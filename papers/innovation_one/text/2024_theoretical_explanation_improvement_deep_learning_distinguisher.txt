@@ -1,0 +1,912 @@
+On the Explanation and Enhancement of
+Neural-inspired Differential Cryptanalysis
+Weixi Zhenga , Liu Zhanga , Zilong Wanga,∗
+a
+
+School of Cyber Engineering, Xidian University, 266 Xinglong Section of Xifeng
+Road, Xi’an, 710026, Shaanxi, China
+
+Abstract
+Neural networks have been applied to symmetric cryptanalysis, and Gohr
+demonstrated that a neural-network-based distinguisher achieves higher accuracy than classical differential distinguishers at CRYPTO 2019. In this
+work, we analyze ciphertext data through the lens of probability distributions, identifying non-random features that provide indirect insights into
+how neural networks distinguish ciphertexts from random data. In parallel,
+we improve the key-recovery attack process by adopting the Bayesian-UCB
+method, which achieves a better balance between exploration and exploitation of ciphertext structures. These enhancements reduce the runtime of
+key-recovery attacks while simultaneously increasing their success rate.
+Keywords: Neural Networks, Probability Distributions, Interpretability,
+Bayesian-UCB, Key Recovery Attacks
+1. Introduction
+Recent advances in deep learning have led to remarkable progress across
+diverse and challenging tasks, ranging from machine translation and autonomous driving to achieving superhuman performance in abstract board
+games. On the theoretical side, the long-recognized connection between cryptography and machine learning, as highlighted in the survey of [1], continues
+to provide valuable insights.
+∗
+
+Corresponding author.
+Email address: zlwang@xidian.edu.cn (Zilong Wang)
+
+Preprint submitted to Elsevier
+
+September 18, 2025
+
+At CRYPTO 2019, Gohr [2] introduced differential-neural cryptanalysis, where a neural network is trained as a differential-neural distinguisher
+(DN D) to separate ciphertext pairs with a fixed input difference from random ones. Since then, numerous works have investigated how neural networks achieve this. Gohr showed that they capture features beyond those
+exploited in classical differential cryptanalysis. Benamira et al. [3] related
+this ability to approximating the differential distribution table (DDT). Gohr
+et al. [4] further proved that, for SIMON32/64, neural networks can rely solely
+on differential features. More recently, Bao et al. [5] demonstrated that their
+strong performance on SPECK32/64 stems from leveraging additional features
+such as Intra-XOR and Cross-XOR.
+To extend neural distinguishers to key-recovery attacks, a short classical
+differential (CD) is often prepended and combined with techniques such as
+the BayesianKeySearch algorithm, wrong-key response profiling, and the
+upper confidence bound (UCB) strategy to improve efficiency.
+In this work, we pursue two directions: deepening the understanding
+of neural network mechanisms and improving the efficiency of key-recovery
+attacks.
+• Explanation of the Working Mechanism. From the perspective
+of probability distributions, we analyze the features embedded in the
+ciphertext pair of SPECK32/64 and infer that, in addition to classical
+difference information, ciphertext pairs also contain extra XOR-based
+features. Based on this observation, we reduce both the dimensionality of the training data and the size of the neural network, while
+maintaining its performance.
+• Improved Key Recovery Attacks. To mitigate the tendency of
+UCB to become trapped in wrong ciphertext structures, we employ
+Bayesian-UCB as a new ciphertext-structure selection strategy to strengthen the key-recovery attack process. Furthermore, we refine the
+BayesianKeySearch algorithm by retaining the highest-scoring key,
+which reduces errors caused by incorrect ciphertext structures. Combined, these improvements lower the time complexity and substantially
+increase the success rate of key-recovery attacks on SPECK32/64, as
+shown in Table 1.
+
+2
+
+Table 1: Summary of key-recovery attacks on SPECK32/64
+
+Round
+
+c1
+
+c2
+
+ncts
+
+nit
+
+Ne
+
+11
+
+5
+
+10
+
+100
+
+500
+
+1000
+
+12
+
+20
+
+500
+
+500
+
+2000
+
+100
+
+13
+
+8
+
+-500
+
+211
+
+212
+
+100
+
+Run
+Time
+
+Success
+Rate
+
+Ref.
+
+216.61 s
+168.07 s
+1842.43 s
+1786.86 s
+17 011.22 s
+16 145.12 s
+
+36.1 %
+52.8 %
+39 %
+50 %
+21 %
+24 %
+
+[2]
+Our work
+[2]
+Our work
+[6]
+Our work
+
+2. Preliminary
+2.1. Brief Description of SPECK32/64
+Let n be the word size in bits and 2n the state size. Denote the internal
+state after round i as (CLi , CRi ) and the i-th round subkey as k i . We use ⊕
+for XOR, ⊞ for addition modulo 2n , and ≫ / ≪ for right/left rotation.
+SPECK32/64 is a lightweight block cipher from the SPECK family [7]. It
+encrypts 32-bit blocks with a 64-bit key, using 16-bit words for both state
+and subkeys. In round i, the state update is:
+CLi+1 = ((CLi ≫ 7) ⊞ CRi ) ⊕ k i ,
+
+CRi+1 = (CRi ≪ 2) ⊕ CLi+1 .
+
+2.2. Differential Scenario
+n
+Given an encryption function E : F2 p × Fn2 k → Fn2 c , a differential distinguisher separates:
+• Encryption samples: (E(p1 , k), E(p2 , k)), with p1 ⊕ p2 = ∆;
+• Random samples: (E(p1 , k), E(p2 , k)), with p1 , p2 chosen independently at random.
+Here, ∆ is a fixed input difference, and p1 , p2 , k are uniformly random.
+In differential-neural cryptanalysis, these are labeled as positive (encryption)
+and negative (random) examples to train the DN D.
+
+3
+
+3. Explanation of the Working Mechanism
+The encryption sample is (c1 , c2 ) = (E(k, p), E(k, p ⊕ ∆)), where k and
+p are uniform. If E(k, ·) is bijective, c1 and c2 are each uniform, so distinguishing requires analyzing them jointly. Since the key is random, ciphertext
+bits are independent; however, when c1 and c2 are considered together, their
+differences cancel out the randomness from the last key addition.
+3.1. Probability Distribution of Ciphertext Pair for SPECK32/64
+According to the round function of SPECK32/64, both X and Y depend on the same subkey K, as illustrated in Equation 1. We consider
+(X, Y ) = (CLi , CRi ) as the known ciphertext state, and analyze the probability distribution of the ciphertext pair (X 1 , Y 1 , X 2 , Y 2 ).
+X = CLi = ((CLi−1 ≫ 7) ⊞ CRi−1 ) ⊕ K = x ⊕ K,
+
+(1)
+
+Y = CRi = ((CRi−1 ≪ 2) ⊕ x) ⊕ K = y ⊕ K.
+
+Lemma 1. Let X 1 , X 2 , Y 1 , Y 2 ∈ Fn2 be random vectors with Bernoulli components, and let K = (K1 , . . . , Kn ) have independent components Ki ∼
+Bern(1/2), independent of X 1 , X 2 , Y 1 , Y 2 . For x1 , x2 , y 1 , y 2 , δ 1 , δ 2 , δ 3 ∈ Fn2
+satisfying
+x2 = x1 ⊕ δ 1 , y 1 = x1 ⊕ δ 2 , y 2 = y 1 ⊕ δ 3 (= x1 ⊕ δ 2 ⊕ δ 3 ),
+we have
+Pr[X 1 = x1 ⊕ K, X 2 = x2 ⊕ K, Y 1 = y 1 ⊕ K, Y 2 = y 2 ⊕ K]
+h
+= Pr X 1 ⊕ X 2 = δ 1 , Y 1 ⊕ X 1 = δ 2 , Y 2 ⊕ Y 1 = δ 3 , Y 1 ⊕ X 2 = δ 1 ⊕ δ 2 ,
+
+i
+Y ⊕X =δ ⊕δ , Y ⊕X =δ ⊕δ ⊕δ .
+2
+
+1
+
+2
+
+3
+
+2
+
+2
+
+1
+
+2
+
+3
+
+The detailed proof is shown in Appendix A.
+
+As shown in Lemma 1, ciphertext pairs contain not only classical difference information but also XOR relations between the left and right branches
+within a single ciphertext or between two ciphertexts. This observation is
+consistent with the conclusion in [5].
+
+4
+
+3.2. Lemma Verification through Modified Network Architecture
+New Data Format. Previously, the ciphertext pair (X 1 , Y 1 , X 2 , Y 2 ) was used
+directly as network input. By Lemma 1, SPECK32/64 ciphertexts yield only
+six distinct difference combinations. Thus, we use (X 1 ⊕ X 2 , X 1 ⊕ Y 1 , X 1 ⊕
+Y 2 ) as input, from which the network can infer the other three differences.
+Modified the Network Architecture. In Gohr’s network [2] (Fig. B.3), the initial convolutional layer (Module 1) was used to capture simple bit-sliced
+operations. Benamira et al. [3] later showed that this layer mainly performs
+linear combinations of ciphertext-pair differences. Since Lemma 1 already
+characterizes these features, the layer is redundant. We therefore remove
+it, as shown in Fig. 1. The modified network (15,383 parameters) is much
+smaller than Gohr’s original (44,865 parameters), with detailed hyperparameters given in the Appendix B.
+
+Reshape
+Input
+
+F C, d1
+
+T ranspose
+
+BN
+Relu
+
+Preprocess
+
+Module 1
+
+Module 1
+
+Module 3
+
+Module 2
+Residual Block
+Module 2
+
+F C, d2
+Conv1D, ks , Nf
+
+BN
+
+BN
+
+Relu
+
+Module 3
+Prediction Head
+
+Module 4
+
+Relu
+Conv1D, ks , Nw
+
+Module 4
+
+BN
+Relu
+
+Output
+
+F C, 1
++
+
+Sigmoid
+Output
+
+Module 2
+
+Figure 1: Modified network architecture
+
+Performance Evaluation of DN D. Table 2 summarizes the accuracy (acc)
+of our DN D compared with previous work.
+Notably, removing the initial convolutional layer and reformulating the
+input data format according to the derived lemma does not lead to a significant loss in accuracy, thereby confirming the validity of Lemma 1.
+5
+
+Table 2: Accuracy comparison of DN D on different rounds
+
+Round
+
+Accuracy
+
+Reference
+
+6
+
+78.8 %
+78.8 %
+78.4 %
+
+Our work
+[2]
+[8]
+
+7
+
+61.7 %
+61.6 %
+61.4 %
+60.7 %
+
+[4]
+[2]
+Our work
+[8]
+
+4. Improved Key Recovery Attack
+By refining the UCB-based selection of ciphertext structures and the
+BayesianKeySearch algorithm, we accelerate key recovery and improve
+the attack success rate.1
+4.1. Improved Select Strategy of Ciphertext Structure
+In differential-neural cryptanalysis, a CD is combined with a DN D to
+extend the reach of key recovery attacks. The overall process is shown in
+Fig. 2; further details are provided in Appendix C.
+The s-round CD (δ → ∆) is probabilistic: a plaintext structure with
+input difference δ may or may not yield a ciphertext structure with output
+difference ∆. We call the former correct and the latter wrong. To efficiently
+select promising structures, Gohr [2] applied the UCB strategy:
+p
+log(p)
+,
+priorityp (i) = Xmax (i) + γ · p
+Np (i)
+where Xmax (i) is the maximum score of structure i before iteration p, Np (i)
+√
+its usage count, and γ = ncts with ncts denoting the number of ciphertext
+structures.
+The UCB strategy can identify promising ciphertext structures but depends heavily on the weight γ, making it hard to balance exploration and
+1
+
+Experiments were conducted on Ubuntu 20.04 with Python 3.7.15 and TensorFlow 2.5.0, using dual Intel Xeon Gold 6226R CPUs (2.90 GHz), 256 GB RAM, and five
+NVIDIA RTX 2080Ti GPUs (12 GB each).
+
+6
+
+}|
+
+s-round CD
+
+1
+CR
+
+{z
+
+}
+
+Fk 0
+CL0
+
+2
+CR
+
+Fks+r+1
+
+Fks+r
+
+Fk s
+
+s+r−1
+CR
+
+CLs+1
+s+2
+CR
+
+···
+
+Fks+r−1
+
+CLs+r
+CLs+r+1
+|
+{z
+}|
+1-round key-gussing
+|
+{z
+}|
+1-round key-gussing
+
+CLs+r+2
+
+s+1
+CR
+
+CLs
+
+CL2
+s+r
+CR
+
+s+r+1
+CR
+
+s
+CR
+
+···
+
+Fk1
+CL1
+
+s+r+2
+CR
+
+{z
+
+0
+CR
+
+|
+
+1-round free
+
+CLs+r−1
+
+Fks+1
+CLs+2
+
+{z
+(r − 1)-round DN D
+{z
+r-round DN D
+
+}
+
+}
+
+Figure 2: (1 + s + r + 1)-round key recovery attack of differential-neural cryptanalysis
+in [2].
+
+exploitation. It may also get stuck in wrong structures with deceptively high
+DN D scores, wasting computation and reducing success rates. Separately,
+Kaufmann et al. [9] proposed Bayesian Upper Confidence Bound (BayesUCB), a general bandit algorithm. Unlike frequency-based UCB, BayesUCB assigns each arm a prior distribution and selects structures based on
+cumulative scores.
+Let Xj be the DN D score at the j-th selection. For structure i, define
+1(Ip = i) = 1 if Ip = i at iteration p, and 0 otherwise. The cumulative score
+before iteration p is sp (i). With Q(1 − ν, ρ) the quantile of distribution ρ and
+T (d) the t-distribution with d degrees of freedom, the priority of structure i
+is
+
+
+1
+q
+Q 1 − p , T (Np (i) − 1)
+sp (i)
+p
++ wp (i) ·
+,
+priorityp (i) =
+Np (i)
+Np (i)
+where
+
+sp (i) =
+
+p−1
+X
+j=1
+
+1(Ij = i)Xj , wp (i) =
+
+Pp−1
+
+2
+2
+j=1 1(Ij = i)Xj − sp (i)/Np (i)
+
+Np (i) − 1
+
+.
+
+The first term estimates the mean score, and the second adds an exploration
+bonus. At each iteration, the structure with the highest priority is selected.
+We carried out 11-round key recovery attacks on SPECK32/64 using BayesUCB with the DN Ds from [2], keeping all parameters the same except for
+the ciphertext structure selection strategy. A key guess is deemed successful
+7
+
+if the last-round subkey is correct and the Hamming distance between the
+penultimate-round subkey and the true subkey does not exceed two. The
+results are presented in Table 3.
+Table 3: The result of key recovery attack using the Bayes-UCB Algorithm
+
+Run Success
+Time
+Rate
+
+Round c1 c2 ncts nit Ne
+11
+
+5 10 100 500 100
+
+227.07 s
+182.57 s
+
+51 %
+55 %
+
+Ref.
+[2]
+Bayes-UCB
+
+1. c1 , c2 : cutoffs for last-round and penultimate-round subkeys.
+2. Ne : number of experiments
+3. nit : number of iterations in key recovery.
+
+These results confirm the effectiveness of Bayes-UCB in enhancing both
+the efficiency and reliability of key recovery attacks.
+4.2. Improved BayesianKeySearch Algorithm
+In key recovery, we find that the correct key with an incorrect ciphertext
+structure may yield a high score. To mitigate this, we propose an improved
+BayesianKeySearch Algorithm 1 (refer to Appendix D), which retains
+the best key and adds it to the new candidate key. The experiment share
+identical parameters except for the search method, and the results are shown
+in Table 4.
+Table 4: The key recovery attack using the improved BayesianKeySearch Algorithm
+
+Ne
+
+Run
+Time
+
+Success
+Rate
+
+Ref.
+
+5 10 100 500 100
+
+227.07 s
+158.84 s
+
+51 %
+52 %
+
+[2]
+Alg. 1
+
+Round c1 c2 ncts nit
+11
+
+Experimental results show that the improved BayesianKeySearch algorithm achieves comparable success rates while reducing time complexity
+relative to [2].
+
+8
+
+4.3. Bayes-UCB + Improved BayesianKeySearch
+We evaluated Bayes-UCB and improved BayesianKeySearch through
+11-, 12-, and 13-round key recovery attacks on SPECK32/64, using the DN Ds
+of SPECK32/64 trained in [2]. For comparison, the results of [2] and [10] were
+reproduced on our setup (Table 1).
+These results demonstrate that combining Bayes-UCB with the improved
+BayesianKeySearch algorithm not only reduces time complexity but also
+achieves a significant improvement in success rate, highlighting the effectiveness of our approach.
+5. Conclusion
+In this work, we revisited differential-neural cryptanalysis on SPECK32/
+64. We characterized non-random XOR-based features in ciphertext pairs
+beyond classical differentials and used these insights to redesign the data
+format and simplify the neural network, yielding a smaller model without
+loss of accuracy. For key recovery, we introduced Bayes-UCB for ciphertext structure selection and improved the BayesianKeySearch algorithm.
+Together, these refinements lower time complexity and raise success rates,
+offering both theoretical insight into learned features and practical gains in
+attack efficiency.
+References
+[1] R. L. Rivest, Cryptography and machine learning, in: International Conference on the Theory and Application of Cryptology, Springer, 1991,
+pp. 427–439.
+[2] A. Gohr, Improving attacks on round-reduced speck32/64 using deep
+learning, in: CRYPTO (2), Vol. 11693 of Lecture Notes in Computer
+Science, Springer, 2019, pp. 150–179.
+[3] A. Benamira, D. Gérault, T. Peyrin, Q. Q. Tan, A deeper look at machine learning-based cryptanalysis, in: EUROCRYPT (1), Vol. 12696 of
+Lecture Notes in Computer Science, Springer, 2021, pp. 805–835.
+[4] A. Gohr, G. Leander, P. Neumann, An assessment of differential-neural
+distinguishers, Cryptology ePrint Archive (2022).
+
+9
+
+[5] Z. Bao, J. Lu, Y. Yao, L. Zhang, More insight on deep learning-aided
+cryptanalysis, in: ASIACRYPT (3), Vol. 14440 of Lecture Notes in Computer Science, Springer, 2023, pp. 436–467.
+[6] L. Zhang, Z. Wang, B. Wang, Improving differential-neural cryptanalysis, IACR Commun. Cryptol. 1 (3) (2024) 13.
+[7] R. Beaulieu, D. Shors, J. Smith, S. Treatman-Clark, B. Weeks,
+L. Wingers, The SIMON and SPECK families of lightweight block ciphers, IACR Cryptol. ePrint Arch. (2013) 404.
+[8] Y. Chen, Y. Shen, H. Yu, S. Yuan, A new neural distinguisher considering features derived from multiple ciphertext pairs, The Computer
+Journal 66 (6) (2023) 1419–1433.
+[9] E. Kaufmann, O. Cappé, A. Garivier, On bayesian upper confidence
+bounds for bandit problems, in: Artificial intelligence and statistics,
+PMLR, 2012, pp. 592–600.
+[10] Z. Bao, J. Guo, M. Liu, L. Ma, Y. Tu, Conditional differential-neural
+cryptanalysis, IACR Cryptol. ePrint Arch. (2021) 719.
+Appendix A. The Proof of Lemma 1
+Proof. Expand over all possible key values:
+Pr[X 1 = x1 ⊕ K, X 2 = x2 ⊕ K, Y 1 = y 1 ⊕ K, Y 2 = y 2 ⊕ K]
+X
+=
+Pr[K = k] Pr[X 1 = x1 ⊕ k, X 2 = x2 ⊕ k, Y 1 = y 1 ⊕ k,
+k∈Fn
+2
+
+=
+
+X
+
+2−n Pr[X 1 = x1 ⊕ k, X 2 = (x1 ⊕ δ 1 ) ⊕ k,
+
+X
+
+2−n Pr[X 1 = x1 ⊕ k, X 2 = (x1 ⊕ δ 1 ) ⊕ k,
+
+k∈Fn
+2
+
+=
+
+Y 2 = y 2 ⊕ k]
+
+k∈Fn
+2
+
+Y 1 = (x1 ⊕ δ 2 ) ⊕ k, Y 2 = (y 1 ⊕ δ 3 ) ⊕ k]
+
+Y 1 = (x1 ⊕ δ 2 ) ⊕ k, Y 2 = (x1 ⊕ δ 2 ⊕ δ 3 ) ⊕ k].
+
+10
+
+Let v = x1 ⊕ k. As k ranges over Fn2 , so does v, and we get
+X
+2−n Pr[X 1 = v, X 2 = v ⊕ δ 1 , Y 1 = v ⊕ δ 2 , Y 2 = v ⊕ (δ 2 ⊕ δ 3 )].
+v∈Fn
+2
+
+Thus the event is exactly
+{ X 2 = X 1 ⊕ δ 1 , Y 1 = X 1 ⊕ δ 2 , Y 2 = Y 1 ⊕ δ 3 },
+which, by straightforward XOR combinations of the defining equalities, yield
+the following six pairwise relations:
+X 2 ⊕ X 1 = δ1, Y 1 ⊕ X 1 = δ2, Y 2 ⊕ Y 1 = δ3,
+Y 1 ⊕ X 2 = δ1 ⊕ δ2, Y 2 ⊕ X 1 = δ2 ⊕ δ3, Y 2 ⊕ X 2 = δ1 ⊕ δ2 ⊕ δ3.
+Conversely, these six pairwise relations imply the original three defining equations, so the corresponding events are equivalent and have identical probability.
+Appendix B. About the Neural Network
+The network architecture used by Gohr in [2] is shown in Figure B.3.
+Hyperparameters of the Network Architecture. The neural network takes as
+input a bit sequence of size Nw × n, where Nw is the number of words. This
+sequence is reshaped into an array of dimension (Nw , n) and transposed during preprocessing. Module 2 corresponds to the Residual Network, where
+Conv denotes a one-dimensional convolution (Conv1D) with either Nf or
+Nw filters, and ks is the convolution kernel size. Each residual block contains
+two layers, and the number of input and output filters must match. Thus,
+the filters first expand from Nw to Nf and then contract back to Nw . The
+number of residual modules is determined by the parameter depth. Finally,
+the prediction head is composed of Modules 3 and 4, followed by the output layer. The specific parameter values used in the network are listed in
+Table B.5.
+Appendix C. Process of Key Recovery Attack
+To extend the distinguisher, a short s-round classical differential (δ →
+∆ with probability 2−p ) is prepended before an r-round DN D. Since no
+11
+
+Input
+Conv, 1, Nf
+Preprocess
+
+Preprocess
+
+Bit Sliced Layer
+
+Module 1
+
+F C, d1
+
+BN
+
+BN
+
+Relu
+
+Relu
+
+Module 1
+
+Module 3
+
+Module 2
+Residual Blocks
+
+F C, d2
+Module 2
+
+Conv, ks , Nf
+
+BN
+
+BN
+
+Relu
+
+Module 3
+
+Relu
+
+Module 4
+
+Conv, ks , Nf
+Prediction Head
+
+Module 4
+
+BN
+Relu
+
+Output
+
+F C, 1
++
+
+Sigmoid
+Output
+
+Module 2
+
+Figure B.3: Network architecture used in [2]
+Table B.5: Hyperparameters of the modified neural network for SPECK32/64
+
+Batch
+Size
+
+β
+
+α
+
+depth
+
+d1
+
+d2
+
+ks
+
+Nf
+
+Nw
+
+L2
+
+2000
+
+3.5 × 10−3
+
+10−4
+
+10
+
+64
+
+64
+
+3
+
+32
+
+3
+
+5 × 10−7
+
+key addition occurs in SPECK32/64 prior to the first non-linear operation,
+plaintext pairs with input difference δ can be extended by one round without
+extra cost, enabling a (1 + s + r + 1)-round key recovery attack. This attack
+requires both the main r-round DN D and an auxiliary (r − 1)-round DN D,
+each trained on ciphertext pairs whose corresponding plaintext pairs satisfy
+the input difference ∆.
+For ciphertext generation, we first generate about c × 2p data pairs with
+input difference δ (denoted ncts ), where c is a small constant. Each pair is
+then expanded into a structure of nb pairs using the neutral bits of the sround CD. Next, the ncts structures are decrypted by one round with subkey
+0 to obtain the corresponding plaintext structures. Finally, each plaintext
+structure is encrypted for 1 + s + r + 1 rounds to produce the ciphertext
+structures. When only one round of trial decryption is used, the wrong-key
+
+12
+
+randomization hypothesis often fails, especially for lightweight ciphers. To
+address this, Gohr [2] proposed an efficient Bayesian key search strategy.
+Here, the expected response of the distinguisher under wrong-key decryption
+depends on the bitwise difference between a candidate subkey ki and the true
+subkey k. The BayesianKeySearch algorithm then refines the candidate
+set by minimizing the weighted Euclidean distance, using the precomputed
+WKRP as the criterion.
+As the number of rounds increases, the accuracy of DN D decreases. To
+reduce the effect of single misclassifications, Gohr [2] combined the responses
+of DN D over ciphertext structures generated with neutral bits. For a structure of size nb , the responses vi,k are aggregated as
+sk =
+
+nX
+b −1
+i=0
+
+log2
+
+
+
+vi,k
+1 − vi,k
+
+
+
+,
+
+where sk is the score of a candidate subkey. This score determines the attack’s
+runtime and success rate. A sufficiently large number of samples is required
+to compensate for the low accuracy of DN D.
+Since CD is inherently probabilistic, a plaintext structure with input difference δ will evolve into a ciphertext structure with output difference ∆ after
+s rounds only with probability 2−p . As a result, the majority of ciphertext
+structures deviate from the expected distribution, making uniform treatment
+inefficient. To overcome this, Gohr [2] formulated the selection of ciphertext
+structures as a multi-armed bandit problem and adopted the Upper Confidence Bound (UCB) approach. The objective is to prioritize the ciphertext
+structure that yields the highest distinguisher score during key recovery. At
+iteration p, the priority of structure i is computed as
+p
+log(p)
+,
+priorityp (i) = Xmax (i) + γ · p
+Np (i)
+where Xmax (i) denotes the best score observed for structure i, Np (i) is its
+√
+selection count up to iteration p, and γ = ncts . This formulation directs
+computational effort toward the most promising structures, striking a balance
+between exploration and exploitation.
+Appendix D. Improved BayesianKeySearch Algorithm
+
+13
+
+Algorithm 1: Improved BayesianKeySearch
+Input: Ciphertext structures C = {C0 , . . . , Cncts −1 }; number of
+candidates ncand per iteration; (optional) current best key
+Kbest ; number of iterations ℓ; DN D; wrong-key response
+profile (µ, σ).
+Output: List L of tuples (key, score)
+if Kbest = None then S ← sample ncand keys uniformly at random
+from the key space K (w/o replacement) ;
+2 else S ← {Kbest } ∪ (sample ncand − 1 keys from K \ {Kbest }) ;
+3 L ← ∅;
+4 for t = 1 to ℓ do
+5
+foreach ki ∈ S do
+6
+for j = 0 to ncts − 1 do
+′
+← DecryptOneRound(Cj , ki );
+7
+Cj,k
+i
+′
+);
+8
+vj,ki ← DN D(Cj,k
+i
+
+
+vj,ki
+9
+zj,ki ← log
+;
+// log-odds
+1 − vj,ki
+10
+end
+P cts −1
+zj,ki ; // combined score via neutral bits
+11
+ski ← nj=0
+12
+L ← L ∪ {(ki , ski )};
+1 Pncts −1
+13
+mki ←
+zj,ki ;
+// mean log-odds
+ncts j=0
+14
+end
+15
+foreach k ∈ K do
+2
+Pncand −1 mki − µ ki ⊕k
+16
+λ(k) ← i=0
+;
+σ 2ki ⊕k
+17
+end
+18
+S ← arg min λ(k)[0 : ncand − 1]
+1
+
+k∈K
+
+end
+20 return L
+
+19
+
+14
+
+

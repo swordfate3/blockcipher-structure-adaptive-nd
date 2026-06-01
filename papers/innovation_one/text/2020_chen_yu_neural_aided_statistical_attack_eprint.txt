@@ -1,0 +1,1835 @@
+Neural Aided Statistical Attack for
+Cryptanalysis
+No Author Given
+No Institute Given
+
+Abstract. In Crypto’19, Gohr proposed the first deep learning-based
+key recovery attack on 11-round Speck32/64, which opens the direction
+of neural aided cryptanalysis. Until now, neural aided cryptanalysis still
+faces two problems: (1) the attack complexity estimations rely purely on
+practical experiments. There is no theoretical framework for estimating
+theoretical complexity. (2) it does not work when there are not enough
+neutral bits that exist in the prepended differential. To the best of our
+knowledge, we are the first to solve these two problems. In this paper, we
+propose a Neural Aided Statistical Attack (NASA) that has the following advantages: (1) NASA supports estimating the theoretical complexity. (2) NASA does not rely on any special properties including neutral
+bits. (3) NASA is applicable to large-size ciphers. Moreover, we propose
+three methods for reducing the attack complexity of NASA. One of the
+methods is based on a newly proposed concept named Informative Bit
+that reveals an important phenomenon.
+Four attacks on 9-round or 10-round Speck32/64 are executed to verify
+the correctness of NASA. To further highlight the advantages of NASA,
+we have performed a series of experiments. At first, we apply NASA
+and Gohr’s attack to round reduced DES. Since NASA does not rely
+on neutral bits, NASA breaks 10-round DES while Gohr’s attack breaks
+8-round DES. Then, we compare the time consumption of attacks on 11round Speck32/64. When the newly proposed three methods are used,
+the time consumption of NASA is almost the same as that of Gohr’s
+attack. Besides, NASA is applied to 13-round Speck32/64. At last, we
+introduce how to analyze the resistance of large-size ciphers with respect
+to NASA, and apply NASA to 14-round Speck96/96. The code of this
+paper is available at https://github.com/AI-Lab-Y/NASA. Our work
+arguably raises a new direction for neural aided cryptanalysis.
+Keywords: Cryptanalysis · deep learning · Informative Bit · Bayesian
+
+1
+
+Introduction
+
+Deep learning has received much expectation in the cryptography community
+since the last century. Rivest in [17] reviewed various connections between machine learning and cryptography. Some possible directions of research in cryptanalytic applications of machine learning were also suggested. Greydanus proved
+that a simplified version of Enigma can be simulated by recurrent neural networks [14].
+
+Although deep learning has shown its superiorities in various fields such as
+computer vision [16], natural language processing [3], and smart medical [8], its
+application in the field of conventional cryptanalysis has been stagnant. A few
+valuable applications are only concentrated in the side-channel analysis [7, 15].
+In Crypto’19, Gohr proposed a deep learning-based distinguisher [13] that is
+also called neural distinguisher (N D). By placing a differential before N D, Gohr
+developed a key recovery attack on 11-round Speck32/64, which shows considerable advantages in terms of attack complexity over the differential attack [5].
+In Eurocrypto’20, Benamira et al [2] presented a deeper analysis of N D.
+In [13], each key guess corresponds to a key rank score that is directly determined by the output of N D. A key guess is returned as a candidate when
+its key rank score exceeds a threshold. Since the output of N D is unpredictable
+and the threshold is set without any theoretical basis, the adversary does not
+foresee the required data complexity to attack a specific cipher. As a result, the
+estimation of the attack complexity and success rate must rely on practical experiments that are finished within an acceptable runtime. This is unfavorable
+for evaluating the security of ciphers against machine learning. Besides, when
+a differential is placed before N D, enough neutral bits [4] must exist in this
+prepended differential. Otherwise, the attack in [13] does not work.
+In this paper, we have explored neural aided cryptanalysis and made contributions as follows.
+– We propose a Neural Aided Statistical Attack (NASA) which supports theoretical complexity estimation and does not rely on neutral bits. NASA
+is based on a neural aided statistical distinguisher. And the key recovery is
+transformed into the distinguishing between two normal distributions, which
+tells the required data complexity of NASA. Four attacks on 9-round or 10round Speck32/64 proves the correctness of NASA. Experiments on round
+reduced DES further prove that NASA has more potential than Gohr’s attack when there are not enough neutral bits.
+– We propose three methods to reduce the attack complexity of NASA. The
+first one is reducing the key space by building N D on partial ciphertext bits.
+This method comes from the truth that only partial ciphertext bits have a
+significant influence on N D. We call these bits informative bits and propose
+a Bit Sensitivity Test to identify them. The initial N D proposed by Gohr
+takes the complete ciphertext pair as input, which forces the adversary to
+guess all the key bits simultaneously. By building N D on partial informative
+bits, the adversary guesses partial key bits at a time. The second one is a
+highly selective Bayesian key search algorithm. It allows the adversary to
+search for the most promising key guesses instead of traversing all the key
+guesses. The third one is reducing the data complexity by exploiting neutral
+bits. When there are available neutral bits, the data complexity of NASA
+can be reduced. When these three methods are adopted, the average time
+consumption of NASA on 11-round Speck32/64 is almost the same as that
+of Gohr’s attack.
+2
+
+– At last, we introduce how to analyze the resistance of large-size ciphers with
+respect to NASA by applying NASA to 14-round Speck96/96. A practical
+attack on 10-round Speck96/96 is provided together.
+Organization Sections 3, 4 presents the neural aided statistical distinguisher and NASA respectively. The three optimization methods are introduced
+in sections 5, 6, 7. Applications to DES, Speck32/64, and Speck96/96 are presented in sections 8, 9, 10. At last, we summarize this paper and provide more
+discussion.
+
+2
+
+Related Work
+
+Let (P0 , P1 ) denote a plaintext pair with difference ∆P . The corresponding intermediate states, ciphertexts are (S0 , S1 ), (C0 , C1 ).
+2.1
+
+Neutral Bit
+
+Consider a differential ∆P → ∆S. Let E denote the encryption function covering
+the differential. We denote the probability that the following condition holds as
+the neutrality of the j-th bit
+E(P0 ⊕ ej ) ⊕ E(P1 ⊕ ej ) = ∆S,
+
+ej = 1  j,
+
+where (P0 , P1 ) stands for plaintext pairs conforming to the differential. If the
+neutrality is 1, the j-th bit is called a neutral bit [4].
+Based on k neutral bits {j1 , · · · , jk } and a plaintext pair (P0 , P1 )|P0 ⊕ P1 =
+∆P , we can generate a plaintext structure consisting of 2k plaintext pairs. Once
+(P0 , P1 ) satisfies the differential, the remaining 2k −1 plaintext pairs also conform
+to the differential.
+2.2
+
+Neural Distinguisher
+
+The target of N D [13] is to distinguish two classes of ciphertext pairs
+
+1, if S0 ⊕ S1 = ∆S
+Y (C0 , C1 ) =
+,
+0, if S0 ⊕ S1 6= ∆S
+
+(1)
+
+where Y = 1 or Y = 0 is the label of (C0 , C1 ). If the difference between S0 and
+S1 is the target difference ∆S, the pair (C0 , C1 ) is regarded as a positive sample
+drawn from the target distribution. Otherwise, (C0 , C1 ) is regarded as a negative
+sample that comes from a uniform distribution.
+A neural network is trained over N2 positive samples and N2 negative samples.
+The neural network can be used as an N D if the distinguishing accuracy over a
+testing database is higher than 0.5. The training pipeline refers to [13].
+Given a sample (C0 , C1 ), N D will output a score Z which is used as the
+posterior probability
+P r{Y = 1 |(C0 , C1 ) } = Z = N D(C0 , C1 ),
+
+06Z61
+
+(2)
+
+When Z > 0.5, the predicted label of (C0 , C1 ) is 1 [13]. In this paper, let N Dh
+denote an h-round neural distinguisher.
+3
+
+2.3
+
+Gohr’s Key Recovery Attack
+
+Algorithm 1 summarizes the core idea of the basic version (unaccelerated version)
+of Gohr’s key recovery attack [13].
+Algorithm 1 Basic version of Gohr’s key recovery attack
+Require: k neutral bits that exist in ∆P → ∆S; An N D built over ∆S;
+A key rank score threshold, c1 ; A maximum number of iterations.
+Ensure: A possible key candidate.
+1: repeat
+2:
+Random generate a plaintext pair (P01 , P11 )|P01 ⊕ P11 = ∆P ;
+3:
+Create a plaintext structure consisting of 2k plaintext pairs by k neutral bits;
+4:
+Collect corresponding ciphertext pairs, (C0i , C1i ), i ∈ {1, · · · , 2k };
+5:
+for each key guess kg do
+6:
+Partially decrypt 2k ciphertext pairs with kg;
+7:
+Feed decrypted ciphertext pairs to N D and collect the outputs;
+8:
+Calculate the key rank score vkg based on collected outputs
+k
+
+vkg =
+
+2
+X
+i=1
+
+
+log2
+
+
+Zi
+,
+1 − Zi
+
+(3)
+
+where Zi is the output of N D.
+9:
+if vkg > c1 then
+10:
+stop the key search and return kg as the key candidate;
+11:
+end if
+12:
+end for
+13: until a key candidate is returned or the maximum number of iterations is reached.
+
+The rank score vkg is likely to exceed c1 only when the plaintext structure
+passes the prepended differential and kg is the right key. If the plaintext structure
+does not pass the differential or the key guess is wrong, the rank score should
+be very low. Thus, the right key can be identified by comparing the rank score
+with a threshold. When the performance of N D is weak, 2k needs to be large.
+Then more neutral bits are required.
+2.4
+
+Distinguishing between Two Normal Distributions
+
+Consider two normal distributions: N (µr , σr ), and N (µw , σw ). A sample s is
+sampled from either N (µr , σr ) or N (µw , σw ). We have to decide if this sample
+is from N (µr , σr ) or N (µw , σw ).
+The decision is made by comparing the value s to some threshold t. Without
+loss of generality, assume that µr > µw . If s > t, the decision is s ∈ N (µr , σr ).
+If s < t, the decision is s ∈ N (µw , σw ). Then there are error probabilities of two
+types:
+βr = P r {N (µw , σw ) |s ∈ N (µr , σr ) } ,
+βw = P r {N (µr , σr ) |s ∈ N (µw , σw ) } .
+4
+
+(4)
+
+When a sample s is sampled from N (µr , σr ), the probability that the decision
+is s ∈ N (µw , σw ) is βr .
+Here a condition is given on µr , µw , σr , σw such that the error probabilities
+are βr and βw . The proof can refer to related research [11, 12].
+Proposition 1. For the test to have error probabilities of at most βr and βw , the
+parameters of the normal distribution N (µr , σr ) and N (µw , σw ) with µr 6= µw
+have to be such that
+z1−βr × σr + z1−βw × σw
+=1
+(5)
+|µr − µw |
+where z1−βr and z1−βw are the quantiles of the standard normal distribution.
+
+3
+
+Neural Aided Statistical Distinguisher
+
+3.1
+
+A Chosen Plaintext Statistical Distinguisher
+p0
+
+Consider a cipher E and a differential ∆P −→ ∆S where ∆P, ∆S ∈ Fm
+2 and p0 is
+the transition probability. Build an N D over ∆S. Randomly generate N plaintext pairs with a difference ∆P and collect corresponding ciphertext pairs. The
+adversary needs to distinguish between this cipher and a random permutation.
+
+The concrete process is as follows. For each ciphertext pair C0i , C1i , i ∈
+{1, · · · , N }, the adversary feeds it into the N D and obtains its output Zi . Setting
+a threshold value c2 , the adversary calculates the statistic T
+T =
+
+N
+X
+
+
+φ (Zi ),
+
+φ (Zi ) =
+
+i=1
+
+1, if Zi > c2
+.
+0, if Zi 6 c2
+
+(6)
+
+When p0 > 2−m holds, it’s expected that the value of the statistic T for the
+cipher is higher than that for a random permutation. In a key recovery setting,
+the right key will result in the statistic T being among the highest values for all
+candidate keys if N is large enough. Next, we give this a theoretical analysis.
+3.2
+
+Distribution of the Statistic under Right and Wrong keys
+
+First, we regard a ciphertext pair as a point in a high-dimensional space. For a
+given threshold c2 , it is equivalent to creating a stable classification hyperplane in
+this space using an N D. Thus the classification over a ciphertext pair is modeled
+as a Bernoulli experiment. It provides us with a theoretical analysis framework.
+According to the key recovery process, there are four possible situations when
+we decrypt a ciphertext pair with a key guess kg as shown in Fig. 1:
+· Decrypting a positive sample with the right key: the ciphertext pair
+satisfies the differential and the key guess is right.
+· Decrypting a positive sample with wrong keys: the ciphertext pair
+satisfies the differential but the key guess is wrong.
+5
+
+Fig. 1. Four situations of decrypting a ciphertext pair with a key guess.
+
+· Decrypting a negative sample with the right key: the ciphertext pair
+does not satisfy the differential but the key guess is right.
+· Decrypting a negative sample with wrong keys: the ciphertext pair
+does not satisfy the differential and the key guess is wrong.
+Given an N D, we denote the probability of Z > c2 as p1 , p2 , p3 , p4 for the
+four situations respectively. Then the distributions of the statistic (formula 6)
+in these four situations are
+p
+T1 ∼ N (µ1 , σ1 ), µ1 = N1 × p1 , σ1 = pN1 × p1 (1 − p1 )
+T2 ∼ N (µ2 , σ2 ), µ2 = N2 × p2 , σ2 = pN2 × p2 (1 − p2 )
+(7)
+T3 ∼ N (µ3 , σ3 ), µ3 = N3 × p3 , σ3 = pN3 × p3 (1 − p3 )
+T4 ∼ N (µ4 , σ4 ), µ4 = N4 × p4 , σ4 = N4 × p4 (1 − p4 )
+if N1 , N2 , N3 , N4 are high enough. N (µi , σi ) is a normal distribution with mean
+µi and standard deviation σi , i ∈ {1, 2, 3, 4}. An empirical condition is
+Ni × pi > 5,
+
+Ni × (1 − pi ) > 5,
+
+i ∈ {1, 2, 3, 4}.
+
+If the probability of the differential ∆P → ∆S is p0 and N ciphertext pairs
+are collected randomly, then
+N1 = N2 = N × p0 ,
+
+N3 = N4 = N × (1 − p0 ) .
+
+(8)
+
+Besides, the distributions of the statistic (formula 6) under the right key and
+wrong keys are both a mixture of two normal distributions.
+Right key guess This case contains two situations in which corresponding
+distributions are N (µ1 , σ1 ) and N (µ3 , σ3 ). Since a mixture of two independent
+normal distributions is still a normal distribution, the distribution of the statistic
+(formula 6) under the right key guess is:
+
+σr =
+
+p
+
+Tr = T1 + T3 ∼ N (µr , σr )
+
+(9)
+
+µr = N × (p0 p1 + (1 − p0 ) p3 )
+
+(10)
+
+N × p0 × p1 (1 − p1 ) + N (1 − p0 ) p3 (1 − p3 )
+6
+
+(11)
+
+Wrong key guess This case also contains two situations in which corresponding
+distributions are N (µ2 , σ2 ) and N (µ4 , σ4 ). Then the distribution of the statistic
+(formula 6) under wrong key guesses is:
+Tw = T2 + T4 ∼ N (µw , σw )
+
+(12)
+
+µw = N × (p0 p2 + (1 − p0 ) p4 )
+p
+σw = N × p0 × p2 (1 − p2 ) + N (1 − p0 ) p4 (1 − p4 )
+
+(13)
+(14)
+
+Negative samples in the high-dimensional space approximately obey uniform
+distribution, thus p3 = p4 holds theoretically and experiments also verify it.
+Since the accuracy of N D is higher than 0.5, p1 > p2 also holds with a high
+probability. When we set c2 = 0.5, we ensure p1 > p2 . Thus µr > µw also holds.
+Since the distributions of Tr , Tw are different, the right key can be recovered
+based on Proposition 1.
+3.3
+
+Data Complexity of the Statistical Distinguisher
+
+Based on Proposition 1, one obtains the condition:
+z1−βr σr + z1−βw σw
+=1
+µr − µw
+
+(15)
+
+where the values of µr , σr , µw , σw refer to formula 10, 11, 13, 14 respectively.
+In a key recovery setting, 1 − βr is the minimum probability that the right key
+survives, βw is the maximum probability that wrong keys survive.
+Since we do not know the real classification hyperplane learned by N D, p1 ,
+p2 , p3 , and p4 are estimated experimentally. Then the estimated values of p3 and
+p4 will be slightly different even they should be theoretically equal. When the
+probability p0 of the differential is very low, the slight distinction p3 − p4 may
+dominate µr − µw , which is wrong. Thus we neglect the minor difference and
+replace p3 , p4 with pn .
+Then the condition (formula 15) is simplified as
+p
+p
+√
+z1−βr × p0 a1 + (1 − p0 )a3 + z1−βw × p0 a2 + (1 − p0 )a3
+N=
+,
+(16)
+(p1 − p2 ) × p0
+where
+a1 = p1 (1 − p1 ),
+
+a2 = p2 (1 − p2 ),
+
+a3 = pn (1 − pn ).
+
+(17)
+
+The decision threshold t is:
+t = µr − z1−βr σr = µw + z1−βw σw .
+
+(18)
+
+The data complexity N is directly calculated when βr and βw are set. The
+−2
+impacts of p0 , p1 , p2 , pn on N are about O(p−2
+), O(pn ) respec0 ), O((p1 − p2 )
+tively. The proof is presented in Appendix A.
+7
+
+3.4
+
+Estimation of p1 , pn
+
+Consider an N D against a cipher, the values of p1 , pn are estimated as:
+1. Randomly generate M positive/negative samples and decrypt them for 1
+round with the right/wrong subkeys.
+2. Feed partially decrypted samples into N D.
+3. Calculate the final ratio of Z > c2 .
+The ratio is the statistical expectation of p1 or pn . A large M can make the
+statistical expectation accurate enough.
+3.5
+
+Further Analysis and Estimation of p2
+
+When we decrypt a positive sample with a wrong key guess (Fig. 1(2)), the final
+value of p2 is related to the Hamming distance between the wrong key guess and
+the right key. Such a phenomenon is based on Property 1 and Property 2.
+Property 1. Decrypt a ciphertext for one round with two different subkeys,
+1
+Ch−1
+= DecOneRound(Ch , kg 1 )
+2
+Ch−1 = DecOneRound(Ch , kg 2 ).
+
+If kg 1 and kg 2 are only different at a few bits (e.g. just 1 bit or 2 bits), the
+1
+2
+Hamming distance between Ch−1
+and Ch−1
+will be very small in high probability.
+Property 2. Consider a neural network F (·). If two input samples s1 , s2 are very
+close to each other in the input space, two outputs F (s1 ), F (s2 ) of the neural
+network may satisfy F (s1 ) ≈ F (s2 ) in high probability.
+Although the distance metric in the input space of neural networks is complex
+and unknown, the Hamming distance is a good alternative. Thus, it is expected
+that p2 is related to the Hamming distance between the right key and wrong key
+guesses.
+Suppose we decrypt a positive sample (Ch+x,0 , Ch+x,1 ) with x subkey guesses
+simultaneously
+Ch+j−1,0/1 = DecOneRound(Ch+j,0/1 , kg h+j ),
+
+j ∈ {1, · · · , x}
+
+where kg h+j is the subkey guess of the (h + j)-th round. (Ch,0 , Ch,1 ) is fed into
+an N D for estimating the probability of Z > c2 .
+When the last x − 1 subkey guesses kg h+j , j ∈ [2, · · · , x] are all right,
+(Ch+1,0 , Ch+1,1 ) is still a positive sample. Then the final probability of Z > c2
+would be high if kg h+1 is different from the right subkey at few bits. However, if
+kg h+j , j ∈ {2, · · · , x} are not all right, (Ch+1,0 , Ch+1,1 ) is not a positive sample
+anymore. Then the final probability of Z > c2 is closer to pn .
+Thus, we consider x Hamming distances for estimating p2 at first. Let dj
+denotes the Hamming distance between the right subkey and subkey guess in the
+8
+
+Algorithm 2 Estimation of p2|d1 ,··· ,dx
+Require: a cipher with a subkey size of m; an N Dh built over ∆P ;
+M random plaintext pairs, (P0i , P1i ), P0i ⊕ P1i = ∆P, i ∈ {1, · · · , M };
+M random master keys, M K i , i ∈ {1, · · · , M }; a threshold c2 .
+Ensure: p2|d1 ,··· ,dx .
+1: Encrypt each plaintext pair (P0i , P1i ) with a master key M K i for h + x rounds;
+2: Save the ciphertext pair (C0i , C1i ) and subkeys skih+j , j ∈ {1, · · · , x};
+3: for d1 = 0 to m, · · · , dx = 0 to m do
+4:
+for i = 1 to M do
+5:
+Randomly draw x subkey guesses kg ij , j ∈ {1, · · · , x} where the Hamming
+distance between kg ij and skih+j is dj ;
+6:
+Decrypt (C0i , C1i ) with kg ij , j ∈ {1, · · · , x} for x rounds;
+7:
+Feed the decrypted ciphertext pair into N Dh and save the output as
+Zi|d1 ,··· ,dx ;
+8:
+end for
+9:
+Count the number of Zi|d1 ,··· ,dx > c2 , and denote it as Td1 ,··· ,dx ;
+10:
+Save p2|d1 ,··· ,dx =
+11: end for
+
+Td1 ,··· ,dx
+.
+M
+
+(h + j)-th round, and p2|d1 ,··· ,dx denotes the probability of Z > c2 . Algorithm 2
+is proposed to estimate p2|d1 ,··· ,dx .
+Verification. Gohr provided N D5 , N D6 , N D7 , N D8 against Speck32/64 [13],
+which are built over a plaintext difference (0x0040, 0). We have performed tests
+on these four distinguishers. Let M = 107 , Table 1 and Table 2 show the estimation results of p2|d1 and p2|d1 ,d2 respectively.
+Table 1. The estimation of p2|d1 of 4 neural distinguishers against round reduced
+Speck32/64. For N D5 , N D6 , N D7 , c2 = 0.55. For N D8 , c2 = 0.5. p2|d1 =0 = p1 . Only
+four decimal places are presented in this paper. Actually, we kept more decimal places
+during follow-up experiments.
+N D5
+
+d1
+0
+1
+2
+3
+4
+5
+6
+7
+8 ∼ 16
+p2|d1 0.8889 0.5151 0.3213 0.2168 0.1556 0.1189 0.0956 0.08 6 0.0694
+
+N D6
+
+0
+1
+2
+3
+4
+5
+6
+7
+8 ∼ 16
+p2|d1 0.6784 0.4430 0.3135 0.2394 0.1958 0.1691 0.1522 0.1410 6 0.1336
+
+N D7
+
+d1
+0
+1
+2
+3
+4
+5
+6
+7
+8 ∼ 16
+p2|d1 0.4183 0.3369 0.2884 0.2607 0.2442 0.234 0.2276 0.2236 6 0.2211
+
+N D8
+
+d1
+0
+1
+2
+3
+4
+5
+6
+7
+8 ∼ 16
+p2|d1 0.5183 0.5056 0.4993 0.4958 0.4939 0.4927 0.4925 0.4918 6 0.4917
+
+d1
+
+The test results have verified the analysis of p2 . When two subkeys are guessed
+simultaneously, p2|d1 ,d2 decreases sharply even if the subkey guess of the last
+round is wrong at only 1 bit.
+9
+
+Table 2. the estimation of p2|d1 ,d2 of N D7 against Speck32/64. c2 = 0.55. the columns
+correspond to d2 . the rows correspond to d1 . all results only retain two decimal places.
+the same value is replaced by an uppercase letter. Y = 0.21, E = 0.22, J = 0.23,
+U = 0.25, and V = 0.26.
+0
+
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+
+0
+
+0.42 V E E Y Y Y Y Y Y Y Y Y Y Y Y Y
+
+1
+
+0.33 U E Y Y Y Y Y Y Y Y Y Y Y Y Y E
+
+2
+
+0.29 J E Y Y Y Y Y Y Y Y Y Y Y Y Y Y
+
+3
+
+V J EYYYYYYY Y Y Y Y Y Y Y
+
+4
+
+J
+
+5
+
+E EEYYYYYYY Y Y Y Y Y Y Y
+
+J EYYYYYYY Y Y Y Y Y Y Y
+
+6
+
+E YEYYYYYYY Y Y Y Y Y Y Y
+
+7
+
+E EYYYYYYYY Y Y Y Y Y Y E
+
+8
+
+E YYYYYYYYY Y Y Y Y Y Y Y
+
+9 ∼ 16
+
+6Y
+
+Thus, the choice of p2 depends on the target of the key recovery
+attack. If we think the attack is successful as long as the Hamming distance
+between the subkey guess and the right subkey does not exceed a threshold d,
+the value of p2 should be
+
+p2 = max p2|d1 ,··· ,dx |d1 + · · · + dx > d
+
+(19)
+
+This choice is based on the following truth. By setting a proper threshold c2
+such as c2 > 0.5, we ensure
+p2|d1 ,··· ,dx 6 0.5,
+
+if
+
+d1 + · · · + dx > d.
+
+(20)
+
+According to formula 16, the higher p2 is, the higher the required data complexity
+is. The decision threshold also increases when p2 increases. Thus we only need
+to focus on the highest data complexity required for filtering wrong keys.
+Take N D7 as an example. Let d = 2, it means that the attack is successful
+if the recovered subkey is different from the right subkey at most 2 bits. Then
+p2 = p2|3 = 0.2607 or p2 = p2|0,1 = p2|3,0 = 0.26.
+
+4
+
+Neural Aided Statistical Attack
+
+4.1
+
+Key Recovery Attack Model
+
+This neural aided statistical distinguisher is used to determine whether a key
+guess may be the right key. This is done by the Statistical Test as shown in Algorithm 3. Algorithm 4 summarizes the Neural Aided Statistical Attack (NASA)
+based on the statistical distinguisher.
+10
+
+Algorithm 3 Statistical test for a key guess
+Require: An N D; A key guess, kg;
+A posterior probability threshold, c2 ; The decision threshold, t;
+N ciphertext pairs (C0i , C1i ) encrypted from (P0i , P1i ), P0i ⊕ P1i = ∆P, i ∈ [1, N ].
+1: Decrypt N ciphertext pairs with kg;
+2: Feed decrypted ciphertext pairs into N D, and collect the outputs Zi , i ∈ [1, N ];
+3: Calculate the statistic T in formula 6;
+4: if T > t then
+5:
+Return kg as a key candidate.
+6: end if
+
+Algorithm 4 Neural Aided Statistical Attack
+Require: The attacked cipher;
+p0
+The differential with a probability of p0 , ∆P −→
+∆S;
+Two maximum error probabilities, βr , βw ;
+A posterior probability threshold, c2 .
+Ensure: All possible key candidates.
+1: Train an N D over ∆S;
+2: Estimate p1 , pn , p2 using N D (Section 3.4, Algorithm 2);
+3: Calculate the data complexity N and the decision threshold t (Section 3.3);
+4: Randomly generate N plaintext pairs (P0i , P1i ), P0i ⊕ P1i = ∆P, i ∈ {1, · · · , N };
+5: Collect corresponding N ciphertext pairs, (C0i , C1i ), i ∈ {1, · · · , N };
+6: for each key guess kg do
+7:
+Perform the statistical test (Algorithm 3);
+8: end for
+9: Test surviving key candidates against a necessary number of plaintext-ciphertext
+pairs according to the unicity distance for the attacked cipher.
+
+4.2
+
+Verification of the Key Recovery Attack Model
+
+Four practical attacks on h-round Speck32/64 are performed to verify NASA.
+The target is to recover the last subkey sk h . It’s expected that returned subkey
+guesses are different from sk h at most d = 2 bits.
+NASA should work as long as the adopted N D has a distinguishing accuracy
+higher than 0.5. Besides, the data complexity should be correctly estimated once
+p0
+∆P −→ ∆S, N D, d, βr , and βw are provided. Thus, different settings about these
+factors are considered.
+Four distinguishers N D5 , N D6 , N D7 , N D8 provided by Gohr [13] are adopted.
+Table 3 shows two different differentials adopted in the verification. Since no key
+addition happens in Speck before the first nonlinear operation, these two differentials can be extended to a 2/3-round differential respectively.
+The verification plan consists of three steps:
+1. Set the value of βr , βw . Calculate the data complexity N (formula 16).
+2. Perform NASA 100 times with N samples.
+3. Check the following observation indexes:
+(a) The ratio that the right subkey (d1 = 0) survives.
+11
+
+Table 3. two options of the prepended differential of Speck32/64. nr is the number of
+encryption rounds covered by the differential.
+∆P → ∆S
+
+ID
+
+p0 nr
+
+1 (0x2800, 0x10) → (0x0040, 0) 2−2 1
+2 (0x211, 0xa04) → (0x0040, 0) 2−6 2
+
+(b) The average number of surviving subkey guesses in 100 trails.
+(c) The ratio that the number of surviving subkeys does not exceed the
+expected upper bound.
+Table 4 summarizes the settings related to four attacks. Table 1 shows the
+estimations of p2|d1 related to N D5 , N D6 , N D7 , N D8 . The value of p2 is p2|d1 =3
+in four attacks.
+Table 4. Settings of the four attacks on round reduced Speck32/64. DID is the differential’s ID in Table 3.
+Attack ID Attack rounds N D DID p0
+
+c2
+
+p1
+
+d
+
+p2
+
+pn
+
+βr
+
+βw
+
+1
+
+9
+
+N D5
+
+2
+
+2−6 0.55 0.8889 2 0.2168 0.0384 0.005 2−16
+
+2
+
+9
+
+N D6
+
+1
+
+2−2 0.55 0.6784 2 0.2394 0.1162 0.005 2−16
+
+3
+
+10
+
+N D7
+
+1
+
+2−2 0.55 0.4183 2 0.2607 0.2163 0.005 2−16
+
+4
+
+10
+
+N D8
+
+-
+
+1
+
+0.5 0.5183 2 0.4958 0.4914 0.001 2−16
+
+Attack 1: recover sk9 of 9-round Speck32/64 In the first attack setting,
+we get N = 15905 ≈ 213.957 ( see formula 16). The decision threshold is t = 758.
+The right subkey (d1 = 0) should survive with a 1 − βr = 0.995 probability
+at least. Wrong subkey guesses (d1 > 3) should survive with a βw = 2−16
+probability at most. The number of surviving subkey guesses should not exceed
+137 + (216 − 137) × 2−16 = 137.998.
+After performing this attack 100 times, we find:
+– The right key (d1 = 0) has survived in all the 100 experiments.
+– The average number of surviving subkey guesses is 18.41.
+– The number of surviving subkey guesses does not exceed 137.998 in 100
+experiments.
+Attack 2: recover sk9 of 9-round Speck32/64 In the second attack setting,
+N = 475 ≈ 28.893 and t = 101. The number of surviving subkey guesses should
+not exceed 137 + (216 − 137) × 2−16 ≈ 137.998.
+After performing this attack 100 times, we find:
+– The right subkey has survived in all the 100 experiments.
+– The average number of surviving subkey guesses is 33.43.
+– The number of surviving subkey guesses does not exceed 137.998 in 100 experiments.
+
+12
+
+Attack 3: recover sk10 of 10-round Speck32/64 In the third attack setting,
+N = 5272 ≈ 212.364 and t = 1325. The number of surviving subkey guesses
+should not exceed 137 + (216 − 137) × 2−16 ≈ 137.998.
+After performing this attack 100 times, we find:
+– The right subkey (d1 = 0) has survived in 99 experiments.
+– The average number of surviving subkey guesses is 63.54.
+– The number of surviving subkey guesses does not exceed 137.998 in 98 experiments.
+
+Attack 4: recover sk10 of 10-round Speck32/64 N D8 is a very weak
+distinguisher. Its distinguishing accuracy is only about 0.518. In the fourth attack
+setting, N = 25680 ≈ 214.65 and t = 13064. The number of surviving subkey
+guesses should not exceed 137 + (216 − 137) × 2−16 ≈ 137.998.
+After performing this attack 100 times, we find:
+– The right subkey (d1 = 0) has survived in all the 100 experiments.
+– The average number of surviving subkey guesses is 77.47.
+– The number of surviving subkey guesses does not exceed 137.998 in 85 experiments. In the other 15 experiments, the ratio that subkey guesses with
+d1 = 3 survive is a little higher than that in the 85 experiments.
+It’s clear that these four attacks 1 have achieved the most important two
+targets of NASA. This proves the Hamming distance is a good distance metric
+for estimating p2 . The correctness of NASA is also well verified.
+
+5
+
+Reduce the Key Space
+
+So far we need to guess all the bits of the subkey simultaneously since N D takes
+the complete ciphertext pairs (C0 , C1 ) as input. When the subkey has a large
+size, this is a serious bottleneck.
+5.1
+
+An Intuitive Method for Reducing the Key Space
+
+An intuitive method for reducing the key space is building N D on partial ciphertext bits
+Ci = Ci [L − 1]|| · · · ||Ci [0], i ∈ [0, 1]
+(21)
+
+1
+
+Γ = {x1 , x2 , · · · , xk }, x1 > · · · > xk , k <= L
+
+(22)
+
+ϕ(Ci , Γ ) = Ci [x1 ]||Ci [x2 ]||Ci [xk ], i ∈ [0, 1]
+
+(23)
+
+It takes about 10 hours to 2 days to execute any one of the four attacks 100 times
+when a graphics card is used. To facilitate readers to perform the experiment, we
+provide accelerated versions, which are completed within 1 hour to 4 hours.
+
+13
+
+
+Y (ϕ(C0 , Γ ), ϕ(C1 , Γ )) =
+
+1,
+0,
+
+if S0 ⊕ S1 = ∆S
+if S0 ⊕ S1 6= ∆S
+
+P r{Y = 1 |(ϕ(C0 , Γ ), ϕ(C1 , Γ )) } = N D(ϕ(C0 , Γ ), ϕ(C1 , Γ ))
+
+(24)
+(25)
+
+where Ci [0] is the least significant bit of the ciphertext Ci , Γ is the subscript set
+of selected ciphertext bits.
+Such a method significantly reduces the key space to be searched. But which
+ciphertext bits should we select for building N D? Can we develop a
+generic and efficient framework for guiding this selection? In order to
+better introduce our work for solving these problems, three new concepts are
+proposed first.
+Definition 1 An informative bit is the ciphertext bit that is helpful to distinguish between the cipher and a pseudo-random permutation.
+Definition 2 For a cipher reduced to h rounds, the neural distinguisher trained
+on the complete ciphertexts (C0 , C1 ) is denoted as the teacher distinguisher
+N Dth , the neural distinguisher trained on partial ciphertext bits (ϕ(C0 , Γ ), ϕ(C1 , Γ ))
+is denoted as the student distinguisher N Dsh . The teacher distinguisher is
+viewed as a special student distinguisher.
+5.2
+
+Identify Informative Bits by Bit Sensitivity Test
+
+It’s clear that student distinguishers should be built on informative bits. However, it’s hard to identify informative bits according to Definition 1. Thus we
+propose an approximate definition of the informative bit.
+Definition 3 For an N Dt , if the distinguishing accuracy is significantly affected
+by the j-th bit of C0 or C1 , the j-th ciphertext bit is an informative bit.
+An N Dt works since it has learned knowledge from ciphertext bits. According
+to Definition 1, only informative bits provide knowledge. Thus the ciphertext
+bit that has a significant influence on the distinguishing accuracy of N Dt must
+be an informative bit.
+Definition 3 does not ensure each informative bit that obeys Definition 1 is
+identified successfully. But we only care about informative bits that are captured
+by an N Dt . This approximate definition helps develop a simple but effective
+framework for identifying informative bits.
+The proposed framework is named Bit Sensitivity Test (BST). Its core
+idea is to test whether the distinguishing accuracy of an N Dt drops after we
+remove some knowledge related to the specific bit.
+Gohr in [13] has proved that N Dth , h ∈ {5, 6, 7, 8} against Speck32/64 captures the knowledge about the ciphertext difference and some unknown features.
+Consider the j-th ciphertext bit. We remove the knowledge about the j-th ciphertext bit difference by
+C0 = C0 ⊕ (η  j) or
+14
+
+C1 = C1 ⊕ (η  j)
+
+(26)
+
+where η is a random mask that could be 0 or 1.
+We have performed an extreme test on N Dth , h ∈ {5, 6, 7, 8} against Speck32/64.
+If we XOR each bit of C0 or C1 with a random mask, N Dth , h ∈ {5, 6, 7, 8} can
+not distinguish positive samples and negative samples anymore. These tests imply that knowledge about unknown features is also removed by one of the two
+operations presented in formula 26.
+After the knowledge related to a ciphertext bit is removed, the accuracy
+decrease of N Dt is named Bit Sensitivity, which is used to identify informative
+bits. Algorithm 5 summarizes the BST.
+
+Algorithm 5 Bit Sensitivity Test
+Require: a cipher with a block size of m;
+an N Dt against this cipher;
+a test dataset consisting of M
+positive samples and M
+negative samples.
+2
+2
+Ensure: An array sen that saves the bit sensitivity of m ciphertext bits.
+1: Test the distinguishing accuracy of N Dt on the test dataset. Save it to sen[m];
+2: for j = 0 to m − 1 do
+3:
+for i = 1 to M do
+4:
+Generate a random mask η ∈ {0, 1};
+5:
+C0i,new = C0i ⊕ (η  j);
+6:
+Feed the new sample (C0i,new , C1i ) to N Dt ;
+7:
+end for
+8:
+Count the current accuracy cp;
+9:
+sen[j] = sen[m] − cp;
+10: end for
+
+Examples and analysis. We have applied the BST to N Dth , h ∈ {5, 6, 7}
+against Speck32/64. The results of the BST under three scenarios are shown in
+Fig. 2 and Fig. 3 respectively.
+We observe that sen0 ≈ sen1 . This proves that C0 ⊕ (η  j) is equivalent to
+C1 ⊕ (η  j). Besides, we know
+– If sen0 [j] > 0, the j-th ciphertext bit is an informative bit.
+– If sen0,1 [j] > 0, the j-th ciphertext bit provides some useful unknown features. Since the knowledge about the bit difference is not removed, then only
+useful unknown features can lead to a decrease in the accuracy.
+– If sen0 [j] ≈ sen0,1 [j], the j-th ciphertext bit difference has little influence
+on N Dth .
+Reverse verification about identified informative bits. To further
+verify Definition 3, a reverse verification about identified informative bits is
+performed. First, select some informative bits. Second, train an N Ds on selected
+informative bits and observe the distinguishing accuracy.
+Taking N Dt7 against Speck32/64 as an example, we have performed the reverse verification based on results in Fig. 3(b). Table 5 shows the distinguishing
+accuracies under two settings. For Speck32/64, the j-th and (j + 16)-th bit are
+15
+
+Fig. 2. Results of BST of N Dt5 against Speck32/64, M = 106 . sen0 is the results of
+performing C0 ⊕ (η  j), sen1 is the results of performing C1 ⊕ (η  j), sen0,1 is
+the results of performing two operations simultaneously, j ∈ {0, · · · , 31}. Only three
+decimal places are kept.
+
+(a)
+
+(b)
+
+Fig. 3. Results of BST of N Dt6 (a) and N Dt7 (b) against Speck32/64, M = 106 .
+
+directly related to the same subkey bit. Thus the 8-th and 1st ciphertext bits
+are also considered.
+Table 5. accuracies of neural distinguishers trained on selected ciphertext bits
+Γ
+Accuracy
+{30 ∼ 23, 14 ∼ 7}
+0.5414
+{30 ∼ 23, 21 ∼ 17, 14 ∼ 7, 5 ∼ 1} 0.6065
+{31 ∼ 0}
+0.6067
+
+The accuracy of N Dt7 is 0.6067. When all the identified informative bits are
+considered, the resulted N Ds7 obtains a distinguishing accuracy of 0.6065, which
+is almost the same as 0.6067. Such an experiment shows that Definition 3 can
+help identify all the ciphertext bits that have a significant influence on teacher
+distinguishers.
+Once informative bits are identified by the Bit Sensitivity Test, the whole
+key space can be divided into several subspaces. In each subspace, NASA is
+performed to recover specific key bits. This informative-bit-based method is the
+first generic technique for reducing the attack complexities of NASA.
+16
+
+6
+
+Selective Key Search
+
+In Algorithm 4, each possible key guess kg is tested. Inspired by the analysis of
+p2 in Section 3.5, we develop a highly selective key search strategy for further
+reducing the attack complexity.
+Specifically, we do not need to traverse all the key guesses. Some key guesses
+that are most likely to be the right key are recommended based on the key
+guesses that have been tested.
+
+6.1
+
+Distribution of the Statistic Under Different Keys
+
+We discuss the distribution of the statistic (formula 6) under different keys again.
+We still take Fig. 1 as an example.
+Suppose that the size of the key guess kg is m. According to the analysis in
+Section 3.5, we know there are the following m + 1 probabilities
+p2|d1 = P r{z > c2 |S0 ⊕ S1 = ∆S},
+
+d1 ∈ {0, · · · , m},
+
+where d1 is the Hamming distance between kg and the right key.
+Then there are m + 1 distributions of the statistic (formula 6)
+Td1 ∼ N (µd1 , σd1 ),
+
+(27)
+
+µd1 = N × (p0 × p2|d1 + (1 − p0 )pn ),
+σd1 =
+
+q
+
+
+N × p0 × p2|d1 1 − p2|d1 + N (1 − p0 ) pn (1 − pn ).
+
+The parameters of these m + 1 distributions are obtained offline. These distributions are used as prior knowledge to develop a Bayesian key search strategy.
+
+6.2
+
+Bayesian Key Search Strategy
+
+Algorithm 6 summarizes the newly proposed Bayesian key search algorithm,
+which is the second technique for reducing the attack complexities of NASA.
+
+7
+
+Reduce the Data Complexity
+p0
+
+Consider the prepended differential ∆P −→ ∆S. As we have presented in section 3.3, the impact of p0 on the data complexity is about O(p−2
+0 ).
+Neutral bits seldom exist in a long differential characteristic. But there usually are numerous neutral bits in a short differential characteristic. This section
+shows how to reduce the data complexity of NASA by neutral bits.
+17
+
+Algorithm 6 Bayesian Key Search Algorithm
+Require: Ciphertext pairs, (C0i , C1i ), i ∈ {1, · · · , N };
+A neural distinguisher, N D;
+Prior knowledge µd1 and σd1 , d1 ∈ {0, · · · , m};
+The number of key guess candidates to be generated within each iteration, ncand ;
+The number of iterations, niter .
+Ensure: The list L of tuples of recommended key guesses and statistics.
+1: K = {kg 1 , · · · , kg cand } ← choose ncand values at random without replacement from
+the set of all subkey candidates.
+2: L ← {}
+3: for t = 1 to niter do
+4:
+for each kg ∈ K do
+5:
+for i = 1 to N do
+6:
+Decrypt C0i , C1i with kg.
+7:
+Feed partially decrypted ciphertext pair into N D.
+8:
+Collect the output Zi,kg of N D.
+9:
+end for
+10:
+Compute the statistic (formula 6), T kg ;
+11:
+L ← L||(kg, T kg ).
+12:
+end for
+13:
+for sk ∈ {0, · · · , 2m − 1} do
+2 2
+P
+.
+14:
+λsk = kg∈K T kg − µhd(kg⊕sk) /σhd(kg⊕sk)
+/* hd(kg ⊕ sk) is the Hamming distance between kg and sk */
+15:
+end for
+16:
+K ← argsortsk (λ)[0 : ncand − 1].
+/* Pick ncand key guesses with the ncand smallest score to form the new set of
+key guess candidates K */
+17: end for
+18: Return L
+
+7.1
+
+Improved Neural Aided Statistical Attack
+
+We still take the key recovery attack with 1-round decryption as an example to
+introduce the improved NASA.
+q
+Its core idea is to divide the long differential into two short ones: ∆P −
+→ ∆B,
+p
+and ∆B −
+→ ∆S where p0 = q × p. The statistical distinguisher only covers the
+second differential ∆B → ∆S. Neutral bits that exist in the first part ∆P → ∆B
+are exploited. Algorithm 7 summarizes the details of the improved NASA.
+Now, only the impact of p on the total data complexity is O(p−2 ). The
+impact of q on the total data complexity is O(q −1 ). Thus, the total impact of
+−2 −2
+the prepended differential is O(q −1 p−2 ) instead of O(p−2
+p ). The
+0 ) = O(q
+−1
+data complexity is reduced by a factor of about q .
+7.2
+
+Further Improvement Based On Early Stopping
+
+In Algorithm 7, 1q plaintext structures are generated. But only one plaintext
+structure P is expected to satisfy the differential ∆P → ∆B.
+18
+
+Algorithm 7 Improved neural aided statistical attack
+Require: The attacked cipher;
+q
+p
+The prepended differential, ∆P −
+→ ∆B −
+→ ∆S;
+Neutral bits that exist in ∆P → ∆B;
+Two maximum error probabilities, βr , βw ;
+A posterior probability threshold, c2 .
+Ensure: All possible key candidates.
+1: Train an N D over ∆S;
+2: Estimate p1 , pn , p2 using N D (Section 3.4, Algorithm 2);
+3: Calculate the data complexity N1 based on p, p1 , pn , p2 (Section 3.3);
+4: for j from 1 to 1q do
+5:
+Based on ∆P and neutral bits, randomly generate a plaintext structure P consisting of N1 plaintext pairs.
+6:
+Perform the basic NASA based on P (Algorithm 4).
+7: end for
+8: Test surviving key candidates against a necessary number of plaintext-ciphertext
+pairs according to the unicity distance for the attacked cipher.
+
+This plaintext structure is called valid plaintext structure while other plaintext structures are called invalid plaintext structures. If a valid plaintext structure is identified once it arises, Algorithm 7 can be early stopped at step 4.
+We propose an identification method that does not change the process of
+Algorithm 7. At a high level, the identification method is as follows:
+1. Generate a plaintext structure P consisting of M plaintext pairs.
+2. Filter key guesses based on the statistic T (formula 6) and a decision threshold tM .
+3. If the number of surviving key guesses exceeds a threshold tP , P is a valid
+plaintext structure.
+By setting proper parameters tM , the number of surviving key guesses exceeds
+tP only when P is a valid plaintext structure.
+Next, we present a theoretical analysis of M, tM , tP . For convenience, we
+rewrite the statistic T (formula 6) as
+
+M
+X
+1, if Zi > c2
+T =
+φ (Zi ), φ (Zi ) =
+.
+(28)
+0, if Zi 6 c2
+i=1
+
+The four situations as shown in Fig. 1 also exist in this identification process.
+The following notations are adopted again:
+– p2|d1 : the probability P r{Z > c2 |S0 ⊕S1 = ∆S} when the Hamming distance
+between the key guess and the right key is d1 ∈ {0, · · · , m}.
+– pn : the probability P r{Z > c2 |S0 ⊕ S1 6= ∆S}.
+Distribution of the statistic under valid plaintext structures When P
+is a valid plaintext structure that satisfies ∆P → ∆B, there are M × p positive
+samples and M × (1 − p) negative samples.
+19
+
+At first, we do not set d1 clearly and denote p2|d1 as pV . The distribution of
+the statistic(formula 28) is
+TV ∼ N (µV , σV ),
+
+(29)
+
+µV = M [p × pV + (1 − p)pn ],
+p
+σV = M × p × pV (1 − pV ) + M (1 − p)pn (1 − pn ).
+
+(30)
+(31)
+
+Select a specific d1 , we have pV = p2|d1 . Let KV denote the set of key guesses
+with a Hamming distance d1 from the right key. Then only kg ∈ KV makes the
+above TV hold.
+Distribution of the statistic under invalid plaintext structures When
+P is an invalid plaintext structure, all the M samples are negative samples.
+The distribution of the statistic(formula 28) is
+TI ∼ N (µI , σI )
+p
+µI = M × pn , σI = M × pn (1 − pn )
+
+(32)
+(33)
+
+Let K denote the set of all possible key guesses. Then any kg ∈ K makes the
+above TI hold.
+Distinguishing between TV and TI Since TV and TI are two different
+normal distributions, the technique in Section 2.4 is used to distinguish these
+two distributions. According to Proposition 1, the condition for distinguishing
+TV and TI is
+z1−βV × σV + z1−βI × σI
+=1
+(34)
+µV − µI
+where
+βV = P r {N (µI , σI ) |s ∈ N (µV , σV ) } ,
+βI = P r {N (µV , σV ) |s ∈ N (µI , σI ) } ,
+
+(35)
+
+and s stands for a sample.
+We present a deeper explanation about the two error probabilities βI , βV .
+When P is an invalid plaintext structure, the maximum probability that key
+guesses kg ∈ K survive the attack is βI . When P is a valid plaintext structure,
+the minimum probability that key guesses kg ∈ KV survive the attack is 1 − βV .
+By simplifying formula 34, we know that the required data complexity M is
+aV = pV (1 − pV ), an = pn (1 − pn ),
+p
+√
+√
+z1−βV × p × aV + (1 − p)an + z1−βI × an
+M=
+.
+(pV − pn ) × p
+And the decision threshold tM is
+tM = µV − z1−βV σV = µI + z1−βI σI ,
+
+(36)
+(37)
+
+(38)
+
+where z1−βV and z1−βI are the quantiles of the standard normal distribution.
+20
+
+Identify valid plaintext structures by counting surviving keys When
+P is a valid plaintext structure, The lower bound of the number of surviving
+subkeys is |KV | × (1 − βV ). When P is an invalid plaintext structure, The upper
+bound of the number of surviving subkeys is |K| × βI .
+By setting two proper error probabilities βV , βI , we ensure the following
+condition always holds
+|KR | × (1 − βV )  |K| × βI .
+
+(39)
+
+Let tP satisfy the following condition
+|KR | × (1 − βV ) > tP  |K| × βI ,
+
+(40)
+
+where x  y means that x is much larger than y here. Then valid plaintext
+structures is identified by by comparing the number of surviving subkey guesses
+with tP 2 .
+Algorithm 8 Identify valid plaintext structures
+Require: a plaintext structure P with a size of M (formula 37);
+an N D trained over ∆S;
+the posterior probability threshold c2 ;
+a decision threshold tM for filtering subkey guesses;
+a decision threshold tP for identifying valid plaintext structures.
+Ensure: the classification of P.
+1: Collect the M ciphertext pairs corresponding to P;
+2: Initialize a counter cp ← 0;
+3: for each possible subkey guess kg do
+4:
+Decrypt M ciphertext pairs with kg;
+5:
+Feed partially decrypted ciphertext pairs into N D;
+6:
+Save the outputs of N D, Zi , i ∈ [1, M ];
+7:
+Count the number of Zi > c, and denote it as TM ;
+8:
+if TM > tM then
+9:
+cp ← cp + 1;
+10:
+end if
+11: end for
+12: if cp > tP then
+13:
+Return 1 (P is a valid plaintext structure).
+14: else
+15:
+Return 0 (P is an invalid plaintext structure).
+16: end if
+
+Algorithm 8 summarizes the concrete identification process. Since the identification is based on the same statistic as the key recovery, Algorithm 8 and
+Algorithm 7 are able to be performed simultaneously. The necessary condition
+is that the size of a plaintext structure P should exceed N1 and M .
+2
+
+We provide the code to verify Algorithm 8. The identification success rate over valid
+plaintext structures is 100%.
+
+21
+
+Further analysis about pV . The data complexity M is related to pV . And
+pV is related to the Hamming distance d1 .
+When pV increases, M (Equation 37) decreases since
+√
+
+p
+√
+p × aV + (1 − p)an + z1−βI × an
+M=
+(pV − pn ) × p
+q
+√
+z1−βI × an
+n
+z1−βV × p(1 − pV ) + (1−p)a
++
+pV
+pV
+=
+.
+√
+( pV − √ppnV ) × p
+z1−βV ×
+
+If pV increases, the numerator will decrease and the denominator will increase.
+Then M will decrease.
+When the Hamming distance d1 decreases, p2|d1 will increase in high probability. But the number of subkey guesses in the subspace may decrease sharply when
+d1 decreases, which may make the condition (formula 39) not hold. Thus, there
+is a trade-off. As long as the condition (formula 39) holds, we advise pV = p2|d1
+where d1 should be as small as possible.
+
+8
+
+Application to DES
+
+This section proves that NASA has more potential than Gohr’s attack when
+enough neutral bits do not exist in the prepended long differential.
+DES [9] is a block cipher with a block size of 64 bits. The structure of DES
+is the classical Feistel structure. Its round function f is given by eight different
+S-boxes. More details refer to [9], please. We perform key recovery attacks on
+round reduced DES.
+
+8.1
+
+Prepended Differentials
+
+Two optimal 2-round iterative differentials found in [6] are
+P r= 1
+
+−→ 0x19600000/0,
+0x19600000/0 −−−−234
+P r= 1
+
+(41)
+
+0x1B600000/0 −−−−234
+−→ 0x1B600000/0.
+Based on these 2-round differentials, we can get longer iterative differentials.
+These iterative differentials are used as the prepended differential ∆P → ∆S for
+attacking round reduced DES.
+According to the definition of the neutral bit, We measure the neutrality of
+each ciphertext bit experimentally. We find that 18 neutral bits {33, · · · , 50} exist
+in the above 2-round iterative differentials. As for 4-round iterative differentials,
+no neutral bits exist anymore.
+22
+
+8.2
+
+Build Neural Distinguishers Against DES
+
+Let ∆S = 0x19600000/0, we build teacher distinguishers against DES up to 5
+rounds. The distinguishing accuracy of the 5-round teacher distinguisher is 0.58.
+Based on the BST, we find that 4 bits {39, 50, 56, 61} related to the fifth S-box
+S5 and 4 bits {59, 37, 43, 49} related to the eighth S-box S8 are all informative
+bits.
+In order to introduce the next experiment more clearly, we focus on the
+student distinguisher N Ds5 built over the bits {39, 50, 56, 61} for now. Let the
+posterior probability threshold be c2 = 0.5, we get p1 = 0.6041 and pn = 0.4890.
+Table 6 shows the estimation of p2|d1 .
+Table 6. The estimation of p2|d1 of N Ds5 against round reduced DES. c2 = 0.5. N Ds5
+is built over 4 bits {39, 50, 56, 61}.
+d1
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+p2|d1 0.6041 0.5042 0.5065 0.5083 0.5113 0.5043 0.4957
+
+8.3
+
+Attack DES with Gohr’s Attack
+234−1
+
+By placing the 2-round differential 0x19600000/0 −−−−→ 0x19600000/0 before
+N Ds5 , with the help of the 18 neutral bits {33, · · · , 50}, 8-round DES is broken
+by Gohr’s attack. The 6 key bits related to S5 of the last round are recovered.
+234−2
+
+Since no neutral bits exist in the 4-round differential 0x19600000/0 −−−−→
+0x19600000/0, 10-round DES can not be broken by Gohr’s attack under
+the current setting.
+8.4
+
+Neural Aided Statistical Attack on DES
+
+Consider the basic NASA (Algorithm 4) on 10-round DES 3 . We also adopt the
+234−2
+
+4-round prepended differential 0x19600000/0 −−−−→ 0x19600000/0 and N Ds5 .
+Let d = 0, we have p2 = 0.5113 based on Table 6. Besides, let βr = 0.005,
+and βw = 2−6 . Since p0 = 234−2 , the required data complexity is N = 240.824
+chosen plaintext pairs.
+Since the output of an S-box only contains 4 bits, we build a look-up table
+offline for saving the tuple ((C0 , C1 ), N Ds5 (C0 , C1 )). Then the time complexity is
+not related to N Ds5 anymore. In other words, the time complexity of this attack
+is N ×2×26 = 247.824 . Thus, 10-round DES is broken by the basic NASA
+under the same setting.
+3
+
+A practical attack on 6-round DES is first executed to confirm that the Hamming
+distance is a good distance metric for N Ds5 and NASA is applicable.
+
+23
+
+9
+
+Application to Speck32/64
+p0
+
+Consider the prepended differential ∆P −→ ∆S. For Gohr’s attack, the impact
+of p0 on the data complexity is only O(p−1
+0 ). For the basic NASA, the impact of
+p0 on the data complexity is O(p−2
+).
+0
+In this section, we prove that NASA can achieve competitive performance
+when the three optimization techniques introduced in sections 5, 6, 7 are available. Speck32/64 is one variant of the Speck family that is designed by the NSA
+Research Directorate [1]. Its round function is
+CL = (CL ≪ 7)  CR ,
+CL = CL ⊕ sk,
+CR = (CR ≫ 2) ⊕ CL .
+where CL ||CR is the input / output, and sk is the subkey.
+9.1
+
+Prepended Differential
+
+To attack 11-round Speck32/64, Gohr adopted a 2-round prepended differential
+p0 =2−6
+
+∆P = (0x211, 0x204) −−−−−→ ∆S = (0x40, 0x0).
+There are only 3 neutral bits {20, 21, 22} that exist in ∆P → ∆S. Besides, there
+are 2 high probabilistic neutral bits {14, 15} whose neutrality exceeds 0.95.
+Dividing this differential into two 1-round differentials
+q=2−4
+
+p=2−2
+
+∆P = (0x211, 0x204) −−−−→ ∆B = (0x2800, 0x10) −−−−→ ∆S = (0x40, 0),
+we measure the neutrality of each ciphertext bit. For ∆P → ∆B, there are 8
+neutral bits {0, 11, 14, 15, 20, 21, 22, 26}. Moreover, there are 8 high probabilistic
+neutral bits {1, 3, 4, 5, 23, 24, 27, 28} whose neutrality exceeds 0.95.
+9.2
+
+Build Neural Distinguishers Against Speck32/64
+
+Two teacher distinguishers N Dt6 , N Dt7 built by Gohr over ∆S = (0x40, 0) are
+adopted in this section. Table 1 shows the estimation of p2|d1 of N Dt6 , N Dt7 when
+c2 = 0.55.
+Based on the BST results of N Dt6 , N Dt7 as shown in Fig. 3, we build 2 student
+distinguishers N Ds6 , N Ds7 by setting Γ = {30 ∼ 23, 14 ∼ 7}. These 16 ciphertext
+bits are related to the least significant 8 subkey bits. Later, N Ds6 , N Ds7 are used
+to recover sk 10 [7 ∼ 0] and sk 11 [7 ∼ 0] respectively.
+Let c2 = 0.55, Table 7 shows the estimation of p2|d1 of N Ds6 , N Ds7 . Table 8 summarizes the estimation of p1 , pn of N Ds6 , N Ds7 , N Dt6 , N Dt7 against
+Speck32/64.
+24
+
+Table 7. The estimation of p2|d1 of N Ds6 , N Ds7 against Speck32/64. c2 = 0.55. The
+subscript set of selected ciphertext bits is Γ = {30 ∼ 23, 14 ∼ 7}
+N Ds6
+
+d1
+0
+1
+2
+3∼8
+p2|d1 0.5132 0.4057 0.3402 6 0.3025
+
+N Ds7
+
+d1
+0
+1
+2
+3∼8
+p2|d1 0.3576 0.3232 0.3036 6 0.2940
+
+Table 8. The estimation of p1 , pn of N Ds6 , N Ds7 , N Dt6 , N Dt7 against Speck32/64. c2 =
+0.55.
+N Ds6 N Ds7 N Dt6 N Dt7
+p1 0.5132 0.3575 0.6784 0.4183
+pn 0.2604 0.2863 0.1162 0.2163
+
+9.3
+
+Gohr’s Attack on Speck32/64
+
+Based on the 2-round prepended differential ∆P → ∆S and N Dt7 , N Dt6 , Gohr
+presented a key recovery attack (Algorithm 1) on 11-round Speck32/64. Besides,
+Gohr provided some optimization techniques for accelerating it.
+The target is to recover the last two subkeys sk 10 , sk 11 . Gohr counted a key
+guess as successful if the last subkey was guessed correctly and if the second
+subkey was at Hamming distance at most two of the real key sk 10 . Finally, the
+success rate of Gohr’s attack is about 52%.
+We have performed this accelerated attack again based on the code provided
+by Gohr. By adopting an Intel(R) Core(TM) i5-7500 CPU and one graphics card
+(NVIDIA GeForce GTX 1060(6GB)), we find that the average time consumption
+of performing this attack one time is about 70 seconds.
+9.4
+
+Neural Aided Statistical Attack on Speck32/64
+
+At first, we consider the neural aided statistical attack on 11-round Speck32/64.
+At a high level, the attack contains five stages:
+– stage 1: Identify the valid plaintext structure P that satisfies ∆P → ∆B by
+N Ds7 (Algorithm 8). The subkey to be searched is sk 11 [7 ∼ 0].
+– stage 2: Recover sk 11 [7 ∼ 0] by N Ds7 (Algorithm 4).
+– stage 3: Recover sk 11 by N Dt7 (Algorithm 4).
+– stage 4: Recover (sk 11 , sk 10 [7 ∼ 0]) by N Ds6 (Algorithm 4).
+– stage 5: Recover (sk 11 , sk 10 ) by N Dt6 (Algorithm 4).
+In stage 1, we set pV = p2|d1 =1 , βV = 0.1, βI = 2−8 . It means that the
+number of surviving subkey guess kg 11 [7 ∼ 0] should exceed 8 × (1 − 0.1) = 7.2
+when P is a valid plaintext structure. Otherwise, the number of surviving subkey
+should not exceed 28 ×2−8 = 1. Based on this setting, each plaintext structure P
+should contain M = 37938 ≈ 215.211 plaintext pairs. The decision threshold for
+filtering subkey guesses is tM = 11103. When the number of surviving subkey
+guess exceeds 7 (tP = 8), P is a valid plaintext structure.
+25
+
+In stage 2, we set p2 = p2|d1 =3 , βr = 0.005, βw = 2−8 . The required data
+complexity is N = 22586 ≈ 214.463 plaintext pairs, and the decision threshold
+for filtering subkey guess is t = 6690.
+In stage 3, we filter kg 11 based on each surviving kg 11 [7 ∼ 0]. Let p2 =
+p2|d1 =3 , βr = 0.005, βw = 2−16 , we have N = 5271 ≈ 212.364 , t = 1325.
+In stage 4, we filter (kg 10 [7 ∼ 0], kg 11 ) based on each surviving kg 11 . Let
+p2 = p2|d1 =2 , βr = 0.001, βw = 2−14 , we have N = 5228 ≈ 212.36 , t = 1589.
+In stage 5, we filter (kg 10 , kg 11 ) based on each surviving (kg 10 [7 ∼ 0], kg 11 ).
+Let p2 = p2|d1 =2 , βr = 0.001, βw = 2−16 , we have N = 829 ≈ 29.697 , t = 180.
+We use 16 high probabilistic neutral bits {0, 1, 3 ∼ 5, 11, 14, 15, 20 ∼ 24, 26 ∼
+28} that exist in ∆P → ∆B to generate plaintext structures P consisting of M =
+37938 plaintext pairs with a difference ∆P = (0x211, 0xa04). The probability
+that P is a valid plaintext structure is about 2−4.2 . In stage 1, if no valid plaintext
+structures occur after 24 plaintext structures are generated, the attack is stopped
+and viewed as a failure.
+Once one valid plaintext structure P is found, the remaining 4 stages are
+performed based on this structure P. Moreover, 22586, 5271, 5228, 829 plaintext
+pairs are selected from this valid plaintext structure respectively. In stage 1 ∼ 5,
+the proposed Bayesian key search strategy (Algorithm 6) is applied in each stage.
+The settings related to the Bayesian key search strategy are as follows. In
+stage 1 and stage 2, the number of iterations is niter = 3. For each iteration, we
+search ncand = 32 subkey guesses. In stage 3, we set niter = 4, ncand = 32. In
+stage 4 and stage 5, we set niter = 3, ncand = 32.
+We count a key guess as successful if the right subkey pair (sk 10 , sk 11 ) survives. We have performed 500 experiments under the same hardware environment used in section 9.3, . Valid plaintext structures occurred in 339 experiments
+and were all identified successfully. The attack was successful in 265 out of 339
+trials. Besides, the attack was successful in 4 out of the remaining 161 trials. We
+find that the invalid plaintext structure in the 4 trials contains many plaintext
+pairs that pass the differential ∆P → ∆B. The average numbers of surviving key
+guesses in the last four stages were 8.2, 32.9, 14.8, 11.1 respectively. The average
+number of generated plaintext structures is 10.73. The average time consumption
+of this attack is about 77.9 seconds, which is very close to the time consumption
+of Gohr’s attack.
+According to the attack settings in stages 2 ∼ 5, the probability that the right
+keys survive should be (1 − 0.005)2 × (1 − 0.001)2 ≈ 0.988. We argue that the
+reason why the attack failed in 74 out of 339 experiments is that the sampling
+randomness is destroyed by neutral bits. To verify this argument, we randomly
+generate 22586 plaintext pairs with a difference ∆B to form a plaintext structure
+and have performed the attack 100 times again. The attack was successful in 99
+out of 100 trials.
+We wonder how many rounds NASA could attack at most. By adopting
+N Dt8 (let p2 = p2|d1 =3 ) and 19 neutral bits, we guess and recover sk 13 , sk 12
+simultaneously. The theoretical data complexity is about 222.73 chosen-plaintext
+pairs, which is lower than the data complexity (225 chosen plaintexts) of the
+26
+
+previous best attack [10] on 13-round Speck32/64. For NASA, the basic operation
+contains two steps: (1) partially decrypt a ciphertext pair with a subkey guess,
+(2) feed the decrypted ciphertext pair into N D and obtain the output. Under
+the hardware environment used in section 9.3, it takes about 2.8 seconds to
+perform 220 basic operations with N Dt8 . As a comparison, it takes about 0.28
+seconds to process 220 key guesses by force key search. Thus, the theoretical time
+2.8
+= 10, and 13-round Speck32/64
+complexity is about δ × 222.73+32 where δ = 0.28
+4
+is broken by NASA .
+
+10
+
+Application to Speck96/96
+
+NASA can be used to analyze the resistance of large-size ciphers with respect
+to deep learning. We introduce the general idea by adopting the application to
+Speck96/96 [1] as an example.
+First, we train a student distinguisher N Ds7 over ∆S = (0x80, 0) by setting
+Γ = {69 ∼ 56, 21 ∼ 8}. Second, a practical attack 5 based on N Ds7 is performed
+to confirm that NASA is applicable. More precisely, the practical attack is used
+to verify whether the Hamming distance is a good distance metric for estimating
+p2 related to N Ds7 . Third, estimate the theoretical complexity of NASA on round
+reduced Speck96/96.
+By placing a prepended 6-round differential extended from the 5-round dif2−32
+
+ferential ∆P = (0x900900480001, 0x11003084008) −−−→ ∆S = (0x80, 0), we find
+that the theoretical data complexity for recovering 14 subkey bits sk 14 [13 ∼ 0]
+of 14-round Speck96/96 is 270.22 chosen plaintext pairs. Thus, the theoretical
+time complexity is δ × 270.22+14 where δ ≈ 4.85 under the hardware environment
+used in section 9.3.
+
+11
+
+Conclusion
+
+In this article, we propose a Neural Aided Statistical Attack (NASA) and three
+methods for reducing the complexity of NASA. NASA recovers the right key
+based on distinguishing between two different normal distributions. NASA is
+the first deep learning-based cryptanalysis technique that supports theoretical
+complexity estimation and does not rely on any special properties such as neutral
+bits. Applications to round reduced DES, Speck32/64, and Speck96/96 prove the
+superiorities of NASA.
+Our work in this article also provides many inspirations for neural aided
+cryptanalysis. First, if we replace the neural network with other machine learning models, NASA still works. Thus, it is possible to further accelerate NASA by
+adopting other machine learning-based distinguishers. Second, when we try to
+reduce the key space, we find that ciphertext bits have a different influence on the
+4
+
+The code of NASA on 12-round Speck32/64 is provided. The average runtime is
+under two hours on a GeForce GTX 1080 Ti GPU.
+5
+The code of practical NASA on 10-round Speck96/96 is provided.
+
+27
+
+neural distinguisher. This finding is not only useful for neural aided cryptanalysis. The traditional differential attack may be improved by exploiting knowledge
+extracted from neural distinguishers. Third, the data complexity for distinguishing two normal distributions is very high, which makes the data complexity of
+basic NASA is also high. If some new probability distributions are more suitable
+for simulating the key recovery process, new neural aided attacks with a lower
+complexity are able to be developed. Fourth, if a distance metric is better than
+the Hamming distance, NASA would give more accurate estimations. At last,
+the negative influence of neutral bits needs to be further explored.
+
+A
+
+Analysis of the Data Complexity of Basic NASA
+
+The data complexity of NASA is related to N D and the prepended differential.
+In this appendix, we present the analysis of each part’s impact on the data
+complexity.
+
+A.1
+
+The Differential’s Impact on the Data Complexity
+
+According to formula 16, the data complexity N is affected by the probability
+p0 of the prepended differential as
+√
+
+p
+
+p
+p0 a1 + (1 − p0 )a3 + z1−βw p0 a2 + (1 − p0 )a3
+N=
+(p1 − p2 ) × p0
+p
+p
+z1−βr a3 + (a1 − a3 )p0 + z1−βw a3 + (a2 − a3 )p0
+∝
+p0
+p
+p
+a3 + (a1 − a3 )p0 + a4 × a3 + (a2 − a3 )p0
+∝
+p0
+z1−βr
+
+z
+
+w
+. We further know
+where a4 = z1−β
+1−β
+r
+
+
+
+N ∝ p−2
+a3 + a24 a3 + (a1 − a3 + a24 a2 − a24 a3 )p0 + a5
+0
+p
+p
+where a5 = 2 × a4 × a3 + (a1 − a3 )p0 × a3 + (a2 − a3 )p0 . Thus the impact
+of the probability p0 of the differential is O(p−2
+0 ).
+
+A.2
+
+The Neural Distinguisher’s Impact on the Data Complexity
+
+Three probabilities p1 , p2 , pn are related to the neural distinguisher. Since pn is
+related to negative samples and p1 , p2 are related to positive samples, we discuss
+pn separately.
+28
+
+The impact of pn In formula 16, only a3 is related to pn .
+p
+p
+√
+z1−βr p0 a1 + (1 − p0 )a3 + z1−βw p0 a2 + (1 − p0 )a3
+N=
+(p1 − p2 ) × p0
+p
+p
+∝ p0 a1 + (1 − p0 )a3 + a4 × p0 a2 + (1 − p0 )a3
+⇒ N ∝ p0 × a1 + a24 × p0 × a2 + (1 − p0 )(1 + a24 )a3 + a5
+Next, we focus on attack scenarios where the p0 is low. This makes the
+discussion easier and more concise. This simplification is also reasonable. Because
+when we attack a cipher for more rounds, the probability of the differential is
+generally low.
+When p0 → 0, a5 → 2×a4 ×a3 . Thus the impact of a3 on the data complexity
+is O(a3 ). Since pn < 1 always holds and a3 = pn − p2n , the impact of pn on the
+data complexity is also O(pn ).
+The impact of p1 , p2 In formula 16, a1 , a2 are related to p1 , p2 respectively.
+The impacts of a1 , a2 are adjusted by p0 .
+Due to this property, we also focus on attack scenarios where p0 → 0.
+p
+p
+√
+z1−βr p0 a1 + (1 − p0 )a3 + z1−βw p0 a2 + (1 − p0 )a3
+N=
+(p1 − p2 ) × p0
+p
+p
+z1−βr (1 − p0 )a3 + z1−βw (1 − p0 )a3
+∝ (p1 − p2 )−1
+≈
+(p1 − p2 ) × p0
+Thus the impact of p1 , p2 on the data complexity is O((p1 − p2 )−2 ).
+
+References
+1. Beaulieu, R., Shors, D., Smith, J., Treatman-Clark, S., Weeks, B., Wingers, L.:
+The SIMON and SPECK lightweight block ciphers. In: Proceedings of the 52nd
+Annual Design Automation Conference, San Francisco, CA, USA, June 7-11, 2015.
+pp. 175:1–175:6. ACM (2015)
+2. Benamira, A., Gérault, D., Peyrin, T., Tan, Q.Q.: A deeper look at machine
+learning-based cryptanalysis. In: Canteaut, A., Standaert, F. (eds.) Advances in
+Cryptology - EUROCRYPT 2021 - 40th Annual International Conference on the
+Theory and Applications of Cryptographic Techniques, Zagreb, Croatia, October
+17-21, 2021, Proceedings, Part I. Lecture Notes in Computer Science, vol. 12696,
+pp. 805–835. Springer (2021)
+3. Bengio, Y., Ducharme, R., Vincent, P.: A neural probabilistic language model. In:
+Leen, T.K., Dietterich, T.G., Tresp, V. (eds.) Advances in Neural Information Processing Systems 13, Papers from Neural Information Processing Systems (NIPS)
+2000, Denver, CO, USA. pp. 932–938. MIT Press (2000)
+4. Biham, E., Chen, R.: Near-collisions of SHA-0. In: Franklin, M.K. (ed.) Advances
+in Cryptology - CRYPTO 2004, 24th Annual International CryptologyConference,
+Santa Barbara, California, USA, August 15-19, 2004, Proceedings. Lecture Notes
+in Computer Science, vol. 3152, pp. 290–305. Springer (2004)
+
+29
+
+5. Biham, E., Shamir, A.: Differential cryptanalysis of des-like cryptosystems. In:
+Menezes, A., Vanstone, S.A. (eds.) Advances in Cryptology - CRYPTO ’90, 10th
+Annual International Cryptology Conference, Santa Barbara, California, USA, August 11-15, 1990, Proceedings. Lecture Notes in Computer Science, vol. 537, pp.
+2–21. Springer (1990)
+6. Biham, E., Shamir, A.: Differential cryptanalysis of des-like cryptosystems. J.
+Cryptol. 4(1), 3–72 (1991)
+7. Cagli, E., Dumas, C., Prouff, E.: Convolutional neural networks with data augmentation against jitter-based countermeasures - profiling attacks without preprocessing. In: Fischer, W., Homma, N. (eds.) Cryptographic Hardware and Embedded Systems - CHES 2017 - 19th International Conference, Taipei, Taiwan,
+September 25-28, 2017, Proceedings. Lecture Notes in Computer Science, vol.
+10529, pp. 45–68. Springer (2017)
+8. Chen, Y., Yu, L., Ota, K., Dong, M.: Robust activity recognition for aging society.
+IEEE J. Biomed. Health Informatics 22(6), 1754–1764 (2018)
+9. Davies, D.W.: Some regular properties of the ’data encryption standard’ algorithm.
+In: Chaum, D., Rivest, R.L., Sherman, A.T. (eds.) Advances in Cryptology: Proceedings of CRYPTO ’82, Santa Barbara, California, USA, August 23-25, 1982.
+pp. 89–96. Plenum Press, New York (1982)
+10. Dinur, I.: Improved differential cryptanalysis of round-reduced speck. In: Joux, A.,
+Youssef, A.M. (eds.) Selected Areas in Cryptography - SAC 2014 - 21st International Conference, Montreal, QC, Canada, August 14-15, 2014, Revised Selected
+Papers. Lecture Notes in Computer Science, vol. 8781, pp. 147–164. Springer (2014)
+11. Feller, W.: An introduction to probability theory and its applications. vol. ii. Population 23(2), 375 (1968)
+12. Gisselquist, R., Hoel, P.G., Port, S.C., Stone, C.J.: Introduction to probability
+theory. American Mathematical Monthly 81(9), 1041 (1974)
+13. Gohr, A.: Improving attacks on round-reduced speck32/64 using deep learning.
+In: Boldyreva, A., Micciancio, D. (eds.) Advances in Cryptology - CRYPTO 2019
+- 39th Annual International Cryptology Conference, Santa Barbara, CA, USA,
+August 18-22, 2019, Proceedings, Part II. Lecture Notes in Computer Science, vol.
+11693, pp. 150–179. Springer (2019)
+14. Greydanus, S.: Learning the enigma with recurrent neural networks. CoRR
+abs/1708.07576 (2017)
+15. Kim, J., Picek, S., Heuser, A., Bhasin, S., Hanjalic, A.: Make some noise. unleashing
+the power of convolutional neural networks for profiled side-channel analysis. IACR
+Trans. Cryptogr. Hardw. Embed. Syst. 2019(3), 148–179 (2019)
+16. Krizhevsky, A., Sutskever, I., Hinton, G.E.: Imagenet classification with deep convolutional neural networks. In: Bartlett, P.L., Pereira, F.C.N., Burges, C.J.C.,
+Bottou, L., Weinberger, K.Q. (eds.) Advances in Neural Information Processing
+Systems 25: 26th Annual Conference on Neural Information Processing Systems
+2012. Proceedings of a meeting held December 3-6, 2012, Lake Tahoe, Nevada,
+United States. pp. 1106–1114 (2012)
+17. Rivest, R.L.: Cryptography and machine learning. In: Imai, H., Rivest, R.L., Matsumoto, T. (eds.) Advances in Cryptology - ASIACRYPT ’91, International Conference on the Theory and Applications of Cryptology, Fujiyoshida, Japan, November
+11-14, 1991, Proceedings. Lecture Notes in Computer Science, vol. 739, pp. 427–
+439. Springer (1991)
+
+30
+
+

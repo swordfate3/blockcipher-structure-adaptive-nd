@@ -1,0 +1,7241 @@
+Enhancing Diﬀerential-Neural Cryptanalysis
+Zhenzhen Bao1,2,4 , Jian Guo2 , Meicheng Liu3 , Li Ma3 , and Yi
+Tu2 
+1
+
+Institute for Network Sciences and Cyberspace, BNRist, Tsinghua University,
+Beijing, China zzbao@tsinghua.edu.cn
+2
+School of Physical and Mathematical Sciences, Nanyang Technological University,
+Singapore guojian@ntu.edu.sg, tuyi0002@e.ntu.edu.sg
+3
+State Key Laboratory of Information Security, Institute of Information Engineering,
+Chinese Academy of Sciences, Beijing, China liumeicheng@iie.ac.cn,
+skloismary@gmail.com
+4
+Zhongguancun Laboratory, Beijing, China
+
+Abstract. In CRYPTO 2019, Gohr shows that well-trained neural networks can perform cryptanalytic distinguishing tasks superior to traditional diﬀerential distinguishers. Moreover, applying an unorthodox key
+guessing strategy, an 11-round key-recovery attack on a modern block
+cipher Speck32/64 improves upon the published state-of-the-art result.
+This calls into the next questions. To what extent is the advantage of
+machine learning (ML) over traditional methods, and whether the advantage generally exists in the cryptanalysis of modern ciphers? To answer
+the ﬁrst question, we devised ML-based key-recovery attacks on more extended round-reduced Speck32/64. We achieved an improved 12-round
+and the ﬁrst practical 13-round attacks. The essential for the new results
+is enhancing a classical component in the ML-based attacks, that is, the
+neutral bits. To answer the second question, we produced various neural
+distinguishers on round-reduced Simon32/64 and provided comparisons
+with their pure diﬀerential-based counterparts.
+Keywords: Diﬀerential Cryptanalysis, Machine Learning, Speck, Simon, Neural Distinguisher, Key Recovery, Neutral Bits
+
+1
+
+Introduction
+
+Cryptography and machine learning (ML) share many concerns, e.g., distinguishing, classiﬁcation, decision, searching, and optimization. It has been a longstanding challenge to answer whether computers could “learn to perform cryptanalytic tasks” [27]. These years, ML has made rapid progress in application
+domains ranging from machine translation, visual recognition, and autonomous
+vehicles to playing board games at superhuman levels [28]. ML has also been used
+to construct new types of cryptographic schemes [1] or crack ancient ciphers [16].
+However, whether ML models can learn from scratch and then break modern ciphers at a superior level is still unpredictable. Nevertheless, one can still
+look forward to the prospect that ML approaches become substantial positive
+
+additions to the existing cryptanalysis toolkit, which has already been true in
+side-channel cryptanalysis [26].
+For using ML to assist classical cryptanalysis, there are several questions to
+explore. That might include the follows:
+– Can ML models learn new features with/without prior human cryptanalysis?
+– Can ML provide more accurate and eﬃcient measurements of known features?
+– Can various ML approaches combined with various cryptanalysis techniques
+perform cryptanalysis tasks at a superior level to orthodox techniques, then
+be interpreted, and in turn, help to develop innovative and general cryptanalytic techniques?
+In CRYPTO 2019, a remarkable work by Gohr [15] shows that commonly
+used neural networks could be trained to be superior cryptographic distinguishers. The work shed light on positive answers to the ﬁrst two questions. It showed
+that deep neural-network distinguisher could exploit features that strong classical distinguishers fail to capture for Speck. In [15], neural networks were trained
+with principles of diﬀerential cryptanalysis in mind. They show a remarkable
+capability in distinguishing attacks. More importantly, combining them with
+classical diﬀerentials and a highly selective key search policy forms a powerful key-recovery attack. Speciﬁcally, using the obtained neural distinguishers
+(NDs) as the main engines, prepending them with a classical diﬀerential (CD),
+applying basic reinforcement learning mechanisms, i.e., the Upper Conﬁdence
+Bounds (UCB) and Bayesian optimization, an 11-round key-recovery attack on
+Speck32/64 can achieve an unparalleled speed. However, to attack more rounds,
+one has to extend either the classical component, i.e., the prepended CD, or the
+ND. Both are facing obstacles that have not been overcome since [15].
+In EUROCRYPT 2021, Ghor’s ND got a deeper interpretation by Benamira
+et al. [7]. They were found to have learned not only the diﬀerential distribution on
+the output pairs but also the diﬀerential distribution in penultimate and antepenultimate rounds. Still, the other enhanced new component, i.e., the UCB
+and Bayesian optimization-based key-recovery phase in the superior 11-round
+attack in [15], has not been fully interpreted and theorized, thus still missing
+necessary guidance on tuning various parameters and sound theoretical models
+on analyzing data/time complexity and success probability.
+Note that one of the main diﬃculties in evaluating the scope of applicability of ML algorithms is the lack of a formally speciﬁed theoretical model.
+Strong theoretical models for ML-based cryptanalysis are vital for generalizing
+the techniques. However, in parallel or even before our community achieve sound
+theoretical models, devising a suﬃcient number of successful attacks as positive
+examples in this new setting is essential. Without providing the best attacks as
+examples, it might be harder to obtain a theoretical model that produces the
+most powerful attacks. This work provides strong positive examples and extensive experimental data to support the ﬁrst steps towards a realistic theoretical
+model for eﬀective ML-based cryptanalysis.
+2
+
+Our contribution. The contribution of this work includes the following.
+– Practical attacks and rules of thumb
+• The ﬁrst practical 13-round and an improved 12-round ND-based keyrecovery attacks on Speck32/64 are devised. They have considerable
+advantages in time complexity over attacks devised using orthodox cryptanalysis. In addition, the ﬁrst practical 16-round ND-based key-recovery
+attack on Simon32/64 is devised, which has a considerable advantage
+in data complexity. These results are summarized in Table 1.
+• Substantial illustrations unveil previously hidden details of the unorthodox key-recovery phase. Furthermore, observations derived from the illustrations provide rules of thumb for tuning critical parameters.
+– Applications of enhanced cryptanalytic techniques
+The improved attacks are achieved by enhancing the classical components
+in the diﬀerential-neural attack scheme in [15], which are the CD’s neutral
+bits (NBs). NBs and NB sets were ﬁrst introduced by Biham and Chen in the
+cryptanalysis of hash function SHA-0 [9]. Later, many extensions and related
+concepts were proposed and applied in classical cryptanalysis, including message modiﬁcation [32], tunnels [22], boomerangs [21], probabilistic NBs [4],
+and free bits [23]. Flipping an NB of a diﬀerential’s conforming pair, the
+resulting pair also conforms to the diﬀerential. Thus, NBs can be used to
+derive a batch of data pairs from a single pair, and they conform or do not
+conform to the diﬀerential simultaneously. Single-bit NBs are employed in
+ML-based attacks in [15] to boost signals from NDs. However, NBs of long
+CD are too scarce to boost signals from a weak but long ND, thus inhibiting
+the ML-based attack from extending more rounds. In this work, we exploit
+various generalized NBs to make weak ND usable again. Particularly, we employed conditional simultaneous neutral bit-sets (CSNBS) and switching bit
+for adjoining diﬀerentials (SBfAD), which are essential for achieving eﬃcient
+12-round and practical 13-round attacks.
+– New observations
+• We note the output diﬀerence of the CD matters to ND, but not the
+input diﬀerence. Hence, more than one CD can be prepended to ND,
+as long as they share the same output diﬀerence. Some neutral bits can
+be shared by multiple such diﬀerentials. Using such diﬀerentials might
+enable data reuse, thus slightly reducing data complexity.
+• We ﬁnd that there are additional constraints on subkeys for some diﬀerential trails used in the presented attacks as well as the previous best
+attacks on Speck32/64 [10, 13, 29]. Thus, the attacks only work for a
+subspace of the keys, i.e., weak keys up to half of the keyspace.
+– Various NDs and DDT-based distinguishers (DD) for Simon32/64
+• Besides the Residual Network (ResNet) [18] considered by Gohr in [15],
+other neural networks that have shown advantages on ResNet in speciﬁc
+tasks, including Dense Network (DenseNet) [20] and the Squeeze-andExcitation Network (SENet) [19], are investigated. Additionally, various
+training schemes, including direct training, key-averaging, and staged
+3
+
+training, were attempted. This eﬀort results in various NDs covering up
+to 11-round Simon32/64.
+• The full distribution of diﬀerences induced by the input diﬀerence (0x0000,
+0x0040) up to 11 rounds are computed for Simon32/64, which results
+in various DDs. These DDs provide solid baselines for ND. We note that
+r-round ND should be compared with (r − 1)-round DD for Simon (different from Speck). The results show that r-round NDs achieve similar
+but weaker classiﬁcation accuracy than (r − 1)-round DDs (see Table 5).
+We conjecture that r-round NDs can learn to “decrypt” one un-keyed
+round and try to learn the distribution of the (r − 1)-round diﬀerential,
+but fails to learn more features beyond the distribution of diﬀerences.
+The source codes of the new attacks and the new NDs can be found via
+https://github.com/differential-neural-cryptanalysis/speck32_simon32.
+Table 1: Summary of key-recovery attacks on Speck32/64 and Simon32/64
+Target
+
+Speck32/64
+
+Simon32/64
+
+#R
+
+Time
+(#Enc)
+
+Data
+(#CP)
+
+Succ.
+Rate
+
+Weak
+keys
+
+Conﬁgure
+
+Ref.
+
+11
+
+246
+⋆
+238
+
+214
+213.6
+
+0.52
+
+264
+264
+
+1+6 +4
+1+2 +7+1
+
+[13]
+[15]
+
+12
+
+251
+⋆
+243.40
+44.89⋆
+2
+⋆
+242.97
+
+219
+222.97
+222.00
+218.58
+
+0.40
+0.86
+0.83
+
+264
+264
+264
+263
+
+1+7 +4
+1+2 +8+1
+1+2 +8+1
+1+3 +7+1
+
+[13]
+[15]
+Fig. 6 Sect. 4.3
+Fig. 7 Sect. 4.3
+
+13
+
+257
+⋆
+248.67 +r
+
+225
+229
+
+0.82
+
+264
+263
+
+1+8 +4
+1+3 +8+1
+
+[13]
+Fig. 5 Sect. 4.2
+
+14
+
+262.47
+
+230.47
+
+-
+
+264
+
+1+9 +4
+
+26.48
+
+16
+
+2
+⋆
+241.81 +r
+
+29.48
+
+2
+221
+
+0.62
+0.49
+
+2
+264
+
+2+12 +2
+1+3 +11+1
+
+18
+21
+
+246.00
+255.25
+
+231.2
+231.0
+
+0.63
+-
+
+264
+264
+
+1+13 +4
+4+13 +4
+
+64
+
+[29]
+[3]
+Sect. E.4
+[2]
+[31]
+
+- Not available.
+⋆
+Under the assumption that one second equals the time of 228 executions of Speck32/64 or
+Simon32/64 on a CPU.
+r : log2 (cpu/gpu), where cpu and gpu are the CPU and GPU time running an attack,
+respectively. In our computing systems, r = 2.4 (The worse case execution time of the core of
+the 12-round attack on Speck32/64 (without guessing the one key bit of k0 ) took 6637 and
+1265 seconds on CPU and GPU, respectively).
+In the column entitled “Conﬁgure”, the numbers colored in blue and red are the numbers of
+round covered by CDs and NDs, respectively.
+Please see [5] for the full version of this article.
+
+Organization. The rest of the paper is organized as follows. Section 2 gives
+the preliminary on ML-based diﬀerential cryptanalysis and introduces the design
+of Speck and Simon. Section 3 introduces concepts of generalized neutral bits
+and some new notice on diﬀerential trails of Speck32/64. The framework of the
+enhanced diﬀerential-neural cryptanalysis and its applications to Speck32/64
+and Simon32/64 are presented in Section 4 and Section E. Section 5 exhibits
+details of important statistics during the key-recovery phase. Rules of thumb
+4
+
+are provided for tuning various parameters for the attacks. Section 6 presents
+various of NDs and DDs on Simon32/64 reduced up to 11 rounds.
+
+2
+
+Preliminary
+
+2.1
+
+Brief Description of Speck32/64 and Simon32/64
+
+Notations. Denote by n the word size in bits, 2n the state size in bits. Denote
+by (xr , yr ) the left and right branches of a state after the encryption of r rounds.
+Denote by x[i] (resp. y[i]) the i-th bit of x (resp. y) counted starting from 0;
+Denote by [j] the index of the j-th bit of the state, i.e., the concatenation of x
+and y, where y[0] is the 0-th bit, and x[0] is the 16-th bit. Denote by ⊕ the bitwise XOR, ⊞ the addition modulo 2n , & the bit-wise AND, x≪s the bit-wise left
+rotation by s positions, x≫s the bit-wise right rotation by s positions. Denote
+by Fk (resp. Fk−1 ) the round function (resp. inverse of the round function) using
+subkey k of the encryption.
+Brief Description of Speck32/64 and Simon32/64. Speck32/64 and Simon32/64 are small members of the lightweight block cipher families Speck and
+Simon [6] designed by researchers from the National Security Agency (NSA) of
+the USA. Both Speck32/64 and Simon32/64 have a Feistel-like structure 5 , a
+block size and a key size of 32 resp. 64 bits. The round functions use combinations
+of rotation, XOR, and addition modulo 216 (Speck) or bit-wise AND (Simon).
+Speck32/64 has 22 rounds, and Simon32/64 has 32 rounds. The encryption
+algorithms of Speck32/64 and Simon32/64 are listed in Algorithms 1 and 2.
+The subkeys of 16-bit for each round are generated from a master key of 64-bit
+by the non-linear key schedule using the same round function (Speck32/64) or
+linear functions of simple rotation and XOR (Simon32/64).
+Algorithm 1: Encryption of
+Speck32/64
+
+Algorithm 2: Encryption of
+Simon32/64
+
+Input: P = (x0 , y0 ), {k0 , · · · , k21 }
+Output: C = (x22 , y22 )
+for r = 0 to 21 do
+xr+1 ← x≫7
+⊞ yr ⊕ kr
+r
+yr+1 ← yr≪2 ⊕ xr+1
+end
+
+2.2
+
+Input: P = (x0 , y0 ), {k0 , · · · , k31 }
+Output: C = (x32 , y32 )
+for r = 0 to 31 do
+xr+1 ←
+(x≪1
+&x≪8
+) ⊕ x≪2
+⊕ y r ⊕ kr
+r
+r
+r
+yr+1 ← xr
+end
+
+Diﬀerential-based Neural Distinguishers
+
+The work in [15] shows that a neural network could be trained to capture the
+non-randomness of the distribution of values of output pairs when the input
+5
+
+Speck can be represented as a composition of two Feistel maps [6].
+
+5
+
+pairs to round-reduced Speck32/64 are of speciﬁc diﬀerence, and thus play
+the role of distinguisher in cryptanalysis. This diﬀerential-based ND is the ﬁrst
+known machine learning model that successfully performed cryptanalysis tasks
+on modern ciphers (beyond the applications on side-channel attacks).
+In the following, the way of training the diﬀerential-based ND introduced
+in [15] is brieﬂy recalled.
+The Training Data and Input Representation. For a target cipher, the
+neural network is trained to distinguish between examples of ciphertext pairs
+corresponding to plaintext pairs with particular diﬀerence and those corresponding to random plaintext pairs. Thus, each of the training data is a data pair
+of the form (C, C 0 ) together with a label taking a value 0 or 1, where 0 means
+the corresponding plaintext pair is generated randomly, and 1 from a particular
+plaintext diﬀerence ∆I . For Speck32/64, the ∆I is chosen to be of a single
+active bit, i.e., (0x0040, 0000), which is the intermediate diﬀerence lying in a
+known best diﬀerential characteristic.
+The state of Speck32/64 has left and right parts; thus, a pair of data is
+transformed into a quadruple of words (x, y, x0 , y 0 ) where C = xky and C 0 =
+x0 ky 0 . The word quadruple is then interpreted into a 4 × 16-matrix with each
+word as a row-vector before being fed into the neural network with an input layer
+consisting of 64 units. Among the training data (and veriﬁcation data), half are
+positive and half are negative examples, labeled by 1 and 0, respectively.
+Training Schemes. The neural network structure used in [15] is a deep residual
+network. There are three training schemes proposed in [15]. The ﬁrst is a basic
+training scheme that is suﬃcient for successfully training short-round distinguishers. The second is an improved training scheme for r-round distinguishers that
+simulate the output of the KeyAveraging algorithm used with an (r−1)-round
+distinguisher. Using the second scheme, the best ND on 7-round Speck32/64
+was achieved in [15]. The third is a staged training method that turns an already
+trained (r−1)-round distinguisher into an r-round distinguisher in several stages.
+Using the third scheme, the longest ND on Speck32/64, which is an 8-round
+one, was achieved.
+2.3
+
+Upper Conﬁdence Bounds and Bayesian Optimization
+
+Besides a basic key-recovery attack, an improved attack using speciﬁcs of the targeted cipher (i.e., the wrong key randomization hypothesis does not hold when
+only one round of trial decryption is performed) and elements from reinforcement learning (i.e., automatic exploitation versus exploration trade-oﬀ based on
+upper conﬁdence bounds) was proposed in [15].
+The improved key-recovery attack employs an r-round main and an (r − 1)round helper ND trained with data pairs corresponding to input pairs with
+diﬀerence ∆I ; a short s-round diﬀerential, ∆I 0 → ∆I with probability denoted
+by 2−p , is prepended on top of the NDs (refer to Fig. 1 for an illustration of the
+6
+
+s-round classical differential
+∆0I → ∆I
+
+1-round
+free
+
+1-round key-guessing
+ks+r+1
+
+r-round neural distinguisher
+∆I → (xr , yr , x0r , yr0 )
+
+(r − 1)-round neural distinguisher 1-round key-guessing
+0
+)
+∆I → (xr−1 , yr−1 , x0r−1 , yr−1
+ks+r
+y0
+
+ỹ1
+Fk0
+
+y2
+F k1
+
+x0
+
+x̃1
+
+x2
+
+ys+1
+
+ys
+···
+xs
+
+ys+2
+Fks+1
+
+F ks
+xs+1
+
+ys+r−1
+
+xs+2
+
+ys+r
+Fs+r−1
+
+···
+xs+r−1
+
+ys+r+1
+Fs+r
+
+xs+r
+
+ys+r+2
+Fs+r+1
+
+xs+r+1
+
+xs+r+2
+
+(1 + s + r + 1)-round key-recovery attack
+
+Fig. 1: Components of the key-recovery attacks
+
+components of the key-recovery attack.) About c·2p (denoted by ncts ) data pairs
+with diﬀerence ∆I 0 are randomly generated, where c is a small constant; Neutral
+bits of the s-round diﬀerential are used to expand each data pair to a structure
+of nb data pairs. The resulting ncts structures of data pairs are decrypted by one
+round with 0 as the subkey 6 to get plaintext structures. All plaintext structures
+are queried to obtain the corresponding ciphertext structures.
+Each ciphertext structure is to be used to generate candidates of the last
+subkey by the r-round main ND (and latter of the second to the last subkey by
+the (r − 1)-round helper ND) with a highly selective key search policy based on
+a variant of Bayesian optimization.
+More speciﬁcally, the key search policy depends on an important observation
+that the expected response of the distinguisher upon wrong-key decryption will
+depend on the bit-wise diﬀerence between the trial key and the real key. This
+wrong key response proﬁle, which can be precomputed, is used to recommend
+new candidate values for the key from previous candidate values by minimizing
+the weighted Euclidean distance as the criteria in an BayesianKeySearch
+(see Alg. 4.) It recommends a set of subkeys and provides their scores without
+exhaustively performing trail decryptions.
+The use of ciphertext structures is also highly selective using a standard
+exploration-exploitation technique, namely Upper Conﬁdence Bounds (UCB).
+Each ciphertext structure is assigned a priority according to the scores of the
+subkeys they recommended and how often they were visited.
+An important detail in the BayesianKeySearch is that the responses vi,k
+from the ND on ciphertext pairs in the ciphertext structure (of size nb ) are
+combined using the Formula 1 and used as the score sk of the recommended
+subkey k (refer to Alg. 4). This score is highly decisive for the execution time and
+success rate of the attack. It will determine whether the recommended subkey
+will be further treated as its score passes or fails to pass the cutoﬀ and also
+determine the priority of ciphertext structures to be visited. The number of
+ciphertext pairs in each structure is decisive when the ND has low accuracy.
+sk :=
+
+n∑
+b −1
+
+log2 (
+
+i=0
+6
+
+vi,k
+)
+1 − vi,k
+
+(1)
+
+For Speck, there is no whitening key and the ﬁrst subkey is XORed after the ﬁrst
+non-linear operation, which makes the ﬁrst round free in diﬀerential attack (see the
+top of Fig. 3).
+
+7
+
+3
+
+Deep Exploring of Neutral Bits
+
+3.1
+
+The Motivation of Neutral Bits
+
+Typically, the more rounds a ND covers, the lower its accuracy. When the accuracy becomes marginally higher than 0.5, it is hard to be used in a practical keyrecovery attack. Thus, Gohr in [15] used the combined response (Formula 1) of
+the ND over large number of samples of the same distribution as a distinguisher
+(named as combined-response-distinguisher, CRD). By doing so, the signal from
+the ND is boosted, and the distinguishability is increased. For a CRD built on
+top of a weak ND to reach its most potential with respect to distinguishability,
+the number of samples of the same distribution should be suﬃciently large (see
+Sect. C for a detailed experimental study on the relation between the distinguishability of CRD and the number of combined samples).
+For the hybrid diﬀerential distinguisher used in the key-recovery attack in [15],
+it is not straightforward to aggregate enough samples of the same distribution fed
+to the ND due to the prepended CD. To overcome this problem, Gohr in [15] used
+the neutral bits of the CD, which is a notion ﬁrst introduced by Biham and Chen
+for attacking SHA-0 [9]. The neutral bit has many extensions and related concepts, including message modiﬁcation [32], tunnels [22], boomerangs [21], probabilistic neutral bits [4], and free bits [23]. Changing the values at the neutral
+bits of an input pair does not change the conformability to the diﬀerential. Thus,
+one can use m neutral bits to derive 2m data pairs from a single pair such that
+they conform or do not conform to the diﬀerential simultaneously. The more
+neutral bits there are for the prepended CD, the more the samples of the same
+distribution that could be generated for the ND. However, generally, the longer
+the CD, the fewer the neutral bits.
+Finding enough neutral bits for prepending a long CD over a weak ND becomes a diﬃcult problem for devising a key-recovery to cover more rounds. Thus,
+the ﬁrst part of this work focuses on ﬁnding various types of neutral bits.
+3.2
+
+Neutral Bits and Generalized Neutral Bits
+
+Notations. Let δ := ∆in → ∆out be a diﬀerential of an r-round encryption F r .
+Let (P, P 0 ) be the input pair and (C, C 0 ) be the output pair, where P ⊕P 0 = ∆in ,
+C = F r (P ), and C 0 = F r (P 0 ). If C ⊕C 0 = ∆out , (P, P 0 ) is said to conform to the
+diﬀerential δ (conforming pairs, or correct pairs of the diﬀerential). The primary
+notion of neutral bits can be interpreted as follows.
+Deﬁnition 1 (Neutral bits of a diﬀerential, NBs [9]). Let e0 , e1 , . . . , en−1
+be the standard basis of Fn2 . Let i be an index of a bit (starting from 0). The
+i-th bit is a neutral bit of the diﬀerential ∆in → ∆out , if for any conforming pair
+(P, P 0 ), (P ⊕ ei , P 0 ⊕ ei ) is also a conforming pair.
+Let {i1 , i2 , . . . , in } be the set of NBs of a diﬀerential ∆in → ∆out . Denote
+the subspace of Fn2 with basis {ei1 , ei2 , . . . , ein } by S. Then, from one input pair
+8
+
+(P, P 0 ) where P ⊕ P 0 = ∆in , one can generate a set {(Pi , Pi0 ) | Pi ∈ P ⊕ S, Pi0 =
+Pi ⊕ ∆in } that forms a structure with the same conformability to the diﬀerential.
+For a diﬀerential ∆in → ∆out of F r , in the view of a system of equations
+deﬁned on the derivative function of F r , i.e., D∆in F r (P ) = ∆out , a set of neutral
+bits N B partitions the solution space of D∆in F r (x) = ∆out into equivalence
+classes. It can be seen that the more neutral bits for a diﬀerential, the more
+structured the solution space.
+Generalization of Neutral Bits. In general, neutral bits of non-trivial diﬀerentials
+are scarce. In [15], because of the lack of neutral bits for the 2-round diﬀerential
+of Speck32/64, probabilistic neutral bits (PNBs for short) are exploited. This
+notion of PNB has already been introduced by Aumasson et al. in previous
+diﬀerential cryptanalysis of stream ciphers Salsa20 and Chacha, and compression
+function Rumba [4]. Formally, it can be deﬁned as follows.
+Deﬁnition 2 (Probabilistic neutral bits, PNBs [4]). Let i be an index of
+a bit. The i-th bit is a p-probabilistic neutral bit of the diﬀerential ∆in → ∆out ,
+if the event that when (P, P 0 ) conforms to the diﬀerential then (P ⊕ ei , P 0 ⊕ ei )
+also conforms to the diﬀerential under the same key, has a probability p (over
+the choice of P and the key).
+In the sequel attacks, the higher the probability p is, the higher the neutrality
+quality, and the more useful the neutral bit becomes. For convenience, when
+p = 1, the neutral bits are said to be deterministic neutral bits.
+In this work, two types of generalized neutral bits are considered beyond the
+(probabilistic) neutral bits considered in [15]. The ﬁrst type, named simultaneousneutral bit-set (SNBSs for short), has already been introduced together with
+the notion of neutral bit in [9]. That is, for a diﬀerential, given a conforming
+pair, complementing individual bits, the conformability might be changed, but
+simultaneously complementing a set of bits does not change the conformability
+of the resulted pair. Formally, it can be deﬁned as follows.
+Deﬁnition 3 (Simultaneous-neutral bit-sets,⊕
+SNBSs [9]). Let Is = {i1 ,
+i2 , . . ., is } be a set of bit indices. Denote fIs =
+i∈Is ei . The bit-set Is is a
+simultaneous-neutral bit-set of the diﬀerential ∆in → ∆out , if for any conforming
+pair (P, P 0 ), (P ⊕ fIs , P 0 ⊕ fIs ) is also a conforming pair, while for any subsets
+of Is , the conformability of the resulted pair does not always hold.
+If we view that ﬁnding neutral bits is to form a subspace of Fn2 in which the
+corresponding data have the same conformability to the diﬀerential, the essence
+of generalizing to SNBS is that, instead of only considering the standard basis
+corresponding to single-bit NBs, we now consider arbitrary bases.
+The second type, which is a natural generalization, is named in this work
+as conditional (simultaneous-) neutral bit(-set)s (CSNBSs for short), that is, the
+bits or bit-sets are neutral for input pairs fulﬁlling speciﬁc conditions. Formally,
+it can be deﬁned as follows.
+9
+
+Deﬁnition 4 (Conditional (simultaneous-) neutral bit(-set)s,
+CSNBSs).
+⊕
+let Is = {i1 , i2 , . . . , is } be a set of bit indices. Denote fIs = i∈Is ei . Let C be
+a set of constraints on the value of an input P , and PC be the set of inputs
+that fulﬁll the constraints C. The bit-set Is is a conditional simultaneous-neutral
+bit-set of the diﬀerential ∆in → ∆out , if for any conforming pair (P, P 0 ) where
+P ∈ PC , (P ⊕ fIs , P 0 ⊕ fIs ) is also a conforming pair.
+The most straightforward constraints can be that some bit values of P are
+ﬁxed. However, the constraints on the values of input P can be a more involved
+system of linear or non-linear equations.
+Remark 1. Interestingly, various ‘tunnels’ have been used in [22] to speed up
+the search of MD5 collisions. They are essentially (generalized) neutral bits,
+including PNBs and CNBs. For consistency, in this paper, we use the extended
+names of the more well-known concept of ‘neutral bits’ instead of ‘tunnels’.
+Remark 2. The neutrality of CSNBSs depends on the values of some particular
+bits. The selected data is at an intermediate round in our attacks in this work,
+although the diﬀerence does not depend on the round-key, the values do. Thus,
+using CSNBSs, the attack requires guessing some key bits of the ﬁrst round.
+3.3
+
+Automatic Procedure to Search for CSNBSs
+
+To ﬁnd CSNBSs, we use an automatic procedure to experimentally evaluate the
+conditional neutral probability of candidate SNBSs. Concretely, we investigate
+how the neutrality of each candidate SNBS is inﬂuenced by values of bits in
+some involved and controllable variables (for Speck32/64, such variables are
+supposed to be the variables involved in the ﬁrst modular addition, particularly,
+they are x1 , y1 , and x1 ≫7 ⊕ y1 7 ), and search CSNBSs conditioned on bits of
+these variables with the procedure in Algorithm 3.
+3.4
+
+Switching Bits for Adjoining Diﬀerentials
+
+One knows that for a diﬀerential δ1 = ∆in1 → ∆out , ﬂipping a non-neutral bit of
+a conforming pair might make the resulting pair not conform to the diﬀerential.
+However, it is interesting that the resulted pair might turn into a conforming pair
+of another diﬀerential δ2 = ∆in2 → ∆out (after adjusting the input diﬀerence).
+If ﬂipping this bit turns all conforming pairs of δ1 into all conforming pairs
+of δ2 , then δ2 has the same probability as δ1 . Since δ1 and δ2 have the same
+probability and share the same output diﬀerence, which will be the connecting
+diﬀerence in a hybrid distinguisher, the two diﬀerential are equally useful. In this
+case, that non-neutral bit can play the same role as neutral bits for generating
+structures of pairs simultaneously satisfying the connecting diﬀerence in a hybrid
+distinguisher. Formally, we deﬁne such bits that relate two diﬀerential as follows.
+7
+
+In these considered variables, (x1 , y1 ) = (x̃1 ⊕ k0 , ỹ1 ⊕ k0 ) is the real input to the
+CD (see Fig. 3), where (x̃1 , ỹ1 ) is the chosen data in the key-recovery attack (since,
+in the key-recovery attack, the CD will be freely extended one round backward).
+
+10
+
+Algorithm 3: An automatic procedure to search for CSNBSs
+1. Generate N random conforming pairs of the diﬀerential, each with a diﬀerent
+random key.
+2. For each candidate SNBS, denoted by I, for each bit b of a variable x possibly
+inﬂuencing the neutrality, and for c ∈ {0, 1}, do the following.
+3. Experimentally evaluate the following probabilities over the conforming pairs.
+– Pr[I is neutral], i.e., the neutral probability of I;
+– Pr[b = c], i.e., the probability of b taking value c;
+– Pr[I is neutral and b = c], i.e., the probability of I is neutral and b taking
+value c for a random conforming pair;
+and b=c]
+(when Pr[b = c] = 0, set
+4. Compute Pr[I is neutral | b = c] as Pr[I is neutral
+Pr[b=c]
+Pr[I is neutral | b = c] as 0.
+5. If Pr[I is neutral | b = c] − Pr[I is neutral] > τ and Pr[I is neutral | b = c] > ξ,
+take I as a useful CSNBS and b = c as its condition, and store in a set CNB.
+– In our experiments, N takes 1000. Statistics using 10, 100, 5000 conforming pairs were also
+made as preliminary tests. The statistical results do not have obvious divergence when using
+more than 100 conforming pairs, thus 1000 should be suﬃcient.
+– In this procedure, τ and ξ are thresholds which can be adjusted to make trade-oﬀs between
+the cost of imposing the condition, the number of CNBs, and the quality of CNBs. Typically,
+set τ be 0.2 and ξ be 0.8 will work well.
+
+Deﬁnition 5 (Switching bits for adjoining diﬀerentials, SBfADs). Let i
+be an index of a bit. The i-th bit is an switching bit of two diﬀerentials δ1 =
+∆in1 → ∆out and δ2 = ∆in2 → ∆out , if for any conforming pair (P, P ⊕ ∆in1 )
+of δ1 , ﬂipping the i-th bit and adjusting the input diﬀerence, the resulted pair
+(P ⊕ ei , P ⊕ ei ⊕ ∆in2 ) conforms to δ2 under the same key. We call δ1 and δ2
+adjoining diﬀerentials.
+Conceivably, such adjoining diﬀerentials and switching bit should be rare.
+However, they do exist. Currently, we found one type for XOR (⊕) diﬀerential
+of addition modulo 2n (⊞), and the details can be found in Sect. A.1. A concrete
+example can be found in Sect. 4.1.
+3.5
+
+Paired Diﬀerentials Sharing the Same Neutral Bits
+
+From the connecting diﬀerence between the CD and the ND propagating upward,
+there might be multiple diﬀerentials similar to CD and have equally good probability. These similar diﬀerentials are likely to share many neutral bits. When
+a shared neutral bit happens to be exactly the diﬀerence between input diﬀerences of two diﬀerentials, one can re-group ciphertext pairs within each ciphertext structure corresponding to one diﬀerential, and obtain ciphertext structures
+corresponding to the other diﬀerential without additional queries, i.e., doubling
+the number of ciphertext structures for free. Formally, one has the following.
+Deﬁnition 6 (Paired Diﬀerentials). let δ1 = ∆in1 → ∆out and δ2 = ∆in2 →
+∆out be two diﬀerentials with the same output diﬀerence and with input diﬀerences satisfying ∆in1 ⊕ ∆in2 = ∆nbi . Suppose nbi is a NB/SNBS for both δ1 and
+δ2 . Then, once a pair of input pair {(P, P ⊕ ∆in1 ), (P ⊕ ∆nbi , P ⊕ ∆in1 ⊕ ∆nbi )}
+11
+
+is generated for diﬀerential δ1 , one can re-pair the inputs as {(P, P ⊕ ∆in1 ⊕
+∆nbi ), (P ⊕ ∆nbi , P ⊕ ∆in1 )} and obtain a pair of input pair for diﬀerential δ2 .
+Thus, by re-pairing the corresponding ciphertext pairs, the number of ciphertext
+structures is doubled. Such two diﬀerentials are said to be paired diﬀerentials.
+Exploiting paired diﬀerentials can reduce the data complexity by half, but is
+only of interest when the two diﬀerentials are with almost equally good probability and share enough neutral bits to be used in key-recovery attacks. An example
+can be found in Sect. 4.1.
+Remark 3. Noticeably, the example of paired diﬀerentials is exactly the example
+of adjoining diﬀerentials in Sect. 4.1. However, this same example plays diﬀerent
+roles when employed as paired diﬀerentials or as adjoining diﬀerentials. Employing as the former is to reuse data by re-pairing, employing as the latter is to
+achieve the eﬀect of neutral bits. If a single pair of diﬀerentials acts as paired
+diﬀerentials and adjoining diﬀerentials simultaneously, the generated data pairs
+will be all diﬀerent. Thus, two diﬀerentials can play both roles at the same time.
+Remark 4. Reusing data to form diﬀerent pairs adds dependencies between the
+chosen data pairs. However, the inﬂuence of such dependencies should not matter.
+We performed the attacks with and without reusing the data. The results show
+that as long as the total number of ciphertext structures and their size are the
+same, the success rates are roughly the same.
+Remark 5. There is an implicit relation between neutral bits of a diﬀerential and
+high-order diﬀerential. An SNBS Is of a diﬀerential ∆in → ∆out
+⊕ deﬁnes a special
+high-order diﬀerential ∆a1 ,a2 → 0, where a1 = ∆in and a2 = i∈Is ei .
+Besides, there is an interesting relation between neutral bits and the mixturediﬀerential distinguisher of AES [17]. Some neutral bits found for Speck32/64
+and Simon32/64 in this work can result in some bit-level mixture quadruples.
+
+4
+
+Key Recovery Attack on Round-Reduced Speck32/64
+
+This section shows that the neural distinguishers have not reached their full potential in the key-recovery attacks in [15]. They could be harnessed to cooperate
+with classical cryptanalytic tools and perform key-recovery attacks competitive
+to the attacks devised by orthodox cryptanalysis. In the following, we present keyrecovery attacks employing the same neural distinguishers used in the 11-round
+and 12-round attacks on Speck32/64 in [15]. The ﬁrst neural distinguishers
+based 13-round attack and an improved 12-round attack were obtained.
+The improved attacks follow the framework of the improved key-recovery attacks in [15]. An r-round main and an (r − 1)-round helper NDs are employed,
+and an s-round CD is prepended. The key guessing procedure applies a simple
+reinforcement learning procedure. The last subkey and the second to last subkey are to be recovered without exhaustively using all candidate values to do
+one-round decryption. Instead, a Bayesian key search employing the wrong key
+response proﬁle is to be used.
+12
+
+The prepended CDs to be used in the improved attacks include the same
+2-round diﬀerential used in the attack in [15] and four new 3-round diﬀerentials.
+The preliminary is to ﬁnd enough NBs of these diﬀerentials to obtain enough
+samples of the same distribution so that we can use the combined response from
+the NDs. In the following, the SNBSs, CNBs, and SBfADs introduced in Sect. 3
+are to be found and exploited.
+4.1
+
+Finding CSNBSs for Speck32/64
+
+For ﬁnding NBs of the diﬀerential of round-reduced Speck32/64, we used an
+exhaustive search for empirical results because of the complexity brought by the
+carry of modular addition.
+Finding SNBSs for 2-round Diﬀerential. For the prepended 2-round CD on
+top of the NDs, one can experimentally obtain three deterministic NBs and two
+SNBSs (simultaneously complementing up to 4 bits) using an exhaustive search.
+Besides, bits and bit-sets that are (simultaneous-)neutral with high probabilities
+are also detected. Concretely, for the 2-round diﬀerential (0x0211, 0x0a04) →
+(0x0040, 0x0000), bits and bit-sets that are (probabilistic) (simultaneous-)neutral
+are summarized in Table 2.
+Table 2: (Probabilistic) SNBSs for 2-round diﬀerential (0x0211, 0x0a04) →
+(0x0040, 0x0000) of Speck32/64. The statistics were performed on 1000 correct pairs,
+each with a diﬀerent random key. For comparison, one can ﬁnd the NBs used by attacks
+in [15] in Table 9.
+NBs Pr.
+
+NBs Pr.
+
+NBs Pr.
+
+NBs Pr.
+
+NBs
+
+Pr.
+
+NBs
+
+Pr.
+
+NBs Pr.
+
+[20] 1
+[21] 1
+[22] 1
+[9, 16] 1
+[2, 11, 25] 1
+[14]
+0.965 [15] 0.938
+0.806 [0]
+0.754 [11, 27]0.736 [8] 0.664
+[6, 29]0.91 [23] 0.812 [30] 0.809 [7]
+
+Finding SNBSs for 3-round Diﬀerential. The 2-round diﬀerential
+(0x0211, 0x0a04) → (0x0040, 0x0000) can be extended to two optimal (prob.
+≈ 2−11 ) 3-round diﬀerentials, i.e.,
+(0x0a20, 0x4205) → (0x0040, 0x0000), (0x0a60, 0x4205) → (0x0040, 0x0000).
+However, the NBs/SNBSs of these two optimal diﬀerentials are very scarce.
+There are four sub-optimal 3-round diﬀerentials (prob. ≈ 2−12 when being estimated following Markov model, but are actually 2−11 for 263 keys and 0 for
+another 263 keys, see Sect. D for more details), i.e.,
+(0x8020, 0x4101) → (0x0040, 0x0000), (0x8060, 0x4101) → (0x0040, 0x0000),
+(0x8021, 0x4101) → (0x0040, 0x0000), (0x8061, 0x4101) → (0x0040, 0x0000).
+For these 3-round diﬀerentials, the hamming weights of the input diﬀerences are
+low, and they have more NBs/SNBSs. Still, the numbers of NBs/SNBSs are not
+13
+
+enough for appending a weak neural network distinguisher. Thus, conditional
+ones were searched using the procedure in Algorithm 3. For ξ = 0.7, the obtained CSNBSs and their conditions are summarized together with unconditional
+NBs/SNBSs in Table 4. In the table, the columns titled ‘Post.’ are ﬁnally veriﬁed
+neutral probabilities of the (C)SNBSs when all four conditions are fulﬁlled.
+For each of the four diﬀerentials, there are three linear conditions (xy-type)
+that are necessary for a pair ((x, y), (x0 , y 0 )) to conform to it, which are listed in
+Table 3 (without coloring in gray). For each linear condition, once it is fulﬁlled,
+the probability of the diﬀerential increases by a factor of 21 . In the following
+key-recovery attacks, the linear conditions can be fulﬁlled by chosen data once
+the corresponding bits of k0 are guessed.
+Table 3: Necessary conditions to conform to the 3-round diﬀerentials (or the dominant
+trail in the diﬀerential, intermediate diﬀerences in the dominant trail are colored in
+gray, the condition for the trail instead of the diﬀerential is colored in gray, where
+c = (x≫7 ⊞ y) ⊕ (x≫7 ⊕ y). Each column corresponds to one diﬀerential (trail).)
+(0x8020, 0x4101)
+(0x0201, 0x0604)
+(0x1800, 0x0010)
+(0x0040, 0x0000)
+
+x[7] = 0,
+
+
+
+x[5] ⊕ y[14] = 1,
+
+x[15] ⊕ y[8] = 0,
+
+
+x[0] ⊕ y[9] = 0.
+
+(0x8060, 0x4101)
+(0x0201, 0x0604)
+(0x1800, 0x0010)
+(0x0040, 0x0000)
+
+x[7] = 0,
+
+
+
+x[5] ⊕ y[14] = 0,
+
+x[15] ⊕ y[8] = 0,
+
+
+x[0] ⊕ y[9] = 0.
+
+(0x8021, 0x4101)
+(0x0201, 0x0604)
+(0x1800, 0x0010)
+(0x0040, 0x0000)
+
+x[7] = 0,
+
+
+
+x[5] ⊕ y[14] = 1,
+
+x[15] ⊕ y[8] = 1,
+
+
+y[9] ⊕ c[9] = 0.
+
+(0x8061, 0x4101)
+(0x0201, 0x0604)
+(0x1800, 0x0010)
+(0x0040, 0x0000)
+
+x[7] = 0,
+
+
+
+x[5] ⊕ y[14] = 0,
+
+x[15] ⊕ y[8] = 1,
+
+
+y[9] ⊕ c[9] = 0.
+
+Table 4: (C)SNBSs for 3-round diﬀerential (0x8020, 0x4101) → (0x0040, 0x0000),
+(0x8060, 0x4101) → (0x0040, 0x0000), (0x8021, 0x4101) → (0x0040, 0x0000), and
+(0x8061, 0x4101) → (0x0040, 0x0000) of Speck32/64.
+Bit-set
+[22]
+[20]
+[13]
+[12, 19]
+[14, 21]
+[6, 29]
+[30]
+[0, 8, 31]
+[5, 28]
+[15, 24]
+[4, 27, 29]
+[6, 11, 12, 18]
+
+(8020,
+Pre.
+0.995
+0.986
+0.986
+0.986
+0.855
+0.901
+0.803
+0.855
+0.495
+0.482
+0.672
+0.445
+
+4101)
+Post.
+1.000
+1.000
+1.000
+1.000
+0.860
+0.902
+0.818
+0.859
+1.000
+1.000
+0.916
+0.903
+
+(8060,
+Pre.
+0.995
+0.997
+0.989
+0.995
+0.874
+0.898
+0.818
+0.858
+0.495
+0.542
+0.648
+0.456
+
+4101)
+Post.
+1.000
+1.000
+1.000
+1.000
+0.871
+0.893
+0.860
+0.881
+1.000
+1.000
+0.905
+0.906
+
+(8021,
+Pre.
+0.996
+0.996
+0.988
+0.993
+0.881
+0.721
+0.442
+0.000
+0.481
+0.498
+0.535
+0.333
+
+4101)
+Post.
+1.000
+1.000
+1.000
+1.000
+0.873
+0.706
+0.442
+0.000
+1.000
+1.000
+0.736
+0.701
+
+(8061,
+Pre.
+0.997
+0.995
+0.992
+0.986
+0.881
+0.721
+0.412
+0.000
+0.469
+0.496
+0.536
+0.382
+
+4101)
+Post.
+1.000
+1.000
+1.000
+1.000
+0.876
+0.723
+0.407
+0.000
+1.000
+1.000
+0.718
+0.726
+
+Condition
+–
+–
+–
+–
+–
+–
+–
+–
+x[12]⊕y[5] = 1
+y[1] = 0
+x[11]⊕y[4] = 1
+x[2]⊕y[11] = 0
+
+A condition at the end of a row is speciﬁc to the bit-set at the same row. ‘-’ means that there is no
+condition for the corresponding bit-set.
+Pre.: probability obtained using 1000 correct pairs without imposing the conditions.
+Post.: probability obtained using 1000 correct pairs and imposing all conditions in the last column.
+□ : Neutral bit(-set)s used in the 13-round attack ASpeck13R on Speck32/64.
+□ : Neutral bit(-set)s used in the 12-round attack ASpeck12R on Speck32/64.
+
+14
+
+Exploiting SBfADs. Among the four 3-round diﬀerentials, (0x8020, 0x4101) →
+(0x0040, 0x0000) and (0x8060, 0x4101) → (0x0040, 0x0000) are adjoining differentials, and (0x8021, 0x4101) → (0x0040, 0x0000) and (0x8061, 0x4101) →
+(0x0040, 0x0000) are adjoining diﬀerentials (refer to Sect. 3.4). The bit 5 of x
+(the bit 21 of xky) is the SBfAD of both pairs. An SBfAD plays the same role
+as a deterministic unconditional NB, thus is better to be used than probabilistic and conditional NBs. Speciﬁcally, employing SBfAD saves one guessed key
+bit and reduces both time and data complexity by half compared to employing
+the CSNBS. In the presented 13-round (resp. 12-round) attacks, this SBfAD is
+employed, and one CSNBS (resp. PNBS) in Table 4 can be dismissed.
+The reasoning on why one can switch between these diﬀerentials by bit 5 of
+x can be found in Sect. A.2. Experiments were performed and have veriﬁed that
+this SBfAD plays a better role than a CSNBS or a PNBS.
+
+Exploiting paired diﬀerentials. The four 3-round diﬀerentials share most of
+the high-probabilistic NBs and the conditions on the NBs. Besides, the neutral
+bit [22] makes
+(0x8020, 0x4101) → (0x0040, 0x0000) and (0x8060, 0x4101) → (0x0040, 0x0000)
+(resp.
+(0x8021, 0x4101) → (0x0040, 0x0000) and (0x8061, 0x4101) → (0x0040, 0x0000))
+be paired diﬀerentials as introduced in Sect 3.5.
+Speciﬁcally, take the ﬁrst two diﬀerentials for example. They share the neutral
+bit [22] and all other useful NB. Since (0x8020, 0x4101) ⊕ (0x8060, 0x4101) =
+(0x0040, 0000), while bit [22] corresponds to diﬀerence ∆22 = (0x0040, 0000),
+ciphertext structures for (0x8060, 0x4101) → (0x0040, 0x0000) can be directly
+obtained from that of (0x8020, 0x4101) → (0x0040, 0x0000) (refer to Sect. 3.5).
+Thus, using a paired diﬀerentials (as in the following attack ASpeck13R on the
+13-round Speck32/64), one can generate half of the required data pairs for free.
+Accordingly, the data complexity to get one pair of ciphertexts is one instead of
+two.
+Further, the data complexity can be slightly reduced by using both paired differentials when the attack requires no more than six NBs (the number of shared
+unconditional NBs). For the ease of notation, let us denote (0x8020, 0x4101)
+as example diﬀerence ∆1E , and (0x8021, 0x4101) as ∆2E . Six queries of a plaintext structure consisting of (P , P ⊕ ∆1E , P ⊕ ∆22 , P ⊕ ∆1E ⊕ ∆22 , P ⊕ ∆2E ,
+P ⊕ ∆2E ⊕ ∆22 ) result in eight pairs to be used in the upcoming attack ASpeck12R
+on the 12-round Speck32/64. The eight pairs are two pairs (P, P ⊕ ∆1E ) and
+(P ⊕ ∆22 , P ⊕ ∆1E ⊕ ∆22 ) following input diﬀerence ∆1E , two pairs (P, P ⊕
+∆1E ⊕ ∆22 ), (P ⊕ ∆22 , P ⊕ ∆1E ) following input diﬀerence ∆1E ⊕ ∆22 , two pairs
+(P, P ⊕ ∆2E ), (P ⊕ ∆22 , P ⊕ ∆2E ⊕ ∆22 ) following input diﬀerence ∆2E , and two
+pairs (P, P ⊕ ∆2E ⊕ ∆22 ), (P ⊕ ∆22 , P ⊕ ∆2E ) following input diﬀerence ∆2E ⊕ ∆22 .
+In such a way, the average data complexity to get one pair of ciphertexts reduces
+from 2 to 3/4.
+15
+
+4.2
+
+Key Recovery Attack on 13-round Speck32/64
+
+Employing two classical diﬀerentials that can simultaneously act as adjoining differentials and paired diﬀerentials, and combining them with neural distinguishers,
+we examine how far a practical attack can go on reduced-round Speck32/64. A
+13-round attack, denoted by ASpeck13R , is devised as follows.
+The preliminary components that capture characteristics of Speck32/64 for
+devising the attack ASpeck13R are as follows.
+1. Two 3-round CDs (0x8020, 0x4101) → (0x0040, 0x0000), (0x8060, 0x4101) →
+(0x0040, 0x0000) (refer to the rounds colored in blue in Fig. 3), which act
+as both adjoining diﬀerentials and paired diﬀerentials (refer to Remark 3),
+11 common NBs (including single-bit NBs, SNBSs, CSNBSs), i.e., N B: {[22],
+[13], [20], [5, 28], [15, 24], [12, 19], [6, 29], [4, 27, 29], [14, 21], [0, 8, 31], [30]}
+(refer to the columns framed by blue lines in Table 4), and a SBfAD [21];
+2. An 8-round ND, named NDSpeck8R , trained with diﬀerence (0x0040, 0x0000)
+and its wrong key response proﬁles NDSpeck8R .µ and NDSpeck8R .σ;
+3. A 7-round ND, named NDSpeck7R , trained with diﬀerence (0x0040, 0x0000)
+and its wrong key response proﬁles NDSpeck7R .µ and NDSpeck7R .σ.
+The parameters for recovering the last two subkeys are denoted as follows.
+1. nkg : the number of possible values for the few guessed bits of k0 .
+2. ncts : the number of ciphertext structures.
+3. nb : the number of ciphertext pairs in each ciphertext structure, i.e., 2|N B|+1 .
+4. nit : the total number of iterations on the ciphertext structures.
+5. c1 and c2 : the cutoﬀs with respect to the scores of the recommended last
+subkey and second to last subkey, respectively.
+6. nbyit1 , ncand1 and nbyit2 , ncand2 : the number of iterations and number of key
+candidates within each iteration in the BayesianKeySearch procedures
+(refer to Alg. 4) for guessing each of the last and second to last subkeys.
+The attack procedure is as follows (refer to Figures 2 and 3 ).
+1. Initialize variables Gbestkey ← (None, None), Gbestscore ← −∞.
+2. For each of the nkg values of the 5 key bits k0 [7], k0 [15] ⊕ k0 [8], k0 [12] ⊕ k0 [5],
+k0 [1], k0 [11] ⊕ k0 [4] 8 ,
+(a) Generate ncts /2 random data pairs, i.e., (x̃1 ||ỹ1 , x̃01 ||ỹ10 )’s, with diﬀerence
+(0x8020, 0x4101), and satisfying the conditions for conforming pairs,
+{
+x̃1 [7] = k0 [7],
+i.e.,
+and the conditions for three CSNBSs
+x̃1 [15] ⊕ ỹ1 [8] = k0 [15] ⊕ k0 [8],
+
+x̃1 [12] ⊕ ỹ1 [5] ⊕ 1 = k0 [12] ⊕ k0 [5],
+i.e., ỹ1 [1] = k0 [1],
+(refer to Tables 3 and 4).
+
+x̃1 [11] ⊕ ỹ1 [4] ⊕ 1 = k0 [11] ⊕ k0 [4],
+
+8
+
+Since the ﬁrst two 3-round CDs are used as paired diﬀerentials, the key bit k0 [5] ⊕
+k0 [14] does not need to be guessed. Besides, since the CSNBS [6, 11, 12, 18] in Table
+4 is not used in the attack, the key bit k0 [2] ⊕ k0 [11] does not need to be guessed. In
+total only 5 bits of k0 are guessed
+
+16
+
+(b) From the ncts /2 random data pairs, generate ncts /2 structures using the
+NBs in N B, marking the correspondence between old pairs and new pairs
+that are generated using the NB [22].
+(c) Use the SBfAD [21] to double the number of pairs in each of the ncts /2
+structures. The new pairs are generated by ﬂipping the [21] bit in the
+original pairs and adjusting the diﬀerence to be (0x8060, 0x4101).
+(d) Decrypt one round using zero as the subkey for all data in the structures
+obtained above and obtain ncts /2 plaintext structures;
+(e) Query for the ciphertexts under 13-round Speck32/64 of the ncts /2 ×
+nb × 2 plaintexts, obtaining ncts /2 ciphertext structures.
+(f) For each couple of ciphertext pairs, denoted by (c1 , c01 ) and (c2 , c02 ),
+whose corresponding couple of data pairs are related by ﬂipping the
+neutral bit [22], that is the couple (x̃1 ||ỹ1 , x̃1 ||ỹ1 ⊕ (0x8020, 0x4101))
+and (x̃1 ||ỹ1 ⊕(0x0040, 0000), x̃1 ||ỹ1 ⊕(0x8020, 0x4101)⊕(0x0040, 0000)),
+obtain a new couple of ciphertext pairs, that is (c1 , c02 ) and (c2 , c01 ). As
+a result, the new couples generated in this way correspond to couples
+of plaintext pairs for the second diﬀerential (0x8060, 0x4101) and its
+neutral bit [22]. Thus, additional ncts /2 ciphertext structures can be obtained without new queries. In total, ncts ciphertext structures, denoted
+by {C1 , . . . , Cncts }, are obtained.
+(g) Initialize an array wmax and an array nvisit to record the highest scores
+and the numbers of visits obtained by ciphertext structures.
+(h) Initialize variables bestscore ← −∞, bestkey ← (None, None), bestpos ←
+None to record the best score, the corresponding best-recommended values for the two subkeys obtained among all ciphertext structures and
+the index of this ciphertext structure.
+(i) For j from 1 to nit :
+i. Compute the priority
+of each of the ciphertext structures as follows:
+√
+√
+si = wmaxi +α· log2 (j)/nvisiti , for i ∈ {1, . . . , ncts }, and α = ncts ;
+This formula of priority is designed according to a general method
+in reinforcement learning for achieving automatic exploitation versus exploration trade-oﬀ based on Upper Conﬁdence Bounds. It is
+motivated to focus the key search on the most promising ciphertext
+structures [15].
+ii. Pick the ciphertext structure with the highest priority score for further processing in this j-th iteration, denote it by C, and its index
+by idx, nvisitidx ← nvisitidx + 1.
+iii. Run BayesianKeySearch with C, the neural distinguisher NDSpeck8R
+and its wrong key response proﬁle NDSpeck8R .µ and NDSpeck8R .σ,
+ncand1 , and nbyit1 as input parameters; obtain the output, that is a
+list L1 of nbyit1 × ncand1 candidate values for the last subkey and
+their scores, i.e., L1 = {(g1 i , v1i ) : i ∈ {1, . . . , nbyit1 × ncand1 }}.
+iv. Find the maximum v1max among v1i in L1 , if v1max > wmaxidx ,
+wmaxidx ← v1max .
+v. For each recommended last subkey g1 i ∈ L1 , if the score v1i > c1 ,
+17
+
+A. Decrypt the ciphertexts in C using the g1 i by one round and
+obtain the ciphertext structure C 0 of 12-round Speck32/64.
+B. Run BayesianKeySearch with C 0 , NDSpeck7R and its wrong
+key response proﬁle NDSpeck7R .µ and NDSpeck7R .σ, ncand2 , and
+nbyit2 as input parameters; obtain the output, that is a list L2 of
+nbyit2 ×ncand2 candidate values for the second to last subkey and
+their scores, i.e., L2 = {(g2 i , v2i ) : i ∈ {1, . . . , nbyit2 × ncand2 }}.
+C. Find the maximum among v2i and the corresponding g2 i in L2 ,
+and denote them by v2max and g2 max .
+D. If v2max > bestscore , update
+bestscore ← v2max , bestkey ← (g1 i , g2 max ), bestpos ← idx.
+vi. If bestscore > c2 , go to Step 2j.
+(j) Make a ﬁnal improvement using VerifierSearch [14] on the value of
+bestkey by examining whether the scores of a set of keys obtained by
+changing at most 2 bits on top of the incrementally updated bestkey
+could be improved recursively until no improvement is obtained, update bestscore to the best score in the ﬁnal improvement; If bestscore >
+Gbestscore , update Gbestscore ← bestscore , Gbestkey ← bestkey .
+3. Return Gbestkey , Gbestscore .
+Remark 6. In Gohr’s implementations of the attack [14], two bits of g1 are randomly assigned instead of being recommended by minimizing the weighted euclidean distance. This is based on observation of the symmetry of the wrong
+key response proﬁles, which indicates that values of the last two bits of the last
+subkey have almost the same inﬂuence on the response, thus hard to be correctly
+guessed. In our implementations, guessing these two bits in the last subkey is
+integrated into guessing the second to the last subkey, which is done using the
+stronger helper ND. The wrong key response proﬁle with respect to the helper
+ND are thus on 18 key bits. In doing so, these two key bits can be correctly
+recommended with a higher probability.
+In the experimental veriﬁcation of the attack ASpeck13R , the 8-round and 7round neural distinguishers provided in [14] were used. The accuracy of NDSpeck8R
+(resp. NDSpeck7R ) is about 0.514 (resp. 0.616). Concrete parameters and the
+complexity of ASpeck13R are as follows (see Figure 5).
+nkg = 25 ,
+c1 = 18,
+
+nb = 211+1 ,
+c2 = −500,
+
+ncts = 212 ,
+nbyit1 = nbyit2 = 5,
+
+nit = 4 × ncts
+ncand1 = ncand2 = 32
+
+The data complexity is nkg ×nb ×ncts , that is, 25+11+1+12 , i.e., 229 plaintexts
+(because of the use of two matched diﬀerentials, data complexity for getting each
+ciphertext pair is 1 instead of 2.)
+To make the experimental veriﬁcation economic, we tested the core of the
+attack with the ﬁve conditions being fulﬁlled only. That is, tested whether a
+particular one of 2nkg loops in Step 2 can successfully recover the last two subkeys.
+In that particular loop, the trialed value of the 5 bits of k0 is correct. In the other
+loops, the trialed values deviate from the correct value by at least one bit. The
+18
+
+other loops can be expected to obtain worse scores and wrong key guesses than
+that particular loop. Besides, since the prepended classical diﬀerentials are valid
+to keys fulﬁlling k2 [12] 6= k2 [11], we tested for these valid keys only, and the
+presented attack works for 263 keys (refer to Sect. D).
+The core of the attack was examined in 40 trials. We count a key guess
+as successful if the returned last two subkeys and the real two subkeys have
+a Hamming distance at most two in total. Among the 40 trials, there are 33
+successful trials. Thus, the success rate is 33/40, which is 0.8250.
+The trials were executed using a server with 8 GPUs9 . The maximum execution time (worst-case run time) among the 40 runs is 14.5 hours (which runs all
+the nit , i.e., 214 iterations). For 25 loops in Step 2, the worst situation is that
+within each loop, all nit iterations are executed. Accordingly, the full attack
+requires about 25 × 14.5, i.e., 464 GPU hours, which is equivalent to 248.67+r
+executions of Speck32/64 10 .
+Remark 7. For invalid guesses of the few bits of k0 , worse scores and wrong key
+guesses for the last two subkeys will be obtained. Invalided guesses of bits of
+k0 directly cause all or most ciphertext pairs in all ciphertext structures to be
+nonconforming pairs (wrong ciphertext structures). For wrong ciphertext structures, the scores of the recommended last and the second to last subkeys will be
+very low such that fewer last subkeys will pass cutoﬀ c1 , and almost no second
+to the last subkey will pass cutoﬀ c2 . Therefore, under invalid key guesses of k0 ,
+all nit iterations will be used. Using nkg times the worst-case run-time (which is
+taken by a failed trial using all the nit iterations) of an attack core provides a
+conservative estimation of the time complexity of a full attack.
+4.3
+
+Key Recovery Attack on 12-round Speck32/64
+
+To devise key-recovery attack on 12-round Speck32/64, Gohr in [15] used the 2round classical diﬀerential (0x0211, 0x0a04) → (0x0040, 0x0000) combined with
+the 8-round and 7-round NDs. For amplifying the weak signal from the 8-round
+neural distinguisher, 13 single-bit NBs of the prepended 2-round CD were exploited. However, many of the 13 NBs are neutral with probabilities that are
+not high (refer to Table 9). Besides, 500 ciphertext structures and 2000 iterations were used to achieve a success rate of 0.40. Thus, the data complexity
+is 500 × 213 × 2, i.e., 222.97 plaintexts. The attack takes roughly 12 hours on a
+quad-core PC (as listed in Table 1).
+From Table 2, one can see that there are many SNBSs being deterministically
+neutral or neutral with relatively high probability. Using 13 SNBSs, cutting the
+required data by nearly half, and using the following parameters, our experiments
+9
+
+Tesla V100-SXM2-32GB, computeCapability: 7.0; coreClock: 1.53GHz; coreCount:
+80; deviceMemorySize: 31.72GB; deviceMemoryBandwidth: 836.37GB/s)
+10
+Under the assumption that one second equals the time of 228 executions of
+Speck32/64 on a CPU, and r = log2 (cpu/gpu), where cpu is the CPU time and gpu
+is the GPU time running an attack. In our computing systems, r = 2.4
+
+19
+
+show that the success rate of the resulting attack can be increased to 0.86 using
+fewer data (see Fig. 6).
+nkg = 0,
+c1 = 15,
+
+nb = 213 ,
+c2 = 500,
+
+ncts = 28 ,
+nbyit1 = nbyit2 = 5,
+
+nit = 210
+ncand1 = ncand2 = 32
+
+However, the data complexity is still bounded by the weakness of the 8round ND. To further reduce the data requirement, we employ the 3-round CDs
+and combine them with the stronger 7-round (and 6-round) ND. In this case,
+unconditional SNBSs are enough for the 7-round ND. Thus, those conditional
+ones can be dismissed in such a 12-round attack. Besides, since bit [21] is an
+SBfAD which switches the ﬁrst two and the last two diﬀerentials, it can be used
+to replace a probabilistic NB. The four 3-round diﬀerentials share enough NBs,
+thus, all can be employed, which makes it possible to obtain one plaintext pair
+with 3/4 instead of 2 queries (as discussed in Sect. 4.1).
+Concretely, the components of the 12-round key-recovery attack, denoted by
+ASpeck12R , are as follows.
+1. Four 3-round CDs (0x8020, 0x4101) → (0x0040, 0x0000), (0x8060, 0x4101) →
+(0x0040, 0x0000), (0x8021, 0x4101) → (0x0040, 0x0000), (0x8061, 0x4101) →
+(0x0040, 0x0000), ﬁve neutral bit(-set)s N B: {[22], [13], [20], [12, 19], [14, 21]}
+(refer to the rows framed by green lines in Table 4), one SBfAD [21];
+2. A 7-round ND, named NDSpeck7R , trained with diﬀerence (0x0040, 0x0000)
+and its wrong key response proﬁles NDSpeck7R .µ and NDSpeck7R .σ;
+3. A 6-round ND, named NDSpeck6R trained with diﬀerence (0x0040, 0x0000)
+and its wrong key response proﬁles NDSpeck6R .µ and NDSpeck6R .σ.
+The framework of the 12-round attack ASpeck12R follows that of ASpeck13R .
+The diﬀerence is that, in the beginning, we only guess one key bit of k0 , that
+is k0 [7], because for all four 3-round diﬀerentials, there is only one common
+condition for conforming pairs, i.e., x1 [7] = 0 (refer to Table 3). Thus, nkg is 21 ,
+and there are only 2 outermost loops.
+The concrete parameters and complexity of ASpeck12R are as follows (see
+Fig. 7 for details). The accuracy of NDSpeck7R (resp. NDSpeck6R ) is about 0.616
+(resp. 0.788).
+nkg = 21 ,
+c1 = 8,
+
+nb = 25+1 ,
+c2 = 10,
+
+ncts = 212 ,
+nbyit1 = nbyit2 = 5,
+
+nit = 213
+ncand1 = 2 × ncand2 = 64
+
+The data complexity is nkg ×ncts ×nb ×3/4, that is, 218.58 plaintexts. To compare
+with previous attacks, the experiments were done using CPUs. Concretely, 128
+trials were done with 32 threads in a CPU server11 . Within the 128 trials, 2 trials
+have no correct ciphertext structures. In the remaining 126 trials, there are 107
+successful trials (the returned last two subkeys have a Hamming distance to the
+real subkeys at most two). The success rate is 107/128, i.e., 0.8359.
+11
+
+Equipped with a 32-core Intel Cascade-Lake Xeon(R) Platinum 9221 2.30 GHz, and
+with 384GB RAM, on CentOS 7.6.
+
+20
+
+The maximum execution time among the trials is 4.4 hours (which runs all
+the nit , i.e., 8192 iterations). Repeating 21 times, the maximum run time should
+be about 8.8 CPU hours, which is equivalent to 242.97 executions of Speck32/64.
+Trade-oﬀ. If accepting a success rate of 0.6016, the data complexity can be
+further reduced to 217.58 (by setting ncts = 211 , c1 = 7, ncand1 = 32) (see Fig. 8
+for details).
+Comparison. Compared to classical attacks on Speck32/64 (refer to Table 1),
+these new attacks commonly employ longer distinguishers consisting of short CDs
+and NDs, and their key-guessing phase covers fewer rounds. As for complexity,
+their advantage is considerable in terms of time. Compared to previous ML-based
+results in [15], for attacking 12-round, the success rate improves considerably
+using fewer data; most importantly, one more round is covered.
+
+5
+
+Tuning Parameters for the Key Recovery Attacks
+
+The key-recovery attack with UCB and BayesianKeySearch has shown its
+eﬀectiveness in guessing keys in [15] and this work. However, the tuning of the
+parameters, especially the cutoﬀs, which determine the execution time and the
+success rate, is still missing theoretical guidance up to the time of this work. Thus,
+in this section, we provide detailed experimental data and derived observations to
+bring some light on tuning important parameters and making better trade-oﬀs.
+5.1
+
+Exhibitions of important statistics in various attacks
+
+It is noticed that v1max (i.e., max({v1i | v1i ∈ L1 })) in the key-recovery phase
+is an important variable determining the priority of each ciphertext structure and
+indicates whether promising sub-keys are discovered in each run of BayesianKeySearch. Investigating the distributions of this variable corresponding to correct
+ciphertext structures (denoted by Drv1 max ) and wrong ciphertext structures (dev1max
+noted by Dw
+) is helpful. These distributions can be used to learn how to
+tune cutoﬀ c1 to make trade-oﬀs between time complexity and success rate. Investigating the distributions of v2max (i.e., max({v2i | v2i ∈ L2 })) could be
+v2max
+for correct
+used to learn how to tune cutoﬀ c2 (denoted by Drv2max and Dw
+ciphertext structures and wrong structures, respectively). Thus, together with
+the information on attack conﬁgurations, attack complexity, and success rate,
+v1 max
+v2max
+histograms are given to show Drv1 max , Dw
+, Drv2max , Dw
+for each presented
+attack (ASpeck13R and ASpeck12R ). Concretely, for each attack, details of the following statistics are illustrated in its corresponding ﬁgure (e.g., Figures 5 to 8).
+v1max
+– Dw
+, Drv1 max , Dsv1 max : indicated using rand, real, and succ in the histograms, respectively; Dsv1max is the distribution of v1max corresponding to
+the successfully recovered subkeys.
+– qctw , qctr : percentage of v1max ’s corresponding to wrong (resp. correct) ciphertext structures passing cutoﬀ c1 ;
+
+21
+
+– percentage of passing samples if diﬀerent cutoﬀs are set, including both the
+quantile plot with the samples and the plot with the best ﬁtting generalized
+logistic distribution on the samples;
+v2max
+, Dsv2 max )12 ;
+– similar statistics for v2max (including Drv2max , Dw
+– distribution of Hamming distances between returned and the real subkeys;
+– distribution of the used number of iterations in successful attacks.
+5.2
+
+Some rules of thumb
+
+Apart from substantial illustrations of previously hidden details of the keyrecovery phase, the following observations are made to provide some rules of
+thumb for deciding the number of data required and the cutoﬀ c1 . Before that,
+we note that compared to c1 , cutoﬀ c2 is much easier to decide because a successful attack requires the value of c2 to be ‘at the top rank’ (compared with a
+‘threshold’ sense of cutoﬀ c1 ). Thus, it is safe to select a value for c2 that is just
+v2 max
+large enough to be uncovered by Dw
+.
+Observation 1 Suppose in the above attack framework, the probability of the
+prepended diﬀerential is p, the number of ciphertext structures is ncts . Denote
+the attack success probability by Ps .
+Note that Ps ≤ 1 − (1 − p · q)ncts , where q is the probability for the response v1max from a correct ciphertext structure pass the cutoﬀ c1 , i.e., q =
+PrCr [v1max ≥ c1 ], where Cr is space of correct ciphertext structures.
+Thus, the following relation should be fulﬁlled:
+ncts ≥
+
+log2 (1 − Ps )
+.
+log2 (1 − p · q)
+
+For given ncts , p, and Ps , the cutoﬀ c1 should be chosen such that
+1
+
+1 − (1 − Ps ) ncts
+c1 ≤ Q(1 −
+),
+p
+where Q(·) is the quantile function of the distribution of v1max corresponding to
+correct ciphertext structures, i.e., Drv1max .
+For example, in the attack conﬁguration in Fig. 5, after correctly guessing
+the key bits in k0 , the probability p of the prepended diﬀerential is 2−9 ; suppose
+c1 is selected as 18 so that q is 0.31; then, to have a success probability of 0.82,
+the required number of ciphertext structures, i.e., ncts should satisfy ncts ≥
+log 2(1 − 0.82)/ log 2(1 − 2−9 · 0.31) ≈ 2831.33 ≈ 211.4673 . On the other hand,
+suppose one selects ncts to be 212 , and aims Ps to be 0.82; since p is 2−9 , this
+−12
+requires c1 ≤ Q(1 − (1 − (1 − 0.82)2 )/2−9 ) = Q(1 − 0.2143) ≈ 20.5.
+Note that Observation 1 provides an upper bound on the value of the cutoﬀ
+c1 . As for a lower bound on c1 , we provide the following observations.
+12
+
+Some v2max ’s corresponding to success cases are lower than cutoﬀ c2 ; that is due to
+the ﬁnal improvement.
+
+22
+
+The cutoﬀ c1 seems to be the smaller, the better for having a high success
+probability. However, a smaller cutoﬀ c1 is not a better choice for having a good
+time complexity than a larger one. On the one hand, even using the correct
+ciphertext structures, if a recommended subkey gets a small score v1 , then, typically, it also has a large Hamming distance towards the real subkeys; thus, it
+is hard to produce good recommendations for the second to last subkeys. On
+the other hand, too small cutoﬀ c1 results in a high percentage of v1 from the
+wrong ciphertext structures passing it. As a consequence, a lot of running time
+will be wasted on the wrong ciphertext structures. Thus, the cutoﬀ c1 is better
+to be large enough such that a low percentage of v1 of bad recommendations of
+last subkeys (e.g., with more than Hamming distance 3 to the real subkey) from
+both correct and wrong ciphertext structures is passing it.
+The preliminary to use these observations as guidance to tune the parameters
+v1max
+is to have a good knowledge of the distribution Drv1max and Dw
+. Experimental
+v1 max
+v1 max
+investigations on Dr
+and Dw
+can be found in Sect. B.3.
+
+6
+
+Neural Distinguishers on Round-Reduced Simon32/64
+
+This section presents the neural distinguishers on Simon32/64 obtained in this
+work, using which a key-recovery attack covering 16 rounds is devised and presented in Sect. E. Besides, DDT-based DDs are computed and provide baselines
+for NDs. Comparisons between DDs and NDs are made accordingly.
+6.1
+
+The Choice of the Network Architecture
+
+Considering that several state-of-the-art neural network structures have been
+developed, a preliminary search for a better network other than the Residual
+Network (ResNet) [18] used in [15] was conducted. Speciﬁcally, Dense Network
+(DenseNet) [20] shows advantages in parameter eﬃciency, implicit deep supervision, and feature reuse. Squeeze-and-Excitation Network (SENet) [19] won the
+ﬁrst place in the ImageNet Large Scale Visual Recognition Challenge (ILSVRC
+2017) for classiﬁcation tasks. SENet can also be combined with existing deep
+architectures to boost performance at a minimal additional computational cost.
+One example is the SE-ResNeXt that employs squeeze-and-excitation blocks
+and uses the ResNeXt as backbone. Thus, these two networks, together with
+ResNet, were investigated. The results on the performance of distinguishers that
+cover 7 to 9 rounds Simon32/64 under the three diﬀerent network structures
+are presented in Table 5. From the comparison, for longer rounds, SENet yields
+distinguishers that are superior to that of the other two. In the following, we
+only report essential details of the distinguishers trained using the SENet.
+6.2
+
+The Training of Neural Distinguishers
+
+The training schemes follow that in [15]. All three schemes are attempted. For
+short rounds, the basic training scheme already works well. For longer rounds,
+23
+
+the KeyAverageing and Staged schemes are necessary to achieve distinguishers
+with non-marginal advantage. Due to the speciﬁc round structure of Simon,
+distinguishers fed with partial values combined with partial diﬀerences between
+ciphertext pairs, instead of full values of ciphertext pairs, should be more useful
+than their counterparts for carrying out key-recovery attacks. Thus, we trained
+distinguishers accepting data composed partial values and partial diﬀerences.
+The input diﬀerence is (0x0000, 0x0040). This choice takes into account both
+the ND and the prepended CD, whose output diﬀerence is this input diﬀerence of
+the ND. The goal is to obtain the best hybrid distinguisher to make the longest
+key-recovery attack. Therefore, the ﬁrstly examined were the intermediate differences in the best 13-round diﬀerential trail [10]. All intermediate diﬀerences
+were examined by training NDs. This diﬀerence, (0x0000, 0x0040), yielded the
+best 7, 8, and 9-round NDs and, at the same time, allows prepending a good CD,
+thus resulting in the best hybrid distinguisher. Note that since the diﬀerentials
+of Simon32/64 has a rotational equivalent property along with the 16-bit word,
+all r-round NDs with input diﬀerence (0, ei ) and (r − 1)-round NDs with input
+diﬀerence (ei , 0) were found to have similar accuracy, for 0 ≤ i < 16.
+Training using the basic scheme. Using the basic training scheme and adopting SENet (more precisely, the adopted is the SE-ResNeXt variant), neural distinguishers to recognize output pairs of 7-, 8-, 9-round Simon32/64 with the input
+diﬀerence (0x0000, 0x0040) are obtained. That is, given an output pair (x, y)
+and (x0 , y 0 ) and represented in the form of (x, y, x0 , y 0 ), they can predict whether
+the data corresponds to input pairs with diﬀerence (0x0000, 0x0040) of the 7-, 8-,
+9-round Simon32/64. To make a distinction from their counterparts accepting
+transformed data, i.e., (x, x0 , y ⊕y 0 ), the 7-, 8-, 9-round neural distinguishers pre9R
+8R
+7R
+, respectively.
+, and NDSimon
+, NDSimon
+sented here are named as NDSimon
+VV
+VV
+VV
+Simon7R
+achieves an accuracy as high as 0.9825, which drops by
+The 7-round NDVV
+8R
+9R
+0.17 per round to 0.8151 and 0.6325 for NDSimon
+and NDSimon
+, respectively.
+VV
+VV
+Training to simulate KeyAverageing algorithm. Successful training of the
+10-round distinguisher is achieved by adopting the training scheme of simulating
+9R
+a KeyAverageing Algorithm [15] used with the 9-round NDSimon
+. Concretely, a
+VV
+20
+size 2 sample set S of ciphertext pairs for 10-round Simon32/64 is generated,
+one half corresponds to plaintext pairs with diﬀerence (0x0000, 0x0040) and the
+other half corresponds to random plaintext pairs. The labels of these samples are
+not assigned directly but using the KeyAverageing Algorithm calling the 9-round
+9R
+NDSimon
+. That is, each ciphertext pair ci in the set S is decrypted by oneVV
+round using all possible values of the 10-th round subkey; thus 216 intermediate
+values c0i,j ’s for j ∈ {0, 1}16 are generated; grading the c0i,j ’s using the 9-round
+9R
+NDSimon
+, and combining the 216 scores into a score for the ciphertext pair ci
+VV
+by transforming the scores into real-vs-random likelihood ratios and averaging.
+This combined score is then taken as the label of ci in S. Using the sample set
+S with the labels so obtained, a training, which follows the training of the best
+24
+
+7-round neural distinguisher in [15], is performed from a randomly initialized
+network state. This training procedure results in a 10-round distinguisher, named
+10R
+NDSimon
+, with an accuracy of 0.5551.
+VV
+Training using the Staged Training Method. The best 10-round and 11round distinguisher are trained using the staged training method, which was the
+same method used to train the 8-round distinguisher of Speck32/64 in [15].
+Concretely, for training an 11-round ND, in the ﬁrst stage, the best 9-round
+Simon9R
+distinguisher NDVV
+is retained to recognize 8-round Simon32/64 with the
+input diﬀerence (0x0440, 0x0100). Note that the most likely diﬀerence to appear
+three rounds after the input diﬀerence (0x0000, 0x0040) is (0x0440, 0x0100),
+and the probability is about 2−4 . In this ﬁrst stage, the number of examples
+for training and for testing are 228 and 226 , respectively. The number of epochs
+is 10 and the learning rate is 10−4 . In the second stage, the resulted network
+of the ﬁrst stage is retained to recognize 11-round Simon32/64 with the input
+diﬀerence (0x0000, 0x0040). For this training, 230 examples are freshly generated
+and fed, and 228 examples are for veriﬁcation. One epoch with a learning rate
+of 10−4 is done. In the last stage, the resulting network of the second stage is
+retained in two epochs with 230 freshly generated data for training and 228 data
+11R
+for veriﬁcation. The learning rate is 10−5 . The resulting distinguisher NDSimon
+VV
+achieves an accuracy of 0.5174.
+Training using Data of Form (x, x0 , y ⊕ y 0 ). Notice that once the output
+of the r-th round (xr , x0r , yr , yr0 ) is known, one can directly compute (xr−1 , x0r−1 ,
+0
+yr−1 ⊕ yr−1
+) without knowing the (r − 1)-th subkey. Thus, an (r − 1)-round
+distinguisher accepting data of the form (x, x0 , y ⊕ y 0 ) can be used as an r-round
+distinguisher in the key-recovery attack. With this consideration, (r − 1)-round
+distinguishers accepting data of the form (x, x0 , y ⊕y 0 ) are trained to see whether
+they are superior to r-round distinguishers accepting data of the form (x, x0 , y, y 0 ).
+Simon
+To make a distinction, let us denote the former by NDVD (r−1)R and the latter
+SimonrR
+.
+by NDVV
+Simon
+The results show that NDVD (r−1)R could achieve slightly better accuracy
+SimonrR
+8R
+than NDVV
+. Besides, the wrong key response proﬁles of NDSimon
+and
+VD
+Simon9R
+that of NDVV
+share observable pattern and symmetry. For key values that
+8R
+have little diﬀerent from the real value, responses from NDSimon
+are higher
+VD
+Simon9R
+than responses from NDVV
+. Similar observations can be derived from a
+9R
+10R
+comparison between that of NDSimon
+and that of NDSimon
+.
+VD
+VV
+Summaries on various distinguishers are presented in Table 5 for detailed
+accuracy and in Fig. 19 for their wrong key response proﬁles.
+6.3
+
+Computing DDs and Further Interpretations
+
+To provide baselines for NDs, we calculate the full distribution of diﬀerences
+for Simon32/64 induced by the input diﬀerence 0x0000/0040 up to 11 rounds
+25
+
+Table 5: Summary of neural distinguishers on Simon32/64
+#R Name
+6
+
+Simon
+DD DD 6R
+
+Network
+
+Accuracy
+
+DDT
+
+0.9918
+−4
+
+7
+Simon
+
+ND VV 7R
+Simon
+
+7
+
+DD DD 7R
+
+8
+
+Simon
+ND VV 8R
+
+8
+
+DD DD 8R
+
+8
+
+True Positive Rate
+
+True Negative Rate
+
+0.9995
+
+0.9841
+
+ResNet
+0.9823 ± 1.2 × 10
+SENet†
+0.9802 ± 1.3 × 10−4
+DenseNet 0.9244 ± 2.7 × 10−4
+
+0.9996 ± 2.7 × 10
+0.9987 ± 4.2 × 10−5
+0.9670 ± 2.2 × 10−4
+
+0.9650 ± 2.3 × 10−4
+0.9617 ± 2.4 × 10−4
+0.8818 ± 4.5 × 10−4
+
+DDT
+
+0.8641
+
+0.8288
+
+0.8465
+
+SENet
+0.8150 ± 4.2 × 10
+ResNet
+0.7912 ± 4.2 × 10−4
+DenseNet 0.7789 ± 4.4 × 10−4
+
+0.8418 ± 5.5 × 10
+0.8041 ± 5.5 × 10−4
+0.7709 ± 6.8 × 10−4
+
+0.7882 ± 5.1 × 10−4
+0.7783 ± 6.2 × 10−4
+0.7868 ± 5.6 × 10−4
+
+Simon
+
+DDT
+
+0.6628
+
+0.5781
+
+0.7476
+
+ND VD 8R
+
+Simon
+
+SENet†
+
+0.6587 ± 4.8 × 10−4
+
+0.5586 ± 7.4 × 10−4
+
+0.7588 ± 5.6 × 10−4
+
+9
+
+Simon
+ND VV 9R
+
+†
+
+−4
+
+−4
+
+9
+
+DD DD 9R
+
+9
+
+Simon
+ND VD 9R
+
+SENet
+
+0.5657 ± 4.9 × 10
+
+10
+
+Simon
+ND VV 10R +
+Simon10R ∗
+ND VV
+
+SENet†
+SENet†
+
+10
+
+DD DD 10R
+
+DDT
+
+11
+
+Simon
+ND VV 11R
+
+Simon
+
+Simon
+
+†
+
+−4
+
+−5
+
+−4
+
+SENet
+0.6515 ± 5.3 × 10
+ResNet
+0.6296 ± 4.5 × 10−4
+DenseNet 0.6443 ± 4.1 × 10−4
+
+0.5334 ± 7.0 × 10
+0.5164 ± 6.3 × 10−4
+0.5337 ± 6.1 × 10−4
+
+0.7695 ± 5.7 × 10−4
+0.7429 ± 5.5 × 10−4
+0.7550 ± 5.0 × 10−4
+
+DDT
+
+0.4691
+
+0.6674
+
+0.5683
+†
+
+†
+
+SENet
+
+−4
+
+0.6565 ± 6.6 × 10−4
+
+0.5610 ± 4.5 × 10−4
+0.5549 ± 4.6 × 10−4
+
+0.4761 ± 6.0 × 10−4
+0.4605 ± 6.5 × 10−4
+
+0.6460 ± 7.2 × 10−4
+0.6493 ± 7.7 × 10−4
+
+0.5203
+
+0.5002
+
+0.5404
+
+0.5174 ± 5.3 × 10
+
+−4
+
+−4
+
+0.4748 ± 7.1 × 10
+
+0.5041 ± 7.1 × 10
+
+−4
+
+0.5307 ± 7.9 × 10−4
+
+Simon
+DD DD 11R
+
+DDT
+0.5044
+0.4852
+0.5236
+11
+† More precisely, the adopted is the SE-ResNeXt variant.
+- The network structure and parameters for the ResNet follow exactly that used in [14] for training
+the NDs on Speck32/64 except for the learning rate. Using a smaller learning rate (i.e.,
+cyclic_lr(10,0.001,0.00001)) instead of the original learning rate (i.e., cyclic_lr(10,0.002,0.0001))
+results in a better accuracy (e.g., 0.6296 vs 0.6110 for 9-round) for NDs on Simon32/64.
+* This neural distinguisher is trained using the KeyAveraging algorithm.
++ This neural distinguisher is trained using the staged training method.
+
+(see Table 5). This is done using the framework of Gohr’s implementation for
+Speck32/64 and integrating the algorithm for computing one-round diﬀerential
+probability for Simon oﬀered by Kölbl et al. in [24]. Note that, the fed data to
+r-round ND are values of ciphertexts, from which, for Simon, one can directly
+compute the diﬀerences on (r − 1)-round outputs without knowing the subkey.
+Simon
+Simon
+rR
+or NDVD (r−1)R should be compared with NDDD (r−1)R .
+Thus, NDSimon
+VV
+Simon
+
+rR
+The results show that NDSimon
+and NDVD (r−1)R achieve similar but
+VV
+Simon
+weaker classiﬁcation accuracy than NDDD (r−1)R . To further evaluate the gaps
+between the advantage of DD over ND, we devised a key ranking task, as done
+by Gohr for comparing NDs and DDs on Speck32/64 in [15]. Speciﬁcally, a simple key ranking procedure to recover the last subkey on 11-round Simon32/64
+Simon8R
+8R
+can be performed both by DDDD
+or NDSimon
+in a conﬁguration of 1+8+2.
+VD
+Simon8R
+8R
+and NDSimon
+in the ranking for
+Table 6 shows the performance of DDDD
+VD
+real subkeys among 216 candidate subkeys. It can be seen that they both work
+well in this task; the data requirement is 64 chosen plaintexts to achieve a success
+
+26
+
+Table 6: Comparing ND and DD on Simon32/64 using statistics in a simple key
+recovery attack on 11-round Simon32/64. The conﬁguration is 1+8+1+1, i.e., a free
+prepended invert round, an 8-round distinguisher, a free inverting round, and a keyguessing (last) round. All data are based on 1000 trials of the respective attacks, all
+measurements of these statistics follow that in [15]: The rank of the real subkey is
+in the range [0, 216 ); it is deﬁned as the number of subkeys ranked higher, i.e., rank
+0 corresponds to successful key recovery. When several keys were ranked equally, the
+right key was assumed to be in a random position among the equally ranked keys.
+The reported error bars around the mean are for a 2σ conﬁdence interval, where σ is
+calculated based on the observed standard deviation of the key rank. #D indicates the
+number of chosen plaintexts.
+#D
+
+Distinguisher
+
+Mean of key rank
+
+Median key rank
+
+Success rate
+
+Simon
+
+11.8 ± 3.1
+43.9 ± 21.4
+
+1.0
+2.0
+
+0.238
+0.188
+
+Simon
+
+0.9 ± 0.2
+1.3 ± 0.2
+
+1.0
+1.0
+
+0.415
+0.335
+
+8R
+32 × 2 DD DD
+Simon
+ND VD 8R
+8R
+64 × 2 DD DD
+Simon8R
+ND VD
+
+Simon8R
+8R
+. To
+is slightly inferior to DDDD
+rate of around 20%. However, NDSimon
+VD
+Simon8R
+8R
+,
+requires
+more
+data
+than
+DD
+achieve the same success rate, NDSimon
+DD
+VD
+but the diﬀerence is less than twice.
+rR
+can “decrypt” one unThese comparisons suggest that r-round NDSimon
+VV
+keyed round to obtain the (r − 1)-round diﬀerence and learn the diﬀerential
+distribution, which conﬁrms the interpretation in [7], but fails to learn more
+features beyond the distribution of diﬀerences.
+
+Remark 8. This fact for Simon is diﬀerent from the corresponding conclusion for
+Speck. For Speck, knowing values of ciphertexts, without knowing the subkey,
+one can only compute half but not full of the diﬀerences on (r−1)-round outputs.
+Thus, the counterpart of r-round ND is r-round DD. From [15], r-round ND
+learns additional features beyond diﬀerences and has better classiﬁcation accuracy than r-round DD. We conjecture that the mean reason is that, for Speck,
+pure XOR-diﬀerence DDs cannot provide the best baselines for NDs. On the one
+hand, they are not accurate because of being computed following the Markov
+assumption. On the other hand, features related to generalized XOR-diﬀerence
+through modular addition and multi-bit constraints [12, 25] might be useful to
+capture the additional features in outputs of Speck32/64. For examples, Tables 7 and 8 present generalized constraints beyond XOR-diﬀerences on some
+diﬀerential trails, considering which the probability of the trails could be reﬁned.
+In contrast, for Simon32/64, the XOR-diﬀerences distribution table computed
+using the Markov model might already be an accurate approximation for the
+actual diﬀerential distribution.
+We note that the NDs on Speck32/64 might also “decrypt” half of the “unkeyed” last round to retrieve the input values on the right branch yr−1 . This
+interesting fact that the NDs can “learn to decrypt up to the values not messed
+up by outer subkey” might be due to the design by Gohr, as explained in [15]
+27
+
+as “the use of the initial width-1 convolutional layer is intended to make the
+learning of simple bit-sliced functions such as bit-wise addition easier”. Remarkably, for Simon32/64, the NDs seems to have also successfully peeled oﬀ the
+nonlinear bit-wise AND layer in the last round. For deeper look into the NDs
+on Simon32/64, please refer to Sect. G.
+
+7
+
+Conclusions and Future Work
+
+This paper shows practical key-recovery attacks up to 13 rounds of Speck32/64.
+This advances state of the art on practical attacks by one round. It shows that the
+way the underlying neural distinguishers were used in the previous diﬀerentialneural attacks is not optimal. Accordingly, the diﬀerential-neural cryptanalysis
+on Speck32/64 has more potential than it originally exhibited.
+The methods developed, particularly those generalized neutral bits, are not
+intrinsically linked to neural network-based cryptanalysis. They are expected
+to be useful for the conversion of a wider range of deep weak distinguishers to
+competitive key recovery attacks in general.
+The experiments and comparisons made on various distinguishers on roundreduced Simon32/64 indicate that diﬀerential-based neural-distinguishers should
+work well in general on modern ciphers. Still, they may not always be superior to
+their classical counterparts. Their advantages might be easier to show on ciphers,
+on which the diﬀerential-like properties have not been accurately evaluated using
+existing tools.
+The provided rules of thumb on turning parameters in the UCB and Bayesian
+optimization-based key-recovery phase are helpful but far from perfect. For this
+advanced key-recovery strategy to be widely applied, a rigorous theoretical model
+on the relation between attack parameters, attack complexity, and success probability is missing, and the building of which is left as future work.
+
+Acknowledgments
+The authors would like to thank anonymous reviewers for their insightful and
+helpful comments which helped us improve the manuscript signiﬁcantly. This research is partially supported by Nanyang Technological University in Singapore
+under Start-up Grant 04INS000397C230, and Ministry of Education in Singapore
+under Grants RG91/20 and MOE2019-T2-1-060; Zhenzhen Bao was supported
+by the Gopalakrishnan – NTU Presidential Postdoctoral Fellowship 2020; the Tsinghua University in China under Start-up Grant 533344001; the National Key
+R&D Program of China (Grant No. 2018YFA0704701), the Major Program of
+Guangdong Basic and Applied Research (Grant No. 2019B030302008), the Shandong Province Key R&D Project (Nos. 2020ZLYS09 and 2019JZZY010133). Meicheng Liu was supported by the National Natural Science Foundation of China
+(Grant Nos. 62122085 and 12231015), and the Youth Innovation Promotion Association of Chinese Academy of Sciences.
+28
+
+References
+1. M. Abadi and D. G. Andersen. Learning to protect communications with adversarial neural cryptography. arXiv preprint arXiv:1610.06918, 2016.
+2. F. Abed, E. List, S. Lucks, and J. Wenzel. Diﬀerential cryptanalysis of roundreduced Simon and Speck. In C. Cid and C. Rechberger, editors, FSE 2014, volume
+8540 of LNCS, pages 525–545. Springer, Heidelberg, Mar. 2015.
+3. H. A. Alkhzaimi and M. M. Lauridsen. Cryptanalysis of the SIMON family of block
+ciphers. Cryptology ePrint Archive, Report 2013/543, 2013. https://eprint.iacr.
+org/2013/543.
+4. J.-P. Aumasson, S. Fischer, S. Khazaei, W. Meier, and C. Rechberger. New features
+of latin dances: Analysis of Salsa, ChaCha, and Rumba. In K. Nyberg, editor,
+FSE 2008, volume 5086 of LNCS, pages 470–488. Springer, Heidelberg, Feb. 2008.
+5. Z. Bao, J. Guo, M. Liu, L. Ma, and Y. Tu. Enhancing diﬀerential-neural cryptanalysis. Cryptology ePrint Archive, Report 2021/719, 2021. https://eprint.iacr.
+org/2021/719.
+6. R. Beaulieu, D. Shors, J. Smith, S. Treatman-Clark, B. Weeks, and L. Wingers.
+The SIMON and SPECK Families of Lightweight Block Ciphers. Cryptology ePrint
+Archive, Report 2013/404, 2013. https://eprint.iacr.org/2013/404.
+7. A. Benamira, D. Gérault, T. Peyrin, and Q. Q. Tan. A deeper look at machine
+learning-based cryptanalysis. In A. Canteaut and F.-X. Standaert, editors, EUROCRYPT 2021, Part I, volume 12696 of LNCS, pages 805–835. Springer, Heidelberg,
+Oct. 2021.
+8. T. Beyne and V. Rijmen. Diﬀerential cryptanalysis in the ﬁxed-key model. Cryptology ePrint Archive, Paper 2022/837, 2022. https://eprint.iacr.org/2022/837.
+9. E. Biham and R. Chen. Near-collisions of SHA-0. In M. Franklin, editor,
+CRYPTO 2004, volume 3152 of LNCS, pages 290–305. Springer, Heidelberg, Aug.
+2004.
+10. A. Biryukov, A. Roy, and V. Velichkov. Diﬀerential analysis of block ciphers SIMON and SPECK. In C. Cid and C. Rechberger, editors, FSE 2014, volume 8540
+of LNCS, pages 546–570. Springer, Heidelberg, Mar. 2015.
+11. M. Brickenstein, A. Dreyer, B. Erocal, M. Albrecht, S. King, and C. Bouillaguet.
+Sage 9.3 Reference Manual: Polynomials: Boolean Polynomials. https://doc.sagemath.org/html/en/reference/polynomial_rings/sage/
+rings/polynomial/pbori/pbori.html. Accessed: 2021-5.
+12. C. De Cannière and C. Rechberger. Finding SHA-1 characteristics: General results
+and applications. In X. Lai and K. Chen, editors, ASIACRYPT 2006, volume 4284
+of LNCS, pages 1–20. Springer, Heidelberg, Dec. 2006.
+13. I. Dinur. Improved diﬀerential cryptanalysis of round-reduced Speck. In A. Joux
+and A. M. Youssef, editors, SAC 2014, volume 8781 of LNCS, pages 147–164.
+Springer, Heidelberg, Aug. 2014.
+14. A. Gohr. Implementation of the Improving Attacks on Round-Reduced Speck32/64
+Using Deep Learning. GitHub Repository. https://github.com/agohr/deep_
+speck, 2019.
+15. A. Gohr. Improving attacks on round-reduced Speck32/64 using deep learning. In
+A. Boldyreva and D. Micciancio, editors, CRYPTO 2019, Part II, volume 11693
+of LNCS, pages 150–179. Springer, Heidelberg, Aug. 2019.
+16. A. N. Gomez, S. Huang, I. Zhang, B. M. Li, M. Osama, and L. Kaiser. Unsupervised
+cipher cracking using discrete gans. In 6th International Conference on Learning
+Representations, ICLR 2018, Vancouver, BC, Canada, April 30 - May 3, 2018,
+Conference Track Proceedings. OpenReview.net, 2018.
+
+29
+
+17. L. Grassi. Mixture diﬀerential cryptanalysis: a new approach to distinguishers and
+attacks on round-reduced AES. IACR Trans. Symm. Cryptol., 2018(2):133–160,
+2018.
+18. K. He, X. Zhang, S. Ren, and J. Sun. Deep residual learning for image recognition.
+In 2016 IEEE Conference on Computer Vision and Pattern Recognition, CVPR
+2016, Las Vegas, NV, USA, June 27-30, 2016, pages 770–778. IEEE Computer
+Society, 2016.
+19. J. Hu, L. Shen, S. Albanie, G. Sun, and E. Wu. Squeeze-and-excitation networks.
+IEEE Trans. Pattern Anal. Mach. Intell., 42(8):2011–2023, 2020.
+20. G. Huang, Z. Liu, L. van der Maaten, and K. Q. Weinberger. Densely connected
+convolutional networks. In 2017 IEEE Conference on Computer Vision and Pattern
+Recognition, CVPR 2017, Honolulu, HI, USA, July 21-26, 2017, pages 2261–2269.
+IEEE Computer Society, 2017.
+21. A. Joux and T. Peyrin. Hash functions and the (ampliﬁed) boomerang attack. In
+A. Menezes, editor, CRYPTO 2007, volume 4622 of LNCS, pages 244–263. Springer,
+Heidelberg, Aug. 2007.
+22. V. Klima. Tunnels in hash functions: MD5 collisions within a minute. Cryptology
+ePrint Archive, Report 2006/105, 2006. https://eprint.iacr.org/2006/105.
+23. S. Knellwolf, W. Meier, and M. Naya-Plasencia. Conditional diﬀerential cryptanalysis of NLFSR-based cryptosystems. In M. Abe, editor, ASIACRYPT 2010,
+volume 6477 of LNCS, pages 130–145. Springer, Heidelberg, Dec. 2010.
+24. S. Kölbl, G. Leander, and T. Tiessen. Observations on the SIMON block cipher
+family. In R. Gennaro and M. J. B. Robshaw, editors, CRYPTO 2015, Part I,
+volume 9215 of LNCS, pages 161–185. Springer, Heidelberg, Aug. 2015.
+25. G. Leurent. Construction of diﬀerential characteristics in ARX designs application
+to Skein. In R. Canetti and J. A. Garay, editors, CRYPTO 2013, Part I, volume
+8042 of LNCS, pages 241–258. Springer, Heidelberg, Aug. 2013.
+26. J. Rijsdijk, L. Wu, G. Perin, and S. Picek. Reinforcement learning for hyperparameter tuning in deep learning-based side-channel analysis. IACR TCHES,
+2021(3):677–707, 2021.
+https://tches.iacr.org/index.php/TCHES/article/
+view/8989.
+27. R. L. Rivest. Cryptography and machine learning (invited lecture). In H. Imai,
+R. L. Rivest, and T. Matsumoto, editors, ASIACRYPT’91, volume 739 of LNCS,
+pages 427–439. Springer, Heidelberg, Nov. 1993.
+28. D. Silver, T. Hubert, J. Schrittwieser, I. Antonoglou, M. Lai, A. Guez, M. Lanctot,
+L. Sifre, D. Kumaran, T. Graepel, et al. A general reinforcement learning algorithm
+that masters chess, shogi, and go through self-play. Science, 362(6419):1140–1144,
+2018.
+29. L. Song, Z. Huang, and Q. Yang. Automatic diﬀerential analysis of ARX block
+ciphers with application to SPECK and LEA. Cryptology ePrint Archive, Report
+2016/209, 2016. https://eprint.iacr.org/2016/209.
+30. Stefan Kölbl. CryptoSMT: An easy to use tool for cryptanalysis of symmetric
+primitives. https://github.com/kste/cryptosmt.
+31. N. Wang, X. Wang, K. Jia, and J. Zhao. Diﬀerential attacks on reduced SIMON
+versions with dynamic key-guessing techniques. Cryptology ePrint Archive, Report
+2014/448, 2014. https://eprint.iacr.org/2014/448.
+32. X. Wang and H. Yu. How to break MD5 and other hash functions. In R. Cramer,
+editor, EUROCRYPT 2005, volume 3494 of LNCS, pages 19–35. Springer, Heidelberg, May 2005.
+
+30
+
+A
+
+SBfADs for XOR-addition modulo diﬀerentials
+
+A.1
+
+One type of SBfAD
+
+The following introduces one type of SBfAD for XOR (⊕) diﬀerential of addition
+modulo 2n (⊞).
+For simplicity, consider an ⊕-diﬀerence propagation through a single ⊞, denoted by δ = (α, β 7→ γ). For an input pair ((x, y), (x ⊕ α, y ⊕ β)) to conform
+to the diﬀerence propagation δ, that is (x ⊞ y) ⊕ ((x ⊕ α) ⊞ (y ⊕ β)) = γ,
+the conforming conditions can be explicitly listed bit-by-bit. Among the bit-bybit conditions, one type, denoted by xy-type, is linear and is in the form of
+x[i] ⊕ y[i] = a; another type, denoted by c-type, is non-linear and is in the form
+of x[i] ⊕ c[i] = a or y[i] ⊕ c[i] = a, where a ∈ {0, 1}, c[i] is the i-th bit of the
+carry c, and c = (x ⊞ y) ⊕ (x ⊕ y).
+For two ⊕-diﬀerence propagation through a single ⊞, δ1 and δ2 , if all conforming conditions are the same except one, e.g., x[i] ⊕ y[i] = 0 for δ1 and
+x[i] ⊕ y[i] = 1 for δ2 , and the i-th bit of x together with the i-th bit of y forms an
+SNBS of δ1 , then for a conforming pair ((x, y), (x ⊕ α, y ⊕ β)) of δ1 , ﬂipping x[i]
+or y[i] and changing the input diﬀerence, the resulted pair conforms to δ2 . Thus,
+the i-th bit of x or of y is an SBfAD for adjoining diﬀerentials δ1 and δ2 . For two
+⊕-diﬀerentials propagating several rounds, the x means the input to the ﬁrst ⊞.
+That is, the i-th bit referred is the ((i + 7) mod 16)-th bit of x in Speck32/64.
+A.2
+
+An SBfAD for the 3-round Diﬀerentials of Speck32/64
+
+The following analysis how
+(0x8020, 0x4101) → (0x0040, 0x0000) and (0x8060, 0x4101) → (0x0040, 0x0000)
+(resp.
+(0x8021, 0x4101) → (0x0040, 0x0000) and (0x8061, 0x4101) → (0x0040, 0x0000))
+can be switched by bit 5 of x.
+We note that each of the four diﬀerentials consists of a dominant trail. Four
+dominant trails of the four diﬀerentials share the same inner core (colored in
+gray in rows 2 and 3 of Table 3). Specifying to these dominant trails, there is
+an additional necessary condition (colored in gray in the last row of Table 3) for
+conforming to each of the dominant trails 13 . For each of the dominant trails,
+the additional necessary condition together with the above three necessary conditions form necessary and suﬃcient conditions for conforming to the outermost
+round diﬀerential, which is the only diﬀerent part among the four trails.
+Accordingly, from Table 3, the dominant trails of diﬀerentials
+(0x8020, 0x4101) → (0x0040, 0x0000) and (0x8060, 0x4101) → (0x0040, 0x0000)
+(resp.
+13
+
+These additional conditions are not necessary to the diﬀerentials because they are not
+necessary for subordinate trails in the diﬀerentials. However, the subordinate trails
+have far small probabilities than the dominant ones. Thus, these additional conditions can be seen as almost necessary to the diﬀerentials (about 99.5% conforming
+pairs fulﬁll the additional conditions).
+
+31
+
+(0x8021, 0x4101) → (0x0040, 0x0000) and (0x8061, 0x4101) → (0x0040, 0x0000))
+have only one diﬀerent condition, that is x[5] ⊕ y[14] equals 1 or 0. Besides,
+from Table 4, the bit 14 of y and the bit 5 of x (the 21 bit of xky) forms an
+SNBS. Thus, according to Sect. A.1, (0x8020, 0x4101) → (0x0040, 0x0000) and
+(0x8060, 0x4101) → (0x0040, 0x0000) (resp. (0x8021, 0x4101) → (0x0040, 0x0000)
+and (0x8061, 0x4101) → (0x0040, 0x0000)) can be seen as adjoining diﬀerentials,
+and the bit 5 of x is their switching bit.
+
+B
+
+Visualizations and Experimental Investigations
+
+B.1
+
+Visualizing the framework and the components of the
+key-recovery attacks on Speck32/64
+
+32
+
+End
+Output Gbestkey as the
+guessed value for (k−1 , k−2 )
+
+Start
+Initialize Gbestkey ←
+(None, None), Gbestscore ← −∞
+
+No
+
+∃ untested value out of the nkg
+values of guessed key bits of k0
+
+Yes
+Test the next value of the
+guessed key bits of k0 .
+Generate ciphertext structures {C1 , . . . , Cncts }
+
+Selected Ciphertext Structure
+idx ← argmax(si ), C ← Cidx ,
+nvisitidx ← nvisitidx + 1
+
+BayesianKeySearch with C, N D r ,
+N D r .µ, N D r .σ, ncand1 , nbyit1
+
+Start Core
+j ← 0, wmax ← {−∞}, nvisit ← {0}
+bestkey ← (None, None),
+bestscore ← −∞, bestpos ← None
+
+Upper Confidence Bound
+j ← jp+ 1,
+si := wmaxi + α · log2 (j)/nvisiti ,
+for i ∈ {1, . . . , ncts }
+
+Candidates for k−1 and their scores
+L1 = {(g1 i , v1i ) : i ∈
+{1, . . . , nbyit1 × ncand1 }}
+if max (v1i ∈ L1 ) > wmaxidx ,
+wmaxidx ← max (v1i ∈ L1 ).
+
+No
+End Core
+Final improvement by VerifierSearch(bestpos , bestkey , bestscore ) Yes
+If bestscore > Gbestscore ,
+Gbestscore ← bestscore ,
+Gbestkey ← bestkey
+
+(j > nit ) or (bestscore > cutoff c2 )
+
+No
+
+∃ non-visited (g1 i , v1i ) ∈
+L1 s.t. v1i > cutoff c1
+
+Yes
+C0
+
+←
+
+Fg−1 (C)
+1i
+
+BayesianKeySearch with C 0 , N D r−1 ,
+N D r−1 .µ, N D r−1 .σ, ncand2 , nbyit2
+Candidates for k−2 and their scores
+L2 = {(g2 i , v2i ) : i ∈
+{1, . . . , nbyit2 × ncand2 }}
+(v2max , g2 max ) ←
+(v2 i0 , g2 i0 ) s.t. v2 i0 = max(v2 i ∈ L2 ).
+If v2max > bestscore ,
+bestscore ← v2max , bestkey ←
+(g1 i , g2 max ), bestpos ← idx
+
+The core of the attack
+
+Fig. 2: Framework of the key-recovery attacks
+
+33
+
+y0
+
+x0
+
+y0
+
+x0
+
+≪ (1)
+&
+
+≫ (7)
+
+≪ (8)
+
+0
+
+1-R
+PK
+
+≪ (2)
+
+(
+1000 0000 0010 0000
+x̃1
+1000 0000 0110 0000
+
+ỹ1
+k0
+
+ỹ1 0001 0000 0000 0000
+
+0000 0100 0100 0000 x̃1
+k0
+x1
+
+)
+0100 0001 0000 0001
+0100 0001 0000 0001
+
+1-R
+PK
+
+0
+
+≪ (2)
+
+y1
+≪ (1)
+
+y1
+
+x1
+
+&
+≪ (8)
+
+≫ (7)
+
+k1
+
+≪ (2)
+
+k1
+
+≪ (2)
+
+..
+.
+
+..
+.
+
+3-R
+CD
+
+..
+.
+
+3-R
+CD
+
+..
+.
+y3
+
+x3
+≪ (1)
+&
+≪ (8)
+
+y3
+
+x3
+
+k4
+
+≪ (2)
+
+≫ (7)
+
+y4 0000 0000 0100 0000
+
+0000 0000 0000 0000 x4
+
+k3
+
+≪ (2)
+
+≪ (1)
+&
+≪ (8)
+
+y4 0000 0000 0000 0000
+
+0000 0000 0100 0000 x4
+
+k5
+
+≪ (2)
+
+≫ (7)
+
+y5
+
+x5
+≪ (1)
+
+k4
+
+≪ (2)
+
+9-R
+ND
+VD
+
+&
+≪ (8)
+
+k6
+
+≪ (2)
+
+..
+.
+x10
+
+..
+.
+
+7-R
+ND
+..
+.
+
+y10
+8-R
+ND
+
+≫ (7)
+
+11-R
+ND
+VV
+
+..
+.
+y13 dddd dddd dddd dddd
+
+vvvv vvvv vvvv vvvv x13
+≪ (1)
+&
+
+k10
+
+≪ (8)
+
+≪ (2)
+
+k13
+
+≪ (2)
+
+vvvv vvvv vvvv vvvv x11
+
+1-R
+FR
+• PK:
+Free one round
+with Partial Key
+guess
+
+y11 vvvv vvvv vvvv vvvv
+y14
+
+x14
+
+≫ (7)
+
+≪ (1)
+
+k11
+
+≪ (2)
+
+vvvv vvvv vvvv vvvv x12
+
+• PK:
+Free one round
+with Partial Key
+guess
+
+1-R
+KG
+
+• CD:
+Classical
+Differential
+
+y12 vvvv vvvv vvvv vvvv
+
+≫ (7)
+
+&
+≪ (8)
+
+k14
+
+≪ (2)
+
+• CD:
+Classical
+Differential
+
+1-R
+KG
+
+• ND:
+Neural
+Distinguisher
+
+y15 vvvv vvvv vvvv vvvv
+
+vvvv vvvv vvvv vvvv x15
+≪ (1)
+&
+
+k12
+
+≪ (2)
+
+x13
+
+y13
+
+1-R
+KG
+
+• ND:
+Neural
+Distinguisher
+• KG:
+Key Guess
+
+≪ (8)
+
+k15
+
+≪ (2)
+
+x16
+
+y16
+
+1-R
+KG
+
+• FD:
+Free one round
+by computing
+value of xi and
+Difference of yi
+• KG:
+Key Guess
+
+Fig. 3: Components for key-recovery attack ASpeck13R on 13-round Fig. 4: Components for key-recovery attack AISimon16R on 16
+round Simon32/64
+Speck32/64
+
+34
+
+Visualizing distributions of statistics for various attacks
+
+0.3
+
+0.2
+
+0.04
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30 0.31
+0.25
+0.22
+0.20
+0.15
+0.10
+0.05
+
+0.1
+
+0.02
+0.00
+
+0.4
+
+Percentage
+
+Comp.: 1+3+8+1
+0.10 Conf.: nkg : 25 nb : 211 + 1 c1 : 18.0 c2 : 500.0
+Conf.: ncts : 212 nit : 214 ncand1 : 32 ncand2 : 32 nbyit : 5
+Test Done: 40 succ.: 33 succ. rate: 0.8250
+Have Real: 40 succ.: 33 succ. rate: 0.8250
+0.08 Max time: 52171 secs = 14.5 hours
+Time cplx.: 25×52171 secs = 25×14.5 hours (GPU )
+Time cplx.: 248.67 + r Encs (228 Encs/sec)
+29.00
+0.06 Data cplx.: 2 CPs
+
+rand #218.2170 w: 13.4439 w: 5.9567 qctw: 0.2246
+real #29.1344 r: 15.6574 r: 7.2232 qctr: 0.3149
+succ #25.0444 s : 26.6410 s : 6.3005 min : 18.5831
+
+Densities of samples for succ.
+
+Densities of samples for rand and real
+
+B.2
+
+5
+
+0
+
+5
+
+10
+
+15
+20
+25
+v1max : = max({v1i v1i L1})
+
+30
+
+35
+
+40
+
+45
+
+12
+
+0.008
+
+0.010
+0.008
+
+0.006
+
+0.006
+
+Densities of samples
+
+rand #218.2219 w:-838.8867 w: 30.3200 qctw: 0.0000
+0.010
+real #210.3652 r:-761.5303 r:255.6485 qctr: 0.0485
+succ #25.0444 s : 386.7259 s : 521.9770 min : 672.3280
+Densities of samples for succ.
+
+0.002
+
+0.002
+
+18
+18
+
+20
+
+22
+
+cutoff
+
+24
+
+26
+
+28
+
+30
+
+32
+
+(d) Hamming distances between gk−1 ||gk−2 and k−1 ||k−2
+3.0
+
+0.004
+
+0.004
+
+16
+
+0.70
+Total # 40
+0.65
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+0.00 1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
+Hamming distance between gk 1||gk 2 and k 1||k 2
+
+0.000 1000 900 800 700 600 500 400 300 200 100 0 100 200 300 400 500 600 700 800 900 1000 1100 0.000
+v2max : = max({v2i v2i L2})
+
+succ: #33.0000 a:5774.7273 max:16384.0000
+
+2.5
+Densities of samples
+
+Densities of samples for rand and real
+
+0.012
+
+14
+
+(c) Percentage of samples passing various cutoﬀs in 5a
+
+0.0
+
+(a) Attack information and distributions of v1max
+
+0.014
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+2.0
+1.5
+1.0
+0.5
+0.0
+
+0 800 1600 2400 3200 4000 4800 5600 6400 7200 8000 8800 9600104001120012000128001360014400152001600016800
+used
+
+(b) Distributions of v2 max during the attack and those when successfully recovered the key
+(e) Used number of iterations before return
+13R
+Fig. 5: Detailed information for attack ASpeck
+I
+
+35
+
+qctw: 0.1990
+r: 11.6814 qctr: 0.5036
+s : 9.6950 min : 17.4776
+w: 8.6514
+
+0.4
+0.3
+
+0.04
+
+0.2
+
+0.02
+0.00 15
+
+0.5
+
+Percentage
+
+rand #212.2058 w: 8.2360
+real #28.1085 r: 17.2664
+succ #23.5850 s : 30.8707
+
+Densities of samples for succ.
+
+Densities of samples for rand and real
+
+Comp.: 1+2+8+1
+0.10 Conf.: nkg : 20 nb : 213 c1 : 15.0 c2 : 500.0
+Conf.: ncts : 28 nit : 210 ncand1 : 32 ncand2 : 32 nbyit : 5
+Test Done: 14 succ.: 12 succ. rate: 0.8571
+0.08 Have Real: 14 succ.: 12 succ. rate: 0.8571
+Max time: 121477 secs = 33.7 hours
+Avg time: 51483 secs = 14.3 hours
+Time cplx.: 20×121477 secs = 20×33.7 hours (CPU )
+0.06 Time cplx.: 244.89 Encs (228 Encs/sec)
+Data cplx.: 222.00 CPs
+
+0.6
+
+0.60
+0.55
+0.50 0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20 0.20
+0.15
+0.10
+0.05
+
+4 6 8 10 12 141516 18 20 22 24 26 28 30 32 34 36 38 40 42 44
+
+0.1
+
+10
+
+5
+
+0
+
+5
+
+10
+
+15
+20
+25
+30
+35
+v1max : = max({v1i v1i L1})
+
+40
+
+45
+
+50
+
+55
+
+60
+
+cutoff
+
+(c) Percentage of samples passing various cutoﬀs in 6a
+
+0.0
+
+Densities of samples for succ.
+
+0.0150
+0.0125
+
+0.006
+
+0.0100
+0.004
+
+2.00
+
+0.002
+
+0.0025
+0.000 2000 1800 1600 1400 1200 1000 800 600 400 200 0 200 400 600 800 1000 1200 1400 1600 1800 2000 2200 2400
+0.0000
+v2max : = max({v2i v2i L2})
+
+succ: #12.0000 a:350.2500 max:922.0000
+
+1.75
+
+0.0075
+0.0050
+
+0.75
+Total # 14
+0.70
+0.65
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+0.00 1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
+Hamming distance between gk 1||gk 2 and k 1||k 2
+
+(d) Hamming distances between gk−1 ||gk−2 and k−1 ||k−2
+
+1.50
+Densities of samples
+
+Densities of samples for rand and real
+
+0.008
+
+rand #212.1941 w:-1806.9862 w: 84.0514 qctw: 0.0006
+0.0200
+real #210.3718 r:-1652.4326 r:468.4770 qctr: 0.0143
+succ #23.5850 s : 1459.6375 s : 553.9709 min : 616.6309
+0.0175
+
+Densities of samples
+
+(a) Attack information and distributions of v1max
+
+0.010
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+1.25
+1.00
+0.75
+0.50
+0.25
+0.00 0 40 80 120 160 200 240 280 320 360 400 440 480 520 560 600 640 680 720 760 800 840 880 920 960
+used
+
+(b) Distributions of v2 max during the attack and those when successfully recovered the key
+(e) Used number of iterations before return
+12R
+Fig. 6: Detailed information for attack ASpeck
+I
+
+36
+
+0.30
+0.25
+0.20
+0.15
+
+0.06
+
+0.10
+
+0.04
+
+2
+
+0.05
+
+0.02
+0.00
+
+Percentage
+
+rand #218.5892 w: 3.9835 w: 3.7231 qctw: 0.1412
+real #28.7448 r: 8.6821 r: 6.8977 qctr: 0.4406
+succ #26.7415 s : 15.4115 s : 6.0969 min : 8.0750
+
+Densities of samples for succ.
+
+Densities of samples for rand and real
+
+Comp.: 1+3+7+1
+Conf.: n : 21 n : 25 + 1 c : 8.0 c : 10.0
+0.14 Conf.: nkg : 212 nb : 213 n 1 : 64 2 n : 32 n : 5
+cts
+it
+cand1
+cand2
+byit
+Test Done: 128 succ.: 107 succ. rate: 0.8359
+0.12 Have Real: 126 succ.: 107 succ. rate: 0.8492
+Max time: 16009 secs = 4.4 hours
+Time cplx.: 21×16009 secs = 21×4.4 hours (CPU )
+0.10 Time cplx.: 242.97 Encs (228 Encs/sec)
+Data cplx.: 218.58 CPs
+0.08
+
+0.60
+0.55
+0.50
+0.45 0.44
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15 0.14
+0.10
+0.05
+
+10
+
+5
+
+0
+
+5
+
+10
+15
+v1max : = max({v1i v1i L1})
+
+20
+
+25
+
+30
+
+35 0.00
+
+Densities of samples for succ.
+
+0.03
+0.03
+
+0.01
+
+0.01
+0.00
+
+75 60 45 30 15 0
+
+15 30 45 60 75 90 105 120 135 150 165 180 195 210 225 2400.00
+v2max : = max({v2i v2i L2})
+
+88
+
+10
+
+12
+
+14
+
+cutoff
+
+16
+
+18
+
+20
+
+22
+
+24
+
+succ: #107.0000 a:2235.1869 max:7394.0000
+
+7
+6
+5
+4
+3
+2
+1
+0
+
+0
+
+400 800 1200 1600 2000 2400 2800 3200 3600 4000 4400 4800 5200 5600 6000 6400 6800 7200 7600
+used
+
+(b) Distributions of v2 max during the attack and those when successfully recovered the key
+(e) Used number of iterations before return
+12R
+Fig. 7: Detailed information for attack ASpeck
+II
+
+37
+
+26
+
+(d) Hamming distances between gk−1 ||gk−2 and k−1 ||k−2
+
+0.02
+0.02
+
+6
+
+0.70
+Total # 126
+0.65
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+0.00 1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
+Hamming distance between gk 1||gk 2 and k 1||k 2
+
+Densities of samples
+
+Densities of samples for rand and real
+
+0.04
+
+Densities of samples
+
+rand #217.9368 w:-43.3973 w: 7.9459 qctw: 0.0000
+real #212.1206 r:-12.2944 r: 50.5523 qctr: 0.1660
+0.04
+succ #26.7415 s : 151.3679 s : 45.7007 min : 12.1410
+
+4
+
+(c) Percentage of samples passing various cutoﬀs in 7a
+
+(a) Attack information and distributions of v1max
+
+0.05
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+0.30
+0.25
+0.20
+0.15
+
+0.06
+
+0.10
+
+0.04
+
+Percentage
+
+rand #218.9077 w: 2.3703 w: 4.0297 qctw: 0.1320
+real #29.0140 r: 6.7498 r: 6.7842 qctr: 0.3965
+succ #26.2668 s : 15.2585 s : 6.4452 min : 7.1799
+
+Densities of samples for succ.
+
+Densities of samples for rand and real
+
+Comp.: 1+3+7+1
+0.14 Conf.: nkg : 21 nb : 25 + 1 c1 : 7.0 c2 : 10.0
+Conf.: ncts : 211 nit : 213 ncand1 : 32 ncand2 : 32 nbyit : 5
+Test Done: 128 succ.: 77 succ. rate: 0.6016
+0.12 Have Real: 111 succ.: 77 succ. rate: 0.6937
+Max time: 15988 secs = 4.4 hours
+1×15988 secs = 21×4.4 hours (CPU )
+0.10 Time cplx.: 242.96
+Time cplx.: 2 Encs (228 Encs/sec)
+Data cplx.: 217.58 CPs
+0.08
+
+0.60
+0.55
+0.50
+0.45
+0.40 0.40
+0.35
+0.30
+0.25
+0.20
+0.15 0.13
+0.10
+0.05
+2
+
+0.05
+
+0.02
+0.00
+
+10
+
+5
+
+0
+
+5
+
+10
+15
+20
+v1max : = max({v1i v1i L1})
+
+25
+
+30
+
+35
+
+40
+
+0.00
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+4
+
+6 7 8
+
+10
+
+12
+
+cutoff
+
+14
+
+16
+
+18
+
+20
+
+22
+
+(c) Percentage of samples passing various cutoﬀs in 8a
+0.60
+
+Total # 111
+
+0.55
+0.50
+
+(a) Attack information and distributions of v1max
+
+Densities of samples for succ.
+
+0.04
+
+0.04
+0.03
+
+Densities of samples
+
+rand #218.1438 w:-43.6714 w: 7.9322 qctw: 0.0000
+0.06
+real #211.8357 r:-19.7212 r: 46.3451 qctr: 0.1207
+succ #26.2668 s : 144.3523 s : 53.1859 min : 6.2427
+0.05
+
+0.05
+
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+0.00 1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
+Hamming distance between gk 1||gk 2 and k 1||k 2
+
+(d) Hamming distances between gk−1 ||gk−2 and k−1 ||k−2
+
+0.03
+0.02
+
+0.01
+75
+
+60
+
+45
+
+30
+
+15
+
+0
+
+15
+
+30 45 60 75 90 105 120 135 150 165 180 195 210
+v2max : = max({v2i v2i L2})
+
+0.00
+
+succ: #77.0000 a:2776.2208 max:8192.0000
+
+3.5
+
+0.02
+
+0.01
+0.00
+
+4.0
+
+3.0
+Densities of samples
+
+Densities of samples for rand and real
+
+0.45
+
+2.5
+2.0
+1.5
+1.0
+0.5
+0.0400 0 400 800 1200 1600 2000 2400 2800 3200 3600 4000 4400 4800 5200 5600 6000 6400 6800 7200 7600 8000 8400
+used
+
+(b) Distributions of v2 max during the attack and those when successfully recovered the key
+(e) Used number of iterations before return
+12R
+Fig. 8: Detailed information for attack ASpeck
+III
+
+38
+
+B.3
+
+v1max
+Investigations on Drv1max and Dw
+
+v1max
+were done through samThe experimental investigations on Drv1max and Dw
+16
+16
+pling about 2 correct ciphertext structures and 2 wrong ciphertext structures
+and analyzing the values of v1max statistically (Figures 9 to 13). These experiments use exactly the same procedure of the key-recovery attack but generate
+ciphertext structures by accessing the subkeys; besides, it does not run into guessing the second to the last subkey. The same neutral bits used in actual attacks
+are also used here to generate the ciphertext structures. Since some neutral bits
+are probabilistic, using ciphertext structures generated by diﬀerent neutral bits,
+v1max
+the simulation of the Drv1max and Dw
+will be slightly diﬀerent. This is aimed
+at using these investigations to guide the actual attacks.
+v1max
+Apart from Drv1 max and Dw
+, for correct ciphertext structures, distribution
+of v1max corresponding to the recommended subkeys of low Hamming distances
+(from 0 to 3 bits) towards the real subkey are investigated and presented together
+(e.g., Figures 11 to 13).
+For experimental results, we have the following observation.
+
+Observation 2 Among various distributions, including Normal, Chi-squared,
+Generalized logistic, Logistic, and Gamma, the Generalized logistic distribution 14 (denote by genlogistic) provides the best ﬁt for both Drv1max and
+v1max
+Dw
+. Besides, Drv1 max ’s are heavy right-skewed.
+v1 max
+In ﬁgures that display Drv1max and Dw
+, the parameters of the best ﬁtting
+generalized logistic distributions are thus provided.
+v1max
+The inﬂuence on Drv1max and Dw
+when changing the size of ciphertext
+structures (nb ) (determined by the number of used neutral bits), the number of
+recommended keys in each iteration inside BayesianKeySearch (ncand ), and the
+number of iterations in each BayesianKeySearch (nbyit ) are investigated.
+To quantify the inﬂuence , the Kullback-Leibler Divergence KL(real||rand)
+in the range [µr , maxr ] is considered, where µr is the mean of v1max from correct
+ciphertext structures and maxr is the maximum. Considering only this range is
+because, in the actual attacks, the cutoﬀs are generally selected to be no less than
+µr . Subﬁgures in Fig. 9 show how the distributions change when changing nb .
+From Figures 9a and 9c, for that attack conﬁguration, increasing nb from 25 to
+26 , the KL(real||rand) increases considerably. Increasing from 26 to 27 (Fig. 9c
+and 9e), the mean increase approximately 2 times, however, the KL(real||rand)
+does not increase but slightly decreases. That can be understood by looking at
+Figures 17g and 17h, which show that if combining responses on 26 samples, the
+two distributions of combined-response on random samples and real samples are
+already separated. From the quantile plot in Figures 9b and 9d, setting cutoﬀ
+to be 8, when nb = 25 , approximately 17% of v1max from the wrong ciphertext
+structures pass, and 30% from the correct ciphertext structures pass; whereas
+when nb = 26 , 9% from the wrong ciphertext structures pass and 35% from the
+14
+
+Type I generalized logistic distribution with probability density function f (y, c) =
+−y
+, for x ≥ 0 and c > 0.
+c (1+ee−y )c+1 , where y = (x−loc)
+scale
+
+39
+
+correct ciphertext structures pass. Thus, the latter is much better for achieving
+a good trade-oﬀ between time complexity and success rate for the attack. Such
+an obvious advantage cannot be seen for nb = 27 over nb = 26 . Thus, nb = 26 is
+suﬃcient for the corresponding attacks.
+Similar comparisons among Figures (10a, 10b), (10c, 10d), and (10e, 10f) indicate that increasing ncand is more eﬀective than increasing nbyit for separating
+the two distributions. Thus, tuning ncand could achieve better trade-oﬀs between
+time complexity and success rate than tuning nbyit .
+For diﬀerent attacks, the signiﬁcance of the inﬂuence by increasing ncand
+are diﬀerent. Increasing ncand might fail to result in considerable improvements
+in separating the distributions (see Fig. 11 and 12 for attacks of composition
+1+3+8+1). However, the probability that guessed subkeys with low hamming
+distances to the real subkey can increase to be doubled (comparing Fig. 11c
+and 12c). Thus, ncand can still be used to make trade-oﬀs between time complexity and success probability without changing data complexity for the attacks.
+
+40
+
+1+3+7+1 nb : 25 ncand : 32 nbyit : 5
+
+rand #216.0000 w: 5.5129 w: 2.6737 maxw : 18.8306
+real #216.0000 r: 6.8225 r: 3.2955 maxr : 29.9336
+rand fit genlogistic ppf: c = 1.5289, loc = 4.4275, scale = 1.7211
+real fit genlogistic ppf: c = 3.6045, loc = 2.8064, scale = 2.3420
+
+0.14
+
+Statistical distances in range [ r:6.8225 maxr : 29.9336]
+KL(rand || real): 0.1040 bits
+KL(real || rand): 2.7774 bits
+JS(real || rand): 1.4407 bits
+
+0.12
+0.10
+
+Percentage
+
+Densities of samples for rand and real
+
+0.16
+
+0.08
+0.06
+0.04
+0.02
+0.00 5
+
+0
+
+5
+
+10
+15
+v1max : = max({v1i v1i L1})
+v
+
+20
+
+25
+
+6
+
+v
+
+1+3+7+1 nb : 26 ncand : 32 nbyit : 5
+
+Percentage
+
+Densities of samples for rand and real
+
+Statistical distances in range [ r:6.9105 maxr : 46.5115]
+KL(rand || real): 0.4651 bits
+KL(real || rand): 20.4433 bits
+JS(real || rand): 10.4542 bits
+
+0.06
+0.04
+0.02
+0.00
+
+10
+
+5
+
+0
+
+5
+
+10
+
+15
+20
+25
+v1max : = max({v1i v1i L1})
+
+v
+
+30
+
+35
+
+40
+
+v
+
+0.03
+
+rand #216.0000 w: 4.4713 w: 7.9507 maxw : 43.2416
+real #216.0092 r: 13.6800 r: 14.1560 maxr : 93.1438
+rand fit genlogistic ppf: c = 2.3055, loc = 2.0819, scale = 5.6104
+real fit genlogistic ppf: c = 427.1838, loc = 57.1560, scale = 10.6546
+
+0.02
+0.01
+0.00
+
+25 20 15 10 5 0
+
+5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95
+v1max : = max({v1i v1i L1})
+
+v
+(e) Distributions Dr 1max
+
+v
+and Dw1 max
+
+14
+
+2
+
+4
+
+6
+
+8
+
+10
+
+12
+
+14
+
+cutoff
+
+16
+
+18
+
+20
+
+22
+
+24
+
+(d) Percentage of samples passing various cutoﬀs in 9c
+
+Statistical distances in range [ r:13.6800 maxr : 93.1438]
+KL(rand || real): 0.4682 bits
+KL(real || rand): 19.9629 bits
+JS(real || rand): 10.2156 bits
+
+0.04
+
+12
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+0
+
+Percentage
+
+Densities of samples for rand and real
+
+0.05
+
+10
+
+cutoff
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+
+45
+
+(c) Distributions Dr 1 max and Dw1max when using 6 NBs
+
+1+3+7+1 nb : 27 ncand : 32 nbyit : 5
+
+8
+
+(b) Percentage of samples passing various cutoﬀs in 9a
+
+rand #216.0000 w: 2.3009 w: 4.0024 maxw : 21.9529
+real #216.0017 r: 6.9105 r: 7.0255 maxr : 46.5115
+rand fit genlogistic ppf: c = 2.3659, loc = 1.1079, scale = 2.8420
+real fit genlogistic ppf: c = 427.0260, loc = 28.5140, scale = 5.3308
+
+0.08
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+30
+
+(a) Distributions Dr 1max and Dw1max when using 5 NBs
+
+0.10
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+0 2 4 6 8 101214161820222426283032343638404244464850
+
+cutoff
+
+(f) Percentage of samples passing various cutoﬀs in 9e
+
+when using 7 NBs
+
+Fig. 9: Distributions of v1max from correct ciphertext structures (real) and from wrong
+ciphertext structures (rand) of size nb for nb ∈ {25 , 26 , 27 }
+
+41
+
+1+3+7+1 nb : 26 ncand : 32 nbyit : 5
+
+rand #216.0000 w: 2.3009 w: 4.0024 maxw : 21.9529
+real #216.0017 r: 6.9105 r: 7.0255 maxr : 46.5115
+rand fit genlogistic ppf: c = 2.3659, loc = 1.1079, scale = 2.8420
+real fit genlogistic ppf: c = 427.0260, loc = 28.5140, scale = 5.3308
+Statistical distances in range [ r:6.9105 maxr : 46.5115]
+KL(rand || real): 0.4651 bits
+KL(real || rand): 20.4433 bits
+JS(real || rand): 10.4542 bits
+
+0.08
+0.06
+
+Percentage
+
+Densities of samples for rand and real
+
+0.10
+
+0.04
+0.02
+0.00
+
+10
+
+5
+
+0
+
+5
+
+10
+
+v
+
+15
+20
+25
+v1max : = max({v1i v1i L1})
+
+30
+
+35
+
+40
+
+45
+
+v
+
+0.06
+
+Percentage
+
+Densities of samples for rand and real
+
+Statistical distances in range [ r:9.6217 maxr : 50.0741]
+KL(rand || real): 0.7470 bits
+KL(real || rand): 31.5547 bits
+JS(real || rand): 16.1508 bits
+
+0.08
+
+0.04
+0.02
+0.00
+
+10
+
+5
+
+0
+
+5
+
+v
+(c) Distributions Dr 1max
+
+10
+
+15
+20
+25
+30
+v1max : = max({v1i v1i L1})
+
+v
+and Dw1 max
+
+40
+
+45
+
+6
+
+when nb = 2 , ncand = 64, nbyit = 5
+
+0.06
+0.04
+0.02
+0.00 10
+
+5
+
+0
+
+5
+v
+
+10
+
+15
+20
+25
+v1max : = max({v1i v1i L1})
+
+30
+
+35
+
+40
+
+v
+
+(e) Distributions Dr 1 max and Dw1 max when nb = 26 , ncand = 32, nbyit = 10
+
+8
+
+10
+
+4
+
+6
+
+8
+
+14
+
+16
+
+18
+
+20
+
+22
+
+24
+
+10 12 14 16 18 20 22 24 26
+
+cutoff
+
+45
+
+50
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+2
+
+4
+
+6
+
+8
+
+10
+
+12
+
+14
+
+cutoff
+
+16
+
+18
+
+20
+
+22
+
+24
+
+26
+
+(f) Percentage of samples passing various cutoﬀs in 10e
+
+Fig. 10: Distributions of v1max from correct ciphertext structures (real) and from
+wrong ciphertext structures (rand) with nb ﬁx to 26 , ncand ∈ {32, 64}, nb ∈ {5, 10}
+
+42
+
+12
+
+cutoff
+
+(d) Percentage of samples passing various cutoﬀs in 10c
+
+Statistical distances in range [ r:8.7250 maxr : 47.7396]
+KL(rand || real): 0.5911 bits
+KL(real || rand): 25.0315 bits
+JS(real || rand): 12.8113 bits
+
+0.08
+
+6
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+2
+
+rand #216.0000 w: 3.9128 w: 3.6026 maxw : 22.4126
+real #215.9999 r: 8.7250 r: 6.9566 maxr : 47.7396
+rand fit genlogistic ppf: c = 1.9752, loc = 1.5190, scale = 2.4592
+real fit genlogistic ppf: c = 635.9890, loc = 27.5011, scale = 5.1345
+
+0.10
+
+4
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+
+50
+
+Percentage
+
+Densities of samples for rand and real
+
+6
+0.12 1+3+7+1 nb : 2 ncand : 32 nbyit : 10
+
+35
+
+2
+
+(b) Percentage of samples passing various cutoﬀs in 10a
+
+rand #216.0000 w: 3.8999 w: 3.6830 maxw : 21.4975
+real #216.0121 r: 9.6217 r: 7.3943 maxr : 50.0741
+rand fit genlogistic ppf: c = 1.7726, loc = 1.8515, scale = 2.4683
+real fit genlogistic ppf: c = 502.4548, loc = 28.7666, scale = 5.6358
+
+0.10
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+0
+
+(a) Distributions Dr 1 max and Dw1max when nb = 26 , ncand = 32, nbyit = 5
+
+0.12 1+3+7+1 nb : 26 ncand : 64 nbyit : 5
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+
+1+3+8+1 nb : 212 ncand : 32 nbyit : 5
+
+0.06
+
+rand #216.0000 w: 13.3115 w: 5.9362 maxw : 40.9927
+real #216.0112 r: 15.4180 r: 6.8935 maxr : 51.5177
+rand fit genlogistic ppf: c = 3.0679, loc = 6.6569, scale = 4.4016
+real fit genlogistic ppf: c = 4.4840, loc = 5.3183, scale = 5.1704
+Statistical distances in range [ r:15.4180 maxr : 51.5177]
+KL(rand || real): 0.0670 bits
+KL(real || rand): 2.1070 bits
+JS(real || rand): 1.0870 bits
+
+0.05
+0.04
+
+Percentage
+
+Densities of samples for rand and real
+
+0.07
+
+0.03
+0.02
+0.01
+0.00
+
+5
+
+0
+
+5
+
+10
+
+15
+20
+25
+30
+v1max : = max({v1i v1i L1})
+
+35
+
+40
+
+45
+v
+
+50
+
+Densities of samples
+
+0.08
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+12
+v
+
+(a) Sampling 216 correct/wrong ciphertext structures to study the distributions Dr 1max and Dw1max
+involved in attack ASpeck13R
+
+0.10
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+14
+
+16
+
+18
+
+22
+
+cutoff
+
+24
+
+26
+
+28
+
+30
+
+32
+
+(b) Percentage of samples passing various cutoﬀs in 11a
+
+hw 0: pr. 2 6.5580 #29.4533 0: 30.1435 0: 8.2989 min0: 7.4510 median0: 29.9378 max0: 51.5177
+hw 1: pr. 2 5.7957 #210.2155 1: 26.6233 1: 8.2695 min1: 4.0187 median1: 26.9728 max1: 51.3717
+hw 2: pr. 2 5.2522 #210.7591 2: 22.7595 2: 8.3655 min2: 2.6252 median2: 22.3735 max2: 51.2651
+hw 3: pr. 2 4.7609 #211.2503 3: 19.8535 3: 7.7663 min3: -0.2976 median3: 19.6247 max3: 48.5147
+
+0.06
+
+0.04
+
+0.02
+
+0.00 2.5 0.0 2.5 5.0 7.5 10.0 12.5 15.0 17.5 20.0 22.5 25.0 27.5 30.0 32.5 35.0 37.5 40.0 42.5 45.0 47.5 50.0 52.5
+v1max : = max({v1i v1i L1})
+(c) Distribution of combined responses using correct ciphertext structures when the corresponding
+recommended subkey has Hamming distance hw with the real subkey
+
+Fig. 11: Distribution of the combined responses on outputs of decrypting one round
+using recommended subkeys from correct ciphertext structures (real) and from wrong
+ciphertext structures (rand)
+
+43
+
+20
+
+0.08 1+3+8+1 n : 212 n : 64 n : 5
+b
+cand
+byit
+
+0.06
+
+rand #217.0000 w: 15.6199 w: 5.5883 maxw : 51.4407
+real #217.0129 r: 18.0364 r: 6.7471 maxr : 52.6721
+rand fit genlogistic ppf: c = 2.2864, loc = 11.0401, scale = 3.9655
+real fit genlogistic ppf: c = 4.1387, loc = 8.7777, scale = 4.9612
+Statistical distances in range [ r:18.0364 maxr : 52.6721]
+KL(rand || real): 0.1378 bits
+KL(real || rand): 2.2839 bits
+JS(real || rand): 1.2108 bits
+
+0.05
+0.04
+
+Percentage
+
+Densities of samples for rand and real
+
+0.07
+
+0.03
+0.02
+0.01
+0.00
+
+0
+
+5
+
+10
+
+15
+
+20
+25
+30
+v1max : = max({v1i v1i L1})
+
+35
+
+40
+
+45
+v
+
+50
+
+55
+v
+
+(a) Sampling 217 correct/wrong ciphertext structures to study the distributions Dr 1max and Dw1max
+involved in attack ASpeck13R
+
+0.14
+0.12
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+14
+
+16
+
+18
+
+20
+
+hw 0: pr. 2 5.6831 #211.3298 0: 30.1366 0: 7.2681 min0: 7.7382 median0: 29.4136 max0: 50.3384
+hw 1: pr. 2 5.1219 #211.8910 1: 28.5589 1: 8.5080 min1: 3.3012 median1: 28.2677 max1: 52.6721
+hw 2: pr. 2 4.8032 #212.2098 2: 25.1165 2: 7.9175 min2: 3.4602 median2: 25.0594 max2: 51.1559
+hw 3: pr. 2 4.6163 #212.3966 3: 21.5182 3: 7.3743 min3: 3.0331 median3: 20.6399 max3: 44.6365
+
+Densities of samples
+
+0.08
+0.06
+0.04
+0.02
+2.5 5.0 7.5 10.0 12.5 15.0 17.5 20.0 22.5 25.0 27.5 30.0 32.5 35.0 37.5 40.0 42.5 45.0 47.5 50.0 52.5 55.0
+v1max : = max({v1i v1i L1})
+
+(c) Distribution of combined responses using correct ciphertext structures when the corresponding
+recommended subkey has Hamming distance hw with the real subkey
+
+Fig. 12: Distribution of the combined responses on outputs of decrypting one round
+using recommonded subkeys from correct ciphertext structures (real) and from wrong
+ciphertext structures (rand)
+
+44
+
+24
+
+cutoff
+
+26
+
+28
+
+30
+
+32
+
+34
+
+(b) Percentage of samples passing various cutoﬀs in 12a
+
+0.10
+
+0.00
+
+22
+
+rand #216.0000 w: 3.8999 w: 3.6830 maxw : 21.4975
+real #216.0121 r: 9.6217 r: 7.3943 maxr : 50.0741
+rand fit genlogistic ppf: c = 1.7726, loc = 1.8515, scale = 2.4683
+real fit genlogistic ppf: c = 502.4548, loc = 28.7666, scale = 5.6358
+
+0.10
+
+Statistical distances in range [ r:9.6217 maxr : 50.0741]
+KL(rand || real): 0.7470 bits
+KL(real || rand): 31.5547 bits
+JS(real || rand): 16.1508 bits
+
+0.08
+0.06
+
+Percentage
+
+Densities of samples for rand and real
+
+0.12 1+3+7+1 nb : 26 ncand : 64 nbyit : 5
+
+0.04
+0.02
+0.00
+
+10
+
+5
+
+0
+
+5
+
+10
+
+15
+20
+25
+30
+v1max : = max({v1i v1i L1})
+
+35
+
+40
+
+45
+
+50
+
+v
+v
+(a) Sampling 2 correct/wrong ciphertext structures to study the distributions Dr 1max and Dw1max
+involved in attack ASpeck12R
+16
+
+0.08
+0.07
+
+0.60
+0.55
+0.50
+0.45
+0.40
+0.35
+0.30
+0.25
+0.20
+0.15
+0.10
+0.05
+
+ctw: fit genlogistic dist
+ctw: experimental
+ctr: fit genlogistic dist
+ctr: experimental
+
+2
+
+4
+
+6
+
+8
+
+10 12 14 16 18 20 22 24 26
+
+(b) Percentage of samples passing various cutoﬀs in 13a
+
+hw 0: pr. 2 3.5075 #212.5046 0: 20.1801 0: 6.4670 min0: -0.0715 median0: 19.9763 max0: 50.0741
+hw 1: pr. 2 3.2181 #212.7940 1: 17.8236 1: 6.5571 min1: -2.3788 median1: 17.5119 max1: 44.1257
+hw 2: pr. 2 3.6554 #212.3567 2: 14.8465 2: 6.5758 min2: -3.1805 median2: 14.4840 max2: 41.0329
+hw 3: pr. 2 3.9184 #212.0937 3: 11.9559 3: 6.3369 min3: -3.6091 median3: 11.3813 max3: 39.5732
+
+Densities of samples
+
+0.06
+0.05
+0.04
+0.03
+0.02
+0.01
+0.00 5.0 2.5 0.0 2.5 5.0 7.5 10.0 12.5 15.0 17.5 20.0 22.5 25.0 27.5 30.0 32.5 35.0 37.5 40.0 42.5 45.0 47.5 50.0 52.5
+v1max : = max({v1i v1i L1})
+(c) Distribution of combined responses using correct ciphertext structures when the corresponding
+recommended subkey has Hamming distance hw with the real subkey
+
+Fig. 13: Distribution of the combined responses on outputs of decrypting one round
+using recommended subkeys from correct ciphertext structures (real) and from wrong
+ciphertext structures (rand)
+
+45
+
+cutoff
+
+C
+
+Distributions of the Combined-response with Various
+Number of Blocks
+
+To investigate how many samples from the same distribution should be combined to achieve a good combine-response distinguisher (CRD), that is how
+many neutral bits are necessary, the accuracy of the CRD and the distributions of the combine-responses were experimentally investigated. The relation
+curves between the accuracy of the resulting CRDs and the number of combined
+samples can be seen in Fig. 14. The resulting distributions are illustrated using histogram plots. Besides, parameters of the best ﬁtting distributions among
+{Normal, Chi-squared, Generalized logistic, Logistic, Gamma} are provided.
+From Figures 15, 16, 17, 18, for Gohr’s lightweight 5-, 6-, 7-, 8-round neural
+distinguishers (with accuracy listed in Table 10), the distributions corresponding
+to wrong and correct ciphertext structures can be separated when combining 20 ,
+23 ∼ 24 , 26 ∼ 27 , and 212 ∼ 213 samples, respectively. Combining that many
+samples, the accuracy of the resulting CRDs can be higher than 0.95, which can
+be seen in Fig. 14. Thus, for using these distinguishers to do key-recovery and
+when there are only several correct ciphertext structures could occur, roughly,
+one needs to exploit about 0, 3 ∼ 4, 6 ∼ 7, and 12 ∼ 13 neutral bits.
+
+1.00
+0.95
+0.90
+
+accuracy
+
+0.85
+0.80
+0.75
+0.70
+0.65
+
+ND5
+ND6
+ND7
+ND8
+
+0.60
+0.55
+0.50
+
+20 21 22 23 24 25 26 27 28 29 210 211 212 213
+
+number of blocks
+
+Fig. 14: The accuracy curve when combining a various number of samples from the
+same distribution
+
+46
+
+140
+
+Y0: Best fit dist. gamma p: 1.2180592734234635e-297 parm: (0.39609293005304214, 2.8509433725411253e-10, 0.2500476688241958)
+Y1: Best fit dist. norm p: 0.0 parm: (0.8896674, 0.23980394)
+
+Y=0 Random
+Y=1 Real
+
+100 Y0: Best fit dist. norm p: 0.0 parm: (0.065871015, 0.10690286)
+Y1: Best fit dist. norm p: 0.0 parm: (0.9402602, 0.14136717)
+80
+Densities of combined samples
+
+120
+Densities of combined samples
+
+Y=0 Random
+Y=1 Real
+
+100
+80
+60
+
+60
+
+40
+
+40
+20
+20
+0
+0.05 0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00 1.05
+Combined scores from 5-round ND with 20 samples
+
+0
+0.05 0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00 1.05
+Combined scores from 5-round ND with 21 samples
+
+(a) Combining responses of 20 samples from ND Speck5R
+
+Y0: Best fit dist. norm p: 0.0 parm: (0.042811524, 0.057859685)
+70 Y1: Best fit dist. norm p: 0.0 parm: (0.96727955, 0.07052364)
+
+(b) Combining responses of 21 samples from ND Speck5R
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. norm p: 0.0 parm: (0.031347558, 0.031172875)
+60 Y1: Best fit dist. norm p: 0.0 parm: (0.97942764, 0.030002592)
+
+50
+Densities of combined samples
+
+Densities of combined samples
+
+60
+50
+40
+30
+20
+
+40
+
+30
+
+20
+
+10
+
+10
+0
+0.05 0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00 1.05
+Combined scores from 5-round ND with 22 samples
+
+0
+0.05 0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Combined scores from 5-round ND with 23 samples
+
+(c) Combining responses of 22 samples from ND Speck5R
+
+60
+
+Y0: Best fit dist. norm p: 0.0 parm: (0.025922459, 0.018116588)
+Y1: Best fit dist. norm p: 0.0 parm: (0.9841161, 0.01390796)
+
+(d) Combining responses of 23 samples from ND Speck5R
+
+80
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. genlogistic p: 4.0293551033266853e-131 parm: (455.4634476461855, -0.03323582776507718, 0.008430374574812358)
+Y1: Best fit dist. genlogistic p: 2.4033617754635275e-175 parm: (0.1356802103428173, 0.9935161583728382, 0.0010526250698648025)
+
+Y=0 Random
+Y=1 Real
+
+70
+60
+Densities of combined samples
+
+50
+Densities of combined samples
+
+Y=0 Random
+Y=1 Real
+
+40
+
+30
+
+20
+
+50
+40
+30
+20
+
+10
+
+0
+
+10
+0
+
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Combined scores from 5-round ND with 24 samples
+
+(e) Combining responses of 24 samples from ND Speck5R
+100
+
+Y0: Best fit dist. chi2 p: 8.284332240662243e-19 parm: (12.059626185428465, 0.0036455429971263397, 0.0015365578583675385)
+Y1: Best fit dist. genlogistic p: 1.0644133114737432e-264 parm: (0.24582677618008114, 0.9913598969668043, 0.001224994834087929)
+
+(f) Combining responses of 25 samples from ND Speck5R
+
+Y=0 Random
+Y=1 Real
+
+120
+
+Y0: Best fit dist. gamma p: 5.088086990929161e-06 parm: (10.64147249310497, 0.004599497825237048, 0.0015931545936711594)
+Y1: Best fit dist. genlogistic p: 3.9128659423788826e-219 parm: (0.37954848438254996, 0.9898378683563382, 0.0012314058258432845)
+
+Y=0 Random
+Y=1 Real
+
+100
+Densities of combined samples
+
+Densities of combined samples
+
+80
+
+60
+
+40
+
+20
+
+0
+
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Combined scores from 5-round ND with 25 samples
+
+80
+
+60
+
+40
+
+20
+
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Combined scores from 5-round ND with 26 samples
+
+(g) Combining responses of 26 samples from ND Speck5R
+
+47
+
+0
+
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Combined scores from 5-round ND with 27 samples
+
+(h) Combining responses of 27 samples from ND Speck5R
+
+Fig. 15: The distribution of combined responses from NDSpeck5R (sampled with 220
+combined ciphertext-pairs)
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. norm p: 0.0 parm: (0.29191887, 0.19254076)
+Y1: Best fit dist. norm p: 0.0 parm: (0.70607597, 0.2899791)
+
+14
+
+6
+
+12
+
+5
+
+10
+8
+6
+
+4
+3
+2
+
+4
+
+1
+
+2
+0
+
+0
+
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Combined scores from 6-round ND with 20 samples
+
+(a) Combining responses of 20 samples from ND Speck6R
+5
+
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Combined scores from 6-round ND with 21 samples
+
+(b) Combining responses of 21 samples from ND Speck6R
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. genlogistic p: 1.2146198486424728e-134 parm: (638.6526402802658, -0.2732601591685082, 0.07800250241309326)
+Y1: Best fit dist. norm p: 0.0 parm: (0.79803324, 0.15610181)
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. genlogistic p: 4.0686911795691355e-20 parm: (44.29985237101043, 0.02042364048962176, 0.0577294437413273)
+6 Y1: Best fit dist. norm p: 0.0 parm: (0.81865937, 0.10972888)
+
+4
+
+5
+Densities of combined samples
+
+Densities of combined samples
+
+Y=0 Random
+Y=1 Real
+
+7 Y0: Best fit dist. norm p: 0.0 parm: (0.28386295, 0.14530206)
+Y1: Best fit dist. norm p: 0.0 parm: (0.76429886, 0.21864201)
+
+Densities of combined samples
+
+Densities of combined samples
+
+16
+
+3
+
+2
+
+4
+
+3
+
+2
+
+1
+1
+
+0
+
+0.05
+
+0.10
+
+0.15
+
+0.20
+
+0.25
+
+0.30
+
+0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70
+Combined scores from 6-round ND with 22 samples
+
+0.75
+
+0.80
+
+0.85
+
+0.90
+
+0.95
+
+0
+0.05
+
+1.00
+
+(c) Combining responses of 22 samples from ND Speck6R
+
+0.15
+
+0.20
+
+0.25
+
+0.30
+
+0.35
+
+0.40 0.45 0.50 0.55 0.60 0.65 0.70
+Combined scores from 6-round ND with 23 samples
+
+0.75
+
+0.80
+
+0.85
+
+0.90
+
+0.95
+
+1.00
+
+(d) Combining responses of 23 samples from ND Speck6R
+
+12 Y0: Best fit dist. gamma p: 0.03237469630012735 parm: (18.100129477041214, 0.11566966399023171, 0.008401093570341942)
+Y1: Best fit dist. genlogistic p: 8.743e-320 parm: (0.39677757023538396, 0.8755282391190669, 0.019286095166176576)
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. gamma p: 0.00017474434864354462 parm: (9.927055938168536, 0.10877778369623933, 0.01615053777012138)
+8 Y1: Best fit dist. norm p: 0.0 parm: (0.8301008, 0.076566644)
+
+Y=0 Random
+Y=1 Real
+
+10
+
+7
+6
+
+Densities of combined samples
+
+Densities of combined samples
+
+0.10
+
+5
+4
+3
+
+8
+
+6
+
+4
+
+2
+2
+1
+0
+
+0.10
+
+0.15
+
+0.20
+
+0.25
+
+0.30
+
+0.35
+
+0.40 0.45 0.50 0.55 0.60 0.65 0.70
+Combined scores from 6-round ND with 24 samples
+
+0.75
+
+0.80
+
+0.85
+
+0.90
+
+0.95
+
+0
+
+1.00
+
+(e) Combining responses of 24 samples from ND Speck6R
+
+16
+
+0.20
+
+0.25
+
+0.30
+
+0.35
+
+0.40
+
+0.45 0.50 0.55 0.60 0.65 0.70
+Combined scores from 6-round ND with 25 samples
+
+0.75
+
+0.80
+
+0.85
+
+0.90
+
+0.95
+
+1.00
+
+(f) Combining responses of 25 samples from ND Speck6R
+
+Y0: Best fit dist. gamma p: 0.36335858812310795 parm: (35.53313656175325, 0.11675196193828015, 0.0042281921488204685)
+Y1: Best fit dist. genlogistic p: 4.107195280191064e-236 parm: (0.5301610826403247, 0.8607630134772402, 0.016799365173631835)
+
+Y=0 Random
+Y=1 Real
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. gamma p: 0.01563803872118948 parm: (67.82170492920562, 0.12008040770690698, 0.002160475897005281)
+Y1: Best fit dist. genlogistic p: 5.446883559580866e-213 parm: (0.6500195860410589, 0.8528227791364726, 0.014163030777681631)
+20
+
+14
+12
+
+Densities of combined samples
+
+Densities of combined samples
+
+0.15
+
+10
+8
+6
+4
+
+15
+
+10
+
+5
+
+2
+0
+
+0.15
+
+0.20
+
+0.25
+
+0.30
+
+0.35
+
+0.40
+
+0.45
+0.50
+0.55
+0.60
+0.65
+0.70
+Combined scores from 6-round ND with 26 samples
+
+0.75
+
+0.80
+
+0.85
+
+(g) Combining responses of 26 samples from ND Speck6R
+
+0.90
+
+0.95
+
+48
+
+0
+
+0.20
+
+0.25
+
+0.30
+
+0.35
+
+0.40
+
+0.45
+0.50
+0.55
+0.60
+0.65
+0.70
+Combined scores from 6-round ND with 27 samples
+
+0.75
+
+0.80
+
+0.85
+
+(h) Combining responses of 27 samples from ND Speck6R
+
+Fig. 16: The distribution of combined responses from NDSpeck6R (sampled with 220
+combined ciphertext-pairs)
+
+0.90
+
+0.95
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. genlogistic p: 1.5559987699149654e-303 parm: (372.524631651316, -0.14138783057248394, 0.09176569242419197)
+Y1: Best fit dist. norm p: 0.0 parm: (0.5337745, 0.14683612)
+
+Y=0 Random
+Y=1 Real
+
+5 Y0: Best fit dist. gamma p: 7.171004476177538e-100 parm: (8.568449837356749, 0.20555857622942547, 0.029251919129941975)
+Y1: Best fit dist. gamma p: 4.843480101747072e-158 parm: (14.428106894081665, 0.12021090442754565, 0.028934200520604518)
+
+4
+
+Densities of combined samples
+
+Densities of combined samples
+
+4
+3
+
+2
+
+1
+
+0
+
+3
+
+2
+
+1
+
+0.10
+
+0.15
+
+0.20
+
+0.25
+
+0.30
+
+0.35
+
+0.40 0.45 0.50 0.55 0.60 0.65 0.70
+Combined scores from 7-round ND with 20 samples
+
+0.75
+
+0.80
+
+0.85
+
+0.90
+
+0
+
+0.95
+
+(a) Combining responses of 20 samples from ND Speck7R
+
+0.25
+
+0.30
+
+0.35
+
+0.40
+
+0.45
+0.50
+0.55
+0.60
+0.65
+0.70
+Combined scores from 7-round ND with 21 samples
+
+0.75
+
+0.80
+
+0.85
+
+0.90
+
+0.95
+
+(b) Combining responses of 21 samples from ND Speck7R
+
+7 Y0: Best fit dist. chi2 p: 7.504077688210544e-05 parm: (23.473832431371015, 0.24296710903960778, 0.009075247217029434)
+Y1: Best fit dist. gamma p: 2.0232518621083232e-56 parm: (66.6501201555601, -0.10496209199902162, 0.009663150351941888)
+
+Y=0 Random
+Y=1 Real
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. gamma p: 0.0016230489911323984 parm: (26.552216541600927, 0.22884083538450917, 0.008540247546206498)
+Y1: Best fit dist. gamma p: 1.6914391567137345e-15 parm: (112.8616600442972, -0.06377870218121331, 0.005345775105535036)
+
+6
+
+8
+
+5
+
+Densities of combined samples
+
+Densities of combined samples
+
+0.20
+
+4
+3
+2
+
+6
+
+4
+
+2
+1
+0
+
+0.25
+
+0.30
+
+0.35
+
+0.40
+
+0.45
+0.50
+0.55
+0.60
+0.65
+0.70
+Combined scores from 7-round ND with 22 samples
+
+0.75
+
+0.80
+
+0.85
+
+0
+
+0.90
+
+(c) Combining responses of 22 samples from ND Speck7R
+
+12
+
+0.30
+
+0.35
+
+0.40
+
+0.45
+
+0.50
+0.55
+0.60
+0.65
+Combined scores from 7-round ND with 23 samples
+
+0.70
+
+0.75
+
+0.80
+
+(d) Combining responses of 23 samples from ND Speck7R
+
+Y0: Best fit dist. gamma p: 0.10667477485568866 parm: (53.50044493102709, 0.22736000267817247, 0.00426660463082579)
+Y1: Best fit dist. gamma p: 0.012852027042416773 parm: (219.27091419458839, -0.0638320981016886, 0.0027539023432276597)
+
+Y=0 Random
+Y=1 Real
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. gamma p: 0.0032899699947093906 parm: (106.81417556963908, 0.22713221375647347, 0.0021392677167331)
+17.5 Y1: Best fit dist. gamma p: 0.09555353852700277 parm: (405.8593606159941, -0.047410962429811854, 0.0014479050705434593)
+15.0
+Densities of combined samples
+
+Densities of combined samples
+
+10
+8
+6
+4
+
+10.0
+7.5
+5.0
+
+2
+0
+
+12.5
+
+2.5
+
+0.35
+
+0.40
+
+0.45
+
+0.50
+0.55
+0.60
+Combined scores from 7-round ND with 24 samples
+
+0.65
+
+0.70
+
+0.0
+
+0.75
+
+(e) Combining responses of 24 samples from ND Speck7R
+
+Y0: Best fit dist. gamma p: 0.0004652820843985058 parm: (219.93409202428845, 0.22409360853145793, 0.0010524935611987848)
+25 Y1: Best fit dist. gamma p: 0.44609374669516033 parm: (711.2630383822747, -0.021251751974088504, 0.0007894574263664867)
+
+0.40
+
+0.45
+
+0.50
+0.55
+Combined scores from 7-round ND with 25 samples
+
+0.60
+
+0.65
+
+(f) Combining responses of 25 samples from ND Speck7R
+
+Y=0 Random
+Y=1 Real
+
+35
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. gamma p: 0.05663976989917541 parm: (464.0869967847427, 0.21779385949218727, 0.0005121215235158584)
+Y1: Best fit dist. gamma p: 7.511988160156753e-07 parm: (1196.4204877986874, 0.0035962555808504316, 0.0004485021153939834)
+
+30
+Densities of combined samples
+
+20
+Densities of combined samples
+
+0.35
+
+15
+
+10
+
+25
+20
+15
+10
+
+5
+5
+0
+
+0.40
+
+0.45
+
+0.50
+0.55
+Combined scores from 7-round ND with 26 samples
+
+0.60
+
+(g) Combining responses of 26 samples from ND Speck7R
+
+0.65
+
+49
+
+0
+
+0.40
+
+0.45
+
+0.50
+0.55
+Combined scores from 7-round ND with 27 samples
+
+(h) Combining responses of 27 samples from ND Speck7R
+
+Fig. 17: The distribution of combined responses from NDSpeck7R (sampled with 220
+combined ciphertext-pairs)
+
+0.60
+
+50 Y0: Best fit dist. logistic p: 0.0009225031505120825 parm: (0.49939313381674666, 0.005190414949222818)
+Y1: Best fit dist. genlogistic p: 0.08147691618727759 parm: (1.1070724723220262, 0.4998961621494733, 0.005375799955940933)
+
+Y=0 Random
+Y=1 Real
+
+Y0: Best fit dist. norm p: 0.0 parm: (0.4993295, 0.018678525)
+30 Y1: Best fit dist. norm p: 0.0 parm: (0.5008209, 0.01868204)
+
+40
+Densities of combined samples
+
+Densities of combined samples
+
+25
+
+20
+
+15
+
+10
+
+30
+
+20
+
+10
+
+5
+
+0
+
+0.35
+
+0.40
+
+0.45
+0.50
+0.55
+Combined scores from 8-round ND with 20 samples
+
+0.60
+
+0
+
+0.65
+
+(a) Combining responses of 20 samples from ND Speck8R
+
+Y0: Best fit dist. norm p: 1.1058107515242246e-18 parm: (0.4993451, 0.0046750014)
+Y1: Best fit dist. gamma p: 8.348502452181588e-12 parm: (2637.4061425043665, 0.2616417454225735, 9.067903374741101e-05)
+
+0.45
+
+0.50
+Combined scores from 8-round ND with 22 samples
+
+0.55
+
+(b) Combining responses of 22 samples from ND Speck8R
+
+Y=0 Random
+Y=1 Real
+
+175 Y0: Best fit dist. norm p: 0.006655423253244691 parm: (0.49935085, 0.0023383056)
+Y1: Best fit dist. norm p: 0.002588005524688615 parm: (0.5007852, 0.002354166)
+
+80
+
+Y=0 Random
+Y=1 Real
+
+150
+Densities of combined samples
+
+Densities of combined samples
+
+Y=0 Random
+Y=1 Real
+
+60
+
+40
+
+125
+100
+75
+50
+
+20
+25
+0
+
+0
+
+0.50
+Combined scores from 8-round ND with 24 samples
+
+(c) Combining responses of 24 samples from ND Speck8R
+
+350 Y0: Best fit dist. norm p: 0.9694651913146539 parm: (0.4993487, 0.0011687127)
+Y1: Best fit dist. norm p: 0.3067850011982737 parm: (0.50078315, 0.0011887781)
+
+0.50
+Combined scores from 8-round ND with 26 samples
+
+(d) Combining responses of 26 samples from ND Speck8R
+
+Y=0 Random
+Y=1 Real
+
+1000
+
+Y0: Best fit dist. norm p: 0.8188809702988278 parm: (0.49935013, 0.00041314395)
+Y1: Best fit dist. norm p: 0.07039180907948772 parm: (0.5007803, 0.0004603153)
+
+Y=0 Random
+Y=1 Real
+
+300
+
+Densities of combined samples
+
+Densities of combined samples
+
+800
+250
+200
+150
+
+600
+
+400
+
+100
+200
+50
+0
+
+0
+
+0.50
+Combined scores from 8-round ND with 28 samples
+
+(e) Combining responses of 28 samples from ND Speck8R
+
+1400
+
+Y0: Best fit dist. norm p: 0.7802669881174968 parm: (0.4993502, 0.00029234946)
+Y1: Best fit dist. norm p: 0.0015504720553424884 parm: (0.5007824, 0.00035478626)
+
+(f) Combining responses of 211 samples from ND Speck8R
+
+Y=0 Random
+Y=1 Real
+
+2500 Y0: Best fit dist. norm p: 0.8602970852198111 parm: (0.49935013, 0.00020519852)
+Y1: Best fit dist. gamma p: 0.41839908672022996 parm: (213.58431321597214, 0.496611402924442, 1.952331969086066e-05)
+
+1200
+
+2000
+
+1000
+
+Densities of combined samples
+
+Densities of combined samples
+
+0.50
+Combined scores from 8-round ND with 211 samples
+
+800
+600
+
+1500
+
+1000
+
+400
+500
+200
+0
+
+0.50
+Combined scores from 8-round ND with 212 samples
+
+(g) Combining responses of 212 samples from ND Speck8R
+
+50
+
+0
+
+0.50
+Combined scores from 8-round ND with 213 samples
+
+(h) Combining responses of 213 samples from ND Speck8R
+
+Fig. 18: The distribution of combined responses from NDSpeck8R (sampled with 220
+combined ciphertext-pairs when combining no more than 210 , 218 for combining 210 ∼
+212 , and 215 for combining 213 responses)
+
+Y=0 Random
+Y=1 Real
+
+D
+
+Additional Constraints on Diﬀerential Trails of
+Speck32/64
+
+During this work, additional constraints beyond the XOR-diﬀerences on some
+diﬀerential trails of Speck32/64 were found. Moreover, unexpectedly, in some
+diﬀerential trails, constraints are on subkeys. In such a situation, the attacks
+using diﬀerentials whose major contributed trails must fulﬁll these constraints
+on keys can only work for a fraction of the keyspace.
+This happens to the presented attacks that use the 3-round diﬀerentials
+(0x8020, 0x4101) → (0x0040, 0x0000), (0x8060, 0x4101) → (0x0040, 0x0000),
+(0x8021, 0x4101) → (0x0040, 0x0000), and (0x8061, 0x4101) → (0x0040, 0x0000).
+Note that this also happens to previous best diﬀerential attacks on Speck32/64,
+including those covering the most rounds (14-round) in [10, 13, 29], which was
+not noticed before.
+Table 7 presents the generalized constraints of the diﬀerential trails involved
+in the proposed attacks (and other potentially useful trails), and Table 8 presents
+those used in previous attacks [10,13,29]. These constraints can be obtained using
+the existing tool ARXToolkit from [25]. A recent work in [8] also independently
+found this key-dependent phenomenon of the diﬀerential on Speck and provided
+a theoretical treatment.
+For the used 3-round diﬀerential trails, there is 1 bit constraint on one subkey
+(all four 3-round diﬀerential trails share this constraint), as shown in Table 7. In
+the 11-round attack in [10] and the 14-round attacks in [13,29], the best 9-round
+trail was used. In this trail, there is 1 bit constraint on one subkey, as shown in
+Table 8. In [29], the best 10-round diﬀerential trail was found. In this trail, there
+are 3 bits constraints on the subkeys as shown in Table 8.
+Since the probabilities of these trails are calculated using the Markov model,
+and it is averaged over the whole keyspace, the real probability of these trails
+should be about 2c times larger than the previous estimation for 264−c keys, and
+0 for other keys, where c is the number of constraints on the subkeys. Accordingly,
+the used 3-round diﬀerential trails whose probability was previously estimated as
+2−12 should have a probability 2−11 for 263 keys and 0 for other keys. Similarly,
+the 9-round diﬀerential trail, whose probability was previously estimated as 2−30
+used in [10,13,29] should be about 2−29 for 263 keys and 0 for other keys; the 10round diﬀerential trail, whose probability is previously estimated as 2−35 found
+in [29] should be about 2−32 for 261 keys and 0 for other keys.
+Additionally, we found that for one of the best diﬀerential trails with input
+diﬀerence 0x0040/0000 of 8-round Speck32/64, there are additional constraints
+on subkeys (see Table 7). For the corresponding keys that fulﬁll constraint k1 [9] =
+k1 [8], we trained a 7-round ResNet neural distinguisher with an accuracy of
+0.6228 (while for keys such that k1 [9] 6= k1 [8], the resulted neural distinguisher
+has an accuracy 0.6164). This indicates the existence of better weak-key neural
+distinguishers.
+
+51
+
+Table 7: Generalized diﬀerences of the 3-round, 4-round, and 8-round diﬀerential trails
+used/involved in the attacks (obtained using tools in [25, 30])
+3-round
+R diﬀerences vars
+hex(xi yi )
+
+0 8020 4101
+
+1 0201 0604
+
+2 1800 0010
+
+3 0040 0000
+
+x0
+y0
+z0
+k0
+x1
+y1
+z1
+k1
+x2
+y2
+z2
+k2
+x3
+y3
+
+4-round
+generalized
+diﬀerences
+
+x-------0-x-----x-----x-------x
+------x--------x
+---------------------x--------x
+-----<x------x---->x-------- c0 ----!--------------<x-------------=-------x------------x-----------------------------x---------------------
+
+R diﬀerences vars
+hex(xi yi )
+
+0 1488 1008
+
+1 0021 4001
+
+2 0601 0604
+
+3 1800 0010
+
+4 0040 0000
+
+x0
+y0
+z0
+k0
+x1
+y1
+z1
+k1
+x2
+y2
+z2
+k2
+x3
+y3
+z3
+k3
+x4
+y4
+
+8-round
+generalized
+diﬀerences
+
+---x-x--x---x-----x--------x--0
+----------x- c0 --x
+-----------------------0-x----x
+-x-----!-------x
+----->x--------x
+-----=-------------->x--------x
+-----<x------x---->x-------- c1 ----!--------------<x-------------=-------x------------x-----------------------------x---------------------
+
+R diﬀerences vars
+hex(xi yi )
+
+0 0040 0000
+
+1 8000 8000
+
+2 8300 8302
+
+3 8e00 820a
+
+4 832e 8b04
+
+5 2802 0410
+
+6 0040 1000
+
+7 9000 d000
+
+8 5120 1123
+P ra = 2−12
+{ −11
+2
+P rr =
+0
+
+63
+
+for 2 keys
+for others
+
+P ra = 2−17
+{ −15
+2
+P rr =
+0
+
+62
+
+for 2 keys
+for others
+
+P ra = 2−30
+{ −26.58
+2
+P rr =
+0
+
+generalized
+diﬀerences
+
+x0 ---------x-----y0 ---------------z0 x--------------k0 ---------------x1 x--------------y1 x--------------z1 x----->x-------k1 ------=--------x2 x----->x-------y2 x-----xx------xz2 x---><x------- f0 k2 ---- 40 ----------x3 x--- 03 xx f1 -------y3 x-----x-----x 10 xz3 x-----xx--x-xxxk3 ---------------x4 x-----xx-- 08 - 03 x 08 y4 x---x-<x-----x f1 z4 --x-x-------- 20 xk4 ---------------x5 --x-x---------xy5 -----x-----x---z5 ---------x-----k5 ---------------x6 ---------x-----y6 ---x-----------z6 x--x-----------k6 ---------------x7 x--x------ 40 ----y7 xx-x-----------z7 -x-x---x--x----k7 ---------------x8 -x-x---x--x----y8 ---x---x--x---xx
+for 260.58 keys
+for others
+
+P ra is the previous estimated probability over all keys, P rr is the revisited estimated probability for diﬀerent keys.
+c
+0
+-: ai = a0i
+: uncommon constraint “c20000c3”
+: uncommon constraint “00824100”
+0
+8
+c
+0
+0
+x: ai 6= ai
+:
+uncommon
+constraint
+“c30000c2”
+: uncommon constraint “00381c00”
+1
+3
+c
+0
+0: ai = a0i = 0
+:
+uncommon
+constraint
+“c2000043”
+: uncommon constraint “00418200”
+2
+4
+4
+1
+1: ai = a0i = 1
+:
+uncommon
+constraint
+“430000c2”
+: uncommon constraint “1400003c”
+0
+0
+f
+2
+!: a0i = ai 6= ai−1
+:
+uncommon
+constraint
+“ff0000f0”
+: uncommon constraint “2800003c”
+0
+0
+f
+=: a0i = ai = ai−1
+:
+uncommon
+constraint
+“ff00000f”
+Constraints
+in red are on sub-keys.
+1
+<: a0i 6= ai = ai−1
+>: a0i 6= ai 6= ai−1
+
+52
+
+Table 8: Generalized diﬀerences of the 9-round and 10-round diﬀerential trails used
+in [10, 29] (obtained using tools in [25])
+9-round
+R diﬀerences vars
+hex(xi yi )
+
+0 8054 a900
+
+1 0000 a402
+
+2 a402 3408
+
+3 50c0 80e0
+
+4 0181 0203
+
+5 000c 0800
+
+6 2000 0000
+
+7 0040 0040
+
+8 8040 8140
+
+9 0040 0542
+
+10-round
+generalized
+diﬀerences
+
+R diﬀerences vars
+hex(xi yi )
+
+x0 x--------x-x-x-y0 x-x-x--x-------z0 -- c2 ------------k0 ---------------x1 ------- f1 -------y1 x-x--x--------xz1 x-x--x--------xk1 ---------------x2 04 -x--x--------xy2 --<x-x------x--z2 - 04 -x- c2 --<x-----k2 ---------------x3 -x-x----xx-----y3 x-------x<x----0
+z3 -------xx------x
+k3 ---------------x4 -------xx------x
+y4 ------x-------xx
+z4 ------------>x01
+k4 ------------!--x5 ------------<x-y5 ----x----------z5 --x------------k5 ---------------x6 --x------------y6 ---------------z6 ---------x-----k6 ---------------x7 ---------x-----y7 ---------x-----z7 x--------x-----k7 ---------------x8 x--------x-----y8 x------x-x-----z8 ---------x-----k8 ---------------x9 ---------x-----y9 -----x-x-x----x-
+
+0 2040 0040
+
+1 8000 8100
+
+2 8000 8402
+
+3 8d02 9d08
+
+4 6002 1420
+
+5 1060 40e0
+
+6 0380 0001
+
+7 0004 0000
+
+8 0800 0800
+
+9 0810 2810
+
+10 0800 a840
+P ra = 2−30
+{ −29
+2
+P rr =
+0
+
+P ra = 2−35
+{ −32
+2
+P rr =
+0
+
+63
+
+for 2 keys
+for others
+
+Symbols used are same as in Table 7
+
+53
+
+x0
+y0
+z0
+k0
+x1
+y1
+z1
+k1
+x2
+y2
+z2
+k2
+x3
+y3
+z3
+k3
+x4
+y4
+z4
+k4
+x5
+y5
+z5
+k5
+x6
+y6
+z6
+k6
+x7
+y7
+z7
+k7
+x8
+y8
+z8
+k8
+x9
+y9
+z9
+k9
+x10
+y10
+
+generalized
+diﬀerences
+--x------x--------------x-----x-----------------------------x--------------x------x-------x-----------------------------x------ f1 ------!x----x!-------xx--->x-x------x----=----------x--->x-x------xx--<<x-x----x- f1 -<x-- 40 --------x-!-------------->x-----------x-!-x-x----x-------x-----xx--------------------!-x-----xx-----x------x>x----------><x-------------!-------------x>x-------------=-----=-x
+-------------x-0
+----------------------------x--------------------x-----------------------------x--------------x--------------x------x----------------------x------x-----x-x------x-------x-----------------------------x----------x-x-x----x------
+
+for 261 keys
+for others
+
+0.58
+0.56
+
+0.7
+
+0.54
+0.6
+
+Mean response
+
+Mean response
+
+0.52
+0.5
+
+0.50
+0.48
+
+0.4
+0.46
+0.44
+
+0.3
+
+0.42
+0.2
+
+0
+
+4096 8192 12288 16384 20480 24576 28672 32768 36864 40960 45056 49152 53248 57344 61440 65536
+
+0
+
+Difference to real key
+
+(a) ND VV 8R : directly trained with data of the form ((x, y, x0 , y 0 ))
+
+4096 8192 12288 16384 20480 24576 28672 32768 36864 40960 45056 49152 53248 57344 61440 65536
+
+Difference to real key
+
+(b) ND VD 8R : directly trained with data of the form ((x, x0 , y ⊕ y 0 ))
+
+Simon
+
+Simon
+
+0.56
+0.515
+0.54
+0.510
+
+0.50
+
+Mean response
+
+Mean response
+
+0.52
+
+0.48
+
+0.505
+
+0.500
+
+0.46
+0.44
+
+0.495
+
+0.42
+0.490
+0
+
+4096 8192 12288 16384 20480 24576 28672 32768 36864 40960 45056 49152 53248 57344 61440 65536
+
+0
+
+Difference to real key
+
+(c) ND VV 9R : directly trained with data of the form ((x, y, x0 , y 0 ))
+
+4096 8192 12288 16384 20480 24576 28672 32768 36864 40960 45056 49152 53248 57344 61440 65536
+
+Difference to real key
+
+(d) ND VD 9R : directly trained with data of the form ((x, x0 , y ⊕ y 0 ))
+
+Simon
+
+Simon
+
+0.515
+0.5010
+0.510
+
+Mean response
+
+Mean response
+
+0.5005
+
+0.505
+
+0.500
+
+0.5000
+
+0.4995
+
+0.4990
+0.495
+0.4985
+0
+
+Simon
+
+4096 8192 12288 16384 20480 24576 28672 32768 36864 40960 45056 49152 53248 57344 61440 65536
+
+0
+
+Difference to real key
+
+Simon
+
+(e) ND VV 10R : trained using ND VV 9R and KeyAveraging algorithm
+
+Simon
+
+4096 8192 12288 16384 20480 24576 28672 32768 36864 40960 45056 49152 53248 57344 61440 65536
+
+Difference to real key
+
+Simon
+
+Simon
+
+8R
+(f) ND VV 11R : trained using ND VV 9R and DD (0440,0100)
+in staged training
+method
+
+Fig. 19: Wrong key response proﬁle (only µδ shown) for neural distinguishers on Simon32/64 (used 214 ciphertexts for (a-e) and 218 for (f))
+
+54
+
+E
+
+Key-recovery Attacks on Round-Reduced Simon32/64
+
+E.1
+
+Wrong Key Response Proﬁle for the Neural Distinguishers on
+Simon32/64
+
+Figure 19 shows the wrong key response proﬁles of the trained NDs for Si8R
+mon32/64. From Fig. 19, the wrong key response proﬁles of NDSimon
+(Fig. 19b)
+VD
+Simon9R
+and that of NDVV
+(Fig. 19c) share observable patterns and symmetry. For
+8R
+key values that have little diﬀerent from the real value, responses from NDSimon
+VD
+Simon9R
+are higher than responses from NDVV
+. Similar observations can be de10R
+9R
+rived from a comparison between that of NDSimon
+(Fig. 19d) and NDSimon
+VV
+VD
+(Fig. 19e).
+E.2
+
+An Attack on 16-round Simon32/64
+
+Under a similar framework to the key-recovery attacks on Speck32/64, the
+trained neural distinguishers can be prepended with a classical diﬀerential to per16R
+form key-recovery attacks. This section presents such an attack, named ASimon
+,
+I
+which combines the longest but weak ND with a diﬀerential that has many
+SNBSs.
+16R
+The classical component in the attack ASimon
+presented in the sequel is a
+I
+3-round diﬀerential (0x0440, 0x1000) → (0x0000, 0x0040) (prob. ≈ 2−8 ).
+Similar to attacks on Speck32/64, to obtain decent scores from the responses
+of the NDs, combined responses from the NDs over a number of samples from
+the same distribution are to be used. Thus, to obtain enough samples from the
+same distribution, neutral bits of the prepended CD are exploited.
+E.3
+
+Finding Neutral Bits for the Classical Diﬀerentials
+
+Finding SNBSs for 3-round Diﬀerential. For the 3-round diﬀerential to be
+prepended to the NDs, one can obtain all neutral bits and SNBSs (simultaneously complementing up to 4 bits) using the following algebraic method.
+Given the input and output diﬀerences (0x0440, 0x1000) and (0x0000, 0x0040),
+one can build the non-linear equations on the derivative functions. Because the
+degrees of the derivative functions corresponding to this 3-round diﬀerential is
+low (i.e., 4), this system of non-linear equations can be solved by computing
+the reduced Gröbner basis, which can be done using the PolyBoRi library integrated in SageMath [11]. The reduced Gröbner basis is a unique representation
+for the ideal with respect to a ﬁxed monomial order. Thus, the computed is
+a unique representation corresponding to the variety of the equations deﬁned
+by the derivative function corresponding to the diﬀerential. Thus, not changing
+the reduced Gröbner basis is a necessary and suﬃcient condition for being an
+NB/SNBS. Accordingly, to ﬁnd SNBSs (including single-bit NBs), the following
+method is used. For each of the 41448 sets (i.e., 32 + 496 + 4960 + 35960 sets)
+of at most four bits, in the resulting reduced Gröbner basis, replace this set of
+55
+
+variables with their complements simultaneously; if the Gröbner basis does not
+change, the set of variables corresponds to an SNBS.
+Using the above algebraic method and experimental double-veriﬁcation, all
+the single-bit NBs and SNBSs are obtained. There are 9 single-bit NBs {[2], [3],
+[4], [6], [8], [9], [10], [18], [22]}, 2 2-SNBSs {[0, 24], [12, 26]} (actually, there are
+38 2-SNBSs; but 36 out 38 are formed by combinations of the 9 single-bit NBs);
+all 3-SNBSs and 4-SNBSs are formed by combinations of the 9 single-bit NBs
+and 2 2-SNBSs. Thus, there are 11 independent single-bit NBs and SNBSs in
+total.
+From the resulting Gröbner basis (also observed by experiments), for an input
+pair ((x, y), (x0 , y 0 )) to conform
+to the 3-round diﬀerential (0x0440, 0x1000) →
+{
+x[1] = x0 [1] = 0,
+(0x0000, 0x0040), one has
+(2)
+x[3] = x0 [3] = 0.
+E.4
+
+Key Recovery Attack on 16-round Simon32/64
+
+16R
+The components of ASimon
+are as follows (refer to Fig. 4).
+I
+
+1. A 3-round CD (0x0440, 0x1000) → (0x0000, 0x0040) (refer to the rounds
+colored in blue in Fig. 4), and a set of its 11 NBs {[2], [3], [4], [6], [8], [9],
+[10], [18], [22], [0, 24],[12, 26] };
+11R
+trained using the staged approach under dif2. A 11-round ND NDSimon
+VV
+11R
+.µ
+ference (0x0000, 0x0040), and its wrong key response proﬁles NDSimon
+VV
+Simon11R
+and NDVV
+.σ.
+Simon9R
+3. A 9-round ND NDVD
+trained under diﬀerence (0x0000, 0x0040) and
+fed with data of type (x, x0 , y ⊕ y 0 ), and its wrong key response proﬁles
+9R
+9R
+.σ.
+.µ and NDSimon
+NDSimon
+VD
+VD
+The goal is to recover the last two subkeys k15 and k14 . A diﬀerence with
+9R
+accepts data of
+the attack ASpeck13R is that, as one of the NDs NDSimon
+VD
+0
+0
+type (x, x , y ⊕ y ), after guessing k15 and k14 and decrypting a ciphertext pair
+0
+0
+to (x14 , y14 ), (x014 , y14
+), one can compute (x13 , x013 , y13 ⊕ y13
+) by inverting one
+Simon9R
+round with 0 as the subkey, and thus can be feed to NDVD
+.
+At the beginning, we guess two key bits of k0 , that is k0 [1] and k0 [3], because
+for the 3-round diﬀerential, the conditions for correct pairs are x1 [1] = x01 [1] = 0
+and x1 [3] = x01 [3] = 0 (refer to Eq. 2); no more key bits need to be guessed
+because the number of non-conditional neutral bits is enough). Thus, nkg is 2,
+and there are 22 outermost loops.
+16R
+The framework of attack ASimon
+is the same as that of ASpeck13R on
+I
+Speck32/64 (refer to Fig. 2). The concrete parameters of the attack are as
+11R
+9R
+follows. The accuracy of NDSimon
+is 0.5173, and that of NDSimon
+is 0.5629.
+VV
+VD
+nkg = 22 ,
+c1 = 25,
+
+ncts = 27 ,
+c2 = 100,
+
+nb = 211 ,
+nbyit1 = nbyit2 = 5,
+
+nit = 29
+ncand1 = ncand2 = 32
+
+The data complexity is nkg ×ncts ×nb ×2, that is, 221 plaintexts. To examine the
+performance of the attack, experiments are done on the same GPU server testing
+56
+
+ASpeck13R . In total 99 trials are run. Within the 99 trials, all trials have correct
+ciphertext pairs and all called the NDs. There are 49 success trials, for which
+the returned last two subkeys have a Hamming distance to the real subkeys of
+at most two. Thus, the success rate is computed as 49/99, i.e., 0.49.
+The 99 (+7) trials took 78 core hours in total. For a trial, it shows that
+running full 512 iterations requires less than 1 hour. Thus, the worst case to run
+22 outermost loops (on guessed values of k0 [0] and k0 [3]) for a full attack takes
+less than 4 GPU hours.
+
+F
+
+Details of the Key-recovery Attack in [15]
+
+F.1
+
+Neutral bits Used in [14, 15]
+
+Table 9: (Probabilistic) single-bit neutral bits for 2-round diﬀerential
+(0x0211, 0x0a04) → (0x0040, 0x0000) of Speck32/64 used in the 11-round [15]
+and/or 12-round [14] attacks by Gohr.
+NBs Pr.
+
+NBs Pr.
+
+NBs Pr.
+
+1
+[22]
+0.763 [8]
+
+NBs Pr.
+
+1
+[14]
+0.664 [24]
+
+NBs Pr.
+
+0.965 [15]
+0.649 [31]
+
+NBs Pr.
+
+0.938 [23]
+0.644 [1]
+
+NBs Pr.
+
+[20]
+[30]
+
+1
+[21]
+0.809 [0]
+
+0.812 [7]
+0.574
+
+F.2
+
+Accuracy of the Neural Distinguishers on Speck32/64 in [15]
+
+Table 10: Accuracy of Gohr’s neural distinguishers on Speck32/64 [15]
+#R
+
+Name
+
+5
+
+DD Speck5R
+
+5
+
+ND Speck5R
+
+6
+
+DD Speck6R
+
+6
+
+ND Speck6R
+
+7
+
+DD Speck7R
+
+7
+
+ND Speck7R
+
+8
+
+DD Speck8R
+
+8
+
+ND Speck8R
+
+F.3
+
+Accuracy
+
+True Positive Rate
+
+True Negative Rate
+
+0.911
+
+0.877
+
+0.947
+
+0.929 ± 5.13 × 10−4
+
+0.904 ± 8.33 × 10−4
+
+0.954 ± 5.91 × 10−4
+
+0.758
+
+0.680
+
+0.837
+
+0.788 ± 8.17 × 10−4
+
+0.724 ± 1.26 × 10−3
+
+0.853 ± 1.00 × 10−3
+
+0.591
+
+0.543
+
+0.640
+
+0.616 ± 9.70 × 10−4
+
+0.533 ± 1.41 × 10−3
+
+0.699 ± 1.30 × 10−3
+
+0.512
+
+0.496
+
+0.527
+
+0.514 ± 1.00 × 10−3
+
+0.519 ± 1.41 × 10−3
+
+0.508 ± 1.42 × 10−3
+
+BayesianKeySearch Algorithm in [15]
+
+57
+
+0.806
+
+Algorithm 4: BayesianKeySearch Algorithm [15]
+/* The description of this BayesianKeySearch Algorithm in [15] has
+a small typo and is inconsistent with that in the implementation
+codes [14], the description here corrects it according to [14].
+*/
+Input: Ciphertext structure C := {C0 , · · · , Cnb −1 }, a neural distinguisher ND,
+and its wrong key response proﬁle µ and σ, the number of candidates
+to be generated within each iteration ncand , the number of iterations
+nbyit
+Output: The list L of tuples of recommended keys and their scores
+1 S := {k0 , k1 , . . . , kncand −1 } ← choose ncand values at random without
+replacement from the set of all subkey candidates.
+2 L ← {}
+3 for t = 1 to nbyit do
+4
+for ∀ki ∈ S do
+5
+for j = 0 to nb − 1 do
+0
+6
+Cj,k
+= Fk−1
+(Cj )
+i
+i
+0
+7
+vj,ki = ND(Cj,k
+)
+i
+8
+sj,ki = log2 (vj,ki /(1 − vj,ki ))
+9
+end
+∑nb −1
+10
+ski = j=0
+sj,ki ;
+/* the combined score of ki */
+11
+L ← L||(ki , ski )
+∑nb −1
+12
+mki = j=0
+vj,ki /nb
+13
+end
+14
+for k ∈ {0, 1, · · · , 216 − 1} do
+∑ncand −1
+15
+λk = i=0
+(mki − µki ⊕k )2 /σk2i ⊕k
+16
+end
+17
+S ← argsortk (λ)[0 : ncand − 1] ;
+/* Pick ncand keys with the ncand
+smallest score to form the new set of candidate keys S */
+18 end
+19 return L
+
+58
+
+G
+
+Deeper Look into the NDs on Simon32/64
+
+G.1
+
+On NDs for Simon32/64 having learned to take back the ﬁnal
+round
+
+rR
+It would be interesting to test further the observation about the NDSimon
+s for
+VV
+Simon32/64 having learned to take back the ﬁnal round. Following the idea of
+Simon
+Simon
+one reviewer, we try to ﬁnd good combiners among DDDD n−1R , NDVD n−1R ,
+Simonn−1R
+SimonnR
+and NDVV
+to distinguish n-round output, where DDDD
+is the (n − 1)Simonn−1R
+round distinguisher that depends on the full DDT, NDVD
+is the (n − 1)0
+nR
+), and NDSimon
+is
+round ND that uses data of form (xn−1 , x0n−1 , yn−1 ⊕ yn−1
+VV
+0
+0
+the n-round ND that uses data of format (xn , xn , yn , yn ).
+The searching and evaluation procedure for a good combiner is as follows:
+
+1. Transform each value p in the DDT to a value in the range of [0, 1] using
+Simon
+the formula p/(p + 2−32 ), such that the response of DDDD n−1R is in the
+−32
+range of [0, 1], and 2
+corresponds to 0.5.
+2. For a set of data X (about 225 examples of n-round ciphertext pairs, half posSimon
+itive and half negative), obtain the scores from distinguishers DDDD n−1R ,
+Simon
+SimonnR
+.
+NDVD n−1R , and NDVV
+3. Extract cases where all distinguishers agree, construct data set A where each
+entry is a tuple of scores given by diﬀerent distinguishers on same examples
+of ciphertext pair, labeling with the label of the ciphertext pair. Use this
+data set A to ﬁt a ﬁrst linear regression model, denoted by LRa .
+4. Extract cases where there exists a distinguisher who disagree, construct data
+set D where each entry is a tuple of scores given by diﬀerent distinguishers
+on same examples of ciphertext pair, labeling with the label of the ciphertext
+pair. Use this data set D to ﬁt a second linear regression model, denoted by
+LRb .
+5. For a set of fresh data X (about 223 examples of n-round ciphertext pairs,
+half positive and half negative) for testing, obtain the scores from distinSimon
+Simon
+SimonnR
+guishers DDDD n−1R , NDVD n−1R , and NDVV
+.
+6. For cases where all distinguishers agree, use the ﬁtted linear regression model
+LRa to predict their score.
+7. For cases where there exists a distinguisher who disagree, use the ﬁtted linear
+regression model LRd to predict their score.
+The best combiners obtained for n = 10 and n = 9 achieve almost the
+Simon
+same performance as that of DDDD n−1R , which is the best among the three.
+They give almost 1 (e.g., 1.00353623 and 0.99973883) weights to the scores from
+Simon
+DDDD n−1R in both cases (agree and disagree).
+Concrete results for n = 9 and 10 can be found in Table 11.
+To look deeper into the relations of various distinguishers, we plot the responses of these distinguishers on a small set of examples. We found that on
+most examples, diﬀerent distinguishers have consistent scores (see Figures 20
+59
+
+Scores
+
+1.00
+0.96
+0.92
+0.88
+0.84
+0.80
+0.76
+0.72
+0.68
+0.64
+0.60
+0.56
+0.52
+0.48
+0.44
+0.40
+0.36
+0.32
+0.28
+0.24
+0.20
+0.16
+0.12
+
+Y = 1, Z_VV: :0.563 :0.201 min:0.002 max:0.993
+Y = 1, Z_VD: :0.575 :0.207 min:0.013 max:0.998
+Y = 1, Z_DD: :0.583 :0.208 min:0.006 max:0.999
+Y = 1, Z_AD: :0.583 :0.208 min:0.006 max:0.999
+
+6
+
+0
+
+6
+
+12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 126 132
+Rand Sample
+Simon
+
+Simon
+
+Simon
+
+Scores
+
+(a) Scores from distinguishers DD DD 8R , ND VD 8R , and ND VV 9R on 9-round positive examples
+
+0.96
+0.92
+0.88
+0.84
+0.80
+0.76
+0.72
+0.68
+0.64
+0.60
+0.56
+0.52
+0.48
+0.44
+0.40
+0.36
+0.32
+0.28
+0.24
+0.20
+0.16
+0.12
+
+Y = 0, Z_VV: :0.417 :0.149 min:0.000 max:0.991
+Y = 0, Z_VD: :0.417 :0.156 min:0.000 max:0.996
+Y = 0, Z_DD: :0.417 :0.160 min:0.000 max:0.998
+Y = 0, Z_AD: :0.417 :0.160 min:0.000 max:0.998
+
+6
+
+0
+
+6
+
+12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 126 132
+Rand Sample
+Simon
+
+Simon
+
+Simon
+
+(b) Scores from distinguishers DD DD 8R , ND VD 8R , and ND VV 9R on 9-round negative examples
+Simon8R
+Simon8R
+7R
+9R
+Fig. 20: Scores from distinguishers DDSimon
+, DDDD
+, NDVD
+, and NDSimon
+AD
+VV
+on 9-round examples
+
+60
+
+Scores
+
+0.850
+0.825
+0.800
+0.775
+0.750
+0.725
+0.700
+0.675
+0.650
+0.625
+0.600
+0.575
+0.550
+0.525
+0.500
+0.475
+0.450
+0.425
+0.400
+0.375
+0.350
+0.325
+
+Y = 1, Z_VV: :0.512 :0.081 min:0.109 max:0.930
+Y = 1, Z_VD: :0.515 :0.085 min:0.141 max:0.979
+Y = 1, Z_DD: :0.516 :0.095 min:0.056 max:0.998
+Y = 1, Z_AD: :0.516 :0.095 min:0.056 max:0.998
+
+6
+
+0
+
+6
+
+12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 126 132
+Rand Sample
+Simon
+
+Simon
+
+Simon
+
+Scores
+
+(a) Scores from distinguishers DD DD 9R , ND VD 9R , and ND VV 10R on 10-round positive examples
+
+0.72
+0.70
+0.68
+0.66
+0.64
+0.62
+0.60
+0.58
+0.56
+0.54
+0.52
+0.50
+0.48
+0.46
+0.44
+0.42
+0.40
+0.38
+0.36
+0.34
+0.32
+0.30
+0.28
+
+Y = 0, Z_VV: :0.489 :0.070 min:0.070 max:0.925
+Y = 0, Z_VD: :0.488 :0.071 min:0.075 max:0.962
+Y = 0, Z_DD: :0.484 :0.079 min:0.000 max:0.991
+Y = 0, Z_AD: :0.484 :0.079 min:0.000 max:0.991
+
+6
+
+0
+
+6
+
+12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 126 132
+Rand Sample
+Simon
+
+Simon
+
+Simon
+
+(b) Scores from distinguishers DD DD 9R , ND VD 9R , and ND VV 10R on 10-round negative examples
+Simon9R
+Simon9R
+8R
+10R
+Fig. 21: Scores from distinguishers DDSimon
+, DDDD
+, NDVD
+, and NDSimon
+AD
+VV
+on 9-round examples
+
+61
+
+Table 11: Accuracy of various distinguishers and combined ones on 9-round and 10round Simon32/64, and Key-averaging distinguisher on 5-round Speck32/64 basing
+on 4-round DDT
+On Simon32/64
+#R
+
+Name
+
+ACC
+
+TPR
+
+TNR
+
+MSE
+
+9
+
+Simon
+DD AD 7R
+
+0.663
+
+0.579
+
+0.748
+
+0.211
+
+9
+
+DD DD 8R
+
+Simon
+
+0.663
+
+0.579
+
+0.748
+
+0.211
+
+9
+
+Simon
+ND VD 8R
+
+0.659
+
+0.559
+
+0.759
+
+0.210
+
+9
+
+Simon
+ND VV 9R
+
+0.652
+
+0.534
+
+0.770
+
+0.214
+
+9
+
+Simon9R
+ND DD+VD+VV
+
+0.663
+
+0.578
+
+0.747
+
+0.209
+
+10
+
+Simon
+DD AD 8R
+
+0.568
+
+0.469
+
+0.668
+
+0.243
+
+10
+
+Simon
+DD DD 9R
+
+0.568
+
+0.469
+
+0.668
+
+0.243
+
+10
+
+Simon
+ND VD 9R
+
+0.566
+
+0.474
+
+0.657
+
+0.243
+
+10
+
+Simon
+ND VV 10R
+
+0.561
+
+0.476
+
+0.646
+
+0.244
+
+10
+
+Simon10R
+ND DD+VD+VV
+
+0.568
+
+0.468
+
+0.669
+
+0.242
+
+#R
+5
+
+Name
+Speck
+DD AD 4R
+
+ACC
+0.936
+
+TPR
+0.917
+
+TNR
+0.956
+
+MSE
+0.048
+
+5
+
+DD DD 5R
+
+Speck
+
+0.911
+
+0.877
+
+0.944
+
+0.066
+
+6
+
+DD AD 5R
+
+Speck
+
+0.795
+
+0.731
+
+0.858
+
+0.142
+
+6
+
+Speck
+DD DD 6R
+
+0.758
+
+0.679
+
+0.837
+
+0.162
+
+7
+
+Speck
+DD AD 6R
+
+0.624
+
+0.543
+
+0.705
+
+0.227
+
+7
+
+Speck
+DD DD 7R
+
+0.591
+
+0.543
+
+0.639
+
+0.236
+
+8
+
+Speck
+DD AD 7R
+
+0.519
+
+0.492
+
+0.547
+
+0.249
+
+8
+
+Speck
+DD DD 8R
+
+0.512
+
+0.497
+
+0.527
+
+0.250
+
+On Speck32/64
+
+Diﬀerent distinguishers on the same rounds are tested with the same set of 223 fresh examples.
+
+and 21). At the same time, each distinguisher misses some cases when there exists another distinguisher be correct (outliers are marked in Figures 20 and 21),
+which indicates that there is no single super distinguisher that is better than all
+the others.
+nR
+From the close performance between DDDD n−1R , NDVD n−1R and NDSimon
+VV
+for Simon32/64 (see Table 11, Figures 22 and 23) and considering possible
+small deviation of the training process, we conclude that the performance of
+Simon
+nR
+, and conjecNDVD n−1R is the upper bound of the performance of NDSimon
+VV
+Simon
+0
+0
+nR
+tured that accepting data of form (xn , xn , yn , yn ), NDVV
+s have learned to
+0
+detect the features of data (xn−1 , x0n−1 , yn−1 ⊕ yn−1
+) that can be obtained by
+manually taking (xn , x0n , yn , yn0 ) back by one round without knowing the last
+
+Simon
+
+62
+
+Simon
+
+nR
+subkey. That is, in the ideal training case, the performance of an NDSimon
+VV
+Simonn−1R
+should be the same as that of an NDVD
+.
+
+G.2
+
+On NDs and DDs of Simon32/64 failing to detect potential
+signals
+
+It would be interesting to learn whether there exists a signal beyond that found
+Simon
+Simon
+rR
+by a DDDD r−1R and if it exists, whether a NDSimon
+and a NDVV r−1R
+VV
+for Simon32/64 are failing to detect such a signal. As suggested by a reviewer,
+this could be done by running a key-averaging distinguisher (refer to Algorithm 1
+in [15]) against n rounds that relies on the DDT at n−2 rounds. Accordingly, we
+Simon
+built two key-averaging distinguishers against n rounds that rely on DDDD n−2R ,
+Simon
+denoted by DDAD n−2R , where n = 9 and 10.
+Simon
+Interestingly, these DDAD n−2R s have exactly the same performance (ACC,
+Simon
+TPR, TNR, and MSE) with DDDD n−1R s. This result is quite diﬀerent from
+that of Speck32/64 (see Table 11 for the experimental results on Speck32/64,
+Speck
+where DDAD n−1R is an n-round key-averaging distinguisher relying on (n − 1)round full DDT). This indicates that, for Simon32/64, the computation of the
+n-round DDT using (n − 1)-round full DDT and the algorithm in [24] is accurate
+in the sense of averaging over all subkeys. Therefore, there are no additional
+Simon
+Simon
+nR
+signals beyond that found by a DDDD n−1R for a NDVD n−1R or a NDSimon
+VV
+to detect.
+Please ﬁnd the source code of the experiments and the raw data of the results
+via https://github.com/differential-neural-cryptanalysis/speck32_simon32.
+
+63
+
+Densities of samples
+
+2.4
+2.3
+2.2
+2.1
+2.0
+1.9
+1.8
+1.7
+1.6
+1.5
+1.4
+1.3
+1.2
+1.1
+1.0
+0.9
+0.8
+0.7
+0.6
+0.5
+0.4
+0.3
+0.2
+0.1
+0.0
+
+Y = 1, Z_VV: :0.563 :0.201 min:0.002 max:0.993
+Y = 1, Z_VD: :0.575 :0.207 min:0.013 max:0.998
+Y = 1, Z_DD: :0.583 :0.208 min:0.006 max:0.999
+Y = 1, Z_AD: :0.583 :0.208 min:0.006 max:0.999
+
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Scores
+Simon
+
+Simon
+
+Simon
+
+Simon
+
+Densities of samples
+
+(a) Distribution of scores from distinguishers DD AD 7R , DD DD 8R , ND VD 8R , and ND VV 9R on
+9-round positive examples
+
+3.8
+3.6
+3.4
+3.2
+3.0
+2.8
+2.6
+2.4
+2.2
+2.0
+1.8
+1.6
+1.4
+1.2
+1.0
+0.8
+0.6
+0.4
+0.2
+0.0
+
+Y = 0, Z_VV: :0.417 :0.149 min:0.000 max:0.991
+Y = 0, Z_VD: :0.417 :0.156 min:0.000 max:0.996
+Y = 0, Z_DD: :0.417 :0.160 min:0.000 max:0.998
+Y = 0, Z_AD: :0.417 :0.160 min:0.000 max:0.998
+
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Scores
+Simon
+
+Simon
+
+Simon
+
+Simon
+
+(b) Distribution of scores from distinguishers DD AD 7R , DD DD 8R , ND VD 8R , and ND VV 9R on
+9-round negative examples
+Simon7R
+Simon8R
+8R
+Fig. 22: Distribution of scores from distinguishers DDAD
+, DDDD
+, NDSimon
+,
+VD
+Simon9R
+and NDVV
+on 9-round examples
+
+64
+
+Densities of samples
+
+9.6
+9.2
+8.8
+8.4
+8.0
+7.6
+7.2
+6.8
+6.4
+6.0
+5.6
+5.2
+4.8
+4.4
+4.0
+3.6
+3.2
+2.8
+2.4
+2.0
+1.6
+1.2
+0.8
+0.4
+0.0
+
+Y = 1, Z_VV: :0.512 :0.081 min:0.109 max:0.930
+Y = 1, Z_VD: :0.515 :0.085 min:0.141 max:0.979
+Y = 1, Z_DD: :0.516 :0.095 min:0.056 max:0.998
+Y = 1, Z_AD: :0.516 :0.095 min:0.056 max:0.998
+
+0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Scores
+Simon
+
+Simon
+
+Simon
+
+Simon
+
+Densities of samples
+
+(a) Distribution of scores from distinguishers DD AD 8R , DD DD 9R , ND VD 9R , and ND VV 10R
+on 10-round positive examples
+
+11.0
+10.5
+10.0
+9.5
+9.0
+8.5
+8.0
+7.5
+7.0
+6.5
+6.0
+5.5
+5.0
+4.5
+4.0
+3.5
+3.0
+2.5
+2.0
+1.5
+1.0
+0.5
+0.0
+
+Y = 0, Z_VV: :0.489 :0.070 min:0.070 max:0.925
+Y = 0, Z_VD: :0.488 :0.071 min:0.075 max:0.962
+Y = 0, Z_DD: :0.484 :0.079 min:0.000 max:0.991
+Y = 0, Z_AD: :0.484 :0.079 min:0.000 max:0.991
+
+0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+Scores
+Simon
+
+Simon
+
+Simon
+
+Simon
+
+(b) Distribution of scores from distinguishers DD AD 8R , DD DD 9R , ND VD 9R , and ND VV 10R
+on 10-round negative examples
+Simon8R
+Simon9R
+9R
+Fig. 23: Distribution of scores from distinguishers DDAD
+, DDDD
+, NDSimon
+,
+VD
+Simon10R
+and NDVV
+on 10-round examples
+
+65
+
+

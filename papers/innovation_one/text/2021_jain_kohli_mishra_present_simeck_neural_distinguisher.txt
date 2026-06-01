@@ -1,0 +1,760 @@
+Deep Learning based Differential Distinguisher for
+Lightweight Block Ciphers
+Aayush Jain1, Varun Kohli2 and Girish Mishra3
+1 National Institute of Technology, Tiruchirappalli, India-620015
+2
+
+Birla Institute of Technology and Science Pilani, India-333031
+3 Scientific Analysis Group DRDO, India-110054
+
+Abstract. Recent years have seen an increasing involvement of Deep Learning
+in the cryptanalysis of various ciphers. The present study is inspired by past
+works on differential distinguishers, to develop a Deep Neural Network-based
+differential distinguisher for round reduced lightweight block ciphers
+PRESENT and Simeck. We make improvements in the state-of-the-art
+approach and extend its use to the two structurally different block ciphers,
+PRESENT-80 and Simeck64/128. The obtained results suggest the universality
+of our cryptanalysis method. The proposed method can distinguish random data
+from the cipher data obtained until 6 rounds of PRESENT and 7 rounds of
+Simeck encryption with high accuracy. In addition to this, we explore a new
+approach to select good input differentials, which to the best of our knowledge
+has not been explored in the past. We also provide a minimum-security
+requirement for the discussed ciphers against our differential attack.
+Keywords: Internet of Things, Differential Cryptanalysis, Deep Learning,
+Block Ciphers, PRESENT, Simeck
+
+1
+
+Introduction
+
+In the era of Internet of Things (IoT), security is one of the deciding factors for the
+viability of IoT systems [1]. These include smart homes [2], medical and healthcare
+services [3,4], environment monitoring [5], transportation [6], vehicular networks [7],
+and UAVs [8] to name a few. An IoT system comprises of four layers, namely
+application, middleware, network and sensing [1], each of which may show
+vulnerability to a wide range of security threats [9]. Even seemingly secure systems
+have inherent flaws that can be exploited by attackers without the need of high
+computational resources [10]. One such flaw for example, may be biased encryption
+algorithms.
+Various methods have been developed to exploit such flaws. Differential
+Cryptanalysis is a general cryptanalysis technique primarily used on block ciphers
+[11], with some applications in stream ciphers [12] and hash functions [13]. It is the
+study of how input differences affect the differences in the output. In the case of block
+ciphers, the technique follows the transformation of the input through the cipher
+
+network, detecting areas of non-random behavior [2]. Such properties are exploited to
+recover the secret cryptographic key of the cipher. Biham and Shamir presented a
+novel differential cryptanalysis method [14] that could be applied to various DES-like
+substitution and permutation cryptosystems, such as FEAL-4 [15]. A classical
+differential attack follows the exhaustive approach of creating a difference
+distribution table. Aron Gohr proposed a novel neural network-based distinguisher in
+his recent work [16], wherein a low-data, chosen-plaintext attack on round reduced
+SPECK 32/64 gave better results than past work by Dinur on SPECK [17]. Their
+proposed attack is an all-in-one approach with the Markov assumption which
+considers all output differences for a given input difference. He also presented a key
+recovery attack on 11 rounds of SPECK32/64 to recover the last two subkeys after
+214.5 chosen-plaintext queries with a computational requirement of 238 SPECK
+encryptions, compared to past work by Dinur that achieved the complexity of 246 for
+11 rounds. Following Gohr’s work, Baksi et al proposed a deep learning-based
+approach for differential attacks on the non-Markov 8-round Gimli-Hash and GimliCipher [18]. They used multiple models including multilayer perceptron (MLP), Long
+Short-Term Memory (LSTM) [19], and Convolutional Neural Networks (CNN) [20]
+with varied width and number of neurons. We discuss their method in more detail in a
+later section.
+PRESENT was developed in 2007 [21] at Orange Labs, France. It has become the
+criteria to measure the security of modern lightweight ciphers [22]. The Simeck
+family of lightweight block ciphers was developed in 2015 [23] and is a combination
+of the SIMON and SPECK block cipher families [24], which are the smallest
+hardware and software block ciphers respectively. It has a smaller hardware footprint
+and software implementation than its parent families. An overview of the PRESENT
+and Simeck ciphers is discussed in a later section. These ciphers find practical
+application in IoT devices such as RFID tags [25] and sensors. Wang [26] in 2008,
+presented her differential cryptanalysis of 16-round reduced PRESENT. Her proposed
+differential characteristics for 14 and 15 rounds of encryption had a probability of 2−62
+and 2−66 respectively. Wang also searched for iterative characteristics from the 2nd to
+7th rounds which she claims to be more effective than the 2-round iterative
+characteristics. Wang’s study proved the effectiveness of using select input
+differentials which have a higher probability over differentials with lower probability.
+This study extends the work by Baksi and Wang for use in two structurally different
+lightweight block ciphers, PRESENT and Simeck. Our major contributions are as
+follows:
+1. We improve the differential distinguisher algorithm proposed by Baksi et al
+by using Wang's high probability input differentials for PRESENT and
+Simeck.
+2. We generate three good input differentials from one of Wang’s high
+probability input differences by using left and right shift operators.
+3. We propose a simpler deep learning architecture with a lower number of
+parameters as compared to Baksi’s recommended architecture.
+4. Our results provide a minimum-security requirement for the discussed
+ciphers to ensure safety against deep learning-based differential attacks.
+
+Section-2 gives an overview of the lightweight block ciphers PRESENT and Simeck.
+This is followed by a discussion on the differential distinguisher algorithm in Section3. We will then discuss our deep learning model followed by the results obtained
+during experimentation in Sections-4 and 5 respectively. Finally, we conclude the
+study in Section-6 and provide direction for future work based on our research.
+
+2
+
+Lightweight Block Ciphers
+
+Block ciphers are symmetric key ciphers employing deterministic algorithms to
+encrypt blocks of plaintext. Lightweight block ciphers are a subset of these, as they
+use algorithms that require less computing power. The following subsections discuss
+the two lightweight block ciphers used in our study, PRESENT and Simeck.
+2.1
+
+PRESENT
+
+The PRESENT cipher was developed by Bogdanov et al in 2007 [21]. It was
+included in the new international standard for lightweight cryptographic methods by
+the International Organization for Standardization (ISO) and the International
+Electrotechnical Commission (IEC) in 2019 [22]. Due to its bit-oriented permutations,
+PRESENT is a hardware cipher which can be implemented with simple wiring. It
+supports a block-length of 64 bits and key-lengths of 80 bits and 128 bits, which
+suffice the requirements of moderate-level security applications such as tag-based
+systems. The scope of this study is limited to the 80-bit key variant of PRESENT.
+
+Fig. 1. Abstract view of PRESENT cipher.
+
+2.1.1
+
+Round Function
+
+A complete-round PRESENT implementation consists of 31 rounds of encryption
+and each round includes the following layers:
+Substitution Layer: The substitution layer contains 4×4 S-Boxes. These S-Boxes are
+used 16 times in parallel each round. The hexadecimal S-Box mapping is shown in
+Table-1.
+Table 1. Hexadecimal S-Box Mapping.
+X
+S(x)
+
+0 1 2
+C 5 6
+
+3 4
+B 9
+
+5 6 7 8
+0 A D 3
+
+9 A B C D E F
+E F 8 4 7 1 2
+
+Permutation Layer: Bit-wise permutation is performed on the data block in this
+layer. The permutation layer mapping is shown in Table-2.
+Table 2. Permutation Layer Mapping.
+i
+P(i)
+
+0
+0
+
+1
+2
+3
+4
+16 32 48 1
+
+5
+6
+7
+8
+17 33 49 2
+
+9
+10 11 12 13 14 15
+18 34 50 3
+19 35 51
+
+i
+
+0
+
+1
+
+5
+
+9
+
+P(i)
+
+0
+
+16 32 48 1
+
+17 33 49 2
+
+18 34 50 3
+
+i
+
+0
+
+1
+
+5
+
+9
+
+P(i)
+
+0
+
+16 32 48 1
+
+17 33 49 2
+
+18 34 50 3
+
+i
+
+0
+
+1
+
+5
+
+9
+
+P(i)
+
+0
+
+16 32 48 1
+
+2
+2
+2
+
+3
+3
+3
+
+4
+4
+4
+
+6
+6
+6
+
+7
+7
+7
+
+8
+8
+8
+
+17 33 49 2
+
+10 11 12 13 14 15
+19 35 51
+
+10 11 12 13 14 15
+19 35 51
+
+10 11 12 13 14 15
+
+18 34 50 3
+
+19 35 51
+
+addRoundKey: The round key is XORed to the current block state in accordance
+with the following equations.
+Where 1 ≤ 𝑖 ≤ 32, and 𝐾𝑖 , 𝐵𝑖 are the 𝑖 𝑡ℎ round key and block state respectively. Fig1 illustrates the general working of the PRESENT cipher.
+2.1.2
+
+Key Scheduling Algorithm
+
+The round keys to be used in the addRoundKey step are generated using the Key
+Scheduling Algorithm (KSA) which takes the 80-bit key denoted as 𝐾 =
+𝑘79 𝑘78 𝑘77 … 𝑘0 and stores it in the shift register. The key is rotated to the left by 61
+bits positions. The most significant 4 bits are passed through the 4 × 4 PRESENT Sbox. Bits 15-19 of K are then XORed with the least significant bit of roundCounter on
+the right. The equations for the process are as follows:
+[𝑘79 𝑘78 … 𝑘1 𝑘0 ] = [𝑘18 𝑘17 … 𝑘20 𝑘19 ]
+[𝑘79 𝑘78 𝑘77 𝑘76 ] = 𝑆[𝑘79 𝑘78 𝑘77 𝑘76 ]
+[𝑘19 𝑘78 𝑘17 𝑘16 𝑘15 ] = [𝑘19 𝑘18 𝑘17 𝑘16 𝑘15 ]⨁ 𝑟𝑜𝑢𝑛𝑑𝐶𝑜𝑢𝑛𝑡𝑒𝑟
+
+2.2
+
+Simeck
+
+The Simeck lightweight block cipher was proposed by Yang et al in 2015 [23]. It is
+designed to be compact and moderately secure for resource constrained applications
+such as passive RFID tags and Wireless Sensor Network (WSN) nodes. It is a
+combination of the SIMON and SPECK cipher families which are a set of hardware
+and software lightweight block ciphers respectively. Simeck is smaller than SIMON
+due to the reduced size of the Round Function and KSA. It combines the best features
+of its parent cipher families, that are:
+a.
+
+A modified and compact version of SIMON’s round function.
+
+b.
+
+A round function for key scheduling, similar to SPECK.
+
+c.
+
+A Linear Feedback Shift Register (LSFR)-based constant for simpler key
+schedule, in line with SIMON.
+
+The Simeck family of ciphers is represented as Simeck2n/mn. Here n is the word size,
+equal to 16, 24 or 32 based on the family, and mn denotes the key size which may be
+64, 96 or 128 bits long. Thus, the resulting ciphers are Simeck 32/64, 48/96, and
+64/128. These size choices aim to fit various applications such as tag-based systems
+and are included in the specification of the SIMON and SPECK. The round function
+and key scheduling algorithm have a Feistel structure as shown in Fig-2 and 3.
+2.2.1
+
+Round Function
+
+Fig-2 shows the round function for Simeck. It involves the division of the plaintext
+into left and right words 𝑙0 and 𝑟0 respectively, where 𝑙0 consists of the most
+significant 𝑛 bits, and 𝑟0 contains the least significant 𝑛 bits. The round function
+processes these two words, followed by the concatenation of 𝑙 𝑇 and 𝑟𝑇 , where 𝑇 is the
+total number of encryption rounds. The round function is as follows:
+𝑅𝑘𝑖 (𝑙𝑖 , 𝑟𝑖 ) = (𝑟𝑖 ⨁𝑓(𝑙𝑖 )⨁𝑘𝑖 , 𝑙𝑖 )
+Where 𝑙𝑖 and 𝑟𝑖 are as discussed above and 𝑘𝑖 is the 𝑖 𝑡ℎ round key. The function 𝑓(𝑧)
+is as follows:
+𝑓(𝑧) = (((𝑧)𝐴𝑁𝐷(𝑧 ⋘ 5))⨁(𝑧 ⋘ 1))
+In the above equations, ⊕, ⋘ and 𝐴𝑁𝐷 represent the Exclusive OR, left rotation and
+bitwise AND operations respectively.
+
+Fig. 2. Round function of Simeck.
+
+2.2.2
+
+Fig. 3. KSA of Simeck.
+
+Key Scheduling Algorithm
+
+The 𝑖 𝑡ℎ round key 𝑘𝑖 is generated by dividing the master key 𝐾 into four words and
+loading them as the inital states (𝑡2 , 𝑡1 , 𝑡0 , 𝑘0 ). Here, 𝑡2 is the most significant 𝑛 bits
+of 𝑘, and the least significant n bits are denoted by 𝑘0 . These initial states are loaded
+into the LFSR. The FSR of the key scheduling algorithm are shown in Fig-3. The
+update of states is done as per the following equations:
+𝑘𝑖+1 = 𝑡𝑖 ,
+𝑡𝑖+3 = 𝑘𝑖 ⨁𝑓(𝑡𝑖 )⨁𝐶⨁(𝑧𝑗 )𝑖
+Where 𝑖 is the round number, 𝐶 = 2𝑛 − 4 (𝑛 is the word size) and (𝑧𝑗 )𝑖 is the 𝑖 𝑡ℎ bit
+of sequence 𝑧𝑗 in which 𝑗 = 0 for Simeck32/64 and Simeck48/96, and 𝑧0 has period
+of 31. Similarly, for Simeck64/128, 𝑗 = 1 and 𝑧1 has a period of 63.
+
+3
+
+Differential Distinguisher
+
+Following the work done by Baksi et. al. 18 on Machine Learning (ML) based
+differential distinguishers, we improve their differential method. This section
+discusses the in-depth approach of their algorithm and our suggested improvements.
+The algorithm for the deep learning based differential distinguisher is shown in
+Algorithm-1. In this differential method, the attacker chooses (𝑡 ≥ 2) input
+differentials. The four selected differentials are provided in Table-3, where the first
+differential is selected from Wang’s study [26] for PRESENT. The remaining three
+differentials (numbered 2-4) are generated using left and right shifts. The same
+differences are used for Simeck64/128 as well. This selection is followed by two
+phases, OFFLINE and ONLINE. The OFFLINE or the Training Phase is for making
+the training-dataset of input-output differential pairs, and then training the DL model
+to learn the relationship between these input and output differences. The ONLINE or
+Testing Phase involves the creation of the test-dataset and then deciphering whether
+the given ORACLE is the CIPHER or RANDOM. For 𝑡 input differentials, if the
+
+1
+
+training accuracy during the Offline phase comes out to be ≥ , we proceed to the
+𝑡
+
+1
+
+online phase. A testing accuracy ≥ in the online phase implies the ORACLE is the
+𝑡
+CIPHER, and otherwise, RANDOM.
+Table 3. Differentials used in this study.
+Input differential class Input differentials
+1
+0x0700000000000700
+
+4
+
+2
+
+0x7000000000007000
+
+3
+
+0x0070000000000070
+
+4
+
+0x0007000000000007
+
+Deep Learning Model
+
+We have implemented four Differential Distinguisher Models denoted by 𝑀𝑖 (1 ≤ 𝑖 ≤
+4). Model 1 (𝑀1 ) and Model 2 (𝑀2 ) use Baksi’s recommended deep learning
+architecture and our proposed architecture respectively, with randomly selected input
+differentials. Model 3 (𝑀3 ) and Model 4 (𝑀4 ) have the same deep learning
+architectures of 𝑀1 and 𝑀2 respectively, but with selected differentials. Baksi et al
+recommend a 4-layer MLP (128, 1024, 1024, 𝑡). In contrast, our proposed deep
+learning architecture consists of three layers (128, 1024, 𝑡), where 𝑡 is the number of
+output layer neurons given by the number of differential classes. Fig-4 shows our
+proposed architecture.
+Algorithm 1 Improved differential distinguisher algorithm.
+1: procedure TESTING PHASE (ONLINE)
+1: procedure TRAINING PHASE (OFFLINE)
+2:
+𝛿𝑡 ← 𝑆𝑒𝑙𝑒𝑐𝑡𝑒𝑑 𝑑𝑖𝑓𝑓𝑒𝑟𝑒𝑛𝑡𝑖𝑎𝑙𝑠
+2:
+𝛿𝑡 ← 𝑆𝑒𝑙𝑒𝑐𝑡𝑒𝑑 𝑑𝑖𝑓𝑓𝑒𝑟𝑒𝑛𝑡𝑖𝑎𝑙𝑠
+3:
+𝑃, 𝐾 ← Random
+3:
+𝑃, 𝐾 ← Random
+4:
+𝐶 ← ORACLE (P, K)
+4:
+𝐶 ← CIPHER (P, K)
+5:
+𝒇𝒐𝒓 0 ≤ 𝑖 < 𝑡 do
+5:
+𝒇𝒐𝒓 0 ≤ 𝑖 < 𝑡 do
+6:
+𝐶𝑖 ← ORACLE (𝑃⨁𝛿𝑖 , K)
+6:
+𝐶𝑖 ← CIPHER (𝑃⨁𝛿𝑖 , K)
+7:
+𝑑𝑎𝑡𝑎𝑠𝑒𝑡(𝑖) ← (C⨁𝐶𝑖 , 𝑖)
+7:
+𝑑𝑎𝑡𝑎𝑠𝑒𝑡(𝑖) ← (C⨁𝐶𝑖 , 𝑖)
+8:
+end 𝒇𝒐𝒓
+8:
+end 𝒇𝒐𝒓
+9:
+𝒇𝒐𝒓 each 𝑑𝑎𝑡𝑎 in 𝑑𝑎𝑡𝑎𝑠𝑒𝑡 do
+9:
+𝒇𝒐𝒓 each 𝑑𝑎𝑡𝑎 in 𝑑𝑎𝑡𝑎𝑠𝑒𝑡 do
+10:
+𝛼 ′ ← 𝑡𝑟𝑎𝑖𝑛(𝑑𝑎𝑡𝑎)
+10:
+𝛼 ← 𝑡𝑟𝑎𝑖𝑛(𝑑𝑎𝑡𝑎)
+1
+11:
+if 𝛼 ′ = 𝛼 then
+11:
+if 𝛼 > then
+𝑡
+12:
+ORACLE = CIPHER
+12:
+goto ONLINE PHASE
+13:
+else
+13:
+else
+14:
+ORACLE = RANDOM
+14:
+Repeat from Step 3
+15:
+end if
+15:
+end if
+16:
+Repeat from Step 3 if required
+16: end 𝒇𝒐𝒓
+17: end 𝒇𝒐𝒓
+17: end procedure
+18: end procedure
+
+Fig. 4. Proposed DL Architecture.
+
+Dataset Collection: For 10,000 different key-plaintext pairs, we have selected four
+input differential classes. These input differentials were either selected randomly (for
+𝑀1 and 𝑀2 ) or were taken from Table-3 (for 𝑀3 and 𝑀4 ). For every key-plaintext pair,
+the plaintext, and its corresponding difference pair, calculated for each input
+difference class, is encrypted for r-round reduced PRESENT (3 ≤ 𝑟 ≤ 6) and Simeck
+(3 ≤ 𝑟 ≤ 7). The obtained ciphertext pairs XORed to get the output difference. This
+output difference, along with the input difference class, is stored in a training-dataset.
+The hyper-parameters for the training and testing of the models are given in Table-4.
+Table 4. Hyper-parameters.
+Hyper-Parameters
+Learning rate
+
+Values
+0.001
+
+Optimizer
+
+Adam
+
+Loss function
+
+BCE Loss
+
+Epochs
+
+25
+
+Sample size
+
+10000
+
+Batch size
+
+100
+
+Validation Split
+
+0.3
+
+5
+
+Results
+
+The previously discussed differential distinguisher models were trained and tested on
+random data, and data from PRESENT and Simeck. The minimum and maximum
+validation results of the study are presented in Table-5 in a very concise format.
+Table 5. Comparison of Differential Distinguisher Models based on Validation Accuracy.
+PRESENT Model 1 (𝑴𝟏 )
+Rounds
+Min
+Max
+
+Model 3 (𝑴𝟑 )
+Min Max
+
+Model 4 (𝑴𝟒 )
+Min Max
+
+0.45
+0.18
+0.21
+0.13
+
+0.7
+0.58
+0.28
+0.18
+
+0.73
+0.67
+0.31
+0.18
+
+6
+
+0.36
+0.17
+0.16
+0.16
+
+SIMECK
+Rounds
+
+Model 1 (𝑴𝟏 )
+Min
+Max
+
+Model 2 (𝑴𝟐 )
+Min Max
+
+Model 3 (𝑴𝟑 )
+Min Max
+
+Model 4 (𝑴𝟒 )
+Min Max
+
+2
+
+0.55
+0.21
+0.17
+0.21
+0.15
+
+0.52
+0.22
+0.2
+0.19
+0.16
+
+1.00
+0.99
+0.74
+0.37
+0.16
+
+1.00
+0.97
+0.74
+0.42
+0.19
+
+3
+4
+5
+
+3
+4
+5
+6
+
+0.55
+0.34
+0.34
+0.36
+
+Model 2 (𝑴𝟐 )
+Min Max
+
+0.79
+0.31
+0.32
+0.33
+0.35
+
+0.78
+0.33
+0.33
+0.31
+
+0.79
+0.36
+0.32
+0.33
+0.36
+
+0.92
+0.82
+0.45
+0.34
+
+1.00
+1.00
+0.88
+0.56
+0.37
+
+0.92
+0.85
+0.44
+0.36
+
+1.00
+1.00
+0.9
+0.57
+0.38
+
+𝑀1 and 𝑀2 did not show any significant validation accuracies as expected due to the
+random nature of the differentials selected for them. On the other hand, 𝑀3 and 𝑀4
+performed significantly better for both PRESENT and Simeck. This is because the
+selected input differentials have a high probability for differential cryptanalysis and
+remove the possibility of using low probability differentials, that would give poor
+results as seen for 𝑀1 and 𝑀2 . Although the selected differentials are for PRESENT,
+they give good results for Simeck as well as shown in the table. Fig-5 and Fig-6 show
+the average validation accuracies for PRESENT and Simeck respectively, round and
+model wise.
+
+Fig. 5. Average validation accuracies for PRESENT.
+
+Fig. 6. Average validation accuracies for Simeck.
+
+It can be seen that 𝑀3 and 𝑀4 perform exceptionally well, with obtained average
+accuracies following a decreasing trend from lower to higher rounds. Whereas the
+average accuracies for 𝑀1 and 𝑀2 are significantly lower in comparison, for reasons
+discussed earlier, with nearly constant values obtained after the third round. All four
+models reach the limiting average accuracies of nearly 25% by the 6 6𝑡ℎ round for
+PRESENT, and the 7𝑡ℎ round for Simeck. In addition to the above, our proposed
+MLP (used in 𝑀2 and 𝑀4 ) performs better than Baksi’s recommended MLP (used in
+𝑀1 and 𝑀3 ) for use on PRESENT and Simeck.
+
+6
+
+Conclusion
+
+In this study, we improved Baksi et al’s differential distinguisher method by using
+one high probability input differential from Wang’s study for PRESENT and
+generated three more differentials from it by shifting it left and right. This improvised
+method was extended to two structurally different lightweight block ciphers
+PRESENT and Simeck. The results obtained were significantly better than when
+randomly selected input differentials were used, and slightly better for our proposed
+deep learning architecture over the one recommended in the past work. The proposed
+method can differentiate random data from cipher data until 6 rounds of PRESENT
+and 7 rounds of Simeck encryption. This shows that using a higher number of
+encryption rounds for these ciphers can provide the necessary security for IoT devices
+against a deep learning based differential attack. Based on our study, future work in
+this area of research can be done on the suggestive universality of the method and
+input differences across structurally different ciphers. The suggested method for
+selecting input differentials by shifting an already established high probability input
+differential can also be explored. In addition to this, our approach does not include a
+key retrieval method, which can be developed in the future.
+
+References
+1. Hassija V, Chamola V, Saxena V, Jain D, Goyal P, Sikdar B. A survey on IoT security:
+application areas, security threats, and solution architectures. IEEE Access 2019; 7:
+82721–82743.
+2. Rodrigues RR, Rodrigues JJ, Cruz dMA, Khanna A, Gupta D. An IoT-based automated
+shower system for smart homes. In: IEEE.; 2018: 254–258.
+3. Pustokhina IV, Pustokhin DA, Gupta D, Khanna A, Shankar K, Nguyen GN. An effective
+training scheme for deep neural network in edge computing enabled Internet of medical
+things (IoMT) systems. IEEE Access 2020; 8: 107112–107123.
+4. Hussein AF, Burbano-Fernandez M, Ramírez-González G, Abdulhay E, De Albuquerque
+VHC, others. An automated remote cloud-based heart rate variability monitoring system.
+IEEE Access 2018; 6: 77055–77064.
+5. Khan S, Muhammad K, Mumtaz S, Baik SW, Albuquerque dVHC. Energy-efficient deep
+CNN for smoke detection in foggy IoT environment. IEEE Internet of Things Journal
+2019; 6(6): 9237–9245.
+6. Chavhan S, Gupta D, Chandana B, Khanna A, Rodrigues JJ. IoT-based Context-Aware
+Intelligent Public Transport System in a metropolitan area. IEEE Internet of Things
+Journal 2019.
+7. Bansal G, Naren N, Chamola V, Sikdar B, Kumar N, Guizani M. Lightweight mutual
+authentication protocol for V2G using physical unclonable function. IEEE Transactions on
+Vehicular Technology 2020.
+8. Khanna A, Rodrigues JJ, Gupta N, Swaroop A, Gupta D. Local mutual exclusion
+algorithm using fuzzy logic for Flying Ad hoc Networks. Computer Communications
+2020.
+9. Alladi T, Chamola V, Sikdar B, Choo KKR. Consumer IoT: Security vulnerability case
+studies and solutions. IEEE Consumer Electronics Magazine 2020; 9(2): 17–25.
+10. Alladi T, Chamola V, Zeadally S. Industrial Control Systems: Cyberattack trends and
+countermeasures. Computer Communications 2020.
+11. Coppersmith D. The Data Encryption Standard (DES) and its strength against attacks. IBM
+journal of research and development 1994; 38(3): 243–250.
+12. Biham E, Dunkelman O. Differential cryptanalysis of stream ciphers. tech. rep., Computer
+Science Department, Technion; Haifa, Israel: 2007.
+13. Biham E, Shamir A. Differential Cryptanalysis of Hash Functions. In: Springer. 1993 (pp.
+133–148).
+14. Biham E, Shamir A. Differential cryptanalysis of DES-like cryptosystems. Journal of
+CRYPTOLOGY 1991; 4(1): 3–72.
+15. Aoki K, Ohta K. Differential-linear cryptanalysis of FEAL-8. IEICE Transactions on
+Fundamentals of Electronics, Communications and Computer Sciences 1996; 79(1): 20–
+27.
+16. Gohr A. Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning. In:
+Springer. ; 2019: 150–179.
+17. Dinur I. Improved differential cryptanalysis of round-reduced speck. In: Springer. ; 2014:
+147–164.
+18. Baksi A, Breier J, Dong X, Yi C. Machine Learning Assisted Differential Distinguishers
+For Lightweight Ciphers. IACR Cryptol. ePrint Arch. 2020; 2020: 571.
+19. Ullah A, Muhammad K, Del Ser J, Baik SW, Albuquerque dVHC. Activity recognition
+using temporal optical flow convolutional features and multilayer LSTM. IEEE
+Transactions on Industrial Electronics 2018; 66(12): 9692–9702.
+
+20. Hussain T, Muhammad K, Ullah A, Cao Z, Baik SW, Albuquerque dVHC. Cloud-assisted
+multiview video summarization using CNN and bidirectional LSTM. IEEE Transactions
+on Industrial Informatics 2019; 16(1): 77–86.
+21. Bogdanov A, Knudsen LR, Leander G, et al. PRESENT: An ultra-lightweight block
+cipher. In: Springer. ; 2007: 450–466.
+22. iso . ISO/IEC 29192-2:2019. https://www.iso.org/standard/56552.html; 2019.
+23. Yang G, Zhu B, Suder V, Aagaard MD, Gong G. The simeck family of lightweight block
+ciphers. In: Springer. ; 2015: 307–329.
+24. Beaulieu R, Shors D, Smith J, Treatman-Clark S, Weeks B, Wingers L. The SIMON and
+SPECK Families of Lightweight Block Ciphers.. IACR Cryptol. ePrint Arch. 2013; 2013:
+404. 10.
+25. Weinstein R. RFID: a technical overview and its application to the enterprise. IT
+professional 2005; 7(3): 27–33.
+26. Wang M. Differential cryptanalysis of reduced-round PRESENT. In: Springer. ; 2008: 40–
+49.
+
+

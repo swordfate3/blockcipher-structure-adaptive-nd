@@ -1,0 +1,2113 @@
+Exploring Key-Recovery-Friendly Differential
+Distinguishers for SM4 and Their Performance in
+Differential Attacks (Full Version)
+Bingqing Li1,2,3 and Ling Sun(Q)1,2,3,4
+State Key Laboratory of Cryptography and Digital Economy Security,
+Shandong University, Qingdao, China
+2
+Key Laboratory of Cryptologic Technology and Information Security,
+Ministry of Education, Shandong University, Jinan, China
+3
+School of Cyber Science and Technology, Shandong University, Qingdao, China
+4
+Quan Cheng Shandong Laboratory, Jinan, China
+lingsun@sdu.edu.cn
+1
+
+Abstract. In this paper, we focus on SM4, a widely used and standardized Chinese block cipher. After revisiting the previously proposed
+optimal 19-round differential characteristic, we observe that its applicability in differential attacks is limited by a reduced pre-sieving probability, causing the time complexity to exceed that of brute force. To overcome this issue, we employ an automated search approach to identify
+more promising optimal 19-round differential characteristics. By translating key properties relevant to key recovery into Boolean expressions,
+we uncover three structural properties common to all optimal 19-round
+characteristics. While these properties dictate the overall probability of
+the resulting 19-round distinguishers, their varying pre-sieving probabilities influence their practical effectiveness in differential attacks. Using
+Boolean encodings, we identify four representative key-recovery-friendly
+differential characteristics. We then conduct an in-depth analysis of one
+such characteristic and demonstrate that, when evaluated under both
+the hypothesis testing paradigm and the key ranking paradigm, the proposed attack requires slightly more data than existing 23-round attacks.
+Nonetheless, it achieves lower time and memory complexities and ensures
+a higher success probability, offering a valuable new avenue for differential
+cryptanalysis of SM4. We believe our findings enhance the understanding
+of SM4’s differential structure and provide a solid foundation for future
+research on advanced key-recovery techniques that leverage these newly
+identified structural properties and differential characteristics.
+Keywords: Differential cryptanalysis · Distinguisher · Characteristic ·
+Key-recovery-friendly · SM4.
+
+1
+
+Introduction
+
+SM4 [7] is a block cipher standard widely used in China to safeguard sensitive data. Developed by the Chinese government, it forms a core component of
+
+2
+
+B. Li and L. Sun
+
+the nation’s cryptographic standards. Originally introduced as SMS4, the algorithm was standardized by the Chinese State Cryptography Administration and
+later renamed SM4, aligning it with the SM series of cryptographic algorithms.
+Since its inception, SM4 has been subjected to extensive cryptanalysis, with researchers examining its resilience against a wide range of attacks  most notably
+differential attacks [9,24,25,19], as well as linear [8,9] and integral attacks [12],
+among other advanced techniques.
+Like many modern block ciphers, SM4 is designed to resist differential cryptanalysis  a powerful method introduced by Biham and Shamir [3,4]. Nevertheless, researchers continue to investigate differential characteristics in pursuit of
+potential vulnerabilities. Notably, Su et al. [19] identified a family of 19-round
+differential characteristics for SM4, including one with a maximal probability of
+2−124 . By exploiting this distinguisher, they launched the first 23-round differential attack on SM4.
+For nearly a decade, the probability bound of 19-round differential characteristics in SM4 remained unchallenged. In 2019, Liu et al. [13,14] leveraged
+an automated approach based on the Simple Theorem Prover (STP) to search
+for differential and linear characteristics in S-box-based ciphers. Through this
+method, they claimed to discover a 19-round SM4 differential characteristic with
+a probability of 2−123 , although they did not provide detailed information about
+the characteristic or confirm whether 2−123 is indeed the tightest bound.
+More recently, Li and Sun [10] used a Boolean Satisfiability (SAT) based
+automated search to address the gap left by Liu et al. They confirmed that
+2−123 is indeed the upper bound for 19-round differential characteristics in SM4
+and publicly released the first known optimal 19-round characteristic. However,
+this newly identified characteristic has not yet been employed in any differential
+attack on SM4. Consequently, the primary motivation for this work was to determine whether this optimal 19-round differential characteristic could be leveraged
+to improve differential attacks on SM4.
+In this paper, we begin by analyzing the optimal differential characteristic
+proposed in [10]. Our findings reveal that the output difference of this characteristic reduces the pre-sieving probability in the differential attack, resulting in
+a time complexity that exceeds that of brute force. Since the existing differential
+characteristic does not yield an improvement in the differential attack on SM4,
+we shift our focus to identifying other 19-round differential characteristics with
+the same probability of 2−123 that are more conducive to key recovery.
+In view of the SAT-based method’s outstanding performance in searching for
+optimal differential characteristics in SM4, we also adopt an automated SATbased search strategy to discover new differential characteristics. Given the vast
+number of 19-round optimal differential characteristics with a probability of
+2−123 in SM4  and considering the lengthy runtime required by SAT solvers for
+multi-solution searches  it is not feasible to enumerate all such characteristics in
+order to identify those best suited for key-recovery attacks. Instead, we explore
+the properties these optimal 19-round differential characteristics share, as well
+as those that set them apart.
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+3
+
+By translating the characteristic properties that influence key recovery into
+Boolean expressions, we successfully identified three structural properties common to all optimal 19-round differential characteristics.
+• The total number of active S-boxes cannot be fewer than 19.
+• Each round must contain at least one active S-box.
+• The number of active S-boxes is exactly 19, with precisely one active S-box
+present in every round.
+Based on these properties, we find that the 19-round differential distinguisher
+derived from any optimal characteristic has a probability of 2−123.99 .
+Although all 19-round distinguishers from the optimal characteristics share
+this overall probability, their respective pre-sieving probabilities differ, influencing their practical utility in differential attacks. Using Boolean encodings, we
+confirm the existence of key-recovery-friendly characteristics among the optimal 19-round differential characteristics of SM4. Furthermore, we identify four
+representative differential characteristics that are particularly favorable for keyrecovery attacks.
+We conduct an in-depth analysis of one of the four differential characteristics
+in the context of key-recovery attacks. To comprehensively evaluate its performance, we employ both the hypothesis testing paradigm and the key ranking
+paradigm, with the resulting performance metrics summarized in Table 1. Under the hypothesis testing paradigm, our attack requires slightly more data than
+the 23-round attack proposed by Su et al. [19], yet it achieves lower time and
+memory complexities while ensuring at least a 90% success probability. Under
+the key ranking paradigm, our attack also requires more data than the 23-round
+attack by Zhao et al. [26], but it offers lower time complexity and a higher success
+probability.
+Table 1. Comparison of differential attacks on SM4.
+Round
+
+Evaluation
+Method
+
+21
+Signal-to-noise
+(18 + 3)
+ratio in [3]
+22
+Poisson limit
+(18 + 4)
+theorem
+22
+Poisson limit
+(18 + 4)
+theorem
+23
+Signal-to-noise
+(19 + 4)
+ratio in [3]
+23
+Key ranking
+(19 + 4)
+paradigm in [5]
+23
+Hypothesis testing
+(19 + 4)
+paradigm in [5]
+23
+Key ranking
+(19 + 4)
+paradigm in [5]
+
+Data
+Time
+Memory
+Success
+Complexity Complexity Complexity Probability
+
+Reference
+
+2118.0
+
+2126.6
+
+2118.0
+
+-
+
+[24]
+
+2118.0
+
+2125.7
+
+2118.0
+
+60.0%
+
+[9]
+
+2117.0
+
+2112.3
+
+2117.0
+
+76.2%
+
+[25]
+
+2118.0
+
+2126.7
+
+2118.0
+
+98.9%
+
+[19]
+
+2113.5
+
+2126.7
+
+negligible
+
+90.0%
+
+[26]
+
+2120.4
+
+2122.8
+
+2116.4
+
+90.0%
+
+Section 4.1
+
+2116.8
+
+2122.8
+
+negligible
+
+99.9%
+
+Section 4.2
+
+4
+
+B. Li and L. Sun
+
+The remainder of this paper is organized as follows. Section 2 presents an
+overview of differential cryptanalysis and summarizes essential information on
+SM4. Section 3 describes our methodology for identifying key-recovery-friendly
+optimal 19-round differential characteristics of SM4. In Section 4, we evaluate the
+attack performance using one of these newly identified 19-round characteristics.
+Finally, Section 5 concludes the paper.
+
+2
+
+Preliminary
+
+2.1
+
+Differential Cryptanalysis
+
+Differential cryptanalysis [3,4] is a cryptanalytic method primarily applied to
+symmetric-key algorithms, especially block ciphers. It leverages the nonlinear
+components of a cipher to identify cases where certain input differences ∆in
+yield specific output differences ∆out with a higher probability than would occur
+by chance. The pair (∆in , ∆out ) is called a differential. The probability of this
+differential, for an n-bit primitive EK , is defined as
+PrEK (∆in , ∆out ) =
+
+{x ∈ Fn2 | EK (x) ⊕ EK (x ⊕ ∆in ) = ∆out }
+.
+2n
+
+The weight of the differential is given by
+ωEK (∆in , ∆out ) = − log2 [PrEK (∆in , ∆out )].
+Determining the probability of a valid differential in a multi-round cryptographic algorithm can be quite challenging. Typically, differential characteristics are constructed to trace internal differences after each round. Let (∆in =
+∆0 , ∆1 , . . . , ∆R = ∆out ) represent an R-round differential characteristic. Suppose the R-round encryption function EK is composed of R round functions, i.e.,
+EK = FKR−1 ◦ FKR−2 ◦ · · · ◦ FK0 . Under the assumption that the round keys K0 ,
+K1 , . . ., KR−1 are uniformly random and independent, the probability of this
+differential characteristic is the product of the differential transition probabilities
+at each round:
+PrEK (∆0 , ∆1 , . . . , ∆R ) =
+
+R−1
+Y
+
+PrFKr (∆r , ∆r+1 ).
+
+r=0
+
+When determining differential characteristics for round functions, S-boxes
+often present the greatest complexity. To simplify their analysis, one typically
+constructs a Differential Distribution Table (DDT). For an s-bit S-box, the DDT
+is a 2s × 2s table, with the entry in the i-th row and j-th column indicating the
+number of input-output pairs that satisfy the differential (i, j). An S-box is
+considered active if its differential corresponds to a DDT entry that is nonzero
+yet strictly less than 2s .
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+2.2
+
+5
+
+Data Complexity and Success Probability in Differential Attack
+
+Once an effective differential characteristic for the target cipher is identified, a
+differential attack can be mounted. Let p0 denote the probability of the R-round
+differential characteristic, and let N be the number of plaintext pairs used in
+the attack. As a form of statistical cryptanalysis, we define the statistic Σ (used
+in the differential attack) as the number of pairs that satisfy the differential
+characteristic. Under the correct key guess, Σ follows a binomial distribution
+with parameters (N, p0 ). Conversely, if the probability that a pair satisfies the
+differential characteristic under an incorrect key guess is p (where p < p0 ), then
+Σ follows a binomial distribution with parameters (N, p).
+Once the observed value of Σ is obtained from the sample, we construct a
+list L of the most likely keys among all κ possible keys. As shown by Blondeau
+et al. [5], two paradigms can be adopted for this process. In both paradigms,
+the success probability PS is defined as the probability that the correct key is
+included in L.
+Hypothesis Testing Paradigm. Hypothesis testing begins by setting a threshold τ . Any key whose statistic Σ is at least τ is included in the list L. Two types
+of errors can arise.
+1. Non-detection error probability (α): This error occurs if the correct key k0
+is not included in L (i.e., k0 ∈
+/ L). From its definition,
+X N 
+α=
+pi0 (1 − p0 )N −i .
+(1)
+i
+i<τ
+In this situation, the success probability PS is 1 − α.
+2. False alarm error probability (β): This error occurs if an incorrect key k is
+included in L (i.e., k ∈ L). In this case,
+X N 
+β=
+pi (1 − p)N −i .
+(2)
+i
+i⩾τ
+
+The following theorem can be used to estimate α and β.
+Theorem 1 (Blondeau et al. [5]). Let p0 and p be real numbers such that
+0 < p < p0 < 1, and let τ satisfy p < τ /N < p0 . Define Σ0 and Σk as binomial
+random variables with parameters (N, p0 ) and (N, p), respectively. Then,
+p
+τ
+p0 1 − τ /N
+N →∞
+√
+e−N D( N ∥p0 ) ,
+(3)
+Pr(Σ0 ⩽ τ ) ∼
+p0 − τ /N 2πτ
+p
+τ
+(1 − p) τ /N
+N →∞
+p
+Pr(Σk ⩾ τ ) ∼
+e−N D( N ∥p) ,
+(4)
+(τ /N − p) 2πN (1 − τ /N )
+ 
+
+
+1−q1
+where D(q1 ∥q2 ) ≜ q1 × ln qq21 + (1 − q1 ) × ln 1−q
+is the Kullback-Leibler
+2
+divergence between two Bernoulli distributions with parameters q1 and q2 .
+
+6
+
+B. Li and L. Sun
+
+Remark 1. As noted in [5], when p and p0 are not extremely small, the approximation formulas from Theorem 1 can reliably estimate both types of error
+probabilities. However, when p and p0 are exceedingly small, directly applying
+these approximations to compute α and β may cause substantial errors. For instance, in our evaluation of the SM4 differential attack, if we set p = 2−128 and
+p0 = 2−123.99 with N ranging from 2123 to 2126 , using (3) sometimes produces
+negative values or values greater than 1  both of which are invalid probabilities. As a result, in the subsequent analysis, we do not use the approximation
+formulas from Theorem 1. Instead, we revert to the original definitions of the
+error probabilities and employ formulas (1) and (2) to evaluate α and β.
+Key Ranking Paradigm. Key ranking fixes the size of the candidate key list L
+to an integer ℓ, retaining the ℓ most probable keys. By leveraging properties of the
+Beta distribution, the success probability can be evaluated using the following
+theorem.
+Theorem 2 (Blondeau et al. [5]). Let F be the cumulative distribution
+P N  funci
+tion of a binomial distribution with parameters (N, p), i.e., F(x) ≜
+i p (1 −
+i⩽x
+
+p)N −i . Its inverse function F−1 is F−1 (x) = min{t ∈ N | F(t) ⩾ x}. Denote
+by f0 (i) the
+Σ for the correct key takes the value i:
+ probability that the statistic
+ℓ−1
+. If λ ⩽ 0.25, then the success probability
+f0 (i) = Ni pi0 (1 − p0 )N −i . Let λ ≜ κ−2
+PS satisfies
+!
+r
+ln(ℓ/δ 2 )
+1
+1
+PS = 1 − δ + O δ(1 + Cλ )
++ 2+
+,
+(5)
+ℓ
+ℓ
+κ
+where
+F−1 (1−λ)−1
+
+δ=
+
+X
+
+f0 (i) and Cλ =
+
+i=0
+
+p p0 (N + 1) − F−1 (1 − λ)
+.
+p0 F−1 (1 − λ) − p(N + 1)
+
+Through experimental verification, Blondeau et al. showed that when N takes
+the form
+√
+− ln(2 πℓ/κ)
+N =c
+,
+D(p0 ||p)
+the success probability PS depends primarily on the constant c.
+2.3
+
+Description of SM4
+
+SM4 [7] operates on 128-bit blocks, consistent with other modern block ciphers
+such as the Advanced Encryption Standard (AES) [16]. The cipher uses a 128bit key K, providing a symmetric encryption scheme in which the same key
+is employed for both encryption and decryption. SM4 consists of 32 rounds of
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+7
+
+4
+encryption. Let (Xi , Xi+1 , Xi+2 , Xi+3 ) ∈ (F32
+2 ) denote the 128-bit input to the
+i-th round, where 0 ⩽ i < 32. Denote the round keys by RKi .
+In each round, the internal state is updated using the function T . The encryption process for the i-th round is given by
+
+Xi+4 = Xi ⊕ T (Xi+1 ⊕ Xi+2 ⊕ Xi+3 ⊕ RKi ).
+The function T is composed of a nonlinear transformation S and a linear transformation L, i.e., T = L ◦ S. An illustration for the round function of SM4 can
+be found in Figure 1.
+Xi+1 Xi+2 Xi+3
+
+Xi
+
+≪ 18
+≪ 24
+
+Xi+1
+
+KCi
+
+L′
+
+≪2
+≪ 10
+
+KSi+1 KSi+2 KSi+3
+
+KSi
+
+L
+
+≪ 13
+
+S
+
+≪ 23
+
+RKi
+
+Xi+2 Xi+3 Xi+4
+
+S
+
+KSi+1
+
+KSi+2 KSi+3 KSi+4
+
+Fig. 1. Round function and key schedule of SM4.
+
+Nonlinear transformation S. SM4 applies the same 8 × 8 S-box S four times
+in parallel to a 32-bit input. Let Y = (Y [0], Y [1], Y [2], Y [3]) ∈ (F82 )4 represent the input to S, and Z = (Z[0], Z[1], Z[2], Z[3]) ∈ (F82 )4 denote the
+corresponding output. The transformation S is defined by
+(Z[0], Z[1], Z[2], Z[3]) = (S(Y [0]), S(Y [1]), S(Y [2]), S(Y [3])).
+Linear transformation L. The linear transformation L is a simple linear function that takes the output of S as its input. Given Z as the input to L, its
+output is computed as
+L(Z) = Z ⊕ (Z ≪ 2) ⊕ (Z ≪ 10) ⊕ (Z ≪ 18) ⊕ (Z ≪ 24).
+
+A key property of the SM4 S-box, often exploited in its cryptanalysis, is the
+following.
+Property 1. For any nonzero input difference, the SM4 S-box produces 127 possible output differences. Among these, one specific output difference appears with
+probability 2−6 , while each of the remaining 126 output differences occurs with
+probability 2−7 .
+As illustrated in Figure 1, the SM4 key schedule operates similarly to its
+encryption function. The function T ′ , used in the key schedule, closely resembles
+T except for the linear transformation: it uses
+L′ (Z) = Z ⊕ (Z ≪ 13) ⊕ (Z ≪ 23)
+
+8
+
+B. Li and L. Sun
+
+instead of L. The round key RKi for the i-th round is then computed as
+RKi = KSi+4 = KSi ⊕ T ′ (KSi+1 ⊕ KSi+2 ⊕ KSi+3 ⊕ KCi ), 0 ⩽ i < 32,
+where KCi are certain constants. Moreover, (KS0 , KS1 , KS2 , KS3 ) is obtained
+by XORing the master key K with a fixed system parameter. Additional details
+on the cipher can be found in [7].
+2.4
+
+Previous Most Effective Differential Attacks on SM4
+
+The most effective differential attacks on SM4 so far target 23 rounds. Both
+known 23-round differential attacks on SM4 [19,26] are based on the 1272 19round differential characteristics first introduced by Su et al. [19]. These characteristics share the same output difference5 :
+(3f0000cf, ccf300fc, f3f30033, f3f30033),
+while their input differences vary. The input differences take the form
+(a0 , f3f30033, f3f30033, f3000030),
+where a0 ∈ {x ⊕ 00f30003 | PrT (f3000030, x) > 0}. Among these 1272 differential characteristics, one has a probability of 2−124 , 254 have a probability of
+2−125 , and the remaining characteristics have a probability of 2−126 . The average probability of these differential characteristics is 2−125.98 , representing the
+probability for the 19-round distinguisher.
+In the 23-round differential attacks, this 19-round distinguisher is placed
+at the beginning (rounds 0 to 18), followed by four additional rounds. As illustrated in Figure 2(a), only the second and third bytes of ∆X0 are fixed,
+enabling structures to be constructed at the distinguisher input so that more
+plaintext pairs can be generated from a fixed number of plaintexts. At the output of the distinguisher, ∆X20 ⊕ ∆X21 ⊕ ∆X22 = ccf300fc, which matches
+the input difference of the function T in the nineteenth round. Since X23 =
+X19 ⊕ T (X20 ⊕ X21 ⊕ X22 ⊕ RK19 ), ∆X23 is confined to the set
+Λ = {x ⊕ 3f0000cf | PrT (ccf300fc, x) > 0} ,
+which contains 1273 elements. Because ∆X23 is part of the ciphertext difference,
+the condition ∆X23 ∈ Λ filters out ciphertext pairs with probability 2−11.03 prior
+to key enumeration. This probability is called the pre-sieving probability. As the
+initial number of pairs heavily impacts the time complexity of subsequent key
+enumeration, the magnitude of this pre-sieving probability is critically important.
+5
+
+Typewriter font is used to represent hexadecimal bit vectors.
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+a′0 ∈ {x ⊕ 263b8b26 | PrT (00220000, x) > 0}
+
+a0 ∈ {x ⊕ 00f30003 | PrT (f3000030, x) > 0}
+∆X0 = a0
+
+∆X1 = f3f30033
+
+∆X2 = f3f30033
+
+∆X3 = f3000030
+−125.98
+
+19-round distinguisher with a probability of 2
+∆X19 = 3f0000cf
+
+T
+
+∆X20 = ccf300fc
+
+∆X20 = ccf300fc
+RK19
+
+∆X21 = f3f30033
+
+∆X22 = f3f30033
+
+∆X0 = a′0
+
+∆X22 = f3f30033
+
+∆X23 ∈ Λ
+
+∆X19 = 26168b26
+
+T
+
+∆X20 = 4703d247
+
+T
+
+∆X21 = f3f30033
+
+∆X22 = f3f30033
+RK21
+
+∆X23 ∈ Λ
+
+∆X24 ∈ F32
+2
+
+∆X21 = 61ae5961
+
+∆X3 = 61835961
+
+∆X20 = 4703d247
+RK19
+
+∆X21 = 61ae5961
+
+∆X22 = 479ad247
+
+∆X21 = 61ae5961
+RK20
+
+∆X22 = 479ad247
+
+∆X23 ∈ Λ′
+
+∆X22 = 479ad247
+RK21
+
+∆X23 ∈ Λ′
+
+∆X24 ∈ F32
+2
+
+∆X23 ∈ Λ′
+RK22
+
+∆X24 ∈ F32
+2
+
+∆X25 ∈ F32
+2
+
+∆X20 ⊕ ∆X21 ⊕ ∆X22 = 61375961
+
+T
+
+∆X23 ∈ Λ
+RK22
+
+∆X24 ∈ F32
+2
+
+∆X25 ∈ F32
+2
+
+∆X22 = 479ad247
+
+T
+
+T
+
+Λ = {x ⊕ 3f0000cf | PrT (ccf300fc, x) > 0}, |Λ| = 1273
+∆X23 ∈ Λ
+
+∆X2 = 479ad247
+
+T
+
+T
+
+∆X22 = f3f30033
+
+∆X1 = 263b8b26
+
+19-round distinguisher with a probability of 2−123.99
+
+∆X20 ⊕ ∆X21 ⊕ ∆X22 = ccf300fc
+
+∆X21 = f3f30033
+RK20
+
+9
+
+∆X24 ∈ F32
+2
+
+∆X25 ∈ F32
+2
+
+∆X26 ∈ F32
+2
+
+(a) Key-recovery procedure using the distinguisher proposed by Su et al.
+
+Λ′ = {x ⊕ 26168b26 | PrT (61375961, x) > 0}, |Λ′ | = 1274
+∆X23 ∈ Λ′
+
+∆X24 ∈ F32
+2
+
+∆X25 ∈ F32
+2
+
+∆X26 ∈ F32
+2
+
+(b) Key-recovery procedure using the distinguisher proposed by Li and Sun.
+
+Fig. 2. 23-round key-recovery procedures with different distinguishers.
+
+2.5
+
+Automated Search for Optimal Differential Characteristics
+
+Several studies [23,11,13,14,10] have employed automated techniques to explore
+the differential properties of SM4. Among these, the method based on Boolean
+satisfiability problems (SAT) has delivered the best performance to date.
+In a SAT problem, one seeks an assignment of truth values to variables that
+satisfies a given Boolean formula  making it evaluate to true. SAT problems
+are widely utilized in areas such as cryptography, hardware and software verification, and automated theorem proving. Due to their importance, many advanced
+algorithms and tools, known as SAT solvers, have been developed to efficiently
+handle large-scale and complex SAT instances. When given to SAT solvers, SAT
+problems are generally expressed in Conjunctive Normal Form (CNF), where the
+formula is a conjunction (AND, ∧) of clauses, each clause being a disjunction
+(OR, ∨) of literals. A literal is defined as a variable or its negation (NOT, ·).
+By formulating the search for differential characteristics in SM4 as SAT problems, Li and Sun [10] introduced the first publicly available optimal 19-round
+differential characteristic with a probability of 2−123 . Its input difference is
+(4703d247, 263b8b26, 479ad247, 61835961),
+and its output difference is
+(26168b26, 4703d247, 61ae5961, 479ad247).
+
+10
+
+B. Li and L. Sun
+
+3
+
+Explorations of Key-Recovery-Friendly Distinguishers
+
+In this section, we first demonstrate that the previously discovered optimal differential characteristic does not yield a stronger differential attack on SM4. Subsequently, we succeed in identifying alternative 19-round differential characteristics
+that are more conducive to key recovery.
+3.1
+
+Main Problem of Employing Differential Characteristic in [10]
+
+Although Li and Sun [10] presented an optimal 19-round differential characteristic for SM4, its potential to strengthen differential attacks has not been
+examined. In this work, we show that the 19-round distinguisher derived from
+their characteristic offers no advantage when used to launch 23-round differential
+attacks on SM4.
+As illustrated in Figure 2(b), since ∆X1 ⊕ ∆X2 ⊕ ∆X3 = 00220000 serves as
+the input difference for the function T in the zeroth round, we can derive a set of
+127 differential characteristics based on the original characteristic from [10] (see
+Section 2.5). These differential characteristics share the same output difference
+as the optimal one but differ in their input differences, which are of the form
+(a′0 , 263b8b26, 479ad247, 61835961),
+where a′0 ∈ {x ⊕ 263b8b26 | PrT (00220000, x) > 0}. Among these 127 characteristics, one achieves the highest probability of 2−123 , while the remaining 126
+have a probability of 2−124 . Consequently, the new 19-round distinguisher has
+an average probability of 2−123.99 .
+To mount a 23-round attack, we append four rounds to the new 19-round
+distinguisher. Since ∆X20 ⊕ ∆X21 ⊕ ∆X22 = 61375961, the possible values of
+∆X23 belong to
+Λ′ = {x ⊕ 26168b26 | PrT (61375961, x) > 0} ,
+which contains 1274 elements. When applying the condition ∆X23 ∈ Λ′ to filter
+ciphertext pairs, the pre-sieving probability is 2−4.05 . Given the large number of
+pairs advancing to the key enumeration phase, the time complexity of the attack
+will be difficult to manage.
+Given that even the 19-round distinguisher with higher differential probability does not yield a more efficient differential attack, we must also consider
+whether other 19-round differential characteristics with probability 2−123 might
+facilitate stronger attacks. We aim to use a SAT-based automated approach6
+to investigate the existence of more effective differential characteristics. Before
+presenting our method, we first review the automated techniques from [10] for
+searching differential characteristics of SM4.
+6
+
+In this work, we employ the SAT solvers Kissat [2] and CryptoMiniSat [18].
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+3.2
+
+11
+
+Methods for Finding Differential Characteristics of SM4
+
+To find differential characteristics of SM4, one can translate differential propagation through the cipher’s components into Boolean formulas in CNF. This SAT
+formulation, geared toward identifying SM4 differential characteristics, naturally
+divides into three parts: SAT models for the linear components, the nonlinear
+components, and the objective function.
+SAT Models for Linear Components. As discussed in [10], characterizing
+differential propagation over the linear components of SM4 only requires a SAT
+model for multi-input XOR operations. Because Kissat does not natively support
+Boolean formulas involving XOR, the SAT model from [21] is employed instead.
+Throughout this work, for an n-bit vector ∆X, we use ∆X (i) to denote the i-th
+bit of ∆X, where 0 ⩽ i < n.
+Model 1 (l-Input XOR, [21]) Consider the n-bit XOR operation Y = X0 ⊕
+X1 ⊕ · · · ⊕ Xl−1 , whose input and output differences are ∆X0 , ∆X1 , . . ., ∆Xl−1
+and ∆Y , respectively. The differential propagation is valid if and only if ∆X0 ,
+∆X1 , . . ., ∆Xl−1 , and ∆Y satisfy the following equations for every (l + 1)-bit
+vector (θ(0) , θ(1) , . . . , θ(l) ) such that θ(0) ⊕ θ(1) ⊕ · · · ⊕ θ(l) = 1.
+(i)
+
+(i)
+
+(∆X0 ⊕ θ(0) ) ∨ · · · ∨ (∆Xl−1 ⊕ θ(l−1) ) ∨ (∆Y (i) ⊕ θ(l) ) = 1, 0 ⩽ i < n.
+SAT Models for Nonlinear Components. In SM4, the S-box S is the sole
+nonlinear component. The SAT model for S, which aims to capture differential probabilities, follows the approach in [20]. Specifically, each S-box is characterized by sixteen Boolean variables, ∆X = (∆X (0) , ∆X (1) , . . . , ∆X (7) ) and
+∆Y = (∆Y (0) , ∆Y (1) , . . . , ∆Y (7) ), representing the input and output differences.
+The probability of differential propagation through S can take one of three values: 1, 2−6 , or 2−7 . To encode these probabilities, two additional Boolean variables w = (w(0) , w(1) ) are introduced, and the corresponding weight is computed
+as w(0) + 6w(1) . Hence, the 18-bit vector (∆X, ∆Y, w) must belong to the set
+
+
+∆X, 
+∆Y ∈ F82 , w ∈ F22 , PrS (∆X, ∆Y ) > 0 
+
+
+
+
+
+−7
+
+
+
+(1, 1), if PrS (∆X, ∆Y ) = 2
+Θ = (∆X, ∆Y, w)
+.
+w = (0, 1), if PrS (∆X, ∆Y ) = 2−6
+
+
+
+
+
+
+
+
+
+
+(0, 0), if PrS (∆X, ∆Y ) = 1
+To enforce this, the model introduces a clause
+7 
+_
+i=0
+
+7 
+1 
+ _
+ _
+
+∆X (i) ⊕ θ(i) ∨
+∆Y (i) ⊕ θ(i+8) ∨
+w(i) ⊕ θ(i+16) = 1
+i=0
+
+i=0
+
+for every 18-bit vector θ ∈
+/ Θ, thus forming a baseline SAT description of the
+S-box. However, because F18
+2 \Θ has 229758 elements, encoding all such clauses
+
+12
+
+B. Li and L. Sun
+
+directly would produce an intractably large SAT problem. To mitigate this complexity, the ESPRESSO logic minimizer [6] is applied, reducing the model to 8599
+clauses. This streamlined SAT model effectively captures the S-box’s differential
+probability properties.
+SAT Models for the Objective Function. Since the goal of the automatic
+search is to identify differential characteristics with high probabilities, the objective function in the SAT problem can be represented by a cardinality inequality:
+γ−1
+P
+wi ⩽ ϖ, where wi are Boolean variables encoding the weights of possible
+i=0
+
+differential propagations through S-boxes, and ϖ is a predefined upper bound
+on the characteristic’s total weight. A common technique for translating this
+cardinality constraint into Boolean logic is the sequential encoding method [17].
+Wang et al. [22] demonstrated that when the upper and lower bounds of each
+′
+γP
+−1
+γ−1
+P
+partial sum
+wi (for 0 ⩽ γ ′ < γ) in the inequality
+wi ⩽ ϖ are known, this
+i=0
+
+i=0
+
+information can be integrated into the sequential encoding method to construct
+a more effective objective function model. The enhanced model significantly improves the efficiency of SAT-based searches. Due to space limitations, the two
+SAT models for the objective function are provided in Appendix A.
+3.3
+
+Structural Properties of 19-Round Optimal Characteristics
+
+Theoretically, confirming whether other 19-round differential characteristics with
+a probability of 2−123 exist requires only a multi-solution SAT solver  such
+as CryptoMiniSat [18]  to enumerate these characteristics in SM4. However,
+our experiments with CryptoMiniSat suggest that there may be a very large
+number of such characteristics, and exhaustively exploring them is extremely
+time-consuming. In one instance, we ran the solver for 15 days and discovered
+only 77491 characteristics, yet the search remained incomplete.
+Although we can select some of these 77491 characteristics that potentially
+facilitate more efficient key-recovery attacks than the one presented in [10], this
+approach does not guarantee finding the truly optimal distinguisher. Consequently, rather than enumerating all 19-round optimal differential characteristics
+of SM4, we focus on analyzing both their shared and distinct properties. These
+properties  closely tied to the probability of the derived distinguisher and the
+pre-sieving probability  allow us to estimate an upper limit on the effectiveness
+of 19-round optimal differential characteristics for key-recovery attacks.
+Maximum Number of Derived Characteristics from a Single Optimal
+Characteristic. As discussed in Sections 2.4 and 3.1, the probability of a distinguisher depends not only on the probability of its optimal characteristic but
+also on the number of differential characteristics derivable from that characteristic. Although the optimal characteristic in [10] achieves a probability of 2−123 ,
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+13
+
+it yields only 127 associated differential characteristics. In contrast, the distinguisher in [19] encompasses 1272 characteristics. Because a greater number of
+characteristics can boost the probability of the distinguisher, we first investigate
+whether it is possible to find a 19-round characteristic with probability 2−123
+that generates at least 1272 characteristics.
+To explore this question, we revisit the differential characteristics presented
+in [19] and [10]. We observe that the characteristic proposed in [10] achieves a
+higher probability but involves 19 active S-boxes, whereas the best characteristic
+from [19] contains only 18 active S-boxes. Both works [19,10] confirm that 18
+is the minimum number of active S-boxes possible for a 19-round differential
+characteristic in SM4. Thus, we aim to determine whether a 19-round differential
+characteristic exists in SM4 that offers a probability of 2−123 while maintaining
+exactly 18 active S-boxes.
+We address this problem via automated searches. Because we must constrain
+both the probability of the characteristic and the number of active S-boxes, we
+employ a dual-objective SAT problem. In particular, we use Model 6 to limit
+the differential characteristic’s weight to 123 and Model 5 to fix the number of
+active S-boxes at 18. Leveraging the SAT solver Kissat under these constraints
+yields the following property.
+Property 2. The number of active S-boxes in any 19-round differential characteristic of SM4 with a probability of 2−123 cannot be fewer than 19.
+Because the minimum number of active S-boxes in a 19-round optimal differential characteristic is 19, the arrangement of these active S-boxes directly
+affects how many differential characteristics can be derived from the optimal
+one. For example, in the differential characteristic analyzed in Section 2.4 of
+[19], there are two active S-boxes in the first round; consequently, under fixed
+output differences, the 1272 choices of input differences yield 1272 possible differential characteristics. This observation prompts the question of whether a
+19-round differential characteristic with probability 2−123 could also feature two
+active S-boxes in its first round.
+To investigate the positions of active S-boxes in a 19-round optimal characteristic more comprehensively, we reformulate the problem into a SAT-based
+check. Specifically, we test whether a 19-round optimal differential characteristic
+can feature a round with no active S-boxes. Let wr,i be the 2-bit Boolean variable
+encoding the weight of the i-th S-box in the r-th round. We then incorporate
+the following model into our SAT problem to determine if the r-th round can
+indeed contain zero active S-boxes.
+Model 2 The r-th round of the differential characteristic contains no active S(1)
+(1)
+(1)
+(1)
+boxes if and only if the variables wr,0 , wr,1 , wr,2 , and wr,3 satisfy the following
+equations.
+(1)
+
+wr,i = 1, 0 ⩽ i < 4.
+
+14
+
+B. Li and L. Sun
+
+Our test results indicate that, when these conditions are successively introduced into the SAT problem, none of the 19 resulting SAT instances is solvable.
+Hence, we arrive at the following conclusion.
+Property 3. In SM4, any 19-round differential characteristic with probability
+2−123 must have at least one active S-box in each round.
+Since the maximum differential propagation probability of SM4’s S-box is
+2−6 , and the probability of the optimal 19-round characteristic is 2−123 , the
+number of active S-boxes in the optimal characteristic cannot exceed 20. By
+Property 3, this implies that the optimal 19-round differential characteristic may
+contain at most one round with two active S-boxes, with each of the remaining
+rounds featuring exactly one active S-box. To determine whether the r-th round
+of the optimal 19-round differential characteristic can accommodate two active
+S-boxes, we incorporate the following model into our SAT problem.
+Model 3 The r-th round of the SM4 differential characteristic has at least two
+(1)
+(1)
+(1)
+(1)
+active S-boxes if and only if the variables wr,0 , wr,1 , wr,2 , and wr,3 satisfy the
+following equations.
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+(1)
+
+wr,0 ∨ wr,1 ∨ wr,2 ∨ wr,3 = 1,
+wr,0 ∨ wr,1 ∨ wr,2 ∨ wr,3 = 1,
+wr,0 ∨ wr,1 ∨ wr,2 ∨ wr,3 = 1,
+wr,0 ∨ wr,1 ∨ wr,2 ∨ wr,3 = 1,
+wr,0 ∨ wr,1 ∨ wr,2 ∨ wr,3 = 1.
+The test results show that, when these conditions are successively included
+in the SAT problem, all 19 instances become unsatisfiable. Therefore, we arrive
+at the following conclusion.
+Property 4. In every optimal 19-round differential characteristic of SM4, there
+are exactly 19 active S-boxes  one in each round.
+According to Property 4, the first round of an optimal 19-round differential
+characteristic must contain exactly one active S-box. As a result, the total number of differential characteristics derivable from a single optimal characteristic
+is capped at 127. Furthermore, the probability of any 19-round differential distinguisher constructed from an optimal characteristic is 2−123.99 , matching the
+probability of the distinguisher discussed in Section 3.1.
+Maximum Pre-Sieving Probability for Optimal Characteristics. As discussed in Sections 2.4 and 3.1, the pre-sieving probability is influenced by the
+XOR of the last three branches of the output difference, ∆X20 ⊕ ∆X21 ⊕ ∆X22 .
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+15
+
+A smaller number of nonzero bytes in ∆X20 ⊕ ∆X21 ⊕ ∆X22 reduces the range
+of possible values for ∆X23 in the first branch of the ciphertext pair, thereby
+decreasing the pre-sieving probability. In the distinguisher from [19], ∆X20 ⊕
+∆X21 ⊕ ∆X22 contains three nonzero bytes, whereas in the distinguisher from
+[10], it contains four. Since our goal is to identify optimal 19-round differential
+characteristics for key-recovery attacks, we focus on whether a 19-round characteristic with a probability of 2−123 can be found such that ∆X20 ⊕ ∆X21 ⊕ ∆X22
+has exactly three nonzero bytes. This condition is equivalent to asking whether
+there exists one zero byte in ∆X20 ⊕∆X21 ⊕∆X22 . To test this, we integrate the
+following model into the SAT problem, enabling the solver to analyze whether
+the i-th byte of ∆X20 ⊕ ∆X21 ⊕ ∆X22 is zero.
+Model 4 In SM4’s 19-round optimal differential characteristic, the i-th byte of
+∆X20 ⊕ ∆X21 ⊕ ∆X22 is zero if and only if, for every 0 ⩽ j < 8, the variables
+(8i+j)
+(8i+j)
+(8i+j)
+∆X20
+, ∆X21
+, and ∆X22
+satisfy the following equations.
+(8i+j)
+
+∆X20
+
+(8i+j)
+
+∆X20
+
+(8i+j)
+
+∆X20
+
+∨ ∆X21
+
+(8i+j)
+
+∨ ∆X22
+
+(8i+j)
+
+= 1,
+
+∨ ∆X21
+
+∨ ∆X22
+
+(8i+j)
+
+= 1,
+
+∨ ∆X21
+
+∨ ∆X22
+
+(8i+j)
+
+= 1,
+
+(8i+j)
+(8i+j)
+
+(8i+j)
+(8i+j)
+(8i+j)
+∆X20
+∨ ∆X21
+∨ ∆X22
+= 1.
+
+Test results indicate that each of the four bytes in ∆X20 ⊕ ∆X21 ⊕ ∆X22
+can independently be zero. Naturally, this raises the question of whether two of
+these bytes can be zero simultaneously. To explore this, we adapt the constraints
+from Model 4 and integrate them into the SAT problem. The solver’s outcome
+reveals that, in SM4, no 19-round differential characteristic with probability
+2−123 has two zero bytes in the XOR of the last three branches of the output
+difference. Consequently, the minimum number of nonzero bytes in ∆X20 ⊕
+∆X21 ⊕ ∆X22 is three. This finding also establishes the upper bound on the presieving probability for optimal differential characteristics in key-recovery attacks,
+consistent with the pre-sieving probability of 2−11.03 reported in [19]. The four
+19-round optimal differential characteristics identified via Model 4 are provided
+in Table 2. In the next section, we examine the effectiveness of employing the
+fourth characteristic in differential key-recovery attacks.
+
+4
+
+Attack Performance with the New Distinguisher
+
+In this section, we present differential attacks on 23-round SM4 using a 19-round
+distinguisher derived from the fourth differential characteristic in Table 2. To
+ensure fair comparisons with previously proposed distinguishers, we reimplement
+the attacks in [19,26] using our new 19-round distinguisher. By applying the two
+paradigms introduced in Section 2.2, we accurately determine the complexities
+of these attacks in each scenario.
+
+16
+
+B. Li and L. Sun
+
+Table 2. Four optimal 19-round differential characteristics enabling effective differential attacks on SM4.
+Round r
+
+-
+
+∆Xr
+
+∆Xr+1
+
+∆Xr+2
+
+∆Xr+3
+
+-
+
+∆Xr
+
+∆Xr+1
+
+∆Xr+2
+
+∆Xr+3
+
+Pr
+
+f56d7cf5 25e04825 f5047cf5 d0ea34d0
+
+-
+
+b51f7c7c 7e8a2222 a7955e5e a81f7c7c
+
+25e04825 f5047cf5 d0ea34d0 25894825
+
+2−6
+
+2
+
+7e8a2222 a7955e5e a81f7c7c 7e8a2222
+
+f5047cf5 d0ea34d0 25894825 f5047cf5
+
+2−7
+
+3
+
+a7955e5e a81f7c7c 7e8a2222 1d955e5e
+
+d0ea34d0 25894825 f5047cf5 d06934d0
+
+2−6
+
+4
+
+a81f7c7c 7e8a2222 1d955e5e 0f1f7c7c
+
+25894825 f5047cf5 d06934d0 25634825
+
+2−6
+
+5
+
+7e8a2222 1d955e5e 0f1f7c7c 638a2222
+
+f5047cf5 d06934d0 25634825 f56d7cf5
+
+2−6
+
+d06934d0 25634825 f56d7cf5 d06934d0
+
+2−6
+
+25634825 f56d7cf5 d06934d0 25e04825
+
+2−7
+
+f56d7cf5 d06934d0 25e04825 f5877cf5
+
+2−7
+
+d06934d0 25e04825 f5877cf5 d00034d0
+
+2−7
+
+25e04825 f5877cf5 d00034d0 25e04825
+
+2−7
+
+f5877cf5 d00034d0 25e04825 f5047cf5
+
+2−7
+
+d00034d0 25e04825 f5047cf5 d0ea34d0
+
+2−7
+
+25e04825 f5047cf5 d0ea34d0 25894825
+
+2−7
+
+f5047cf5 d0ea34d0 25894825 f5047cf5
+
+2−7
+
+6
+7
+8
+9
+10
+11
+12
+13
+14
+
+1d955e5e 0f1f7c7c 638a2222 1d955e5e
+0f1f7c7c 638a2222 1d955e5e b51f7c7c
+638a2222 1d955e5e b51f7c7c c48a2222
+1d955e5e b51f7c7c c48a2222 00955e5e
+b51f7c7c c48a2222 00955e5e b51f7c7c
+c48a2222 00955e5e b51f7c7c 7e8a2222
+00955e5e b51f7c7c 7e8a2222 a7955e5e
+b51f7c7c 7e8a2222 a7955e5e a81f7c7c
+7e8a2222 a7955e5e a81f7c7c 7e8a2222
+
+The second differential characteristic
+
+638a2222 b51f7c7c 7e8a2222 a7955e5e
+
+1
+
+The first differential characteristic
+
+0
+
+d0ea34d0 25894825 f5047cf5 d06934d0
+
+2−6
+
+16
+
+a81f7c7c 7e8a2222 1d955e5e 0f1f7c7c
+
+25894825 f5047cf5 d06934d0 25634825
+
+2−6
+
+17
+
+7e8a2222 1d955e5e 0f1f7c7c 638a2222
+
+f5047cf5 d06934d0 25634825 f56d7cf5
+
+2−6
+
+18
+
+1d955e5e 0f1f7c7c 638a2222 1d955e5e
+
+d06934d0 25634825 f56d7cf5 d06934d0
+
+2−6
+
+19
+
+0f1f7c7c 638a2222 1d955e5e 7e8a2222
+
+25634825 f56d7cf5 d06934d0 f5047cf5
+
+2−6
+
+0
+
+1c1c1e07 18182806 1c1c2d07 0404f301
+
+6fb9b974 e793932d 6fb9b98f 882a2a9e
+
+-
+
+1
+
+18182806 1c1c2d07 0404f301 18181b06
+
+e793932d 6fb9b98f 882a2a9e e79393d6
+
+2−6
+
+2
+
+1c1c2d07 0404f301 18181b06 1c1c2d07
+
+6fb9b98f 882a2a9e e79393d6 6fb9b98f
+
+2−7
+
+3
+
+0404f301 18181b06 1c1c2d07 04043301
+
+882a2a9e e79393d6 6fb9b98f 882a2afb
+
+2−6
+
+4
+
+18181b06 1c1c2d07 04043301 1818e806
+
+e79393d6 6fb9b98f 882a2afb e7939348
+
+2−6
+
+6fb9b98f 882a2afb e7939348 6fb9b974
+
+2−6
+
+882a2afb e7939348 6fb9b974 882a2afb
+
+2−6
+
+e7939348 6fb9b974 882a2afb e793932d
+
+2−7
+
+6fb9b974 882a2afb e793932d 6fb9b9ea
+
+2−7
+
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+
+1c1c2d07 04043301 1818e806 1c1c1e07
+04043301 1818e806 1c1c1e07 04043301
+1818e806 1c1c1e07 04043301 18182806
+1c1c1e07 04043301 18182806 1c1ced07
+04043301 18182806 1c1ced07 04040001
+18182806 1c1ced07 04040001 18182806
+1c1ced07 04040001 18182806 1c1c2d07
+04040001 18182806 1c1c2d07 0404f301
+18182806 1c1c2d07 0404f301 18181b06
+
+The fourth differential characteristic
+
+a7955e5e a81f7c7c 7e8a2222 1d955e5e
+
+The third differential characteristic
+
+15
+
+882a2afb e793932d 6fb9b9ea 882a2a00
+
+2−7
+
+e793932d 6fb9b9ea 882a2a00 e793932d
+
+2−7
+
+6fb9b9ea 882a2a00 e793932d 6fb9b98f
+
+2−7
+
+882a2a00 e793932d 6fb9b98f 882a2a9e
+
+2−7
+
+e793932d 6fb9b98f 882a2a9e e79393d6
+
+2−7
+
+6fb9b98f 882a2a9e e79393d6 6fb9b98f
+
+2−7
+
+15
+
+0404f301 18181b06 1c1c2d07 04043301
+
+882a2a9e e79393d6 6fb9b98f 882a2afb
+
+2−6
+
+16
+
+18181b06 1c1c2d07 04043301 1818e806
+
+e79393d6 6fb9b98f 882a2afb e7939348
+
+2−6
+
+17
+
+1c1c2d07 04043301 1818e806 1c1c1e07
+
+6fb9b98f 882a2afb e7939348 6fb9b974
+
+2−6
+
+18
+
+04043301 1818e806 1c1c1e07 04043301
+
+882a2afb e7939348 6fb9b974 882a2afb
+
+2−6
+
+19
+
+1818e806 1c1c1e07 04043301 1c1c2d07
+
+e7939348 6fb9b974 882a2afb 6fb9b98f
+
+2−6
+
+1c1c2d07 0404f301 18181b06 1c1c2d07
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+17
+
+a′′0 ∈ {x ⊕ e79393d6 | PrT (0000003c, x) > 0}
+∆X0 = a′′0
+
+∆X1 = e793932d
+
+∆X2 = 6fb9b98f
+
+∆X3 = 882a2a9e
+
+19-round distinguisher with a probability of 2−123.99
+∆X19 = e7939348
+
+T
+
+∆X20 = 6fb9b974
+
+∆X20 = 6fb9b974
+RK19
+
+∆X21 = 882a2afb
+
+∆X22 = 6fb9b98f
+
+∆X21 = 882a2afb
+RK20
+
+∆X22 = 6fb9b98f
+
+∆X23 ∈ Λ′′
+
+∆X22 = 6fb9b98f
+RK21
+
+∆X23 ∈ Λ′′
+
+∆X24 ∈ F32
+2
+
+∆X23 ∈ Λ′′
+RK22
+
+∆X24 ∈ F32
+2
+
+∆X25 ∈ F32
+2
+
+∆X20 ⊕ ∆X21 ⊕ ∆X22 = 882a2a00
+
+T
+
+∆X21 = 882a2afb
+
+T
+
+∆X22 = 6fb9b98f
+
+T
+Λ′′ = {x ⊕ e7939348 | PrT (882a2a00, x) > 0}, |Λ′′ | = 1273
+∆X23 ∈ Λ′′
+
+∆X24 ∈ F32
+2
+
+∆X25 ∈ F32
+2
+
+∆X26 ∈ F32
+2
+
+Fig. 3. Key-recovery attack on 23-round SM4 using the new distinguisher.
+
+As depicted in Figure 3, the 19-round distinguisher is applied to the first
+nineteen rounds of the cipher in both attacks. Its input difference has the form
+(a′′0 , e793932d, 6fb9b98f, 882a2a9e),
+where a′′0 ∈ {x ⊕ e79393d6 | PrT (0000003c, x) > 0}. The probability of this 19round distinguisher is 2−123.99 . Because the input difference for the nineteenth
+T function is ∆X20 ⊕ ∆X21 ⊕ ∆X22 = 882a2a00, the difference ∆X23 can only
+take values from
+Λ′′ = {x ⊕ e7939348 | PrT (882a2a00, x) > 0} ,
+which contains 1273 possible elements.
+To generate plaintext pairs, we construct two pools, M1 and M2 , each containing 232 plaintexts:
+M1 = {(x, c1 , c2 , c3 ) | x ∈ F32
+2 },
+
+M2 = {(y, c1 ⊕ e793932d, c2 ⊕ 6fb9b98f, c3 ⊕ 882a2a9e) | y ∈ F32
+2 },
+where c1 , c2 , and c3 are fixed constants in F32
+2 . We refer to the pair (M1 , M2 )
+as a structure. Each structure contains 233 distinct plaintexts and can generate
+approximately 232 × 127 ≈ 238.99 plaintext pairs.
+
+18
+
+4.1
+
+B. Li and L. Sun
+
+Key-Recovery Attack Using the Method from [19]
+
+Following the approach in [19], the attack proceeds as follows.
+Step 1. Select m structures to obtain approximately m × 238.99 plaintext pairs,
+generated from m × 233 plaintexts.
+Step 2. For each plaintext pair (P, P̂ ), compute the difference of the corresponding ciphertexts (C, Ĉ). Check whether the first word of the ciphertext
+difference belongs to the set Λ′′ . If not, discard the pair. After this filtering
+process, the expected number of surviving pairs is m × 238.99 × 2−11.03 =
+m × 227.96 .
+Step 3. For each guess of RK22 [0], perform the following steps.
+(1) For each remaining ciphertext pair (C, Ĉ), where C = (C0 , C1 , C2 , C3 )
+and Ĉ = (Ĉ0 , Ĉ1 , Ĉ2 , Ĉ3 ), partially decrypt to obtain the output difference of the zeroth S-box in the 22-nd round d22 [0] = S(C0 [0] ⊕ C1 [0] ⊕
+C2 [0] ⊕ RK22 [0]) ⊕ S(Ĉ0 [0] ⊕ Ĉ1 [0] ⊕ Ĉ2 [0] ⊕ RK22 [0]), and compute
+c22 [0] = (L−1 (C3 ⊕ Ĉ3 ⊕ ∆X22 ))[0]. If RK22 [0] is guessed correctly,
+then for all correct ciphertext pairs, we must have d22 [0] = c22 [0]. Discard any pairs that do not satisfy this condition. After this sieving, approximately m × 227.96 × 2−8 = m × 219.96 ciphertext pairs remain.
+Next, repeat this guessing procedure for each of the other three bytes of
+RK22 . Compute the corresponding S-box output and input differences
+d22 [i] and c22 [i] for i = 1 to 3. At each step, discard pairs whenever
+d22 [i] ̸= c22 [i]. After these tests, the expected number of surviving pairs
+is m × 219.96 × 2−24 = m × 2−4.04 .
+(2) For each of the four bytes of RK21 , guess its value and perform similar
+sieving steps on the remaining ciphertext pairs, as in Step 3(1). After
+applying these tests, the number of surviving ciphertext pairs becomes
+m × 2−4.04 × 2−32 = m × 2−36.04 .
+(3) Similarly, guess each of the four bytes of RK20 and apply the same sieving
+process. After these tests, the expected number of remaining ciphertext
+pairs is m × 2−36.04 × 2−32 = m × 2−68.04 .
+(4) Next, guess RK19 [0] and perform sieving similar to Step 3(1). Because of
+1
+=
+the chosen set Λ′′ , the number of surviving pairs is m × 2−68.04 × 127
+−75.03
+m×2
+. For each of RK19 [1] and RK19 [2], guess its value and perform
+the same sieving as in Step 3(1). Each guess further reduces the number
+1
+. After both guesses, the expected number of
+of pairs by a factor of 127
+1
+−75.03
+−89.01
+× 127
+. Since the last S-box
+remaining pairs is m × 2
+2 = m×2
+in the 19-th round is inactive, there is no information available to recover
+RK19 [3].
+Step 4. After completing the sieving steps, any 120-bit subkey guess (RK19 [0-2],
+RK20 , RK21 , RK22 ) that leaves at least a threshold τ number of ciphertext
+pairs is considered a candidate key. For each candidate key, guess the missing byte RK19 [3]. Then, use at most two plaintext-ciphertext pairs to verify
+each fully reconstructed key by encrypting or decrypting with the guessed
+subkey values. Finally, the correct key is uniquely determined as the one
+that reproduces the observed ciphertexts or plaintexts upon encryption or
+decryption.
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+19
+
+Analysis of the Attack Using the Hypothesis Testing Paradigm. Since
+the probability of the distinguisher is 2−123.99 , the number of remaining pairs for
+the correct key follows a binomial distribution with parameters (N, p0 ), where
+N = m × 238.99 and p0 = 2−123.99 . For incorrect keys, the number of remaining
+pairs follows a binomial distribution with parameters (N, p), where p = 2−128 .
+We set the threshold τ to 3 and the success probability to 90%. By applying
+formulas (1) and (2) for numerical approximation, we obtain N = 2126.40 and
+β = 2−7.74 . Consequently, the number of structures used in the attack is m =
+287.41 , leading to a data complexity of 2120.41 chosen plaintexts.
+The overall time complexity can be divided into three parts. T1 = m × 233 is
+the cost of generating ciphertexts from the m × 233 plaintexts. T2 = 13 × m ×
+1
+1
+1
+8
+27.96
++ m × 227.96 × 256
+×
+227.96 × 28 × 2 × 41 × 23
+127 × 2 × 2 × 4 × 23 + m × 2
+256 2
+1
+1
+8
+( 127 ) × 2 × 2 × 4 × 23 accounts for enumerating 120 bits of the round keys.
+T3 = 2128 ×β is the exhaustive search over the remaining key candidates plus the
+unguessed 8-bit subkey. Summing these yields T1 + T2 + T3 = 2122.77 23-round
+encryptions. The memory required for the attack is primarily used to store the
+remaining m × 227.96 ciphertext pairs in the second step. Therefore, the memory
+complexity of the attack is approximately m × 228.96 = 2116.37 blocks.
+As summarized in Table 1, although our attack uses slightly more data than
+the 23-round attack of Su et al. [19], it achieves lower time and memory complexities while ensuring at least a 90% success probability.
+4.2
+
+Key-Recovery Attack Using the Method from [26]
+
+In the attack described in [26], the differential key recovery framework for partial substitution-permutation networks proposed in [1] is employed. Instead of
+performing exhaustive key enumeration, the primary idea is to generate key suggestions for each ciphertext pair. During the preprocessing phase, two matrices
+are constructed. The method for constructing matrices A and B is detailed in
+Appendix B. With these matrices prepared, the key-recovery process proceeds
+as follows.
+Step I. By selecting m structures, we generate approximately m × 238.99 plaintext pairs from m × 233 plaintexts.
+Step II. For each pair (P, P̂ ), compute the difference of the corresponding ciphertexts (C, Ĉ) and check whether the first word of the ciphertext difference is in Λ′′ . If it is not, discard the pair. After this filtering, around
+m × 238.99 × 2−11.03 = m × 227.96 pairs are expected to remain.
+Step III. For each remaining pair (C, Ĉ), perform the following steps.
+(1) Calculate (∆Z19 , ∆Z20 , ∆Z21 , ∆Z22 ) using matrix A from equation (6),
+which enables the computation of the input differences ∆Yi and output
+differences ∆Zi of the nonlinear transformation S in rounds 19 to 22.
+(2) For each of the 12 active S-boxes in rounds 20 to 22, check whether the
+differential transitions are possible according to the DDT; if any transition is impossible, discard this pair and return to Step III to analyze the
+next pair. In view of Property 1, the sieving probability for each active
+
+20
+
+B. Li and L. Sun
+
+S-box is 127
+number of surviving
+256 , so after these checks, the expected
+
+127 12
+27.96
+ciphertext pairs becomes m × 2
+× 256
+= m × 215.82 .
+(3) Based on the DDT, construct a list List of vectors containing all possible
+values for (Y19 [0-2], Y20 , Y21 , Y22 , Z19 [0-2], Z20 , Z21 , Z22 ), representing the
+inputs and outputs of all 15 active S-boxes in rounds 19 to 22. Since each
+S-box input and output occupies 16 bits, each of these vectors comprises
+240 bits.
+(4) For each 240-bit vector in List, combine it with the known ciphertext C,
+apply matrix B (see equation (7)), and derive a candidate 120-bit key
+(RK19 [0-2], RK20 , RK21 , RK22 ). Then guess the missing byte RK19 [3].
+Verify each candidate by testing at most two plaintext-ciphertext pairs;
+if the correct ciphertexts are reproduced, output the 128-bit key.
+Analysis of the Attack Using the Key Ranking Paradigm. In the keyranking framework, let p = 2−128 , p0 = 2−123.99 , and the total number of possible
+keys be κ = 2120 . Since each possible differential transition of the S-box yields an
+= 21.01 correct pairs, the number of remaining key candidates
+average of 2×126+4
+127
+15.82
+is ℓ = m × 2
+× 21.01×15 = m × 230.97 . By setting N = 2122.83 and applying
+formula (5), we determine that the attack’s success probability is approximately
+PS = 99.99%. From N = m × 238.99 , we obtain m = 283.84 , giving a data
+complexity of 2116.84 chosen plaintexts.
+The overall time complexity can be divided into four parts. T1 = m × 233 is
+the time required to encrypt m × 233 plaintexts. T2 is the time required to use
+matrix A to derive input and output differences for the nonlinear transformation
+S. Following the approach in [26], we treat one computation of expression (6)
+1
+as a single round of SM4 encryption. Thus, T2 = m × 227.96 × 23
+23-round
+encryptions. T3 is the time needed to use matrix B to obtain 120-bit round-key
+candidates. We treat one computation of expression (7) as four rounds of SM4
+4
+23-round encryptions. T4 is the time for
+encryption. Hence, T3 = m × 230.97 × 23
+brute-forcing the correct key, giving T4 = m × 230.97 × 28 23-round encryptions.
+Summing these contributions, we obtain T1 + T2 + T3 + T4 = 2122.84 23-round
+encryptions. The memory complexity is below 210 words of 128 bits, primarily
+for storing matrices A and B, since elements of List can be generated on-the-fly.
+As summarized in Table 1, although our attack uses more data than the 23round attack of Zhao et al. [26], it achieves lower time complexity and a higher
+success probability.
+
+5
+
+Conclusion
+
+In this work, we revisit the 19-round differential characteristics of SM4, motivated by the observation that previously published optimal characteristics do
+not necessarily yield practical efficiency in key-recovery attacks. To address this
+shortcoming, we employ an automated search method to examine the properties of all optimal 19-round differential characteristics of SM4. Through Boolean
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+21
+
+encodings and comprehensive exploration, we identify three structural properties common to all such optimal characteristics and highlight four representative characteristics that are particularly well-suited for key recovery. Our detailed analysis of one such characteristic reveals that although it requires slightly
+more data compared to certain existing 23-round attacks, it achieves lower time
+and memory complexities under both the hypothesis testing and key ranking
+paradigms. These findings not only deepen our understanding of SM4’s differential structure but also offer a strong foundation for future research.
+Acknowledgements The research leading to these results has received funding from the Shan-dong Key Research and Development Program (Grant No.
+2024ZLGX05), the National Natural Science Foundation of China (Grant No.
+62272273, Grant No. 62002201, Grant No. 62032014), and the National Cryptologic Science Fund of China (Grant No. 2025NCSF02006). Ling Sun gratefully
+acknowledges the support by the Program of TaiShan Scholars Special Fund for
+young scholars (Grant No. tsqn202306043) and Xiaomi Young Talents Program.
+
+References
+1. Bar-On, A., Dinur, I., Dunkelman, O., Lallemand, V., Keller, N., Tsaban, B.:
+Cryptanalysis of SP networks with partial non-linear layers. In: Oswald, E., Fischlin, M. (eds.) Advances in Cryptology - EUROCRYPT 2015 - 34th Annual International Conference on the Theory and Applications of Cryptographic Techniques, Sofia, Bulgaria, April 26-30, 2015, Proceedings, Part I. Lecture Notes in
+Computer Science, vol. 9056, pp. 315–342. Springer (2015). https://doi.org/10.
+1007/978-3-662-46800-5_13
+2. Biere, A., Faller, T., Fazekas, K., Fleury, M., Froleyks, N., Pollitt, F.: CaDiCaL,
+Gimsatul, IsaSAT and Kissat entering the SAT Competition 2024. In: Heule, M.,
+Iser, M., Järvisalo, M., Suda, M. (eds.) Proc. of SAT Competition 2024 – Solver,
+Benchmark and Proof Checker Descriptions. Department of Computer Science Report Series B, vol. B-2024-1, pp. 8–10. University of Helsinki (2024)
+3. Biham, E., Shamir, A.: Differential cryptanalysis of DES-like cryptosystems.
+In: Menezes, A.J., Vanstone, S.A. (eds.) CRYPTO’90. LNCS, vol. 537, pp.
+2–21. Springer, Berlin, Heidelberg (Aug 1991). https://doi.org/10.1007/
+3-540-38424-3_1
+4. Biham, E., Shamir, A.: Differential cryptanalysis of the full 16-round DES. In:
+Brickell, E.F. (ed.) CRYPTO’92. LNCS, vol. 740, pp. 487–496. Springer, Berlin,
+Heidelberg (Aug 1993). https://doi.org/10.1007/3-540-48071-4_34
+5. Blondeau, C., Gérard, B., Tillich, J.: Accurate estimates of the data complexity
+and success probability for various cryptanalyses. Des. Codes Cryptogr. 59(1-3),
+3–34 (2011). https://doi.org/10.1007/S10623-010-9452-2
+6. Brayton, R.K., Hachtel, G.D., McMullen, C.T., Sangiovanni-Vincentelli, A.L.:
+Logic Minimization Algorithms for VLSI Synthesis, The Kluwer International
+Series in Engineering and Computer Science, vol. 2. Springer (1984). https:
+//doi.org/10.1007/978-1-4613-2821-6
+7. Diffie, W., (translators), G.L.: SMS4 encryption algorithm for wireless networks.
+Cryptology ePrint Archive, Report 2008/329 (2008), https://eprint.iacr.org/
+2008/329
+
+22
+
+B. Li and L. Sun
+
+8. Etrog, J., Robshaw, M.J.B.: The cryptanalysis of reduced-round SMS4. In: Avanzi,
+R.M., Keliher, L., Sica, F. (eds.) SAC 2008. LNCS, vol. 5381, pp. 51–65. Springer,
+Berlin, Heidelberg (Aug 2009). https://doi.org/10.1007/978-3-642-04159-4_4
+9. Kim, T., Kim, J., Hong, S., Sung, J.: Linear and differential cryptanalysis of reduced SMS4 block cipher. Cryptology ePrint Archive, Report 2008/281 (2008),
+https://eprint.iacr.org/2008/281
+10. Li, B., Sun, L.: Exploring the optimal differential characteristics of SM4 (full version): Improving automatic search by including human insights. Cryptology ePrint
+Archive, Paper 2024/2003 (2024), https://eprint.iacr.org/2024/2003
+11. Li, L., Wu, W., Zhang, L., Zheng, Y.: New method to describe the differential
+distribution table for large S-boxes in MILP and its application. IET Inf. Secur.
+13(5), 479–485 (2019). https://doi.org/10.1049/IET-IFS.2018.5284
+12. Liu, F., Ji, W., Hu, L., Ding, J., Lv, S., Pyshkin, A., Weinmann, R.P.: Analysis
+of the SMS4 block cipher. In: Pieprzyk, J., Ghodosi, H., Dawson, E. (eds.) ACISP
+07. LNCS, vol. 4586, pp. 158–170. Springer, Berlin, Heidelberg (Jul 2007). https:
+//doi.org/10.1007/978-3-540-73458-1_13
+13. Liu, Y., Liang, H., Li, M., Huang, L., Hu, K., Yang, C., Wang, M.: STP models
+of optimal differential and linear trail for S-box based ciphers. Cryptology ePrint
+Archive, Report 2019/025 (2019), https://eprint.iacr.org/2019/025
+14. Liu, Y., Liang, H., Li, M., Huang, L., Hu, K., Yang, C., Wang, M.: STP models
+of optimal differential and linear trail for s-box based ciphers. Sci. China Inf. Sci.
+64(5) (2021). https://doi.org/10.1007/S11432-018-9772-0
+15. Matsui, M.: On correlation between the order of S-boxes and the strength of DES.
+In: Santis, A.D. (ed.) Advances in Cryptology - EUROCRYPT ’94, Workshop on
+the Theory and Application of Cryptographic Techniques, Perugia, Italy, May 912, 1994, Proceedings. Lecture Notes in Computer Science, vol. 950, pp. 366–375.
+Springer (1994). https://doi.org/10.1007/BFB0053451
+16. Rijmen, V., Daemen, J.: Advanced encryption standard. Proceedings of federal
+information processing standards publications, national institute of standards and
+technology 19, 22 (2001)
+17. Sinz, C.: Towards an optimal CNF encoding of boolean cardinality constraints.
+In: van Beek, P. (ed.) Principles and Practice of Constraint Programming - CP
+2005, 11th International Conference, CP 2005, Sitges, Spain, October 1-5, 2005,
+Proceedings. Lecture Notes in Computer Science, vol. 3709, pp. 827–831. Springer
+(2005). https://doi.org/10.1007/11564751_73
+18. Soos, M., Nohl, K., Castelluccia, C.: Extending SAT solvers to cryptographic problems. In: Kullmann, O. (ed.) Theory and Applications of Satisfiability Testing SAT 2009, 12th International Conference, SAT 2009, Swansea, UK, June 30 - July
+3, 2009. Proceedings. Lecture Notes in Computer Science, vol. 5584, pp. 244–257.
+Springer (2009). https://doi.org/10.1007/978-3-642-02777-2_24
+19. Su, B., Wu, W., Zhang, W.: Differential cryptanalysis of SMS4 block cipher. Cryptology ePrint Archive, Report 2010/062 (2010), https://eprint.iacr.org/2010/
+062
+20. Sun, L., Wang, M.: SoK: Modeling for large S-boxes oriented to differential probabilities and linear correlations. IACR Trans. Symm. Cryptol. 2023(1), 111–151
+(2023). https://doi.org/10.46586/tosc.v2023.i1.111-151
+21. Sun, L., Wang, W., Wang, M.: Accelerating the search of differential and linear
+characteristics with the SAT method. IACR Trans. Symm. Cryptol. 2021(1), 269–
+315 (2021). https://doi.org/10.46586/tosc.v2021.i1.269-315
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+23
+
+22. Wang, S., Feng, D., Hu, B., Guan, J., Zhang, K., Shi, T.: New method for combining
+Matsui’s bounding conditions with sequential encoding method. Des. Codes Cryptogr. 91(11), 3603–3642 (2023). https://doi.org/10.1007/S10623-023-01259-9
+23. Zhang, J., Wu, W., Zheng, Y.: Security of SM4 against (related-key) differential cryptanalysis. In: Bao, F., Chen, L., Deng, R.H., Wang, G. (eds.) Information Security Practice and Experience - 12th International Conference, ISPEC 2016, Zhangjiajie, China, November 16-18, 2016, Proceedings. Lecture Notes
+in Computer Science, vol. 10060, pp. 65–78 (2016). https://doi.org/10.1007/
+978-3-319-49151-6_5
+24. Zhang, L., Zhang, W., Wu, W.: Cryptanalysis of reduced-round SMS4 block cipher. In: Mu, Y., Susilo, W., Seberry, J. (eds.) ACISP 08. LNCS, vol. 5107,
+pp. 216–229. Springer, Berlin, Heidelberg (Jul 2008). https://doi.org/10.1007/
+978-3-540-70500-0_16
+25. Zhang, W., Wu, W., Feng, D., Su, B.: Some new observations on the SMS4 block
+cipher in the chinese WAPI standard. In: Bao, F., Li, H., Wang, G. (eds.) Information Security Practice and Experience, 5th International Conference, ISPEC 2009, Xi’an, China, April 13-15, 2009, Proceedings. Lecture Notes in Computer Science, vol. 5451, pp. 324–335. Springer (2009). https://doi.org/10.1007/
+978-3-642-00843-6_28
+26. ZHAO Yan-Min, L.Y., Mei-Qin, W.: Improved differential attack on 23-round
+SMS4. Journal of Software 29(9), 2821 (2018). https://doi.org/10.13328/j.
+cnki.jos.005271
+
+Appendix
+A
+
+Two SAT Models for the Objective Function
+
+Model 5 is based on the sequential encoding method described in [17], while
+Model 6 is the enhanced model proposed by Wang et al. [22].
+Model 5 (Sequential Encoding Method, [17]) To encode the cardinality inγ−1
+P
+equality
+wi ⩽ ϖ, auxiliary Boolean variables σi,j (0 ⩽ i ⩽ γ − 2, 0 ⩽ j ⩽
+i=0
+
+ϖ − 1) must be introduced. The constraint
+
+γ−1
+P
+i=0
+
+wi ⩽ ϖ holds if and only if all of
+
+the following clauses are satisfied simultaneously.
+w0 ∨ σ0,0 = 1
+
+σ0,j = 1, 1 ⩽ j ⩽ ϖ − 1
+wi ∨ σi,0 = 1
+
+σi−1,0 ∨ σi,0 = 1
+
+)
+wi ∨ σi−1,j−1 ∨ σi,j = 1
+σi−1,j ∨ σi,j = 1
+
+wi ∨ σi−1,ϖ−1 = 1
+
+wγ−1 ∨ σγ−2,ϖ−1 = 1
+
+
+
+
+
+
+
+
+
+
+1 ⩽ j ⩽ ϖ − 1
+
+
+
+
+
+
+
+
+1 ⩽ i ⩽ γ − 2.
+
+24
+
+B. Li and L. Sun
+
+Model 6 (Enhanced Sequential Encoding Method, [22]) The dominated
+γ−1
+P
+inequality
+wi ⩽ ϖ requires introducing auxiliary Boolean variables σi,j (0 ⩽
+i=0
+
+i ⩽ γ − 2, 0 ⩽ j ⩽ ϖ − 1). The constraints
+
+γ−1
+P
+i=0
+
+wi ⩽ ϖ and l
+
+γ′
+
+⩽
+
+′
+γP
+−1
+
+i=0
+
+wi ⩽ uγ ′
+
+(0 ⩽ γ ′ < γ) are satisfied if and only if all of the following clauses hold.
+if l0 = 0 and u0 = 1 then w0 ∨ σ0,0 = 1
+
+if l0 = u0 = 0 then w0 = 1
+
+if l0 = 1 and u0 = 1 then w0 = 1
+if uγ ′ = 0 then wγ ′ = 1
+if uγ ′ > 0
+if lγ ′ = 0 then wγ ′ ∨ σγ ′ ,0 = 1
+if lγ ′ −1 < uγ ′ −1 then σγ ′ −1,0 ∨ σγ ′ ,0 = 1
+
+if lγ ′ −1 = j then
+
+
+
+
+
+wγ ′ ∨ σγ ′ ,j = 1
+
+
+
+ j ⩾ max(l ′ , 1)
+if lγ ′ −1 < j and uγ ′ −1 ⩾ j then
+γ
+
+′
+′
+′
+and j ⩽ uγ ′ − 1
+wγ ∨ σγ −1,j−1 ∨ σγ ,j = 1
+
+
+
+
+if lγ ′ −1 ⩽ j and uγ ′ −1 ⩾ j + 1 then 
+
+
+
+σγ ′ −1,j ∨ σγ ′ ,j = 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ γ ′ ⩾ 1 and
+
+
+γ ′ ⩽ γ − 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if uγ ′ −1 = uγ ′ and lγ ′ −1 < uγ ′ then wγ ′ ∨ σγ ′ −1,uγ ′ −1 = 1 
+
+
+
+
+if lγ ′ −1 = uγ ′ then wγ ′ = 1
+if uγ−1 = 0 then wγ−1 = 0
+if uγ−1 > 0
+if uγ−2 = uγ−1 and lγ−2 < uγ−1 then wγ−1 ∨ σγ−2,uγ−1 −1 = 1
+if lγ−2 = uγ−1 then wγ−1 = 1
+According to Wang et al., the upper bound uγ ′ and lower bound lγ ′ for
+partial sums can be derived by applying Matsui’s bounding conditions [15] to
+solve small-scale mixed integer linear programming (MILP) problems. For more
+details, see [22].
+
+B
+
+Creation of Two Matrices Using the Method from [1]
+
+The first matrix A is used to compute the differential transitions for each ciphertext pair based on the ciphertext differences. Let ∆Zi denote the output difference of the nonlinear transformation S in the i-th round. As shown
+in Figure 3, four linear equations can be derived for rounds 19 ⩽ i < 23:
+∆Xi ⊕ L(∆Zi ) = ∆Xi+4 . Since the values of ∆Xi for all 19 ⩽ i ⩽ 26 are
+known  either from the output difference of the 19-round distinguisher or from
+
+Exploring Key-Recovery-Friendly Differential Distinguishers for SM4
+
+25
+
+the ciphertext differences  it is possible to calculate ∆Z19 , ∆Z20 , ∆Z21 , and
+∆Z22 via the equation
+  −1
+
+
+  −1
+ 
+∆Z19
+L
+0
+0
+0
+∆C0
+L (∆X19 )
+
+∆Z20   0 L−1 0
+  −1
+
+0 
+
+=
+ × ∆C1  ⊕ L−1 (∆X20 ),
+(6)
+−1
+∆Z21   0
+0 L
+0  ∆C2  L (∆X21 )
+−1
+−1
+∆Z22
+0
+0
+0 L
+∆C3
+L (∆X22 )
+Matrix A
+where L−1 is the matrix representation of the inverse of L. Consequently, the
+matrix A that we seek to construct is the block diagonal matrix in expression
+(6), where each diagonal element is L−1 .
+The second matrix B is used to generate key suggestions based on the ciphertexts and the differential transitions. Let ∆Yi denote the input difference
+to the nonlinear transformation S in the i-th round, and let Yi and Zi be the
+input and output values of S in the i-th round, respectively. After determining
+the differential transitions (∆Yi , ∆Zi ) for all rounds 19 ⩽ i < 23, the values of
+Yi and Zi become almost uniquely determined (ignoring the ciphertext order
+within each pair). Referring to the cipher structure in Figure 3, we have the
+following equations for 0 ⩽ i < 4:
+RKi+19 = Xi+20 ⊕ Xi+21 ⊕ Xi+22 ⊕ Yi+19 ,
+Xi+19 = Ci ⊕ L (Zi+19 ) , Xi+23 = Ci .
+
+By combining these equations, we can derive expressions for RK19 , RK20 , RK21 ,
+and RK22
+
+
+Y19
+ Y20 
+
+
+ Y21 
+
+
+
+
+ 
+  Y22 
+
+
+
+RK19
+1 0 0 0 0 L L L 0 1 1 1
+Z19 
+RK20   0 1 0 0 0 0 L L 1 0 1 1  Z20 
+ 
+ 
+
+
+(7)
+RK21  =  0 0 1 0 0 0 0 L 1 1 0 1  × Z21 .
+
+
+
+
+RK22
+0 0 0 1 0 0 0 0 1 1 1 0
+Z22 
+ C0 
+Matrix B
+
+
+ C1 
+
+
+ C2 
+C3
+The matrix B we construct is the block matrix in expression (7).
+
+
