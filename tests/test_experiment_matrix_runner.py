@@ -145,3 +145,44 @@ def test_run_innovation_one_matrix_can_use_literature_difference_profile(tmp_pat
     assert rows[0]["difference_profile"] == "speck32_gohr2019"
     assert rows[0]["difference_member"] == 0
     assert "Gohr 2019" in rows[0]["difference_source"]
+
+
+def test_run_innovation_one_matrix_can_train_structure_moe(tmp_path: Path):
+    output_path = tmp_path / "moe.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "moe_hard",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--difference-profile",
+            "speck32_gohr2019",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["model"] == "moe_hard"
+    assert rows[0]["gate_mode"] == "hard"
+    assert rows[0]["gate_weights_mean"]["resnet_bitslice"] == 0.55
+    assert rows[0]["gate_weights_mean"]["dbitnet_dilated_cnn"] == 0.30

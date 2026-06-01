@@ -9,8 +9,10 @@ from blockcipher_ai_eval.models import (
     LstmRoundSeqDistinguisher,
     MlpDistinguisher,
     ResNetBitSliceDistinguisher,
+    StructureAwareMoEDistinguisher,
     TransformerEncoderDistinguisher,
 )
+from blockcipher_ai_eval.structure_features import STRUCTURE_FEATURE_NAMES
 
 
 def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
@@ -46,4 +48,25 @@ def build_model(name: str, input_bits: int, hidden_bits: int) -> nn.Module:
         return LstmRoundSeqDistinguisher(input_bits=input_bits, hidden_bits=hidden_bits)
     if name == "transformer_encoder":
         return TransformerEncoderDistinguisher(input_bits=input_bits, hidden_bits=hidden_bits)
+    if name == "moe_uniform":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="uniform",
+        )
+    if name == "moe_hard":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="hard",
+        )
+    if name == "moe_soft":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="soft",
+        )
     raise ValueError(f"unsupported model: {name}")

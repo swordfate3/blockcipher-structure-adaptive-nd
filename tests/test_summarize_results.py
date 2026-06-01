@@ -22,6 +22,7 @@ def test_summarize_innovation_one_results_writes_csv(tmp_path: Path):
             "difference_profile": "speck32_gohr2019",
             "difference_member": 0,
             "difference_source": "Gohr 2019 SPECK32/64 neural distinguisher",
+            "gate_mode": "hard",
             "samples_per_class": 8,
             "metrics": {"accuracy": 0.60, "auc": 0.70, "advantage": 0.20, "loss": 0.6},
         },
@@ -38,6 +39,7 @@ def test_summarize_innovation_one_results_writes_csv(tmp_path: Path):
             "difference_profile": "speck32_gohr2019",
             "difference_member": 0,
             "difference_source": "Gohr 2019 SPECK32/64 neural distinguisher",
+            "gate_mode": "hard",
             "samples_per_class": 8,
             "metrics": {"accuracy": 0.80, "auc": 0.90, "advantage": 0.60, "loss": 0.4},
         },
@@ -67,6 +69,7 @@ def test_summarize_innovation_one_results_writes_csv(tmp_path: Path):
     assert summary_rows[0]["difference_profile"] == "speck32_gohr2019"
     assert summary_rows[0]["difference_member"] == "0"
     assert "Gohr 2019" in summary_rows[0]["difference_source"]
+    assert summary_rows[0]["gate_mode"] == "hard"
     assert float(summary_rows[0]["accuracy_mean"]) == 0.70
     assert "calibrated_accuracy_mean" in summary_rows[0]
     assert int(summary_rows[0]["runs"]) == 2

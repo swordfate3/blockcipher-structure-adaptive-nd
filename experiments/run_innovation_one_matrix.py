@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import torch
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
@@ -20,6 +22,8 @@ from blockcipher_ai_eval.experiments import (
     difference_for_profile,
     literature_difference_profiles,
 )
+from blockcipher_ai_eval.innovation_one import CipherProfile
+from blockcipher_ai_eval.structure_features import structure_feature_vector
 from blockcipher_ai_eval.training import TrainingConfig, train_binary_classifier
 
 
@@ -94,6 +98,7 @@ def main() -> None:
             input_bits=train_dataset.features.shape[1],
             hidden_bits=args.hidden_bits,
         )
+        _configure_structure_aware_model(model, task["cipher_key"], task["rounds"])
         result = train_binary_classifier(
             model,
             train_dataset,
@@ -131,6 +136,7 @@ def main() -> None:
                     "input_bits": int(train_dataset.features.shape[1]),
                     "feature_encoding": task["feature_encoding"],
                 },
+                **_model_metadata(model),
             }
         )
 
@@ -240,6 +246,40 @@ def _difference_metadata(
         "difference_member": member_index,
         "difference_source": profile.source,
     }
+
+
+def _configure_structure_aware_model(model: Any, cipher_key: str, rounds: int) -> None:
+    if not hasattr(model, "set_structure_features"):
+        return
+    vector = structure_feature_vector(_cipher_profile(cipher_key), rounds)
+    model.set_structure_features(torch.tensor(vector, dtype=torch.float32))
+
+
+def _model_metadata(model: Any) -> dict[str, Any]:
+    if not hasattr(model, "gate_summary"):
+        return {}
+    summary = model.gate_summary()
+    gate_weights = {
+        key.removeprefix("gate_weight_"): value
+        for key, value in summary.items()
+        if key.startswith("gate_weight_")
+    }
+    return {
+        "gate_mode": summary["gate_mode"],
+        "gate_weights_mean": gate_weights,
+    }
+
+
+def _cipher_profile(cipher_key: str) -> CipherProfile:
+    mapping = {
+        "speck32": CipherProfile.speck32_64,
+        "present80": CipherProfile.present80,
+        "sm4": CipherProfile.sm4,
+    }
+    try:
+        return mapping[cipher_key]()
+    except KeyError as exc:
+        raise ValueError(f"unsupported cipher key: {cipher_key}") from exc
 
 
 def _cipher_key(cipher_name: str) -> str:

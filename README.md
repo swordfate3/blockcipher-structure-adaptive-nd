@@ -134,3 +134,36 @@ The summary CSV reports both fixed-threshold metrics and calibrated metrics
 often learn a useful ranking before their probability threshold is calibrated.
 It also keeps `difference_profile`, `difference_member`, and
 `difference_source` so ablation rows remain traceable to the literature setting.
+
+## Structure-Aware MoE
+
+The matrix runner also supports a first structure-aware mixture-of-experts
+model. It fuses ResNet-BitSlice, DBitNet-DilatedCNN, CNN-SBoxLocal, and MLP
+experts with a gate derived from cipher-structure features.
+
+Available MoE model keys:
+
+- `moe_uniform`: equal expert weights.
+- `moe_hard`: fixed structure-aware weights for ARX, SPN, and Feistel-like ciphers.
+- `moe_soft`: trainable softmax gate over structure features.
+
+Small smoke run:
+
+```bash
+uv run python experiments/run_innovation_one_matrix.py \
+  --ciphers speck32 \
+  --models moe_uniform moe_hard moe_soft \
+  --rounds 5 \
+  --seeds 0 \
+  --samples-per-class 4096 \
+  --epochs 4 \
+  --batch-size 512 \
+  --hidden-bits 32 \
+  --feature-encoding ciphertext_pair_xor_bits \
+  --difference-profile speck32_gohr2019 \
+  --output outputs/innovation_one_moe_smoke.jsonl
+```
+
+MoE JSONL rows include `gate_mode` and `gate_weights_mean` for interpretability.
+This first version uses per-cipher input widths; cross-cipher mixed batches with
+padding or adapters are intentionally left for a later experiment.

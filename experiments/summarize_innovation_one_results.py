@@ -21,6 +21,7 @@ GROUP_FIELDS = (
     "difference_profile",
     "difference_member",
     "difference_source",
+    "gate_mode",
     "samples_per_class",
 )
 METRIC_FIELDS = (
