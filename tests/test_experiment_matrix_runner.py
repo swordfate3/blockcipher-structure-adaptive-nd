@@ -104,3 +104,44 @@ def test_run_innovation_one_matrix_can_execute_literature_ranked_plan(tmp_path: 
     assert rows[0]["training"]["input_bits"] == 96
     assert rows[1]["cipher"] == "PRESENT-80"
     assert "wrote 2 rows" in completed.stdout
+
+
+def test_run_innovation_one_matrix_can_use_literature_difference_profile(tmp_path: Path):
+    output_path = tmp_path / "speck_profile.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "mlp",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--difference-profile",
+            "speck32_gohr2019",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["input_difference"] == 0x00400000
+    assert rows[0]["difference_profile"] == "speck32_gohr2019"
+    assert rows[0]["difference_member"] == 0
+    assert "Gohr 2019" in rows[0]["difference_source"]

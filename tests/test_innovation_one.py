@@ -7,6 +7,7 @@ from blockcipher_ai_eval.innovation_one import (
     default_literature_rules,
     rank_architectures,
     recommended_model_key,
+    recommended_difference_profile,
     recommend_experiment_configs,
     summarize_recommendation,
 )
@@ -136,12 +137,23 @@ def test_recommend_experiment_configs_keeps_ranked_literature_metadata():
     assert configs[0]["rounds"] == 3
     assert configs[0]["seed"] == 0
     assert configs[0]["model_key"] == "resnet_bitslice"
+    assert configs[0]["difference_profile"] == "speck32_gohr2019"
+    assert configs[0]["difference_member"] == 0
 
 
 def test_recommended_model_key_maps_paper_architecture_to_runnable_model():
     assert recommended_model_key("ResNet-BitSlice") == "resnet_bitslice"
     assert recommended_model_key("CNN-SBoxLocal") == "cnn"
     assert recommended_model_key("MLP-Baseline") == "mlp"
+
+
+def test_recommended_difference_profile_maps_cipher_to_literature_input_difference():
+    assert recommended_difference_profile("SPECK32/64") == ("speck32_gohr2019", 0)
+    assert recommended_difference_profile("PRESENT-80") == (
+        "present_wang_jain2021",
+        0,
+    )
+    assert recommended_difference_profile("SM4") == ("sm4_yu2023_conv_resnet", 0)
 
 
 def test_summarize_recommendation_returns_thesis_ready_claim():

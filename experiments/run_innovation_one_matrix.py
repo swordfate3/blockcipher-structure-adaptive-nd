@@ -13,7 +13,13 @@ if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
 from blockcipher_ai_eval.datasets import DifferentialDatasetConfig, make_differential_dataset
-from blockcipher_ai_eval.experiments import build_cipher, build_model, default_difference
+from blockcipher_ai_eval.experiments import (
+    build_cipher,
+    build_model,
+    default_difference,
+    difference_for_profile,
+    literature_difference_profiles,
+)
 from blockcipher_ai_eval.training import TrainingConfig, train_binary_classifier
 
 
@@ -37,6 +43,17 @@ def parse_args() -> argparse.Namespace:
         help="Feature encoding for generated ciphertext pairs.",
     )
     parser.add_argument(
+        "--difference-profile",
+        default=None,
+        help="Optional literature-backed input-difference profile.",
+    )
+    parser.add_argument(
+        "--difference-member",
+        type=int,
+        default=0,
+        help="Member index for multi-fixed difference profiles.",
+    )
+    parser.add_argument(
         "--plan",
         default=None,
         help="Optional literature-ranked CSV plan from build_innovation_one_matrix.py.",
@@ -53,7 +70,7 @@ def main() -> None:
 
     for task in _build_tasks(args):
         cipher = build_cipher(task["cipher_key"], task["rounds"])
-        input_difference = default_difference(task["cipher_key"])
+        input_difference = task["input_difference"]
         train_dataset = make_differential_dataset(
             DifferentialDatasetConfig(
                 cipher=cipher,
@@ -102,6 +119,9 @@ def main() -> None:
                 "rounds": task["rounds"],
                 "seed": task["seed"],
                 "input_difference": input_difference,
+                "difference_profile": task.get("difference_profile", ""),
+                "difference_member": task.get("difference_member", ""),
+                "difference_source": task.get("difference_source", ""),
                 "samples_per_class": task["samples_per_class"],
                 "feature_encoding": task["feature_encoding"],
                 "metrics": result.final_metrics,
@@ -122,7 +142,12 @@ def main() -> None:
 
 def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
     if args.plan:
-        return _tasks_from_plan(Path(args.plan), feature_encoding=args.feature_encoding)
+        return _tasks_from_plan(
+            Path(args.plan),
+            feature_encoding=args.feature_encoding,
+            difference_profile=args.difference_profile,
+            difference_member=args.difference_member,
+        )
 
     tasks: list[dict[str, Any]] = []
     for cipher_key in args.ciphers:
@@ -138,17 +163,39 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "seed": seed,
                             "samples_per_class": args.samples_per_class,
                             "feature_encoding": args.feature_encoding,
+                            **_difference_metadata(
+                                cipher_key,
+                                args.difference_profile,
+                                args.difference_member,
+                            ),
                         }
                     )
     return tasks
 
 
-def _tasks_from_plan(path: Path, feature_encoding: str) -> list[dict[str, Any]]:
+def _tasks_from_plan(
+    path: Path,
+    feature_encoding: str,
+    difference_profile: str | None,
+    difference_member: int,
+) -> list[dict[str, Any]]:
     with path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     return [
-        {
-            "cipher_key": _cipher_key(row["cipher"]),
+        _plan_task(row, feature_encoding, difference_profile, difference_member)
+        for row in rows
+    ]
+
+
+def _plan_task(
+    row: dict[str, str],
+    feature_encoding: str,
+    difference_profile: str | None,
+    difference_member: int,
+) -> dict[str, Any]:
+    cipher_key = _cipher_key(row["cipher"])
+    task = {
+        "cipher_key": cipher_key,
             "model_key": row["model_key"],
             "architecture": row["network"],
             "architecture_rank": int(row["architecture_rank"]),
@@ -159,9 +206,40 @@ def _tasks_from_plan(path: Path, feature_encoding: str) -> list[dict[str, Any]]:
             "seed": int(row["seed"]),
             "samples_per_class": int(row["samples_per_class"]),
             "feature_encoding": row.get("feature_encoding") or feature_encoding,
+    }
+    task.update(
+        _difference_metadata(
+            cipher_key,
+            row.get("difference_profile") or difference_profile,
+            int(row.get("difference_member") or difference_member),
+        )
+    )
+    return task
+
+
+def _difference_metadata(
+    cipher_key: str,
+    profile_name: str | None,
+    member_index: int,
+) -> dict[str, Any]:
+    if not profile_name:
+        return {
+            "input_difference": default_difference(cipher_key),
+            "difference_profile": "",
+            "difference_member": "",
+            "difference_source": "",
         }
-        for row in rows
-    ]
+    profile = literature_difference_profiles()[profile_name]
+    if profile.cipher != cipher_key:
+        raise ValueError(
+            f"difference profile {profile_name} is for {profile.cipher}, not {cipher_key}"
+        )
+    return {
+        "input_difference": difference_for_profile(profile_name, member_index),
+        "difference_profile": profile_name,
+        "difference_member": member_index,
+        "difference_source": profile.source,
+    }
 
 
 def _cipher_key(cipher_name: str) -> str:

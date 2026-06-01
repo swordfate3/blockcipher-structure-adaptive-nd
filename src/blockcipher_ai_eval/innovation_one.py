@@ -211,6 +211,11 @@ MODEL_KEYS = {
     "Transformer-Encoder": "transformer_encoder",
     "MLP-Baseline": "mlp",
 }
+LITERATURE_DIFFERENCE_PROFILES = {
+    "SPECK32/64": ("speck32_gohr2019", 0),
+    "PRESENT-80": ("present_wang_jain2021", 0),
+    "SM4": ("sm4_yu2023_conv_resnet", 0),
+}
 
 
 def default_literature_rules() -> list[LiteratureRule]:
@@ -333,6 +338,15 @@ def recommended_model_key(architecture_name: str) -> str:
         raise ValueError(f"unsupported architecture: {architecture_name}") from exc
 
 
+def recommended_difference_profile(cipher_name: str) -> tuple[str, int]:
+    """Return the literature-backed input-difference profile for a cipher."""
+
+    try:
+        return LITERATURE_DIFFERENCE_PROFILES[cipher_name]
+    except KeyError as exc:
+        raise ValueError(f"unsupported cipher for difference profile: {cipher_name}") from exc
+
+
 def rank_architectures(
     cipher: CipherProfile,
     networks: Iterable[NetworkProfile],
@@ -430,6 +444,9 @@ def recommend_experiment_configs(
             literature_rules=literature_rules,
         )
         for architecture_rank, architecture in enumerate(ranked[:top_k], start=1):
+            difference_profile, difference_member = recommended_difference_profile(
+                cipher.name
+            )
             for round_count in rounds:
                 for seed in seeds:
                     rows.append(
@@ -444,6 +461,8 @@ def recommend_experiment_configs(
                             "rounds": round_count,
                             "seed": seed,
                             "samples_per_class": samples_per_class,
+                            "difference_profile": difference_profile,
+                            "difference_member": difference_member,
                             "evidence": "; ".join(architecture.evidence),
                             "literature": "; ".join(architecture.literature),
                         }

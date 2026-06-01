@@ -18,6 +18,9 @@ GROUP_FIELDS = (
     "matching_score",
     "literature",
     "rounds",
+    "difference_profile",
+    "difference_member",
+    "difference_source",
     "samples_per_class",
 )
 METRIC_FIELDS = (
