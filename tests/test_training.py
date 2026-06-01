@@ -21,11 +21,23 @@ def test_evaluate_binary_classifier_returns_core_metrics():
 
     metrics = evaluate_binary_classifier(model, dataset, batch_size=8)
 
-    assert set(metrics) == {"loss", "accuracy", "advantage", "auc", "best_accuracy"}
+    assert set(metrics) == {
+        "loss",
+        "accuracy",
+        "advantage",
+        "auc",
+        "best_accuracy",
+        "calibrated_accuracy",
+        "calibrated_advantage",
+        "calibrated_threshold",
+    }
     assert 0.0 <= metrics["accuracy"] <= 1.0
     assert 0.0 <= metrics["best_accuracy"] <= 1.0
+    assert 0.0 <= metrics["calibrated_accuracy"] <= 1.0
     assert -1.0 <= metrics["advantage"] <= 1.0
+    assert -1.0 <= metrics["calibrated_advantage"] <= 1.0
     assert 0.0 <= metrics["auc"] <= 1.0
+    assert 0.0 <= metrics["calibrated_threshold"] <= 1.0
 
 
 def test_train_binary_classifier_returns_history_and_final_metrics():

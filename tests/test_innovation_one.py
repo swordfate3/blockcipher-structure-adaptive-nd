@@ -48,6 +48,18 @@ def test_rank_architectures_keeps_transformer_as_high_cost_candidate():
     assert transformer.score < ranked[0].score
 
 
+def test_rank_architectures_prefers_sm4_convolutional_candidates_over_lstm():
+    cipher = CipherProfile.sm4()
+    networks = NetworkProfile.default_candidates()
+
+    ranked = rank_architectures(cipher, networks)
+    top_names = {ranked[0].name, ranked[1].name}
+
+    assert "CNN-SBoxLocal" in top_names
+    assert "DBitNet-DilatedCNN" in top_names
+    assert ranked.index(next(item for item in ranked if item.name == "RNN-LSTM-RoundSeq")) > 1
+
+
 def test_default_literature_rules_cover_core_cipher_structures():
     rules = default_literature_rules()
 

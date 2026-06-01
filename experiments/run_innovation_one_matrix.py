@@ -31,6 +31,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--hidden-bits", type=int, default=64)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument(
+        "--feature-encoding",
+        default="ciphertext_pair_bits",
+        choices=["ciphertext_pair_bits", "ciphertext_pair_xor_bits"],
+        help="Feature encoding for generated ciphertext pairs.",
+    )
+    parser.add_argument(
         "--plan",
         default=None,
         help="Optional literature-ranked CSV plan from build_innovation_one_matrix.py.",
@@ -54,6 +60,7 @@ def main() -> None:
                 input_difference=input_difference,
                 samples_per_class=task["samples_per_class"],
                 seed=task["seed"],
+                feature_encoding=task["feature_encoding"],
             )
         )
         validation_dataset = make_differential_dataset(
@@ -62,6 +69,7 @@ def main() -> None:
                 input_difference=input_difference,
                 samples_per_class=max(8, task["samples_per_class"] // 2),
                 seed=task["seed"] + 10_000,
+                feature_encoding=task["feature_encoding"],
             )
         )
         model = build_model(
@@ -95,9 +103,14 @@ def main() -> None:
                 "seed": task["seed"],
                 "input_difference": input_difference,
                 "samples_per_class": task["samples_per_class"],
+                "feature_encoding": task["feature_encoding"],
                 "metrics": result.final_metrics,
                 "history": result.history,
-                "training": result.metadata,
+                "training": {
+                    **result.metadata,
+                    "input_bits": int(train_dataset.features.shape[1]),
+                    "feature_encoding": task["feature_encoding"],
+                },
             }
         )
 
@@ -109,7 +122,7 @@ def main() -> None:
 
 def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
     if args.plan:
-        return _tasks_from_plan(Path(args.plan))
+        return _tasks_from_plan(Path(args.plan), feature_encoding=args.feature_encoding)
 
     tasks: list[dict[str, Any]] = []
     for cipher_key in args.ciphers:
@@ -124,12 +137,13 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "rounds": rounds,
                             "seed": seed,
                             "samples_per_class": args.samples_per_class,
+                            "feature_encoding": args.feature_encoding,
                         }
                     )
     return tasks
 
 
-def _tasks_from_plan(path: Path) -> list[dict[str, Any]]:
+def _tasks_from_plan(path: Path, feature_encoding: str) -> list[dict[str, Any]]:
     with path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     return [
@@ -144,6 +158,7 @@ def _tasks_from_plan(path: Path) -> list[dict[str, Any]]:
             "rounds": int(row["rounds"]),
             "seed": int(row["seed"]),
             "samples_per_class": int(row["samples_per_class"]),
+            "feature_encoding": row.get("feature_encoding") or feature_encoding,
         }
         for row in rows
     ]

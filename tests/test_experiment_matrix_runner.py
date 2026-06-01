@@ -29,6 +29,8 @@ def test_run_innovation_one_matrix_writes_jsonl_rows(tmp_path: Path):
         "8",
         "--hidden-bits",
         "8",
+        "--feature-encoding",
+        "ciphertext_pair_xor_bits",
         "--output",
         str(output_path),
     ]
@@ -79,6 +81,8 @@ def test_run_innovation_one_matrix_can_execute_literature_ranked_plan(tmp_path: 
             "8",
             "--hidden-bits",
             "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
             "--output",
             str(output_path),
         ],
@@ -96,5 +100,7 @@ def test_run_innovation_one_matrix_can_execute_literature_ranked_plan(tmp_path: 
     assert rows[0]["matching_score"] == 26
     assert rows[0]["matching_evidence"] == "gohr evidence"
     assert rows[0]["literature"] == "Gohr 2019"
+    assert rows[0]["feature_encoding"] == "ciphertext_pair_xor_bits"
+    assert rows[0]["training"]["input_bits"] == 96
     assert rows[1]["cipher"] == "PRESENT-80"
     assert "wrote 2 rows" in completed.stdout

@@ -20,6 +20,7 @@ class DifferentialDatasetConfig:
     samples_per_class: int
     seed: int
     shuffle: bool = True
+    feature_encoding: str = "ciphertext_pair_bits"
 
 
 @dataclass(frozen=True)
@@ -43,13 +44,17 @@ def make_differential_dataset(config: DifferentialDatasetConfig) -> Differential
         paired = (plaintext ^ config.input_difference) & mask
         ciphertext_a = config.cipher.encrypt(plaintext)
         ciphertext_b = config.cipher.encrypt(paired)
-        rows.append(_pair_to_bits(ciphertext_a, ciphertext_b, block_bits))
+        rows.append(
+            _encode_pair(ciphertext_a, ciphertext_b, block_bits, config.feature_encoding)
+        )
         labels.append(1)
 
     for _ in range(config.samples_per_class):
         ciphertext_a = _random_int(rng, block_bits)
         ciphertext_b = _random_int(rng, block_bits)
-        rows.append(_pair_to_bits(ciphertext_a, ciphertext_b, block_bits))
+        rows.append(
+            _encode_pair(ciphertext_a, ciphertext_b, block_bits, config.feature_encoding)
+        )
         labels.append(0)
 
     features = np.array(rows, dtype=np.uint8)
@@ -67,9 +72,20 @@ def make_differential_dataset(config: DifferentialDatasetConfig) -> Differential
         "input_difference": config.input_difference,
         "samples_per_class": config.samples_per_class,
         "seed": config.seed,
-        "feature_encoding": "ciphertext_pair_bits",
+        "feature_encoding": config.feature_encoding,
     }
     return DifferentialDataset(features=features, labels=label_array, metadata=metadata)
+
+
+def _encode_pair(left: int, right: int, width: int, feature_encoding: str) -> list[int]:
+    if feature_encoding == "ciphertext_pair_bits":
+        return _pair_to_bits(left, right, width)
+    if feature_encoding == "ciphertext_pair_xor_bits":
+        left_bits = int_to_bits(left, width)
+        right_bits = int_to_bits(right, width)
+        difference_bits = [left_bit ^ right_bit for left_bit, right_bit in zip(left_bits, right_bits)]
+        return left_bits + right_bits + difference_bits
+    raise ValueError(f"unsupported feature encoding: {feature_encoding}")
 
 
 def _pair_to_bits(left: int, right: int, width: int) -> list[int]:

@@ -44,6 +44,7 @@ uv run python experiments/run_innovation_one_matrix.py \
   --epochs 2 \
   --batch-size 32 \
   --hidden-bits 16 \
+  --feature-encoding ciphertext_pair_xor_bits \
   --output outputs/innovation_one_matrix_smoke.jsonl
 ```
 
@@ -80,6 +81,7 @@ uv run python experiments/run_innovation_one_matrix.py \
   --epochs 5 \
   --batch-size 256 \
   --hidden-bits 64 \
+  --feature-encoding ciphertext_pair_xor_bits \
   --output outputs/innovation_one_literature_ranked_results.jsonl
 ```
 
@@ -91,3 +93,12 @@ uv run python experiments/summarize_innovation_one_results.py \
   --input outputs/innovation_one_literature_ranked_results.jsonl \
   --output outputs/innovation_one_literature_ranked_summary.csv
 ```
+
+Supported feature encodings:
+
+- `ciphertext_pair_bits`: concatenate `C || C'`.
+- `ciphertext_pair_xor_bits`: concatenate `C || C' || (C xor C')`.
+
+The summary CSV reports both fixed-threshold metrics and calibrated metrics
+(`calibrated_accuracy`, `calibrated_advantage`) because neural distinguishers
+often learn a useful ranking before their probability threshold is calibrated.

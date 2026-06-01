@@ -20,7 +20,15 @@ GROUP_FIELDS = (
     "rounds",
     "samples_per_class",
 )
-METRIC_FIELDS = ("accuracy", "best_accuracy", "auc", "advantage", "loss")
+METRIC_FIELDS = (
+    "accuracy",
+    "best_accuracy",
+    "calibrated_accuracy",
+    "auc",
+    "advantage",
+    "calibrated_advantage",
+    "loss",
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -67,8 +75,10 @@ def summarize_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def _metric_value(metrics: dict[str, Any], metric: str) -> float:
     if metric in metrics:
         return float(metrics[metric])
-    if metric == "best_accuracy":
+    if metric in {"best_accuracy", "calibrated_accuracy"}:
         return float(metrics["accuracy"])
+    if metric == "calibrated_advantage":
+        return float(metrics.get("advantage", 2.0 * float(metrics["accuracy"]) - 1.0))
     raise KeyError(metric)
 
 

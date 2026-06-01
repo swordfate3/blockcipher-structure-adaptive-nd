@@ -56,12 +56,18 @@ def evaluate_binary_classifier(
     prob_array = np.array(probabilities, dtype=np.float32)
     predictions = (prob_array >= 0.5).astype(np.float32)
     accuracy = float((predictions == label_array).mean()) if len(label_array) else 0.0
+    calibrated_accuracy, calibrated_threshold = _best_threshold_accuracy_and_threshold(
+        label_array, prob_array
+    )
     return {
         "loss": total_loss / max(1, len(label_array)),
         "accuracy": accuracy,
         "advantage": 2.0 * accuracy - 1.0,
         "auc": _binary_auc(label_array, prob_array),
-        "best_accuracy": _best_threshold_accuracy(label_array, prob_array),
+        "best_accuracy": calibrated_accuracy,
+        "calibrated_accuracy": calibrated_accuracy,
+        "calibrated_advantage": 2.0 * calibrated_accuracy - 1.0,
+        "calibrated_threshold": calibrated_threshold,
     }
 
 
@@ -167,11 +173,21 @@ def _binary_auc(labels: np.ndarray, scores: np.ndarray) -> float:
 
 
 def _best_threshold_accuracy(labels: np.ndarray, scores: np.ndarray) -> float:
+    return _best_threshold_accuracy_and_threshold(labels, scores)[0]
+
+
+def _best_threshold_accuracy_and_threshold(
+    labels: np.ndarray, scores: np.ndarray
+) -> tuple[float, float]:
     if len(labels) == 0:
-        return 0.0
+        return 0.0, 0.5
     thresholds = np.unique(scores)
     best = 0.0
+    best_threshold = 0.5
     for threshold in thresholds:
         predictions = (scores >= threshold).astype(np.float32)
-        best = max(best, float((predictions == labels).mean()))
-    return best
+        accuracy = float((predictions == labels).mean())
+        if accuracy > best:
+            best = accuracy
+            best_threshold = float(threshold)
+    return best, best_threshold

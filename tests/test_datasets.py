@@ -29,6 +29,29 @@ def test_make_differential_dataset_is_balanced_and_bit_encoded():
     assert dataset.metadata["cipher"] == "SPECK32/64"
     assert dataset.metadata["structure"] == "ARX"
     assert dataset.metadata["rounds"] == 3
+    assert dataset.metadata["feature_encoding"] == "ciphertext_pair_bits"
+
+
+def test_make_differential_dataset_can_include_xor_difference_bits():
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=1,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_pair_xor_bits",
+    )
+
+    dataset = make_differential_dataset(config)
+    first_row = dataset.features[0].tolist()
+    left = first_row[:32]
+    right = first_row[32:64]
+    difference = first_row[64:]
+
+    assert dataset.features.shape == (2, 96)
+    assert difference == [a ^ b for a, b in zip(left, right)]
+    assert dataset.metadata["feature_encoding"] == "ciphertext_pair_xor_bits"
 
 
 def test_make_differential_dataset_is_reproducible_for_same_seed():

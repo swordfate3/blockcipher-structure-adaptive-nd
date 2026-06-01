@@ -59,4 +59,5 @@ def test_summarize_innovation_one_results_writes_csv(tmp_path: Path):
     assert summary_rows[0]["matching_score"] == "2"
     assert summary_rows[0]["literature"] == "protocol evidence"
     assert float(summary_rows[0]["accuracy_mean"]) == 0.70
+    assert "calibrated_accuracy_mean" in summary_rows[0]
     assert int(summary_rows[0]["runs"]) == 2
