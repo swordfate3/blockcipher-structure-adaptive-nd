@@ -9,7 +9,17 @@ from statistics import mean, pstdev
 from typing import Any
 
 
-GROUP_FIELDS = ("cipher", "structure", "model", "rounds", "samples_per_class")
+GROUP_FIELDS = (
+    "cipher",
+    "structure",
+    "model",
+    "architecture",
+    "architecture_rank",
+    "matching_score",
+    "literature",
+    "rounds",
+    "samples_per_class",
+)
 METRIC_FIELDS = ("accuracy", "best_accuracy", "auc", "advantage", "loss")
 
 
@@ -39,7 +49,7 @@ def main() -> None:
 def summarize_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     groups: dict[tuple[Any, ...], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
-        key = tuple(row[field] for field in GROUP_FIELDS)
+        key = tuple(_group_value(row, field) for field in GROUP_FIELDS)
         groups[key].append(row)
 
     summary = []
@@ -60,6 +70,12 @@ def _metric_value(metrics: dict[str, Any], metric: str) -> float:
     if metric == "best_accuracy":
         return float(metrics["accuracy"])
     raise KeyError(metric)
+
+
+def _group_value(row: dict[str, Any], field: str) -> Any:
+    if field == "architecture":
+        return row.get("architecture", row["model"])
+    return row.get(field, "")
 
 
 def _load_rows(path: Path) -> list[dict[str, Any]]:

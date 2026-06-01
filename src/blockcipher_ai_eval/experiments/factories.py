@@ -3,7 +3,14 @@ from __future__ import annotations
 from torch import nn
 
 from blockcipher_ai_eval.ciphers import Present80, ReducedRoundCipher, Sm4Reduced, Speck32_64
-from blockcipher_ai_eval.models import CnnDistinguisher, MlpDistinguisher
+from blockcipher_ai_eval.models import (
+    CnnDistinguisher,
+    DBitNetDistinguisher,
+    LstmRoundSeqDistinguisher,
+    MlpDistinguisher,
+    ResNetBitSliceDistinguisher,
+    TransformerEncoderDistinguisher,
+)
 
 
 def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
@@ -31,5 +38,12 @@ def build_model(name: str, input_bits: int, hidden_bits: int) -> nn.Module:
         return MlpDistinguisher(input_bits=input_bits, hidden_bits=hidden_bits)
     if name == "cnn":
         return CnnDistinguisher(input_bits=input_bits, channels=hidden_bits)
+    if name == "resnet_bitslice":
+        return ResNetBitSliceDistinguisher(input_bits=input_bits, channels=hidden_bits)
+    if name == "dbitnet_dilated_cnn":
+        return DBitNetDistinguisher(input_bits=input_bits, channels=hidden_bits)
+    if name == "lstm_roundseq":
+        return LstmRoundSeqDistinguisher(input_bits=input_bits, hidden_bits=hidden_bits)
+    if name == "transformer_encoder":
+        return TransformerEncoderDistinguisher(input_bits=input_bits, hidden_bits=hidden_bits)
     raise ValueError(f"unsupported model: {name}")
-

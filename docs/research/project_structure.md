@@ -14,12 +14,17 @@ src/blockcipher_ai_eval/
 │   └── sm4.py           # SM4 reduced/full-round 实现
 ├── models/
 │   ├── __init__.py      # 对外导出神经网络模型
-│   └── mlp.py           # MLP baseline 神经区分器
+│   ├── mlp.py           # MLP baseline 神经区分器
+│   ├── cnn.py           # 局部卷积 baseline 神经区分器
+│   ├── resnet_bitslice.py # Gohr 风格残差 bit-slice 神经区分器
+│   ├── dbitnet.py       # DBitNet 风格扩张卷积神经区分器
+│   ├── lstm_roundseq.py # 轮序列 / Feistel-like 候选神经区分器
+│   └── transformer_encoder.py # 高成本全局注意力消融模型
 ├── training/
 │   ├── __init__.py      # 对外导出训练 API
 │   └── binary.py        # 二分类训练循环、Accuracy/AUC/Advantage 指标
 ├── datasets.py          # 神经区分器差分数据集生成与 bit 编码
-└── innovation_one.py    # 结构特征、网络特征、匹配评分与实验矩阵
+└── innovation_one.py    # 结构特征、文献证据规则、匹配评分与实验矩阵
 ```
 
 ## 设计约束

@@ -151,12 +151,27 @@ class NetworkProfile:
 
 
 @dataclass(frozen=True)
+class LiteratureRule:
+    """Literature-derived evidence that links cipher structure to architectures."""
+
+    source_id: str
+    citation: str
+    cipher_structures: tuple[str, ...]
+    cipher_traits: tuple[str, ...]
+    network_families: tuple[str, ...]
+    network_names: tuple[str, ...]
+    evidence: tuple[str, ...]
+    weight: int
+
+
+@dataclass(frozen=True)
 class RankedArchitecture:
     name: str
     family: str
     score: int
     compute_cost: str
     evidence: tuple[str, ...]
+    literature: tuple[str, ...]
     notes: str
 
 
@@ -187,21 +202,179 @@ TRAIT_EVIDENCE = {
 }
 
 COMPUTE_PENALTY = {"low": 0, "medium": 1, "high": 3}
+LITERATURE_WEIGHT_MULTIPLIER = 2
+MODEL_KEYS = {
+    "ResNet-BitSlice": "resnet_bitslice",
+    "DBitNet-DilatedCNN": "dbitnet_dilated_cnn",
+    "CNN-SBoxLocal": "cnn",
+    "RNN-LSTM-RoundSeq": "lstm_roundseq",
+    "Transformer-Encoder": "transformer_encoder",
+    "MLP-Baseline": "mlp",
+}
+
+
+def default_literature_rules() -> list[LiteratureRule]:
+    """Return the first curated evidence rules for innovation point 1."""
+
+    return [
+        LiteratureRule(
+            source_id="gohr2019_speck_resnet",
+            citation="Gohr 2019 SPECK32/64 neural distinguisher",
+            cipher_structures=("ARX",),
+            cipher_traits=(
+                "modular_addition",
+                "xor",
+                "rotation",
+                "carry_propagation",
+                "word_parallelism",
+            ),
+            network_families=("residual_cnn",),
+            network_names=("ResNet-BitSlice",),
+            evidence=(
+                "Gohr-style residual bit-slice features for SPECK32/64",
+                "modular addition carry propagation",
+            ),
+            weight=4,
+        ),
+        LiteratureRule(
+            source_id="benamira2021_deeper_look",
+            citation="Benamira et al. 2021 deeper look at machine learning cryptanalysis",
+            cipher_structures=("ARX",),
+            cipher_traits=("modular_addition", "carry_propagation", "word_parallelism"),
+            network_families=("residual_cnn",),
+            network_names=("ResNet-BitSlice",),
+            evidence=("feature evidence for Gohr-style ARX distinguishers",),
+            weight=2,
+        ),
+        LiteratureRule(
+            source_id="dbitnet2023_cipher_agnostic",
+            citation="DBitNet 2023 cipher-agnostic neural training pipeline",
+            cipher_structures=("ARX", "SPN", "Feistel-like"),
+            cipher_traits=(
+                "bit_permutation",
+                "sbox_locality",
+                "linear_diffusion",
+                "wide_receptive_field",
+            ),
+            network_families=("dilated_cnn",),
+            network_names=("DBitNet-DilatedCNN",),
+            evidence=("cipher-agnostic dilated convolution comparison baseline",),
+            weight=2,
+        ),
+        LiteratureRule(
+            source_id="jain2020_present_neural",
+            citation="Jain et al. 2020 PRESENT neural distinguisher",
+            cipher_structures=("SPN",),
+            cipher_traits=("sbox_layer", "sbox_locality", "permutation_layer"),
+            network_families=("cnn",),
+            network_names=("CNN-SBoxLocal",),
+            evidence=("PRESENT/SPN local S-box neural distinguisher evidence",),
+            weight=3,
+        ),
+        LiteratureRule(
+            source_id="liu2026_spn_iot",
+            citation="Liu et al. 2026 SPN IoT-friendly neural distinguisher framework",
+            cipher_structures=("SPN",),
+            cipher_traits=("lightweight_spn", "sbox_locality", "bit_permutation"),
+            network_families=("cnn", "dilated_cnn"),
+            network_names=("CNN-SBoxLocal", "DBitNet-DilatedCNN"),
+            evidence=("SPN-specific lightweight input and architecture design",),
+            weight=2,
+        ),
+        LiteratureRule(
+            source_id="yu2023_sm4_conv_resnet",
+            citation="Yu/Wu/Zhang 2023 SM4 convolutional residual network analysis",
+            cipher_structures=("Feistel-like",),
+            cipher_traits=("sbox_layer", "linear_diffusion", "word_parallelism"),
+            network_families=("residual_cnn", "cnn"),
+            network_names=("ResNet-BitSlice", "CNN-SBoxLocal"),
+            evidence=("SM4 convolutional/residual analysis for Feistel-like structure",),
+            weight=2,
+        ),
+        LiteratureRule(
+            source_id="hou2020_des_deep_linear",
+            citation="Hou et al. 2020 DES deep learning linear attack",
+            cipher_structures=("Feistel-like",),
+            cipher_traits=("round_recurrence", "unbalanced_round_update"),
+            network_families=("sequence",),
+            network_names=("RNN-LSTM-RoundSeq",),
+            evidence=("Feistel round-wise dependency can be modelled as a sequence",),
+            weight=2,
+        ),
+        LiteratureRule(
+            source_id="assessment2022_sok2024_protocol",
+            citation="Gohr/Leander/Neumann 2022 and SoK 2024 evaluation guidance",
+            cipher_structures=("ARX", "SPN", "Feistel-like"),
+            cipher_traits=(),
+            network_families=("mlp", "attention"),
+            network_names=("MLP-Baseline", "Transformer-Encoder"),
+            evidence=("controlled baseline and high-cost ablation for comparability",),
+            weight=1,
+        ),
+    ]
+
+
+def _rule_applies_to_cipher(rule: LiteratureRule, cipher: CipherProfile) -> bool:
+    structure_match = cipher.structure in rule.cipher_structures
+    trait_match = bool(set(cipher.traits).intersection(rule.cipher_traits))
+    return structure_match and (trait_match or not rule.cipher_traits)
+
+
+def _rule_applies_to_network(rule: LiteratureRule, network: NetworkProfile) -> bool:
+    return network.name in rule.network_names or network.family in rule.network_families
+
+
+def recommended_model_key(architecture_name: str) -> str:
+    """Map a thesis architecture label to an experiment model key."""
+
+    try:
+        return MODEL_KEYS[architecture_name]
+    except KeyError as exc:
+        raise ValueError(f"unsupported architecture: {architecture_name}") from exc
 
 
 def rank_architectures(
-    cipher: CipherProfile, networks: Iterable[NetworkProfile]
+    cipher: CipherProfile,
+    networks: Iterable[NetworkProfile],
+    literature_rules: Iterable[LiteratureRule] | None = None,
 ) -> list[RankedArchitecture]:
     """Rank networks by structure-trait overlap with a small cost penalty."""
 
     ranked = []
+    rules = list(default_literature_rules() if literature_rules is None else literature_rules)
     cipher_traits = set(cipher.traits)
     for network in networks:
         matched = cipher_traits.intersection(network.strengths)
+        trait_evidence = [
+            TRAIT_EVIDENCE.get(trait, trait) for trait in sorted(matched)
+        ]
+        matched_rules = [
+            rule
+            for rule in rules
+            if _rule_applies_to_cipher(rule, cipher)
+            and _rule_applies_to_network(rule, network)
+        ]
+        literature_score = sum(rule.weight for rule in matched_rules)
         evidence = tuple(
-            dict.fromkeys(TRAIT_EVIDENCE.get(trait, trait) for trait in sorted(matched))
+            dict.fromkeys(
+                [
+                    *trait_evidence,
+                    *(
+                        evidence_item
+                        for rule in matched_rules
+                        for evidence_item in rule.evidence
+                    ),
+                ]
+            )
         )
-        score = 3 * len(matched) - COMPUTE_PENALTY[network.compute_cost]
+        literature = tuple(
+            dict.fromkeys(rule.citation for rule in matched_rules)
+        )
+        score = (
+            3 * len(matched)
+            + LITERATURE_WEIGHT_MULTIPLIER * literature_score
+            - COMPUTE_PENALTY[network.compute_cost]
+        )
         ranked.append(
             RankedArchitecture(
                 name=network.name,
@@ -209,6 +382,7 @@ def rank_architectures(
                 score=score,
                 compute_cost=network.compute_cost,
                 evidence=evidence,
+                literature=literature,
                 notes=network.notes,
             )
         )
@@ -236,6 +410,47 @@ def build_experiment_matrix(plan: ExperimentPlan) -> list[dict[str, int | str]]:
     return rows
 
 
+def recommend_experiment_configs(
+    ciphers: Iterable[CipherProfile],
+    networks: Iterable[NetworkProfile],
+    top_k: int,
+    rounds: Iterable[int],
+    seeds: Iterable[int],
+    samples_per_class: int,
+    literature_rules: Iterable[LiteratureRule] | None = None,
+) -> list[dict[str, int | str]]:
+    """Build a smaller matrix over top-ranked literature-backed candidates."""
+
+    rows: list[dict[str, int | str]] = []
+    network_list = list(networks)
+    for cipher in ciphers:
+        ranked = rank_architectures(
+            cipher,
+            network_list,
+            literature_rules=literature_rules,
+        )
+        for architecture_rank, architecture in enumerate(ranked[:top_k], start=1):
+            for round_count in rounds:
+                for seed in seeds:
+                    rows.append(
+                        {
+                            "cipher": cipher.name,
+                            "structure": cipher.structure,
+                            "network": architecture.name,
+                            "model_key": recommended_model_key(architecture.name),
+                            "family": architecture.family,
+                            "architecture_rank": architecture_rank,
+                            "score": architecture.score,
+                            "rounds": round_count,
+                            "seed": seed,
+                            "samples_per_class": samples_per_class,
+                            "evidence": "; ".join(architecture.evidence),
+                            "literature": "; ".join(architecture.literature),
+                        }
+                    )
+    return rows
+
+
 def summarize_recommendation(
     cipher: CipherProfile, ranked: list[RankedArchitecture]
 ) -> str:
@@ -244,8 +459,10 @@ def summarize_recommendation(
     top = ranked[0]
     runner_up = ", ".join(item.name for item in ranked[1:]) or "no runner-up"
     evidence = "; ".join(top.evidence) if top.evidence else "control-baseline behavior"
+    literature = "; ".join(top.literature) if top.literature else "the baseline rule set"
     return (
         f"For {cipher.name} ({cipher.structure}), {top.name} is the first candidate "
         f"for empirical architecture matching because it aligns with {evidence}. "
+        f"Literature support: {literature}. "
         f"Secondary candidates for ablation are {runner_up}."
     )

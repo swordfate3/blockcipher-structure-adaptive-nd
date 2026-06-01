@@ -13,6 +13,10 @@ def test_summarize_innovation_one_results_writes_csv(tmp_path: Path):
             "cipher": "SPECK32/64",
             "structure": "ARX",
             "model": "mlp",
+            "architecture": "MLP-Baseline",
+            "architecture_rank": 2,
+            "matching_score": 2,
+            "literature": "protocol evidence",
             "rounds": 1,
             "seed": 0,
             "samples_per_class": 8,
@@ -22,6 +26,10 @@ def test_summarize_innovation_one_results_writes_csv(tmp_path: Path):
             "cipher": "SPECK32/64",
             "structure": "ARX",
             "model": "mlp",
+            "architecture": "MLP-Baseline",
+            "architecture_rank": 2,
+            "matching_score": 2,
+            "literature": "protocol evidence",
             "rounds": 1,
             "seed": 1,
             "samples_per_class": 8,
@@ -46,5 +54,9 @@ def test_summarize_innovation_one_results_writes_csv(tmp_path: Path):
     assert len(summary_rows) == 1
     assert summary_rows[0]["cipher"] == "SPECK32/64"
     assert summary_rows[0]["model"] == "mlp"
+    assert summary_rows[0]["architecture"] == "MLP-Baseline"
+    assert summary_rows[0]["architecture_rank"] == "2"
+    assert summary_rows[0]["matching_score"] == "2"
+    assert summary_rows[0]["literature"] == "protocol evidence"
     assert float(summary_rows[0]["accuracy_mean"]) == 0.70
     assert int(summary_rows[0]["runs"]) == 2

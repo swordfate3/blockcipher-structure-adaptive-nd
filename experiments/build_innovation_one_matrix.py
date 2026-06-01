@@ -16,6 +16,7 @@ from blockcipher_ai_eval.innovation_one import (
     NetworkProfile,
     build_experiment_matrix,
     rank_architectures,
+    recommend_experiment_configs,
     summarize_recommendation,
 )
 
@@ -49,6 +50,12 @@ def parse_args() -> argparse.Namespace:
         default=[0, 1, 2, 3, 4],
         help="Random seeds for repeated trials.",
     )
+    parser.add_argument(
+        "--top-k",
+        type=int,
+        default=None,
+        help="If set, emit only the top-k literature-ranked architectures per cipher.",
+    )
     return parser.parse_args()
 
 
@@ -56,15 +63,27 @@ def main() -> None:
     args = parse_args()
     ciphers = [CipherProfile.speck32_64(), CipherProfile.present80(), CipherProfile.sm4()]
     networks = NetworkProfile.default_candidates()
-    plan = ExperimentPlan(
-        ciphers=ciphers,
-        networks=networks,
-        rounds=args.rounds,
-        seeds=args.seeds,
-        samples_per_class=args.samples_per_class,
-    )
+    if args.top_k is None:
+        plan = ExperimentPlan(
+            ciphers=ciphers,
+            networks=networks,
+            rounds=args.rounds,
+            seeds=args.seeds,
+            samples_per_class=args.samples_per_class,
+        )
+        rows = build_experiment_matrix(plan)
+        message = f"Wrote {len(rows)} experiment rows to"
+    else:
+        rows = recommend_experiment_configs(
+            ciphers=ciphers,
+            networks=networks,
+            top_k=args.top_k,
+            rounds=args.rounds,
+            seeds=args.seeds,
+            samples_per_class=args.samples_per_class,
+        )
+        message = f"Wrote {len(rows)} literature-ranked experiment rows to"
 
-    rows = build_experiment_matrix(plan)
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("w", newline="", encoding="utf-8") as handle:
@@ -72,7 +91,7 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"Wrote {len(rows)} experiment rows to {output}")
+    print(f"{message} {output}")
     for cipher in ciphers:
         ranked = rank_architectures(cipher, networks)
         print(summarize_recommendation(cipher, ranked[:3]))
