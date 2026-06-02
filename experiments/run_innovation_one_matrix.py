@@ -71,84 +71,98 @@ def main() -> None:
     args = parse_args()
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    rows: list[dict[str, Any]] = []
-
-    for task in _build_tasks(args):
-        cipher = build_cipher(task["cipher_key"], task["rounds"])
-        input_difference = task["input_difference"]
-        train_dataset = make_differential_dataset(
-            DifferentialDatasetConfig(
-                cipher=cipher,
-                input_difference=input_difference,
-                samples_per_class=task["samples_per_class"],
-                seed=task["seed"],
-                feature_encoding=task["feature_encoding"],
-                pairs_per_sample=task["pairs_per_sample"],
-            )
-        )
-        validation_dataset = make_differential_dataset(
-            DifferentialDatasetConfig(
-                cipher=cipher,
-                input_difference=input_difference,
-                samples_per_class=max(8, task["samples_per_class"] // 2),
-                seed=task["seed"] + 10_000,
-                feature_encoding=task["feature_encoding"],
-                pairs_per_sample=task["pairs_per_sample"],
-            )
-        )
-        model = build_model(
-            task["model_key"],
-            input_bits=train_dataset.features.shape[1],
-            hidden_bits=args.hidden_bits,
-        )
-        _configure_structure_aware_model(model, task["cipher_key"], task["rounds"])
-        result = train_binary_classifier(
-            model,
-            train_dataset,
-            validation_dataset,
-            TrainingConfig(
-                epochs=args.epochs,
-                batch_size=args.batch_size,
-                learning_rate=args.learning_rate,
-                seed=task["seed"],
-            ),
-        )
-        rows.append(
-            {
-                "cipher": cipher.name,
-                "cipher_key": task["cipher_key"],
-                "structure": cipher.structure,
-                "model": task["model_key"],
-                "architecture": task["architecture"],
-                "architecture_rank": task.get("architecture_rank"),
-                "matching_score": task.get("matching_score"),
-                "matching_evidence": task.get("matching_evidence", ""),
-                "literature": task.get("literature", ""),
-                "rounds": task["rounds"],
-                "seed": task["seed"],
-                "input_difference": input_difference,
-                "difference_profile": task.get("difference_profile", ""),
-                "difference_member": task.get("difference_member", ""),
-                "difference_source": task.get("difference_source", ""),
-                "samples_per_class": task["samples_per_class"],
-                "pairs_per_sample": task["pairs_per_sample"],
-                "feature_encoding": task["feature_encoding"],
-                "metrics": result.final_metrics,
-                "history": result.history,
-                "training": {
-                    **result.metadata,
-                    "input_bits": int(train_dataset.features.shape[1]),
-                    "feature_encoding": task["feature_encoding"],
-                    "pairs_per_sample": task["pairs_per_sample"],
-                },
-                **_model_metadata(model),
-            }
-        )
+    tasks = _build_tasks(args)
 
     with output.open("w", encoding="utf-8") as handle:
-        for row in rows:
+        for index, task in enumerate(tasks, start=1):
+            row = _run_task(task, args)
             handle.write(json.dumps(row, sort_keys=True) + "\n")
-    print(f"wrote {len(rows)} rows to {output}")
+            handle.flush()
+            print(
+                "[{index}/{total}] {cipher} r={rounds} model={model} "
+                "seed={seed} pairs={pairs}".format(
+                    index=index,
+                    total=len(tasks),
+                    cipher=row["cipher"],
+                    rounds=row["rounds"],
+                    model=row["model"],
+                    seed=row["seed"],
+                    pairs=row["pairs_per_sample"],
+                ),
+                flush=True,
+            )
+    print(f"wrote {len(tasks)} rows to {output}")
+
+
+def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
+    cipher = build_cipher(task["cipher_key"], task["rounds"])
+    input_difference = task["input_difference"]
+    train_dataset = make_differential_dataset(
+        DifferentialDatasetConfig(
+            cipher=cipher,
+            input_difference=input_difference,
+            samples_per_class=task["samples_per_class"],
+            seed=task["seed"],
+            feature_encoding=task["feature_encoding"],
+            pairs_per_sample=task["pairs_per_sample"],
+        )
+    )
+    validation_dataset = make_differential_dataset(
+        DifferentialDatasetConfig(
+            cipher=cipher,
+            input_difference=input_difference,
+            samples_per_class=max(8, task["samples_per_class"] // 2),
+            seed=task["seed"] + 10_000,
+            feature_encoding=task["feature_encoding"],
+            pairs_per_sample=task["pairs_per_sample"],
+        )
+    )
+    model = build_model(
+        task["model_key"],
+        input_bits=train_dataset.features.shape[1],
+        hidden_bits=args.hidden_bits,
+    )
+    _configure_structure_aware_model(model, task["cipher_key"], task["rounds"])
+    result = train_binary_classifier(
+        model,
+        train_dataset,
+        validation_dataset,
+        TrainingConfig(
+            epochs=args.epochs,
+            batch_size=args.batch_size,
+            learning_rate=args.learning_rate,
+            seed=task["seed"],
+        ),
+    )
+    return {
+        "cipher": cipher.name,
+        "cipher_key": task["cipher_key"],
+        "structure": cipher.structure,
+        "model": task["model_key"],
+        "architecture": task["architecture"],
+        "architecture_rank": task.get("architecture_rank"),
+        "matching_score": task.get("matching_score"),
+        "matching_evidence": task.get("matching_evidence", ""),
+        "literature": task.get("literature", ""),
+        "rounds": task["rounds"],
+        "seed": task["seed"],
+        "input_difference": input_difference,
+        "difference_profile": task.get("difference_profile", ""),
+        "difference_member": task.get("difference_member", ""),
+        "difference_source": task.get("difference_source", ""),
+        "samples_per_class": task["samples_per_class"],
+        "pairs_per_sample": task["pairs_per_sample"],
+        "feature_encoding": task["feature_encoding"],
+        "metrics": result.final_metrics,
+        "history": result.history,
+        "training": {
+            **result.metadata,
+            "input_bits": int(train_dataset.features.shape[1]),
+            "feature_encoding": task["feature_encoding"],
+            "pairs_per_sample": task["pairs_per_sample"],
+        },
+        **_model_metadata(model),
+    }
 
 
 def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:

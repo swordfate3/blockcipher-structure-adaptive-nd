@@ -230,3 +230,39 @@ def test_run_innovation_one_matrix_can_train_structure_moe(tmp_path: Path):
     assert rows[0]["gate_weights_mean"]["dbitnet_dilated_cnn"] == 0.20
     assert rows[0]["gate_weights_mean"]["senet_resnext"] == 0.10
     assert rows[0]["gate_weights_mean"]["multiscale_dense_resnet"] == 0.25
+
+
+def test_run_innovation_one_matrix_prints_task_progress(tmp_path: Path):
+    output_path = tmp_path / "progress.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "mlp",
+            "cnn",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "[1/2] SPECK32/64 r=1 model=mlp seed=0 pairs=1" in completed.stdout
+    assert "[2/2] SPECK32/64 r=1 model=cnn seed=0 pairs=1" in completed.stdout

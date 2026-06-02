@@ -162,14 +162,27 @@ def _select_device(device: str) -> torch.device:
 
 
 def _binary_auc(labels: np.ndarray, scores: np.ndarray) -> float:
-    positives = scores[labels == 1]
-    negatives = scores[labels == 0]
-    if len(positives) == 0 or len(negatives) == 0:
+    positive_mask = labels == 1
+    positive_count = int(positive_mask.sum())
+    negative_count = int((labels == 0).sum())
+    if positive_count == 0 or negative_count == 0:
         return 0.5
-    comparisons = positives[:, None] - negatives[None, :]
-    wins = np.sum(comparisons > 0)
-    ties = np.sum(comparisons == 0)
-    return float((wins + 0.5 * ties) / (len(positives) * len(negatives)))
+
+    order = np.argsort(scores, kind="mergesort")
+    sorted_scores = scores[order]
+    ranks = np.empty(len(scores), dtype=np.float64)
+    start = 0
+    while start < len(sorted_scores):
+        end = start + 1
+        while end < len(sorted_scores) and sorted_scores[end] == sorted_scores[start]:
+            end += 1
+        average_rank = (start + 1 + end) / 2.0
+        ranks[order[start:end]] = average_rank
+        start = end
+
+    positive_rank_sum = float(ranks[positive_mask].sum())
+    u_statistic = positive_rank_sum - positive_count * (positive_count + 1) / 2.0
+    return float(u_statistic / (positive_count * negative_count))
 
 
 def _best_threshold_accuracy(labels: np.ndarray, scores: np.ndarray) -> float:

@@ -1,3 +1,5 @@
+import numpy as np
+
 from blockcipher_ai_eval.ciphers import Speck32_64
 from blockcipher_ai_eval.datasets import DifferentialDatasetConfig, make_differential_dataset
 from blockcipher_ai_eval.models import MlpDistinguisher
@@ -6,6 +8,7 @@ from blockcipher_ai_eval.training import (
     evaluate_binary_classifier,
     train_binary_classifier,
 )
+from blockcipher_ai_eval.training.binary import _binary_auc
 
 
 def test_evaluate_binary_classifier_returns_core_metrics():
@@ -59,3 +62,15 @@ def test_train_binary_classifier_returns_history_and_final_metrics():
     assert 0.0 <= result.final_metrics["accuracy"] <= 1.0
     assert result.metadata["epochs"] == 2
     assert result.metadata["batch_size"] == 16
+
+
+def test_binary_auc_handles_ties_without_quadratic_comparison_matrix(monkeypatch):
+    labels = np.array([1, 0, 1, 0, 1, 0], dtype=np.float32)
+    scores = np.array([0.8, 0.1, 0.5, 0.5, 0.2, 0.2], dtype=np.float32)
+
+    def fail_sum(*args, **kwargs):
+        raise AssertionError("quadratic comparison matrix path should not call np.sum")
+
+    monkeypatch.setattr(np, "sum", fail_sum)
+
+    assert _binary_auc(labels, scores) == 7.0 / 9.0
