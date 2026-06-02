@@ -4,10 +4,10 @@
 
 - PDF 全文：`papers/innovation_one/pdf/`
 - 抽取文本：`papers/innovation_one/text/`
-- 文献清单：`papers/innovation_one/sources/paper_manifest.csv`
-- 失败/误下载记录：`papers/innovation_one/sources/failed_downloads/`
+- 文献状态唯一来源：`papers/innovation_one/sources/paper_manifest.csv`
+- 失败/误下载原始页面归档：`papers/innovation_one/sources/failed_downloads/`
 
-目前已下载并验证为真实 PDF 的论文：22 篇。每篇都已用 `pdftotext` 抽取为 `.txt`，便于后续检索和精读。
+目前已下载并验证为真实 PDF 的论文：30 篇。每篇都已用 `pdftotext` 抽取为 `.txt`，便于后续检索和精读。具体下载状态、来源和备注统一看 `paper_manifest.csv`，本文档不重复维护逐篇状态。
 
 ## 最贴合创新一的优先阅读顺序
 
@@ -65,16 +65,36 @@
     - 神经启发差分密码分析解释与增强。
     - 对创新一的作用：补充理论解释和可解释性讨论。
 
+13. `2025_gpd_feature_engineering_nd.pdf`
+    - Generic Partial Decryption，自动构造部分解密特征。
+    - 对创新一的作用：强支撑“结构感知特征工程”不是简单堆模型。
+
+14. `2025_speck_simon_multi_pair_multiscale.pdf`
+    - Speck/Simon 多密文对输入、多尺度卷积和 dense residual。
+    - 对创新一的作用：提示 MoE 还要和多密文对/强 CNN 数据格式基线比较。
+
+15. `2025_rx_neural_simon_simeck.pdf`
+    - Rotational-XOR neural distinguisher。
+    - 对创新一的作用：支撑差分类型要按密码结构扩展，不应只有 XOR difference。
+
+16. `2026_polytopic_pdnd_simon_simeck_speck.pdf`
+    - Polytopic differential neural distinguishers。
+    - 对创新一的作用：支撑多输入/多差分样本结构，是 `polytope_size` schema 的依据。
+
+17. `2026_present_entropy_nd.pdf`
+    - PRESENT entropy-based neural distinguisher/key recovery。
+    - 对创新一的作用：支撑 SPN/PRESENT 分支的 bit selection 和攻击级扩展。
+
 ## 按密码结构分类
 
 | 结构 | 已下载论文 | 对应创新一用途 |
 |---|---|---|
-| ARX / SPECK | Gohr 2019; Benamira 2021; Bao 2022; Ebrahimi 2022; Chen multiple-pair 2021 | ResNet-BitSlice、bit selection、multi-pair features |
-| AND-RX / SIMON / SIMECK | Lu et al. 2022 arXiv/ePrint; Bao 2022 | 补充 ARX 与 AND-RX 差异，避免把 SIMON/SPECK 完全混为一类 |
-| SPN / PRESENT | Jain et al. 2020; Jain et al. 2021; Liu et al. 2026 | CNN-SBoxLocal、DBitNet、SPN-specific data format |
+| ARX / SPECK | Gohr 2019; Benamira 2021; Bao 2022; Ebrahimi 2022; Chen multiple-pair 2021; Hou et al. 2025; Mirzaali et al. 2026 | ResNet-BitSlice、bit selection、multi-pair features、polytopic inputs |
+| AND-RX / SIMON / SIMECK | Lu et al. 2022 arXiv/ePrint; Bao 2022; Liu et al. 2025; Mirzaali et al. 2026 | 补充 ARX 与 AND-RX 差异，支持 RX difference、polytopic、related-key 扩展 |
+| SPN / PRESENT | Jain et al. 2020; Jain et al. 2021; Liu et al. 2026; PRESENT entropy 2026 | CNN-SBoxLocal、DBitNet、SPN-specific data format、entropy bit selection |
 | Feistel / DES | Hou et al. 2020 | 证明 Feistel 结构有独立神经/深度学习攻击路线 |
 | Feistel-like / SM4 | 余玥琳等 2023; Li & Sun 2025 | SM4 分支的中文和差分背景支撑 |
-| 通用流水线/比较 | DBitNet 2023; Assessment 2022; SoK 2024; Bellini & Rossi 2020 | 支撑“统一实验协议”和“结构感知匹配”的论文定位 |
+| 通用流水线/比较 | DBitNet 2023; Assessment 2022; SoK 2024; Bellini & Rossi 2020; GPD 2025 | 支撑“统一实验协议”和“结构感知匹配”的论文定位 |
 
 ## 可直接支撑的论文表述
 
@@ -90,11 +110,12 @@
 4. 读 PRESENT/SPN 两篇和 2026 SPN 框架，确定 SPN 分支的输入表示。
 5. 读 SM4 中文论文和 SM4 2025 差分论文，确定 SM4 在论文里写作 Feistel-like 的依据。
 
-## 失败/误下载记录
+## 状态管理规则
 
-以下文件保留在 `papers/innovation_one/sources/failed_downloads/`，不是可用全文：
+`paper_manifest.csv` 是唯一状态源：
 
-- `2023_cipher_agnostic_wrong_eprint_2022_1331.pdf`：误用 ePrint 编号，实际不是 DBitNet，已用 `2022/1467` 正确替换。
-- `2022_chen_shen_yu_neural_aided_statistical_attack.html`：出版社页返回 HTML，不是 PDF；已保留 ePrint 版本。
-- `2024_comprehensive_neural_cryptanalysis_block_ciphers.html`：MDPI 链接返回非 PDF。
-- `2024_enhanced_related_key_simon_simeck_peerj*.html`：返回 HTML/跳转页，不是 PDF；已保留 arXiv/ePrint 相关 SIMON/SIMECK 版本。
+- `downloaded`：必须同时存在 PDF 和抽取后的 text。
+- `pending_download`：题名和来源已确认，但全文尚未成功入库。
+- `failed_downloads/`：只保存失败下载得到的原始页面或误下载文件，不作为状态源。
+
+更新论文状态时，只修改 manifest；研究文档只引用 manifest 的汇总结果。
