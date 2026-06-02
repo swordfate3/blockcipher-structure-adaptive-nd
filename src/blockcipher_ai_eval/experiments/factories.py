@@ -11,6 +11,7 @@ from blockcipher_ai_eval.models import (
     LstmRoundSeqDistinguisher,
     MlpDistinguisher,
     MultiScaleDenseResNetDistinguisher,
+    PairwiseAdaptiveDBitNetDistinguisher,
     ResNetBitSliceDistinguisher,
     SeResNeXtDistinguisher,
     StructureAwareMoEDistinguisher,
@@ -50,6 +51,12 @@ def build_model(name: str, input_bits: int, hidden_bits: int) -> nn.Module:
         return DBitNetDistinguisher(input_bits=input_bits, channels=hidden_bits)
     if name == "adaptive_dbitnet":
         return AdaptiveDBitNetDistinguisher(input_bits=input_bits, base_channels=hidden_bits)
+    if name == "adaptive_dbitnet_pairwise":
+        return PairwiseAdaptiveDBitNetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=96,
+            base_channels=hidden_bits,
+        )
     if name == "gohr_resnet_speck":
         return GohrSpeckDistinguisher(input_bits=input_bits, filters=hidden_bits)
     if name == "gohr_resnet_speck_depth10":

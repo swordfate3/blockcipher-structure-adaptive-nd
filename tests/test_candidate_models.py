@@ -8,6 +8,7 @@ from blockcipher_ai_eval.models import (
     GohrSpeckDistinguisher,
     LstmRoundSeqDistinguisher,
     MultiScaleDenseResNetDistinguisher,
+    PairwiseAdaptiveDBitNetDistinguisher,
     SeResNeXtDistinguisher,
     TransformerEncoderDistinguisher,
 )
@@ -53,6 +54,16 @@ def test_build_model_supports_all_innovation_one_candidate_keys(
 def test_innovation_one_candidate_models_reject_odd_pair_width(model_key: str):
     with pytest.raises(ValueError, match="even number of input bits"):
         build_model(model_key, input_bits=63, hidden_bits=8)
+
+
+def test_build_model_supports_pairwise_adaptive_dbitnet_candidate_key():
+    model = build_model("adaptive_dbitnet_pairwise", input_bits=384, hidden_bits=8)
+    batch = torch.zeros((3, 384), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert isinstance(model, PairwiseAdaptiveDBitNetDistinguisher)
+    assert logits.shape == (3, 1)
 
 
 def test_gohr_resnet_speck_requires_original_speck_pair_width():

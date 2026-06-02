@@ -34,6 +34,7 @@
 - `resnet_bitslice`
 - `dbitnet_dilated_cnn`
 - `adaptive_dbitnet`
+- `adaptive_dbitnet_pairwise`
 - `senet_resnext`
 - `multiscale_dense_resnet`
 - `moe_uniform`
@@ -51,6 +52,7 @@
 - 当前 `resnet_bitslice` 只是 Gohr-style 简化版，不是 Gohr 原版 4-channel word-aware ResNet。
 - 当前 `dbitnet_dilated_cnn` 是旧的固定 dilation 轻量版，不代表文献完整 DBitNet。
 - 新增 `adaptive_dbitnet` 才开始按输入 bit 宽度生成 DBitNet-style dilation rates。
+- 新增 `adaptive_dbitnet_pairwise` 按 ciphertext pair 共享编码，再跨 pair mean/max pooling，是当前 SPECK6 multi-pair 最强模型。
 - 新增 `gohr_resnet_speck` 是 SPECK32/64 专用 4-channel word-aware Gohr-style 模型，只支持 64-bit `C || C'` 原始 pair 输入。
 - 新增 `gohr_resnet_speck_depth10` 用于筛查深残差 Gohr-style 变体，但当前一次小规模实验没有超过浅层 Gohr 模型。
 - 新增 `moe_v2_*` 保持 6 专家结构，但将旧 `dbitnet_dilated_cnn` 专家替换为 `adaptive_dbitnet`。
@@ -110,6 +112,26 @@ pairs_per_sample = 1
 该模型用于复现 Gohr SPECK32/64 原始 pair 输入设置，不直接用于 `ciphertext_pair_xor_bits` 或 multi-pair 宽输入。
 
 ## 已跑关键实验
+
+### Pairwise Adaptive DBitNet SPECK6 筛查
+
+记录文件：
+
+- `docs/experiments/2026-06-02-pairwise-adaptive-dbitnet-speck6-screen.md`
+
+SPECK6, `ciphertext_pair_xor_bits`, `pairs_per_sample=4`, `hidden_bits=64`, `8192/class`, `5 epochs`：
+
+| model | calibrated accuracy mean | AUC mean |
+|---|---:|---:|
+| `adaptive_dbitnet_pairwise` | 0.7861 | 0.8625 |
+| `mlp` | 0.6286 | 0.6695 |
+| `adaptive_dbitnet` | 0.6001 | 0.6355 |
+
+结论：
+
+- pairwise 共享 encoder + mean/max pooling 显著超过直接 384-bit 长序列 DBitNet。
+- 该结果接近 Gohr SPECK6 单 pair 文献准确率约 0.788，但协议不同：这里是 `pairs_per_sample=4` + `ciphertext_pair_xor_bits`。
+- 这是创新一目前最强结构优化证据；后续应接入 MoE v3 专家池。
 
 ### MoE v2 Adaptive DBitNet 专家消融
 
@@ -219,11 +241,10 @@ Gohr 可比输入 `ciphertext_pair_bits`, pairs=1：
 
 优先级 2：
 
-- 实现 `adaptive_dbitnet_pairwise`：
-  - 每个 ciphertext pair 独立/共享 encoder。
-  - pair-level embedding 做 mean/max pooling 或 attention。
-  - 对比 `adaptive_dbitnet`、`moe_v2_hard/soft`、`mlp`。
-  - 目标是解决当前 `adaptive_dbitnet` 直接吃 384-bit 长序列时不如 MLP 的问题。
+- 将 `adaptive_dbitnet_pairwise` 接入 MoE v3：
+  - 替换 MoE v2 中的 `adaptive_dbitnet` 专家。
+  - 对比 `moe_v2_hard/soft`、`moe_v3_hard/soft`、`adaptive_dbitnet_pairwise`、`mlp`。
+  - 检查 MoE 是否因为弱专家拖累 pairwise 强专家；必要时设计 ARX 专家专用 gate。
 
 优先级 3：
 
