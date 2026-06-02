@@ -36,6 +36,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--rounds", type=int, nargs="+", default=[2])
     parser.add_argument("--seeds", type=int, nargs="+", default=[0])
     parser.add_argument("--samples-per-class", type=int, default=256)
+    parser.add_argument("--pairs-per-sample", type=int, default=1)
     parser.add_argument("--epochs", type=int, default=3)
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--hidden-bits", type=int, default=64)
@@ -82,6 +83,7 @@ def main() -> None:
                 samples_per_class=task["samples_per_class"],
                 seed=task["seed"],
                 feature_encoding=task["feature_encoding"],
+                pairs_per_sample=task["pairs_per_sample"],
             )
         )
         validation_dataset = make_differential_dataset(
@@ -91,6 +93,7 @@ def main() -> None:
                 samples_per_class=max(8, task["samples_per_class"] // 2),
                 seed=task["seed"] + 10_000,
                 feature_encoding=task["feature_encoding"],
+                pairs_per_sample=task["pairs_per_sample"],
             )
         )
         model = build_model(
@@ -128,6 +131,7 @@ def main() -> None:
                 "difference_member": task.get("difference_member", ""),
                 "difference_source": task.get("difference_source", ""),
                 "samples_per_class": task["samples_per_class"],
+                "pairs_per_sample": task["pairs_per_sample"],
                 "feature_encoding": task["feature_encoding"],
                 "metrics": result.final_metrics,
                 "history": result.history,
@@ -135,6 +139,7 @@ def main() -> None:
                     **result.metadata,
                     "input_bits": int(train_dataset.features.shape[1]),
                     "feature_encoding": task["feature_encoding"],
+                    "pairs_per_sample": task["pairs_per_sample"],
                 },
                 **_model_metadata(model),
             }
@@ -151,6 +156,7 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
         return _tasks_from_plan(
             Path(args.plan),
             feature_encoding=args.feature_encoding,
+            pairs_per_sample=args.pairs_per_sample,
             difference_profile=args.difference_profile,
             difference_member=args.difference_member,
         )
@@ -168,6 +174,7 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "rounds": rounds,
                             "seed": seed,
                             "samples_per_class": args.samples_per_class,
+                            "pairs_per_sample": args.pairs_per_sample,
                             "feature_encoding": args.feature_encoding,
                             **_difference_metadata(
                                 cipher_key,
@@ -182,13 +189,20 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
 def _tasks_from_plan(
     path: Path,
     feature_encoding: str,
+    pairs_per_sample: int,
     difference_profile: str | None,
     difference_member: int,
 ) -> list[dict[str, Any]]:
     with path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     return [
-        _plan_task(row, feature_encoding, difference_profile, difference_member)
+        _plan_task(
+            row,
+            feature_encoding,
+            pairs_per_sample,
+            difference_profile,
+            difference_member,
+        )
         for row in rows
     ]
 
@@ -196,6 +210,7 @@ def _tasks_from_plan(
 def _plan_task(
     row: dict[str, str],
     feature_encoding: str,
+    pairs_per_sample: int,
     difference_profile: str | None,
     difference_member: int,
 ) -> dict[str, Any]:
@@ -211,6 +226,7 @@ def _plan_task(
             "rounds": int(row["rounds"]),
             "seed": int(row["seed"]),
             "samples_per_class": int(row["samples_per_class"]),
+            "pairs_per_sample": int(row.get("pairs_per_sample") or pairs_per_sample),
             "feature_encoding": row.get("feature_encoding") or feature_encoding,
     }
     task.update(

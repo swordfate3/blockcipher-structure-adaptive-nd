@@ -21,6 +21,7 @@ class DifferentialDatasetConfig:
     seed: int
     shuffle: bool = True
     feature_encoding: str = "ciphertext_pair_bits"
+    pairs_per_sample: int = 1
 
 
 @dataclass(frozen=True)
@@ -31,6 +32,8 @@ class DifferentialDataset:
 
 
 def make_differential_dataset(config: DifferentialDatasetConfig) -> DifferentialDataset:
+    if config.pairs_per_sample < 1:
+        raise ValueError("pairs_per_sample must be at least 1")
     rng = np.random.default_rng(config.seed)
     block_bits = config.cipher.block_bits
     mask = (1 << block_bits) - 1
@@ -38,23 +41,39 @@ def make_differential_dataset(config: DifferentialDatasetConfig) -> Differential
     labels: list[int] = []
 
     for _ in range(config.samples_per_class):
-        plaintext = int(rng.integers(0, 1 << min(block_bits, 63), dtype=np.uint64))
-        if block_bits > 63:
-            plaintext = _random_int(rng, block_bits)
-        paired = (plaintext ^ config.input_difference) & mask
-        ciphertext_a = config.cipher.encrypt(plaintext)
-        ciphertext_b = config.cipher.encrypt(paired)
-        rows.append(
-            _encode_pair(ciphertext_a, ciphertext_b, block_bits, config.feature_encoding)
-        )
+        encoded_pairs = []
+        for _pair_index in range(config.pairs_per_sample):
+            plaintext = int(rng.integers(0, 1 << min(block_bits, 63), dtype=np.uint64))
+            if block_bits > 63:
+                plaintext = _random_int(rng, block_bits)
+            paired = (plaintext ^ config.input_difference) & mask
+            ciphertext_a = config.cipher.encrypt(plaintext)
+            ciphertext_b = config.cipher.encrypt(paired)
+            encoded_pairs.extend(
+                _encode_pair(
+                    ciphertext_a,
+                    ciphertext_b,
+                    block_bits,
+                    config.feature_encoding,
+                )
+            )
+        rows.append(encoded_pairs)
         labels.append(1)
 
     for _ in range(config.samples_per_class):
-        ciphertext_a = _random_int(rng, block_bits)
-        ciphertext_b = _random_int(rng, block_bits)
-        rows.append(
-            _encode_pair(ciphertext_a, ciphertext_b, block_bits, config.feature_encoding)
-        )
+        encoded_pairs = []
+        for _pair_index in range(config.pairs_per_sample):
+            ciphertext_a = _random_int(rng, block_bits)
+            ciphertext_b = _random_int(rng, block_bits)
+            encoded_pairs.extend(
+                _encode_pair(
+                    ciphertext_a,
+                    ciphertext_b,
+                    block_bits,
+                    config.feature_encoding,
+                )
+            )
+        rows.append(encoded_pairs)
         labels.append(0)
 
     features = np.array(rows, dtype=np.uint8)
@@ -73,6 +92,7 @@ def make_differential_dataset(config: DifferentialDatasetConfig) -> Differential
         "samples_per_class": config.samples_per_class,
         "seed": config.seed,
         "feature_encoding": config.feature_encoding,
+        "pairs_per_sample": config.pairs_per_sample,
     }
     return DifferentialDataset(features=features, labels=label_array, metadata=metadata)
 

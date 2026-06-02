@@ -54,6 +54,25 @@ def test_make_differential_dataset_can_include_xor_difference_bits():
     assert dataset.metadata["feature_encoding"] == "ciphertext_pair_xor_bits"
 
 
+def test_make_differential_dataset_can_group_multiple_pairs_per_sample():
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=2,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_pair_xor_bits",
+        pairs_per_sample=2,
+    )
+
+    dataset = make_differential_dataset(config)
+
+    assert dataset.features.shape == (4, 192)
+    assert dataset.labels.tolist() == [1, 1, 0, 0]
+    assert dataset.metadata["pairs_per_sample"] == 2
+
+
 def test_make_differential_dataset_is_reproducible_for_same_seed():
     cipher = Speck32_64(rounds=3, key=0x1918111009080100)
     config = DifferentialDatasetConfig(

@@ -147,6 +147,48 @@ def test_run_innovation_one_matrix_can_use_literature_difference_profile(tmp_pat
     assert "Gohr 2019" in rows[0]["difference_source"]
 
 
+def test_run_innovation_one_matrix_records_multi_pair_samples(tmp_path: Path):
+    output_path = tmp_path / "multi_pair.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "mlp",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
+            "--pairs-per-sample",
+            "2",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["pairs_per_sample"] == 2
+    assert rows[0]["training"]["pairs_per_sample"] == 2
+    assert rows[0]["training"]["input_bits"] == 192
+
+
 def test_run_innovation_one_matrix_can_train_structure_moe(tmp_path: Path):
     output_path = tmp_path / "moe.jsonl"
 

@@ -12,11 +12,19 @@ class DifferenceProfile:
     source: str
     word_difference: tuple[str, ...] = ()
     note: str = ""
+    difference_kind: str = "xor"
+    pairs_per_sample: int = 1
+    related_key_difference: int | None = None
+    polytope_size: int = 2
 
     @property
     def difference(self) -> int:
         if self.kind != "fixed":
             raise ValueError(f"profile {self.name} is not a fixed input difference")
+        if self.difference_kind != "xor":
+            raise ValueError(
+                f"profile {self.name} uses {self.difference_kind}, not a fixed xor input difference"
+            )
         return self.differences[0]
 
 
@@ -100,12 +108,32 @@ def literature_difference_profiles() -> dict[str, DifferenceProfile]:
             source="Li/Sun 2025 key-recovery-friendly SM4 differential family",
             note="Constrained family; not directly usable as a fixed neural input difference.",
         ),
+        "simon32_rx_neural2025_schema": DifferenceProfile(
+            name="simon32_rx_neural2025_schema",
+            cipher="simon32",
+            kind="schema_only",
+            differences=(),
+            source="Liu/Chen/Xiang/Zhang/Zeng 2025 RX-neural Simon/Simeck",
+            note="Schema placeholder for RX-neural distinguishers; requires SIMON/SIMECK generators.",
+            difference_kind="rx",
+            pairs_per_sample=8,
+        ),
+        "speck32_polytopic2026_schema": DifferenceProfile(
+            name="speck32_polytopic2026_schema",
+            cipher="speck32",
+            kind="schema_only",
+            differences=(),
+            source="Mirzaali/Sadeghi/Bagheri 2026 polytopic neural distinguishers",
+            note="Schema placeholder for ciphertext quadruple/polytope inputs.",
+            difference_kind="polytope",
+            polytope_size=4,
+        ),
     }
 
 
 def difference_for_profile(name: str, member_index: int = 0) -> int:
     profile = literature_difference_profiles()[name]
-    if profile.kind == "difference_family":
+    if profile.kind in {"difference_family", "schema_only"}:
         raise ValueError(f"profile {name} is not a fixed input difference")
     try:
         return profile.differences[member_index]
