@@ -18,6 +18,11 @@ class TrainingConfig:
     learning_rate: float = 1e-3
     seed: int = 0
     device: str = "auto"
+    optimizer: str = "adam"
+    amsgrad: bool = False
+    weight_decay: float = 0.0
+    lr_scheduler: str = "none"
+    max_learning_rate: float | None = None
 
 
 @dataclass(frozen=True)
@@ -80,7 +85,8 @@ def train_binary_classifier(
     torch.manual_seed(config.seed)
     selected_device = _select_device(config.device)
     model = model.to(selected_device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
+    optimizer = _make_optimizer(model, config)
+    scheduler = _make_scheduler(optimizer, config, len(train_dataset.labels))
     loss_fn = nn.BCEWithLogitsLoss()
     train_loader = _make_loader(
         train_dataset,
@@ -102,6 +108,8 @@ def train_binary_classifier(
             loss = loss_fn(logits, labels)
             loss.backward()
             optimizer.step()
+            if scheduler is not None:
+                scheduler.step()
             total_loss += float(loss.detach().cpu()) * len(labels)
             total_seen += len(labels)
 
@@ -118,6 +126,7 @@ def train_binary_classifier(
                 "val_loss": validation_metrics["loss"],
                 "val_accuracy": validation_metrics["accuracy"],
                 "val_auc": validation_metrics["auc"],
+                "learning_rate": _current_learning_rate(optimizer),
             }
         )
 
@@ -131,10 +140,59 @@ def train_binary_classifier(
         "epochs": config.epochs,
         "batch_size": config.batch_size,
         "learning_rate": config.learning_rate,
+        "optimizer": config.optimizer,
+        "amsgrad": config.amsgrad,
+        "weight_decay": config.weight_decay,
+        "lr_scheduler": config.lr_scheduler,
+        "max_learning_rate": config.max_learning_rate,
         "seed": config.seed,
         "device": str(selected_device),
     }
     return TrainingResult(history=history, final_metrics=final_metrics, metadata=metadata)
+
+
+def _make_optimizer(
+    model: nn.Module,
+    config: TrainingConfig,
+) -> torch.optim.Optimizer:
+    if config.optimizer == "adam":
+        return torch.optim.Adam(
+            model.parameters(),
+            lr=config.learning_rate,
+            weight_decay=config.weight_decay,
+            amsgrad=config.amsgrad,
+        )
+    if config.optimizer == "adamw":
+        return torch.optim.AdamW(
+            model.parameters(),
+            lr=config.learning_rate,
+            weight_decay=config.weight_decay,
+            amsgrad=config.amsgrad,
+        )
+    raise ValueError(f"unsupported optimizer: {config.optimizer}")
+
+
+def _make_scheduler(
+    optimizer: torch.optim.Optimizer,
+    config: TrainingConfig,
+    train_size: int,
+) -> torch.optim.lr_scheduler.LRScheduler | None:
+    if config.lr_scheduler == "none":
+        return None
+    if config.lr_scheduler == "cyclic":
+        steps_per_epoch = max(1, (train_size + config.batch_size - 1) // config.batch_size)
+        return torch.optim.lr_scheduler.CyclicLR(
+            optimizer,
+            base_lr=config.learning_rate,
+            max_lr=config.max_learning_rate or config.learning_rate * 10.0,
+            step_size_up=max(1, steps_per_epoch // 2),
+            cycle_momentum=False,
+        )
+    raise ValueError(f"unsupported lr scheduler: {config.lr_scheduler}")
+
+
+def _current_learning_rate(optimizer: torch.optim.Optimizer) -> float:
+    return float(optimizer.param_groups[0]["lr"])
 
 
 def _make_loader(

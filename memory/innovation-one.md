@@ -41,6 +41,7 @@
 - `moe_soft`
 - `lstm_roundseq`
 - `transformer_encoder`
+- `gohr_resnet_speck_depth10`
 
 重要说明：
 
@@ -48,6 +49,7 @@
 - 当前 `dbitnet_dilated_cnn` 是旧的固定 dilation 轻量版，不代表文献完整 DBitNet。
 - 新增 `adaptive_dbitnet` 才开始按输入 bit 宽度生成 DBitNet-style dilation rates。
 - 新增 `gohr_resnet_speck` 是 SPECK32/64 专用 4-channel word-aware Gohr-style 模型，只支持 64-bit `C || C'` 原始 pair 输入。
+- 新增 `gohr_resnet_speck_depth10` 用于筛查深残差 Gohr-style 变体，但当前一次小规模实验没有超过浅层 Gohr 模型。
 
 ## Adaptive DBitNet
 
@@ -84,6 +86,7 @@ Flatten -> Linear(256) -> ReLU -> Linear(256) -> ReLU -> Linear(64) -> ReLU -> L
 
 ```text
 gohr_resnet_speck
+gohr_resnet_speck_depth10
 ```
 
 对应文件：
@@ -103,6 +106,29 @@ pairs_per_sample = 1
 该模型用于复现 Gohr SPECK32/64 原始 pair 输入设置，不直接用于 `ciphertext_pair_xor_bits` 或 multi-pair 宽输入。
 
 ## 已跑关键实验
+
+### Gohr ResNet SPECK 训练日程筛查
+
+记录文件：
+
+- `docs/experiments/2026-06-02-gohr-speck-training-schedule-screen.md`
+
+关键结果：
+
+| 配置 | 轮数 | calibrated accuracy mean | AUC mean |
+|---|---:|---:|---:|
+| `gohr_resnet_speck`, 8192/class, 5 epochs | 5 | 0.8527 | 0.9074 |
+| `gohr_resnet_speck`, 8192/class, 5 epochs | 6 | 0.6675 | 0.7134 |
+| `gohr_resnet_speck`, 8192/class, 5 epochs | 7 | 0.5095 | 0.5039 |
+| `gohr_resnet_speck_depth10`, cyclic LR | 6 | 0.6304 | 0.6662 |
+| `gohr_resnet_speck`, AMSGrad, 32768/class, 10 epochs | 6 | 0.6978 | 0.7535 |
+
+结论：
+
+- 真正 SPECK 专用 4-channel Gohr-style reshape 明显强于此前简化 ResNet / DBitNet / MLP。
+- AMSGrad + 更大样本 + 更多 epoch 对 SPECK6 有实质提升。
+- depth10 + 当前 cyclic LR 设置没有提升，不能把“更深网络”作为创新点硬写。
+- 当前最好 SPECK6 仍低于 Gohr 2019 约 0.788，后续需继续校准 bit ordering、网络细节与训练日程。
 
 ### SPECK6 主表 v1 与容量消融
 
@@ -160,9 +186,9 @@ Gohr 可比输入 `ciphertext_pair_bits`, pairs=1：
 
 优先级 1：
 
-- 已实现 `gohr_resnet_speck`，使用 SPECK32/64 的 4 channels × 16 bit positions 输入 reshape。
-- 目标是复现 Gohr SPECK6 接近 0.78、SPECK7 接近 0.61 的文献水平。
-- 下一步应跑 SPECK5/6/7 小规模复现；若仍弱，再补 AMSGrad/cyclic LR/L2/depth-10。
+- 已实现 `gohr_resnet_speck` 与 `gohr_resnet_speck_depth10`，使用 SPECK32/64 的 4 channels × 16 bit positions 输入 reshape。
+- 当前 SPECK6 最好为 `0.6978 / AUC 0.7535`，相对项目旧模型显著提升，但尚未达到 Gohr 文献水平。
+- 下一步应继续排查 Gohr 原始 bit ordering、残差块/BN/ReLU 细节、训练集规模与学习率衰减。
 
 优先级 2：
 

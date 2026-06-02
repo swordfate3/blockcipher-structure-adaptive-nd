@@ -42,6 +42,30 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--hidden-bits", type=int, default=64)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument(
+        "--optimizer",
+        default="adam",
+        choices=["adam", "adamw"],
+        help="Optimizer used for neural distinguisher training.",
+    )
+    parser.add_argument(
+        "--amsgrad",
+        action="store_true",
+        help="Enable AMSGrad in Adam/AdamW.",
+    )
+    parser.add_argument("--weight-decay", type=float, default=0.0)
+    parser.add_argument(
+        "--lr-scheduler",
+        default="none",
+        choices=["none", "cyclic"],
+        help="Optional learning-rate scheduler.",
+    )
+    parser.add_argument(
+        "--max-learning-rate",
+        type=float,
+        default=None,
+        help="Maximum learning rate for cyclic scheduling.",
+    )
+    parser.add_argument(
         "--feature-encoding",
         default="ciphertext_pair_bits",
         choices=["ciphertext_pair_bits", "ciphertext_pair_xor_bits"],
@@ -131,6 +155,11 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
             epochs=args.epochs,
             batch_size=args.batch_size,
             learning_rate=args.learning_rate,
+            optimizer=args.optimizer,
+            amsgrad=args.amsgrad,
+            weight_decay=args.weight_decay,
+            lr_scheduler=args.lr_scheduler,
+            max_learning_rate=args.max_learning_rate,
             seed=task["seed"],
         ),
     )

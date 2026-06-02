@@ -189,6 +189,58 @@ def test_run_innovation_one_matrix_records_multi_pair_samples(tmp_path: Path):
     assert rows[0]["training"]["input_bits"] == 192
 
 
+def test_run_innovation_one_matrix_passes_gohr_style_training_options(tmp_path: Path):
+    output_path = tmp_path / "training_options.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "gohr_resnet_speck_depth10",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--difference-profile",
+            "speck32_gohr2019",
+            "--optimizer",
+            "adamw",
+            "--amsgrad",
+            "--weight-decay",
+            "0.0001",
+            "--lr-scheduler",
+            "cyclic",
+            "--max-learning-rate",
+            "0.003",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["model"] == "gohr_resnet_speck_depth10"
+    assert rows[0]["training"]["optimizer"] == "adamw"
+    assert rows[0]["training"]["amsgrad"] is True
+    assert rows[0]["training"]["weight_decay"] == 0.0001
+    assert rows[0]["training"]["lr_scheduler"] == "cyclic"
+    assert rows[0]["training"]["max_learning_rate"] == 0.003
+
+
 def test_run_innovation_one_matrix_can_train_structure_moe(tmp_path: Path):
     output_path = tmp_path / "moe.jsonl"
 

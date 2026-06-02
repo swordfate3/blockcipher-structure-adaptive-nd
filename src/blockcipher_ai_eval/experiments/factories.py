@@ -52,6 +52,8 @@ def build_model(name: str, input_bits: int, hidden_bits: int) -> nn.Module:
         return AdaptiveDBitNetDistinguisher(input_bits=input_bits, base_channels=hidden_bits)
     if name == "gohr_resnet_speck":
         return GohrSpeckDistinguisher(input_bits=input_bits, filters=hidden_bits)
+    if name == "gohr_resnet_speck_depth10":
+        return GohrSpeckDistinguisher(input_bits=input_bits, filters=hidden_bits, blocks=10)
     if name == "senet_resnext":
         return SeResNeXtDistinguisher(input_bits=input_bits, channels=hidden_bits)
     if name == "multiscale_dense_resnet":

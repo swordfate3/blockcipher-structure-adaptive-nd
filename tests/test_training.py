@@ -64,6 +64,38 @@ def test_train_binary_classifier_returns_history_and_final_metrics():
     assert result.metadata["batch_size"] == 16
 
 
+def test_train_binary_classifier_supports_gohr_style_optimizer_options():
+    dataset = make_differential_dataset(
+        DifferentialDatasetConfig(
+            cipher=Speck32_64(rounds=2, key=0x1918111009080100),
+            input_difference=0x0040,
+            samples_per_class=32,
+            seed=3,
+        )
+    )
+    model = MlpDistinguisher(input_bits=dataset.features.shape[1], hidden_bits=16)
+    config = TrainingConfig(
+        epochs=2,
+        batch_size=16,
+        learning_rate=1e-3,
+        seed=99,
+        optimizer="adamw",
+        amsgrad=True,
+        weight_decay=1e-4,
+        lr_scheduler="cyclic",
+        max_learning_rate=3e-3,
+    )
+
+    result = train_binary_classifier(model, dataset, dataset, config)
+
+    assert result.metadata["optimizer"] == "adamw"
+    assert result.metadata["amsgrad"] is True
+    assert result.metadata["weight_decay"] == 1e-4
+    assert result.metadata["lr_scheduler"] == "cyclic"
+    assert result.metadata["max_learning_rate"] == 3e-3
+    assert result.history[-1]["learning_rate"] <= 3e-3
+
+
 def test_binary_auc_handles_ties_without_quadratic_comparison_matrix(monkeypatch):
     labels = np.array([1, 0, 1, 0, 1, 0], dtype=np.float32)
     scores = np.array([0.8, 0.1, 0.5, 0.5, 0.2, 0.2], dtype=np.float32)

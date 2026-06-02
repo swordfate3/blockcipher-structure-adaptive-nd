@@ -41,6 +41,13 @@ def test_build_model_supports_gohr_resnet_speck_key():
     assert isinstance(model, GohrSpeckDistinguisher)
 
 
+def test_build_model_supports_depth10_gohr_resnet_speck_key():
+    model = build_model("gohr_resnet_speck_depth10", input_bits=64, hidden_bits=8)
+
+    assert isinstance(model, GohrSpeckDistinguisher)
+    assert model.blocks == 10
+
+
 @pytest.mark.parametrize("input_bits", [63, 96, 384])
 def test_gohr_speck_model_rejects_non_original_pair_width(input_bits: int):
     with pytest.raises(ValueError, match="64-bit SPECK32/64 ciphertext-pair input"):

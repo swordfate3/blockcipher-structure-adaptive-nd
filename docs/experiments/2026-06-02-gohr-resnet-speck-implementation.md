@@ -86,15 +86,22 @@ wrote 1 rows to outputs/gohr_resnet_speck_smoke.jsonl
 
 ## 下一步
 
-1. 跑 SPECK5/6/7 小规模复现：
-   - `models=gohr_resnet_speck resnet_bitslice adaptive_dbitnet mlp`
-   - `feature_encoding=ciphertext_pair_bits`
-   - `pairs_per_sample=1`
-   - `samples_per_class=8192`
-   - `epochs=5`
-2. 若 Gohr 专用模型仍弱，补训练 schedule：
-   - AMSGrad / cyclic learning rate。
-   - L2 weight decay。
-   - 更大样本。
-   - depth-10 variant。
-3. 目标是逐步靠近文献中 SPECK6 约 0.78、SPECK7 约 0.61 的水平。
+后续训练日程筛查记录见：
+
+- `docs/experiments/2026-06-02-gohr-speck-training-schedule-screen.md`
+
+已完成结果：
+
+- 小规模 `8192/class, 5 epochs` 下，`gohr_resnet_speck` 达到：
+  - SPECK5 calibrated accuracy `0.8527`, AUC `0.9074`
+  - SPECK6 calibrated accuracy `0.6675`, AUC `0.7134`
+  - SPECK7 接近随机
+- 新增 `gohr_resnet_speck_depth10`，但当前 cyclic LR 小规模筛查没有超过浅层模型。
+- SPECK6 使用 AMSGrad + `32768/class` + `10 epochs` 后提升到 calibrated accuracy
+  `0.6978`, AUC `0.7535`。
+
+仍需继续校准：
+
+1. Gohr 原始 bit ordering 与当前 `(x, y, x', y')` bit ordering 是否完全一致。
+2. residual block、BN/ReLU 顺序和 dense head 是否与论文/开源实现一致。
+3. 是否需要更大训练集、更长训练或更接近论文的学习率衰减策略。
