@@ -284,6 +284,52 @@ def test_run_innovation_one_matrix_can_train_structure_moe(tmp_path: Path):
     assert rows[0]["gate_weights_mean"]["multiscale_dense_resnet"] == 0.25
 
 
+def test_run_innovation_one_matrix_can_train_adaptive_moe_v2(tmp_path: Path):
+    output_path = tmp_path / "moe_v2.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "moe_v2_hard",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
+            "--pairs-per-sample",
+            "2",
+            "--difference-profile",
+            "speck32_gohr2019",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["model"] == "moe_v2_hard"
+    assert rows[0]["gate_mode"] == "hard"
+    assert rows[0]["expert_set"] == "v2_adaptive"
+    assert rows[0]["gate_weights_mean"]["adaptive_dbitnet"] == 0.20
+    assert "dbitnet_dilated_cnn" not in rows[0]["gate_weights_mean"]
+
+
 def test_run_innovation_one_matrix_prints_task_progress(tmp_path: Path):
     output_path = tmp_path / "progress.jsonl"
 

@@ -86,4 +86,28 @@ def build_model(name: str, input_bits: int, hidden_bits: int) -> nn.Module:
             structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
             gate_mode="soft",
         )
+    if name == "moe_v2_uniform":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="uniform",
+            expert_set="v2_adaptive",
+        )
+    if name == "moe_v2_hard":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="hard",
+            expert_set="v2_adaptive",
+        )
+    if name == "moe_v2_soft":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="soft",
+            expert_set="v2_adaptive",
+        )
     raise ValueError(f"unsupported model: {name}")

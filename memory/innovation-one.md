@@ -39,6 +39,9 @@
 - `moe_uniform`
 - `moe_hard`
 - `moe_soft`
+- `moe_v2_uniform`
+- `moe_v2_hard`
+- `moe_v2_soft`
 - `lstm_roundseq`
 - `transformer_encoder`
 - `gohr_resnet_speck_depth10`
@@ -50,6 +53,7 @@
 - 新增 `adaptive_dbitnet` 才开始按输入 bit 宽度生成 DBitNet-style dilation rates。
 - 新增 `gohr_resnet_speck` 是 SPECK32/64 专用 4-channel word-aware Gohr-style 模型，只支持 64-bit `C || C'` 原始 pair 输入。
 - 新增 `gohr_resnet_speck_depth10` 用于筛查深残差 Gohr-style 变体，但当前一次小规模实验没有超过浅层 Gohr 模型。
+- 新增 `moe_v2_*` 保持 6 专家结构，但将旧 `dbitnet_dilated_cnn` 专家替换为 `adaptive_dbitnet`。
 
 ## Adaptive DBitNet
 
@@ -106,6 +110,29 @@ pairs_per_sample = 1
 该模型用于复现 Gohr SPECK32/64 原始 pair 输入设置，不直接用于 `ciphertext_pair_xor_bits` 或 multi-pair 宽输入。
 
 ## 已跑关键实验
+
+### MoE v2 Adaptive DBitNet 专家消融
+
+记录文件：
+
+- `docs/experiments/2026-06-02-moe-v2-adaptive-dbitnet-speck6-screen.md`
+
+SPECK6, `ciphertext_pair_xor_bits`, `pairs_per_sample=4`, `hidden_bits=64`, `8192/class`, `5 epochs`：
+
+| model | calibrated accuracy mean | AUC mean |
+|---|---:|---:|
+| `mlp` | 0.6313 | 0.6717 |
+| `moe_soft` | 0.6284 | 0.6691 |
+| `moe_v2_hard` | 0.5986 | 0.6313 |
+| `adaptive_dbitnet` | 0.5964 | 0.6316 |
+| `moe_v2_soft` | 0.5957 | 0.6285 |
+| `moe_hard` | 0.5724 | 0.5960 |
+
+结论：
+
+- 替换为 adaptive DBitNet 后，hard gate 明显改善：`moe_hard` 0.5724 -> `moe_v2_hard` 0.5986。
+- 但 `moe_v2_soft` 低于旧 `moe_soft` 和 MLP，说明简单替换专家还不是最终方案。
+- 下一步应实现 `adaptive_dbitnet_pairwise`：每个 ciphertext pair 共享 encoder，再跨 pair pooling/attention 融合。
 
 ### Gohr ResNet SPECK 训练日程筛查
 
@@ -192,14 +219,11 @@ Gohr 可比输入 `ciphertext_pair_bits`, pairs=1：
 
 优先级 2：
 
-- 对 `adaptive_dbitnet` 做小扩展：
-  - SPECK6
-  - `feature_encoding=ciphertext_pair_xor_bits`
-  - `pairs_per_sample=4`
-  - `hidden_bits=64`
-  - `epochs=10`
-  - `samples_per_class=8192` 或 `16384`
-  - `seeds=0 1 2`
+- 实现 `adaptive_dbitnet_pairwise`：
+  - 每个 ciphertext pair 独立/共享 encoder。
+  - pair-level embedding 做 mean/max pooling 或 attention。
+  - 对比 `adaptive_dbitnet`、`moe_v2_hard/soft`、`mlp`。
+  - 目标是解决当前 `adaptive_dbitnet` 直接吃 384-bit 长序列时不如 MLP 的问题。
 
 优先级 3：
 

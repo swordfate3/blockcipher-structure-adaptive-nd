@@ -2,7 +2,8 @@ import torch
 
 from blockcipher_ai_eval.innovation_one import CipherProfile
 from blockcipher_ai_eval.models import StructureAwareMoEDistinguisher
-from blockcipher_ai_eval.models.structure_moe import EXPERT_KEYS
+from blockcipher_ai_eval.models.adaptive_dbitnet import AdaptiveDBitNetDistinguisher
+from blockcipher_ai_eval.models.structure_moe import EXPERT_KEYS, V2_EXPERT_KEYS
 from blockcipher_ai_eval.structure_features import structure_feature_vector
 
 
@@ -72,3 +73,30 @@ def test_soft_moe_weights_sum_to_one():
 
     assert weights.shape == (2, 6)
     assert torch.allclose(weights.sum(dim=1), torch.ones(2), atol=1e-6)
+
+
+def test_v2_moe_replaces_fixed_dbitnet_with_adaptive_dbitnet_expert():
+    model = StructureAwareMoEDistinguisher(
+        input_bits=96,
+        hidden_bits=8,
+        structure_feature_bits=19,
+        gate_mode="hard",
+        expert_set="v2_adaptive",
+    )
+    model.set_structure_features(_features(CipherProfile.sm4(), rounds=4))
+
+    output = model(torch.zeros((2, 96), dtype=torch.float32))
+    summary = model.gate_summary()
+
+    assert output.shape == (2, 1)
+    assert V2_EXPERT_KEYS == (
+        "resnet_bitslice",
+        "adaptive_dbitnet",
+        "cnn",
+        "mlp",
+        "senet_resnext",
+        "multiscale_dense_resnet",
+    )
+    assert isinstance(model.experts[1], AdaptiveDBitNetDistinguisher)
+    assert summary["gate_weight_adaptive_dbitnet"] == 0.35
+    assert "gate_weight_dbitnet_dilated_cnn" not in summary
