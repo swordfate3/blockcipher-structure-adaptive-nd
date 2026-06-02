@@ -5,6 +5,8 @@ from blockcipher_ai_eval.experiments import build_model
 from blockcipher_ai_eval.models import (
     DBitNetDistinguisher,
     LstmRoundSeqDistinguisher,
+    MultiScaleDenseResNetDistinguisher,
+    SeResNeXtDistinguisher,
     TransformerEncoderDistinguisher,
 )
 
@@ -13,6 +15,8 @@ from blockcipher_ai_eval.models import (
     ("model_key", "model_type"),
     [
         ("dbitnet_dilated_cnn", DBitNetDistinguisher),
+        ("senet_resnext", SeResNeXtDistinguisher),
+        ("multiscale_dense_resnet", MultiScaleDenseResNetDistinguisher),
         ("lstm_roundseq", LstmRoundSeqDistinguisher),
         ("transformer_encoder", TransformerEncoderDistinguisher),
     ],
@@ -32,9 +36,14 @@ def test_build_model_supports_all_innovation_one_candidate_keys(
 
 @pytest.mark.parametrize(
     "model_key",
-    ["dbitnet_dilated_cnn", "lstm_roundseq", "transformer_encoder"],
+    [
+        "dbitnet_dilated_cnn",
+        "senet_resnext",
+        "multiscale_dense_resnet",
+        "lstm_roundseq",
+        "transformer_encoder",
+    ],
 )
 def test_innovation_one_candidate_models_reject_odd_pair_width(model_key: str):
     with pytest.raises(ValueError, match="even number of input bits"):
         build_model(model_key, input_bits=63, hidden_bits=8)
-

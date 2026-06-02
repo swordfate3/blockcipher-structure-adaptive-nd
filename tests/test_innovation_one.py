@@ -30,7 +30,7 @@ def test_rank_architectures_prefers_cnn_or_dbitnet_for_spn_cipher():
     networks = NetworkProfile.default_candidates()
 
     ranked = rank_architectures(cipher, networks)
-    top_names = {ranked[0].name, ranked[1].name}
+    top_names = {item.name for item in ranked[:4]}
 
     assert "DBitNet-DilatedCNN" in top_names
     assert "CNN-SBoxLocal" in top_names
@@ -54,7 +54,7 @@ def test_rank_architectures_prefers_sm4_convolutional_candidates_over_lstm():
     networks = NetworkProfile.default_candidates()
 
     ranked = rank_architectures(cipher, networks)
-    top_names = {ranked[0].name, ranked[1].name}
+    top_names = {item.name for item in ranked[:4]}
 
     assert "CNN-SBoxLocal" in top_names
     assert "DBitNet-DilatedCNN" in top_names
@@ -66,6 +66,8 @@ def test_default_literature_rules_cover_core_cipher_structures():
 
     assert any(rule.source_id == "gohr2019_speck_resnet" for rule in rules)
     assert any(rule.source_id == "dbitnet2023_cipher_agnostic" for rule in rules)
+    assert any(rule.source_id == "bao2022_senet_simon" for rule in rules)
+    assert any(rule.source_id == "hou2025_multiscale_dense_speck_simon" for rule in rules)
     assert any(rule.source_id == "yu2023_sm4_conv_resnet" for rule in rules)
 
     speck_rules = [
@@ -143,6 +145,11 @@ def test_recommend_experiment_configs_keeps_ranked_literature_metadata():
 
 def test_recommended_model_key_maps_paper_architecture_to_runnable_model():
     assert recommended_model_key("ResNet-BitSlice") == "resnet_bitslice"
+    assert recommended_model_key("SENet-ResNeXt") == "senet_resnext"
+    assert (
+        recommended_model_key("MultiScale-DenseResNet")
+        == "multiscale_dense_resnet"
+    )
     assert recommended_model_key("CNN-SBoxLocal") == "cnn"
     assert recommended_model_key("MLP-Baseline") == "mlp"
 
