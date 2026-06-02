@@ -330,6 +330,143 @@ def test_run_innovation_one_matrix_can_train_adaptive_moe_v2(tmp_path: Path):
     assert "dbitnet_dilated_cnn" not in rows[0]["gate_weights_mean"]
 
 
+def test_run_innovation_one_matrix_infers_pair_bits_for_pairwise_model(tmp_path: Path):
+    output_path = tmp_path / "pairwise_present.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "present80",
+            "--models",
+            "adaptive_dbitnet_pairwise",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
+            "--pairs-per-sample",
+            "2",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["cipher"] == "PRESENT-80"
+    assert rows[0]["model"] == "adaptive_dbitnet_pairwise"
+    assert rows[0]["training"]["input_bits"] == 384
+    assert rows[0]["training"]["pair_bits"] == 192
+
+
+def test_run_innovation_one_matrix_can_train_pairwise_moe_v3(tmp_path: Path):
+    output_path = tmp_path / "moe_v3.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "moe_v3_hard",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
+            "--pairs-per-sample",
+            "2",
+            "--difference-profile",
+            "speck32_gohr2019",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["model"] == "moe_v3_hard"
+    assert rows[0]["expert_set"] == "v3_pairwise"
+    assert rows[0]["training"]["pair_bits"] == 96
+    assert rows[0]["gate_weights_mean"]["adaptive_dbitnet_pairwise"] == 0.20
+    assert "adaptive_dbitnet" not in rows[0]["gate_weights_mean"]
+
+
+def test_run_innovation_one_matrix_can_train_structure_rule_selector(tmp_path: Path):
+    output_path = tmp_path / "selector_rule.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "present80",
+            "sm4",
+            "--models",
+            "selector_rule",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
+            "--pairs-per-sample",
+            "2",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert len(rows) == 3
+    assert {row["cipher"]: row["selected_model"] for row in rows} == {
+        "SPECK32/64": "adaptive_dbitnet_pairwise",
+        "PRESENT-80": "senet_resnext",
+        "SM4": "multiscale_dense_resnet",
+    }
+    assert rows[0]["model"] == "selector_rule"
+
+
 def test_run_innovation_one_matrix_prints_task_progress(tmp_path: Path):
     output_path = tmp_path / "progress.jsonl"
 

@@ -40,7 +40,12 @@ def default_difference(name: str) -> int:
     raise ValueError(f"unsupported cipher: {name}")
 
 
-def build_model(name: str, input_bits: int, hidden_bits: int) -> nn.Module:
+def build_model(
+    name: str,
+    input_bits: int,
+    hidden_bits: int,
+    pair_bits: int | None = None,
+) -> nn.Module:
     if name == "mlp":
         return MlpDistinguisher(input_bits=input_bits, hidden_bits=hidden_bits)
     if name == "cnn":
@@ -54,7 +59,7 @@ def build_model(name: str, input_bits: int, hidden_bits: int) -> nn.Module:
     if name == "adaptive_dbitnet_pairwise":
         return PairwiseAdaptiveDBitNetDistinguisher(
             input_bits=input_bits,
-            pair_bits=96,
+            pair_bits=pair_bits or 96,
             base_channels=hidden_bits,
         )
     if name == "gohr_resnet_speck":
@@ -116,5 +121,32 @@ def build_model(name: str, input_bits: int, hidden_bits: int) -> nn.Module:
             structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
             gate_mode="soft",
             expert_set="v2_adaptive",
+        )
+    if name == "moe_v3_uniform":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="uniform",
+            expert_set="v3_pairwise",
+            pair_bits=pair_bits,
+        )
+    if name == "moe_v3_hard":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="hard",
+            expert_set="v3_pairwise",
+            pair_bits=pair_bits,
+        )
+    if name == "moe_v3_soft":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="soft",
+            expert_set="v3_pairwise",
+            pair_bits=pair_bits,
         )
     raise ValueError(f"unsupported model: {name}")

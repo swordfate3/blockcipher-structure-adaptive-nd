@@ -43,6 +43,10 @@
 - `moe_v2_uniform`
 - `moe_v2_hard`
 - `moe_v2_soft`
+- `moe_v3_uniform`
+- `moe_v3_hard`
+- `moe_v3_soft`
+- `selector_rule`
 - `lstm_roundseq`
 - `transformer_encoder`
 - `gohr_resnet_speck_depth10`
@@ -56,6 +60,8 @@
 - 新增 `gohr_resnet_speck` 是 SPECK32/64 专用 4-channel word-aware Gohr-style 模型，只支持 64-bit `C || C'` 原始 pair 输入。
 - 新增 `gohr_resnet_speck_depth10` 用于筛查深残差 Gohr-style 变体，但当前一次小规模实验没有超过浅层 Gohr 模型。
 - 新增 `moe_v2_*` 保持 6 专家结构，但将旧 `dbitnet_dilated_cnn` 专家替换为 `adaptive_dbitnet`。
+- 新增 `moe_v3_*` 保持 6 专家结构，但将 `adaptive_dbitnet` 专家替换为 `adaptive_dbitnet_pairwise`。
+- 新增 `selector_rule` 作为结构规则选择器：ARX multi-pair -> `adaptive_dbitnet_pairwise`，SPN -> `senet_resnext`，Feistel-like -> `multiscale_dense_resnet`。
 
 ## Adaptive DBitNet
 
@@ -112,6 +118,27 @@ pairs_per_sample = 1
 该模型用于复现 Gohr SPECK32/64 原始 pair 输入设置，不直接用于 `ciphertext_pair_xor_bits` 或 multi-pair 宽输入。
 
 ## 已跑关键实验
+
+### 结构适配框架推进
+
+记录文件：
+
+- `docs/experiments/2026-06-02-structure-adaptation-framework.md`
+
+已完成：
+
+- `adaptive_dbitnet_pairwise` 的 `pair_bits` 不再固定 96，runner 会按 block size 与 feature encoding 自动推断。
+- `ciphertext_pair_xor_bits` 下：
+  - SPECK32/64: `pair_bits=96`
+  - PRESENT-80: `pair_bits=192`
+  - SM4: `pair_bits=384`
+- 新增 `moe_v3_uniform/hard/soft`，专家池使用 `adaptive_dbitnet_pairwise`。
+- 新增 `selector_rule`，用于结构规则路由。
+- 跨 SPECK/PRESENT/SM4 smoke 已通过，不作为性能结论。
+
+下一步：
+
+- 跑正式结构适配矩阵，比较 `selector_rule`、`moe_v3_soft/hard`、强单专家和 MLP。
 
 ### Pairwise Adaptive DBitNet SPECK6 筛查
 

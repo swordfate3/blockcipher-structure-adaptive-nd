@@ -121,6 +121,12 @@ def main() -> None:
 def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
     cipher = build_cipher(task["cipher_key"], task["rounds"])
     input_difference = task["input_difference"]
+    model_key = _select_model_key(task["model_key"], cipher.structure, task["pairs_per_sample"])
+    pair_bits = _infer_pair_bits(
+        cipher.block_bits,
+        task["feature_encoding"],
+        task["pairs_per_sample"],
+    )
     train_dataset = make_differential_dataset(
         DifferentialDatasetConfig(
             cipher=cipher,
@@ -142,9 +148,10 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         )
     )
     model = build_model(
-        task["model_key"],
+        model_key,
         input_bits=train_dataset.features.shape[1],
         hidden_bits=args.hidden_bits,
+        pair_bits=pair_bits,
     )
     _configure_structure_aware_model(model, task["cipher_key"], task["rounds"])
     result = train_binary_classifier(
@@ -168,6 +175,7 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         "cipher_key": task["cipher_key"],
         "structure": cipher.structure,
         "model": task["model_key"],
+        "selected_model": model_key,
         "architecture": task["architecture"],
         "architecture_rank": task.get("architecture_rank"),
         "matching_score": task.get("matching_score"),
@@ -189,6 +197,7 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
             "input_bits": int(train_dataset.features.shape[1]),
             "feature_encoding": task["feature_encoding"],
             "pairs_per_sample": task["pairs_per_sample"],
+            "pair_bits": pair_bits,
         },
         **_model_metadata(model),
     }
@@ -328,6 +337,34 @@ def _model_metadata(model: Any) -> dict[str, Any]:
         "expert_set": summary.get("expert_set", "legacy"),
         "gate_weights_mean": gate_weights,
     }
+
+
+def _infer_pair_bits(
+    block_bits: int,
+    feature_encoding: str,
+    pairs_per_sample: int,
+) -> int | None:
+    if pairs_per_sample < 2:
+        return None
+    if feature_encoding == "ciphertext_pair_bits":
+        return block_bits * 2
+    if feature_encoding == "ciphertext_pair_xor_bits":
+        return block_bits * 3
+    return None
+
+
+def _select_model_key(model_key: str, structure: str, pairs_per_sample: int) -> str:
+    if model_key != "selector_rule":
+        return model_key
+    if structure == "ARX" and pairs_per_sample > 1:
+        return "adaptive_dbitnet_pairwise"
+    if structure == "ARX":
+        return "resnet_bitslice"
+    if structure == "SPN":
+        return "senet_resnext"
+    if structure == "Feistel-like":
+        return "multiscale_dense_resnet"
+    return "mlp"
 
 
 def _cipher_profile(cipher_key: str) -> CipherProfile:

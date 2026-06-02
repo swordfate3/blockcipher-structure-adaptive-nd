@@ -5,7 +5,10 @@ from typing import Any
 import torch
 from torch import nn
 
-from blockcipher_ai_eval.models.adaptive_dbitnet import AdaptiveDBitNetDistinguisher
+from blockcipher_ai_eval.models.adaptive_dbitnet import (
+    AdaptiveDBitNetDistinguisher,
+    PairwiseAdaptiveDBitNetDistinguisher,
+)
 from blockcipher_ai_eval.models.cnn import CnnDistinguisher
 from blockcipher_ai_eval.models.dbitnet import DBitNetDistinguisher
 from blockcipher_ai_eval.models.mlp import MlpDistinguisher
@@ -34,6 +37,15 @@ V2_EXPERT_KEYS = (
     "multiscale_dense_resnet",
 )
 
+V3_EXPERT_KEYS = (
+    "resnet_bitslice",
+    "adaptive_dbitnet_pairwise",
+    "cnn",
+    "mlp",
+    "senet_resnext",
+    "multiscale_dense_resnet",
+)
+
 HARD_GATE_WEIGHTS = {
     "ARX": (0.35, 0.20, 0.05, 0.05, 0.10, 0.25),
     "SPN": (0.10, 0.30, 0.30, 0.05, 0.20, 0.05),
@@ -49,18 +61,20 @@ class StructureAwareMoEDistinguisher(nn.Module):
         structure_feature_bits: int,
         gate_mode: str,
         expert_set: str = "legacy",
+        pair_bits: int | None = None,
     ) -> None:
         super().__init__()
         if gate_mode not in {"uniform", "hard", "soft"}:
             raise ValueError(f"unsupported gate_mode: {gate_mode}")
-        if expert_set not in {"legacy", "v2_adaptive"}:
+        if expert_set not in {"legacy", "v2_adaptive", "v3_pairwise"}:
             raise ValueError(f"unsupported expert_set: {expert_set}")
         self.input_bits = input_bits
         self.hidden_bits = hidden_bits
         self.structure_feature_bits = structure_feature_bits
         self.gate_mode = gate_mode
         self.expert_set = expert_set
-        self.expert_keys = V2_EXPERT_KEYS if expert_set == "v2_adaptive" else EXPERT_KEYS
+        self.pair_bits = pair_bits
+        self.expert_keys = _expert_keys(expert_set)
         self.experts = nn.ModuleList(self._build_experts(input_bits, hidden_bits))
         self.soft_gate = nn.Sequential(
             nn.Linear(structure_feature_bits, hidden_bits),
@@ -128,6 +142,12 @@ class StructureAwareMoEDistinguisher(nn.Module):
         ]
 
     def _build_dbitnet_expert(self, input_bits: int, hidden_bits: int) -> nn.Module:
+        if self.expert_set == "v3_pairwise":
+            return PairwiseAdaptiveDBitNetDistinguisher(
+                input_bits=input_bits,
+                pair_bits=self.pair_bits or 96,
+                base_channels=hidden_bits,
+            )
         if self.expert_set == "v2_adaptive":
             return AdaptiveDBitNetDistinguisher(
                 input_bits=input_bits,
@@ -146,3 +166,11 @@ class StructureAwareMoEDistinguisher(nn.Module):
         if is_feistel_like:
             return HARD_GATE_WEIGHTS["Feistel-like"]
         return tuple(1.0 / len(self.expert_keys) for _ in self.expert_keys)
+
+
+def _expert_keys(expert_set: str) -> tuple[str, ...]:
+    if expert_set == "v2_adaptive":
+        return V2_EXPERT_KEYS
+    if expert_set == "v3_pairwise":
+        return V3_EXPERT_KEYS
+    return EXPERT_KEYS

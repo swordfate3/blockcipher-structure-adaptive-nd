@@ -3,7 +3,8 @@ import torch
 from blockcipher_ai_eval.innovation_one import CipherProfile
 from blockcipher_ai_eval.models import StructureAwareMoEDistinguisher
 from blockcipher_ai_eval.models.adaptive_dbitnet import AdaptiveDBitNetDistinguisher
-from blockcipher_ai_eval.models.structure_moe import EXPERT_KEYS, V2_EXPERT_KEYS
+from blockcipher_ai_eval.models.adaptive_dbitnet import PairwiseAdaptiveDBitNetDistinguisher
+from blockcipher_ai_eval.models.structure_moe import EXPERT_KEYS, V2_EXPERT_KEYS, V3_EXPERT_KEYS
 from blockcipher_ai_eval.structure_features import structure_feature_vector
 
 
@@ -100,3 +101,31 @@ def test_v2_moe_replaces_fixed_dbitnet_with_adaptive_dbitnet_expert():
     assert isinstance(model.experts[1], AdaptiveDBitNetDistinguisher)
     assert summary["gate_weight_adaptive_dbitnet"] == 0.35
     assert "gate_weight_dbitnet_dilated_cnn" not in summary
+
+
+def test_v3_moe_replaces_adaptive_dbitnet_with_pairwise_expert():
+    model = StructureAwareMoEDistinguisher(
+        input_bits=384,
+        hidden_bits=8,
+        structure_feature_bits=19,
+        gate_mode="hard",
+        expert_set="v3_pairwise",
+        pair_bits=96,
+    )
+    model.set_structure_features(_features(CipherProfile.speck32_64(), rounds=6))
+
+    output = model(torch.zeros((2, 384), dtype=torch.float32))
+    summary = model.gate_summary()
+
+    assert output.shape == (2, 1)
+    assert V3_EXPERT_KEYS == (
+        "resnet_bitslice",
+        "adaptive_dbitnet_pairwise",
+        "cnn",
+        "mlp",
+        "senet_resnext",
+        "multiscale_dense_resnet",
+    )
+    assert isinstance(model.experts[1], PairwiseAdaptiveDBitNetDistinguisher)
+    assert summary["expert_set"] == "v3_pairwise"
+    assert summary["gate_weight_adaptive_dbitnet_pairwise"] == 0.20

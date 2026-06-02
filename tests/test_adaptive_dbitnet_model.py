@@ -70,6 +70,19 @@ def test_build_model_supports_pairwise_adaptive_dbitnet_key():
     assert model.pairs_per_sample == 4
 
 
+def test_build_model_can_configure_pairwise_adaptive_dbitnet_pair_width():
+    model = build_model(
+        "adaptive_dbitnet_pairwise",
+        input_bits=384,
+        hidden_bits=8,
+        pair_bits=192,
+    )
+
+    assert isinstance(model, PairwiseAdaptiveDBitNetDistinguisher)
+    assert model.pair_bits == 192
+    assert model.pairs_per_sample == 2
+
+
 def test_pairwise_adaptive_dbitnet_rejects_non_multiple_pair_width():
     with pytest.raises(ValueError, match="multiple of pair_bits"):
         PairwiseAdaptiveDBitNetDistinguisher(input_bits=320, pair_bits=96, base_channels=8)
