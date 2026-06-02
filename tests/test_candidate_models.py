@@ -5,6 +5,7 @@ from blockcipher_ai_eval.experiments import build_model
 from blockcipher_ai_eval.models import (
     AdaptiveDBitNetDistinguisher,
     DBitNetDistinguisher,
+    GohrSpeckDistinguisher,
     LstmRoundSeqDistinguisher,
     MultiScaleDenseResNetDistinguisher,
     SeResNeXtDistinguisher,
@@ -17,6 +18,7 @@ from blockcipher_ai_eval.models import (
     [
         ("adaptive_dbitnet", AdaptiveDBitNetDistinguisher),
         ("dbitnet_dilated_cnn", DBitNetDistinguisher),
+        ("gohr_resnet_speck", GohrSpeckDistinguisher),
         ("senet_resnext", SeResNeXtDistinguisher),
         ("multiscale_dense_resnet", MultiScaleDenseResNetDistinguisher),
         ("lstm_roundseq", LstmRoundSeqDistinguisher),
@@ -50,3 +52,8 @@ def test_build_model_supports_all_innovation_one_candidate_keys(
 def test_innovation_one_candidate_models_reject_odd_pair_width(model_key: str):
     with pytest.raises(ValueError, match="even number of input bits"):
         build_model(model_key, input_bits=63, hidden_bits=8)
+
+
+def test_gohr_resnet_speck_requires_original_speck_pair_width():
+    with pytest.raises(ValueError, match="64-bit SPECK32/64 ciphertext-pair input"):
+        build_model("gohr_resnet_speck", input_bits=96, hidden_bits=8)

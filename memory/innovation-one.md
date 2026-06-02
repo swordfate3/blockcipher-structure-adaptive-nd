@@ -47,6 +47,7 @@
 - 当前 `resnet_bitslice` 只是 Gohr-style 简化版，不是 Gohr 原版 4-channel word-aware ResNet。
 - 当前 `dbitnet_dilated_cnn` 是旧的固定 dilation 轻量版，不代表文献完整 DBitNet。
 - 新增 `adaptive_dbitnet` 才开始按输入 bit 宽度生成 DBitNet-style dilation rates。
+- 新增 `gohr_resnet_speck` 是 SPECK32/64 专用 4-channel word-aware Gohr-style 模型，只支持 64-bit `C || C'` 原始 pair 输入。
 
 ## Adaptive DBitNet
 
@@ -76,6 +77,30 @@ adaptive_dbitnet
 ```text
 Flatten -> Linear(256) -> ReLU -> Linear(256) -> ReLU -> Linear(64) -> ReLU -> Linear(1)
 ```
+
+## Gohr ResNet SPECK
+
+新增模型 key：
+
+```text
+gohr_resnet_speck
+```
+
+对应文件：
+
+- `src/blockcipher_ai_eval/models/gohr_speck.py`
+- `tests/test_gohr_speck_model.py`
+- `docs/experiments/2026-06-02-gohr-resnet-speck-implementation.md`
+
+当前限制：
+
+```text
+input_bits = 64
+feature_encoding = ciphertext_pair_bits
+pairs_per_sample = 1
+```
+
+该模型用于复现 Gohr SPECK32/64 原始 pair 输入设置，不直接用于 `ciphertext_pair_xor_bits` 或 multi-pair 宽输入。
 
 ## 已跑关键实验
 
@@ -135,8 +160,9 @@ Gohr 可比输入 `ciphertext_pair_bits`, pairs=1：
 
 优先级 1：
 
-- 实现 `gohr_resnet_speck`，使用 SPECK32/64 的 4 channels × 16 bit positions 输入 reshape。
+- 已实现 `gohr_resnet_speck`，使用 SPECK32/64 的 4 channels × 16 bit positions 输入 reshape。
 - 目标是复现 Gohr SPECK6 接近 0.78、SPECK7 接近 0.61 的文献水平。
+- 下一步应跑 SPECK5/6/7 小规模复现；若仍弱，再补 AMSGrad/cyclic LR/L2/depth-10。
 
 优先级 2：
 
@@ -170,4 +196,3 @@ python3 experiments/run_innovation_one_matrix.py
 ```
 
 之前发生过一次 hidden=128 MoE 容量消融进程在沙盒外残留并占满显存的问题。后续长实验必须确认进程退出和显存释放。
-

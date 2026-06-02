@@ -1,6 +1,7 @@
 from blockcipher_ai_eval.models.adaptive_dbitnet import AdaptiveDBitNetDistinguisher
 from blockcipher_ai_eval.models.cnn import CnnDistinguisher
 from blockcipher_ai_eval.models.dbitnet import DBitNetDistinguisher
+from blockcipher_ai_eval.models.gohr_speck import GohrSpeckDistinguisher
 from blockcipher_ai_eval.models.lstm_roundseq import LstmRoundSeqDistinguisher
 from blockcipher_ai_eval.models.mlp import MlpDistinguisher
 from blockcipher_ai_eval.models.multiscale_dense_resnet import (
@@ -15,6 +16,7 @@ __all__ = [
     "CnnDistinguisher",
     "AdaptiveDBitNetDistinguisher",
     "DBitNetDistinguisher",
+    "GohrSpeckDistinguisher",
     "LstmRoundSeqDistinguisher",
     "MlpDistinguisher",
     "MultiScaleDenseResNetDistinguisher",
