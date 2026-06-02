@@ -354,8 +354,10 @@ def _infer_pair_bits(
 
 
 def _select_model_key(model_key: str, structure: str, pairs_per_sample: int) -> str:
-    if model_key != "selector_rule":
+    if model_key not in {"selector_rule", "selector_rule_v2"}:
         return model_key
+    if model_key == "selector_rule_v2" and pairs_per_sample > 1:
+        return "adaptive_dbitnet_pairwise"
     if structure == "ARX" and pairs_per_sample > 1:
         return "adaptive_dbitnet_pairwise"
     if structure == "ARX":

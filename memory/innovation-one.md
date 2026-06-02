@@ -62,6 +62,7 @@
 - 新增 `moe_v2_*` 保持 6 专家结构，但将旧 `dbitnet_dilated_cnn` 专家替换为 `adaptive_dbitnet`。
 - 新增 `moe_v3_*` 保持 6 专家结构，但将 `adaptive_dbitnet` 专家替换为 `adaptive_dbitnet_pairwise`。
 - 新增 `selector_rule` 作为结构规则选择器：ARX multi-pair -> `adaptive_dbitnet_pairwise`，SPN -> `senet_resnext`，Feistel-like -> `multiscale_dense_resnet`。
+- 新增 `selector_rule_v2`：multi-pair 一律选 `adaptive_dbitnet_pairwise`，single-pair 再按结构选择专家。
 
 ## Adaptive DBitNet
 
@@ -118,6 +119,35 @@ pairs_per_sample = 1
 该模型用于复现 Gohr SPECK32/64 原始 pair 输入设置，不直接用于 `ciphertext_pair_xor_bits` 或 multi-pair 宽输入。
 
 ## 已跑关键实验
+
+### 结构适配主矩阵
+
+记录文件：
+
+- `docs/experiments/2026-06-02-structure-adaptation-main-matrix.md`
+
+设置：
+
+- SPECK32/64 r=6, `speck32_gohr2019`
+- PRESENT-80 r=5, `present_wang_jain2021`
+- SM4 r=4, `sm4_yu2023_conv_resnet`
+- `ciphertext_pair_xor_bits`, `pairs_per_sample=4`
+- `8192/class`, `5 epochs`, `seeds=0 1 2`, `hidden_bits=32`
+
+各结构最强结果：
+
+| cipher | best model | calibrated accuracy mean | AUC mean |
+|---|---|---:|---:|
+| SPECK32/64 | `adaptive_dbitnet_pairwise` | 0.7728 | 0.8470 |
+| PRESENT-80 | `adaptive_dbitnet_pairwise` | 0.6407 | 0.6826 |
+| SM4 | `adaptive_dbitnet_pairwise` | 0.9999 | 1.0000 |
+
+关键结论：
+
+- multi-pair 输入下，`adaptive_dbitnet_pairwise` 同时成为 ARX/SPN/Feistel-like 三类结构最强专家。
+- 旧 `selector_rule` 只在 SPECK/ARX 上选对，在 PRESENT/SM4 上低于 pairwise 专家。
+- `moe_v3_soft` 在 SPECK/SM4 接近最强专家，但 PRESENT 上仍有稀释。
+- 因此结构适配规则必须同时考虑密码结构与输入组织；新增 `selector_rule_v2` 作为修正规则。
 
 ### 结构适配框架推进
 

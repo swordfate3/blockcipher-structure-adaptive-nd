@@ -467,6 +467,54 @@ def test_run_innovation_one_matrix_can_train_structure_rule_selector(tmp_path: P
     assert rows[0]["model"] == "selector_rule"
 
 
+def test_run_innovation_one_matrix_can_train_structure_rule_v2_selector(tmp_path: Path):
+    output_path = tmp_path / "selector_rule_v2.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "present80",
+            "sm4",
+            "--models",
+            "selector_rule_v2",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
+            "--pairs-per-sample",
+            "2",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert len(rows) == 3
+    assert {row["cipher"]: row["selected_model"] for row in rows} == {
+        "SPECK32/64": "adaptive_dbitnet_pairwise",
+        "PRESENT-80": "adaptive_dbitnet_pairwise",
+        "SM4": "adaptive_dbitnet_pairwise",
+    }
+    assert rows[0]["model"] == "selector_rule_v2"
+
+
 def test_run_innovation_one_matrix_prints_task_progress(tmp_path: Path):
     output_path = tmp_path / "progress.jsonl"
 
