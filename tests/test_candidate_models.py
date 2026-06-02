@@ -3,6 +3,7 @@ import torch
 
 from blockcipher_ai_eval.experiments import build_model
 from blockcipher_ai_eval.models import (
+    AdaptiveDBitNetDistinguisher,
     DBitNetDistinguisher,
     LstmRoundSeqDistinguisher,
     MultiScaleDenseResNetDistinguisher,
@@ -14,6 +15,7 @@ from blockcipher_ai_eval.models import (
 @pytest.mark.parametrize(
     ("model_key", "model_type"),
     [
+        ("adaptive_dbitnet", AdaptiveDBitNetDistinguisher),
         ("dbitnet_dilated_cnn", DBitNetDistinguisher),
         ("senet_resnext", SeResNeXtDistinguisher),
         ("multiscale_dense_resnet", MultiScaleDenseResNetDistinguisher),
@@ -38,6 +40,7 @@ def test_build_model_supports_all_innovation_one_candidate_keys(
     "model_key",
     [
         "dbitnet_dilated_cnn",
+        "adaptive_dbitnet",
         "senet_resnext",
         "multiscale_dense_resnet",
         "lstm_roundseq",

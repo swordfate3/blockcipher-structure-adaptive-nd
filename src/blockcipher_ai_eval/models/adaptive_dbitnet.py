@@ -1,0 +1,96 @@
+from __future__ import annotations
+
+import math
+
+import torch
+from torch import nn
+
+
+def adaptive_dbitnet_dilations(input_bits: int) -> list[int]:
+    if input_bits % 2 != 0:
+        raise ValueError("AdaptiveDBitNet requires an even number of input bits")
+    if input_bits < 16:
+        raise ValueError("AdaptiveDBitNet requires at least 16 input bits")
+
+    rates: list[int] = []
+    dilation = input_bits // 2 - 1
+    while dilation >= 3:
+        rates.append(dilation)
+        dilation = (dilation + 1) // 2 - 1
+    return rates
+
+
+class AdaptiveDBitNetBlock(nn.Module):
+    def __init__(self, in_channels: int, out_channels: int, dilation: int) -> None:
+        super().__init__()
+        self.layers = nn.Sequential(
+            nn.Conv1d(
+                in_channels,
+                out_channels,
+                kernel_size=2,
+                dilation=dilation,
+                padding=0,
+            ),
+            nn.BatchNorm1d(out_channels),
+            nn.ReLU(),
+            nn.Conv1d(out_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm1d(out_channels),
+            nn.ReLU(),
+        )
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        return self.layers(features)
+
+
+class AdaptiveDBitNetDistinguisher(nn.Module):
+    """Input-size adaptive DBitNet-style dilated CNN.
+
+    This follows the DBitNet idea of deriving long-range dilation rates from the
+    input width, then using a fixed strong prediction head across input sizes.
+    """
+
+    def __init__(self, input_bits: int, base_channels: int = 32) -> None:
+        super().__init__()
+        if input_bits % 2 != 0:
+            raise ValueError("AdaptiveDBitNet requires an even number of input bits")
+        if input_bits < 16:
+            raise ValueError("AdaptiveDBitNet requires at least 16 input bits")
+        self.input_bits = input_bits
+        self.dilations = adaptive_dbitnet_dilations(input_bits)
+        self.output_width = self._output_width(input_bits, self.dilations)
+        self.output_channels = base_channels + (len(self.dilations) - 1) * 16
+
+        in_channels = 1
+        blocks: list[nn.Module] = []
+        for index, dilation in enumerate(self.dilations):
+            out_channels = base_channels + index * 16
+            blocks.append(AdaptiveDBitNetBlock(in_channels, out_channels, dilation))
+            in_channels = out_channels
+        self.features = nn.Sequential(*blocks)
+        self.classifier = nn.Sequential(
+            nn.Linear(self.output_channels * self.output_width, 256),
+            nn.ReLU(),
+            nn.Linear(256, 256),
+            nn.ReLU(),
+            nn.Linear(256, 64),
+            nn.ReLU(),
+            nn.Linear(64, 1),
+        )
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        if features.ndim != 2 or features.shape[1] != self.input_bits:
+            raise ValueError(f"expected {self.input_bits} input bits, got {tuple(features.shape)}")
+        hidden = features.float().unsqueeze(1)
+        hidden = self.features(hidden)
+        return self.classifier(hidden.flatten(start_dim=1))
+
+    @staticmethod
+    def _output_width(input_bits: int, dilations: list[int]) -> int:
+        width = input_bits
+        for dilation in dilations:
+            width -= dilation
+            if width <= 0:
+                raise ValueError(
+                    "AdaptiveDBitNet dilation schedule collapsed the feature width"
+                )
+        return width

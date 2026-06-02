@@ -4,6 +4,7 @@ from torch import nn
 
 from blockcipher_ai_eval.ciphers import Present80, ReducedRoundCipher, Sm4Reduced, Speck32_64
 from blockcipher_ai_eval.models import (
+    AdaptiveDBitNetDistinguisher,
     CnnDistinguisher,
     DBitNetDistinguisher,
     LstmRoundSeqDistinguisher,
@@ -46,6 +47,8 @@ def build_model(name: str, input_bits: int, hidden_bits: int) -> nn.Module:
         return ResNetBitSliceDistinguisher(input_bits=input_bits, channels=hidden_bits)
     if name == "dbitnet_dilated_cnn":
         return DBitNetDistinguisher(input_bits=input_bits, channels=hidden_bits)
+    if name == "adaptive_dbitnet":
+        return AdaptiveDBitNetDistinguisher(input_bits=input_bits, base_channels=hidden_bits)
     if name == "senet_resnext":
         return SeResNeXtDistinguisher(input_bits=input_bits, channels=hidden_bits)
     if name == "multiscale_dense_resnet":
