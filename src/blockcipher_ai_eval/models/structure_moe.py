@@ -8,7 +8,11 @@ from torch import nn
 from blockcipher_ai_eval.models.cnn import CnnDistinguisher
 from blockcipher_ai_eval.models.dbitnet import DBitNetDistinguisher
 from blockcipher_ai_eval.models.mlp import MlpDistinguisher
+from blockcipher_ai_eval.models.multiscale_dense_resnet import (
+    MultiScaleDenseResNetDistinguisher,
+)
 from blockcipher_ai_eval.models.resnet_bitslice import ResNetBitSliceDistinguisher
+from blockcipher_ai_eval.models.senet_resnext import SeResNeXtDistinguisher
 
 
 EXPERT_KEYS = (
@@ -16,12 +20,14 @@ EXPERT_KEYS = (
     "dbitnet_dilated_cnn",
     "cnn",
     "mlp",
+    "senet_resnext",
+    "multiscale_dense_resnet",
 )
 
 HARD_GATE_WEIGHTS = {
-    "ARX": (0.55, 0.30, 0.10, 0.05),
-    "SPN": (0.10, 0.45, 0.40, 0.05),
-    "Feistel-like": (0.30, 0.50, 0.15, 0.05),
+    "ARX": (0.35, 0.20, 0.05, 0.05, 0.10, 0.25),
+    "SPN": (0.10, 0.30, 0.30, 0.05, 0.20, 0.05),
+    "Feistel-like": (0.20, 0.35, 0.10, 0.05, 0.10, 0.20),
 }
 
 
@@ -46,6 +52,11 @@ class StructureAwareMoEDistinguisher(nn.Module):
                 DBitNetDistinguisher(input_bits=input_bits, channels=hidden_bits),
                 CnnDistinguisher(input_bits=input_bits, channels=hidden_bits),
                 MlpDistinguisher(input_bits=input_bits, hidden_bits=hidden_bits),
+                SeResNeXtDistinguisher(input_bits=input_bits, channels=hidden_bits),
+                MultiScaleDenseResNetDistinguisher(
+                    input_bits=input_bits,
+                    channels=hidden_bits,
+                ),
             ]
         )
         self.soft_gate = nn.Sequential(
@@ -99,7 +110,7 @@ class StructureAwareMoEDistinguisher(nn.Module):
             },
         }
 
-    def _hard_weights_from_structure(self) -> tuple[float, float, float, float]:
+    def _hard_weights_from_structure(self) -> tuple[float, ...]:
         is_arx = bool(self._structure_features[0].item())
         is_spn = bool(self._structure_features[1].item())
         is_feistel_like = bool(self._structure_features[2].item())
@@ -109,4 +120,4 @@ class StructureAwareMoEDistinguisher(nn.Module):
             return HARD_GATE_WEIGHTS["SPN"]
         if is_feistel_like:
             return HARD_GATE_WEIGHTS["Feistel-like"]
-        return (0.25, 0.25, 0.25, 0.25)
+        return tuple(1.0 / len(EXPERT_KEYS) for _ in EXPERT_KEYS)

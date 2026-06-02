@@ -226,5 +226,7 @@ def test_run_innovation_one_matrix_can_train_structure_moe(tmp_path: Path):
     assert completed.returncode == 0
     assert rows[0]["model"] == "moe_hard"
     assert rows[0]["gate_mode"] == "hard"
-    assert rows[0]["gate_weights_mean"]["resnet_bitslice"] == 0.55
-    assert rows[0]["gate_weights_mean"]["dbitnet_dilated_cnn"] == 0.30
+    assert rows[0]["gate_weights_mean"]["resnet_bitslice"] == 0.35
+    assert rows[0]["gate_weights_mean"]["dbitnet_dilated_cnn"] == 0.20
+    assert rows[0]["gate_weights_mean"]["senet_resnext"] == 0.10
+    assert rows[0]["gate_weights_mean"]["multiscale_dense_resnet"] == 0.25

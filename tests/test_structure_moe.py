@@ -2,6 +2,7 @@ import torch
 
 from blockcipher_ai_eval.innovation_one import CipherProfile
 from blockcipher_ai_eval.models import StructureAwareMoEDistinguisher
+from blockcipher_ai_eval.models.structure_moe import EXPERT_KEYS
 from blockcipher_ai_eval.structure_features import structure_feature_vector
 
 
@@ -22,7 +23,15 @@ def test_uniform_moe_outputs_expected_shape_and_equal_weights():
     weights = model.current_gate_weights(batch_size=3)
 
     assert output.shape == (3, 1)
-    assert torch.allclose(weights[0], torch.tensor([0.25, 0.25, 0.25, 0.25]))
+    assert EXPERT_KEYS == (
+        "resnet_bitslice",
+        "dbitnet_dilated_cnn",
+        "cnn",
+        "mlp",
+        "senet_resnext",
+        "multiscale_dense_resnet",
+    )
+    assert torch.allclose(weights[0], torch.full((6,), 1.0 / 6.0))
 
 
 def test_hard_moe_prefers_resnet_for_arx_and_dbitnet_for_sm4():
@@ -37,14 +46,17 @@ def test_hard_moe_prefers_resnet_for_arx_and_dbitnet_for_sm4():
     arx_summary = model.gate_summary()
 
     assert arx_summary["gate_mode"] == "hard"
-    assert arx_summary["gate_weight_resnet_bitslice"] == 0.55
-    assert arx_summary["gate_weight_dbitnet_dilated_cnn"] == 0.30
+    assert arx_summary["gate_weight_resnet_bitslice"] == 0.35
+    assert arx_summary["gate_weight_dbitnet_dilated_cnn"] == 0.20
+    assert arx_summary["gate_weight_multiscale_dense_resnet"] == 0.25
+    assert arx_summary["gate_weight_senet_resnext"] == 0.10
 
     model.set_structure_features(_features(CipherProfile.sm4(), rounds=4))
     sm4_summary = model.gate_summary()
 
-    assert sm4_summary["gate_weight_dbitnet_dilated_cnn"] == 0.50
-    assert sm4_summary["gate_weight_resnet_bitslice"] == 0.30
+    assert sm4_summary["gate_weight_dbitnet_dilated_cnn"] == 0.35
+    assert sm4_summary["gate_weight_multiscale_dense_resnet"] == 0.20
+    assert sm4_summary["gate_weight_resnet_bitslice"] == 0.20
 
 
 def test_soft_moe_weights_sum_to_one():
@@ -58,5 +70,5 @@ def test_soft_moe_weights_sum_to_one():
 
     weights = model.current_gate_weights(batch_size=2)
 
-    assert weights.shape == (2, 4)
+    assert weights.shape == (2, 6)
     assert torch.allclose(weights.sum(dim=1), torch.ones(2), atol=1e-6)
