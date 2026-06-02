@@ -23,6 +23,7 @@ GROUP_FIELDS = (
     "difference_source",
     "gate_mode",
     "samples_per_class",
+    "pairs_per_sample",
 )
 METRIC_FIELDS = (
     "accuracy",
