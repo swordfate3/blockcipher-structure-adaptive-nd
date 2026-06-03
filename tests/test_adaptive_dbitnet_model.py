@@ -62,10 +62,70 @@ def test_pairwise_adaptive_dbitnet_uses_shared_pair_encoder_and_pooling():
     assert model.classifier[0].in_features == model.encoder.embedding_bits * 2
 
 
+@pytest.mark.parametrize(
+    ("pooling", "expected_multiplier"),
+    [
+        ("mean", 1),
+        ("max", 1),
+        ("mean_max", 2),
+    ],
+)
+def test_pairwise_adaptive_dbitnet_supports_pooling_ablation_variants(
+    pooling: str,
+    expected_multiplier: int,
+):
+    model = PairwiseAdaptiveDBitNetDistinguisher(
+        input_bits=384,
+        pair_bits=96,
+        base_channels=8,
+        pooling=pooling,
+    )
+    batch = torch.zeros((3, 384), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.pooling == pooling
+    assert logits.shape == (3, 1)
+    assert model.classifier[0].in_features == (
+        model.encoder.embedding_bits * expected_multiplier
+    )
+
+
+def test_pairwise_adaptive_dbitnet_rejects_unknown_pooling():
+    with pytest.raises(ValueError, match="unsupported pooling"):
+        PairwiseAdaptiveDBitNetDistinguisher(
+            input_bits=384,
+            pair_bits=96,
+            base_channels=8,
+            pooling="median",
+        )
+
+
 def test_build_model_supports_pairwise_adaptive_dbitnet_key():
     model = build_model("adaptive_dbitnet_pairwise", input_bits=384, hidden_bits=8)
 
     assert isinstance(model, PairwiseAdaptiveDBitNetDistinguisher)
+    assert model.pair_bits == 96
+    assert model.pairs_per_sample == 4
+    assert model.pooling == "mean_max"
+
+
+@pytest.mark.parametrize(
+    ("model_key", "expected_pooling"),
+    [
+        ("adaptive_dbitnet_pairwise_mean", "mean"),
+        ("adaptive_dbitnet_pairwise_max", "max"),
+        ("adaptive_dbitnet_pairwise_mean_max", "mean_max"),
+    ],
+)
+def test_build_model_supports_pairwise_pooling_ablation_keys(
+    model_key: str,
+    expected_pooling: str,
+):
+    model = build_model(model_key, input_bits=384, hidden_bits=8)
+
+    assert isinstance(model, PairwiseAdaptiveDBitNetDistinguisher)
+    assert model.pooling == expected_pooling
     assert model.pair_bits == 96
     assert model.pairs_per_sample == 4
 

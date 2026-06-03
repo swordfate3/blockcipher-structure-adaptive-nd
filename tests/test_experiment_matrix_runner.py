@@ -469,6 +469,57 @@ def test_run_innovation_one_matrix_can_train_pairwise_moe_v3(tmp_path: Path):
     assert "adaptive_dbitnet" not in rows[0]["gate_weights_mean"]
 
 
+def test_run_innovation_one_matrix_can_train_pairwise_pooling_ablations(tmp_path: Path):
+    output_path = tmp_path / "pairwise_pooling.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "adaptive_dbitnet_pairwise_mean",
+            "adaptive_dbitnet_pairwise_max",
+            "adaptive_dbitnet_pairwise_mean_max",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
+            "--pairs-per-sample",
+            "2",
+            "--difference-profile",
+            "speck32_gohr2019",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert len(rows) == 3
+    assert {row["model"] for row in rows} == {
+        "adaptive_dbitnet_pairwise_mean",
+        "adaptive_dbitnet_pairwise_max",
+        "adaptive_dbitnet_pairwise_mean_max",
+    }
+    assert all(row["selected_model"] == row["model"] for row in rows)
+    assert all(row["training"]["pair_bits"] == 96 for row in rows)
+
+
 def test_run_innovation_one_matrix_can_train_structure_rule_selector(tmp_path: Path):
     output_path = tmp_path / "selector_rule.jsonl"
 

@@ -118,16 +118,21 @@ class PairwiseAdaptiveDBitNetDistinguisher(nn.Module):
         input_bits: int,
         pair_bits: int = 96,
         base_channels: int = 32,
+        pooling: str = "mean_max",
     ) -> None:
         super().__init__()
         if input_bits % pair_bits != 0:
             raise ValueError("PairwiseAdaptiveDBitNet input_bits must be a multiple of pair_bits")
+        if pooling not in {"mean", "max", "mean_max"}:
+            raise ValueError(f"unsupported pooling: {pooling}")
         self.input_bits = input_bits
         self.pair_bits = pair_bits
+        self.pooling = pooling
         self.pairs_per_sample = input_bits // pair_bits
         self.encoder = AdaptiveDBitNetEncoder(pair_bits, base_channels)
+        pooling_multiplier = 2 if pooling == "mean_max" else 1
         self.classifier = nn.Sequential(
-            nn.Linear(self.encoder.embedding_bits * 2, 256),
+            nn.Linear(self.encoder.embedding_bits * pooling_multiplier, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
@@ -148,4 +153,10 @@ class PairwiseAdaptiveDBitNetDistinguisher(nn.Module):
         )
         mean_embedding = embeddings.mean(dim=1)
         max_embedding = embeddings.max(dim=1).values
-        return self.classifier(torch.cat([mean_embedding, max_embedding], dim=1))
+        if self.pooling == "mean":
+            pooled = mean_embedding
+        elif self.pooling == "max":
+            pooled = max_embedding
+        else:
+            pooled = torch.cat([mean_embedding, max_embedding], dim=1)
+        return self.classifier(pooled)

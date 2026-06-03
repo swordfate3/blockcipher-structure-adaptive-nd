@@ -56,11 +56,18 @@ def build_model(
         return DBitNetDistinguisher(input_bits=input_bits, channels=hidden_bits)
     if name == "adaptive_dbitnet":
         return AdaptiveDBitNetDistinguisher(input_bits=input_bits, base_channels=hidden_bits)
-    if name == "adaptive_dbitnet_pairwise":
+    pairwise_pooling_keys = {
+        "adaptive_dbitnet_pairwise": "mean_max",
+        "adaptive_dbitnet_pairwise_mean": "mean",
+        "adaptive_dbitnet_pairwise_max": "max",
+        "adaptive_dbitnet_pairwise_mean_max": "mean_max",
+    }
+    if name in pairwise_pooling_keys:
         return PairwiseAdaptiveDBitNetDistinguisher(
             input_bits=input_bits,
             pair_bits=pair_bits or 96,
             base_channels=hidden_bits,
+            pooling=pairwise_pooling_keys[name],
         )
     if name == "gohr_resnet_speck":
         return GohrSpeckDistinguisher(input_bits=input_bits, filters=hidden_bits)

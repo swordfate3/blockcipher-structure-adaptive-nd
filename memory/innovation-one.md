@@ -10,6 +10,73 @@
 
 论文表述重点应放在：不同分组密码结构、输入组织方式、模型容量和神经网络架构之间存在适配关系；本文在统一实验协议下比较这种适配关系。
 
+## 毕业论文与小论文双轨计划
+
+总原则：
+
+```text
+毕业论文是主轨，小论文是从创新一中切出的 pairwise 子线。
+```
+
+### 主轨：毕业论文创新一
+
+定位：
+
+```text
+面向分组密码结构与输入组织联合适配的神经差分区分器方法。
+```
+
+毕业论文必须保留完整框架：
+
+- 密码结构分类：ARX、SPN、Feistel-like。
+- 结构特征建模：`CipherProfile` 与轮数特征。
+- 专家模型池：MLP、Gohr/ResNet、SENet、Multiscale Dense ResNet、Adaptive DBitNet、Pairwise Adaptive DBitNet、MoE。
+- 输入组织：single-pair / multi-pair，`C || C'` 与 `C || C' || C xor C'`。
+- 显式路由：`selector_rule` 与 `selector_rule_v2`。
+- 融合消融：`moe_v3_*` 不作为唯一创新点，而作为专家融合对照。
+
+毕业论文核心实验：
+
+1. 跨结构主表：SPECK32/64、PRESENT-80、SM4。
+2. single-pair / multi-pair 对照。
+3. `selector_rule` vs `selector_rule_v2`。
+4. `adaptive_dbitnet` vs `adaptive_dbitnet_pairwise`。
+5. 高轮边界：SPECK r=7、PRESENT r=6、SM4 r=5。
+6. Gohr-style SPECK single-pair 协议单独对齐，不能和 multi-pair 直接混比。
+
+### 副轨：中文核心小论文
+
+定位：
+
+```text
+多密文对神经差分区分器的共享 Pair 编码与聚合方法。
+```
+
+小论文只切 `adaptive_dbitnet_pairwise` 这条线，不展开完整结构路由框架。核心问题是：
+
+```text
+multi-pair 输入下，保留 pair 边界并共享 pair encoder 是否优于直接拼接多个 pair。
+```
+
+小论文核心实验：
+
+1. concat vs pairwise：`adaptive_dbitnet` vs `adaptive_dbitnet_pairwise`。
+2. pair 数量消融：`pairs_per_sample=1,2,4,8`。
+3. pooling 消融：mean、max、mean+max，必要时 attention。
+4. 跨密码验证：SPECK/PRESENT/SM4。
+5. 高轮边界简表：PRESENT r=6、SM4 r=5、SPECK r=7。
+6. 参数量、训练时间、显存占用作为补充，避免被质疑只是模型更大。
+
+### 当前推进顺序
+
+优先级：
+
+1. 固定创新一最终口径，不再无限加模型。
+2. 先补 pairwise pooling 消融模型与实验，因为它同时服务毕业论文和小论文。
+3. 再跑 pair 数量消融：`1,2,4,8`。
+4. 再跑更高轮边界：PRESENT r=6、SM4 r=5、SPECK r=7。
+5. 最后整理毕业论文创新一章节，并从其中抽出 pairwise 子线形成小论文初稿。
+
 ## 文献边界
 
 本地 `papers/innovation_one/` 已整理 30 篇相关论文，核心模型线包括：
@@ -248,6 +315,47 @@ SPECK6, `ciphertext_pair_xor_bits`, `pairs_per_sample=4`, `hidden_bits=64`, `819
 - pairwise 共享 encoder + mean/max pooling 显著超过直接 384-bit 长序列 DBitNet。
 - 该结果接近 Gohr SPECK6 单 pair 文献准确率约 0.788，但协议不同：这里是 `pairs_per_sample=4` + `ciphertext_pair_xor_bits`。
 - 这是创新一目前最强结构优化证据；后续应接入 MoE v3 专家池。
+
+### Pairwise pooling 与 pair 数量消融筛查
+
+记录文件：
+
+- `docs/experiments/2026-06-03-pairwise-pooling-speck-present-screen.md`
+
+设置：
+
+- SPECK32/64 r=6, `speck32_gohr2019`
+- PRESENT-80 r=5, `present_wang_jain2021`
+- `ciphertext_pair_xor_bits`
+- `pairs_per_sample=1,2,4,8`
+- `8192/class`, `5 epochs`, `seeds=0 1 2`, `hidden_bits=32`
+
+新增模型 key：
+
+- `adaptive_dbitnet_pairwise_mean`
+- `adaptive_dbitnet_pairwise_max`
+- `adaptive_dbitnet_pairwise_mean_max`
+- 默认 `adaptive_dbitnet_pairwise` 仍等价于 `mean_max`，兼容历史实验。
+
+关键结果：
+
+| cipher | pairs | best model | calibrated accuracy mean | AUC mean |
+|---|---:|---|---:|---:|
+| SPECK32/64 | 1 | `mlp` | 0.5739 | 0.5855 |
+| SPECK32/64 | 2 | `adaptive_dbitnet_pairwise_mean_max` | 0.6360 | 0.6844 |
+| SPECK32/64 | 4 | `adaptive_dbitnet_pairwise_mean_max` | 0.7738 | 0.8497 |
+| SPECK32/64 | 8 | `adaptive_dbitnet_pairwise_mean` | 0.8805 | 0.9491 |
+| PRESENT-80 | 1 | `mlp` | 0.5483 | 0.5644 |
+| PRESENT-80 | 2 | `mlp` | 0.5665 | 0.5889 |
+| PRESENT-80 | 4 | `adaptive_dbitnet_pairwise_mean_max` | 0.6343 | 0.6770 |
+| PRESENT-80 | 8 | `adaptive_dbitnet_pairwise_mean` | 0.7664 | 0.8414 |
+
+结论：
+
+- `pairs=4/8` 下，pairwise 编码显著优于直接宽输入 `adaptive_dbitnet`，支持小论文“共享 pair 编码与聚合”主线。
+- `pairs=8` 在 SPECK/PRESENT 上明显增强；但不能预设所有密码单调提升，SM4 需单独验证。
+- `mean+max` 在 `pairs=4` 更强，`mean` 在 `pairs=8` 更强且更稳。
+- 扩大验证优先选择 `adaptive_dbitnet_pairwise_mean` 与 `adaptive_dbitnet_pairwise_mean_max`，`max` 作为消融保留。
 
 ### MoE v2 Adaptive DBitNet 专家消融
 
