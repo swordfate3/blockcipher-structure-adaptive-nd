@@ -2,7 +2,16 @@ from __future__ import annotations
 
 from torch import nn
 
-from blockcipher_ai_eval.ciphers import Present80, ReducedRoundCipher, Sm4Reduced, Speck32_64
+from blockcipher_ai_eval.ciphers import (
+    Aes128,
+    Aes192,
+    Aes256,
+    Present80,
+    ReducedRoundCipher,
+    Simon64_128,
+    Sm4Reduced,
+    Speck32_64,
+)
 from blockcipher_ai_eval.models import (
     AdaptiveDBitNetDistinguisher,
     CnnDistinguisher,
@@ -21,8 +30,19 @@ from blockcipher_ai_eval.structure_features import STRUCTURE_FEATURE_NAMES
 
 
 def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
+    if name == "aes128":
+        return Aes128(rounds=rounds, key=0x000102030405060708090A0B0C0D0E0F)
+    if name == "aes192":
+        return Aes192(rounds=rounds, key=0x000102030405060708090A0B0C0D0E0F1011121314151617)
+    if name == "aes256":
+        return Aes256(
+            rounds=rounds,
+            key=0x000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F,
+        )
     if name == "speck32":
         return Speck32_64(rounds=rounds, key=0x1918111009080100)
+    if name == "simon64":
+        return Simon64_128(rounds=rounds, key=0x1B1A1918131211100B0A090803020100)
     if name == "present80":
         return Present80(rounds=rounds, key=0x00000000000000000000)
     if name == "sm4":
@@ -31,8 +51,12 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
 
 
 def default_difference(name: str) -> int:
+    if name in {"aes128", "aes192", "aes256"}:
+        return 0x00000000000000000000000000000040
     if name == "speck32":
         return 0x0040
+    if name == "simon64":
+        return 0x0000000000000040
     if name == "present80":
         return 0x0000000000000040
     if name == "sm4":
