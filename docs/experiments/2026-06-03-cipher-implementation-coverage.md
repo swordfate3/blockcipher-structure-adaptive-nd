@@ -27,12 +27,34 @@ key_bits
 rounds
 ```
 
+## 目录架构
+
+当前按结构分类：
+
+```text
+src/blockcipher_ai_eval/ciphers/
+  base.py
+  arx/
+    speck.py
+  spn/
+    aes.py
+    present.py
+  feistel/
+    des.py
+    simon.py
+    sm4.py
+```
+
+根包 `blockcipher_ai_eval.ciphers` 继续导出所有公开类，避免破坏上层代码。
+
 ## 当前已实现并测试的密码
 
 | cipher key | class | block/key | structure | correctness test |
 |---|---|---|---|---|
 | `speck32` | `Speck32_64` | 32/64 | ARX | SPECK32/64 public test vector |
 | `simon64` | `Simon64_128` | 64/128 | Feistel-like | NSA SIMON64/128 implementation guide test vector |
+| `des` | `Des` | 64/64 | Feistel-like | DES public/FIPS test vector |
+| `3des` | `TripleDes` | 64/192 | Feistel-like | degenerate-key consistency with DES |
 | `present80` | `Present80` | 64/80 | SPN | PRESENT-80 public test vector |
 | `sm4` | `Sm4Reduced` | 128/128 | Feistel-like | SM4 standard public test vector |
 | `aes128` | `Aes128` | 128/128 | SPN | NIST FIPS 197 AES-128 KAT |
@@ -41,7 +63,7 @@ rounds
 
 ## 本轮新增
 
-### AES
+### AES 与 SIMON
 
 新增文件：
 
@@ -86,6 +108,32 @@ Simon64_128
 - SIMON64/128 使用 z3 序列。
 - key words 按 Implementation Guide 的 little-endian word order 生成 round keys。
 
+### DES / 3DES
+
+新增文件：
+
+- `src/blockcipher_ai_eval/ciphers/feistel/des.py`
+
+新增类：
+
+```text
+Des
+TripleDes
+```
+
+测试向量：
+
+| variant | key | plaintext | ciphertext |
+|---|---|---|---|
+| DES | `133457799bbcdff1` | `0123456789abcdef` | `85e813540f0ab405` |
+
+3DES 当前测试：
+
+- `key1 == key2 == key3` 时，3DES EDE 退化结果必须等于单 DES。
+- `decrypt(encrypt(P)) == P`。
+
+后续应补 3DES 多 key NIST KAT。
+
 ## 验证命令
 
 运行所有 cipher KAT：
@@ -97,7 +145,7 @@ uv run pytest tests/test_ciphers.py -q
 当前通过：
 
 ```text
-13 passed
+18 passed
 ```
 
 runner smoke：
@@ -138,9 +186,9 @@ uv run python experiments/run_innovation_one_matrix.py \
 
 ### 第二批：经典通用分组密码
 
-- DES / 3DES：FIPS / NIST KAT。
 - Camellia-128/192/256：RFC 3713 KAT。
 - ARIA-128/192/256：RFC 5794 KAT。
+- LEA：KISA/RFC KAT。
 
 ### 第三批：轻量 SPN / Feistel
 
@@ -151,7 +199,6 @@ uv run python experiments/run_innovation_one_matrix.py \
 
 ### 第四批：ARX / AND-RX 家族
 
-- LEA：KISA/RFC KAT。
 - CHAM：官方论文/reference KAT。
 - Simeck：paper/reference KAT。
 

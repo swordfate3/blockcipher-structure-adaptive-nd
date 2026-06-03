@@ -6,11 +6,13 @@ from blockcipher_ai_eval.ciphers import (
     Aes128,
     Aes192,
     Aes256,
+    Des,
     Present80,
     ReducedRoundCipher,
     Simon64_128,
     Sm4Reduced,
     Speck32_64,
+    TripleDes,
 )
 from blockcipher_ai_eval.models import (
     AdaptiveDBitNetDistinguisher,
@@ -39,6 +41,15 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
             rounds=rounds,
             key=0x000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F,
         )
+    if name == "des":
+        return Des(rounds=rounds, key=0x133457799BBCDFF1)
+    if name == "3des":
+        return TripleDes(
+            rounds=rounds,
+            key1=0x0123456789ABCDEF,
+            key2=0x23456789ABCDEF01,
+            key3=0x456789ABCDEF0123,
+        )
     if name == "speck32":
         return Speck32_64(rounds=rounds, key=0x1918111009080100)
     if name == "simon64":
@@ -53,6 +64,8 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
 def default_difference(name: str) -> int:
     if name in {"aes128", "aes192", "aes256"}:
         return 0x00000000000000000000000000000040
+    if name in {"des", "3des"}:
+        return 0x0000000000000040
     if name == "speck32":
         return 0x0040
     if name == "simon64":

@@ -2,11 +2,13 @@ from blockcipher_ai_eval.ciphers import (
     Aes128,
     Aes192,
     Aes256,
+    Des,
     Present80,
     ReducedRoundCipher,
     Simon64_128,
     Speck32_64,
     Sm4Reduced,
+    TripleDes,
 )
 from blockcipher_ai_eval.experiments import build_cipher
 
@@ -75,6 +77,40 @@ def test_sm4_full_round_matches_public_test_vector():
     assert first == 0x681EDF34D206965E86B3E94F536E4246
 
 
+def test_des_full_round_matches_public_test_vector():
+    cipher = Des(rounds=16, key=0x133457799BBCDFF1)
+
+    first = cipher.encrypt(0x0123456789ABCDEF)
+    second = cipher.encrypt(0x0123456789ABCDEF)
+
+    assert first == second
+    assert 0 <= first < 2**64
+    assert first == 0x85E813540F0AB405
+    assert cipher.decrypt(first) == 0x0123456789ABCDEF
+
+
+def test_des_reduced_round_counts_change_ciphertext():
+    plaintext = 0x0123456789ABCDEF
+    key = 0x133457799BBCDFF1
+
+    round_3 = Des(rounds=3, key=key).encrypt(plaintext)
+    round_4 = Des(rounds=4, key=key).encrypt(plaintext)
+
+    assert round_3 != round_4
+
+
+def test_triple_des_degenerate_keys_match_des():
+    plaintext = 0x0123456789ABCDEF
+    key = 0x133457799BBCDFF1
+    des = Des(rounds=16, key=key)
+    triple_des = TripleDes(rounds=16, key1=key, key2=key, key3=key)
+
+    ciphertext = triple_des.encrypt(plaintext)
+
+    assert ciphertext == des.encrypt(plaintext)
+    assert triple_des.decrypt(ciphertext) == plaintext
+
+
 def test_aes128_full_round_matches_fips197_test_vector():
     cipher = Aes128(rounds=10, key=0x000102030405060708090A0B0C0D0E0F)
 
@@ -139,6 +175,16 @@ def test_build_cipher_supports_simon64():
 
     assert cipher.name == "SIMON64/128"
     assert cipher.encrypt(0x656B696C20646E75) == 0x44C8FC20B9DFA07A
+
+
+def test_build_cipher_supports_des_variants():
+    des = build_cipher("des", rounds=16)
+    triple_des = build_cipher("3des", rounds=16)
+
+    assert des.name == "DES"
+    assert triple_des.name == "3DES"
+    assert des.encrypt(0x0123456789ABCDEF) == 0x85E813540F0AB405
+    assert 0 <= triple_des.encrypt(0x0123456789ABCDEF) < 2**64
 
 
 def test_cipher_profile_interface_exposes_metadata():

@@ -68,6 +68,9 @@ while true; do date; nvidia-smi; sleep 1; done
 ```text
 src/blockcipher_ai_eval/
   ciphers/                 分组密码与 reduced-round 实现
+    arx/                   ARX 结构，例如 SPECK
+    spn/                   SPN 结构，例如 AES、PRESENT
+    feistel/               Feistel-like 结构，例如 DES、SIMON、SM4
   datasets.py              差分数据集生成
   models/                  神经区分器模型
   experiments/             cipher/model 工厂与文献差分
@@ -97,7 +100,7 @@ uv run python experiments/run_innovation_one_matrix.py --help
 
 | 参数 | 说明 |
 |---|---|
-| `--ciphers` | 密码：`speck32`, `present80`, `sm4` |
+| `--ciphers` | 密码：`aes128`, `aes192`, `aes256`, `des`, `3des`, `speck32`, `simon64`, `present80`, `sm4` |
 | `--models` | 模型 key 列表 |
 | `--rounds` | reduced-round 轮数 |
 | `--seeds` | 随机种子 |
@@ -117,7 +120,13 @@ uv run python experiments/run_innovation_one_matrix.py --help
 
 | key | cipher | structure |
 |---|---|---|
+| `aes128` | AES-128 | SPN |
+| `aes192` | AES-192 | SPN |
+| `aes256` | AES-256 | SPN |
+| `des` | DES | Feistel-like |
+| `3des` | 3DES | Feistel-like |
 | `speck32` | SPECK32/64 | ARX |
+| `simon64` | SIMON64/128 | Feistel-like |
 | `present80` | PRESENT-80 | SPN |
 | `sm4` | SM4 reduced-round | Feistel-like |
 
