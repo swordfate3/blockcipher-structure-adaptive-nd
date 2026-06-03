@@ -6,7 +6,13 @@ from blockcipher_ai_eval.ciphers import (
     Aes128,
     Aes192,
     Aes256,
+    Aria128,
+    Aria192,
+    Aria256,
     Des,
+    Lea128,
+    Lea192,
+    Lea256,
     Present80,
     ReducedRoundCipher,
     Simon64_128,
@@ -41,6 +47,15 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
             rounds=rounds,
             key=0x000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F,
         )
+    if name == "aria128":
+        return Aria128(rounds=rounds, key=0x000102030405060708090A0B0C0D0E0F)
+    if name == "aria192":
+        return Aria192(rounds=rounds, key=0x000102030405060708090A0B0C0D0E0F1011121314151617)
+    if name == "aria256":
+        return Aria256(
+            rounds=rounds,
+            key=0x000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F,
+        )
     if name == "des":
         return Des(rounds=rounds, key=0x133457799BBCDFF1)
     if name == "3des":
@@ -52,6 +67,24 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
         )
     if name == "speck32":
         return Speck32_64(rounds=rounds, key=0x1918111009080100)
+    if name == "lea128":
+        key = int.from_bytes(bytes.fromhex("0f1e2d3c4b5a69788796a5b4c3d2e1f0"), "little")
+        return Lea128(rounds=rounds, key=key)
+    if name == "lea192":
+        key = int.from_bytes(
+            bytes.fromhex("0f1e2d3c4b5a69788796a5b4c3d2e1f0f0e1d2c3b4a59687"),
+            "little",
+        )
+        return Lea192(rounds=rounds, key=key)
+    if name == "lea256":
+        key = int.from_bytes(
+            bytes.fromhex(
+                "0f1e2d3c4b5a69788796a5b4c3d2e1f0"
+                "f0e1d2c3b4a5968778695a4b3c2d1e0f"
+            ),
+            "little",
+        )
+        return Lea256(rounds=rounds, key=key)
     if name == "simon64":
         return Simon64_128(rounds=rounds, key=0x1B1A1918131211100B0A090803020100)
     if name == "present80":
@@ -62,7 +95,7 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
 
 
 def default_difference(name: str) -> int:
-    if name in {"aes128", "aes192", "aes256"}:
+    if name in {"aes128", "aes192", "aes256", "aria128", "aria192", "aria256", "lea128", "lea192", "lea256"}:
         return 0x00000000000000000000000000000040
     if name in {"des", "3des"}:
         return 0x0000000000000040

@@ -100,7 +100,7 @@ uv run python experiments/run_innovation_one_matrix.py --help
 
 | 参数 | 说明 |
 |---|---|
-| `--ciphers` | 密码：`aes128`, `aes192`, `aes256`, `des`, `3des`, `speck32`, `simon64`, `present80`, `sm4` |
+| `--ciphers` | 密码：`aes128`, `aes192`, `aes256`, `aria128`, `aria192`, `aria256`, `des`, `3des`, `speck32`, `lea128`, `lea192`, `lea256`, `simon64`, `present80`, `sm4` |
 | `--models` | 模型 key 列表 |
 | `--rounds` | reduced-round 轮数 |
 | `--seeds` | 随机种子 |
@@ -123,9 +123,15 @@ uv run python experiments/run_innovation_one_matrix.py --help
 | `aes128` | AES-128 | SPN |
 | `aes192` | AES-192 | SPN |
 | `aes256` | AES-256 | SPN |
+| `aria128` | ARIA-128 | SPN |
+| `aria192` | ARIA-192 | SPN |
+| `aria256` | ARIA-256 | SPN |
 | `des` | DES | Feistel-like |
 | `3des` | 3DES | Feistel-like |
 | `speck32` | SPECK32/64 | ARX |
+| `lea128` | LEA-128 | ARX |
+| `lea192` | LEA-192 | ARX |
+| `lea256` | LEA-256 | ARX |
 | `simon64` | SIMON64/128 | Feistel-like |
 | `present80` | PRESENT-80 | SPN |
 | `sm4` | SM4 reduced-round | Feistel-like |
