@@ -1,6 +1,14 @@
-# Block Cipher AI Evaluation
+# Block Cipher Structure-Adaptive Neural Distinguisher
 
-面向毕业论文“创新一”的分组密码神经差分区分器实验项目。
+面向毕业论文“创新一”的分组密码结构适配神经差分区分器实验项目。
+
+外层项目目录已重命名为：
+
+```text
+/home/fate/gitproject/blockcipher-structure-adaptive-nd
+```
+
+说明：本次只修改外层项目名，Python 包名仍保留 `blockcipher_ai_eval`，以避免干扰当前实验代码和 import。
 
 当前创新一主线是：
 
