@@ -15,6 +15,7 @@ def test_mainstream_cipher_factory_smoke_coverage() -> None:
         "present80": (64, "SPN"),
         "gift64": (64, "SPN"),
         "speck32": (32, "ARX"),
+        "cham64": (64, "ARX"),
         "lea128": (128, "ARX"),
         "lea192": (128, "ARX"),
         "lea256": (128, "ARX"),

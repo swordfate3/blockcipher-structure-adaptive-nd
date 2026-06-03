@@ -100,7 +100,7 @@ uv run python experiments/run_innovation_one_matrix.py --help
 
 | 参数 | 说明 |
 |---|---|
-| `--ciphers` | 密码：`aes128`, `aes192`, `aes256`, `aria128`, `aria192`, `aria256`, `camellia128`, `camellia192`, `camellia256`, `des`, `3des`, `speck32`, `lea128`, `lea192`, `lea256`, `simon64`, `simeck64`, `present80`, `gift64`, `sm4` |
+| `--ciphers` | 密码：`aes128`, `aes192`, `aes256`, `aria128`, `aria192`, `aria256`, `camellia128`, `camellia192`, `camellia256`, `des`, `3des`, `speck32`, `cham64`, `lea128`, `lea192`, `lea256`, `simon64`, `simeck64`, `present80`, `gift64`, `sm4` |
 | `--models` | 模型 key 列表 |
 | `--rounds` | reduced-round 轮数 |
 | `--seeds` | 随机种子 |
@@ -132,6 +132,7 @@ uv run python experiments/run_innovation_one_matrix.py --help
 | `des` | DES | Feistel-like |
 | `3des` | 3DES | Feistel-like |
 | `speck32` | SPECK32/64 | ARX |
+| `cham64` | CHAM-64/128 | ARX |
 | `lea128` | LEA-128 | ARX |
 | `lea192` | LEA-192 | ARX |
 | `lea256` | LEA-256 | ARX |

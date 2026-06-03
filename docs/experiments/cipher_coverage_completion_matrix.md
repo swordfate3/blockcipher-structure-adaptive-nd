@@ -21,6 +21,7 @@
 | SPN | ARIA-256 | `aria256` | 已完成 | RFC 5794 KAT，pytest 已通过 |
 | SPN | GIFT-64 | `gift64` | 已完成 | 官方 GIFT reference KAT，pytest 已通过 |
 | ARX | SPECK32/64 | `speck32` | 已完成 | NSA guide KAT |
+| ARX | CHAM-64/128 | `cham64` | 已完成 | CHAM paper Appendix A KAT，pytest 已通过 |
 | ARX | LEA-128 | `lea128` | 已完成 | 公开 LEA KAT，pytest 已通过 |
 | ARX | LEA-192 | `lea192` | 已完成 | 公开 LEA KAT，pytest 已通过 |
 | ARX | LEA-256 | `lea256` | 已完成 | 公开 LEA KAT，pytest 已通过 |
@@ -40,7 +41,6 @@
 | SPN | SKINNY-64/128 | `skinny64`/`skinny128` | 需明确 tweak 固定策略 |
 | SPN | LED | `led64` 或 `led128` | 需公开 KAT |
 | SPN | RECTANGLE | `rectangle80` 或 `rectangle128` | 需公开 KAT |
-| ARX | CHAM | `cham64`/`cham128` | 需官方 KAT |
 
 ## 当前回归命令
 

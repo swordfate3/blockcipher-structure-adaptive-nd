@@ -12,6 +12,7 @@ from blockcipher_ai_eval.ciphers import (
     Camellia128,
     Camellia192,
     Camellia256,
+    Cham64_128,
     Des,
     Gift64,
     Lea128,
@@ -81,6 +82,8 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
         )
     if name == "speck32":
         return Speck32_64(rounds=rounds, key=0x1918111009080100)
+    if name == "cham64":
+        return Cham64_128(rounds=rounds, key=0x010003020504070609080B0A0D0C0F0E)
     if name == "lea128":
         key = int.from_bytes(bytes.fromhex("0f1e2d3c4b5a69788796a5b4c3d2e1f0"), "little")
         return Lea128(rounds=rounds, key=key)
@@ -119,6 +122,8 @@ def default_difference(name: str) -> int:
         return 0x0000000000000040
     if name == "speck32":
         return 0x0040
+    if name == "cham64":
+        return 0x0000000000000040
     if name in {"simon64", "simeck64"}:
         return 0x0000000000000040
     if name in {"present80", "gift64"}:
