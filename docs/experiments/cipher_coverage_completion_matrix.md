@@ -24,6 +24,9 @@
 | ARX | LEA-128 | `lea128` | 已完成 | 公开 LEA KAT，pytest 已通过 |
 | ARX | LEA-192 | `lea192` | 已完成 | 公开 LEA KAT，pytest 已通过 |
 | ARX | LEA-256 | `lea256` | 已完成 | 公开 LEA KAT，pytest 已通过 |
+| Feistel-like | Camellia-128 | `camellia128` | 已完成 | RFC 3713 KAT，pytest 已通过 |
+| Feistel-like | Camellia-192 | `camellia192` | 已完成 | RFC 3713 KAT，pytest 已通过 |
+| Feistel-like | Camellia-256 | `camellia256` | 已完成 | RFC 3713 KAT，pytest 已通过 |
 | Feistel-like | DES | `des` | 已完成 | DES KAT |
 | Feistel-like | 3DES | `3des` | 已完成 | DES 退化一致性与 roundtrip |
 | Feistel-like | SIMON64/128 | `simon64` | 已完成 | NSA guide KAT |
@@ -33,7 +36,6 @@
 
 | 结构 | 算法 | 计划 key | 备注 |
 | --- | --- | --- | --- |
-| Feistel-like hybrid | Camellia-128/192/256 | `camellia128`/`camellia192`/`camellia256` | 使用 RFC 3713 KAT |
 | SPN | SKINNY-64/128 | `skinny64`/`skinny128` | 需明确 tweak 固定策略 |
 | SPN | LED | `led64` 或 `led128` | 需公开 KAT |
 | SPN | RECTANGLE | `rectangle80` 或 `rectangle128` | 需公开 KAT |
@@ -47,4 +49,4 @@ uv run pytest tests/test_mainstream_cipher_required_vectors.py tests/test_cipher
 uv run pytest tests/test_ciphers.py tests/test_experiment_matrix_runner.py::test_run_innovation_one_matrix_writes_jsonl_rows -q
 ```
 
-ARIA/Camellia 的 RFC 向量测试目前使用 `pytest.importorskip` 作为 future gate；实现对应模块后应自动进入 KAT 验证。
+ARIA 和 Camellia 的 RFC 向量测试已进入常规回归。

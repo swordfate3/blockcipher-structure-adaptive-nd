@@ -1,6 +1,7 @@
 from blockcipher_ai_eval.ciphers.arx.lea import Lea, Lea128, Lea192, Lea256
 from blockcipher_ai_eval.ciphers.arx.speck import Speck32_64
 from blockcipher_ai_eval.ciphers.base import ReducedRoundCipher
+from blockcipher_ai_eval.ciphers.feistel.camellia import Camellia, Camellia128, Camellia192, Camellia256
 from blockcipher_ai_eval.ciphers.feistel.des import Des, TripleDes
 from blockcipher_ai_eval.ciphers.feistel.simon import Simon64_128
 from blockcipher_ai_eval.ciphers.feistel.sm4 import Sm4Reduced
@@ -16,6 +17,10 @@ __all__ = [
     "Aria128",
     "Aria192",
     "Aria256",
+    "Camellia",
+    "Camellia128",
+    "Camellia192",
+    "Camellia256",
     "Des",
     "Lea",
     "Lea128",

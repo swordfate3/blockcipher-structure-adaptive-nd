@@ -9,6 +9,9 @@ from blockcipher_ai_eval.ciphers import (
     Aria128,
     Aria192,
     Aria256,
+    Camellia128,
+    Camellia192,
+    Camellia256,
     Des,
     Lea128,
     Lea192,
@@ -56,6 +59,15 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
             rounds=rounds,
             key=0x000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F,
         )
+    if name == "camellia128":
+        return Camellia128(rounds=rounds, key=0x0123456789ABCDEFFEDCBA9876543210)
+    if name == "camellia192":
+        return Camellia192(rounds=rounds, key=0x0123456789ABCDEFFEDCBA98765432100011223344556677)
+    if name == "camellia256":
+        return Camellia256(
+            rounds=rounds,
+            key=0x0123456789ABCDEFFEDCBA987654321000112233445566778899AABBCCDDEEFF,
+        )
     if name == "des":
         return Des(rounds=rounds, key=0x133457799BBCDFF1)
     if name == "3des":
@@ -95,7 +107,7 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
 
 
 def default_difference(name: str) -> int:
-    if name in {"aes128", "aes192", "aes256", "aria128", "aria192", "aria256", "lea128", "lea192", "lea256"}:
+    if name in {"aes128", "aes192", "aes256", "aria128", "aria192", "aria256", "camellia128", "camellia192", "camellia256", "lea128", "lea192", "lea256"}:
         return 0x00000000000000000000000000000040
     if name in {"des", "3des"}:
         return 0x0000000000000040

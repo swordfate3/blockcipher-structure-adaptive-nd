@@ -7,6 +7,7 @@ being admitted into the experiment factory coverage matrix.
 
 import pytest
 from blockcipher_ai_eval.ciphers.spn.aria import Aria128, Aria192, Aria256
+from blockcipher_ai_eval.ciphers.feistel.camellia import Camellia128, Camellia192, Camellia256
 
 
 def _be_int(hex_bytes: str) -> int:
@@ -45,11 +46,6 @@ def test_aria_rfc5794_vectors() -> None:
 
 
 def test_camellia_rfc3713_vectors() -> None:
-    camellia = pytest.importorskip("blockcipher_ai_eval.ciphers.feistel.camellia")
-    Camellia128 = camellia.Camellia128
-    Camellia192 = camellia.Camellia192
-    Camellia256 = camellia.Camellia256
-
     vectors = [
         (
             Camellia128,
