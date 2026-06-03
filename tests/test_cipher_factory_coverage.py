@@ -21,6 +21,7 @@ def test_mainstream_cipher_factory_smoke_coverage() -> None:
         "des": (64, "Feistel-like"),
         "3des": (64, "Feistel-like"),
         "simon64": (64, "Feistel-like"),
+        "simeck64": (64, "Feistel-like"),
         "sm4": (128, "Feistel-like"),
     }
 

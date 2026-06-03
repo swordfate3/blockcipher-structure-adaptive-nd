@@ -19,6 +19,7 @@ from blockcipher_ai_eval.ciphers import (
     Lea256,
     Present80,
     ReducedRoundCipher,
+    Simeck64_128,
     Simon64_128,
     Sm4Reduced,
     Speck32_64,
@@ -100,6 +101,8 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
         return Lea256(rounds=rounds, key=key)
     if name == "simon64":
         return Simon64_128(rounds=rounds, key=0x1B1A1918131211100B0A090803020100)
+    if name == "simeck64":
+        return Simeck64_128(rounds=rounds, key=0x1B1A1918131211100B0A090803020100)
     if name == "present80":
         return Present80(rounds=rounds, key=0x00000000000000000000)
     if name == "gift64":
@@ -116,7 +119,7 @@ def default_difference(name: str) -> int:
         return 0x0000000000000040
     if name == "speck32":
         return 0x0040
-    if name == "simon64":
+    if name in {"simon64", "simeck64"}:
         return 0x0000000000000040
     if name in {"present80", "gift64"}:
         return 0x0000000000000040

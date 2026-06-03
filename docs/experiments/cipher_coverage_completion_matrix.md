@@ -30,6 +30,7 @@
 | Feistel-like | DES | `des` | 已完成 | DES KAT |
 | Feistel-like | 3DES | `3des` | 已完成 | DES 退化一致性与 roundtrip |
 | Feistel-like | SIMON64/128 | `simon64` | 已完成 | NSA guide KAT |
+| Feistel-like / AND-RX | Simeck64/128 | `simeck64` | 已完成 | CHES 2015 KAT，pytest 已通过 |
 | Feistel-like | SM4 | `sm4` | 已完成 | GB/T 32907 public KAT |
 
 ## 待补主流/论文常用算法
@@ -40,7 +41,6 @@
 | SPN | LED | `led64` 或 `led128` | 需公开 KAT |
 | SPN | RECTANGLE | `rectangle80` 或 `rectangle128` | 需公开 KAT |
 | ARX | CHAM | `cham64`/`cham128` | 需官方 KAT |
-| Feistel-like / AND-RX | Simeck | `simeck32`/`simeck64` | 需公开 KAT |
 
 ## 当前回归命令
 
