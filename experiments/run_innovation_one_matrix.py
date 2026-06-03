@@ -335,6 +335,8 @@ def _model_metadata(model: Any) -> dict[str, Any]:
     return {
         "gate_mode": summary["gate_mode"],
         "expert_set": summary.get("expert_set", "legacy"),
+        "adapter_mode": summary.get("adapter_mode", "none"),
+        "adapter_name": summary.get("adapter_name", "identity"),
         "gate_weights_mean": gate_weights,
     }
 

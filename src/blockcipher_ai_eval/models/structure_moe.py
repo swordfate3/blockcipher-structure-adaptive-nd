@@ -46,11 +46,71 @@ V3_EXPERT_KEYS = (
     "multiscale_dense_resnet",
 )
 
+V4_EXPERT_KEYS = V3_EXPERT_KEYS
+
 HARD_GATE_WEIGHTS = {
     "ARX": (0.35, 0.20, 0.05, 0.05, 0.10, 0.25),
     "SPN": (0.10, 0.30, 0.30, 0.05, 0.20, 0.05),
     "Feistel-like": (0.20, 0.35, 0.10, 0.05, 0.10, 0.20),
 }
+
+
+class IdentityStructureAdapter(nn.Module):
+    name = "identity"
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        return features.float()
+
+
+class ArxWordMixAdapter(nn.Module):
+    name = "arx_word_mix"
+
+    def __init__(self, input_bits: int) -> None:
+        super().__init__()
+        self.rotation_a = max(1, input_bits // 4)
+        self.rotation_b = max(1, input_bits // 8)
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        x = features.float()
+        return (
+            x
+            + torch.roll(x, shifts=self.rotation_a, dims=1)
+            + torch.roll(x, shifts=self.rotation_b, dims=1)
+        ) / 3.0
+
+
+class SpnCellMixAdapter(nn.Module):
+    name = "spn_cell_mix"
+
+    def __init__(self, input_bits: int, cell_bits: int = 4) -> None:
+        super().__init__()
+        self.input_bits = input_bits
+        self.cell_bits = cell_bits
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        x = features.float()
+        if self.input_bits % self.cell_bits != 0:
+            return x
+        cells = x.reshape(x.shape[0], self.input_bits // self.cell_bits, self.cell_bits)
+        cell_context = cells.mean(dim=2, keepdim=True).expand_as(cells)
+        return (0.75 * cells + 0.25 * cell_context).reshape_as(x)
+
+
+class FeistelBranchMixAdapter(nn.Module):
+    name = "feistel_branch_mix"
+
+    def __init__(self, input_bits: int) -> None:
+        super().__init__()
+        self.input_bits = input_bits
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        x = features.float()
+        if self.input_bits % 2 != 0:
+            return x
+        left, right = x.chunk(2, dim=1)
+        mixed_left = 0.75 * left + 0.25 * right
+        mixed_right = 0.75 * right + 0.25 * left
+        return torch.cat([mixed_left, mixed_right], dim=1)
 
 
 class StructureAwareMoEDistinguisher(nn.Module):
@@ -66,7 +126,12 @@ class StructureAwareMoEDistinguisher(nn.Module):
         super().__init__()
         if gate_mode not in {"uniform", "hard", "soft"}:
             raise ValueError(f"unsupported gate_mode: {gate_mode}")
-        if expert_set not in {"legacy", "v2_adaptive", "v3_pairwise"}:
+        if expert_set not in {
+            "legacy",
+            "v2_adaptive",
+            "v3_pairwise",
+            "v4_structure_adapter",
+        }:
             raise ValueError(f"unsupported expert_set: {expert_set}")
         self.input_bits = input_bits
         self.hidden_bits = hidden_bits
@@ -76,6 +141,14 @@ class StructureAwareMoEDistinguisher(nn.Module):
         self.pair_bits = pair_bits
         self.expert_keys = _expert_keys(expert_set)
         self.experts = nn.ModuleList(self._build_experts(input_bits, hidden_bits))
+        self.adapters = nn.ModuleDict(
+            {
+                "identity": IdentityStructureAdapter(),
+                "arx_word_mix": ArxWordMixAdapter(input_bits),
+                "spn_cell_mix": SpnCellMixAdapter(input_bits),
+                "feistel_branch_mix": FeistelBranchMixAdapter(input_bits),
+            }
+        )
         self.soft_gate = nn.Sequential(
             nn.Linear(structure_feature_bits, hidden_bits),
             nn.ReLU(),
@@ -95,7 +168,8 @@ class StructureAwareMoEDistinguisher(nn.Module):
         self._structure_features.copy_(structure_features.detach().to(self._structure_features))
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
-        expert_logits = torch.cat([expert(features) for expert in self.experts], dim=1)
+        adapted_features = self._adapt_features(features)
+        expert_logits = torch.cat([expert(adapted_features) for expert in self.experts], dim=1)
         weights = self.current_gate_weights(batch_size=features.shape[0]).to(features.device)
         return (expert_logits * weights).sum(dim=1, keepdim=True)
 
@@ -122,6 +196,8 @@ class StructureAwareMoEDistinguisher(nn.Module):
         return {
             "gate_mode": self.gate_mode,
             "expert_set": self.expert_set,
+            "adapter_mode": "structure" if self.expert_set == "v4_structure_adapter" else "none",
+            "adapter_name": self._adapter_name_from_structure(),
             **{
                 f"gate_weight_{key}": round(float(weight), 6)
                 for key, weight in zip(self.expert_keys, weights)
@@ -142,7 +218,7 @@ class StructureAwareMoEDistinguisher(nn.Module):
         ]
 
     def _build_dbitnet_expert(self, input_bits: int, hidden_bits: int) -> nn.Module:
-        if self.expert_set == "v3_pairwise":
+        if self.expert_set in {"v3_pairwise", "v4_structure_adapter"}:
             return PairwiseAdaptiveDBitNetDistinguisher(
                 input_bits=input_bits,
                 pair_bits=self.pair_bits or 96,
@@ -154,6 +230,25 @@ class StructureAwareMoEDistinguisher(nn.Module):
                 base_channels=hidden_bits,
             )
         return DBitNetDistinguisher(input_bits=input_bits, channels=hidden_bits)
+
+    def _adapt_features(self, features: torch.Tensor) -> torch.Tensor:
+        if self.expert_set != "v4_structure_adapter":
+            return features
+        return self.adapters[self._adapter_name_from_structure()](features)
+
+    def _adapter_name_from_structure(self) -> str:
+        if self.expert_set != "v4_structure_adapter":
+            return "identity"
+        is_arx = bool(self._structure_features[0].item())
+        is_spn = bool(self._structure_features[1].item())
+        is_feistel_like = bool(self._structure_features[2].item())
+        if is_arx:
+            return "arx_word_mix"
+        if is_spn:
+            return "spn_cell_mix"
+        if is_feistel_like:
+            return "feistel_branch_mix"
+        return "identity"
 
     def _hard_weights_from_structure(self) -> tuple[float, ...]:
         is_arx = bool(self._structure_features[0].item())
@@ -173,4 +268,6 @@ def _expert_keys(expert_set: str) -> tuple[str, ...]:
         return V2_EXPERT_KEYS
     if expert_set == "v3_pairwise":
         return V3_EXPERT_KEYS
+    if expert_set == "v4_structure_adapter":
+        return V4_EXPERT_KEYS
     return EXPERT_KEYS

@@ -113,6 +113,9 @@ multi-pair 输入下，保留 pair 边界并共享 pair encoder 是否优于直�
 - `moe_v3_uniform`
 - `moe_v3_hard`
 - `moe_v3_soft`
+- `moe_v4_uniform`
+- `moe_v4_hard`
+- `moe_v4_soft`
 - `selector_rule`
 - `lstm_roundseq`
 - `transformer_encoder`
@@ -128,6 +131,7 @@ multi-pair 输入下，保留 pair 边界并共享 pair encoder 是否优于直�
 - 新增 `gohr_resnet_speck_depth10` 用于筛查深残差 Gohr-style 变体，但当前一次小规模实验没有超过浅层 Gohr 模型。
 - 新增 `moe_v2_*` 保持 6 专家结构，但将旧 `dbitnet_dilated_cnn` 专家替换为 `adaptive_dbitnet`。
 - 新增 `moe_v3_*` 保持 6 专家结构，但将 `adaptive_dbitnet` 专家替换为 `adaptive_dbitnet_pairwise`。
+- 新增 `moe_v4_*` 在 v3 专家池前加入结构 adapter：ARX -> `arx_word_mix`，SPN -> `spn_cell_mix`，Feistel-like -> `feistel_branch_mix`。这是结构专用输入路径第一版，不代表 GPD/RX/polytopic/score-distribution 已完整实现。
 - 新增 `selector_rule` 作为结构规则选择器：ARX multi-pair -> `adaptive_dbitnet_pairwise`，SPN -> `senet_resnext`，Feistel-like -> `multiscale_dense_resnet`。
 - 新增 `selector_rule_v2`：multi-pair 一律选 `adaptive_dbitnet_pairwise`，single-pair 再按结构选择专家。
 

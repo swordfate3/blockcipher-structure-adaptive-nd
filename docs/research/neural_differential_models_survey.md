@@ -12,22 +12,26 @@
 - GIFT-128 / ASCON 的 score-distribution + MLP test 模型。
 - Enhanced related-key SIMON/SIMECK。
 
-这不表示整个领域永远“找齐”，但对当前创新一的核心清单来说，本地已有完整 PDF/text 证据链。这些新工作不一定都需要完整实现，但至少要在论文相关工作和创新边界里说明；其中 GPD、多输入/多差分、多密文对数据格式、SENet/SE-ResNeXt、score-distribution/MLP test 最值得作为创新一后续实验扩展。
+这不表示整个领域永远“找齐”，但对当前创新一的核心清单来说，本地已有完整 PDF/text 证据链。这些新工作不一定都需要完整实现，但至少要在论文相关工作和创新边界里说明；其中多密文对输入、SENet/SE-ResNeXt、多尺度 DenseResNet 和结构 adapter 已进入代码；GPD、多输入/多差分、RX difference、score-distribution/MLP test 仍是创新一后续实验扩展。
 
 ## 已覆盖模型谱系
 
 | 模型 / 方法 | 代表论文 | 本项目状态 | 对创新一的意义 |
 |---|---|---|---|
-| Gohr-style ResNet-BitSlice | Gohr 2019, SPECK32/64 | 已下载；已实现 `resnet_bitslice` | ARX/SPECK 强基线，所有新模型必须和它比较 |
+| Gohr-style ResNet-BitSlice | Gohr 2019, SPECK32/64 | 已下载；已实现 `resnet_bitslice`；另有 SPECK 专用 `gohr_resnet_speck` | ARX/SPECK 强基线，所有新模型必须和它比较 |
 | MLP / CNN 基线 | Baksi 2020; PRESENT 2020/2021; 多篇比较论文 | 已下载；已实现 `mlp`, `cnn` | 轻量但不能忽视，SPECK6 扩大验证中 MLP 已成强基线 |
-| DBitNet / AutoND | Bellini et al., cipher-agnostic pipeline | 已下载；已实现 `dbitnet_dilated_cnn` | 通用管线边界论文，创新一不能声称“首次通用”，应强调结构感知匹配 |
-| SENet / SE-ResNeXt | Bao et al. 2022, Simon32/64 | 已下载；未实现 | AND-RX/SIMON/SIMECK 分支重要候选模型，适合补入模型池 |
-| 多密文对输入 | Chen et al. 2021; Lu et al. 2022/2024 | 已下载；未系统实现 | 说明输入表示本身是模型能力的一部分，适合扩展 `multi_pair_*` |
+| DBitNet / AutoND | Bellini et al., cipher-agnostic pipeline | 已下载；已实现 `dbitnet_dilated_cnn`、`adaptive_dbitnet`、`adaptive_dbitnet_pairwise` | 通用管线边界论文，创新一不能声称“首次通用”，应强调结构感知匹配 |
+| SENet / SE-ResNeXt | Bao et al. 2022, Simon32/64 | 已下载；已实现 `senet_resnext`，已进入 MoE 专家池 | AND-RX/SIMON/SIMECK 分支重要候选模型，适合继续做结构消融 |
+| 多密文对输入 | Chen et al. 2021; Lu et al. 2022/2024 | 已下载；已实现 `pairs_per_sample` 和 `adaptive_dbitnet_pairwise`，但多差分/related-key 尚未实现 | 说明输入表示本身是模型能力的一部分，适合扩展 `multi_pair_*` |
 | bit selection / partial ML | Ebrahimi et al. 2022 | 已下载；未实现 | 可做低成本特征选择或输入 mask 消融 |
 | NNBits ensemble | NNBits 2023 | 已下载；未实现 | 与 MoE/ensemble 接近，但目标是 bit profiling，不是结构路由 |
-| SM4 Conv-ResNet | 余玥琳等 2023 | 已下载；已有 SM4 分支和差分配置 | 支撑 SM4 不能只当普通 SPN 处理 |
-| SPN-specific framework | Liu 2026, IoT-friendly lightweight SPN | 已下载；未实现专门 SPN 模型 | 支撑 PRESENT/GIFT 类结构需要数据格式与网络结构优化 |
+| SM4 Conv-ResNet | 余玥琳等 2023 | 已下载；已有 SM4 分支、差分配置和 `multiscale_dense_resnet` 专家 | 支撑 SM4 不能只当普通 SPN 处理 |
+| SPN-specific framework | Liu 2026, IoT-friendly lightweight SPN | 已下载；已实现 `cnn`、`senet_resnext`、`spn_cell_mix` adapter 雏形；专门 SPN 数据格式仍未完整实现 | 支撑 PRESENT/GIFT 类结构需要数据格式与网络结构优化 |
 | SoK / Assessment | GLN 2022; SoK 2024/2025 | 已下载 | 支撑统一协议、多种子、可比较性和谨慎表述 |
+
+## MoE 纳入状态补充（2026-06-03）
+
+当前 `moe_v4_uniform/hard/soft` 已加入结构 adapter 第一版：ARX 使用 `arx_word_mix`，SPN 使用 `spn_cell_mix`，Feistel-like 使用 `feistel_branch_mix`。这说明目录下论文中“单阶段神经网络架构”主线已经部分进入专家池；但 GPD、RX-neural、polytopic、two-difference、score-distribution MLP 和 NNBits 更偏数据生成、差分类型、特征工程或二阶段统计测试，不应简单声称已纳入 MoE。
 
 ## 近年需要补齐的模型线
 
@@ -63,7 +67,7 @@
 
 对创新一影响：
 
-- 本项目目前没有 SIMON/SIMECK cipher module，因此 AND-RX 分支仍不完整。
+- 本项目目前已有 SIMON/SIMECK cipher module，但 related-key 数据生成、论文差分配置和 RX/polytopic 输入还未实现。
 - 如果论文要覆盖“按密码结构匹配”，SIMON/SIMECK 是必须考虑的结构类别之一，因为它们不是 SPECK 那种加法型 ARX，而是 AND-RX/Feistel-like。
 
 ### 3. Polytopic / 多输入差分神经区分器
@@ -176,11 +180,11 @@
 
 | 缺口 | 优先级 | 原因 | 建议动作 |
 |---|---:|---|---|
-| SENet / SE-ResNeXt | 高 | Simon/SIMECK 文献中表现强，是 ResNet 后的重要模型 | 加入 `senet_resnext`，先在 SPECK/PRESENT/SM4 上做横向，再等 SIMON 模块 |
-| 多密文对 / 多差分输入 | 高 | 2021-2026 多篇论文都在强调输入组织方式 | 加 `samples_per_item` 或 `pairs_per_sample` 参数 |
-| 多尺度卷积 / dense residual | 高 | 2025 Speck/Simon 多密文对论文显示结构和数据格式共同影响准确率 | 加 `multiscale_dense_resnet` 或先作为 `senet_resnext` 后的第二候选 |
-| GPD 部分解密特征 | 高 | 直接支撑结构感知特征工程 | 先设计接口，不急于全密码实现 |
-| SIMON/SIMECK cipher module | 高 | AND-RX 类结构目前缺位 | 新增 cipher + 文献差分 + related-key 可选 |
+| SENet / SE-ResNeXt 扩展验证 | 高 | `senet_resnext` 已实现并进入 MoE，但还需要在 SIMON/SIMECK/GIFT 等新补密码上做消融 | 跑结构适配扩展矩阵，比较 single-pair 与 multi-pair |
+| 多密文对 / 多差分输入 | 高 | `pairs_per_sample` 已实现，但 two-difference、related-key、polytopic 尚未实现 | 扩展 `difference_profile` schema，支持多差分成员同样本输入 |
+| 多尺度卷积 / dense residual 扩展验证 | 高 | `multiscale_dense_resnet` 已实现并进入 MoE，但还没按 2025 Speck/Simon 论文协议对齐 | 在 SPECK/SIMON 上跑 multi-pair multiscale 对照 |
+| GPD 部分解密特征 | 高 | 直接支撑结构感知特征工程 | 先设计 feature encoder 接口，不急于全密码实现 |
+| SIMON/SIMECK related-key 数据 | 高 | cipher module 已补，但 related-key 差分和论文数据格式尚未实现 | 新增 related-key 可选数据生成和文献差分配置 |
 | RX difference | 中高 | ARX/AND-RX 特有差分定义 | 先作为 difference profile schema 扩展 |
 | score-distribution MLP test | 中 | GIFT/ASCON 新模型，适合 SPN/permutation | 加入二阶段评估脚本 |
 | NNBits-like profiling | 中 | 对解释性有帮助，但工程量较大 | 先不做主实验，作为分析模块 |
@@ -198,7 +202,7 @@
 
 ## 下一步推荐
 
-1. 先实现 `senet_resnext`、`multi_pair` 输入和轻量 `multiscale_dense_resnet`，这是离当前代码最近、也最能提升创新一可信度的三项。
+1. 先跑 `senet_resnext`、`adaptive_dbitnet_pairwise`、`multiscale_dense_resnet`、`moe_v4_*` 在 SPECK/SIMON/SIMECK/PRESENT/GIFT/SM4 上的扩展结构适配矩阵。
 2. 精读新下载的 GPD、RX-neural、polytopic、multi-pair multiscale、PRESENT entropy、two-difference RKND、Enhanced RK SIMON/SIMECK、GIFT/ASCON 八篇，抽取可复现实验参数。
 3. 将原先待下载的三篇近年论文纳入实现优先级：two-difference data generation、related-key SIMON/SIMECK、score-distribution MLP test。
 4. 扩展 difference profile schema：加入 `difference_kind`、`pairs_per_sample`、`related_key_difference`、`polytope_size`。

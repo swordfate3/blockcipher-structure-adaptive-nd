@@ -249,4 +249,31 @@ def build_model(
             expert_set="v3_pairwise",
             pair_bits=pair_bits,
         )
+    if name == "moe_v4_uniform":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="uniform",
+            expert_set="v4_structure_adapter",
+            pair_bits=pair_bits,
+        )
+    if name == "moe_v4_hard":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="hard",
+            expert_set="v4_structure_adapter",
+            pair_bits=pair_bits,
+        )
+    if name == "moe_v4_soft":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=hidden_bits,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="soft",
+            expert_set="v4_structure_adapter",
+            pair_bits=pair_bits,
+        )
     raise ValueError(f"unsupported model: {name}")

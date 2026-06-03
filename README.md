@@ -218,9 +218,14 @@ moe_v2_soft
 moe_v3_uniform
 moe_v3_hard
 moe_v3_soft
+moe_v4_uniform
+moe_v4_hard
+moe_v4_soft
 selector_rule
 selector_rule_v2
 ```
+
+`moe_v4_*` 是结构 adapter MoE：在 v3 pairwise 专家池之前加入同宽输入 adapter，ARX 使用旋转式 word mixing，SPN 使用 4-bit cell mixing，Feistel-like 使用左右分支 mixing。它是结构专用输入路径的第一版，不代表 GPD、RX、polytopic 或 score-distribution 等论文方法已经完整实现。
 
 `selector_rule_v2` 规则：
 
