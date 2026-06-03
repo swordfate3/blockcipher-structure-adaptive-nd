@@ -13,6 +13,7 @@ def test_mainstream_cipher_factory_smoke_coverage() -> None:
         "camellia192": (128, "Feistel-like"),
         "camellia256": (128, "Feistel-like"),
         "present80": (64, "SPN"),
+        "gift64": (64, "SPN"),
         "speck32": (32, "ARX"),
         "lea128": (128, "ARX"),
         "lea192": (128, "ARX"),

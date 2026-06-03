@@ -100,7 +100,7 @@ uv run python experiments/run_innovation_one_matrix.py --help
 
 | 参数 | 说明 |
 |---|---|
-| `--ciphers` | 密码：`aes128`, `aes192`, `aes256`, `aria128`, `aria192`, `aria256`, `camellia128`, `camellia192`, `camellia256`, `des`, `3des`, `speck32`, `lea128`, `lea192`, `lea256`, `simon64`, `present80`, `sm4` |
+| `--ciphers` | 密码：`aes128`, `aes192`, `aes256`, `aria128`, `aria192`, `aria256`, `camellia128`, `camellia192`, `camellia256`, `des`, `3des`, `speck32`, `lea128`, `lea192`, `lea256`, `simon64`, `present80`, `gift64`, `sm4` |
 | `--models` | 模型 key 列表 |
 | `--rounds` | reduced-round 轮数 |
 | `--seeds` | 随机种子 |
@@ -137,6 +137,7 @@ uv run python experiments/run_innovation_one_matrix.py --help
 | `lea256` | LEA-256 | ARX |
 | `simon64` | SIMON64/128 | Feistel-like |
 | `present80` | PRESENT-80 | SPN |
+| `gift64` | GIFT-64 | SPN |
 | `sm4` | SM4 reduced-round | Feistel-like |
 
 当前 curated difference profiles：

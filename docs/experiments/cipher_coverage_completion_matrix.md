@@ -19,7 +19,7 @@
 | SPN | ARIA-128 | `aria128` | 已完成 | RFC 5794 KAT，pytest 已通过 |
 | SPN | ARIA-192 | `aria192` | 已完成 | RFC 5794 KAT，pytest 已通过 |
 | SPN | ARIA-256 | `aria256` | 已完成 | RFC 5794 KAT，pytest 已通过 |
-| SPN | GIFT-64 | `gift64` | 实现草案 | 待 KAT、本地测试 |
+| SPN | GIFT-64 | `gift64` | 已完成 | 官方 GIFT reference KAT，pytest 已通过 |
 | ARX | SPECK32/64 | `speck32` | 已完成 | NSA guide KAT |
 | ARX | LEA-128 | `lea128` | 已完成 | 公开 LEA KAT，pytest 已通过 |
 | ARX | LEA-192 | `lea192` | 已完成 | 公开 LEA KAT，pytest 已通过 |

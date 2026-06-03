@@ -67,8 +67,8 @@
 
 当前状态：
 
-- `src/blockcipher_ai_eval/ciphers/spn/gift.py` 已有实现草案。
-- 必须找到明确 plaintext/key/ciphertext 三元组并跑通后才能接入 `gift64`。
+- `src/blockcipher_ai_eval/ciphers/spn/gift.py` 已实现 GIFT-64/128-key。
+- 已使用官方 `giftcipher/gift` repository 的 `GIFT64_test_vector_1..3.txt` 通过 KAT。
 
 ### SKINNY
 

@@ -13,6 +13,7 @@ from blockcipher_ai_eval.ciphers import (
     Camellia192,
     Camellia256,
     Des,
+    Gift64,
     Lea128,
     Lea192,
     Lea256,
@@ -101,6 +102,8 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
         return Simon64_128(rounds=rounds, key=0x1B1A1918131211100B0A090803020100)
     if name == "present80":
         return Present80(rounds=rounds, key=0x00000000000000000000)
+    if name == "gift64":
+        return Gift64(rounds=rounds, key=0x00000000000000000000000000000000)
     if name == "sm4":
         return Sm4Reduced(rounds=rounds, key=0x0123456789ABCDEFFEDCBA9876543210)
     raise ValueError(f"unsupported cipher: {name}")
@@ -115,7 +118,7 @@ def default_difference(name: str) -> int:
         return 0x0040
     if name == "simon64":
         return 0x0000000000000040
-    if name == "present80":
+    if name in {"present80", "gift64"}:
         return 0x0000000000000040
     if name == "sm4":
         return 0x00000000000000000000000000000040
