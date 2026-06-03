@@ -1,6 +1,6 @@
 # 创新一长期记忆
 
-更新时间：2026-06-02
+更新时间：2026-06-03
 
 ## 当前定位
 
@@ -149,6 +149,61 @@ pairs_per_sample = 1
 - `moe_v3_soft` 在 SPECK/SM4 接近最强专家，但 PRESENT 上仍有稀释。
 - 因此结构适配规则必须同时考虑密码结构与输入组织；新增 `selector_rule_v2` 作为修正规则。
 
+### Selector Rule v2 单对/多对路由对照
+
+记录文件：
+
+- `docs/experiments/2026-06-03-selector-rule-v2-pair-contrast.md`
+
+设置：
+
+- SPECK32/64 r=6, `speck32_gohr2019`
+- PRESENT-80 r=5, `present_wang_jain2021`
+- SM4 r=4, `sm4_yu2023_conv_resnet`
+- `ciphertext_pair_xor_bits`, `pairs_per_sample=1,4`
+- `8192/class`, `5 epochs`, `seeds=0 1 2`, `hidden_bits=32`
+
+输出：
+
+- `outputs/innovation_one_selector_rule_v2_pair_contrast_plan.csv`
+- `outputs/innovation_one_selector_rule_v2_pair_contrast.jsonl`
+- `outputs/innovation_one_selector_rule_v2_pair_contrast_summary.csv`
+
+路由验证：
+
+| cipher | pairs | `selector_rule` | `selector_rule_v2` |
+|---|---:|---|---|
+| SPECK32/64 | 1 | `resnet_bitslice` | `resnet_bitslice` |
+| SPECK32/64 | 4 | `adaptive_dbitnet_pairwise` | `adaptive_dbitnet_pairwise` |
+| PRESENT-80 | 1 | `senet_resnext` | `senet_resnext` |
+| PRESENT-80 | 4 | `senet_resnext` | `adaptive_dbitnet_pairwise` |
+| SM4 | 1 | `multiscale_dense_resnet` | `multiscale_dense_resnet` |
+| SM4 | 4 | `multiscale_dense_resnet` | `adaptive_dbitnet_pairwise` |
+
+关键 calibrated accuracy / AUC：
+
+| cipher | pairs | best/important model | calibrated accuracy mean | AUC mean |
+|---|---:|---|---:|---:|
+| SPECK32/64 | 1 | `mlp` | 0.5722 | 0.5835 |
+| SPECK32/64 | 4 | `adaptive_dbitnet_pairwise` | 0.7751 | 0.8488 |
+| PRESENT-80 | 1 | `mlp` | 0.5483 | 0.5644 |
+| PRESENT-80 | 4 | `selector_rule_v2` | 0.6383 | 0.6814 |
+| SM4 | 1 | `moe_v3_soft` | 0.9666 | 0.9897 |
+| SM4 | 4 | `moe_v3_soft` | 1.0000 | 1.0000 |
+
+v2 证据：
+
+- PRESENT5 multi-pair 下，v2 从旧规则的 `senet_resnext` 切到 `adaptive_dbitnet_pairwise`，calibrated accuracy 从 0.5703 提升到 0.6383。
+- SM4 r=4 multi-pair 下，v2 从 `multiscale_dense_resnet` 切到 `adaptive_dbitnet_pairwise`，calibrated accuracy 从 0.9128 提升到 0.9999。
+- SPECK multi-pair 下 v1/v2 均选 `adaptive_dbitnet_pairwise`，结果接近最强单专家。
+- single-pair 下 v2 不覆盖结构专家，保留 ARX/SPN/Feistel-like 结构路由。
+
+限制：
+
+- SPECK single-pair 当前 `resnet_bitslice` 弱于 MLP，不能代表 Gohr 2019 专用模型水平；Gohr 对齐必须使用 `gohr_resnet_speck` + `ciphertext_pair_bits`。
+- SM4 r=4 multi-pair 已接近满分，后续应推进 r=5 或更难差分，避免实验过浅。
+- `moe_v3_soft` 在 SM4 上很强，但 PRESENT 上低于 v2/单 pairwise 专家，说明软融合仍存在专家稀释。
+
 ### 结构适配框架推进
 
 记录文件：
@@ -168,7 +223,11 @@ pairs_per_sample = 1
 
 下一步：
 
-- 跑正式结构适配矩阵，比较 `selector_rule`、`moe_v3_soft/hard`、强单专家和 MLP。
+- 将 `selector_rule_v2` 作为创新一结构适配主基线。
+- 推进更高轮/更难设置：
+  - SPECK32/64：Gohr-style single-pair 与 pairwise multi-pair 分开比较。
+  - PRESENT-80：推进 r=6 或更多差分 member。
+  - SM4：推进 r=5，避免 r=4 接近满分。
 
 ### Pairwise Adaptive DBitNet SPECK6 筛查
 

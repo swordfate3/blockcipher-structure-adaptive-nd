@@ -344,8 +344,6 @@ def _infer_pair_bits(
     feature_encoding: str,
     pairs_per_sample: int,
 ) -> int | None:
-    if pairs_per_sample < 2:
-        return None
     if feature_encoding == "ciphertext_pair_bits":
         return block_bits * 2
     if feature_encoding == "ciphertext_pair_xor_bits":
