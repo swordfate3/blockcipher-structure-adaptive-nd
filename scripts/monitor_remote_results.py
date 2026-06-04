@@ -22,7 +22,7 @@ class RunSpec:
 
 def run_git(repo_root: Path, args: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        ["git", *args],
+        ["git", "-c", "http.version=HTTP/1.1", *args],
         cwd=repo_root,
         check=check,
         stdout=subprocess.PIPE,
@@ -47,17 +47,17 @@ def parse_run_spec(value: str) -> RunSpec:
     return RunSpec(run_id=run_id, expected_rows=expected_rows)
 
 
-def branch_exists(repo_root: Path, remote: str, branch: str) -> bool:
-    result = run_git(repo_root, ["ls-remote", "--heads", remote, branch], check=False)
+def branch_exists(repo_root: Path, remote_ref: str, branch: str) -> bool:
+    result = run_git(repo_root, ["ls-remote", "--heads", remote_ref, branch], check=False)
     if result.returncode != 0:
         message = result.stderr.strip() or result.stdout.strip() or "git ls-remote failed"
         raise RuntimeError(message)
     return bool(result.stdout.strip())
 
 
-def fetch_branch(repo_root: Path, remote: str, spec: RunSpec) -> str:
-    local_ref = f"refs/remotes/{remote}/{spec.branch}"
-    run_git(repo_root, ["fetch", remote, f"{spec.branch}:{local_ref}"])
+def fetch_branch(repo_root: Path, remote_ref: str, ref_namespace: str, spec: RunSpec) -> str:
+    local_ref = f"refs/remotes/{ref_namespace}/{spec.branch}"
+    run_git(repo_root, ["fetch", remote_ref, f"{spec.branch}:{local_ref}"])
     return local_ref
 
 
@@ -103,15 +103,17 @@ def export_archive(repo_root: Path, ref: str, spec: RunSpec, output_dir: Path) -
     tmp_destination.replace(destination)
 
 
-def check_and_retrieve(repo_root: Path, remote: str, specs: list[RunSpec], output_dir: Path) -> bool:
-    missing = [spec.branch for spec in specs if not branch_exists(repo_root, remote, spec.branch)]
+def check_and_retrieve(
+    repo_root: Path, remote_ref: str, ref_namespace: str, specs: list[RunSpec], output_dir: Path
+) -> bool:
+    missing = [spec.branch for spec in specs if not branch_exists(repo_root, remote_ref, spec.branch)]
     if missing:
         print("WAIT missing result branches: " + ", ".join(missing))
         return False
 
     fetched_refs: list[tuple[RunSpec, str]] = []
     for spec in specs:
-        ref = fetch_branch(repo_root, remote, spec)
+        ref = fetch_branch(repo_root, remote_ref, ref_namespace, spec)
         verify_gate(repo_root, ref, spec)
         fetched_refs.append((spec, ref))
 
@@ -126,6 +128,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Monitor remote result branches and retrieve verified archives.")
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--remote", default="origin")
+    parser.add_argument(
+        "--remote-url",
+        default=None,
+        help="Explicit Git remote URL/path for checks and fetches. Use this to bypass the local origin URL.",
+    )
     parser.add_argument("--output-dir", type=Path, default=None)
     parser.add_argument("--interval-minutes", type=float, default=30.0)
     parser.add_argument("--once", action="store_true")
@@ -145,10 +152,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     repo_root = args.repo_root.resolve()
     output_dir = args.output_dir or repo_root / "outputs" / "remote_results"
+    remote_ref = args.remote_url or args.remote
+    ref_namespace = args.remote if args.remote_url is None else "remote-results"
 
     while True:
         try:
-            done = check_and_retrieve(repo_root, args.remote, args.run_specs, output_dir.resolve())
+            done = check_and_retrieve(repo_root, remote_ref, ref_namespace, args.run_specs, output_dir.resolve())
         except Exception as exc:
             print(f"BLOCKED {exc}", file=sys.stderr)
             if args.once:

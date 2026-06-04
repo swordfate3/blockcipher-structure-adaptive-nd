@@ -569,6 +569,8 @@ uv run python scripts/monitor_remote_results.py \
   --run-id innovation1-debug-large-gpu1-20260604=108
 ```
 
+监控脚本会给 Git 命令默认加 `http.version=HTTP/1.1`，用于缓解部分环境下的 HTTPS `gnutls_handshake` 波动。如果本地 GitHub SSH 已配置好，也可以用 `--remote-url git@github.com:owner/repo.git` 显式走 SSH。
+
 通用用法：
 
 ```bash
@@ -576,4 +578,10 @@ uv run python scripts/monitor_remote_results.py \
   --interval-minutes 30 \
   --run-id <run-id-a>=<expected-rows-a> \
   --run-id <run-id-b>=<expected-rows-b>
+```
+
+需要绕过本地 `origin` 时，额外加：
+
+```bash
+--remote-url <git-remote-url-or-path>
 ```

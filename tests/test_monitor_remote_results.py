@@ -140,3 +140,28 @@ def test_once_blocks_when_remote_query_fails(tmp_path):
     )
 
     assert code == 1
+
+
+def test_once_can_use_explicit_remote_url_without_local_remote(tmp_path):
+    repo_root = Path(__file__).resolve().parents[1]
+    module = load_module(repo_root)
+    origin = make_origin_with_result_branches(tmp_path, [("run-gpu0", 2)])
+    local = tmp_path / "local-no-origin"
+    run(["git", "init", str(local)])
+
+    code = module.main(
+        [
+            "--repo-root",
+            str(local),
+            "--remote-url",
+            str(origin),
+            "--output-dir",
+            str(local / "outputs" / "remote_results"),
+            "--run-id",
+            "run-gpu0=2",
+            "--once",
+        ]
+    )
+
+    assert code == 0
+    assert (local / "outputs" / "remote_results" / "run-gpu0" / "run-gpu0_summary.csv").exists()
