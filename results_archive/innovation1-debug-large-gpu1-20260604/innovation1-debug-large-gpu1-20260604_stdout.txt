@@ -1,0 +1,5 @@
+[1/108] SM4 r=3 model=mlp seed=0 pairs=1
+[2/108] SM4 r=3 model=adaptive_dbitnet seed=0 pairs=1
+[3/108] SM4 r=3 model=adaptive_dbitnet_pairwise seed=0 pairs=1
+[4/108] SM4 r=3 model=resnet_bitslice seed=0 pairs=1
+[5/108] SM4 r=3 model=senet_resnext seed=0 pairs=1

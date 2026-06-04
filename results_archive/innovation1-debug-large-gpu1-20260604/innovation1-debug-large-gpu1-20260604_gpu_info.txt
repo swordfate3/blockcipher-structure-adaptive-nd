@@ -1,0 +1,36 @@
+Thu Jun  4 17:00:18 2026       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 528.49       Driver Version: 528.49       CUDA Version: 12.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name            TCC/WDDM | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA RTX A6000   WDDM  | 00000000:3B:00.0 Off |                  Off |
+| 30%   38C    P8    19W / 300W |    369MiB / 49140MiB |      7%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA RTX A6000   WDDM  | 00000000:AF:00.0 Off |                  Off |
+| 30%   37C    P0    11W / 300W |    108MiB / 49140MiB |      1%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A      5560    C+G   F:\ToDesk\ToDesk.exe            N/A      |
+|    0   N/A  N/A      7400    C+G   ...Client\SunloginClient.exe    N/A      |
+|    0   N/A  N/A     18316    C+G   ...e6\promecefpluginhost.exe    N/A      |
+|    0   N/A  N/A     25376      C   ...s\DWT\torch310\python.exe    N/A      |
+|    1   N/A  N/A       376    C+G   C:\Windows\System32\dwm.exe     N/A      |
+|    1   N/A  N/A      3608    C+G   ...cw5n1h2txyewy\LockApp.exe    N/A      |
+|    1   N/A  N/A      4156    C+G   C:\Windows\explorer.exe         N/A      |
+|    1   N/A  N/A     12084    C+G   ...bbwe\Microsoft.Photos.exe    N/A      |
+|    1   N/A  N/A     15092    C+G   ...w5n1h2txyewy\SearchUI.exe    N/A      |
+|    1   N/A  N/A     16240    C+G   ...es.TextInput.InputApp.exe    N/A      |
+|    1   N/A  N/A     17980    C+G   ...y\ShellExperienceHost.exe    N/A      |
+|    1   N/A  N/A     19028    C+G   ...oft\OneDrive\OneDrive.exe    N/A      |
+|    1   N/A  N/A     23252    C+G   ...dows\System32\LogonUI.exe    N/A      |
++-----------------------------------------------------------------------------+

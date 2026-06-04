@@ -1,0 +1,37 @@
+Traceback (most recent call last):
+  File "G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-debug-large-gpu1-20260604\experiments\run_innovation_one_matrix.py", line 403, in <module>
+    main()
+  File "G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-debug-large-gpu1-20260604\experiments\run_innovation_one_matrix.py", line 107, in main
+    row = _run_task(task, args)
+  File "G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-debug-large-gpu1-20260604\experiments\run_innovation_one_matrix.py", line 162, in _run_task
+    result = train_binary_classifier(
+  File "G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-debug-large-gpu1-20260604\src\blockcipher_ai_eval\training\binary.py", line 107, in train_binary_classifier
+    logits = model(features).squeeze(1)
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-debug-large-gpu1-20260604\src\blockcipher_ai_eval\models\multiscale_dense_resnet.py", line 86, in forward
+    hidden = self.features(hidden)
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-debug-large-gpu1-20260604\src\blockcipher_ai_eval\models\multiscale_dense_resnet.py", line 49, in forward
+    hidden = block(hidden)
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-debug-large-gpu1-20260604\src\blockcipher_ai_eval\models\multiscale_dense_resnet.py", line 26, in forward
+    self.branch7(features),
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\conv.py", line 375, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "F:\Anaconda\envs\DWT\torch310\lib\site-packages\torch\nn\modules\conv.py", line 370, in _conv_forward
+    return F.conv1d(
+KeyboardInterrupt
+^C
