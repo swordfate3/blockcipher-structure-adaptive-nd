@@ -523,3 +523,57 @@ AUC mean/std
 3. SPECK Gohr-style single-pair 协议和 multi-pair pairwise 协议不能直接混写成 SOTA 对比。
 4. SM4 的输入宽，`pairs_per_sample=8` 可能显存较高，先用 `--batch-size 512`。
 5. 如果 `nvidia-smi` 没看到训练，不一定代表没用 GPU；训练结束后显存会释放。以 JSONL 的 `training.device` 字段为准。
+
+## 13. 远程结果自动监控与拉回
+
+远程 Windows GPU 实验跑完后会自动推送 GitHub 结果分支：
+
+```text
+results/<run-id>
+```
+
+本地可以用监控脚本按方式 B 从 GitHub 结果分支拉回 `results_archive/<run-id>` 到：
+
+```text
+outputs/remote_results/<run-id>/
+```
+
+当前创新一 debug-large 双卡实验的便捷监控命令：
+
+```bash
+scripts/monitor_innovation1_debug_large_results.sh
+```
+
+这个脚本默认每 30 分钟检查一次：
+
+```text
+results/innovation1-debug-large-gpu0-20260604
+results/innovation1-debug-large-gpu1-20260604
+```
+
+只有两个结果分支都出现，并且门禁满足：
+
+```text
+innovation1-debug-large-gpu0-20260604: result_lines=216, expected_rows=216
+innovation1-debug-large-gpu1-20260604: result_lines=108, expected_rows=108
+```
+
+才会拉回本地。结果没齐时输出 `WAIT missing result branches` 并继续等待。
+
+也可以只检查一次，不进入循环：
+
+```bash
+uv run python scripts/monitor_remote_results.py \
+  --once \
+  --run-id innovation1-debug-large-gpu0-20260604=216 \
+  --run-id innovation1-debug-large-gpu1-20260604=108
+```
+
+通用用法：
+
+```bash
+uv run python scripts/monitor_remote_results.py \
+  --interval-minutes 30 \
+  --run-id <run-id-a>=<expected-rows-a> \
+  --run-id <run-id-b>=<expected-rows-b>
+```
