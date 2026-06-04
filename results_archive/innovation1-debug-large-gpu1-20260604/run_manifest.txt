@@ -4,6 +4,7 @@ run_dir=G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-debug-large-gp
 branch=main
 plan=experiments\plans\innovation1_debug_large_gpu1.csv
 device=cuda:1
+expected_rows=108
 epochs=10
 batch_size=1024
 hidden_bits=64
