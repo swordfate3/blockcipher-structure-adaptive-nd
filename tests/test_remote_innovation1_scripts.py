@@ -12,11 +12,15 @@ def test_remote_debug_large_scripts_use_expected_devices_and_plans():
     assert "experiments\\plans\\innovation1_debug_large_gpu0.csv" in gpu0
     assert "--device cuda:0" in gpu0
     assert "--batch-size 2048" in gpu0
+    assert "set EXPECTED_ROWS=216" in gpu0
+    assert "RUN_GATE_BLOCKED_INCOMPLETE_RESULTS" in gpu0
     assert "git push origin results/%RUN_ID%" in gpu0
 
     assert "experiments\\plans\\innovation1_debug_large_gpu1.csv" in gpu1
     assert "--device cuda:1" in gpu1
     assert "--batch-size 1024" in gpu1
+    assert "set EXPECTED_ROWS=108" in gpu1
+    assert "RUN_GATE_BLOCKED_INCOMPLETE_RESULTS" in gpu1
     assert "git push origin results/%RUN_ID%" in gpu1
 
 
@@ -30,4 +34,5 @@ def test_remote_debug_large_scripts_archive_curated_results_only():
         assert "git add results_archive\\%RUN_ID%" in text
         assert "copy results\\%RUN_ID%.jsonl results_archive\\%RUN_ID%\\" in text
         assert "copy results\\%RUN_ID%_summary.csv results_archive\\%RUN_ID%\\" in text
+        assert "copy logs\\%RUN_ID%_result_gate.txt results_archive\\%RUN_ID%\\" in text
         assert "RUN_GATE_PASS" in text

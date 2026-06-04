@@ -9,6 +9,7 @@ set PROJECT_ID=blockcipher-structure-adaptive-nd
 set REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set BRANCH=main
 set RUN_ID=innovation1-debug-large-gpu1-20260604
+set EXPECTED_ROWS=108
 set RUN_ROOT=%ROOT%\%PROJECT_ID%-runs
 set RUN_DIR=%RUN_ROOT%\%RUN_ID%
 set PY=F:\Anaconda\envs\DWT\torch310\python.exe
@@ -28,7 +29,12 @@ git pull --ff-only origin %BRANCH%
 if not exist logs mkdir logs
 if not exist results mkdir results
 if not exist results_archive mkdir results_archive
-if not exist results_archive\%RUN_ID% mkdir results_archive\%RUN_ID%
+if exist logs\%RUN_ID%_stdout.txt del logs\%RUN_ID%_stdout.txt
+if exist logs\%RUN_ID%_stderr.txt del logs\%RUN_ID%_stderr.txt
+if exist results\%RUN_ID%.jsonl del results\%RUN_ID%.jsonl
+if exist results\%RUN_ID%_summary.csv del results\%RUN_ID%_summary.csv
+if exist results_archive\%RUN_ID% rmdir /s /q results_archive\%RUN_ID%
+mkdir results_archive\%RUN_ID%
 
 git rev-parse HEAD > logs\%RUN_ID%_git_revision.txt
 git status --short --branch > logs\%RUN_ID%_git_status_before_run.txt
@@ -49,6 +55,12 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   2> logs\%RUN_ID%_stderr.txt
 if errorlevel 1 goto run_failed
 
+set RESULT_LINES=0
+for /f "tokens=3" %%L in ('find /c /v "" results\%RUN_ID%.jsonl') do set RESULT_LINES=%%L
+echo result_lines=%RESULT_LINES% > logs\%RUN_ID%_result_gate.txt
+echo expected_rows=%EXPECTED_ROWS% >> logs\%RUN_ID%_result_gate.txt
+if not "%RESULT_LINES%"=="%EXPECTED_ROWS%" goto incomplete_results
+
 %PY% experiments\summarize_innovation_one_results.py ^
   --input results\%RUN_ID%.jsonl ^
   --output results\%RUN_ID%_summary.csv ^
@@ -65,6 +77,7 @@ copy logs\%RUN_ID%_torch_info.txt results_archive\%RUN_ID%\
 copy logs\%RUN_ID%_torch_info_stderr.txt results_archive\%RUN_ID%\
 copy logs\%RUN_ID%_stdout.txt results_archive\%RUN_ID%\
 copy logs\%RUN_ID%_stderr.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_result_gate.txt results_archive\%RUN_ID%\
 copy logs\%RUN_ID%_summary_stdout.txt results_archive\%RUN_ID%\
 copy logs\%RUN_ID%_summary_stderr.txt results_archive\%RUN_ID%\
 
@@ -75,6 +88,7 @@ echo run_dir=%RUN_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
 echo branch=%BRANCH%>> results_archive\%RUN_ID%\run_manifest.txt
 echo plan=experiments\plans\innovation1_debug_large_gpu1.csv>> results_archive\%RUN_ID%\run_manifest.txt
 echo device=cuda:1>> results_archive\%RUN_ID%\run_manifest.txt
+echo expected_rows=%EXPECTED_ROWS%>> results_archive\%RUN_ID%\run_manifest.txt
 echo epochs=10>> results_archive\%RUN_ID%\run_manifest.txt
 echo batch_size=1024>> results_archive\%RUN_ID%\run_manifest.txt
 echo hidden_bits=64>> results_archive\%RUN_ID%\run_manifest.txt
@@ -91,9 +105,15 @@ echo RUN_GATE_PASS
 echo RUN_DIR %RUN_DIR%
 type logs\%RUN_ID%_git_revision.txt
 type logs\%RUN_ID%_torch_info.txt
+type logs\%RUN_ID%_result_gate.txt
 for %%A in (logs\%RUN_ID%_stderr.txt) do echo STDERR_BYTES %%~zA
 for %%A in (results\%RUN_ID%.jsonl) do echo RESULT_BYTES %%~zA
 exit /b 0
+
+:incomplete_results
+echo RUN_GATE_BLOCKED_INCOMPLETE_RESULTS
+type logs\%RUN_ID%_result_gate.txt
+exit /b 4
 
 :run_failed
 echo RUN_GATE_BLOCKED_RUN_FAILED
