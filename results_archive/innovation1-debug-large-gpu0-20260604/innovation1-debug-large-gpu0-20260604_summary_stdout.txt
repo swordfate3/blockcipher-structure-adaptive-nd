@@ -1,1 +1,1 @@
-wrote 6 summary rows to results\innovation1-debug-large-gpu0-20260604_summary.csv
+wrote 108 summary rows to results\innovation1-debug-large-gpu0-20260604_summary.csv
