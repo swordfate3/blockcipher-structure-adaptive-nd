@@ -189,6 +189,44 @@ def test_run_innovation_one_matrix_records_multi_pair_samples(tmp_path: Path):
     assert rows[0]["training"]["input_bits"] == 192
 
 
+def test_run_innovation_one_matrix_accepts_explicit_device(tmp_path: Path):
+    output_path = tmp_path / "device.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "mlp",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--device",
+            "cpu",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["training"]["device"] == "cpu"
+
+
 def test_run_innovation_one_matrix_passes_gohr_style_training_options(tmp_path: Path):
     output_path = tmp_path / "training_options.jsonl"
 

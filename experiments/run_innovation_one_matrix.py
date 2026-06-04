@@ -42,6 +42,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--hidden-bits", type=int, default=64)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument(
+        "--device",
+        default="auto",
+        help="Training device passed to PyTorch, e.g. auto, cpu, cuda, cuda:0, cuda:1.",
+    )
+    parser.add_argument(
         "--optimizer",
         default="adam",
         choices=["adam", "adamw"],
@@ -168,6 +173,7 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
             lr_scheduler=args.lr_scheduler,
             max_learning_rate=args.max_learning_rate,
             seed=task["seed"],
+            device=args.device,
         ),
     )
     return {
