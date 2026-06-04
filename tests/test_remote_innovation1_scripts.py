@@ -9,6 +9,7 @@ def test_remote_debug_large_scripts_use_expected_devices_and_plans():
     assert "set RUN_ROOT=%ROOT%\\%PROJECT_ID%-runs" in gpu0
     assert "set RUN_DIR=%RUN_ROOT%\\%RUN_ID%" in gpu0
     assert "set PY=F:\\Anaconda\\envs\\DWT\\torch310\\python.exe" in gpu0
+    assert "git config --global --add safe.directory %RUN_DIR%" in gpu0
     assert "experiments\\plans\\innovation1_debug_large_gpu0.csv" in gpu0
     assert "--device cuda:0" in gpu0
     assert "--batch-size 2048" in gpu0
@@ -17,6 +18,7 @@ def test_remote_debug_large_scripts_use_expected_devices_and_plans():
     assert "git push origin results/%RUN_ID%" in gpu0
 
     assert "experiments\\plans\\innovation1_debug_large_gpu1.csv" in gpu1
+    assert "git config --global --add safe.directory %RUN_DIR%" in gpu1
     assert "--device cuda:1" in gpu1
     assert "--batch-size 1024" in gpu1
     assert "set EXPECTED_ROWS=108" in gpu1

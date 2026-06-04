@@ -22,6 +22,7 @@ if not exist %RUN_ID% (
 )
 
 cd /d %RUN_DIR%
+git config --global --add safe.directory %RUN_DIR%
 git fetch origin
 git checkout %BRANCH%
 git pull --ff-only origin %BRANCH%
