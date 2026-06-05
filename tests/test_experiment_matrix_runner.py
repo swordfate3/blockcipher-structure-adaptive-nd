@@ -411,6 +411,57 @@ def test_run_innovation_one_matrix_infers_pair_bits_for_pairwise_model(tmp_path:
     assert rows[0]["training"]["pair_bits"] == 192
 
 
+def test_run_innovation_one_matrix_can_train_structure_adaptive_pairset_dbitnet(
+    tmp_path: Path,
+):
+    output_path = tmp_path / "structure_pairset.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "present80",
+            "sm4",
+            "--models",
+            "structure_adaptive_pairset_dbitnet",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
+            "--pairs-per-sample",
+            "2",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert len(rows) == 3
+    assert all(row["model"] == "structure_adaptive_pairset_dbitnet" for row in rows)
+    assert {row["cipher"]: row["training"]["pair_bits"] for row in rows} == {
+        "SPECK32/64": 96,
+        "PRESENT-80": 192,
+        "SM4": 384,
+    }
+    assert "wrote 3 rows" in completed.stdout
+
+
 def test_run_innovation_one_matrix_infers_pair_bits_for_single_pair_pairwise_model(
     tmp_path: Path,
 ):

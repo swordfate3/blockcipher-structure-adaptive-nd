@@ -5,7 +5,9 @@ from blockcipher_ai_eval.experiments import build_model
 from blockcipher_ai_eval.models.adaptive_dbitnet import (
     AdaptiveDBitNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
+    StructureAdaptivePairSetDBitNetDistinguisher,
     adaptive_dbitnet_dilations,
+    structure_conditioned_dilations,
 )
 
 
@@ -146,6 +148,85 @@ def test_build_model_can_configure_pairwise_adaptive_dbitnet_pair_width():
 def test_pairwise_adaptive_dbitnet_rejects_non_multiple_pair_width():
     with pytest.raises(ValueError, match="multiple of pair_bits"):
         PairwiseAdaptiveDBitNetDistinguisher(input_bits=320, pair_bits=96, base_channels=8)
+
+
+@pytest.mark.parametrize(
+    ("structure", "expected_first_rates"),
+    [
+        ("ARX", [15, 5]),
+        ("SPN", [3, 7]),
+        ("Feistel-like", [47, 23]),
+    ],
+)
+def test_structure_conditioned_dilations_add_structure_specific_receptive_fields(
+    structure: str,
+    expected_first_rates: list[int],
+):
+    dilations = structure_conditioned_dilations(96, structure=structure)
+
+    assert dilations[:2] == expected_first_rates
+    assert 47 in dilations
+    assert len(dilations) == len(set(dilations))
+
+
+def test_structure_adaptive_pairset_dbitnet_uses_attention_pooling_and_bit_mask():
+    model = StructureAdaptivePairSetDBitNetDistinguisher(
+        input_bits=384,
+        pair_bits=96,
+        base_channels=8,
+        structure="ARX",
+        pooling="attention_mean_max",
+    )
+    batch = torch.zeros((3, 384), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "ARX"
+    assert model.pair_bits == 96
+    assert model.pairs_per_sample == 4
+    assert model.pooling == "attention_mean_max"
+    assert model.encoder.structure == "ARX"
+    assert model.encoder.dilations[:2] == [15, 5]
+    assert model.encoder.bit_mask.shape == (96,)
+    assert model.last_attention_weights is not None
+    assert model.last_attention_weights.shape == (3, 4)
+    assert torch.allclose(
+        model.last_attention_weights.sum(dim=1),
+        torch.ones(3),
+        atol=1e-5,
+    )
+    assert logits.shape == (3, 1)
+
+
+def test_structure_adaptive_pairset_dbitnet_can_update_structure_after_build():
+    model = StructureAdaptivePairSetDBitNetDistinguisher(
+        input_bits=384,
+        pair_bits=96,
+        base_channels=8,
+        structure="ARX",
+    )
+
+    model.set_cipher_structure("SPN")
+
+    assert model.structure == "SPN"
+    assert model.encoder.structure == "SPN"
+    assert model.encoder.dilations[:2] == [15, 5]
+    assert model.encoder.bit_mask[:4].tolist() == pytest.approx([1.3, 1.3, 1.3, 1.3])
+
+
+def test_build_model_supports_structure_adaptive_pairset_key():
+    model = build_model(
+        "structure_adaptive_pairset_dbitnet",
+        input_bits=384,
+        hidden_bits=8,
+        pair_bits=96,
+    )
+    batch = torch.zeros((3, 384), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert isinstance(model, StructureAdaptivePairSetDBitNetDistinguisher)
+    assert logits.shape == (3, 1)
 
 
 def test_adaptive_dbitnet_rejects_too_small_or_odd_inputs():

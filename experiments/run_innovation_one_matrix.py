@@ -157,6 +157,7 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         input_bits=train_dataset.features.shape[1],
         hidden_bits=args.hidden_bits,
         pair_bits=pair_bits,
+        structure=cipher.structure,
     )
     _configure_structure_aware_model(model, task["cipher_key"], task["rounds"])
     result = train_binary_classifier(

@@ -1,6 +1,6 @@
 # 创新一长期记忆
 
-更新时间：2026-06-03
+更新时间：2026-06-05
 
 ## 当前定位
 
@@ -9,6 +9,8 @@
 > 结构感知输入组织 + 容量匹配 + 自适应/结构化模型池 + 专家融合消融。
 
 论文表述重点应放在：不同分组密码结构、输入组织方式、模型容量和神经网络架构之间存在适配关系；本文在统一实验协议下比较这种适配关系。
+
+2026-06-05 新定位补充：MoE 保留为对照，不作为唯一主线。当前更强的创新一候选是 `structure_adaptive_pairset_dbitnet`：结构条件化 DBitNet dilation + bit-mask prior + 多密文对 pair-set attention/mean/max 聚合。
 
 ## 毕业论文与小论文双轨计划
 
@@ -134,6 +136,68 @@ multi-pair 输入下，保留 pair 边界并共享 pair encoder 是否优于直�
 - 新增 `moe_v4_*` 在 v3 专家池前加入结构 adapter：ARX -> `arx_word_mix`，SPN -> `spn_cell_mix`，Feistel-like -> `feistel_branch_mix`。这是结构专用输入路径第一版，不代表 GPD/RX/polytopic/score-distribution 已完整实现。
 - 新增 `selector_rule` 作为结构规则选择器：ARX multi-pair -> `adaptive_dbitnet_pairwise`，SPN -> `senet_resnext`，Feistel-like -> `multiscale_dense_resnet`。
 - 新增 `selector_rule_v2`：multi-pair 一律选 `adaptive_dbitnet_pairwise`，single-pair 再按结构选择专家。
+- 新增 `structure_adaptive_pairset_dbitnet`：不是 MoE，也不是 Bellini 原版 DBitNet；它在 shared pair encoder 中按 ARX/SPN/Feistel-like 初始化结构条件 dilation 与 bit-mask prior，再对 pair set 做 attention/mean/max 聚合。该模型是创新一“结构适配 + 多密文对组织”的下一阶段主候选。
+
+## Structure-Adaptive PairSet DBitNet
+
+新增模型 key：
+
+```text
+structure_adaptive_pairset_dbitnet
+structure_adaptive_pairset_dbitnet_attention
+structure_adaptive_pairset_dbitnet_mean_max
+```
+
+对应文件：
+
+- `src/blockcipher_ai_eval/models/adaptive_dbitnet.py`
+- `src/blockcipher_ai_eval/experiments/factories.py`
+- `experiments/build_innovation1_structure_pairset_plans.py`
+- `experiments/plans/innovation1_structure_pairset_gpu0.csv`
+- `experiments/plans/innovation1_structure_pairset_gpu1.csv`
+- `scripts/remote/run_innovation1_structure_pairset_gpu0_and_push.cmd`
+- `scripts/remote/run_innovation1_structure_pairset_gpu1_and_push.cmd`
+
+结构先验：
+
+```text
+ARX          -> rotation/word-like dilation prior + ARX bit mask
+SPN          -> local S-box/cell dilation prior + 4-bit cell mask
+Feistel-like -> branch/cross-state dilation prior + branch mask
+```
+
+本地验证：
+
+```text
+uv run pytest tests/test_adaptive_dbitnet_model.py tests/test_candidate_models.py tests/test_innovation_one.py tests/test_experiment_matrix_runner.py::test_run_innovation_one_matrix_can_train_structure_adaptive_pairset_dbitnet tests/test_innovation1_debug_large_plans.py tests/test_remote_innovation1_scripts.py -q
+63 passed
+
+uv run python experiments/run_innovation_one_matrix.py --ciphers speck32 present80 sm4 --models structure_adaptive_pairset_dbitnet --rounds 1 --seeds 0 --samples-per-class 16 --epochs 1 --batch-size 8 --hidden-bits 8 --feature-encoding ciphertext_pair_xor_bits --pairs-per-sample 2 --output outputs/smoke_structure_pairset.jsonl
+3 rows passed
+```
+
+远程计划：
+
+```text
+GPU0 run_id: innovation1-structure-pairset-gpu0-20260605
+plan: experiments/plans/innovation1_structure_pairset_gpu0.csv
+rows: 72
+ciphers: SPECK32/64 r=5,6 + PRESENT-80 r=4,5
+models: adaptive_dbitnet_pairwise, structure_adaptive_pairset_dbitnet, moe_v4_soft
+
+GPU1 run_id: innovation1-structure-pairset-gpu1-20260605
+plan: experiments/plans/innovation1_structure_pairset_gpu1.csv
+rows: 36
+cipher: SM4 r=3,4
+models: adaptive_dbitnet_pairwise, structure_adaptive_pairset_dbitnet, moe_v4_soft
+```
+
+预期结果分支：
+
+```text
+results/innovation1-structure-pairset-gpu0-20260605
+results/innovation1-structure-pairset-gpu1-20260605
+```
 
 ## Adaptive DBitNet
 

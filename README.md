@@ -214,6 +214,16 @@ adaptive_dbitnet_pairwise == adaptive_dbitnet_pairwise_mean_max
 `adaptive_dbitnet_pairwise` 不是 Bellini et al. DBitNet 的原始结构，而是本项目基于 DBitNet-style
 自适应扩张卷积和 multi-pair 输入组织设计的 pairwise 变体。
 
+结构自适应 PairSet DBitNet：
+
+```text
+structure_adaptive_pairset_dbitnet
+structure_adaptive_pairset_dbitnet_attention
+structure_adaptive_pairset_dbitnet_mean_max
+```
+
+`structure_adaptive_pairset_dbitnet` 是创新一的新主线候选：共享 pair encoder 保留多密文对边界，按 ARX/SPN/Feistel-like 初始化结构条件 dilation 和 bit-mask prior，再用 attention/mean/max 聚合 pair set。它不是 MoE，也不是 Bellini et al. 原始 DBitNet，而是本项目用于验证“结构适配 + 多密文对组织”的组合模型。
+
 MoE 与 selector：
 
 ```text
@@ -285,7 +295,42 @@ python -c 'import json; rows=[json.loads(l) for l in open("outputs/readme_smoke.
 cuda
 ```
 
-## 7. 复现实验：selector_rule_v2 单对/多对路由对照
+## 7. 远程实验：结构自适应 PairSet DBitNet 对照
+
+这组实验用于比较当前最强 pairwise baseline、新增结构自适应 PairSet DBitNet、以及 `moe_v4_soft`：
+
+```text
+experiments/plans/innovation1_structure_pairset_gpu0.csv  # SPECK32/64 + PRESENT-80, 72 rows
+experiments/plans/innovation1_structure_pairset_gpu1.csv  # SM4, 36 rows
+scripts/remote/run_innovation1_structure_pairset_gpu0_and_push.cmd
+scripts/remote/run_innovation1_structure_pairset_gpu1_and_push.cmd
+```
+
+远程按技能流程从 GitHub 拉取 `main` 后运行，结果分支：
+
+```text
+results/innovation1-structure-pairset-gpu0-20260605
+results/innovation1-structure-pairset-gpu1-20260605
+```
+
+本地也可以先跑一个超小 smoke：
+
+```bash
+uv run python experiments/run_innovation_one_matrix.py \
+  --ciphers speck32 present80 sm4 \
+  --models structure_adaptive_pairset_dbitnet \
+  --rounds 1 \
+  --seeds 0 \
+  --samples-per-class 16 \
+  --epochs 1 \
+  --batch-size 8 \
+  --hidden-bits 8 \
+  --feature-encoding ciphertext_pair_xor_bits \
+  --pairs-per-sample 2 \
+  --output outputs/smoke_structure_pairset.jsonl
+```
+
+## 8. 复现实验：selector_rule_v2 单对/多对路由对照
 
 这组实验用于毕业论文创新一主线，验证：
 
@@ -335,7 +380,7 @@ jsonl:   90 行
 summary: 31 行，含 header
 ```
 
-## 8. 复现实验：pairwise pooling 与 pair 数量消融
+## 9. 复现实验：pairwise pooling 与 pair 数量消融
 
 这组实验同时服务：
 
@@ -390,7 +435,7 @@ summary: 41 行，含 header
 python -c 'import csv; rows=list(csv.DictReader(open("outputs/innovation_one_pairwise_pooling_speck_present_summary.csv", encoding="utf-8"))); keys=sorted({(r["cipher"], r["pairs_per_sample"]) for r in rows}); [print(k, max([r for r in rows if (r["cipher"], r["pairs_per_sample"])==k], key=lambda r: float(r["calibrated_accuracy_mean"]))["model"]) for k in keys]'
 ```
 
-## 9. 自己新跑一组实验
+## 10. 自己新跑一组实验
 
 不使用 plan 时，建议一次只跑一个密码，因为不同密码通常需要不同的
 `--difference-profile`。跨密码文献差分实验建议用 CSV plan。
@@ -450,7 +495,7 @@ uv run python experiments/run_innovation_one_matrix.py \
   --output outputs/custom_sm4_pairwise.jsonl
 ```
 
-## 10. 查看结果
+## 11. 查看结果
 
 汇总 CSV：
 
@@ -478,7 +523,7 @@ python -c 'import json; rows=[json.loads(l) for l in open("outputs/custom_speck_
 ['cuda']
 ```
 
-## 11. 结果字段说明
+## 12. 结果字段说明
 
 JSONL 每行包含：
 
@@ -516,7 +561,7 @@ calibrated_accuracy mean/std
 AUC mean/std
 ```
 
-## 12. 重要注意事项
+## 13. 重要注意事项
 
 1. `outputs/` 是实验产物，通常不提交 git。
 2. 跑跨密码文献差分时优先用 plan CSV，因为不同密码需要不同 profile。
@@ -524,7 +569,7 @@ AUC mean/std
 4. SM4 的输入宽，`pairs_per_sample=8` 可能显存较高，先用 `--batch-size 512`。
 5. 如果 `nvidia-smi` 没看到训练，不一定代表没用 GPU；训练结束后显存会释放。以 JSONL 的 `training.device` 字段为准。
 
-## 13. 远程结果自动监控与拉回
+## 14. 远程结果自动监控与拉回
 
 远程 Windows GPU 实验跑完后会自动推送 GitHub 结果分支：
 

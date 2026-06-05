@@ -49,3 +49,36 @@ def test_debug_large_plans_use_expected_model_set():
         "moe_v4_soft",
         "selector_rule_v2",
     }
+
+
+def test_structure_pairset_gpu0_plan_covers_speck_and_present():
+    rows = _rows("experiments/plans/innovation1_structure_pairset_gpu0.csv")
+
+    assert len(rows) == 72
+    assert {row["cipher"] for row in rows} == {"SPECK32/64", "PRESENT-80"}
+    assert {row["rounds"] for row in rows if row["cipher"] == "SPECK32/64"} == {"5", "6"}
+    assert {row["rounds"] for row in rows if row["cipher"] == "PRESENT-80"} == {"4", "5"}
+    assert {row["seed"] for row in rows} == {"0", "1"}
+    assert {row["pairs_per_sample"] for row in rows} == {"1", "2", "4"}
+    assert {row["samples_per_class"] for row in rows} == {"32768"}
+
+
+def test_structure_pairset_gpu1_plan_covers_sm4():
+    rows = _rows("experiments/plans/innovation1_structure_pairset_gpu1.csv")
+
+    assert len(rows) == 36
+    assert {row["cipher"] for row in rows} == {"SM4"}
+    assert {row["rounds"] for row in rows} == {"3", "4"}
+    assert {row["seed"] for row in rows} == {"0", "1"}
+    assert {row["pairs_per_sample"] for row in rows} == {"1", "2", "4"}
+    assert {row["samples_per_class"] for row in rows} == {"32768"}
+
+
+def test_structure_pairset_plans_use_expected_model_set():
+    rows = _rows("experiments/plans/innovation1_structure_pairset_gpu0.csv") + _rows("experiments/plans/innovation1_structure_pairset_gpu1.csv")
+
+    assert {row["model_key"] for row in rows} == {
+        "adaptive_dbitnet_pairwise",
+        "structure_adaptive_pairset_dbitnet",
+        "moe_v4_soft",
+    }

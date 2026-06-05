@@ -25,6 +25,16 @@ def test_rank_architectures_prefers_resnet_for_arx_cipher():
     assert any("Gohr 2019" in source for source in ranked[0].literature)
 
 
+def test_rank_architectures_includes_structure_adaptive_pairset_as_top_candidate():
+    networks = NetworkProfile.default_candidates()
+
+    for cipher in [CipherProfile.speck32_64(), CipherProfile.present80(), CipherProfile.sm4()]:
+        ranked = rank_architectures(cipher, networks)
+        top_names = {item.name for item in ranked[:3]}
+
+        assert "StructureAdaptive-PairSet-DBitNet" in top_names
+
+
 def test_rank_architectures_prefers_cnn_or_dbitnet_for_spn_cipher():
     cipher = CipherProfile.present80()
     networks = NetworkProfile.default_candidates()
@@ -152,6 +162,10 @@ def test_recommended_model_key_maps_paper_architecture_to_runnable_model():
     )
     assert recommended_model_key("CNN-SBoxLocal") == "cnn"
     assert recommended_model_key("MLP-Baseline") == "mlp"
+    assert (
+        recommended_model_key("StructureAdaptive-PairSet-DBitNet")
+        == "structure_adaptive_pairset_dbitnet"
+    )
 
 
 def test_recommended_difference_profile_maps_cipher_to_literature_input_difference():

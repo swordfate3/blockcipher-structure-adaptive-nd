@@ -104,6 +104,28 @@ class NetworkProfile:
                 notes="Cipher-agnostic dilated convolution baseline for unified comparisons.",
             ),
             NetworkProfile(
+                name="StructureAdaptive-PairSet-DBitNet",
+                family="pairset_dilated_cnn",
+                strengths=(
+                    "modular_addition",
+                    "xor",
+                    "rotation",
+                    "carry_propagation",
+                    "word_parallelism",
+                    "sbox_layer",
+                    "sbox_locality",
+                    "permutation_layer",
+                    "bit_permutation",
+                    "linear_diffusion",
+                    "unbalanced_round_update",
+                    "wide_receptive_field",
+                    "multi_pair_statistics",
+                    "structure_conditioning",
+                ),
+                compute_cost="medium",
+                notes="Innovation-one pair-set DBitNet with structure-conditioned dilation, bit mask priors, and attention pooling.",
+            ),
+            NetworkProfile(
                 name="SENet-ResNeXt",
                 family="se_resnext",
                 strengths=(
@@ -227,6 +249,8 @@ TRAIT_EVIDENCE = {
     "unbalanced_round_update": "Feistel-like unbalanced state update",
     "state_transition": "explicit state-transition modelling",
     "wide_receptive_field": "wide receptive field for multi-round diffusion",
+    "multi_pair_statistics": "multi-ciphertext-pair statistical aggregation",
+    "structure_conditioning": "structure-conditioned bit-interaction priors",
 }
 
 COMPUTE_PENALTY = {"low": 0, "medium": 1, "high": 3}
@@ -234,6 +258,7 @@ LITERATURE_WEIGHT_MULTIPLIER = 2
 MODEL_KEYS = {
     "ResNet-BitSlice": "resnet_bitslice",
     "DBitNet-DilatedCNN": "dbitnet_dilated_cnn",
+    "StructureAdaptive-PairSet-DBitNet": "structure_adaptive_pairset_dbitnet",
     "SENet-ResNeXt": "senet_resnext",
     "MultiScale-DenseResNet": "multiscale_dense_resnet",
     "CNN-SBoxLocal": "cnn",
@@ -295,6 +320,27 @@ def default_literature_rules() -> list[LiteratureRule]:
             network_names=("DBitNet-DilatedCNN",),
             evidence=("cipher-agnostic dilated convolution comparison baseline",),
             weight=2,
+        ),
+        LiteratureRule(
+            source_id="innovation1_pairset_structure_dbitnet",
+            citation="Innovation-one structure-adaptive pair-set DBitNet design",
+            cipher_structures=("ARX", "SPN", "Feistel-like"),
+            cipher_traits=(
+                "modular_addition",
+                "rotation",
+                "sbox_locality",
+                "bit_permutation",
+                "linear_diffusion",
+                "unbalanced_round_update",
+                "wide_receptive_field",
+            ),
+            network_families=("pairset_dilated_cnn",),
+            network_names=("StructureAdaptive-PairSet-DBitNet",),
+            evidence=(
+                "shared pair encoder with attention/mean/max set aggregation",
+                "structure-conditioned dilation and bit-mask priors",
+            ),
+            weight=5,
         ),
         LiteratureRule(
             source_id="bao2022_senet_simon",

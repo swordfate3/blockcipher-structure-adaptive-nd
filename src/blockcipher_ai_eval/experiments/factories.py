@@ -37,6 +37,7 @@ from blockcipher_ai_eval.models import (
     PairwiseAdaptiveDBitNetDistinguisher,
     ResNetBitSliceDistinguisher,
     SeResNeXtDistinguisher,
+    StructureAdaptivePairSetDBitNetDistinguisher,
     StructureAwareMoEDistinguisher,
     TransformerEncoderDistinguisher,
 )
@@ -138,6 +139,7 @@ def build_model(
     input_bits: int,
     hidden_bits: int,
     pair_bits: int | None = None,
+    structure: str = "generic",
 ) -> nn.Module:
     if name == "mlp":
         return MlpDistinguisher(input_bits=input_bits, hidden_bits=hidden_bits)
@@ -161,6 +163,19 @@ def build_model(
             pair_bits=pair_bits or 96,
             base_channels=hidden_bits,
             pooling=pairwise_pooling_keys[name],
+        )
+    pairset_pooling_keys = {
+        "structure_adaptive_pairset_dbitnet": "attention_mean_max",
+        "structure_adaptive_pairset_dbitnet_attention": "attention",
+        "structure_adaptive_pairset_dbitnet_mean_max": "mean_max",
+    }
+    if name in pairset_pooling_keys:
+        return StructureAdaptivePairSetDBitNetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 96,
+            base_channels=hidden_bits,
+            structure=structure,
+            pooling=pairset_pooling_keys[name],
         )
     if name == "gohr_resnet_speck":
         return GohrSpeckDistinguisher(input_bits=input_bits, filters=hidden_bits)
