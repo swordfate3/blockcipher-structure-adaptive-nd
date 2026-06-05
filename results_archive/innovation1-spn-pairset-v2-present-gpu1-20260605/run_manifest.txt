@@ -1,0 +1,12 @@
+run_id=innovation1-spn-pairset-v2-present-gpu1-20260605
+project_id=blockcipher-structure-adaptive-nd
+run_dir=G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-spn-pairset-v2-present-gpu1-20260605
+branch=main
+plan=experiments\plans\innovation1_spn_pairset_v2_present.csv
+device=cuda:1
+expected_rows=48
+epochs=10
+batch_size=1024
+hidden_bits=64
+optimizer=adamw
+weight_decay=0.0001
