@@ -94,3 +94,22 @@ def test_remote_spn_nibble_hpo_script_uses_expected_search_space_and_gate():
     assert "run_innovation1_spn_nibble_hpo_present_gpu1_and_push.cmd" in launcher
     assert "innovation1_spn_nibble_hpo_present_gpu1_20260605" in scheduler
     assert "innovation1-spn-nibble-hpo-present-gpu1-20260605=12" in monitor
+
+
+def test_remote_spn_token_mixer_script_uses_expected_plan_and_gate():
+    script = Path("scripts/remote/run_innovation1_spn_token_mixer_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = Path("scripts/remote/launch_innovation1_spn_token_mixer_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = Path("scripts/remote/schedule_innovation1_spn_token_mixer_present.cmd").read_text(encoding="utf-8")
+    monitor = Path("scripts/monitor_innovation1_spn_token_mixer_present_results.sh").read_text(encoding="utf-8")
+
+    assert "set RUN_ID=innovation1-spn-token-mixer-present-gpu1-20260605" in script
+    assert "experiments\\plans\\innovation1_spn_token_mixer_present.csv" in script
+    assert "--device cuda:1" in script
+    assert "--batch-size 1024" in script
+    assert "set EXPECTED_ROWS=10" in script
+    assert "git push origin results/%RUN_ID%" in script
+    assert "git add results_archive\\%RUN_ID%" in script
+    assert "git add ." not in script
+    assert "run_innovation1_spn_token_mixer_present_gpu1_and_push.cmd" in launcher
+    assert "innovation1_spn_token_mixer_present_gpu1_20260605" in scheduler
+    assert "innovation1-spn-token-mixer-present-gpu1-20260605=10" in monitor

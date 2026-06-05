@@ -7,6 +7,7 @@ from blockcipher_ai_eval.models.adaptive_dbitnet import (
     PairwiseAdaptiveDBitNetDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
+    SpnTokenMixerPairSetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
     adaptive_dbitnet_dilations,
     structure_conditioned_dilations,
@@ -347,6 +348,69 @@ def test_build_model_passes_spn_nibble_component_options():
     assert model.conv_depth == 2
     assert model.kernel_size == 5
     assert model.dropout == 0.05
+
+
+def test_spn_token_mixer_pairset_preserves_position_and_mixes_nibbles():
+    model = SpnTokenMixerPairSetDistinguisher(
+        input_bits=768,
+        pair_bits=192,
+        base_channels=8,
+        nibble_bits=4,
+        token_dim=16,
+        mixer_depth=2,
+        token_mlp_ratio=2,
+        activation="gelu",
+        norm="rmsnorm",
+        pooling="gated_attention",
+        dropout=0.05,
+    )
+    batch = torch.zeros((2, 768), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "SPN"
+    assert model.nibble_bits == 4
+    assert model.nibbles_per_pair == 48
+    assert model.token_dim == 16
+    assert model.mixer_depth == 2
+    assert model.token_mlp_ratio == 2
+    assert model.position_embedding.shape == (1, 48, 16)
+    assert model.last_attention_weights is not None
+    assert model.last_attention_weights.shape == (2, 4)
+    assert torch.allclose(
+        model.last_attention_weights.sum(dim=1),
+        torch.ones(2),
+        atol=1e-5,
+    )
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_passes_spn_token_mixer_component_options():
+    model = build_model(
+        "spn_token_mixer_pairset",
+        input_bits=768,
+        hidden_bits=8,
+        pair_bits=192,
+        structure="SPN",
+        model_options={
+            "activation": "silu",
+            "norm": "layernorm",
+            "pooling": "attention_mean_max",
+            "token_dim": 24,
+            "mixer_depth": 3,
+            "token_mlp_ratio": 3,
+            "dropout": 0.10,
+        },
+    )
+
+    assert isinstance(model, SpnTokenMixerPairSetDistinguisher)
+    assert model.activation == "silu"
+    assert model.norm == "layernorm"
+    assert model.pooling == "attention_mean_max"
+    assert model.token_dim == 24
+    assert model.mixer_depth == 3
+    assert model.token_mlp_ratio == 3
+    assert model.dropout == 0.10
 
 
 def test_adaptive_dbitnet_rejects_too_small_or_odd_inputs():

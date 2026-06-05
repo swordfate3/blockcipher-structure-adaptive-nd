@@ -39,6 +39,7 @@ from blockcipher_ai_eval.models import (
     SeResNeXtDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
+    SpnTokenMixerPairSetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
     StructureAwareMoEDistinguisher,
     TransformerEncoderDistinguisher,
@@ -195,6 +196,19 @@ def build_model(
             nibble_embed_dim=_int_option(options, "nibble_embed_dim"),
             conv_depth=_int_option(options, "conv_depth", 3),
             kernel_size=_int_option(options, "kernel_size", 3),
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            pooling=str(options.get("pooling", "attention_mean_max")),
+            dropout=float(options.get("dropout", 0.0)),
+        )
+    if name == "spn_token_mixer_pairset":
+        return SpnTokenMixerPairSetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 192,
+            base_channels=hidden_bits,
+            token_dim=_int_option(options, "token_dim"),
+            mixer_depth=_int_option(options, "mixer_depth", 3),
+            token_mlp_ratio=_int_option(options, "token_mlp_ratio", 2),
             activation=str(options.get("activation", "gelu")),
             norm=str(options.get("norm", "layernorm")),
             pooling=str(options.get("pooling", "attention_mean_max")),
