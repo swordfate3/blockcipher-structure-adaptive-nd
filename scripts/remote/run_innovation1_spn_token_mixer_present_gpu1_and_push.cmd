@@ -6,6 +6,8 @@ set http_proxy=
 set https_proxy=
 set ROOT=G:\lxy
 set PROJECT_ID=blockcipher-structure-adaptive-nd
+set PROJECT_DIR=%ROOT%\%PROJECT_ID%
+set CLONE_URL=https://github.com/swordfate3/blockcipher-structure-adaptive-nd.git
 set REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set BRANCH=main
 set RUN_ID=innovation1-spn-token-mixer-present-gpu1-20260605
@@ -16,16 +18,25 @@ set PY=F:\Anaconda\envs\DWT\torch310\python.exe
 
 if not exist %ROOT% mkdir %ROOT%
 if not exist %RUN_ROOT% mkdir %RUN_ROOT%
-cd /d %RUN_ROOT%
-if not exist %RUN_ID% (
-  git -c http.proxy= -c https.proxy= clone %REPO_URL% %RUN_ID%
+cd /d %ROOT%
+if not exist %PROJECT_DIR% (
+  git -c http.proxy= -c https.proxy= clone %CLONE_URL% %PROJECT_ID%
 )
 
-cd /d %RUN_DIR%
-git config --global --add safe.directory %RUN_DIR%
+cd /d %PROJECT_DIR%
+git config --global --add safe.directory %PROJECT_DIR%
 git fetch origin
 git checkout %BRANCH%
 git pull --ff-only origin %BRANCH%
+
+cd /d %RUN_ROOT%
+if exist %RUN_ID% rmdir /s /q %RUN_ID%
+git clone --local %PROJECT_DIR% %RUN_ID%
+
+cd /d %RUN_DIR%
+git config --global --add safe.directory %RUN_DIR%
+git checkout %BRANCH%
+git remote set-url origin %REPO_URL%
 
 if not exist logs mkdir logs
 if not exist results mkdir results
@@ -86,6 +97,7 @@ copy logs\%RUN_ID%_summary_stderr.txt results_archive\%RUN_ID%\
 if exist results_archive\%RUN_ID%\run_manifest.txt del results_archive\%RUN_ID%\run_manifest.txt
 echo run_id=%RUN_ID%>> results_archive\%RUN_ID%\run_manifest.txt
 echo project_id=%PROJECT_ID%>> results_archive\%RUN_ID%\run_manifest.txt
+echo project_dir=%PROJECT_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
 echo run_dir=%RUN_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
 echo branch=%BRANCH%>> results_archive\%RUN_ID%\run_manifest.txt
 echo plan=experiments\plans\innovation1_spn_token_mixer_present.csv>> results_archive\%RUN_ID%\run_manifest.txt
