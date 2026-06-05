@@ -25,6 +25,7 @@ if not exist %PROJECT_DIR% (
 
 cd /d %PROJECT_DIR%
 git config --global --add safe.directory %PROJECT_DIR%
+git config --global --add safe.directory %PROJECT_DIR%\.git
 git fetch origin
 git checkout %BRANCH%
 git pull --ff-only origin %BRANCH%
