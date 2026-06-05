@@ -1,0 +1,1 @@
+wrote 36 summary rows to results\innovation1-structure-pairset-gpu0-20260605_summary.csv
