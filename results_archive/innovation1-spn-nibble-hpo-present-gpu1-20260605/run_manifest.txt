@@ -1,0 +1,12 @@
+run_id=innovation1-spn-nibble-hpo-present-gpu1-20260605
+project_id=blockcipher-structure-adaptive-nd
+run_dir=G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-spn-nibble-hpo-present-gpu1-20260605
+branch=main
+space=experiments\hparam_spaces\spn_nibble_conv_pairset_present.json
+device=cuda:1
+expected_rows=12
+mode=random
+max_trials=12
+samples_per_class=8192
+batch_size=1024
+hidden_bits=64

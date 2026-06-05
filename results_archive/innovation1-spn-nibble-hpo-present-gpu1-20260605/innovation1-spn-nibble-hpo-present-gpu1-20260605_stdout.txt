@@ -1,0 +1,13 @@
+[1/12] trial=0 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.650024
+[2/12] trial=1 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.593262
+[3/12] trial=2 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.566162
+[4/12] trial=3 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.649170
+[5/12] trial=4 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.638428
+[6/12] trial=5 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.568848
+[7/12] trial=6 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.585571
+[8/12] trial=7 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.662720
+[9/12] trial=8 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.595825
+[10/12] trial=9 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.628418
+[11/12] trial=10 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.678223
+[12/12] trial=11 cipher=PRESENT-80 model=spn_nibble_conv_pairset score=0.565918
+wrote 12 HPO rows to results\innovation1-spn-nibble-hpo-present-gpu1-20260605.jsonl
