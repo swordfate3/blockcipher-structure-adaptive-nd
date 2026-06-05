@@ -38,6 +38,7 @@ from blockcipher_ai_eval.models import (
     ResNetBitSliceDistinguisher,
     SeResNeXtDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
+    SpnNibbleConvPairSetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
     StructureAwareMoEDistinguisher,
     TransformerEncoderDistinguisher,
@@ -141,7 +142,9 @@ def build_model(
     hidden_bits: int,
     pair_bits: int | None = None,
     structure: str = "generic",
+    model_options: dict[str, object] | None = None,
 ) -> nn.Module:
+    options = model_options or {}
     if name == "mlp":
         return MlpDistinguisher(input_bits=input_bits, hidden_bits=hidden_bits)
     if name == "cnn":
@@ -183,6 +186,19 @@ def build_model(
             input_bits=input_bits,
             pair_bits=pair_bits or 192,
             base_channels=hidden_bits,
+        )
+    if name == "spn_nibble_conv_pairset":
+        return SpnNibbleConvPairSetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 192,
+            base_channels=hidden_bits,
+            nibble_embed_dim=_int_option(options, "nibble_embed_dim"),
+            conv_depth=_int_option(options, "conv_depth", 3),
+            kernel_size=_int_option(options, "kernel_size", 3),
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            pooling=str(options.get("pooling", "attention_mean_max")),
+            dropout=float(options.get("dropout", 0.0)),
         )
     if name == "gohr_resnet_speck":
         return GohrSpeckDistinguisher(input_bits=input_bits, filters=hidden_bits)
@@ -299,3 +315,11 @@ def build_model(
             pair_bits=pair_bits,
         )
     raise ValueError(f"unsupported model: {name}")
+
+
+
+def _int_option(options: dict[str, object], key: str, default: int | None = None) -> int | None:
+    value = options.get(key, default)
+    if value is None:
+        return None
+    return int(value)

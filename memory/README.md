@@ -13,3 +13,6 @@
 ## 文件索引
 
 - `remote-gpu-runs-2026-06-03.md`：远端 Windows A6000 GPU sanity run、项目重命名上下文和下一步远端实验建议。
+- `innovation-one.md`：创新一长期定位、已实现模型、文献边界、实验路线和毕业论文/小论文双轨安排。
+- `cipher_implementation_status_2026-06-03.md`：分组密码算法实现与测试覆盖状态。
+- `conversation-archive-2026-06-05.md`：截至 2026-06-05 的连续对话归档，重点记录创新一模型路线、远程实验结论、SPN v2 负向结果和下一步 MoE v5 / SPN nibble expert 方向。

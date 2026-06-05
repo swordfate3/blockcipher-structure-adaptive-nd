@@ -72,3 +72,25 @@ def test_remote_spn_pairset_v2_script_uses_expected_plan_and_gate():
     assert "git push origin results/%RUN_ID%" in script
     assert "run_innovation1_spn_pairset_v2_present_gpu1_and_push.cmd" in launcher
     assert "innovation1_spn_pairset_v2_present_gpu1_20260605" in scheduler
+
+
+
+def test_remote_spn_nibble_hpo_script_uses_expected_search_space_and_gate():
+    script = Path("scripts/remote/run_innovation1_spn_nibble_hpo_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = Path("scripts/remote/launch_innovation1_spn_nibble_hpo_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = Path("scripts/remote/schedule_innovation1_spn_nibble_hpo_present.cmd").read_text(encoding="utf-8")
+    monitor = Path("scripts/monitor_innovation1_spn_nibble_hpo_present_results.sh").read_text(encoding="utf-8")
+
+    assert "set RUN_ID=innovation1-spn-nibble-hpo-present-gpu1-20260605" in script
+    assert "experiments\\run_hparam_search.py" in script
+    assert "experiments\\hparam_spaces\\spn_nibble_conv_pairset_present.json" in script
+    assert "--mode random" in script
+    assert "--max-trials 12" in script
+    assert "--device cuda:1" in script
+    assert "set EXPECTED_ROWS=12" in script
+    assert "git push origin results/%RUN_ID%" in script
+    assert "git add results_archive\\%RUN_ID%" in script
+    assert "git add ." not in script
+    assert "run_innovation1_spn_nibble_hpo_present_gpu1_and_push.cmd" in launcher
+    assert "innovation1_spn_nibble_hpo_present_gpu1_20260605" in scheduler
+    assert "innovation1-spn-nibble-hpo-present-gpu1-20260605=12" in monitor

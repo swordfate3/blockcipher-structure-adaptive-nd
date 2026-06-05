@@ -49,7 +49,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--optimizer",
         default="adam",
-        choices=["adam", "adamw"],
+        choices=["adam", "adamw", "lion"],
         help="Optimizer used for neural distinguisher training.",
     )
     parser.add_argument(
@@ -61,7 +61,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--lr-scheduler",
         default="none",
-        choices=["none", "cyclic"],
+        choices=["none", "cyclic", "cosine_warmup"],
         help="Optional learning-rate scheduler.",
     )
     parser.add_argument(

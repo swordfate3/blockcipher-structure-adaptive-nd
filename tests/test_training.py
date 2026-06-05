@@ -106,3 +106,31 @@ def test_binary_auc_handles_ties_without_quadratic_comparison_matrix(monkeypatch
     monkeypatch.setattr(np, "sum", fail_sum)
 
     assert _binary_auc(labels, scores) == 7.0 / 9.0
+
+
+
+def test_train_binary_classifier_supports_lion_and_cosine_warmup():
+    dataset = make_differential_dataset(
+        DifferentialDatasetConfig(
+            cipher=Speck32_64(rounds=2, key=0x1918111009080100),
+            input_difference=0x0040,
+            samples_per_class=32,
+            seed=4,
+        )
+    )
+    model = MlpDistinguisher(input_bits=dataset.features.shape[1], hidden_bits=16)
+    config = TrainingConfig(
+        epochs=2,
+        batch_size=16,
+        learning_rate=1e-3,
+        seed=99,
+        optimizer="lion",
+        weight_decay=1e-4,
+        lr_scheduler="cosine_warmup",
+    )
+
+    result = train_binary_classifier(model, dataset, dataset, config)
+
+    assert result.metadata["optimizer"] == "lion"
+    assert result.metadata["lr_scheduler"] == "cosine_warmup"
+    assert result.history[0]["learning_rate"] >= 0.0

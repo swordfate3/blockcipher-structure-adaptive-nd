@@ -6,6 +6,7 @@ from blockcipher_ai_eval.models.adaptive_dbitnet import (
     AdaptiveDBitNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
+    SpnNibbleConvPairSetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
     adaptive_dbitnet_dilations,
     structure_conditioned_dilations,
@@ -268,6 +269,84 @@ def test_build_model_supports_spn_pairset_dbitnet_v2_key():
 
     assert isinstance(model, SpnCellPairSetDBitNetDistinguisher)
     assert logits.shape == (2, 1)
+
+
+def test_spn_nibble_conv_pairset_preserves_nibble_sequence_before_pair_pooling():
+    model = SpnNibbleConvPairSetDistinguisher(
+        input_bits=768,
+        pair_bits=192,
+        base_channels=8,
+        nibble_bits=4,
+        nibble_embed_dim=16,
+        conv_depth=3,
+        kernel_size=3,
+        activation="gelu",
+        norm="layernorm",
+        pooling="gated_attention",
+    )
+    batch = torch.zeros((2, 768), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "SPN"
+    assert model.nibble_bits == 4
+    assert model.nibbles_per_pair == 48
+    assert model.nibble_embed_dim == 16
+    assert model.conv_depth == 3
+    assert model.pooling == "gated_attention"
+    assert model.last_attention_weights is not None
+    assert model.last_attention_weights.shape == (2, 4)
+    assert torch.allclose(
+        model.last_attention_weights.sum(dim=1),
+        torch.ones(2),
+        atol=1e-5,
+    )
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_spn_nibble_conv_pairset_key():
+    model = build_model(
+        "spn_nibble_conv_pairset",
+        input_bits=768,
+        hidden_bits=8,
+        pair_bits=192,
+        structure="SPN",
+    )
+    batch = torch.zeros((2, 768), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert isinstance(model, SpnNibbleConvPairSetDistinguisher)
+    assert logits.shape == (2, 1)
+
+
+
+def test_build_model_passes_spn_nibble_component_options():
+    model = build_model(
+        "spn_nibble_conv_pairset",
+        input_bits=768,
+        hidden_bits=8,
+        pair_bits=192,
+        structure="SPN",
+        model_options={
+            "activation": "silu",
+            "norm": "rmsnorm",
+            "pooling": "gated_attention",
+            "nibble_embed_dim": 24,
+            "conv_depth": 2,
+            "kernel_size": 5,
+            "dropout": 0.05,
+        },
+    )
+
+    assert isinstance(model, SpnNibbleConvPairSetDistinguisher)
+    assert model.activation == "silu"
+    assert model.norm == "rmsnorm"
+    assert model.pooling == "gated_attention"
+    assert model.nibble_embed_dim == 24
+    assert model.conv_depth == 2
+    assert model.kernel_size == 5
+    assert model.dropout == 0.05
 
 
 def test_adaptive_dbitnet_rejects_too_small_or_odd_inputs():

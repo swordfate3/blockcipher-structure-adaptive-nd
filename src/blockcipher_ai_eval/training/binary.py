@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import Any
 
@@ -9,6 +10,45 @@ from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 
 from blockcipher_ai_eval.datasets import DifferentialDataset
+
+
+class Lion(torch.optim.Optimizer):
+    """Small local Lion optimizer implementation for HPO experiments."""
+
+    def __init__(
+        self,
+        params,
+        lr: float = 1e-4,
+        betas: tuple[float, float] = (0.9, 0.99),
+        weight_decay: float = 0.0,
+    ) -> None:
+        defaults = {"lr": lr, "betas": betas, "weight_decay": weight_decay}
+        super().__init__(params, defaults)
+
+    @torch.no_grad()
+    def step(self, closure=None):
+        loss = None
+        if closure is not None:
+            with torch.enable_grad():
+                loss = closure()
+        for group in self.param_groups:
+            lr = group["lr"]
+            beta1, beta2 = group["betas"]
+            weight_decay = group["weight_decay"]
+            for parameter in group["params"]:
+                if parameter.grad is None:
+                    continue
+                grad = parameter.grad
+                if weight_decay != 0.0:
+                    parameter.mul_(1.0 - lr * weight_decay)
+                state = self.state[parameter]
+                if len(state) == 0:
+                    state["exp_avg"] = torch.zeros_like(parameter)
+                exp_avg = state["exp_avg"]
+                update = exp_avg * beta1 + grad * (1.0 - beta1)
+                parameter.add_(update.sign(), alpha=-lr)
+                exp_avg.mul_(beta2).add_(grad, alpha=1.0 - beta2)
+        return loss
 
 
 @dataclass(frozen=True)
@@ -169,6 +209,12 @@ def _make_optimizer(
             weight_decay=config.weight_decay,
             amsgrad=config.amsgrad,
         )
+    if config.optimizer == "lion":
+        return Lion(
+            model.parameters(),
+            lr=config.learning_rate,
+            weight_decay=config.weight_decay,
+        )
     raise ValueError(f"unsupported optimizer: {config.optimizer}")
 
 
@@ -188,6 +234,18 @@ def _make_scheduler(
             step_size_up=max(1, steps_per_epoch // 2),
             cycle_momentum=False,
         )
+    if config.lr_scheduler == "cosine_warmup":
+        steps_per_epoch = max(1, (train_size + config.batch_size - 1) // config.batch_size)
+        total_steps = max(1, config.epochs * steps_per_epoch)
+        warmup_steps = max(1, min(total_steps // 10, steps_per_epoch))
+
+        def lr_lambda(step: int) -> float:
+            if step < warmup_steps:
+                return float(step + 1) / float(warmup_steps)
+            progress = float(step - warmup_steps) / float(max(1, total_steps - warmup_steps))
+            return 0.5 * (1.0 + math.cos(math.pi * min(1.0, progress)))
+
+        return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda)
     raise ValueError(f"unsupported lr scheduler: {config.lr_scheduler}")
 
 
