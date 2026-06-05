@@ -462,6 +462,51 @@ def test_run_innovation_one_matrix_can_train_structure_adaptive_pairset_dbitnet(
     assert "wrote 3 rows" in completed.stdout
 
 
+def test_run_innovation_one_matrix_can_train_spn_pairset_dbitnet_v2(
+    tmp_path: Path,
+):
+    output_path = tmp_path / "spn_pairset_v2.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "present80",
+            "--models",
+            "spn_pairset_dbitnet_v2",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_bits",
+            "--pairs-per-sample",
+            "2",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["cipher"] == "PRESENT-80"
+    assert rows[0]["model"] == "spn_pairset_dbitnet_v2"
+    assert rows[0]["training"]["pair_bits"] == 192
+    assert "wrote 1 rows" in completed.stdout
+
+
 def test_run_innovation_one_matrix_infers_pair_bits_for_single_pair_pairwise_model(
     tmp_path: Path,
 ):

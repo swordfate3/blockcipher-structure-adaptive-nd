@@ -5,6 +5,7 @@ from blockcipher_ai_eval.experiments import build_model
 from blockcipher_ai_eval.models.adaptive_dbitnet import (
     AdaptiveDBitNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
+    SpnCellPairSetDBitNetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
     adaptive_dbitnet_dilations,
     structure_conditioned_dilations,
@@ -227,6 +228,46 @@ def test_build_model_supports_structure_adaptive_pairset_key():
 
     assert isinstance(model, StructureAdaptivePairSetDBitNetDistinguisher)
     assert logits.shape == (3, 1)
+
+
+def test_spn_cell_pairset_dbitnet_adds_cell_encoder_to_pair_embedding():
+    model = SpnCellPairSetDBitNetDistinguisher(
+        input_bits=768,
+        pair_bits=192,
+        base_channels=8,
+        cell_bits=4,
+    )
+    batch = torch.zeros((2, 768), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "SPN"
+    assert model.cell_bits == 4
+    assert model.cells_per_pair == 48
+    assert model.cell_embedding_bits == 8 * 4
+    assert model.encoder.dilations[:2] == [3, 7]
+    assert model.fused_pair_embedding_bits == (
+        model.encoder.embedding_bits + model.cell_embedding_bits
+    )
+    assert model.last_attention_weights is not None
+    assert model.last_attention_weights.shape == (2, 4)
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_spn_pairset_dbitnet_v2_key():
+    model = build_model(
+        "spn_pairset_dbitnet_v2",
+        input_bits=768,
+        hidden_bits=8,
+        pair_bits=192,
+        structure="SPN",
+    )
+    batch = torch.zeros((2, 768), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert isinstance(model, SpnCellPairSetDBitNetDistinguisher)
+    assert logits.shape == (2, 1)
 
 
 def test_adaptive_dbitnet_rejects_too_small_or_odd_inputs():

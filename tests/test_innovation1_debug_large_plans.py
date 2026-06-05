@@ -82,3 +82,20 @@ def test_structure_pairset_plans_use_expected_model_set():
         "structure_adaptive_pairset_dbitnet",
         "moe_v4_soft",
     }
+
+
+def test_spn_pairset_v2_plan_targets_present_with_expected_models():
+    rows = _rows("experiments/plans/innovation1_spn_pairset_v2_present.csv")
+
+    assert len(rows) == 48
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["rounds"] for row in rows} == {"4", "5"}
+    assert {row["seed"] for row in rows} == {"0", "1"}
+    assert {row["pairs_per_sample"] for row in rows} == {"1", "2", "4"}
+    assert {row["model_key"] for row in rows} == {
+        "adaptive_dbitnet_pairwise",
+        "structure_adaptive_pairset_dbitnet",
+        "spn_pairset_dbitnet_v2",
+        "moe_v4_soft",
+    }

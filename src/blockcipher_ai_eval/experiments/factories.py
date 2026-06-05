@@ -37,6 +37,7 @@ from blockcipher_ai_eval.models import (
     PairwiseAdaptiveDBitNetDistinguisher,
     ResNetBitSliceDistinguisher,
     SeResNeXtDistinguisher,
+    SpnCellPairSetDBitNetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
     StructureAwareMoEDistinguisher,
     TransformerEncoderDistinguisher,
@@ -176,6 +177,12 @@ def build_model(
             base_channels=hidden_bits,
             structure=structure,
             pooling=pairset_pooling_keys[name],
+        )
+    if name == "spn_pairset_dbitnet_v2":
+        return SpnCellPairSetDBitNetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 192,
+            base_channels=hidden_bits,
         )
     if name == "gohr_resnet_speck":
         return GohrSpeckDistinguisher(input_bits=input_bits, filters=hidden_bits)
