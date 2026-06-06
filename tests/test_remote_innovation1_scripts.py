@@ -199,3 +199,4 @@ def test_remote_moe_v5_hpo_multiseed_script_uses_expected_space_seeds_and_gate()
     assert "run_innovation1_moe_v5_hpo_multiseed_present_gpu1_and_push.cmd" in launcher
     assert "innovation1_moe_v5_hpo_multiseed_present_gpu1_20260606" in scheduler
     assert "innovation1-moe-v5-hpo-multiseed-present-gpu1-20260606=12" in monitor
+    assert "^\n\n" not in script.replace("\r\n", "\n")

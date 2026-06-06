@@ -59,7 +59,6 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   --mode random ^
   --max-trials 12 ^
   --seed 20260606 ^
-
   --trial-seeds 0 1 2 ^
   --epochs 6 ^
   --batch-size 1024 ^
@@ -107,7 +106,6 @@ echo mode=random>> results_archive\%RUN_ID%\run_manifest.txt
 echo max_trials=12>> results_archive\%RUN_ID%\run_manifest.txt
 echo seed=20260606>> results_archive\%RUN_ID%\run_manifest.txt
 echo device=cuda:1>> results_archive\%RUN_ID%\run_manifest.txt
-
 echo trial_seeds=0,1,2>> results_archive\%RUN_ID%\run_manifest.txt
 echo expected_rows=%EXPECTED_ROWS%>> results_archive\%RUN_ID%\run_manifest.txt
 echo epochs=6>> results_archive\%RUN_ID%\run_manifest.txt
