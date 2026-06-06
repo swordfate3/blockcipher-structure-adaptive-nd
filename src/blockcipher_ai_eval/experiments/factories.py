@@ -47,6 +47,23 @@ from blockcipher_ai_eval.models import (
 from blockcipher_ai_eval.structure_features import STRUCTURE_FEATURE_NAMES
 
 
+MOE_V5_PRESENT_HPO_TRIAL20_OPTIONS = {
+    "gate_hidden_bits": 96,
+    "gate_activation": "silu",
+    "gate_dropout": 0.0,
+    "gate_temperature": 1.0,
+    "pairwise_pooling": "mean_max",
+    "spn_token_dim": 128,
+    "spn_mixer_depth": 4,
+    "spn_token_mlp_ratio": 2,
+    "expert_activation": "gelu",
+    "expert_norm": "rmsnorm",
+    "spn_pooling": "gated_attention",
+    "expert_dropout": 0.05,
+}
+MOE_V5_PRESENT_HPO_TRIAL20_HIDDEN_BITS = 96
+
+
 def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
     if name == "aes128":
         return Aes128(rounds=rounds, key=0x000102030405060708090A0B0C0D0E0F)
@@ -357,6 +374,16 @@ def build_model(
             expert_set="v5_structure_experts",
             pair_bits=pair_bits,
             **_moe_v5_options(options),
+        )
+    if name == "moe_v5_soft_hpo_present_best":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=MOE_V5_PRESENT_HPO_TRIAL20_HIDDEN_BITS,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="soft",
+            expert_set="v5_structure_experts",
+            pair_bits=pair_bits or 192,
+            **MOE_V5_PRESENT_HPO_TRIAL20_OPTIONS,
         )
     raise ValueError(f"unsupported model: {name}")
 

@@ -155,3 +155,24 @@ def test_remote_moe_v5_hpo_script_uses_expected_space_and_gate():
     assert "run_innovation1_moe_v5_hpo_present_gpu1_and_push.cmd" in launcher
     assert "innovation1_moe_v5_hpo_present_gpu1_20260606" in scheduler
     assert "innovation1-moe-v5-hpo-present-gpu1-20260606=24" in monitor
+
+
+def test_remote_moe_v5_hpo_best_validation_script_uses_expected_plan_and_gate():
+    script = Path("scripts/remote/run_innovation1_moe_v5_hpo_best_validate_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = Path("scripts/remote/launch_innovation1_moe_v5_hpo_best_validate_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = Path("scripts/remote/schedule_innovation1_moe_v5_hpo_best_validate_present.cmd").read_text(encoding="utf-8")
+    monitor = Path("scripts/monitor_innovation1_moe_v5_hpo_best_validate_present_results.sh").read_text(encoding="utf-8")
+
+    assert "set RUN_ID=innovation1-moe-v5-hpo-best-validate-present-gpu1-20260606" in script
+    assert r"experiments\plans\innovation1_moe_v5_hpo_best_validate_present.csv" in script
+    assert "--device cuda:1" in script
+    assert "--batch-size 1024" in script
+    assert "--epochs 10" in script
+    assert "set EXPECTED_ROWS=20" in script
+    assert "fixed_hpo_model=moe_v5_soft_hpo_present_best" in script
+    assert "git push origin results/%RUN_ID%" in script
+    assert r"git add results_archive\%RUN_ID%" in script
+    assert "git add ." not in script
+    assert "run_innovation1_moe_v5_hpo_best_validate_present_gpu1_and_push.cmd" in launcher
+    assert "innovation1_moe_v5_hpo_best_validate_present_gpu1_20260606" in scheduler
+    assert "innovation1-moe-v5-hpo-best-validate-present-gpu1-20260606=20" in monitor

@@ -137,3 +137,24 @@ def test_moe_v5_plan_targets_present_r5_structure_expert_comparison():
         "moe_v5_hard",
         "moe_v5_soft",
     }
+
+
+def test_moe_v5_hpo_best_validation_plan_targets_fixed_multiseed_protocol():
+    rows = _rows("experiments/plans/innovation1_moe_v5_hpo_best_validate_present.csv")
+
+    assert len(rows) == 20
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["rounds"] for row in rows} == {"5"}
+    assert {row["seed"] for row in rows} == {"0", "1", "2", "3", "4"}
+    assert {row["pairs_per_sample"] for row in rows} == {"4"}
+    assert {row["samples_per_class"] for row in rows} == {"32768"}
+    assert {row["feature_encoding"] for row in rows} == {"ciphertext_pair_xor_bits"}
+    assert {row["difference_profile"] for row in rows} == {"present_wang_jain2021"}
+    assert {row["difference_member"] for row in rows} == {"0"}
+    assert {row["model_key"] for row in rows} == {
+        "adaptive_dbitnet_pairwise",
+        "moe_v4_soft",
+        "moe_v5_soft",
+        "moe_v5_soft_hpo_present_best",
+    }
