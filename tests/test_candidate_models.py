@@ -10,6 +10,7 @@ from blockcipher_ai_eval.models import (
     MultiScaleDenseResNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
     SeResNeXtDistinguisher,
+    StructureAwareMoEDistinguisher,
     TransformerEncoderDistinguisher,
 )
 
@@ -64,6 +65,23 @@ def test_build_model_supports_pairwise_adaptive_dbitnet_candidate_key():
 
     assert isinstance(model, PairwiseAdaptiveDBitNetDistinguisher)
     assert logits.shape == (3, 1)
+
+
+def test_build_model_supports_moe_v5_soft_key():
+    model = build_model(
+        "moe_v5_soft",
+        input_bits=768,
+        hidden_bits=8,
+        pair_bits=192,
+        structure="SPN",
+    )
+    batch = torch.zeros((2, 768), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert isinstance(model, StructureAwareMoEDistinguisher)
+    assert model.expert_set == "v5_structure_experts"
+    assert logits.shape == (2, 1)
 
 
 def test_gohr_resnet_speck_requires_original_speck_pair_width():

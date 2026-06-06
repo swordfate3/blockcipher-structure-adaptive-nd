@@ -8,6 +8,7 @@ from torch import nn
 from blockcipher_ai_eval.models.adaptive_dbitnet import (
     AdaptiveDBitNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
+    SpnTokenMixerPairSetDistinguisher,
 )
 from blockcipher_ai_eval.models.cnn import CnnDistinguisher
 from blockcipher_ai_eval.models.dbitnet import DBitNetDistinguisher
@@ -48,10 +49,24 @@ V3_EXPERT_KEYS = (
 
 V4_EXPERT_KEYS = V3_EXPERT_KEYS
 
+V5_EXPERT_KEYS = (
+    "adaptive_dbitnet_pairwise",
+    "spn_token_mixer_pairset",
+    "resnet_bitslice",
+    "senet_resnext",
+    "multiscale_dense_resnet",
+)
+
 HARD_GATE_WEIGHTS = {
     "ARX": (0.35, 0.20, 0.05, 0.05, 0.10, 0.25),
     "SPN": (0.10, 0.30, 0.30, 0.05, 0.20, 0.05),
     "Feistel-like": (0.20, 0.35, 0.10, 0.05, 0.10, 0.20),
+}
+
+V5_HARD_GATE_WEIGHTS = {
+    "ARX": (0.45, 0.05, 0.20, 0.10, 0.20),
+    "SPN": (0.30, 0.45, 0.05, 0.15, 0.05),
+    "Feistel-like": (0.40, 0.10, 0.20, 0.10, 0.20),
 }
 
 
@@ -131,6 +146,7 @@ class StructureAwareMoEDistinguisher(nn.Module):
             "v2_adaptive",
             "v3_pairwise",
             "v4_structure_adapter",
+            "v5_structure_experts",
         }:
             raise ValueError(f"unsupported expert_set: {expert_set}")
         self.input_bits = input_bits
@@ -205,6 +221,25 @@ class StructureAwareMoEDistinguisher(nn.Module):
         }
 
     def _build_experts(self, input_bits: int, hidden_bits: int) -> list[nn.Module]:
+        if self.expert_set == "v5_structure_experts":
+            return [
+                PairwiseAdaptiveDBitNetDistinguisher(
+                    input_bits=input_bits,
+                    pair_bits=self.pair_bits or 96,
+                    base_channels=hidden_bits,
+                ),
+                SpnTokenMixerPairSetDistinguisher(
+                    input_bits=input_bits,
+                    pair_bits=self.pair_bits or 96,
+                    base_channels=hidden_bits,
+                ),
+                ResNetBitSliceDistinguisher(input_bits=input_bits, channels=hidden_bits),
+                SeResNeXtDistinguisher(input_bits=input_bits, channels=hidden_bits),
+                MultiScaleDenseResNetDistinguisher(
+                    input_bits=input_bits,
+                    channels=hidden_bits,
+                ),
+            ]
         return [
             ResNetBitSliceDistinguisher(input_bits=input_bits, channels=hidden_bits),
             self._build_dbitnet_expert(input_bits, hidden_bits),
@@ -254,6 +289,14 @@ class StructureAwareMoEDistinguisher(nn.Module):
         is_arx = bool(self._structure_features[0].item())
         is_spn = bool(self._structure_features[1].item())
         is_feistel_like = bool(self._structure_features[2].item())
+        if self.expert_set == "v5_structure_experts":
+            if is_arx:
+                return V5_HARD_GATE_WEIGHTS["ARX"]
+            if is_spn:
+                return V5_HARD_GATE_WEIGHTS["SPN"]
+            if is_feistel_like:
+                return V5_HARD_GATE_WEIGHTS["Feistel-like"]
+            return tuple(1.0 / len(self.expert_keys) for _ in self.expert_keys)
         if is_arx:
             return HARD_GATE_WEIGHTS["ARX"]
         if is_spn:
@@ -270,4 +313,6 @@ def _expert_keys(expert_set: str) -> tuple[str, ...]:
         return V3_EXPERT_KEYS
     if expert_set == "v4_structure_adapter":
         return V4_EXPERT_KEYS
+    if expert_set == "v5_structure_experts":
+        return V5_EXPERT_KEYS
     return EXPERT_KEYS

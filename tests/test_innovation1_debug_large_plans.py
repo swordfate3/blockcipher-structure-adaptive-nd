@@ -118,3 +118,22 @@ def test_spn_token_mixer_plan_targets_present_r5_pairset_comparison():
         "spn_token_mixer_pairset",
         "moe_v4_soft",
     }
+
+
+def test_moe_v5_plan_targets_present_r5_structure_expert_comparison():
+    rows = _rows("experiments/plans/innovation1_moe_v5_present.csv")
+
+    assert len(rows) == 10
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["rounds"] for row in rows} == {"5"}
+    assert {row["seed"] for row in rows} == {"0", "1"}
+    assert {row["pairs_per_sample"] for row in rows} == {"4"}
+    assert {row["samples_per_class"] for row in rows} == {"32768"}
+    assert {row["model_key"] for row in rows} == {
+        "adaptive_dbitnet_pairwise",
+        "spn_token_mixer_pairset",
+        "moe_v4_soft",
+        "moe_v5_hard",
+        "moe_v5_soft",
+    }

@@ -4,11 +4,13 @@ from blockcipher_ai_eval.innovation_one import CipherProfile
 from blockcipher_ai_eval.models import StructureAwareMoEDistinguisher
 from blockcipher_ai_eval.models.adaptive_dbitnet import AdaptiveDBitNetDistinguisher
 from blockcipher_ai_eval.models.adaptive_dbitnet import PairwiseAdaptiveDBitNetDistinguisher
+from blockcipher_ai_eval.models.adaptive_dbitnet import SpnTokenMixerPairSetDistinguisher
 from blockcipher_ai_eval.models.structure_moe import (
     EXPERT_KEYS,
     V2_EXPERT_KEYS,
     V3_EXPERT_KEYS,
     V4_EXPERT_KEYS,
+    V5_EXPERT_KEYS,
 )
 from blockcipher_ai_eval.structure_features import structure_feature_vector
 
@@ -163,3 +165,31 @@ def test_v4_moe_applies_structure_adapter_before_pairwise_experts():
     assert summary["expert_set"] == "v4_structure_adapter"
     assert summary["adapter_mode"] == "structure"
     assert summary["adapter_name"] == "arx_word_mix"
+
+
+def test_v5_moe_includes_spn_token_mixer_expert_for_spn_structure():
+    model = StructureAwareMoEDistinguisher(
+        input_bits=768,
+        hidden_bits=8,
+        structure_feature_bits=19,
+        gate_mode="hard",
+        expert_set="v5_structure_experts",
+        pair_bits=192,
+    )
+    model.set_structure_features(_features(CipherProfile.present80(), rounds=5))
+
+    output = model(torch.zeros((2, 768), dtype=torch.float32))
+    summary = model.gate_summary()
+
+    assert output.shape == (2, 1)
+    assert V5_EXPERT_KEYS == (
+        "adaptive_dbitnet_pairwise",
+        "spn_token_mixer_pairset",
+        "resnet_bitslice",
+        "senet_resnext",
+        "multiscale_dense_resnet",
+    )
+    assert isinstance(model.experts[1], SpnTokenMixerPairSetDistinguisher)
+    assert summary["expert_set"] == "v5_structure_experts"
+    assert summary["adapter_mode"] == "none"
+    assert summary["gate_weight_spn_token_mixer_pairset"] == 0.45
