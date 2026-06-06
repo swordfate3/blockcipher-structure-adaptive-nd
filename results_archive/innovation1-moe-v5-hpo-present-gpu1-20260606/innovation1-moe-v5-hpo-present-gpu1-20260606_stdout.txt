@@ -1,0 +1,25 @@
+[1/24] trial=0 cipher=PRESENT-80 model=moe_v5_soft score=0.776398
+[2/24] trial=1 cipher=PRESENT-80 model=moe_v5_soft score=0.796936
+[3/24] trial=2 cipher=PRESENT-80 model=moe_v5_soft score=0.792908
+[4/24] trial=3 cipher=PRESENT-80 model=moe_v5_soft score=0.775848
+[5/24] trial=4 cipher=PRESENT-80 model=moe_v5_soft score=0.747131
+[6/24] trial=5 cipher=PRESENT-80 model=moe_v5_soft score=0.771606
+[7/24] trial=6 cipher=PRESENT-80 model=moe_v5_soft score=0.789856
+[8/24] trial=7 cipher=PRESENT-80 model=moe_v5_soft score=0.793579
+[9/24] trial=8 cipher=PRESENT-80 model=moe_v5_soft score=0.739594
+[10/24] trial=9 cipher=PRESENT-80 model=moe_v5_soft score=0.778900
+[11/24] trial=10 cipher=PRESENT-80 model=moe_v5_soft score=0.791107
+[12/24] trial=11 cipher=PRESENT-80 model=moe_v5_soft score=0.788025
+[13/24] trial=12 cipher=PRESENT-80 model=moe_v5_soft score=0.771729
+[14/24] trial=13 cipher=PRESENT-80 model=moe_v5_soft score=0.799469
+[15/24] trial=14 cipher=PRESENT-80 model=moe_v5_soft score=0.787964
+[16/24] trial=15 cipher=PRESENT-80 model=moe_v5_soft score=0.721558
+[17/24] trial=16 cipher=PRESENT-80 model=moe_v5_soft score=0.793549
+[18/24] trial=17 cipher=PRESENT-80 model=moe_v5_soft score=0.741913
+[19/24] trial=18 cipher=PRESENT-80 model=moe_v5_soft score=0.791077
+[20/24] trial=19 cipher=PRESENT-80 model=moe_v5_soft score=0.791901
+[21/24] trial=20 cipher=PRESENT-80 model=moe_v5_soft score=0.801117
+[22/24] trial=21 cipher=PRESENT-80 model=moe_v5_soft score=0.787659
+[23/24] trial=22 cipher=PRESENT-80 model=moe_v5_soft score=0.773987
+[24/24] trial=23 cipher=PRESENT-80 model=moe_v5_soft score=0.783295
+wrote 24 HPO rows to results\innovation1-moe-v5-hpo-present-gpu1-20260606.jsonl

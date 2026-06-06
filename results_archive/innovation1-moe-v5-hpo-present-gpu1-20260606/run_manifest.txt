@@ -1,0 +1,12 @@
+run_id=innovation1-moe-v5-hpo-present-gpu1-20260606
+project_id=blockcipher-structure-adaptive-nd
+project_dir=G:\lxy\blockcipher-structure-adaptive-nd
+run_dir=G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-moe-v5-hpo-present-gpu1-20260606
+branch=main
+space=experiments\hparam_spaces\moe_v5_present_components.json
+mode=random
+max_trials=24
+seed=20260606
+device=cuda:1
+expected_rows=24
+batch_size=1024
