@@ -165,3 +165,35 @@ def test_build_model_supports_moe_v5_hpo_present_best_key():
     assert model.experts[1].pooling == "gated_attention"
     assert model.experts[1].dropout == 0.05
     assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_moe_v5_hpo_multiseed_present_best_key():
+    model = build_model(
+        "moe_v5_soft_hpo_multiseed_present_best",
+        input_bits=768,
+        hidden_bits=8,
+        pair_bits=192,
+        structure="SPN",
+    )
+    batch = torch.zeros((2, 768), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert isinstance(model, StructureAwareMoEDistinguisher)
+    assert model.expert_set == "v5_structure_experts"
+    assert model.hidden_bits == 96
+    assert model.gate_hidden_bits == 32
+    assert model.gate_activation == "relu"
+    assert model.gate_dropout == 0.05
+    assert model.gate_temperature == 0.75
+    assert isinstance(model.experts[0], PairwiseAdaptiveDBitNetDistinguisher)
+    assert model.experts[0].pooling == "mean"
+    assert isinstance(model.experts[1], SpnTokenMixerPairSetDistinguisher)
+    assert model.experts[1].token_dim == 64
+    assert model.experts[1].mixer_depth == 3
+    assert model.experts[1].token_mlp_ratio == 3
+    assert model.experts[1].activation == "silu"
+    assert model.experts[1].norm == "rmsnorm"
+    assert model.experts[1].pooling == "gated_attention"
+    assert model.experts[1].dropout == 0.0
+    assert logits.shape == (2, 1)

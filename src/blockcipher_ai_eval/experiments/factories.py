@@ -62,6 +62,21 @@ MOE_V5_PRESENT_HPO_TRIAL20_OPTIONS = {
     "expert_dropout": 0.05,
 }
 MOE_V5_PRESENT_HPO_TRIAL20_HIDDEN_BITS = 96
+MOE_V5_PRESENT_HPO_MULTISEED_TRIAL11_OPTIONS = {
+    "gate_hidden_bits": 32,
+    "gate_activation": "relu",
+    "gate_dropout": 0.05,
+    "gate_temperature": 0.75,
+    "pairwise_pooling": "mean",
+    "spn_token_dim": 64,
+    "spn_mixer_depth": 3,
+    "spn_token_mlp_ratio": 3,
+    "expert_activation": "silu",
+    "expert_norm": "rmsnorm",
+    "spn_pooling": "gated_attention",
+    "expert_dropout": 0.0,
+}
+MOE_V5_PRESENT_HPO_MULTISEED_TRIAL11_HIDDEN_BITS = 96
 
 
 def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
@@ -384,6 +399,16 @@ def build_model(
             expert_set="v5_structure_experts",
             pair_bits=pair_bits or 192,
             **MOE_V5_PRESENT_HPO_TRIAL20_OPTIONS,
+        )
+    if name == "moe_v5_soft_hpo_multiseed_present_best":
+        return StructureAwareMoEDistinguisher(
+            input_bits=input_bits,
+            hidden_bits=MOE_V5_PRESENT_HPO_MULTISEED_TRIAL11_HIDDEN_BITS,
+            structure_feature_bits=len(STRUCTURE_FEATURE_NAMES),
+            gate_mode="soft",
+            expert_set="v5_structure_experts",
+            pair_bits=pair_bits or 192,
+            **MOE_V5_PRESENT_HPO_MULTISEED_TRIAL11_OPTIONS,
         )
     raise ValueError(f"unsupported model: {name}")
 
