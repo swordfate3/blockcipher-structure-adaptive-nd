@@ -33,6 +33,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--mode", choices=["grid", "random"], default="random")
     parser.add_argument("--max-trials", type=int, default=20)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument(
+        "--trial-seeds",
+        type=int,
+        nargs="+",
+        default=None,
+        help="Optional seed list evaluated inside each trial; metrics are averaged per trial.",
+    )
     parser.add_argument("--samples-per-class", type=int, default=8192)
     parser.add_argument("--epochs", type=int, default=3)
     parser.add_argument("--batch-size", type=int, default=256)
@@ -55,14 +62,18 @@ def main() -> None:
             row = _run_trial(trial_id, config, args)
             handle.write(json.dumps(row, sort_keys=True) + "\n")
             handle.flush()
+            seed_note = ""
+            if row.get("trial_seeds"):
+                seed_note = " seeds=" + ",".join(str(seed) for seed in row["trial_seeds"])
             print(
-                "[{index}/{total}] trial={trial} cipher={cipher} model={model} score={score:.6f}".format(
+                "[{index}/{total}] trial={trial} cipher={cipher} model={model} score={score:.6f}{seed_note}".format(
                     index=trial_id + 1,
                     total=len(trials),
                     trial=trial_id,
                     cipher=row["cipher"],
                     model=row["config"]["model"],
                     score=row["metrics"]["calibrated_accuracy"],
+                    seed_note=seed_note,
                 ),
                 flush=True,
             )
@@ -115,11 +126,30 @@ def _parse_scalar(value: str) -> Any:
 
 
 def _run_trial(trial_id: int, config: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
+    trial_seeds = _trial_seeds(trial_id, config, args)
+    if len(trial_seeds) == 1:
+        return _run_seed_trial(trial_id, config, args, trial_seeds[0])
+
+    seed_rows = [_run_seed_trial(trial_id, config, args, seed) for seed in trial_seeds]
+    return _aggregate_trial_rows(trial_id, config, trial_seeds, seed_rows)
+
+
+def _trial_seeds(trial_id: int, config: dict[str, Any], args: argparse.Namespace) -> list[int]:
+    if args.trial_seeds:
+        return [int(seed) for seed in args.trial_seeds]
+    return [int(config.get("seed", args.seed + trial_id))]
+
+
+def _run_seed_trial(
+    trial_id: int,
+    config: dict[str, Any],
+    args: argparse.Namespace,
+    seed: int,
+) -> dict[str, Any]:
     cipher_key = str(config.get("cipher", "present80"))
     model_key = str(config.get("model", "spn_nibble_conv_pairset"))
     rounds = int(config.get("rounds", 1))
     pairs_per_sample = int(config.get("pairs_per_sample", 1))
-    seed = int(config.get("seed", args.seed + trial_id))
     feature_encoding = str(config.get("feature_encoding", args.feature_encoding))
     samples_per_class = int(config.get("samples_per_class", args.samples_per_class))
     difference_profile = str(config.get("difference_profile", "") or "")
@@ -203,6 +233,59 @@ def _run_trial(trial_id: int, config: dict[str, Any], args: argparse.Namespace) 
         "history": result.history,
         "training": result.metadata,
     }
+
+
+def _aggregate_trial_rows(
+    trial_id: int,
+    config: dict[str, Any],
+    trial_seeds: list[int],
+    seed_rows: list[dict[str, Any]],
+) -> dict[str, Any]:
+    first = seed_rows[0]
+    metrics = _mean_metrics([row["metrics"] for row in seed_rows])
+    metrics_std = _std_metrics([row["metrics"] for row in seed_rows], metrics)
+    result = {
+        key: value
+        for key, value in first.items()
+        if key not in {"metrics", "history", "training", "seed"}
+    }
+    result.update(
+        {
+            "trial_id": trial_id,
+            "seed": ",".join(str(seed) for seed in trial_seeds),
+            "trial_seeds": trial_seeds,
+            "metrics": metrics,
+            "metrics_std": metrics_std,
+            "seed_results": [
+                {
+                    "seed": row["seed"],
+                    "metrics": row["metrics"],
+                    "history": row["history"],
+                    "training": row["training"],
+                }
+                for row in seed_rows
+            ],
+        }
+    )
+    return result
+
+
+def _mean_metrics(rows: list[dict[str, float]]) -> dict[str, float]:
+    keys = sorted(set().union(*(row.keys() for row in rows)))
+    return {key: sum(float(row[key]) for row in rows) / len(rows) for key in keys}
+
+
+def _std_metrics(
+    rows: list[dict[str, float]],
+    means: dict[str, float],
+) -> dict[str, float]:
+    if len(rows) < 2:
+        return {key: 0.0 for key in means}
+    result: dict[str, float] = {}
+    for key, mean in means.items():
+        variance = sum((float(row[key]) - mean) ** 2 for row in rows) / (len(rows) - 1)
+        result[key] = variance ** 0.5
+    return result
 
 
 def _model_options_from_config(config: dict[str, Any]) -> dict[str, Any]:

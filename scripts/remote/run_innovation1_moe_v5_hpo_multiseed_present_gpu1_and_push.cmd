@@ -1,0 +1,148 @@
+@echo off
+setlocal
+set HTTP_PROXY=
+set HTTPS_PROXY=
+set http_proxy=
+set https_proxy=
+set ROOT=G:\lxy
+set PROJECT_ID=blockcipher-structure-adaptive-nd
+set PROJECT_DIR=%ROOT%\%PROJECT_ID%
+set CLONE_URL=https://github.com/swordfate3/blockcipher-structure-adaptive-nd.git
+set REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
+set BRANCH=main
+set RUN_ID=innovation1-moe-v5-hpo-multiseed-present-gpu1-20260606
+set EXPECTED_ROWS=12
+set RUN_ROOT=%ROOT%\%PROJECT_ID%-runs
+set RUN_DIR=%RUN_ROOT%\%RUN_ID%
+set PY=F:\Anaconda\envs\DWT\torch310\python.exe
+
+if not exist %ROOT% mkdir %ROOT%
+if not exist %RUN_ROOT% mkdir %RUN_ROOT%
+cd /d %ROOT%
+if not exist %PROJECT_DIR% (
+  git -c http.proxy= -c https.proxy= clone %CLONE_URL% %PROJECT_ID%
+)
+
+cd /d %PROJECT_DIR%
+git config --global --add safe.directory %PROJECT_DIR%
+git config --global --add safe.directory %PROJECT_DIR%\.git
+git fetch origin
+git checkout %BRANCH%
+git pull --ff-only origin %BRANCH%
+
+cd /d %RUN_ROOT%
+if exist %RUN_ID% rmdir /s /q %RUN_ID%
+git clone --local %PROJECT_DIR% %RUN_ID%
+
+cd /d %RUN_DIR%
+git config --global --add safe.directory %RUN_DIR%
+git checkout %BRANCH%
+git remote set-url origin %REPO_URL%
+
+if not exist logs mkdir logs
+if not exist results mkdir results
+if not exist results_archive mkdir results_archive
+if exist logs\%RUN_ID%_stdout.txt del logs\%RUN_ID%_stdout.txt
+if exist logs\%RUN_ID%_stderr.txt del logs\%RUN_ID%_stderr.txt
+if exist results\%RUN_ID%.jsonl del results\%RUN_ID%.jsonl
+if exist results\%RUN_ID%_summary.csv del results\%RUN_ID%_summary.csv
+if exist results_archive\%RUN_ID% rmdir /s /q results_archive\%RUN_ID%
+mkdir results_archive\%RUN_ID%
+
+git rev-parse HEAD > logs\%RUN_ID%_git_revision.txt
+git status --short --branch > logs\%RUN_ID%_git_status_before_run.txt
+nvidia-smi > logs\%RUN_ID%_gpu_info.txt
+%PY% -c "import sys, torch; print('python', sys.executable); print('torch', torch.__version__); print('cuda_version', torch.version.cuda); print('cuda_available', torch.cuda.is_available()); print('device_count', torch.cuda.device_count()); print('device1', torch.cuda.get_device_name(1) if torch.cuda.is_available() and torch.cuda.device_count() > 1 else 'NA')" > logs\%RUN_ID%_torch_info.txt 2> logs\%RUN_ID%_torch_info_stderr.txt
+
+%PY% experiments\run_hparam_search.py ^
+  --space experiments\hparam_spaces\moe_v5_present_components.json ^
+  --mode random ^
+  --max-trials 12 ^
+  --seed 20260606 ^
+
+  --trial-seeds 0 1 2 ^
+  --epochs 6 ^
+  --batch-size 1024 ^
+  --device cuda:1 ^
+  --output results\%RUN_ID%.jsonl ^
+  > logs\%RUN_ID%_stdout.txt ^
+  2> logs\%RUN_ID%_stderr.txt
+if errorlevel 1 goto run_failed
+
+set RESULT_LINES=0
+for /f "tokens=3" %%L in ('find /c /v "" results\%RUN_ID%.jsonl') do set RESULT_LINES=%%L
+echo result_lines=%RESULT_LINES% > logs\%RUN_ID%_result_gate.txt
+echo expected_rows=%EXPECTED_ROWS% >> logs\%RUN_ID%_result_gate.txt
+if not "%RESULT_LINES%"=="%EXPECTED_ROWS%" goto incomplete_results
+
+%PY% experiments\summarize_hparam_search.py ^
+  --input results\%RUN_ID%.jsonl ^
+  --output results\%RUN_ID%_summary.csv ^
+  > logs\%RUN_ID%_summary_stdout.txt ^
+  2> logs\%RUN_ID%_summary_stderr.txt
+if errorlevel 1 goto summary_failed
+
+copy results\%RUN_ID%.jsonl results_archive\%RUN_ID%\
+copy results\%RUN_ID%_summary.csv results_archive\%RUN_ID%\
+copy experiments\hparam_spaces\moe_v5_present_components.json results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_git_revision.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_git_status_before_run.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_gpu_info.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_torch_info.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_torch_info_stderr.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_stdout.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_stderr.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_result_gate.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_summary_stdout.txt results_archive\%RUN_ID%\
+copy logs\%RUN_ID%_summary_stderr.txt results_archive\%RUN_ID%\
+
+if exist results_archive\%RUN_ID%\run_manifest.txt del results_archive\%RUN_ID%\run_manifest.txt
+echo run_id=%RUN_ID%>> results_archive\%RUN_ID%\run_manifest.txt
+echo project_id=%PROJECT_ID%>> results_archive\%RUN_ID%\run_manifest.txt
+echo project_dir=%PROJECT_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
+echo run_dir=%RUN_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
+echo branch=%BRANCH%>> results_archive\%RUN_ID%\run_manifest.txt
+echo space=experiments\hparam_spaces\moe_v5_present_components.json>> results_archive\%RUN_ID%\run_manifest.txt
+echo mode=random>> results_archive\%RUN_ID%\run_manifest.txt
+echo max_trials=12>> results_archive\%RUN_ID%\run_manifest.txt
+echo seed=20260606>> results_archive\%RUN_ID%\run_manifest.txt
+echo device=cuda:1>> results_archive\%RUN_ID%\run_manifest.txt
+
+echo trial_seeds=0,1,2>> results_archive\%RUN_ID%\run_manifest.txt
+echo expected_rows=%EXPECTED_ROWS%>> results_archive\%RUN_ID%\run_manifest.txt
+echo epochs=6>> results_archive\%RUN_ID%\run_manifest.txt
+echo batch_size=1024>> results_archive\%RUN_ID%\run_manifest.txt
+
+git checkout -B results/%RUN_ID%
+git add results_archive\%RUN_ID%
+git commit -m "results: %RUN_ID% remote multiseed hpo run"
+git push origin results/%RUN_ID%
+if errorlevel 1 goto push_failed
+
+echo RUN_GATE_PASS
+echo RUN_DIR %RUN_DIR%
+type logs\%RUN_ID%_git_revision.txt
+type logs\%RUN_ID%_torch_info.txt
+type logs\%RUN_ID%_result_gate.txt
+for %%A in (logs\%RUN_ID%_stderr.txt) do echo STDERR_BYTES %%~zA
+for %%A in (results\%RUN_ID%.jsonl) do echo RESULT_BYTES %%~zA
+exit /b 0
+
+:incomplete_results
+echo RUN_GATE_BLOCKED_INCOMPLETE_RESULTS
+type logs\%RUN_ID%_result_gate.txt
+exit /b 4
+
+:run_failed
+echo RUN_GATE_BLOCKED_RUN_FAILED
+type logs\%RUN_ID%_stderr.txt
+exit /b 1
+
+:summary_failed
+echo RUN_GATE_BLOCKED_SUMMARY_FAILED
+type logs\%RUN_ID%_summary_stderr.txt
+exit /b 2
+
+:push_failed
+echo RUN_GATE_BLOCKED_PUSH_FAILED
+exit /b 3

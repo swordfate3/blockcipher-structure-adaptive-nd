@@ -13,14 +13,19 @@ SUMMARY_FIELDS = [
     "model",
     "rounds",
     "seed",
+    "trial_seeds",
     "samples_per_class",
     "pairs_per_sample",
     "difference_profile",
     "difference_member",
     "calibrated_accuracy",
+    "calibrated_accuracy_std",
     "accuracy",
+    "accuracy_std",
     "auc",
+    "auc_std",
     "loss",
+    "loss_std",
     "gate_temperature",
     "gate_hidden_bits",
     "gate_activation",
@@ -62,6 +67,7 @@ def main() -> None:
 
 def _summary_row(row: dict[str, Any]) -> dict[str, Any]:
     metrics = row.get("metrics", {})
+    metrics_std = row.get("metrics_std", {})
     config = row.get("config", {})
     components = row.get("moe_components", row.get("gate_config", {}))
     result: dict[str, Any] = {
@@ -70,14 +76,19 @@ def _summary_row(row: dict[str, Any]) -> dict[str, Any]:
         "model": config.get("model", ""),
         "rounds": row.get("rounds", ""),
         "seed": row.get("seed", ""),
+        "trial_seeds": ",".join(str(seed) for seed in row.get("trial_seeds", [])),
         "samples_per_class": row.get("samples_per_class", ""),
         "pairs_per_sample": row.get("pairs_per_sample", ""),
         "difference_profile": row.get("difference_profile", ""),
         "difference_member": row.get("difference_member", ""),
         "calibrated_accuracy": metrics.get("calibrated_accuracy", ""),
+        "calibrated_accuracy_std": metrics_std.get("calibrated_accuracy", ""),
         "accuracy": metrics.get("accuracy", ""),
+        "accuracy_std": metrics_std.get("accuracy", ""),
         "auc": metrics.get("auc", ""),
+        "auc_std": metrics_std.get("auc", ""),
         "loss": metrics.get("loss", ""),
+        "loss_std": metrics_std.get("loss", ""),
         "learning_rate": config.get("learning_rate", config.get("lr", "")),
         "weight_decay": config.get("weight_decay", ""),
         "optimizer": config.get("optimizer", ""),
