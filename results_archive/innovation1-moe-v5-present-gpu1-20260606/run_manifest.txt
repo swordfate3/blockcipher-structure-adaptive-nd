@@ -1,0 +1,13 @@
+run_id=innovation1-moe-v5-present-gpu1-20260606
+project_id=blockcipher-structure-adaptive-nd
+project_dir=G:\lxy\blockcipher-structure-adaptive-nd
+run_dir=G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-moe-v5-present-gpu1-20260606
+branch=main
+plan=experiments\plans\innovation1_moe_v5_present.csv
+device=cuda:1
+expected_rows=10
+epochs=10
+batch_size=1024
+hidden_bits=64
+optimizer=adamw
+weight_decay=0.0001

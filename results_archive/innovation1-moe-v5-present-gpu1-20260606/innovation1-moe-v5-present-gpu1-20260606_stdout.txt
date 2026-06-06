@@ -1,0 +1,11 @@
+[1/10] PRESENT-80 r=5 model=adaptive_dbitnet_pairwise seed=0 pairs=4
+[2/10] PRESENT-80 r=5 model=spn_token_mixer_pairset seed=0 pairs=4
+[3/10] PRESENT-80 r=5 model=moe_v4_soft seed=0 pairs=4
+[4/10] PRESENT-80 r=5 model=moe_v5_hard seed=0 pairs=4
+[5/10] PRESENT-80 r=5 model=moe_v5_soft seed=0 pairs=4
+[6/10] PRESENT-80 r=5 model=adaptive_dbitnet_pairwise seed=1 pairs=4
+[7/10] PRESENT-80 r=5 model=spn_token_mixer_pairset seed=1 pairs=4
+[8/10] PRESENT-80 r=5 model=moe_v4_soft seed=1 pairs=4
+[9/10] PRESENT-80 r=5 model=moe_v5_hard seed=1 pairs=4
+[10/10] PRESENT-80 r=5 model=moe_v5_soft seed=1 pairs=4
+wrote 10 rows to results\innovation1-moe-v5-present-gpu1-20260606.jsonl
