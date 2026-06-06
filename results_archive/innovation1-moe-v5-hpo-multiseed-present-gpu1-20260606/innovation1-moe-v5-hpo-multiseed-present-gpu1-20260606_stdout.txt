@@ -1,0 +1,13 @@
+[1/12] trial=0 cipher=PRESENT-80 model=moe_v5_soft score=0.766551 seeds=0,1,2
+[2/12] trial=1 cipher=PRESENT-80 model=moe_v5_soft score=0.791829 seeds=0,1,2
+[3/12] trial=2 cipher=PRESENT-80 model=moe_v5_soft score=0.790415 seeds=0,1,2
+[4/12] trial=3 cipher=PRESENT-80 model=moe_v5_soft score=0.755829 seeds=0,1,2
+[5/12] trial=4 cipher=PRESENT-80 model=moe_v5_soft score=0.769796 seeds=0,1,2
+[6/12] trial=5 cipher=PRESENT-80 model=moe_v5_soft score=0.770213 seeds=0,1,2
+[7/12] trial=6 cipher=PRESENT-80 model=moe_v5_soft score=0.791494 seeds=0,1,2
+[8/12] trial=7 cipher=PRESENT-80 model=moe_v5_soft score=0.790476 seeds=0,1,2
+[9/12] trial=8 cipher=PRESENT-80 model=moe_v5_soft score=0.762736 seeds=0,1,2
+[10/12] trial=9 cipher=PRESENT-80 model=moe_v5_soft score=0.772146 seeds=0,1,2
+[11/12] trial=10 cipher=PRESENT-80 model=moe_v5_soft score=0.788503 seeds=0,1,2
+[12/12] trial=11 cipher=PRESENT-80 model=moe_v5_soft score=0.792236 seeds=0,1,2
+wrote 12 HPO rows to results\innovation1-moe-v5-hpo-multiseed-present-gpu1-20260606.jsonl
