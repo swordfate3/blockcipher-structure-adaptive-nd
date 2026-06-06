@@ -583,6 +583,31 @@ results/<run-id>
 outputs/remote_results/<run-id>/
 ```
 
+长期等待远程结果时，建议把本地监控脚本放到 `tmux` 后台会话里运行，避免当前终端关闭后监控停止。教程见：
+
+```text
+docs/usage/tmux-monitoring.md
+```
+
+当前 MoE v5 PRESENT 实验的本地监控会话名：
+
+```text
+innovation1_moe_v5_monitor
+```
+
+查看监控窗口：
+
+```bash
+tmux attach -t innovation1_moe_v5_monitor
+```
+
+离开窗口但保持监控继续运行：
+
+```text
+Ctrl+B
+D
+```
+
 当前创新一 debug-large 双卡实验的便捷监控命令：
 
 ```bash

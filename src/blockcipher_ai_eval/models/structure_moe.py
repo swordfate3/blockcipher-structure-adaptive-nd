@@ -11,6 +11,7 @@ from blockcipher_ai_eval.models.adaptive_dbitnet import (
     SpnTokenMixerPairSetDistinguisher,
 )
 from blockcipher_ai_eval.models.cnn import CnnDistinguisher
+from blockcipher_ai_eval.models.components import build_activation
 from blockcipher_ai_eval.models.dbitnet import DBitNetDistinguisher
 from blockcipher_ai_eval.models.mlp import MlpDistinguisher
 from blockcipher_ai_eval.models.multiscale_dense_resnet import (
@@ -137,6 +138,18 @@ class StructureAwareMoEDistinguisher(nn.Module):
         gate_mode: str,
         expert_set: str = "legacy",
         pair_bits: int | None = None,
+        gate_hidden_bits: int | None = None,
+        gate_activation: str = "relu",
+        gate_dropout: float = 0.0,
+        gate_temperature: float = 1.0,
+        pairwise_pooling: str = "mean_max",
+        spn_token_dim: int | None = None,
+        spn_mixer_depth: int = 3,
+        spn_token_mlp_ratio: int = 2,
+        expert_activation: str = "gelu",
+        expert_norm: str = "layernorm",
+        spn_pooling: str = "attention_mean_max",
+        expert_dropout: float = 0.0,
     ) -> None:
         super().__init__()
         if gate_mode not in {"uniform", "hard", "soft"}:
@@ -149,12 +162,28 @@ class StructureAwareMoEDistinguisher(nn.Module):
             "v5_structure_experts",
         }:
             raise ValueError(f"unsupported expert_set: {expert_set}")
+        if gate_temperature <= 0:
+            raise ValueError("gate_temperature must be > 0")
+        if gate_dropout < 0 or expert_dropout < 0:
+            raise ValueError("dropout values must be non-negative")
         self.input_bits = input_bits
         self.hidden_bits = hidden_bits
         self.structure_feature_bits = structure_feature_bits
         self.gate_mode = gate_mode
         self.expert_set = expert_set
         self.pair_bits = pair_bits
+        self.gate_hidden_bits = gate_hidden_bits or hidden_bits
+        self.gate_activation = gate_activation
+        self.gate_dropout = gate_dropout
+        self.gate_temperature = gate_temperature
+        self.pairwise_pooling = pairwise_pooling
+        self.spn_token_dim = spn_token_dim
+        self.spn_mixer_depth = spn_mixer_depth
+        self.spn_token_mlp_ratio = spn_token_mlp_ratio
+        self.expert_activation = expert_activation
+        self.expert_norm = expert_norm
+        self.spn_pooling = spn_pooling
+        self.expert_dropout = expert_dropout
         self.expert_keys = _expert_keys(expert_set)
         self.experts = nn.ModuleList(self._build_experts(input_bits, hidden_bits))
         self.adapters = nn.ModuleDict(
@@ -166,9 +195,10 @@ class StructureAwareMoEDistinguisher(nn.Module):
             }
         )
         self.soft_gate = nn.Sequential(
-            nn.Linear(structure_feature_bits, hidden_bits),
-            nn.ReLU(),
-            nn.Linear(hidden_bits, len(self.expert_keys)),
+            nn.Linear(structure_feature_bits, self.gate_hidden_bits),
+            build_activation(gate_activation),
+            nn.Dropout(gate_dropout),
+            nn.Linear(self.gate_hidden_bits, len(self.expert_keys)),
         )
         self.register_buffer(
             "_structure_features",
@@ -205,7 +235,7 @@ class StructureAwareMoEDistinguisher(nn.Module):
                 device=structure.device,
             )
             return weights.unsqueeze(0).expand(batch_size, -1)
-        return torch.softmax(self.soft_gate(structure), dim=1)
+        return torch.softmax(self.soft_gate(structure) / self.gate_temperature, dim=1)
 
     def gate_summary(self) -> dict[str, Any]:
         weights = self.current_gate_weights(batch_size=1).detach().cpu()[0]
@@ -214,6 +244,18 @@ class StructureAwareMoEDistinguisher(nn.Module):
             "expert_set": self.expert_set,
             "adapter_mode": "structure" if self.expert_set == "v4_structure_adapter" else "none",
             "adapter_name": self._adapter_name_from_structure(),
+            "gate_hidden_bits": self.gate_hidden_bits,
+            "gate_activation": self.gate_activation,
+            "gate_dropout": round(float(self.gate_dropout), 6),
+            "gate_temperature": round(float(self.gate_temperature), 6),
+            "pairwise_pooling": self.pairwise_pooling,
+            "spn_token_dim": self.spn_token_dim,
+            "spn_mixer_depth": self.spn_mixer_depth,
+            "spn_token_mlp_ratio": self.spn_token_mlp_ratio,
+            "expert_activation": self.expert_activation,
+            "expert_norm": self.expert_norm,
+            "spn_pooling": self.spn_pooling,
+            "expert_dropout": round(float(self.expert_dropout), 6),
             **{
                 f"gate_weight_{key}": round(float(weight), 6)
                 for key, weight in zip(self.expert_keys, weights)
@@ -227,11 +269,19 @@ class StructureAwareMoEDistinguisher(nn.Module):
                     input_bits=input_bits,
                     pair_bits=self.pair_bits or 96,
                     base_channels=hidden_bits,
+                    pooling=self.pairwise_pooling,
                 ),
                 SpnTokenMixerPairSetDistinguisher(
                     input_bits=input_bits,
                     pair_bits=self.pair_bits or 96,
                     base_channels=hidden_bits,
+                    token_dim=self.spn_token_dim,
+                    mixer_depth=self.spn_mixer_depth,
+                    token_mlp_ratio=self.spn_token_mlp_ratio,
+                    activation=self.expert_activation,
+                    norm=self.expert_norm,
+                    pooling=self.spn_pooling,
+                    dropout=self.expert_dropout,
                 ),
                 ResNetBitSliceDistinguisher(input_bits=input_bits, channels=hidden_bits),
                 SeResNeXtDistinguisher(input_bits=input_bits, channels=hidden_bits),

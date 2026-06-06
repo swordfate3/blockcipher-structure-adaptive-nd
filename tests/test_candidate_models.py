@@ -10,6 +10,7 @@ from blockcipher_ai_eval.models import (
     MultiScaleDenseResNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
     SeResNeXtDistinguisher,
+    SpnTokenMixerPairSetDistinguisher,
     StructureAwareMoEDistinguisher,
     TransformerEncoderDistinguisher,
 )
@@ -92,3 +93,43 @@ def test_gohr_resnet_speck_requires_original_speck_pair_width():
 def test_depth10_gohr_resnet_speck_requires_original_speck_pair_width():
     with pytest.raises(ValueError, match="64-bit SPECK32/64 ciphertext-pair input"):
         build_model("gohr_resnet_speck_depth10", input_bits=96, hidden_bits=8)
+
+
+
+def test_build_model_forwards_moe_v5_component_options():
+    model = build_model(
+        "moe_v5_soft",
+        input_bits=768,
+        hidden_bits=8,
+        pair_bits=192,
+        structure="SPN",
+        model_options={
+            "gate_hidden_bits": 12,
+            "gate_activation": "silu",
+            "gate_dropout": 0.05,
+            "gate_temperature": 1.5,
+            "pairwise_pooling": "mean",
+            "spn_token_dim": 24,
+            "spn_mixer_depth": 2,
+            "spn_token_mlp_ratio": 3,
+            "expert_activation": "silu",
+            "expert_norm": "rmsnorm",
+            "spn_pooling": "gated_attention",
+            "expert_dropout": 0.05,
+        },
+    )
+
+    assert isinstance(model, StructureAwareMoEDistinguisher)
+    assert model.gate_hidden_bits == 12
+    assert model.gate_activation == "silu"
+    assert model.gate_temperature == 1.5
+    assert isinstance(model.experts[0], PairwiseAdaptiveDBitNetDistinguisher)
+    assert model.experts[0].pooling == "mean"
+    assert isinstance(model.experts[1], SpnTokenMixerPairSetDistinguisher)
+    assert model.experts[1].token_dim == 24
+    assert model.experts[1].mixer_depth == 2
+    assert model.experts[1].token_mlp_ratio == 3
+    assert model.experts[1].activation == "silu"
+    assert model.experts[1].norm == "rmsnorm"
+    assert model.experts[1].pooling == "gated_attention"
+    assert model.experts[1].dropout == 0.05

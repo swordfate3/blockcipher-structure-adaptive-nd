@@ -6,14 +6,24 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import torch
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
 from blockcipher_ai_eval.datasets import DifferentialDatasetConfig, make_differential_dataset
-from blockcipher_ai_eval.experiments import build_cipher, build_model, default_difference
+from blockcipher_ai_eval.experiments import (
+    build_cipher,
+    build_model,
+    default_difference,
+    difference_for_profile,
+    literature_difference_profiles,
+)
 from blockcipher_ai_eval.hpo import select_trials
+from blockcipher_ai_eval.innovation_one import CipherProfile
+from blockcipher_ai_eval.structure_features import structure_feature_vector
 from blockcipher_ai_eval.training import TrainingConfig, train_binary_classifier
 
 
@@ -101,7 +111,7 @@ def _parse_scalar(value: str) -> Any:
             return float(value)
         return int(value)
     except ValueError:
-        return value.strip('"\'')
+        return value.strip("\"'")
 
 
 def _run_trial(trial_id: int, config: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
@@ -112,8 +122,16 @@ def _run_trial(trial_id: int, config: dict[str, Any], args: argparse.Namespace) 
     seed = int(config.get("seed", args.seed + trial_id))
     feature_encoding = str(config.get("feature_encoding", args.feature_encoding))
     samples_per_class = int(config.get("samples_per_class", args.samples_per_class))
+    difference_profile = str(config.get("difference_profile", "") or "")
+    difference_member = int(config.get("difference_member", 0) or 0)
+
     cipher = build_cipher(cipher_key, rounds)
-    input_difference = int(config.get("input_difference", default_difference(cipher_key)))
+    input_difference = _input_difference_from_config(
+        config,
+        cipher_key=cipher_key,
+        difference_profile=difference_profile,
+        difference_member=difference_member,
+    )
     train_dataset = make_differential_dataset(
         DifferentialDatasetConfig(
             cipher=cipher,
@@ -145,8 +163,10 @@ def _run_trial(trial_id: int, config: dict[str, Any], args: argparse.Namespace) 
         structure=cipher.structure,
         model_options=model_options,
     )
+    _configure_structure_aware_model(model, cipher_key, rounds)
     if hasattr(model, "set_cipher_structure"):
         model.set_cipher_structure(cipher.structure)
+
     result = train_binary_classifier(
         model,
         train_dataset,
@@ -171,15 +191,18 @@ def _run_trial(trial_id: int, config: dict[str, Any], args: argparse.Namespace) 
         "samples_per_class": samples_per_class,
         "pairs_per_sample": pairs_per_sample,
         "feature_encoding": feature_encoding,
+        "input_difference": input_difference,
+        "difference_profile": difference_profile,
+        "difference_member": difference_member if difference_profile else "",
         "input_bits": int(train_dataset.features.shape[1]),
         "pair_bits": int(pair_bits),
         "config": config,
         "model_options": model_options,
+        **_model_metadata(model),
         "metrics": result.final_metrics,
         "history": result.history,
         "training": result.metadata,
     }
-
 
 
 def _model_options_from_config(config: dict[str, Any]) -> dict[str, Any]:
@@ -191,8 +214,91 @@ def _model_options_from_config(config: dict[str, Any]) -> dict[str, Any]:
         "conv_depth",
         "kernel_size",
         "dropout",
+        "token_dim",
+        "mixer_depth",
+        "token_mlp_ratio",
+        "gate_hidden_bits",
+        "gate_activation",
+        "gate_dropout",
+        "gate_temperature",
+        "pairwise_pooling",
+        "spn_token_dim",
+        "spn_mixer_depth",
+        "spn_token_mlp_ratio",
+        "expert_activation",
+        "expert_norm",
+        "spn_pooling",
+        "expert_dropout",
     }
     return {key: config[key] for key in keys if key in config}
+
+
+def _input_difference_from_config(
+    config: dict[str, Any],
+    cipher_key: str,
+    difference_profile: str,
+    difference_member: int,
+) -> int:
+    if "input_difference" in config:
+        return int(config["input_difference"])
+    if not difference_profile:
+        return default_difference(cipher_key)
+    profile = literature_difference_profiles()[difference_profile]
+    if profile.cipher != cipher_key:
+        raise ValueError(
+            f"difference profile {difference_profile} is for {profile.cipher}, not {cipher_key}"
+        )
+    return difference_for_profile(difference_profile, difference_member)
+
+
+def _configure_structure_aware_model(model: Any, cipher_key: str, rounds: int) -> None:
+    if not hasattr(model, "set_structure_features"):
+        return
+    vector = structure_feature_vector(_cipher_profile(cipher_key), rounds)
+    model.set_structure_features(torch.tensor(vector, dtype=torch.float32))
+
+
+def _model_metadata(model: Any) -> dict[str, Any]:
+    if not hasattr(model, "gate_summary"):
+        return {}
+    summary = model.gate_summary()
+    gate_weights = {
+        key.removeprefix("gate_weight_"): value
+        for key, value in summary.items()
+        if key.startswith("gate_weight_")
+    }
+    component_keys = [
+        "gate_hidden_bits",
+        "gate_activation",
+        "gate_dropout",
+        "gate_temperature",
+        "pairwise_pooling",
+        "spn_token_dim",
+        "spn_mixer_depth",
+        "spn_token_mlp_ratio",
+        "expert_activation",
+        "expert_norm",
+        "spn_pooling",
+        "expert_dropout",
+    ]
+    return {
+        "gate_mode": summary["gate_mode"],
+        "expert_set": summary.get("expert_set", "legacy"),
+        "gate_weights_mean": gate_weights,
+        "moe_components": {key: summary[key] for key in component_keys if key in summary},
+    }
+
+
+def _cipher_profile(cipher_key: str) -> CipherProfile:
+    mapping = {
+        "speck32": CipherProfile.speck32_64,
+        "present80": CipherProfile.present80,
+        "sm4": CipherProfile.sm4,
+    }
+    try:
+        return mapping[cipher_key]()
+    except KeyError as exc:
+        raise ValueError(f"unsupported cipher key for structure features: {cipher_key}") from exc
 
 
 if __name__ == "__main__":

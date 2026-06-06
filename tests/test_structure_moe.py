@@ -193,3 +193,42 @@ def test_v5_moe_includes_spn_token_mixer_expert_for_spn_structure():
     assert summary["expert_set"] == "v5_structure_experts"
     assert summary["adapter_mode"] == "none"
     assert summary["gate_weight_spn_token_mixer_pairset"] == 0.45
+
+
+
+def test_v5_moe_soft_gate_temperature_and_component_summary():
+    model = StructureAwareMoEDistinguisher(
+        input_bits=768,
+        hidden_bits=8,
+        structure_feature_bits=19,
+        gate_mode="soft",
+        expert_set="v5_structure_experts",
+        pair_bits=192,
+        gate_hidden_bits=12,
+        gate_activation="silu",
+        gate_temperature=1.5,
+        spn_token_dim=24,
+        spn_mixer_depth=2,
+        spn_token_mlp_ratio=3,
+        expert_activation="silu",
+        expert_norm="rmsnorm",
+        spn_pooling="gated_attention",
+        expert_dropout=0.05,
+    )
+    model.set_structure_features(_features(CipherProfile.present80(), rounds=5))
+
+    weights = model.current_gate_weights(batch_size=2)
+    summary = model.gate_summary()
+
+    assert weights.shape == (2, 5)
+    assert torch.allclose(weights.sum(dim=1), torch.ones(2), atol=1e-6)
+    assert summary["gate_hidden_bits"] == 12
+    assert summary["gate_activation"] == "silu"
+    assert summary["gate_temperature"] == 1.5
+    assert summary["spn_token_dim"] == 24
+    assert summary["spn_mixer_depth"] == 2
+    assert summary["spn_token_mlp_ratio"] == 3
+    assert summary["expert_activation"] == "silu"
+    assert summary["expert_norm"] == "rmsnorm"
+    assert summary["spn_pooling"] == "gated_attention"
+    assert summary["expert_dropout"] == 0.05

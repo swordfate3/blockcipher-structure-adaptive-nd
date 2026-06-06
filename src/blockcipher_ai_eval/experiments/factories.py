@@ -336,6 +336,7 @@ def build_model(
             gate_mode="uniform",
             expert_set="v5_structure_experts",
             pair_bits=pair_bits,
+            **_moe_v5_options(options),
         )
     if name == "moe_v5_hard":
         return StructureAwareMoEDistinguisher(
@@ -345,6 +346,7 @@ def build_model(
             gate_mode="hard",
             expert_set="v5_structure_experts",
             pair_bits=pair_bits,
+            **_moe_v5_options(options),
         )
     if name == "moe_v5_soft":
         return StructureAwareMoEDistinguisher(
@@ -354,9 +356,49 @@ def build_model(
             gate_mode="soft",
             expert_set="v5_structure_experts",
             pair_bits=pair_bits,
+            **_moe_v5_options(options),
         )
     raise ValueError(f"unsupported model: {name}")
 
+
+
+
+def _moe_v5_options(options: dict[str, object]) -> dict[str, object]:
+    result: dict[str, object] = {}
+    int_keys = {
+        "gate_hidden_bits",
+        "spn_token_dim",
+        "spn_mixer_depth",
+        "spn_token_mlp_ratio",
+    }
+    float_keys = {"gate_dropout", "gate_temperature", "expert_dropout"}
+    string_keys = {
+        "gate_activation",
+        "pairwise_pooling",
+        "expert_activation",
+        "expert_norm",
+        "spn_pooling",
+    }
+    aliases = {
+        "token_dim": "spn_token_dim",
+        "mixer_depth": "spn_mixer_depth",
+        "pooling": "spn_pooling",
+        "dropout": "expert_dropout",
+    }
+    expanded_options = dict(options)
+    for key, target in aliases.items():
+        if key in expanded_options and target not in expanded_options:
+            expanded_options[target] = expanded_options[key]
+    for key in int_keys:
+        if key in expanded_options:
+            result[key] = int(expanded_options[key])
+    for key in float_keys:
+        if key in expanded_options:
+            result[key] = float(expanded_options[key])
+    for key in string_keys:
+        if key in expanded_options:
+            result[key] = str(expanded_options[key])
+    return result
 
 
 def _int_option(options: dict[str, object], key: str, default: int | None = None) -> int | None:
