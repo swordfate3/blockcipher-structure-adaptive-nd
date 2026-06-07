@@ -1,0 +1,15 @@
+run_id=innovation1-spn-aligned-round-sweep-present-gpu0-20260607
+project_id=blockcipher-structure-adaptive-nd
+project_dir=G:\lxy\blockcipher-structure-adaptive-nd
+run_dir=G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-spn-aligned-round-sweep-present-gpu0-20260607
+archive_work=G:\lxy\archive_work\spn_aligned_round_sweep_20260607
+branch=main
+plan=experiments\plans\innovation1_spn_aligned_present_round_sweep.csv
+device=cuda:0
+expected_rows=30
+epochs=10
+batch_size=1024
+hidden_bits=64
+optimizer=adamw
+weight_decay=0.0001
+validation=present_round_sweep_raw_vs_inverse_p_aligned
