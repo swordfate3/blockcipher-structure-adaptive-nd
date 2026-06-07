@@ -22,6 +22,7 @@ class DifferentialDatasetConfig:
     shuffle: bool = True
     feature_encoding: str = "ciphertext_pair_bits"
     pairs_per_sample: int = 1
+    negative_mode: str = "random_ciphertext"
 
 
 @dataclass(frozen=True)
@@ -34,6 +35,8 @@ class DifferentialDataset:
 def make_differential_dataset(config: DifferentialDatasetConfig) -> DifferentialDataset:
     if config.pairs_per_sample < 1:
         raise ValueError("pairs_per_sample must be at least 1")
+    if config.negative_mode not in {"random_ciphertext", "encrypted_random_plaintexts"}:
+        raise ValueError(f"unsupported negative_mode: {config.negative_mode}")
     rng = np.random.default_rng(config.seed)
     block_bits = config.cipher.block_bits
     mask = (1 << block_bits) - 1
@@ -63,8 +66,14 @@ def make_differential_dataset(config: DifferentialDatasetConfig) -> Differential
     for _ in range(config.samples_per_class):
         encoded_pairs = []
         for _pair_index in range(config.pairs_per_sample):
-            ciphertext_a = _random_int(rng, block_bits)
-            ciphertext_b = _random_int(rng, block_bits)
+            if config.negative_mode == "random_ciphertext":
+                ciphertext_a = _random_int(rng, block_bits)
+                ciphertext_b = _random_int(rng, block_bits)
+            else:
+                plaintext_a = _random_int(rng, block_bits)
+                plaintext_b = _random_int(rng, block_bits)
+                ciphertext_a = config.cipher.encrypt(plaintext_a)
+                ciphertext_b = config.cipher.encrypt(plaintext_b)
             encoded_pairs.extend(
                 _encode_pair(
                     ciphertext_a,
@@ -93,6 +102,7 @@ def make_differential_dataset(config: DifferentialDatasetConfig) -> Differential
         "seed": config.seed,
         "feature_encoding": config.feature_encoding,
         "pairs_per_sample": config.pairs_per_sample,
+        "negative_mode": config.negative_mode,
         "pair_bits": _pair_bits(block_bits, config.feature_encoding),
     }
     return DifferentialDataset(features=features, labels=label_array, metadata=metadata)
@@ -102,6 +112,14 @@ def _encode_pair(left: int, right: int, width: int, config: DifferentialDatasetC
     feature_encoding = config.feature_encoding
     if feature_encoding == "ciphertext_pair_bits":
         return _pair_to_bits(left, right, width)
+    if feature_encoding == "ciphertext_xor_bits":
+        return _xor_bits(left, right, width)
+    if feature_encoding == "ciphertext_xor_spn_aligned_bits":
+        difference = left ^ right
+        return int_to_bits(difference, width) + int_to_bits(
+            _inverse_permutation_difference(difference, width, config.cipher),
+            width,
+        )
     if feature_encoding == "ciphertext_pair_xor_bits":
         left_bits, right_bits, difference_bits = _pair_xor_bits(left, right, width)
         return left_bits + right_bits + difference_bits
@@ -114,6 +132,10 @@ def _encode_pair(left: int, right: int, width: int, config: DifferentialDatasetC
 
 def _pair_to_bits(left: int, right: int, width: int) -> list[int]:
     return int_to_bits(left, width) + int_to_bits(right, width)
+
+
+def _xor_bits(left: int, right: int, width: int) -> list[int]:
+    return int_to_bits(left ^ right, width)
 
 
 def _pair_xor_bits(left: int, right: int, width: int) -> tuple[list[int], list[int], list[int]]:
@@ -135,6 +157,10 @@ def _inverse_permutation_difference(difference: int, width: int, cipher: Reduced
 
 def _pair_bits(block_bits: int, feature_encoding: str) -> int:
     if feature_encoding == "ciphertext_pair_bits":
+        return block_bits * 2
+    if feature_encoding == "ciphertext_xor_bits":
+        return block_bits
+    if feature_encoding == "ciphertext_xor_spn_aligned_bits":
         return block_bits * 2
     if feature_encoding == "ciphertext_pair_xor_bits":
         return block_bits * 3

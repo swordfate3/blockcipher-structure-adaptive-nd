@@ -878,3 +878,95 @@ def test_run_innovation_one_matrix_accepts_spn_aligned_feature_encoding(tmp_path
     assert rows[0]["feature_encoding"] == "ciphertext_pair_xor_spn_aligned_bits"
     assert rows[0]["training"]["pair_bits"] == 256
     assert rows[0]["training"]["input_bits"] == 512
+
+
+def test_run_innovation_one_matrix_plan_supports_keys_negative_mode_and_xor_aligned_input(
+    tmp_path: Path,
+):
+    plan_path = tmp_path / "crosskey_plan.csv"
+    output_path = tmp_path / "crosskey_results.jsonl"
+    plan_path.write_text(
+        "\n".join(
+            [
+                "cipher,structure,network,model_key,family,architecture_rank,score,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode,train_key,validation_key",
+                "PRESENT-80,SPN,MLP,mlp,mlp,1,1,1,0,8,1,ciphertext_xor_spn_aligned_bits,encrypted_random_plaintexts,0x0,0x11111111111111111111",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--plan",
+            str(plan_path),
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--device",
+            "cpu",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["cipher"] == "PRESENT-80"
+    assert rows[0]["feature_encoding"] == "ciphertext_xor_spn_aligned_bits"
+    assert rows[0]["negative_mode"] == "encrypted_random_plaintexts"
+    assert rows[0]["train_key"] == 0
+    assert rows[0]["validation_key"] == 0x11111111111111111111
+    assert rows[0]["training"]["input_bits"] == 128
+    assert rows[0]["training"]["pair_bits"] == 128
+    assert rows[0]["validation"]["negative_mode"] == "encrypted_random_plaintexts"
+
+
+def test_run_innovation_one_matrix_plan_defaults_validation_key_to_train_key(
+    tmp_path: Path,
+):
+    plan_path = tmp_path / "samekey_plan.csv"
+    output_path = tmp_path / "samekey_results.jsonl"
+    plan_path.write_text(
+        "\n".join(
+            [
+                "cipher,structure,network,model_key,family,architecture_rank,score,rounds,seed,samples_per_class,train_key,validation_key",
+                "PRESENT-80,SPN,MLP,mlp,mlp,1,1,1,0,8,0x11111111111111111111,",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--plan",
+            str(plan_path),
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--device",
+            "cpu",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["train_key"] == 0x11111111111111111111
+    assert rows[0]["validation_key"] == 0x11111111111111111111

@@ -79,7 +79,7 @@ MOE_V5_PRESENT_HPO_MULTISEED_TRIAL11_OPTIONS = {
 MOE_V5_PRESENT_HPO_MULTISEED_TRIAL11_HIDDEN_BITS = 96
 
 
-def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
+def build_cipher(name: str, rounds: int, key: int | None = None) -> ReducedRoundCipher:
     if name == "aes128":
         return Aes128(rounds=rounds, key=0x000102030405060708090A0B0C0D0E0F)
     if name == "aes192":
@@ -143,7 +143,7 @@ def build_cipher(name: str, rounds: int) -> ReducedRoundCipher:
     if name == "simeck64":
         return Simeck64_128(rounds=rounds, key=0x1B1A1918131211100B0A090803020100)
     if name == "present80":
-        return Present80(rounds=rounds, key=0x00000000000000000000)
+        return Present80(rounds=rounds, key=0x00000000000000000000 if key is None else key)
     if name == "gift64":
         return Gift64(rounds=rounds, key=0x00000000000000000000000000000000)
     if name == "sm4":

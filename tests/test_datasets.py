@@ -56,6 +56,33 @@ def test_make_differential_dataset_can_include_xor_difference_bits():
     assert dataset.metadata["feature_encoding"] == "ciphertext_pair_xor_bits"
 
 
+def test_make_differential_dataset_can_emit_only_xor_difference_bits():
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    base_config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=1,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_pair_xor_bits",
+    )
+    xor_config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=1,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_xor_bits",
+    )
+
+    pair_dataset = make_differential_dataset(base_config)
+    xor_dataset = make_differential_dataset(xor_config)
+
+    assert xor_dataset.features.shape == (2, 32)
+    assert xor_dataset.features[0].tolist() == pair_dataset.features[0, 64:].tolist()
+    assert xor_dataset.metadata["pair_bits"] == 32
+
+
 def test_make_differential_dataset_can_group_multiple_pairs_per_sample():
     cipher = Speck32_64(rounds=1, key=0x1918111009080100)
     config = DifferentialDatasetConfig(
@@ -137,6 +164,49 @@ def test_make_differential_dataset_can_include_spn_aligned_inverse_permutation_b
     assert aligned_difference == expected_aligned
     assert dataset.metadata["feature_encoding"] == "ciphertext_pair_xor_spn_aligned_bits"
     assert dataset.metadata["pair_bits"] == 256
+
+
+def test_make_differential_dataset_can_emit_only_spn_aligned_difference_bits():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0700000000000700,
+        samples_per_class=1,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_xor_spn_aligned_bits",
+    )
+
+    dataset = make_differential_dataset(config)
+    first_row = dataset.features[0].tolist()
+    difference = first_row[:64]
+    aligned_difference = first_row[64:]
+    difference_value = int("".join(str(bit) for bit in difference), 2)
+    expected_aligned = int_to_bits(Present80.inverse_permutation_layer(difference_value), 64)
+
+    assert dataset.features.shape == (2, 128)
+    assert aligned_difference == expected_aligned
+    assert dataset.metadata["feature_encoding"] == "ciphertext_xor_spn_aligned_bits"
+    assert dataset.metadata["pair_bits"] == 128
+
+
+def test_make_differential_dataset_can_generate_negative_pairs_from_encrypted_plaintexts():
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=2,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_pair_bits",
+        negative_mode="encrypted_random_plaintexts",
+    )
+
+    dataset = make_differential_dataset(config)
+
+    assert dataset.features.shape == (4, 64)
+    assert dataset.labels.tolist() == [1, 1, 0, 0]
+    assert dataset.metadata["negative_mode"] == "encrypted_random_plaintexts"
 
 
 def test_spn_aligned_feature_encoding_requires_inverse_permutation_layer():

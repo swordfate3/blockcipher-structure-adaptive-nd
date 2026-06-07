@@ -185,6 +185,15 @@ def test_build_cipher_supports_aes_variants():
     assert aes256.encrypt(0x00112233445566778899AABBCCDDEEFF) == 0x8EA2B7CA516745BFEAFC49904B496089
 
 
+def test_build_cipher_accepts_present80_key_override():
+    default_cipher = build_cipher("present80", rounds=5)
+    keyed_cipher = build_cipher("present80", rounds=5, key=0x11111111111111111111)
+
+    assert default_cipher.name == "PRESENT-80"
+    assert keyed_cipher.name == "PRESENT-80"
+    assert default_cipher.encrypt(0x0123456789ABCDEF) != keyed_cipher.encrypt(0x0123456789ABCDEF)
+
+
 def test_build_cipher_supports_simon64():
     cipher = build_cipher("simon64", rounds=44)
 

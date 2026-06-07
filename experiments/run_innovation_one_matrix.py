@@ -73,8 +73,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--feature-encoding",
         default="ciphertext_pair_bits",
-        choices=["ciphertext_pair_bits", "ciphertext_pair_xor_bits", "ciphertext_pair_xor_spn_aligned_bits"],
+        choices=[
+            "ciphertext_pair_bits",
+            "ciphertext_xor_bits",
+            "ciphertext_xor_spn_aligned_bits",
+            "ciphertext_pair_xor_bits",
+            "ciphertext_pair_xor_spn_aligned_bits",
+        ],
         help="Feature encoding for generated ciphertext pairs.",
+    )
+    parser.add_argument(
+        "--negative-mode",
+        default="random_ciphertext",
+        choices=["random_ciphertext", "encrypted_random_plaintexts"],
+        help="How negative-class ciphertext pairs are generated.",
     )
     parser.add_argument(
         "--difference-profile",
@@ -124,32 +136,43 @@ def main() -> None:
 
 
 def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
-    cipher = build_cipher(task["cipher_key"], task["rounds"])
+    train_key = task.get("train_key")
+    validation_key = task.get("validation_key")
+    if validation_key is None:
+        validation_key = train_key
+    train_cipher = build_cipher(task["cipher_key"], task["rounds"], key=train_key)
+    validation_cipher = build_cipher(
+        task["cipher_key"],
+        task["rounds"],
+        key=validation_key,
+    )
     input_difference = task["input_difference"]
-    model_key = _select_model_key(task["model_key"], cipher.structure, task["pairs_per_sample"])
+    model_key = _select_model_key(task["model_key"], train_cipher.structure, task["pairs_per_sample"])
     pair_bits = _infer_pair_bits(
-        cipher.block_bits,
+        train_cipher.block_bits,
         task["feature_encoding"],
         task["pairs_per_sample"],
     )
     train_dataset = make_differential_dataset(
         DifferentialDatasetConfig(
-            cipher=cipher,
+            cipher=train_cipher,
             input_difference=input_difference,
             samples_per_class=task["samples_per_class"],
             seed=task["seed"],
             feature_encoding=task["feature_encoding"],
             pairs_per_sample=task["pairs_per_sample"],
+            negative_mode=task["negative_mode"],
         )
     )
     validation_dataset = make_differential_dataset(
         DifferentialDatasetConfig(
-            cipher=cipher,
+            cipher=validation_cipher,
             input_difference=input_difference,
             samples_per_class=max(8, task["samples_per_class"] // 2),
             seed=task["seed"] + 10_000,
             feature_encoding=task["feature_encoding"],
             pairs_per_sample=task["pairs_per_sample"],
+            negative_mode=task["negative_mode"],
         )
     )
     model = build_model(
@@ -157,7 +180,7 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         input_bits=train_dataset.features.shape[1],
         hidden_bits=args.hidden_bits,
         pair_bits=pair_bits,
-        structure=cipher.structure,
+        structure=train_cipher.structure,
     )
     _configure_structure_aware_model(model, task["cipher_key"], task["rounds"])
     result = train_binary_classifier(
@@ -178,9 +201,9 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         ),
     )
     return {
-        "cipher": cipher.name,
+        "cipher": train_cipher.name,
         "cipher_key": task["cipher_key"],
-        "structure": cipher.structure,
+        "structure": train_cipher.structure,
         "model": task["model_key"],
         "selected_model": model_key,
         "architecture": task["architecture"],
@@ -190,6 +213,8 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         "literature": task.get("literature", ""),
         "rounds": task["rounds"],
         "seed": task["seed"],
+        "train_key": train_key,
+        "validation_key": validation_key,
         "input_difference": input_difference,
         "difference_profile": task.get("difference_profile", ""),
         "difference_member": task.get("difference_member", ""),
@@ -197,6 +222,7 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         "samples_per_class": task["samples_per_class"],
         "pairs_per_sample": task["pairs_per_sample"],
         "feature_encoding": task["feature_encoding"],
+        "negative_mode": task["negative_mode"],
         "metrics": result.final_metrics,
         "history": result.history,
         "training": {
@@ -207,6 +233,15 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
             "pair_bits": pair_bits,
         },
         **_model_metadata(model),
+        "validation": {
+            "cipher": validation_cipher.name,
+            "structure": validation_cipher.structure,
+            "rounds": validation_cipher.rounds,
+            "feature_encoding": validation_dataset.metadata["feature_encoding"],
+            "negative_mode": validation_dataset.metadata["negative_mode"],
+            "pairs_per_sample": validation_dataset.metadata["pairs_per_sample"],
+            "samples_per_class": validation_dataset.metadata["samples_per_class"],
+        },
     }
 
 
@@ -235,6 +270,9 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "samples_per_class": args.samples_per_class,
                             "pairs_per_sample": args.pairs_per_sample,
                             "feature_encoding": args.feature_encoding,
+                            "negative_mode": args.negative_mode,
+                            "train_key": None,
+                            "validation_key": None,
                             **_difference_metadata(
                                 cipher_key,
                                 args.difference_profile,
@@ -280,13 +318,16 @@ def _plan_task(
             "architecture": row["network"],
             "architecture_rank": int(row["architecture_rank"]),
             "matching_score": int(row["score"]),
-            "matching_evidence": row["evidence"],
-            "literature": row["literature"],
+            "matching_evidence": row.get("evidence", ""),
+            "literature": row.get("literature", ""),
             "rounds": int(row["rounds"]),
             "seed": int(row["seed"]),
             "samples_per_class": int(row["samples_per_class"]),
             "pairs_per_sample": int(row.get("pairs_per_sample") or pairs_per_sample),
             "feature_encoding": row.get("feature_encoding") or feature_encoding,
+            "negative_mode": row.get("negative_mode") or "random_ciphertext",
+            "train_key": _optional_int(row.get("train_key")),
+            "validation_key": _optional_int(row.get("validation_key")),
     }
     task.update(
         _difference_metadata(
@@ -355,11 +396,24 @@ def _infer_pair_bits(
 ) -> int | None:
     if feature_encoding == "ciphertext_pair_bits":
         return block_bits * 2
+    if feature_encoding == "ciphertext_xor_bits":
+        return block_bits
+    if feature_encoding == "ciphertext_xor_spn_aligned_bits":
+        return block_bits * 2
     if feature_encoding == "ciphertext_pair_xor_bits":
         return block_bits * 3
     if feature_encoding == "ciphertext_pair_xor_spn_aligned_bits":
         return block_bits * 4
     return None
+
+
+def _optional_int(value: str | None) -> int | None:
+    if value is None:
+        return None
+    value = value.strip()
+    if not value:
+        return None
+    return int(value, 0)
 
 
 def _select_model_key(model_key: str, structure: str, pairs_per_sample: int) -> str:
