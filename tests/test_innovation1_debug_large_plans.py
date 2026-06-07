@@ -201,3 +201,23 @@ def test_spn_aligned_present_plan_compares_raw_and_aligned_inputs():
         "spn_token_mixer_pairset",
         "moe_v5_soft_hpo_present_best",
     }
+
+
+def test_spn_aligned_present_confirm_plan_extends_to_ten_seeds():
+    rows = _rows("experiments/plans/innovation1_spn_aligned_present_confirm.csv")
+
+    assert len(rows) == 40
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["rounds"] for row in rows} == {"5"}
+    assert {row["seed"] for row in rows} == {str(seed) for seed in range(10)}
+    assert {row["pairs_per_sample"] for row in rows} == {"4"}
+    assert {row["samples_per_class"] for row in rows} == {"32768"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "ciphertext_pair_xor_bits",
+        "ciphertext_pair_xor_spn_aligned_bits",
+    }
+    assert {row["model_key"] for row in rows} == {
+        "spn_token_mixer_pairset",
+        "moe_v5_soft_hpo_present_best",
+    }

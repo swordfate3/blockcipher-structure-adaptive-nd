@@ -221,3 +221,24 @@ def test_remote_spn_aligned_present_script_uses_short_archive_work_and_gate():
     assert "run_innovation1_spn_aligned_present_gpu1_and_push.cmd" in launcher
     assert "innovation1_spn_aligned_present_gpu1_20260607" in scheduler
     assert "innovation1-spn-aligned-present-gpu1-20260607=30" in monitor
+
+
+def test_remote_spn_aligned_confirm_present_script_uses_expected_plan_and_gate():
+    script = Path("scripts/remote/run_innovation1_spn_aligned_confirm_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = Path("scripts/remote/launch_innovation1_spn_aligned_confirm_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = Path("scripts/remote/schedule_innovation1_spn_aligned_confirm_present.cmd").read_text(encoding="utf-8")
+    monitor = Path("scripts/monitor_innovation1_spn_aligned_confirm_present_results.sh").read_text(encoding="utf-8")
+
+    assert "set RUN_ID=innovation1-spn-aligned-confirm-present-gpu1-20260607" in script
+    assert "set ARCHIVE_WORK=%ROOT%\\archive_work\\spn_aligned_confirm_20260607" in script
+    assert "experiments\\plans\\innovation1_spn_aligned_present_confirm.csv" in script
+    assert "--device cuda:1" in script
+    assert "--batch-size 1024" in script
+    assert "set EXPECTED_ROWS=40" in script
+    assert "confirmation=spn_aligned_present_seeds_0_to_9" in script
+    assert "git add results_archive\\%RUN_ID%" in script
+    assert "git add ." not in script
+    assert "git push origin results/%RUN_ID%" in script
+    assert "run_innovation1_spn_aligned_confirm_present_gpu1_and_push.cmd" in launcher
+    assert "innovation1_spn_aligned_confirm_present_gpu1_20260607" in scheduler
+    assert "innovation1-spn-aligned-confirm-present-gpu1-20260607=40" in monitor
