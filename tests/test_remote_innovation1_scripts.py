@@ -200,3 +200,24 @@ def test_remote_moe_v5_hpo_multiseed_script_uses_expected_space_seeds_and_gate()
     assert "innovation1_moe_v5_hpo_multiseed_present_gpu1_20260606" in scheduler
     assert "innovation1-moe-v5-hpo-multiseed-present-gpu1-20260606=12" in monitor
     assert "^\n\n" not in script.replace("\r\n", "\n")
+
+
+def test_remote_spn_aligned_present_script_uses_short_archive_work_and_gate():
+    script = Path("scripts/remote/run_innovation1_spn_aligned_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = Path("scripts/remote/launch_innovation1_spn_aligned_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = Path("scripts/remote/schedule_innovation1_spn_aligned_present.cmd").read_text(encoding="utf-8")
+    monitor = Path("scripts/monitor_innovation1_spn_aligned_present_results.sh").read_text(encoding="utf-8")
+
+    assert "set RUN_ID=innovation1-spn-aligned-present-gpu1-20260607" in script
+    assert "set ARCHIVE_WORK=%ROOT%\\archive_work\\spn_aligned_20260607" in script
+    assert "experiments\\plans\\innovation1_spn_aligned_present.csv" in script
+    assert "--device cuda:1" in script
+    assert "--batch-size 1024" in script
+    assert "set EXPECTED_ROWS=30" in script
+    assert "feature_comparison=raw_vs_spn_aligned_inverse_player" in script
+    assert "git add results_archive\\%RUN_ID%" in script
+    assert "git add ." not in script
+    assert "git push origin results/%RUN_ID%" in script
+    assert "run_innovation1_spn_aligned_present_gpu1_and_push.cmd" in launcher
+    assert "innovation1_spn_aligned_present_gpu1_20260607" in scheduler
+    assert "innovation1-spn-aligned-present-gpu1-20260607=30" in monitor

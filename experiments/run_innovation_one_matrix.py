@@ -73,7 +73,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--feature-encoding",
         default="ciphertext_pair_bits",
-        choices=["ciphertext_pair_bits", "ciphertext_pair_xor_bits"],
+        choices=["ciphertext_pair_bits", "ciphertext_pair_xor_bits", "ciphertext_pair_xor_spn_aligned_bits"],
         help="Feature encoding for generated ciphertext pairs.",
     )
     parser.add_argument(
@@ -357,6 +357,8 @@ def _infer_pair_bits(
         return block_bits * 2
     if feature_encoding == "ciphertext_pair_xor_bits":
         return block_bits * 3
+    if feature_encoding == "ciphertext_pair_xor_spn_aligned_bits":
+        return block_bits * 4
     return None
 
 

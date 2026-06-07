@@ -66,6 +66,21 @@ def test_present80_full_round_matches_public_test_vector():
     assert first == 0x5579C1387B228445
 
 
+def test_present80_permutation_layer_round_trips_through_inverse():
+    samples = [
+        0x0000000000000000,
+        0xFFFFFFFFFFFFFFFF,
+        0x0123456789ABCDEF,
+        0x8000000000000001,
+    ]
+
+    for state in samples:
+        permuted = Present80.permutation_layer(state)
+        restored = Present80.inverse_permutation_layer(permuted)
+
+        assert restored == state
+
+
 def test_sm4_full_round_matches_public_test_vector():
     cipher = Sm4Reduced(rounds=32, key=0x0123456789ABCDEFFEDCBA9876543210)
 

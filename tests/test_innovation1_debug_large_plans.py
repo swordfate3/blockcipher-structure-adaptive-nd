@@ -180,3 +180,24 @@ def test_moe_v5_hpo_multiseed_best_validation_plan_targets_fixed_multiseed_proto
         "moe_v5_soft_hpo_present_best",
         "moe_v5_soft_hpo_multiseed_present_best",
     }
+
+
+def test_spn_aligned_present_plan_compares_raw_and_aligned_inputs():
+    rows = _rows("experiments/plans/innovation1_spn_aligned_present.csv")
+
+    assert len(rows) == 30
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["rounds"] for row in rows} == {"5"}
+    assert {row["seed"] for row in rows} == {"0", "1", "2", "3", "4"}
+    assert {row["pairs_per_sample"] for row in rows} == {"4"}
+    assert {row["samples_per_class"] for row in rows} == {"32768"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "ciphertext_pair_xor_bits",
+        "ciphertext_pair_xor_spn_aligned_bits",
+    }
+    assert {row["model_key"] for row in rows} == {
+        "adaptive_dbitnet_pairwise",
+        "spn_token_mixer_pairset",
+        "moe_v5_soft_hpo_present_best",
+    }

@@ -836,3 +836,45 @@ def test_run_innovation_one_matrix_prints_task_progress(tmp_path: Path):
 
     assert "[1/2] SPECK32/64 r=1 model=mlp seed=0 pairs=1" in completed.stdout
     assert "[2/2] SPECK32/64 r=1 model=cnn seed=0 pairs=1" in completed.stdout
+
+
+def test_run_innovation_one_matrix_accepts_spn_aligned_feature_encoding(tmp_path: Path):
+    output_path = tmp_path / "spn_aligned.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "present80",
+            "--models",
+            "mlp",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--feature-encoding",
+            "ciphertext_pair_xor_spn_aligned_bits",
+            "--pairs-per-sample",
+            "2",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["feature_encoding"] == "ciphertext_pair_xor_spn_aligned_bits"
+    assert rows[0]["training"]["pair_bits"] == 256
+    assert rows[0]["training"]["input_bits"] == 512

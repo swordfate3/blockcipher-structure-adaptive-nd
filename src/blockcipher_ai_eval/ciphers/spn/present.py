@@ -56,10 +56,24 @@ class Present80:
 
     @staticmethod
     def _permutation_layer(state: int) -> int:
+        return Present80.permutation_layer(state)
+
+    @staticmethod
+    def permutation_layer(state: int) -> int:
         out = 0
         for bit_index in range(63):
             bit = (state >> bit_index) & 1
             out |= bit << ((16 * bit_index) % 63)
+        out |= ((state >> 63) & 1) << 63
+        return out
+
+    @staticmethod
+    def inverse_permutation_layer(state: int) -> int:
+        out = 0
+        for bit_index in range(63):
+            target_index = (16 * bit_index) % 63
+            bit = (state >> target_index) & 1
+            out |= bit << bit_index
         out |= ((state >> 63) & 1) << 63
         return out
 

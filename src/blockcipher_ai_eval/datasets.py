@@ -54,7 +54,7 @@ def make_differential_dataset(config: DifferentialDatasetConfig) -> Differential
                     ciphertext_a,
                     ciphertext_b,
                     block_bits,
-                    config.feature_encoding,
+                    config,
                 )
             )
         rows.append(encoded_pairs)
@@ -70,7 +70,7 @@ def make_differential_dataset(config: DifferentialDatasetConfig) -> Differential
                     ciphertext_a,
                     ciphertext_b,
                     block_bits,
-                    config.feature_encoding,
+                    config,
                 )
             )
         rows.append(encoded_pairs)
@@ -93,23 +93,54 @@ def make_differential_dataset(config: DifferentialDatasetConfig) -> Differential
         "seed": config.seed,
         "feature_encoding": config.feature_encoding,
         "pairs_per_sample": config.pairs_per_sample,
+        "pair_bits": _pair_bits(block_bits, config.feature_encoding),
     }
     return DifferentialDataset(features=features, labels=label_array, metadata=metadata)
 
 
-def _encode_pair(left: int, right: int, width: int, feature_encoding: str) -> list[int]:
+def _encode_pair(left: int, right: int, width: int, config: DifferentialDatasetConfig) -> list[int]:
+    feature_encoding = config.feature_encoding
     if feature_encoding == "ciphertext_pair_bits":
         return _pair_to_bits(left, right, width)
     if feature_encoding == "ciphertext_pair_xor_bits":
-        left_bits = int_to_bits(left, width)
-        right_bits = int_to_bits(right, width)
-        difference_bits = [left_bit ^ right_bit for left_bit, right_bit in zip(left_bits, right_bits)]
+        left_bits, right_bits, difference_bits = _pair_xor_bits(left, right, width)
         return left_bits + right_bits + difference_bits
+    if feature_encoding == "ciphertext_pair_xor_spn_aligned_bits":
+        left_bits, right_bits, difference_bits = _pair_xor_bits(left, right, width)
+        aligned_difference = _inverse_permutation_difference(left ^ right, width, config.cipher)
+        return left_bits + right_bits + difference_bits + int_to_bits(aligned_difference, width)
     raise ValueError(f"unsupported feature encoding: {feature_encoding}")
 
 
 def _pair_to_bits(left: int, right: int, width: int) -> list[int]:
     return int_to_bits(left, width) + int_to_bits(right, width)
+
+
+def _pair_xor_bits(left: int, right: int, width: int) -> tuple[list[int], list[int], list[int]]:
+    left_bits = int_to_bits(left, width)
+    right_bits = int_to_bits(right, width)
+    difference_bits = [left_bit ^ right_bit for left_bit, right_bit in zip(left_bits, right_bits)]
+    return left_bits, right_bits, difference_bits
+
+
+def _inverse_permutation_difference(difference: int, width: int, cipher: ReducedRoundCipher) -> int:
+    inverse_permutation = getattr(cipher, "inverse_permutation_layer", None)
+    if inverse_permutation is None or not callable(inverse_permutation):
+        raise ValueError(
+            "ciphertext_pair_xor_spn_aligned_bits requires a cipher with "
+            "inverse_permutation_layer"
+        )
+    return int(inverse_permutation(difference)) & ((1 << width) - 1)
+
+
+def _pair_bits(block_bits: int, feature_encoding: str) -> int:
+    if feature_encoding == "ciphertext_pair_bits":
+        return block_bits * 2
+    if feature_encoding == "ciphertext_pair_xor_bits":
+        return block_bits * 3
+    if feature_encoding == "ciphertext_pair_xor_spn_aligned_bits":
+        return block_bits * 4
+    raise ValueError(f"unsupported feature encoding: {feature_encoding}")
 
 
 def _random_int(rng: np.random.Generator, width: int) -> int:

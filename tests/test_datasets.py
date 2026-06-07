@@ -1,4 +1,6 @@
-from blockcipher_ai_eval.ciphers import Speck32_64
+import pytest
+
+from blockcipher_ai_eval.ciphers import Present80, Speck32_64
 from blockcipher_ai_eval.datasets import (
     DifferentialDatasetConfig,
     int_to_bits,
@@ -108,3 +110,45 @@ def test_make_differential_dataset_changes_with_seed():
     second = make_differential_dataset(other)
 
     assert first.features.tolist() != second.features.tolist()
+
+
+def test_make_differential_dataset_can_include_spn_aligned_inverse_permutation_bits():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0700000000000700,
+        samples_per_class=1,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_pair_xor_spn_aligned_bits",
+    )
+
+    dataset = make_differential_dataset(config)
+    first_row = dataset.features[0].tolist()
+    left = first_row[:64]
+    right = first_row[64:128]
+    difference = first_row[128:192]
+    aligned_difference = first_row[192:]
+    difference_value = int("".join(str(bit) for bit in difference), 2)
+    expected_aligned = int_to_bits(Present80.inverse_permutation_layer(difference_value), 64)
+
+    assert dataset.features.shape == (2, 256)
+    assert difference == [a ^ b for a, b in zip(left, right)]
+    assert aligned_difference == expected_aligned
+    assert dataset.metadata["feature_encoding"] == "ciphertext_pair_xor_spn_aligned_bits"
+    assert dataset.metadata["pair_bits"] == 256
+
+
+def test_spn_aligned_feature_encoding_requires_inverse_permutation_layer():
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=1,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_pair_xor_spn_aligned_bits",
+    )
+
+    with pytest.raises(ValueError, match="inverse_permutation_layer"):
+        make_differential_dataset(config)
