@@ -1,0 +1,17 @@
+[1/16] SPECK32/64 r=6 model=structure_adaptive_pairset_dbitnet seed=0 pairs=4
+[2/16] SPECK32/64 r=6 model=structure_adaptive_pairset_dbitnet seed=1 pairs=4
+[3/16] SPECK32/64 r=6 model=structure_adaptive_pairset_dbitnet seed=2 pairs=4
+[4/16] SPECK32/64 r=6 model=structure_adaptive_pairset_dbitnet seed=3 pairs=4
+[5/16] SPECK32/64 r=6 model=structure_adaptive_pairset_dbitnet seed=0 pairs=4
+[6/16] SPECK32/64 r=6 model=structure_adaptive_pairset_dbitnet seed=1 pairs=4
+[7/16] SPECK32/64 r=6 model=structure_adaptive_pairset_dbitnet seed=2 pairs=4
+[8/16] SPECK32/64 r=6 model=structure_adaptive_pairset_dbitnet seed=3 pairs=4
+[9/16] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=0 pairs=4
+[10/16] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=1 pairs=4
+[11/16] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=2 pairs=4
+[12/16] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=3 pairs=4
+[13/16] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=0 pairs=4
+[14/16] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=1 pairs=4
+[15/16] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=2 pairs=4
+[16/16] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=3 pairs=4
+wrote 16 rows to results\innovation1-arx-speck32-aligned-screen-gpu1-20260608.jsonl
