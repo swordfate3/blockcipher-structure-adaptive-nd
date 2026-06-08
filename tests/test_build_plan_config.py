@@ -123,3 +123,21 @@ def test_gift64_spn_aligned_confirm_10seed_config_shape():
     }
     assert {row["negative_mode"] for row in rows} == {"encrypted_random_plaintexts"}
     assert {row["difference_profile"] for row in rows} == {"gift64_shen2024_spn_screen"}
+
+def test_speck32_arx_aligned_screen_config_shape():
+    module = _load_build_plan_module()
+    repo_root = Path(__file__).resolve().parents[1]
+    config_path = repo_root / "experiments" / "configs" / "innovation1" / "arx_speck32_aligned_screen.json"
+    rows = module.build_plan_rows(module.load_plan_config(config_path))
+
+    assert len(rows) == 16
+    assert {row["cipher"] for row in rows} == {"SPECK32/64"}
+    assert {row["structure"] for row in rows} == {"ARX"}
+    assert {str(row["rounds"]) for row in rows} == {"6", "7"}
+    assert {str(row["seed"]) for row in rows} == {"0", "1", "2", "3"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "ciphertext_pair_xor_bits",
+        "ciphertext_pair_xor_arx_aligned_bits",
+    }
+    assert {row["difference_profile"] for row in rows} == {"speck32_gohr2019"}
+    assert {str(row["pairs_per_sample"]) for row in rows} == {"4"}

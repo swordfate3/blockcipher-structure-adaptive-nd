@@ -1,0 +1,37 @@
+{
+  "output": "experiments/plans/innovation1_arx_speck32_aligned_screen.csv",
+  "defaults": {
+    "cipher": "SPECK32/64",
+    "structure": "ARX",
+    "network": "StructureAdaptive-PairSet-DBitNet",
+    "model_key": "structure_adaptive_pairset_dbitnet",
+    "family": "structure_pairset",
+    "architecture_rank": 0,
+    "score": 66,
+    "samples_per_class": 32768,
+    "pairs_per_sample": 4,
+    "negative_mode": "encrypted_random_plaintexts",
+    "train_key": "0x1918111009080100",
+    "validation_key": "0x0f0e0d0c0b0a0908",
+    "difference_profile": "speck32_gohr2019",
+    "difference_member": 0,
+    "evidence": "SPECK32/64 ARX structure-alignment screen using public word rotation aligned output differences",
+    "literature": "Gohr 2019 SPECK32 neural differential cryptanalysis; innovation-one ARX structure alignment"
+  },
+  "sweep": {
+    "rounds": [
+      6,
+      7
+    ],
+    "feature_encoding": [
+      "ciphertext_pair_xor_bits",
+      "ciphertext_pair_xor_arx_aligned_bits"
+    ],
+    "seed": {
+      "range": [
+        0,
+        4
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "run_id": "innovation1-arx-speck32-aligned-screen-gpu1-20260608",
+  "task_name": "innovation1_arx_speck32_aligned_screen_gpu1_20260608",
+  "plan": "experiments\\plans\\innovation1_arx_speck32_aligned_screen.csv",
+  "expected_rows": 16,
+  "device": "cuda:1",
+  "epochs": 8,
+  "batch_size": 1024,
+  "hidden_bits": 64,
+  "learning_rate": 0.001,
+  "optimizer": "adamw",
+  "weight_decay": 0.0001,
+  "archive_work_id": "arx_speck32_aligned_screen_20260608",
+  "validation_label": "speck32_arx_aligned_screen",
+  "monitor_script_name": "monitor_innovation1_arx_speck32_aligned_screen_results.sh"
+}

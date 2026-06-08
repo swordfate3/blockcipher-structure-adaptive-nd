@@ -80,6 +80,7 @@ def parse_args() -> argparse.Namespace:
             "ciphertext_xor_spn_aligned_bits",
             "ciphertext_pair_xor_bits",
             "ciphertext_pair_xor_spn_aligned_bits",
+            "ciphertext_pair_xor_arx_aligned_bits",
         ],
         help="Feature encoding for generated ciphertext pairs.",
     )

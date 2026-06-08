@@ -19,3 +19,4 @@
 - `innovation-one-gift64-spn-aligned-results-2026-06-08.md`：GIFT-64 raw vs SPN aligned 迁移筛查结果，证明 PRESENT 的 SPN 结构对齐收益可迁移到另一个轻量 SPN 密码。
 - `cipher_implementation_status_2026-06-03.md`：分组密码算法实现与测试覆盖状态。
 - `conversation-archive-2026-06-05.md`：截至 2026-06-05 的连续对话归档，重点记录创新一模型路线、远程实验结论、SPN v2 负向结果和下一步 MoE v5 / SPN nibble expert 方向。
+- `innovation-one-speck32-arx-aligned-plan-2026-06-08.md`：SPECK32/64 ARX 结构对齐特征、筛查计划和本地验证。

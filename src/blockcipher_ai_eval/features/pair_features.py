@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from blockcipher_ai_eval.ciphers import ReducedRoundCipher
+from blockcipher_ai_eval.features.arx_aligned import arx_aligned_difference
 from blockcipher_ai_eval.features.spn_aligned import inverse_permutation_difference
 
 
@@ -33,6 +34,10 @@ def encode_ciphertext_pair(
         left_bits, right_bits, difference_bits = pair_xor_bits(left, right, width)
         aligned_difference = inverse_permutation_difference(left ^ right, width, cipher)
         return left_bits + right_bits + difference_bits + int_to_bits(aligned_difference, width)
+    if feature_encoding == "ciphertext_pair_xor_arx_aligned_bits":
+        left_bits, right_bits, difference_bits = pair_xor_bits(left, right, width)
+        aligned_difference = arx_aligned_difference(left ^ right, width, cipher)
+        return left_bits + right_bits + difference_bits + int_to_bits(aligned_difference, width)
     raise ValueError(f"unsupported feature encoding: {feature_encoding}")
 
 
@@ -61,5 +66,7 @@ def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
     if feature_encoding == "ciphertext_pair_xor_bits":
         return block_bits * 3
     if feature_encoding == "ciphertext_pair_xor_spn_aligned_bits":
+        return block_bits * 4
+    if feature_encoding == "ciphertext_pair_xor_arx_aligned_bits":
         return block_bits * 4
     raise ValueError(f"unsupported feature encoding: {feature_encoding}")
