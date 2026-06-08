@@ -20,13 +20,15 @@
 innovation1_moe_v5_monitor
 ```
 
-监控脚本是：
+监控命令是：
 
 ```bash
-./scripts/monitor_innovation1_moe_v5_present_results.sh
+uv run python scripts/monitor_remote_results.py \
+  --interval-minutes 30 \
+  --run-id innovation1-moe-v5-present-gpu1-20260606=10
 ```
 
-它每 30 分钟检查一次结果分支：
+旧版 wrapper 已归档到 `archive/legacy/scripts/monitors/monitor_innovation1_moe_v5_present_results.sh`。该命令每 30 分钟检查一次结果分支：
 
 ```text
 results/innovation1-moe-v5-present-gpu1-20260606
@@ -111,7 +113,7 @@ tail -80 outputs/remote_results/monitor_logs/innovation1_moe_v5_present_monitor.
 
 ```bash
 tmux new-session -d -s innovation1_moe_v5_monitor \
-  'cd /home/fate/gitproject/blockcipher-structure-adaptive-nd && PYTHONUNBUFFERED=1 ./scripts/monitor_innovation1_moe_v5_present_results.sh 2>&1 | tee -a outputs/remote_results/monitor_logs/innovation1_moe_v5_present_monitor.log'
+  'cd /home/fate/gitproject/blockcipher-structure-adaptive-nd && PYTHONUNBUFFERED=1 uv run python scripts/monitor_remote_results.py --interval-minutes 30 --run-id innovation1-moe-v5-present-gpu1-20260606=10 2>&1 | tee -a outputs/remote_results/monitor_logs/innovation1_moe_v5_present_monitor.log'
 ```
 
 说明：
@@ -137,7 +139,7 @@ tmux kill-session -t innovation1_moe_v5_monitor
 
 ```bash
 tmux new-session -d -s innovation1_moe_v5_monitor \
-  'cd /home/fate/gitproject/blockcipher-structure-adaptive-nd && PYTHONUNBUFFERED=1 ./scripts/monitor_innovation1_moe_v5_present_results.sh 2>&1 | tee -a outputs/remote_results/monitor_logs/innovation1_moe_v5_present_monitor.log'
+  'cd /home/fate/gitproject/blockcipher-structure-adaptive-nd && PYTHONUNBUFFERED=1 uv run python scripts/monitor_remote_results.py --interval-minutes 30 --run-id innovation1-moe-v5-present-gpu1-20260606=10 2>&1 | tee -a outputs/remote_results/monitor_logs/innovation1_moe_v5_present_monitor.log'
 ```
 
 然后确认：

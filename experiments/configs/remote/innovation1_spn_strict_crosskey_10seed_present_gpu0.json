@@ -1,0 +1,16 @@
+{
+  "run_id": "innovation1-spn-strict-crosskey-10seed-present-gpu0-20260608",
+  "task_name": "innovation1_spn_strict_crosskey_10seed_present_gpu0_20260608",
+  "plan": "experiments\\plans\\innovation1_spn_strict_crosskey_10seed_present.csv",
+  "expected_rows": 40,
+  "device": "cuda:0",
+  "epochs": 10,
+  "batch_size": 1024,
+  "hidden_bits": 64,
+  "learning_rate": 0.001,
+  "optimizer": "adamw",
+  "weight_decay": 0.0001,
+  "archive_work_id": "spn_strict_crosskey_10seed_20260608",
+  "validation_label": "strict_crosskey_encrypted_negative_10seed_present",
+  "monitor_script_name": "monitor_innovation1_spn_strict_crosskey_10seed_present_results.sh"
+}

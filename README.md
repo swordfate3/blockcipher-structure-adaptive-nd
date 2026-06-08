@@ -86,10 +86,15 @@ src/blockcipher_ai_eval/
 
 experiments/
   run_innovation_one_matrix.py          主实验入口
-  summarize_innovation_one_results.py   JSONL 汇总为 CSV
+  build_plan.py                         JSON 配置生成 CSV plan
   build_innovation_one_matrix.py        生成文献排序实验计划
-  run_innovation_one_smoke.py           早期 smoke 入口
+  summarize_innovation_one_results.py   JSONL 汇总为 CSV
 
+scripts/
+  generate_remote_experiment_scripts.py JSON 配置生成远程 run/launch/schedule/monitor 脚本
+  monitor_remote_results.py             通用远程结果分支监控与拉回
+
+archive/legacy/            旧版一次性 builder、远程 .cmd、monitor wrapper 归档
 docs/experiments/          实验记录
 docs/research/             文献调研记录
 memory/innovation-one.md   创新一长期记忆
@@ -302,9 +307,11 @@ cuda
 ```text
 experiments/plans/innovation1_structure_pairset_gpu0.csv  # SPECK32/64 + PRESENT-80, 72 rows
 experiments/plans/innovation1_structure_pairset_gpu1.csv  # SM4, 36 rows
-scripts/remote/run_innovation1_structure_pairset_gpu0_and_push.cmd
-scripts/remote/run_innovation1_structure_pairset_gpu1_and_push.cmd
+archive/legacy/scripts/remote/run_innovation1_structure_pairset_gpu0_and_push.cmd
+archive/legacy/scripts/remote/run_innovation1_structure_pairset_gpu1_and_push.cmd
 ```
+
+说明：这些 `.cmd` 是历史运行脚本，已移到 `archive/legacy/`。新远程实验优先用 `scripts/generate_remote_experiment_scripts.py` 从 JSON 配置生成。
 
 远程按技能流程从 GitHub 拉取 `main` 后运行，结果分支：
 
@@ -608,13 +615,16 @@ Ctrl+B
 D
 ```
 
-当前创新一 debug-large 双卡实验的便捷监控命令：
+当前创新一 debug-large 双卡实验可以直接用通用监控命令：
 
 ```bash
-scripts/monitor_innovation1_debug_large_results.sh
+uv run python scripts/monitor_remote_results.py \
+  --interval-minutes 30 \
+  --run-id innovation1-debug-large-gpu0-20260604=216 \
+  --run-id innovation1-debug-large-gpu1-20260604=108
 ```
 
-这个脚本默认每 30 分钟检查一次：
+旧版便捷 wrapper 已归档到 `archive/legacy/scripts/monitors/monitor_innovation1_debug_large_results.sh`。这个监控默认每 30 分钟检查一次：
 
 ```text
 results/innovation1-debug-large-gpu0-20260604

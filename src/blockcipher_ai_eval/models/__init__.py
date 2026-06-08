@@ -1,39 +1,39 @@
-from blockcipher_ai_eval.models.adaptive_dbitnet import (
+from blockcipher_ai_eval.models.baseline import (
+    CnnDistinguisher,
+    DBitNetDistinguisher,
+    GohrSpeckDistinguisher,
+    LstmRoundSeqDistinguisher,
+    MlpDistinguisher,
+    MultiScaleDenseResNetDistinguisher,
+    ResNetBitSliceDistinguisher,
+    SeResNeXtDistinguisher,
+    TransformerEncoderDistinguisher,
+)
+from blockcipher_ai_eval.models.structure import (
     AdaptiveDBitNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
+    StructureAwareMoEDistinguisher,
 )
-from blockcipher_ai_eval.models.cnn import CnnDistinguisher
-from blockcipher_ai_eval.models.dbitnet import DBitNetDistinguisher
-from blockcipher_ai_eval.models.gohr_speck import GohrSpeckDistinguisher
-from blockcipher_ai_eval.models.lstm_roundseq import LstmRoundSeqDistinguisher
-from blockcipher_ai_eval.models.mlp import MlpDistinguisher
-from blockcipher_ai_eval.models.multiscale_dense_resnet import (
-    MultiScaleDenseResNetDistinguisher,
-)
-from blockcipher_ai_eval.models.resnet_bitslice import ResNetBitSliceDistinguisher
-from blockcipher_ai_eval.models.senet_resnext import SeResNeXtDistinguisher
-from blockcipher_ai_eval.models.structure_moe import StructureAwareMoEDistinguisher
-from blockcipher_ai_eval.models.transformer_encoder import TransformerEncoderDistinguisher
 
 __all__ = [
-    "CnnDistinguisher",
     "AdaptiveDBitNetDistinguisher",
-    "PairwiseAdaptiveDBitNetDistinguisher",
-    "SpnCellPairSetDBitNetDistinguisher",
-    "SpnNibbleConvPairSetDistinguisher",
-    "SpnTokenMixerPairSetDistinguisher",
-    "StructureAdaptivePairSetDBitNetDistinguisher",
+    "CnnDistinguisher",
     "DBitNetDistinguisher",
     "GohrSpeckDistinguisher",
     "LstmRoundSeqDistinguisher",
     "MlpDistinguisher",
     "MultiScaleDenseResNetDistinguisher",
+    "PairwiseAdaptiveDBitNetDistinguisher",
     "ResNetBitSliceDistinguisher",
     "SeResNeXtDistinguisher",
+    "SpnCellPairSetDBitNetDistinguisher",
+    "SpnNibbleConvPairSetDistinguisher",
+    "SpnTokenMixerPairSetDistinguisher",
+    "StructureAdaptivePairSetDBitNetDistinguisher",
     "StructureAwareMoEDistinguisher",
     "TransformerEncoderDistinguisher",
 ]

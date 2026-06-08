@@ -23,7 +23,8 @@ from blockcipher_ai_eval.experiments import (
     literature_difference_profiles,
 )
 from blockcipher_ai_eval.innovation_one import CipherProfile
-from blockcipher_ai_eval.structure_features import structure_feature_vector
+from blockcipher_ai_eval.features import structure_feature_vector
+from blockcipher_ai_eval.features.encodings import pair_bits_for_encoding
 from blockcipher_ai_eval.training import TrainingConfig, train_binary_classifier
 
 
@@ -394,17 +395,10 @@ def _infer_pair_bits(
     feature_encoding: str,
     pairs_per_sample: int,
 ) -> int | None:
-    if feature_encoding == "ciphertext_pair_bits":
-        return block_bits * 2
-    if feature_encoding == "ciphertext_xor_bits":
-        return block_bits
-    if feature_encoding == "ciphertext_xor_spn_aligned_bits":
-        return block_bits * 2
-    if feature_encoding == "ciphertext_pair_xor_bits":
-        return block_bits * 3
-    if feature_encoding == "ciphertext_pair_xor_spn_aligned_bits":
-        return block_bits * 4
-    return None
+    try:
+        return pair_bits_for_encoding(block_bits, feature_encoding)
+    except ValueError:
+        return None
 
 
 def _optional_int(value: str | None) -> int | None:

@@ -23,7 +23,7 @@ from blockcipher_ai_eval.experiments import (
 )
 from blockcipher_ai_eval.hpo import select_trials
 from blockcipher_ai_eval.innovation_one import CipherProfile
-from blockcipher_ai_eval.structure_features import structure_feature_vector
+from blockcipher_ai_eval.features import structure_feature_vector
 from blockcipher_ai_eval.training import TrainingConfig, train_binary_classifier
 
 

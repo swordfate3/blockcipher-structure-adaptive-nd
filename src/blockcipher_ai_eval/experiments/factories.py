@@ -44,7 +44,7 @@ from blockcipher_ai_eval.models import (
     StructureAwareMoEDistinguisher,
     TransformerEncoderDistinguisher,
 )
-from blockcipher_ai_eval.structure_features import STRUCTURE_FEATURE_NAMES
+from blockcipher_ai_eval.features import STRUCTURE_FEATURE_NAMES
 
 
 MOE_V5_PRESENT_HPO_TRIAL20_OPTIONS = {

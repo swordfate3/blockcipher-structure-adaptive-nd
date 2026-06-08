@@ -1,0 +1,75 @@
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+
+def _load_generator():
+    script_path = Path(__file__).resolve().parents[1] / "scripts" / "generate_remote_experiment_scripts.py"
+    spec = importlib.util.spec_from_file_location("generate_remote_experiment_scripts", script_path)
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module.generate_remote_scripts
+
+
+generate_remote_scripts = _load_generator()
+
+
+def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path: Path):
+    spec_path = tmp_path / "spec.json"
+    output_dir = tmp_path / "remote"
+    monitor_dir = tmp_path / "scripts"
+    spec_path.write_text(
+        json.dumps(
+            {
+                "run_id": "innovation1-demo-gpu0-20260608",
+                "task_name": "innovation1_demo_gpu0_20260608",
+                "plan": "experiments\\plans\\demo.csv",
+                "expected_rows": 4,
+                "device": "cuda:0",
+                "epochs": 3,
+                "batch_size": 128,
+                "hidden_bits": 32,
+                "learning_rate": 0.002,
+                "optimizer": "adamw",
+                "weight_decay": 0.0001,
+                "archive_work_id": "demo_20260608",
+                "validation_label": "demo_validation",
+                "monitor_script_name": "monitor_demo_results.sh",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    generated = generate_remote_scripts(spec_path, output_dir=output_dir, monitor_dir=monitor_dir)
+
+    assert generated.run_script.name == "run_innovation1-demo-gpu0-20260608_and_push.cmd"
+    assert generated.launch_script.name == "launch_innovation1-demo-gpu0-20260608.cmd"
+    assert generated.schedule_script.name == "schedule_innovation1_demo_gpu0_20260608.cmd"
+    assert generated.monitor_script.name == "monitor_demo_results.sh"
+
+    run_text = generated.run_script.read_text(encoding="utf-8")
+    assert "set ROOT=G:\\lxy" in run_text
+    assert "set RUN_ID=innovation1-demo-gpu0-20260608" in run_text
+    assert "set EXPECTED_ROWS=4" in run_text
+    assert "--plan experiments\\plans\\demo.csv" in run_text
+    assert "--device cuda:0" in run_text
+    assert "--epochs 3" in run_text
+    assert "--batch-size 128" in run_text
+    assert "git add results_archive\\%RUN_ID%" in run_text
+    assert "git push origin results/%RUN_ID%" in run_text
+    assert "validation=demo_validation" in run_text
+
+    launcher_text = generated.launch_script.read_text(encoding="utf-8")
+    assert "run_innovation1-demo-gpu0-20260608_and_push.cmd" in launcher_text
+
+    schedule_text = generated.schedule_script.read_text(encoding="utf-8")
+    assert "schtasks /Create /TN innovation1_demo_gpu0_20260608" in schedule_text
+    assert "launch_innovation1-demo-gpu0-20260608.cmd" in schedule_text
+
+    monitor_text = generated.monitor_script.read_text(encoding="utf-8")
+    assert "innovation1-demo-gpu0-20260608=4" in monitor_text
+    assert "scripts/monitor_remote_results.py" in monitor_text

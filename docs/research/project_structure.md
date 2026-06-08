@@ -1,49 +1,122 @@
-# 项目结构说明
+# Blockcipher Structure-Adaptive ND Project Structure
 
-当前代码按“创新一最小实验闭环”组织，先保证密码原语、差分数据集、结构-网络匹配规则能独立验证，再逐步接入训练器和可视化平台。
+This project is organized around innovation one: structure-aware neural differential distinguishers for reduced-round block ciphers. The codebase keeps legacy import paths for reproducibility, but new code should follow the canonical structure below.
 
-## 目录分层
-
-```text
-src/blockcipher_ai_eval/
-├── ciphers/
-│   ├── __init__.py      # 对外导出密码类，保持稳定导入路径
-│   ├── base.py          # ReducedRoundCipher 协议与公共位运算
-│   ├── speck.py         # SPECK32/64 reduced/full-round 实现
-│   ├── present.py       # PRESENT-80 reduced/full-round 实现
-│   └── sm4.py           # SM4 reduced/full-round 实现
-├── models/
-│   ├── __init__.py      # 对外导出神经网络模型
-│   ├── mlp.py           # MLP baseline 神经区分器
-│   ├── cnn.py           # 局部卷积 baseline 神经区分器
-│   ├── resnet_bitslice.py # Gohr 风格残差 bit-slice 神经区分器
-│   ├── dbitnet.py       # DBitNet 风格扩张卷积神经区分器
-│   ├── lstm_roundseq.py # 轮序列 / Feistel-like 候选神经区分器
-│   └── transformer_encoder.py # 高成本全局注意力消融模型
-├── training/
-│   ├── __init__.py      # 对外导出训练 API
-│   └── binary.py        # 二分类训练循环、Accuracy/AUC/Advantage 指标
-├── datasets.py          # 神经区分器差分数据集生成与 bit 编码
-└── innovation_one.py    # 结构特征、文献证据规则、匹配评分与实验矩阵
-```
-
-## 设计约束
-
-1. 每个分组密码算法必须独立成文件，不能把多个算法堆在一个 `ciphers.py` 中。
-2. `ciphers/base.py` 只放公共协议和通用位运算，不放具体算法常量。
-3. 新增密码时优先创建 `src/blockcipher_ai_eval/ciphers/<cipher_name>.py`，并在 `ciphers/__init__.py` 导出。
-4. 每个密码必须有公开测试向量或自说明的 reduced-round 测试，放在 `tests/test_ciphers.py` 或独立测试文件中。
-5. 数据集生成只依赖 `ReducedRoundCipher` 协议，不能绑定具体算法类。
-6. 神经网络模型放在 `models/`，训练逻辑放在 `training/`，实验脚本放在仓库根目录的 `experiments/`。
-
-## 下一步建议结构
-
-后续接入训练时建议继续拆分：
+## Source Layout
 
 ```text
 src/blockcipher_ai_eval/
-├── experiments/         # 实验配置解析和批量运行
-└── reporting/           # 表格、曲线、论文报告生成
+├── ciphers/                         # Reduced-round cipher implementations
+│   ├── arx/                         # SPECK, CHAM, LEA
+│   ├── feistel/                     # SIMON, SIMECK, DES, SM4, Camellia
+│   └── spn/                         # PRESENT, GIFT, AES, ARIA
+├── features/                        # Feature encodings and structure descriptors
+│   ├── registry.py                  # Supported feature encodings and pair-width lookup
+│   ├── pair_features.py             # Ciphertext pair / xor / SPN-aligned pair encodings
+│   ├── profile.py                   # Cipher structure profile vector for MoE/routing
+│   ├── spn_aligned.py               # SPN inverse-permutation-aligned differences
+│   ├── arx_aligned.py               # Future ARX-aware feature namespace
+│   └── feistel_aligned.py           # Future Feistel-aware feature namespace
+├── models/                          # Neural distinguisher architectures
+│   ├── common/                      # Shared activations, normalization, pooling
+│   ├── baseline/                    # Cipher-agnostic and literature-inspired baselines
+│   ├── structure/                   # Structure-aware models and experts
+│   │   ├── adaptive_dbitnet.py      # Adaptive / structure-conditioned DBitNet backbones
+│   │   ├── moe.py                   # Structure-aware MoE and routing
+│   │   ├── spn/                     # SPN-specific experts
+│   │   │   ├── cell_pairset.py
+│   │   │   ├── nibble_conv_pairset.py
+│   │   │   └── token_mixer_pairset.py
+│   │   ├── arx/                     # Future ARX-specific experts
+│   │   └── feistel/                 # Future Feistel-specific experts
+│   ├── registry.py                  # Model registry for canonical model keys
+│   └── *.py                         # Legacy import facades for reproducibility
+├── datasets.py                      # Differential sample generation, delegates feature encoding
+├── experiments/                     # Cipher/model factories and difference profiles
+└── training/                        # Binary training and evaluation utilities
 ```
 
-这样创新一的“密码结构 - 网络架构 - 实验协议”三层会比较清楚，不会在一个脚本里混成一团。
+## Canonical Imports
+
+New code should prefer these paths:
+
+```python
+from blockcipher_ai_eval.models.baseline import MlpDistinguisher
+from blockcipher_ai_eval.models.common import build_activation
+from blockcipher_ai_eval.models.structure import StructureAwareMoEDistinguisher
+from blockcipher_ai_eval.models.structure.spn import SpnTokenMixerPairSetDistinguisher
+from blockcipher_ai_eval.features.registry import pair_bits_for_encoding
+from blockcipher_ai_eval.features.pair_features import encode_ciphertext_pair
+from blockcipher_ai_eval.features.spn_aligned import inverse_permutation_difference
+```
+
+The legacy paths still work for old plans and result reproducibility:
+
+```python
+from blockcipher_ai_eval.models import SpnTokenMixerPairSetDistinguisher
+from blockcipher_ai_eval.models.adaptive_dbitnet import SpnTokenMixerPairSetDistinguisher
+from blockcipher_ai_eval.models.spn import SpnTokenMixerPairSetDistinguisher
+from blockcipher_ai_eval.structure_features import structure_feature_vector
+from blockcipher_ai_eval.datasets import int_to_bits
+```
+
+## Innovation-One Boundary
+
+The current SPN result is built from two separate concerns:
+
+```text
+Feature side:
+  src/blockcipher_ai_eval/features/spn_aligned.py
+  src/blockcipher_ai_eval/features/pair_features.py
+
+Model side:
+  src/blockcipher_ai_eval/models/structure/spn/token_mixer_pairset.py
+```
+
+This keeps the paper claim clean: public SPN structure enters through an explicit aligned feature representation, and the SPN TokenMixer consumes that representation.
+
+## Experiments
+
+```text
+experiments/
+├── build_plan.py                    # Generic JSON-config -> CSV plan builder
+├── build_innovation_one_matrix.py   # Literature-ranked matrix builder
+├── configs/                         # Experiment and remote-run configs
+├── plans/                           # Generated CSV matrices
+├── hparam_spaces/                   # HPO search spaces
+├── run_innovation_one_matrix.py     # Main matrix runner
+└── summarize_*.py                   # Result summarizers
+
+archive/legacy/experiments/builders/ # Historical build_innovation1_* builders
+```
+
+Historical one-off builders are archived under `archive/legacy/experiments/builders/` for reproducibility. New experiments should use `experiments/build_plan.py` with JSON configs under `experiments/configs/innovation1/`. For example:
+
+```bash
+uv run python experiments/build_plan.py experiments/configs/innovation1/spn_present_strict_crosskey_10seed.json
+```
+
+## Remote Execution
+
+```text
+scripts/
+├── generate_remote_experiment_scripts.py # Generate run/launch/schedule/monitor scripts from JSON specs
+└── monitor_remote_results.py             # Generic result-branch monitor/retriever
+
+archive/legacy/scripts/monitors/          # Historical monitor_innovation1_*.sh wrappers
+archive/legacy/scripts/remote/            # Historical generated/hand-written Windows scripts
+```
+
+Stable remote workflow:
+
+```text
+local commit/push -> remote G:/lxy/<project> pull -> run torch310 -> push results branch -> local monitor retrieves outputs/remote_results
+```
+
+Remote configs live under `experiments/configs/remote/`. New remote experiments should prefer:
+
+```bash
+uv run python scripts/generate_remote_experiment_scripts.py experiments/configs/remote/<run>.json
+```
+
+Historical hand-written remote scripts are archived under `archive/legacy/scripts/` because they are part of prior result reproducibility, not active entry points.

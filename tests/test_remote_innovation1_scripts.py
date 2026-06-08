@@ -1,9 +1,12 @@
 from pathlib import Path
 
+LEGACY_REMOTE = Path("archive/legacy/scripts/remote")
+LEGACY_MONITORS = Path("archive/legacy/scripts/monitors")
+
 
 def test_remote_debug_large_scripts_use_expected_devices_and_plans():
-    gpu0 = Path("scripts/remote/run_innovation1_debug_large_gpu0_and_push.cmd").read_text(encoding="utf-8")
-    gpu1 = Path("scripts/remote/run_innovation1_debug_large_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    gpu0 = (LEGACY_REMOTE / "run_innovation1_debug_large_gpu0_and_push.cmd").read_text(encoding="utf-8")
+    gpu1 = (LEGACY_REMOTE / "run_innovation1_debug_large_gpu1_and_push.cmd").read_text(encoding="utf-8")
 
     assert "set ROOT=G:\\lxy" in gpu0
     assert "set RUN_ROOT=%ROOT%\\%PROJECT_ID%-runs" in gpu0
@@ -28,8 +31,8 @@ def test_remote_debug_large_scripts_use_expected_devices_and_plans():
 
 def test_remote_debug_large_scripts_archive_curated_results_only():
     for script_path in [
-        "scripts/remote/run_innovation1_debug_large_gpu0_and_push.cmd",
-        "scripts/remote/run_innovation1_debug_large_gpu1_and_push.cmd",
+        LEGACY_REMOTE / "run_innovation1_debug_large_gpu0_and_push.cmd",
+        LEGACY_REMOTE / "run_innovation1_debug_large_gpu1_and_push.cmd",
     ]:
         text = Path(script_path).read_text(encoding="utf-8")
         assert "git add ." not in text
@@ -41,8 +44,8 @@ def test_remote_debug_large_scripts_archive_curated_results_only():
 
 
 def test_remote_structure_pairset_scripts_use_expected_devices_plans_and_gates():
-    gpu0 = Path("scripts/remote/run_innovation1_structure_pairset_gpu0_and_push.cmd").read_text(encoding="utf-8")
-    gpu1 = Path("scripts/remote/run_innovation1_structure_pairset_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    gpu0 = (LEGACY_REMOTE / "run_innovation1_structure_pairset_gpu0_and_push.cmd").read_text(encoding="utf-8")
+    gpu1 = (LEGACY_REMOTE / "run_innovation1_structure_pairset_gpu1_and_push.cmd").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-structure-pairset-gpu0-20260605" in gpu0
     assert "experiments\\plans\\innovation1_structure_pairset_gpu0.csv" in gpu0
@@ -60,9 +63,9 @@ def test_remote_structure_pairset_scripts_use_expected_devices_plans_and_gates()
 
 
 def test_remote_spn_pairset_v2_script_uses_expected_plan_and_gate():
-    script = Path("scripts/remote/run_innovation1_spn_pairset_v2_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
-    launcher = Path("scripts/remote/launch_innovation1_spn_pairset_v2_present_gpu1.cmd").read_text(encoding="utf-8")
-    scheduler = Path("scripts/remote/schedule_innovation1_spn_pairset_v2_present.cmd").read_text(encoding="utf-8")
+    script = (LEGACY_REMOTE / "run_innovation1_spn_pairset_v2_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = (LEGACY_REMOTE / "launch_innovation1_spn_pairset_v2_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = (LEGACY_REMOTE / "schedule_innovation1_spn_pairset_v2_present.cmd").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-spn-pairset-v2-present-gpu1-20260605" in script
     assert "experiments\\plans\\innovation1_spn_pairset_v2_present.csv" in script
@@ -76,10 +79,10 @@ def test_remote_spn_pairset_v2_script_uses_expected_plan_and_gate():
 
 
 def test_remote_spn_nibble_hpo_script_uses_expected_search_space_and_gate():
-    script = Path("scripts/remote/run_innovation1_spn_nibble_hpo_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
-    launcher = Path("scripts/remote/launch_innovation1_spn_nibble_hpo_present_gpu1.cmd").read_text(encoding="utf-8")
-    scheduler = Path("scripts/remote/schedule_innovation1_spn_nibble_hpo_present.cmd").read_text(encoding="utf-8")
-    monitor = Path("scripts/monitor_innovation1_spn_nibble_hpo_present_results.sh").read_text(encoding="utf-8")
+    script = (LEGACY_REMOTE / "run_innovation1_spn_nibble_hpo_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = (LEGACY_REMOTE / "launch_innovation1_spn_nibble_hpo_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = (LEGACY_REMOTE / "schedule_innovation1_spn_nibble_hpo_present.cmd").read_text(encoding="utf-8")
+    monitor = (LEGACY_MONITORS / "monitor_innovation1_spn_nibble_hpo_present_results.sh").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-spn-nibble-hpo-present-gpu1-20260605" in script
     assert "experiments\\run_hparam_search.py" in script
@@ -97,10 +100,10 @@ def test_remote_spn_nibble_hpo_script_uses_expected_search_space_and_gate():
 
 
 def test_remote_spn_token_mixer_script_uses_expected_plan_and_gate():
-    script = Path("scripts/remote/run_innovation1_spn_token_mixer_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
-    launcher = Path("scripts/remote/launch_innovation1_spn_token_mixer_present_gpu1.cmd").read_text(encoding="utf-8")
-    scheduler = Path("scripts/remote/schedule_innovation1_spn_token_mixer_present.cmd").read_text(encoding="utf-8")
-    monitor = Path("scripts/monitor_innovation1_spn_token_mixer_present_results.sh").read_text(encoding="utf-8")
+    script = (LEGACY_REMOTE / "run_innovation1_spn_token_mixer_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = (LEGACY_REMOTE / "launch_innovation1_spn_token_mixer_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = (LEGACY_REMOTE / "schedule_innovation1_spn_token_mixer_present.cmd").read_text(encoding="utf-8")
+    monitor = (LEGACY_MONITORS / "monitor_innovation1_spn_token_mixer_present_results.sh").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-spn-token-mixer-present-gpu1-20260605" in script
     assert "experiments\\plans\\innovation1_spn_token_mixer_present.csv" in script
@@ -116,10 +119,10 @@ def test_remote_spn_token_mixer_script_uses_expected_plan_and_gate():
 
 
 def test_remote_moe_v5_script_uses_expected_plan_and_gate():
-    script = Path("scripts/remote/run_innovation1_moe_v5_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
-    launcher = Path("scripts/remote/launch_innovation1_moe_v5_present_gpu1.cmd").read_text(encoding="utf-8")
-    scheduler = Path("scripts/remote/schedule_innovation1_moe_v5_present.cmd").read_text(encoding="utf-8")
-    monitor = Path("scripts/monitor_innovation1_moe_v5_present_results.sh").read_text(encoding="utf-8")
+    script = (LEGACY_REMOTE / "run_innovation1_moe_v5_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = (LEGACY_REMOTE / "launch_innovation1_moe_v5_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = (LEGACY_REMOTE / "schedule_innovation1_moe_v5_present.cmd").read_text(encoding="utf-8")
+    monitor = (LEGACY_MONITORS / "monitor_innovation1_moe_v5_present_results.sh").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-moe-v5-present-gpu1-20260606" in script
     assert "experiments\\plans\\innovation1_moe_v5_present.csv" in script
@@ -136,10 +139,10 @@ def test_remote_moe_v5_script_uses_expected_plan_and_gate():
 
 
 def test_remote_moe_v5_hpo_script_uses_expected_space_and_gate():
-    script = Path("scripts/remote/run_innovation1_moe_v5_hpo_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
-    launcher = Path("scripts/remote/launch_innovation1_moe_v5_hpo_present_gpu1.cmd").read_text(encoding="utf-8")
-    scheduler = Path("scripts/remote/schedule_innovation1_moe_v5_hpo_present.cmd").read_text(encoding="utf-8")
-    monitor = Path("scripts/monitor_innovation1_moe_v5_hpo_present_results.sh").read_text(encoding="utf-8")
+    script = (LEGACY_REMOTE / "run_innovation1_moe_v5_hpo_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = (LEGACY_REMOTE / "launch_innovation1_moe_v5_hpo_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = (LEGACY_REMOTE / "schedule_innovation1_moe_v5_hpo_present.cmd").read_text(encoding="utf-8")
+    monitor = (LEGACY_MONITORS / "monitor_innovation1_moe_v5_hpo_present_results.sh").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-moe-v5-hpo-present-gpu1-20260606" in script
     assert r"experiments\run_hparam_search.py" in script
@@ -158,10 +161,10 @@ def test_remote_moe_v5_hpo_script_uses_expected_space_and_gate():
 
 
 def test_remote_moe_v5_hpo_best_validation_script_uses_expected_plan_and_gate():
-    script = Path("scripts/remote/run_innovation1_moe_v5_hpo_best_validate_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
-    launcher = Path("scripts/remote/launch_innovation1_moe_v5_hpo_best_validate_present_gpu1.cmd").read_text(encoding="utf-8")
-    scheduler = Path("scripts/remote/schedule_innovation1_moe_v5_hpo_best_validate_present.cmd").read_text(encoding="utf-8")
-    monitor = Path("scripts/monitor_innovation1_moe_v5_hpo_best_validate_present_results.sh").read_text(encoding="utf-8")
+    script = (LEGACY_REMOTE / "run_innovation1_moe_v5_hpo_best_validate_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = (LEGACY_REMOTE / "launch_innovation1_moe_v5_hpo_best_validate_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = (LEGACY_REMOTE / "schedule_innovation1_moe_v5_hpo_best_validate_present.cmd").read_text(encoding="utf-8")
+    monitor = (LEGACY_MONITORS / "monitor_innovation1_moe_v5_hpo_best_validate_present_results.sh").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-moe-v5-hpo-best-validate-present-gpu1-20260606" in script
     assert r"experiments\plans\innovation1_moe_v5_hpo_best_validate_present.csv" in script
@@ -179,10 +182,10 @@ def test_remote_moe_v5_hpo_best_validation_script_uses_expected_plan_and_gate():
 
 
 def test_remote_moe_v5_hpo_multiseed_script_uses_expected_space_seeds_and_gate():
-    script = Path("scripts/remote/run_innovation1_moe_v5_hpo_multiseed_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
-    launcher = Path("scripts/remote/launch_innovation1_moe_v5_hpo_multiseed_present_gpu1.cmd").read_text(encoding="utf-8")
-    scheduler = Path("scripts/remote/schedule_innovation1_moe_v5_hpo_multiseed_present.cmd").read_text(encoding="utf-8")
-    monitor = Path("scripts/monitor_innovation1_moe_v5_hpo_multiseed_present_results.sh").read_text(encoding="utf-8")
+    script = (LEGACY_REMOTE / "run_innovation1_moe_v5_hpo_multiseed_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = (LEGACY_REMOTE / "launch_innovation1_moe_v5_hpo_multiseed_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = (LEGACY_REMOTE / "schedule_innovation1_moe_v5_hpo_multiseed_present.cmd").read_text(encoding="utf-8")
+    monitor = (LEGACY_MONITORS / "monitor_innovation1_moe_v5_hpo_multiseed_present_results.sh").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-moe-v5-hpo-multiseed-present-gpu1-20260606" in script
     assert "experiments\\run_hparam_search.py" in script
@@ -203,10 +206,10 @@ def test_remote_moe_v5_hpo_multiseed_script_uses_expected_space_seeds_and_gate()
 
 
 def test_remote_spn_aligned_present_script_uses_short_archive_work_and_gate():
-    script = Path("scripts/remote/run_innovation1_spn_aligned_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
-    launcher = Path("scripts/remote/launch_innovation1_spn_aligned_present_gpu1.cmd").read_text(encoding="utf-8")
-    scheduler = Path("scripts/remote/schedule_innovation1_spn_aligned_present.cmd").read_text(encoding="utf-8")
-    monitor = Path("scripts/monitor_innovation1_spn_aligned_present_results.sh").read_text(encoding="utf-8")
+    script = (LEGACY_REMOTE / "run_innovation1_spn_aligned_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = (LEGACY_REMOTE / "launch_innovation1_spn_aligned_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = (LEGACY_REMOTE / "schedule_innovation1_spn_aligned_present.cmd").read_text(encoding="utf-8")
+    monitor = (LEGACY_MONITORS / "monitor_innovation1_spn_aligned_present_results.sh").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-spn-aligned-present-gpu1-20260607" in script
     assert "set ARCHIVE_WORK=%ROOT%\\archive_work\\spn_aligned_20260607" in script
@@ -224,10 +227,10 @@ def test_remote_spn_aligned_present_script_uses_short_archive_work_and_gate():
 
 
 def test_remote_spn_aligned_confirm_present_script_uses_expected_plan_and_gate():
-    script = Path("scripts/remote/run_innovation1_spn_aligned_confirm_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
-    launcher = Path("scripts/remote/launch_innovation1_spn_aligned_confirm_present_gpu1.cmd").read_text(encoding="utf-8")
-    scheduler = Path("scripts/remote/schedule_innovation1_spn_aligned_confirm_present.cmd").read_text(encoding="utf-8")
-    monitor = Path("scripts/monitor_innovation1_spn_aligned_confirm_present_results.sh").read_text(encoding="utf-8")
+    script = (LEGACY_REMOTE / "run_innovation1_spn_aligned_confirm_present_gpu1_and_push.cmd").read_text(encoding="utf-8")
+    launcher = (LEGACY_REMOTE / "launch_innovation1_spn_aligned_confirm_present_gpu1.cmd").read_text(encoding="utf-8")
+    scheduler = (LEGACY_REMOTE / "schedule_innovation1_spn_aligned_confirm_present.cmd").read_text(encoding="utf-8")
+    monitor = (LEGACY_MONITORS / "monitor_innovation1_spn_aligned_confirm_present_results.sh").read_text(encoding="utf-8")
 
     assert "set RUN_ID=innovation1-spn-aligned-confirm-present-gpu1-20260607" in script
     assert "set ARCHIVE_WORK=%ROOT%\\archive_work\\spn_aligned_confirm_20260607" in script

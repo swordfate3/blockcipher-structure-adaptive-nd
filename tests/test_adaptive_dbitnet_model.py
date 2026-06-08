@@ -13,6 +13,16 @@ from blockcipher_ai_eval.models.adaptive_dbitnet import (
     structure_conditioned_dilations,
 )
 
+from blockcipher_ai_eval.models.spn import (
+    SpnCellPairSetDBitNetDistinguisher as ModularSpnCellPairSetDBitNetDistinguisher,
+)
+from blockcipher_ai_eval.models.spn import (
+    SpnNibbleConvPairSetDistinguisher as ModularSpnNibbleConvPairSetDistinguisher,
+)
+from blockcipher_ai_eval.models.spn import (
+    SpnTokenMixerPairSetDistinguisher as ModularSpnTokenMixerPairSetDistinguisher,
+)
+
 
 @pytest.mark.parametrize(
     ("input_bits", "expected"),
@@ -418,3 +428,9 @@ def test_adaptive_dbitnet_rejects_too_small_or_odd_inputs():
         AdaptiveDBitNetDistinguisher(input_bits=95, base_channels=8)
     with pytest.raises(ValueError, match="at least 16 input bits"):
         AdaptiveDBitNetDistinguisher(input_bits=14, base_channels=8)
+
+
+def test_spn_experts_are_available_from_modular_spn_module_and_legacy_path():
+    assert ModularSpnCellPairSetDBitNetDistinguisher is SpnCellPairSetDBitNetDistinguisher
+    assert ModularSpnNibbleConvPairSetDistinguisher is SpnNibbleConvPairSetDistinguisher
+    assert ModularSpnTokenMixerPairSetDistinguisher is SpnTokenMixerPairSetDistinguisher
