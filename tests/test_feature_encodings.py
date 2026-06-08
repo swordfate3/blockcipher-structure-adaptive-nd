@@ -1,4 +1,5 @@
 from blockcipher_ai_eval.ciphers import Present80, Speck32_64
+from blockcipher_ai_eval.ciphers.spn.gift import Gift64
 from blockcipher_ai_eval.datasets import int_to_bits as legacy_int_to_bits
 from blockcipher_ai_eval.features.encodings import (
     encode_ciphertext_pair,
@@ -36,6 +37,25 @@ def test_feature_encoding_module_encodes_spn_aligned_pair_features():
     assert encoded[64:128] == int_to_bits(right, 64)
     assert encoded[128:192] == int_to_bits(difference, 64)
     assert encoded[192:] == int_to_bits(Present80.inverse_permutation_layer(difference), 64)
+
+
+def test_feature_encoding_module_encodes_gift_spn_aligned_pair_features():
+    cipher = Gift64(rounds=1, key=0)
+    left = 0x0123456789ABCDEF
+    right = left ^ 0x000F00000000F000
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding="ciphertext_pair_xor_spn_aligned_bits",
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    assert len(encoded) == 256
+    assert encoded[128:192] == int_to_bits(difference, 64)
+    assert encoded[192:] == int_to_bits(Gift64.inverse_permutation_layer(difference), 64)
 
 
 def test_spn_aligned_encoding_requires_inverse_permutation_layer():

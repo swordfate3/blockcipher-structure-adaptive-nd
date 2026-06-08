@@ -47,6 +47,22 @@ class CipherProfile:
         )
 
     @staticmethod
+    def gift64() -> "CipherProfile":
+        return CipherProfile(
+            name="GIFT-64",
+            structure="SPN",
+            block_bits=64,
+            key_bits=128,
+            traits=(
+                "sbox_layer",
+                "permutation_layer",
+                "sbox_locality",
+                "bit_permutation",
+                "lightweight_spn",
+            ),
+        )
+
+    @staticmethod
     def sm4() -> "CipherProfile":
         return CipherProfile(
             name="SM4",

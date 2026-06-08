@@ -218,3 +218,12 @@ def test_cipher_profile_interface_exposes_metadata():
     assert cipher.block_bits == 32
     assert cipher.structure == "ARX"
     assert cipher.rounds == 3
+
+
+def test_build_cipher_gift64_honors_explicit_key():
+    default_cipher = build_cipher("gift64", rounds=5)
+    keyed_cipher = build_cipher("gift64", rounds=5, key=0x11111111111111111111111111111111)
+
+    assert default_cipher.key == 0
+    assert keyed_cipher.key == 0x11111111111111111111111111111111
+    assert default_cipher.encrypt(0x0123456789ABCDEF) != keyed_cipher.encrypt(0x0123456789ABCDEF)

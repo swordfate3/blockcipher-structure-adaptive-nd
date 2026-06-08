@@ -430,6 +430,7 @@ def _cipher_profile(cipher_key: str) -> CipherProfile:
     mapping = {
         "speck32": CipherProfile.speck32_64,
         "present80": CipherProfile.present80,
+        "gift64": CipherProfile.gift64,
         "sm4": CipherProfile.sm4,
     }
     try:
@@ -442,6 +443,7 @@ def _cipher_key(cipher_name: str) -> str:
     mapping = {
         "SPECK32/64": "speck32",
         "PRESENT-80": "present80",
+        "GIFT-64": "gift64",
         "SM4": "sm4",
     }
     try:

@@ -145,7 +145,7 @@ def build_cipher(name: str, rounds: int, key: int | None = None) -> ReducedRound
     if name == "present80":
         return Present80(rounds=rounds, key=0x00000000000000000000 if key is None else key)
     if name == "gift64":
-        return Gift64(rounds=rounds, key=0x00000000000000000000000000000000)
+        return Gift64(rounds=rounds, key=0x00000000000000000000000000000000 if key is None else key)
     if name == "sm4":
         return Sm4Reduced(rounds=rounds, key=0x0123456789ABCDEFFEDCBA9876543210)
     raise ValueError(f"unsupported cipher: {name}")

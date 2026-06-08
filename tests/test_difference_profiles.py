@@ -27,6 +27,11 @@ def test_literature_difference_profiles_include_core_cipher_settings():
     )
     assert profiles["sm4_li_sun_2025_19r_family"].kind == "difference_family"
 
+    gift = profiles["gift64_shen2024_spn_screen"]
+    assert gift.cipher == "gift64"
+    assert gift.difference == 0x0000000000000040
+    assert "GIFT" in gift.source
+
 
 def test_difference_profile_schema_can_describe_recent_non_xor_families():
     profiles = literature_difference_profiles()

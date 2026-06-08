@@ -125,6 +125,13 @@ def _perm_bits(state: int) -> int:
     return out
 
 
+def _inverse_perm_bits(state: int) -> int:
+    out = 0
+    for source, target in enumerate(_GIFT64_PERM):
+        out |= ((state >> target) & 1) << source
+    return out
+
+
 def _key_nibbles_from_int(key: int) -> list[int]:
     return [(key >> (4 * i)) & 0xF for i in range(32)]
 
@@ -151,6 +158,18 @@ class Gift64:
     structure: str = "SPN"
     block_bits: int = 64
     key_bits: int = 128
+
+    @staticmethod
+    def permutation_layer(state: int) -> int:
+        if state < 0 or state >= (1 << 64):
+            raise ValueError("GIFT-64 state must fit in 64 bits")
+        return _perm_bits(state)
+
+    @staticmethod
+    def inverse_permutation_layer(state: int) -> int:
+        if state < 0 or state >= (1 << 64):
+            raise ValueError("GIFT-64 state must fit in 64 bits")
+        return _inverse_perm_bits(state)
 
     def __post_init__(self) -> None:
         if self.rounds < 1 or self.rounds > 28:

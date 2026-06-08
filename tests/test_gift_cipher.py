@@ -31,3 +31,18 @@ def test_gift64_official_vectors() -> None:
     for key, plaintext, expected_ciphertext in vectors:
         cipher = Gift64(key=_be_int(key))
         assert _be_hex(cipher.encrypt(_be_int(plaintext)), 8) == expected_ciphertext
+
+
+def test_gift64_public_bit_permutation_round_trips() -> None:
+    samples = [
+        0x0000000000000000,
+        0x0000000000000001,
+        0x8000000000000000,
+        0x0123456789ABCDEF,
+        0xFEDCBA9876543210,
+    ]
+
+    for value in samples:
+        permuted = Gift64.permutation_layer(value)
+        assert Gift64.inverse_permutation_layer(permuted) == value
+        assert Gift64.permutation_layer(Gift64.inverse_permutation_layer(value)) == value

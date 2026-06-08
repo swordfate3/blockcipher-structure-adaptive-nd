@@ -80,6 +80,14 @@ def literature_difference_profiles() -> dict[str, DifferenceProfile]:
             differences=(0x0007000000000007,),
             source="Wang differentials via Jain/Kohli/Mishra 2020/2021",
         ),
+        "gift64_shen2024_spn_screen": DifferenceProfile(
+            name="gift64_shen2024_spn_screen",
+            cipher="gift64",
+            kind="fixed",
+            differences=(0x0000000000000040,),
+            source="Shen/Song/Lu/Long/Tian 2024 GIFT neural distinguisher screening profile",
+            note="Fixed xor input difference for first GIFT-64 SPN structure-alignment screening; refine after literature-specific reproduction.",
+        ),
         "sm4_yu2023_conv_resnet": DifferenceProfile(
             name="sm4_yu2023_conv_resnet",
             cipher="sm4",

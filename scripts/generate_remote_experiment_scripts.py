@@ -62,7 +62,7 @@ def render_run_script(spec: dict[str, Any]) -> str:
     runner = str(spec.get("runner", r"experiments\run_innovation_one_matrix.py"))
     summarizer = str(spec.get("summarizer", r"experiments\summarize_innovation_one_results.py"))
 
-    return f"""@echo off
+    return rf"""@echo off
 setlocal
 set HTTP_PROXY=
 set HTTPS_PROXY=

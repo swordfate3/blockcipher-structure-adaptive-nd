@@ -106,6 +106,52 @@ def test_run_innovation_one_matrix_can_execute_literature_ranked_plan(tmp_path: 
     assert "wrote 2 rows" in completed.stdout
 
 
+def test_run_innovation_one_matrix_can_execute_gift_spn_aligned_plan(tmp_path: Path):
+    plan_path = tmp_path / "gift_plan.csv"
+    output_path = tmp_path / "gift_results.jsonl"
+    plan_path.write_text(
+        "\n".join(
+            [
+                "cipher,structure,network,model_key,family,architecture_rank,score,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode,train_key,validation_key,difference_profile,difference_member,evidence,literature",
+                "GIFT-64,SPN,SPN-TokenMixer-PairSet,spn_token_mixer_pairset,spn_token_mixer,0,68,1,0,8,2,ciphertext_pair_xor_spn_aligned_bits,encrypted_random_plaintexts,0x00000000000000000000000000000000,0x11111111111111111111111111111111,gift64_shen2024_spn_screen,0,gift spn aligned smoke,Shen 2024 GIFT neural distinguisher",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--plan",
+            str(plan_path),
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--device",
+            "cpu",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert len(rows) == 1
+    assert rows[0]["cipher"] == "GIFT-64"
+    assert rows[0]["structure"] == "SPN"
+    assert rows[0]["feature_encoding"] == "ciphertext_pair_xor_spn_aligned_bits"
+    assert rows[0]["difference_profile"] == "gift64_shen2024_spn_screen"
+    assert rows[0]["input_difference"] == 0x0000000000000040
+    assert rows[0]["training"]["input_bits"] == 512
+
+
 def test_run_innovation_one_matrix_can_use_literature_difference_profile(tmp_path: Path):
     output_path = tmp_path / "speck_profile.jsonl"
 

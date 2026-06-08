@@ -73,3 +73,30 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     monitor_text = generated.monitor_script.read_text(encoding="utf-8")
     assert "innovation1-demo-gpu0-20260608=4" in monitor_text
     assert "scripts/monitor_remote_results.py" in monitor_text
+
+
+def test_generate_remote_run_script_escapes_windows_paths(tmp_path: Path):
+    spec_path = tmp_path / "spec.json"
+    output_dir = tmp_path / "remote"
+    monitor_dir = tmp_path / "scripts"
+    spec_path.write_text(
+        json.dumps(
+            {
+                "run_id": "innovation1-path-check-gpu0-20260608",
+                "task_name": "innovation1_path_check_gpu0_20260608",
+                "plan": "experiments\\plans\\demo.csv",
+                "expected_rows": 1,
+                "device": "cuda:0",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    generated = generate_remote_scripts(spec_path, output_dir=output_dir, monitor_dir=monitor_dir)
+    run_text = generated.run_script.read_text(encoding="utf-8")
+
+    assert "\r" not in run_text
+    assert "\a" not in run_text
+    assert 'copy "%RUN_DIR%\\results\\%RUN_ID%.jsonl"' in run_text
+    assert "results_archive\\%RUN_ID%\\run_manifest.txt" in run_text
+    assert "set ARCHIVE_WORK=%ROOT%\\archive_work\\innovation1_path_check_gpu0_20260608" in run_text
