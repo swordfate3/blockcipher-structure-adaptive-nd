@@ -1,0 +1,14 @@
+run_id=innovation1-spn-gift64-aligned-confirm-10seed-gpu0-20260608
+project_id=blockcipher-structure-adaptive-nd
+project_dir=G:\lxy\blockcipher-structure-adaptive-nd
+run_dir=G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-spn-gift64-aligned-confirm-10seed-gpu0-20260608
+archive_work=G:\lxy\archive_work\spn_gift64_aligned_confirm_10seed_20260608
+branch=main
+plan=experiments\plans\innovation1_spn_gift64_aligned_confirm_10seed.csv
+device=cuda:0
+expected_rows=40
+batch_size=1024
+hidden_bits=64
+optimizer=adamw
+weight_decay=0.0001
+validation=gift64_spn_aligned_confirm_10seed
