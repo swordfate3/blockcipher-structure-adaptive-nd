@@ -105,3 +105,21 @@ def test_gift64_spn_aligned_screen_config_shape():
     }
     assert {row["difference_profile"] for row in rows} == {"gift64_shen2024_spn_screen"}
     assert {str(row["pairs_per_sample"]) for row in rows} == {"4"}
+
+
+def test_gift64_spn_aligned_confirm_10seed_config_shape():
+    module = _load_build_plan_module()
+    repo_root = Path(__file__).resolve().parents[1]
+    config_path = repo_root / "experiments" / "configs" / "innovation1" / "spn_gift64_aligned_confirm_10seed.json"
+    rows = module.build_plan_rows(module.load_plan_config(config_path))
+
+    assert len(rows) == 40
+    assert {row["cipher"] for row in rows} == {"GIFT-64"}
+    assert {str(row["rounds"]) for row in rows} == {"5", "6"}
+    assert {str(row["seed"]) for row in rows} == {str(seed) for seed in range(10)}
+    assert {row["feature_encoding"] for row in rows} == {
+        "ciphertext_pair_xor_bits",
+        "ciphertext_pair_xor_spn_aligned_bits",
+    }
+    assert {row["negative_mode"] for row in rows} == {"encrypted_random_plaintexts"}
+    assert {row["difference_profile"] for row in rows} == {"gift64_shen2024_spn_screen"}

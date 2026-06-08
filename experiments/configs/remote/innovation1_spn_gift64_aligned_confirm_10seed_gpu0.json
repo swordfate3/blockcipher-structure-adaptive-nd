@@ -1,0 +1,16 @@
+{
+  "run_id": "innovation1-spn-gift64-aligned-confirm-10seed-gpu0-20260608",
+  "task_name": "innovation1_spn_gift64_aligned_confirm_10seed_gpu0_20260608",
+  "plan": "experiments\\plans\\innovation1_spn_gift64_aligned_confirm_10seed.csv",
+  "expected_rows": 40,
+  "device": "cuda:0",
+  "epochs": 8,
+  "batch_size": 1024,
+  "hidden_bits": 64,
+  "learning_rate": 0.001,
+  "optimizer": "adamw",
+  "weight_decay": 0.0001,
+  "archive_work_id": "spn_gift64_aligned_confirm_10seed_20260608",
+  "validation_label": "gift64_spn_aligned_confirm_10seed",
+  "monitor_script_name": "monitor_innovation1_spn_gift64_aligned_confirm_10seed_results.sh"
+}
