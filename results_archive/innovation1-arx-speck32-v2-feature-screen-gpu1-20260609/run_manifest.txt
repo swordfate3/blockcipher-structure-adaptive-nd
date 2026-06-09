@@ -1,0 +1,14 @@
+run_id=innovation1-arx-speck32-v2-feature-screen-gpu1-20260609
+project_id=blockcipher-structure-adaptive-nd
+project_dir=G:\lxy\blockcipher-structure-adaptive-nd
+run_dir=G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-arx-speck32-v2-feature-screen-gpu1-20260609
+archive_work=G:\lxy\archive_work\arx_speck32_v2_feature_screen_20260609
+branch=main
+plan=experiments\plans\innovation1_arx_speck32_v2_feature_screen.csv
+device=cuda:1
+expected_rows=32
+batch_size=1024
+hidden_bits=64
+optimizer=adamw
+weight_decay=0.0001
+validation=speck32_arx_v2_feature_screen
