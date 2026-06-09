@@ -67,3 +67,24 @@ rounds: 7
 seeds: 0..9
 features: raw, rotation v1, partial inverse v2
 ```
+## Scale Ablation Launched
+
+After 10-seed confirmation, ARX v2 partial inverse improved SPECK32/64 round-7 over raw by `+0.031409` calibrated accuracy and `+0.044881` AUC with 10/10 positive seeds. The absolute value is still below known SPECK32/64 7-round neural distinguisher frontiers, so the next test is a scale ablation.
+
+Small scale is already covered by the 10-seed confirmation:
+
+```text
+samples_per_class=32768, epochs=8
+```
+
+New remote scale runs:
+
+```text
+innovation1-arx-speck32-v2-scale-m-gpu0-20260609
+samples_per_class=131072, epochs=16, expected_rows=8
+
+innovation1-arx-speck32-v2-scale-l-gpu1-20260609
+samples_per_class=524288, epochs=24, expected_rows=8
+```
+
+Both compare only raw versus `ciphertext_pair_xor_arx_partial_inverse_bits` for rounds=7, seeds=0..3, pairs_per_sample=4. These runs test whether data/epoch scale lifts the absolute accuracy/AUC or whether the next bottleneck is ARX-specific model architecture.

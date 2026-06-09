@@ -1,0 +1,16 @@
+{
+  "run_id": "innovation1-arx-speck32-v2-scale-m-gpu0-20260609",
+  "task_name": "innovation1_arx_speck32_v2_scale_m_gpu0_20260609",
+  "plan": "experiments\\plans\\innovation1_arx_speck32_v2_scale_m.csv",
+  "expected_rows": 8,
+  "device": "cuda:0",
+  "epochs": 16,
+  "batch_size": 1024,
+  "hidden_bits": 64,
+  "learning_rate": 0.001,
+  "optimizer": "adamw",
+  "weight_decay": 0.0001,
+  "archive_work_id": "arx_speck32_v2_scale_m_20260609",
+  "validation_label": "speck32_arx_v2_scale_m",
+  "monitor_script_name": "monitor_innovation1_arx_speck32_v2_scale_m_results.sh"
+}

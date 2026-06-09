@@ -1,0 +1,36 @@
+{
+  "output": "experiments/plans/innovation1_arx_speck32_v2_scale_m.csv",
+  "defaults": {
+    "cipher": "SPECK32/64",
+    "structure": "ARX",
+    "network": "StructureAdaptive-PairSet-DBitNet",
+    "model_key": "structure_adaptive_pairset_dbitnet",
+    "family": "structure_pairset",
+    "architecture_rank": 0,
+    "score": 72,
+    "pairs_per_sample": 4,
+    "negative_mode": "encrypted_random_plaintexts",
+    "train_key": "0x1918111009080100",
+    "validation_key": "0x0f0e0d0c0b0a0908",
+    "difference_profile": "speck32_gohr2019",
+    "difference_member": 0,
+    "evidence": "SPECK32/64 round-7 ARX v2 scale ablation: raw versus keyless partial-inverse feature",
+    "literature": "Gohr 2019 SPECK32 neural differential cryptanalysis; scale ablation for ARX public partial-inverse structure alignment",
+    "samples_per_class": 131072
+  },
+  "sweep": {
+    "rounds": [
+      7
+    ],
+    "feature_encoding": [
+      "ciphertext_pair_xor_bits",
+      "ciphertext_pair_xor_arx_partial_inverse_bits"
+    ],
+    "seed": {
+      "range": [
+        0,
+        4
+      ]
+    }
+  }
+}
