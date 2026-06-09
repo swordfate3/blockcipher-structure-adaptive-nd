@@ -33,3 +33,37 @@ Validation completed:
 - tiny smoke: all four features trained through `run_innovation_one_matrix.py` and reported expected input/pair widths.
 
 Next: commit, push main, start remote schedule script, and monitor result branch.
+## Screen Results Retrieved
+
+The remote screen completed and was retrieved locally.
+
+```text
+run_id: innovation1-arx-speck32-v2-feature-screen-gpu1-20260609
+result_dir: outputs/remote_results/innovation1-arx-speck32-v2-feature-screen-gpu1-20260609/
+result_lines: 32
+expected_rows: 32
+stderr: 0 bytes
+git_revision: 6324782a712e8d649e1e0e6424bcec64b08d470f
+```
+
+Round-7 key result over 4 seeds:
+
+```text
+raw cal_acc:                  0.512062
+rotation v1 cal_acc:          0.513641, delta +0.001579, positive seeds 2/4
+partial inverse v2 cal_acc:   0.526970, delta +0.014908, positive seeds 4/4
+partial inverse v2 AUC:       0.534486, delta +0.020054
+partial inverse RX v3 cal_acc:0.518944, delta +0.006882, positive seeds 4/4
+```
+
+Interpretation: v2 keyless partial inverse is the best ARX round-7 feature so far. It is still weak-signal evidence, not a high-round breakthrough, but it supports the ARX-specific structure-alignment direction better than rotation-only v1. v3 is not promoted because it is weaker than v2 and hurts round 6.
+
+Next promoted run:
+
+```text
+run_id: innovation1-arx-speck32-v2-confirm-10seed-gpu1-20260609
+expected_rows: 30
+rounds: 7
+seeds: 0..9
+features: raw, rotation v1, partial inverse v2
+```
