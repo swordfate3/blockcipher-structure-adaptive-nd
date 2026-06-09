@@ -12,6 +12,8 @@ FEATURE_ENCODINGS = {
     "ciphertext_pair_xor_bits",
     "ciphertext_pair_xor_spn_aligned_bits",
     "ciphertext_pair_xor_arx_aligned_bits",
+    "ciphertext_pair_xor_arx_partial_inverse_bits",
+    "ciphertext_pair_xor_arx_partial_inverse_rx_bits",
 }
 
 

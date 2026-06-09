@@ -1,4 +1,4 @@
-# 2026-06-08 SPECK32/64 ARX 对齐筛查计划
+# 2026-06-08 SPECK32/64 ARX 对齐筛查计划与结果
 
 ## 目的
 
@@ -59,6 +59,42 @@ ciphertext_pair_xor_bits              input_bits=192 pair_bits=96
 ciphertext_pair_xor_arx_aligned_bits  input_bits=256 pair_bits=128
 ```
 
+## 远程结果
+
+结果已由 monitor 拉回本地：
+
+```text
+outputs/remote_results/innovation1-arx-speck32-aligned-screen-gpu1-20260608/
+```
+
+Gate 通过：
+
+```text
+result_lines=16
+expected_rows=16
+stderr bytes=0
+```
+
+分组结果：
+
+| rounds | feature | seeds | accuracy_mean | calibrated_accuracy_mean | auc_mean | loss_mean |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| 6 | raw `ciphertext_pair_xor_bits` | 4 | 0.874374 | 0.875275 | 0.941063 | 0.329188 |
+| 6 | ARX aligned `ciphertext_pair_xor_arx_aligned_bits` | 4 | 0.880196 | 0.883820 | 0.947691 | 0.331033 |
+| 7 | raw `ciphertext_pair_xor_bits` | 4 | 0.509819 | 0.513657 | 0.515719 | 0.786432 |
+| 7 | ARX aligned `ciphertext_pair_xor_arx_aligned_bits` | 4 | 0.509636 | 0.513039 | 0.515586 | 0.751059 |
+
+Paired delta：
+
+| rounds | calibrated_accuracy_delta | auc_delta | positive_seeds |
+| --- | ---: | ---: | ---: |
+| 6 | +0.008545 | +0.006628 | 4/4 |
+| 7 | -0.000618 | -0.000133 | 3/4 |
+
+## 初步结论
+
+ARX aligned 在 SPECK32/64 6 轮上有稳定小幅提升，4 个 seed 全部为正；7 轮接近随机水平，ARX aligned 没有有效提升。这说明 ARX 结构对齐输入有苗头，但目前只构成“低/中轮有效”的初步证据，还不能说已经提升 SPECK 最高轮次。
+
 ## 论文意义
 
-这条线是创新一的第二个结构家族证据：SPN 已有 PRESENT/GIFT 的 inverse-permutation aligned 结果，ARX 现在进入 SPECK 的 rotation aligned 对照。若远程结果出现稳定提升，可作为“结构公开算子对齐输入特征 + 结构自适应模型”的跨结构证据。
+这条线是创新一的第二个结构家族证据：SPN 已有 PRESENT/GIFT 的 inverse-permutation aligned 结果，ARX 现在进入 SPECK 的 rotation aligned 对照。当前结果支持“结构公开算子对齐输入特征 + 结构自适应模型”在 ARX 上有一定效果，但下一步需要继续优化 ARX 专家或差分表示，重点看 7 轮能否从随机附近拉开。

@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 from blockcipher_ai_eval.ciphers import ReducedRoundCipher
-from blockcipher_ai_eval.features.arx_aligned import arx_aligned_difference
+from blockcipher_ai_eval.features.arx_aligned import (
+    arx_aligned_difference,
+    speck32_partial_inverse_feature_words,
+    speck32_partial_inverse_rx_feature_words,
+)
 from blockcipher_ai_eval.features.spn_aligned import inverse_permutation_difference
 
 
@@ -38,6 +42,18 @@ def encode_ciphertext_pair(
         left_bits, right_bits, difference_bits = pair_xor_bits(left, right, width)
         aligned_difference = arx_aligned_difference(left ^ right, width, cipher)
         return left_bits + right_bits + difference_bits + int_to_bits(aligned_difference, width)
+    if feature_encoding == "ciphertext_pair_xor_arx_partial_inverse_bits":
+        left_bits, right_bits, difference_bits = pair_xor_bits(left, right, width)
+        extra_bits = []
+        for word in speck32_partial_inverse_feature_words(left, right, width, cipher):
+            extra_bits.extend(int_to_bits(word, width))
+        return left_bits + right_bits + difference_bits + extra_bits
+    if feature_encoding == "ciphertext_pair_xor_arx_partial_inverse_rx_bits":
+        left_bits, right_bits, difference_bits = pair_xor_bits(left, right, width)
+        extra_bits = []
+        for word in speck32_partial_inverse_rx_feature_words(left, right, width, cipher):
+            extra_bits.extend(int_to_bits(word, width))
+        return left_bits + right_bits + difference_bits + extra_bits
     raise ValueError(f"unsupported feature encoding: {feature_encoding}")
 
 
@@ -69,4 +85,8 @@ def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
         return block_bits * 4
     if feature_encoding == "ciphertext_pair_xor_arx_aligned_bits":
         return block_bits * 4
+    if feature_encoding == "ciphertext_pair_xor_arx_partial_inverse_bits":
+        return block_bits * 7
+    if feature_encoding == "ciphertext_pair_xor_arx_partial_inverse_rx_bits":
+        return block_bits * 11
     raise ValueError(f"unsupported feature encoding: {feature_encoding}")

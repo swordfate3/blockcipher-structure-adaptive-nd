@@ -18,6 +18,8 @@ def test_feature_encoding_module_exposes_bit_helpers_and_pair_widths():
     assert pair_bits_for_encoding(64, "ciphertext_pair_xor_bits") == 192
     assert pair_bits_for_encoding(64, "ciphertext_pair_xor_spn_aligned_bits") == 256
     assert pair_bits_for_encoding(32, "ciphertext_pair_xor_arx_aligned_bits") == 128
+    assert pair_bits_for_encoding(32, "ciphertext_pair_xor_arx_partial_inverse_bits") == 224
+    assert pair_bits_for_encoding(32, "ciphertext_pair_xor_arx_partial_inverse_rx_bits") == 352
 
 
 def test_feature_encoding_module_encodes_spn_aligned_pair_features():
@@ -117,3 +119,75 @@ def test_arx_aligned_encoding_requires_supported_arx_cipher_profile():
         assert "ARX aligned feature encoding" in str(exc)
     else:
         raise AssertionError("expected ValueError for unsupported ARX aligned encoding")
+
+def test_feature_encoding_module_encodes_speck_arx_partial_inverse_pair_features():
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    left = 0x12345678
+    right = left ^ 0x00400080
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=32,
+        feature_encoding="ciphertext_pair_xor_arx_partial_inverse_bits",
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    delta_left = (difference >> 16) & 0xFFFF
+    delta_right = difference & 0xFFFF
+    rotation_aligned = (ror(delta_left, 7, 16) << 16) | rol(delta_right, 2, 16)
+    x = (left >> 16) & 0xFFFF
+    y = left & 0xFFFF
+    x_prime = (right >> 16) & 0xFFFF
+    y_prime = right & 0xFFFF
+    pre_y = ror(y ^ x, 2, 16)
+    pre_y_prime = ror(y_prime ^ x_prime, 2, 16)
+    delta_pre_y = pre_y ^ pre_y_prime
+
+    assert len(encoded) == 224
+    assert encoded[:32] == int_to_bits(left, 32)
+    assert encoded[32:64] == int_to_bits(right, 32)
+    assert encoded[64:96] == int_to_bits(difference, 32)
+    assert encoded[96:128] == int_to_bits(rotation_aligned, 32)
+    assert encoded[128:160] == int_to_bits(pre_y, 32)
+    assert encoded[160:192] == int_to_bits(pre_y_prime, 32)
+    assert encoded[192:224] == int_to_bits(delta_pre_y, 32)
+
+
+def test_feature_encoding_module_encodes_speck_arx_partial_inverse_rx_pair_features():
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    left = 0x12345678
+    right = left ^ 0x00400080
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=32,
+        feature_encoding="ciphertext_pair_xor_arx_partial_inverse_rx_bits",
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    delta_left = (difference >> 16) & 0xFFFF
+    delta_right = difference & 0xFFFF
+    x = (left >> 16) & 0xFFFF
+    y = left & 0xFFFF
+    x_prime = (right >> 16) & 0xFFFF
+    y_prime = right & 0xFFFF
+    pre_y = ror(y ^ x, 2, 16)
+    pre_y_prime = ror(y_prime ^ x_prime, 2, 16)
+    delta_pre_y = pre_y ^ pre_y_prime
+    rx_alpha = (rol(x, 7, 16) ^ x_prime) << 16 | (rol(y, 7, 16) ^ y_prime)
+    rx_beta = (rol(x, 2, 16) ^ x_prime) << 16 | (rol(y, 2, 16) ^ y_prime)
+    carry_left = ((x + y) & 0xFFFF) ^ x ^ y
+    carry_right = ((x_prime + y_prime) & 0xFFFF) ^ x_prime ^ y_prime
+    carry_delta = carry_left ^ carry_right
+    carry_proxy = (carry_left << 16) | carry_delta
+
+    assert len(encoded) == 352
+    assert encoded[192:224] == int_to_bits(delta_pre_y, 32)
+    assert encoded[224:256] == int_to_bits(rx_alpha, 32)
+    assert encoded[256:288] == int_to_bits(rx_beta, 32)
+    assert encoded[288:320] == int_to_bits(carry_proxy, 32)
+    assert encoded[320:352] == int_to_bits(carry_right << 16 | carry_delta, 32)

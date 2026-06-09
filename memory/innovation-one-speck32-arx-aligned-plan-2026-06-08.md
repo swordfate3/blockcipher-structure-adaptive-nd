@@ -1,6 +1,6 @@
-# 记忆：创新一 SPECK32/64 ARX 对齐计划（2026-06-08）
+# 记忆：创新一 SPECK32/64 ARX 对齐计划与结果（2026-06-08/09）
 
-本轮不等待 GIFT-64 十种子确认，推进创新一 ARX/SPECK 分支。
+本轮不等待 GIFT-64 十种子确认，推进创新一 ARX/SPECK 分支，并已取得第一轮远程筛查结果。
 
 已完成：
 
@@ -17,4 +17,16 @@
 - 全量测试：231 passed。
 - 本地 tiny smoke：2 行真实训练跑通，raw input_bits=192/pair_bits=96，arx_aligned input_bits=256/pair_bits=128。
 
-下一步：提交并推送后，在远程 Windows GPU 工作站拉取 main，执行 `scripts/remote/schedule_innovation1_arx_speck32_aligned_screen_gpu1_20260608.cmd`，本地可用 `scripts/monitor_innovation1_arx_speck32_aligned_screen_results.sh` 监控并拉回结果分支。
+远程结果已拉回：
+
+- 本地目录：`outputs/remote_results/innovation1-arx-speck32-aligned-screen-gpu1-20260608/`
+- Gate：16/16 行，stderr 为空。
+- 提交：`201fb8b73c15a1dd8564c3770fd88922c5aa73a3`
+- 远程环境：torch 2.5.1+cu118，cuda available，2 x RTX A6000。
+
+核心结果：
+
+- SPECK32/64 6 轮：ARX aligned calibrated accuracy 0.883820，raw 0.875275，delta +0.008545；AUC delta +0.006628；4/4 seeds 为正。
+- SPECK32/64 7 轮：ARX aligned calibrated accuracy 0.513039，raw 0.513657，delta -0.000618；AUC delta -0.000133；整体接近随机。
+
+结论：ARX 结构对齐输入在 6 轮有稳定小幅提升，但 7 轮没有拉开。它证明 ARX 分支不是完全无效，但当前还不能作为“超越 SPECK 高轮前沿”的结果。下一步应围绕 ARX 专家/差分表示优化，而不是直接宣称 SPECK 7 轮突破。
