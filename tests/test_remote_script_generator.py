@@ -5,7 +5,12 @@ from pathlib import Path
 
 
 def _load_generator():
-    script_path = Path(__file__).resolve().parents[1] / "scripts" / "generate_remote_experiment_scripts.py"
+    script_path = (
+        Path(__file__).resolve().parents[1]
+        / "scripts"
+        / "generators"
+        / "generate_remote_experiment_scripts.py"
+    )
     spec = importlib.util.spec_from_file_location("generate_remote_experiment_scripts", script_path)
     assert spec is not None
     assert spec.loader is not None
@@ -16,6 +21,13 @@ def _load_generator():
 
 
 generate_remote_scripts = _load_generator()
+
+
+def test_remote_script_generator_compatibility_wrapper_exists():
+    wrapper = Path(__file__).resolve().parents[1] / "scripts" / "generate_remote_experiment_scripts.py"
+
+    assert wrapper.exists()
+    assert "scripts.generators.generate_remote_experiment_scripts" in wrapper.read_text(encoding="utf-8")
 
 
 def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path: Path):
@@ -111,6 +123,30 @@ def test_generate_remote_run_script_escapes_windows_paths(tmp_path: Path):
     assert 'copy "%RUN_DIR%\\results\\%RUN_ID%.jsonl"' in run_text
     assert "results_archive\\%RUN_ID%\\run_manifest.txt" in run_text
     assert "set ARCHIVE_WORK=%ROOT%\\archive_work\\innovation1_path_check_gpu0_20260608" in run_text
+
+
+def test_generate_remote_scripts_accepts_innovation1_plan_path(tmp_path: Path):
+    spec_path = tmp_path / "spec.json"
+    output_dir = tmp_path / "remote"
+    monitor_dir = tmp_path / "scripts"
+    spec_path.write_text(
+        json.dumps(
+            {
+                "run_id": "innovation1-layout-gpu0-20260610",
+                "task_name": "innovation1_layout_gpu0_20260610",
+                "plan": "experiments\\innovation1\\plans\\demo.csv",
+                "expected_rows": 1,
+                "device": "cuda:0",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    generated = generate_remote_scripts(spec_path, output_dir=output_dir, monitor_dir=monitor_dir)
+    run_text = generated.run_script.read_text(encoding="utf-8")
+
+    assert "--plan experiments\\innovation1\\plans\\demo.csv" in run_text
+    assert 'copy "%RUN_DIR%\\experiments\\innovation1\\plans\\demo.csv"' in run_text
 
 
 def test_remote_run_script_falls_back_when_summarizer_is_missing(tmp_path: Path):

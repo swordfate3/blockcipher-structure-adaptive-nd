@@ -89,9 +89,16 @@ experiments/
   build_plan.py                         JSON 配置生成 CSV plan
   build_innovation_one_matrix.py        生成文献排序实验计划
   summarize_innovation_one_results.py   JSONL 汇总为 CSV
+  innovation1/                          创新一实验资产 canonical 目录
+    plans/                              CSV 实验矩阵
+    configs/                            JSON plan 配置
+    configs/remote/                     远程 Windows GPU 运行配置
+    hparam_spaces/                      超参数搜索空间
+    summaries/                          人工整理的对比表与小结
 
 scripts/
-  generate_remote_experiment_scripts.py JSON 配置生成远程 run/launch/schedule/monitor 脚本
+  generate_remote_experiment_scripts.py 远程脚本生成器兼容入口
+  generators/                           远程 run/launch/schedule/monitor 生成器实现
   monitor_remote_results.py             通用远程结果分支监控与拉回
 
 archive/legacy/            旧版一次性 builder、远程 .cmd、monitor wrapper 归档

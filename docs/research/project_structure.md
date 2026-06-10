@@ -81,26 +81,33 @@ This keeps the paper claim clean: public SPN structure enters through an explici
 experiments/
 ├── build_plan.py                    # Generic JSON-config -> CSV plan builder
 ├── build_innovation_one_matrix.py   # Literature-ranked matrix builder
-├── configs/                         # Experiment and remote-run configs
-├── plans/                           # Generated CSV matrices
-├── hparam_spaces/                   # HPO search spaces
+├── innovation1/                     # Canonical innovation-one assets
+│   ├── configs/                     # JSON plan configs
+│   ├── configs/remote/              # Remote Windows GPU run specs
+│   ├── plans/                       # Generated CSV matrices
+│   ├── hparam_spaces/               # HPO search spaces
+│   └── summaries/                   # Curated result summaries
+├── configs/                         # Legacy-compatible configs during migration
+├── plans/                           # Legacy-compatible generated CSV matrices
+├── hparam_spaces/                   # Legacy-compatible HPO search spaces
 ├── run_innovation_one_matrix.py     # Main matrix runner
 └── summarize_*.py                   # Result summarizers
 
 archive/legacy/experiments/builders/ # Historical build_innovation1_* builders
 ```
 
-Historical one-off builders are archived under `archive/legacy/experiments/builders/` for reproducibility. New experiments should use `experiments/build_plan.py` with JSON configs under `experiments/configs/innovation1/`. For example:
+Historical one-off builders are archived under `archive/legacy/experiments/builders/` for reproducibility. New experiments should use `experiments/build_plan.py` with JSON configs under `experiments/innovation1/configs/`. Legacy configs under `experiments/configs/innovation1/` remain valid while old remote runs are reproducible. For example:
 
 ```bash
-uv run python experiments/build_plan.py experiments/configs/innovation1/spn_present_strict_crosskey_10seed.json
+uv run python experiments/build_plan.py experiments/innovation1/configs/spn_present_strict_crosskey_10seed.json
 ```
 
 ## Remote Execution
 
 ```text
 scripts/
-├── generate_remote_experiment_scripts.py # Generate run/launch/schedule/monitor scripts from JSON specs
+├── generate_remote_experiment_scripts.py # Compatibility wrapper for the remote generator
+├── generators/                           # Canonical generators for reproducible scripts/assets
 └── monitor_remote_results.py             # Generic result-branch monitor/retriever
 
 archive/legacy/scripts/monitors/          # Historical monitor_innovation1_*.sh wrappers
@@ -113,10 +120,10 @@ Stable remote workflow:
 local commit/push -> remote G:/lxy/<project> pull -> run torch310 -> push results branch -> local monitor retrieves outputs/remote_results
 ```
 
-Remote configs live under `experiments/configs/remote/`. New remote experiments should prefer:
+Remote configs live under `experiments/innovation1/configs/remote/`. New remote experiments should prefer:
 
 ```bash
-uv run python scripts/generate_remote_experiment_scripts.py experiments/configs/remote/<run>.json
+uv run python scripts/generate_remote_experiment_scripts.py experiments/innovation1/configs/remote/<run>.json
 ```
 
 Historical hand-written remote scripts are archived under `archive/legacy/scripts/` because they are part of prior result reproducibility, not active entry points.
