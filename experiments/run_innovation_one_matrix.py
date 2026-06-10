@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -287,12 +288,29 @@ def _dataset_cache_dir(
     config: DifferentialDatasetConfig,
     split: str,
 ) -> Path:
-    key = task.get("train_key") if split == "train" else task.get("validation_key")
-    key_part = "key-default" if key is None else f"key-{int(key):x}"
-    return root / task["cipher_key"] / f"r{task['rounds']}" / split / (
-        f"seed-{config.seed}_samples-{config.samples_per_class}_pairs-{config.pairs_per_sample}_"
-        f"diff-{config.input_difference:x}_{config.feature_encoding}_{config.negative_mode}_{key_part}"
+    cache_identity = {
+        "cipher_key": task["cipher_key"],
+        "rounds": task["rounds"],
+        "split": split,
+        "seed": config.seed,
+        "samples_per_class": config.samples_per_class,
+        "pairs_per_sample": config.pairs_per_sample,
+        "input_difference": config.input_difference,
+        "feature_encoding": config.feature_encoding,
+        "negative_mode": config.negative_mode,
+        "key": task.get("train_key") if split == "train" else task.get("validation_key"),
+    }
+    digest = hashlib.sha256(
+        json.dumps(cache_identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()[:16]
+    return (
+        root
+        / task["cipher_key"]
+        / f"r{task['rounds']}"
+        / split
+        / f"seed-{config.seed}_{digest}"
     )
+
 
 def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
     if args.plan:

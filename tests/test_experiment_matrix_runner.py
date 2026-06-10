@@ -1113,3 +1113,8 @@ def test_run_innovation_one_matrix_can_use_chunked_dataset_cache(tmp_path: Path)
     assert rows[0]["training"]["dataset_cache_chunk_size"] == 3
     assert list(cache_root.rglob("features.npy"))
     assert list(cache_root.rglob("labels.npy"))
+    cache_dirs = [path.parent for path in cache_root.rglob("metadata.json")]
+    assert cache_dirs
+    assert all(len(path.name) <= 32 for path in cache_dirs)
+    assert all("encrypted_random_plaintexts" not in path.name for path in cache_dirs)
+    assert all("ciphertext_pair_xor_bits" not in path.name for path in cache_dirs)
