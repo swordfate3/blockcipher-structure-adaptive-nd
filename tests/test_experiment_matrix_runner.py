@@ -55,6 +55,56 @@ def test_run_innovation_one_matrix_writes_jsonl_rows(tmp_path: Path):
     assert "wrote 9 rows" in completed.stdout
 
 
+def test_run_innovation_one_matrix_writes_progress_jsonl(tmp_path: Path):
+    output_path = tmp_path / "matrix.jsonl"
+    progress_path = tmp_path / "progress.jsonl"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--ciphers",
+            "speck32",
+            "--models",
+            "mlp",
+            "--rounds",
+            "1",
+            "--seeds",
+            "0",
+            "--samples-per-class",
+            "8",
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--progress-output",
+            str(progress_path),
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    progress_rows = [json.loads(line) for line in progress_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert [row["event"] for row in progress_rows] == [
+        "run_start",
+        "row_start",
+        "cache_ready",
+        "row_done",
+        "run_done",
+    ]
+    assert progress_rows[1]["cipher_key"] == "speck32"
+    assert progress_rows[2]["train_rows"] == 16
+    assert progress_rows[2]["validation_rows"] == 16
+    assert progress_rows[3]["selected_model"] == "mlp"
+    assert progress_rows[-1]["total"] == 1
+
+
 def test_run_innovation_one_matrix_can_execute_literature_ranked_plan(tmp_path: Path):
     plan_path = tmp_path / "plan.csv"
     output_path = tmp_path / "planned_results.jsonl"

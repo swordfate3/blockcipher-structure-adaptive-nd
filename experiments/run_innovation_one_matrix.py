@@ -5,6 +5,7 @@ import csv
 import hashlib
 import json
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -124,6 +125,11 @@ def parse_args() -> argparse.Namespace:
         default=8192,
         help="Rows per class generated before flushing to dataset cache.",
     )
+    parser.add_argument(
+        "--progress-output",
+        default=None,
+        help="Optional JSONL path for run progress events.",
+    )
     parser.add_argument("--output", default="outputs/innovation_one_matrix_results.jsonl")
     return parser.parse_args()
 
@@ -133,29 +139,91 @@ def main() -> None:
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     tasks = _build_tasks(args)
+    _reset_progress(args.progress_output)
+    _write_progress(
+        args.progress_output,
+        "run_start",
+        {
+            "total": len(tasks),
+            "output": str(output),
+            "dataset_cache_root": args.dataset_cache_root,
+        },
+    )
 
-    with output.open("w", encoding="utf-8") as handle:
-        for index, task in enumerate(tasks, start=1):
-            row = _run_task(task, args)
-            handle.write(json.dumps(row, sort_keys=True) + "\n")
-            handle.flush()
-            print(
-                "[{index}/{total}] {cipher} r={rounds} model={model} "
-                "seed={seed} pairs={pairs}".format(
+    try:
+        with output.open("w", encoding="utf-8") as handle:
+            for index, task in enumerate(tasks, start=1):
+                _write_progress(
+                    args.progress_output,
+                    "row_start",
+                    {
+                        "index": index,
+                        "total": len(tasks),
+                        **_task_progress_payload(task),
+                    },
+                )
+                row = _run_task(
+                    task,
+                    args,
+                    progress_path=args.progress_output,
                     index=index,
                     total=len(tasks),
-                    cipher=row["cipher"],
-                    rounds=row["rounds"],
-                    model=row["model"],
-                    seed=row["seed"],
-                    pairs=row["pairs_per_sample"],
-                ),
-                flush=True,
-            )
+                )
+                handle.write(json.dumps(row, sort_keys=True) + "\n")
+                handle.flush()
+                _write_progress(
+                    args.progress_output,
+                    "row_done",
+                    {
+                        "index": index,
+                        "total": len(tasks),
+                        "accuracy": row["metrics"]["accuracy"],
+                        "selected_model": row["selected_model"],
+                        **_task_progress_payload(task),
+                    },
+                )
+                print(
+                    "[{index}/{total}] {cipher} r={rounds} model={model} "
+                    "seed={seed} pairs={pairs}".format(
+                        index=index,
+                        total=len(tasks),
+                        cipher=row["cipher"],
+                        rounds=row["rounds"],
+                        model=row["model"],
+                        seed=row["seed"],
+                        pairs=row["pairs_per_sample"],
+                    ),
+                    flush=True,
+                )
+    except Exception as exc:
+        _write_progress(
+            args.progress_output,
+            "run_failed",
+            {
+                "error_type": type(exc).__name__,
+                "error": str(exc),
+            },
+        )
+        raise
+    _write_progress(
+        args.progress_output,
+        "run_done",
+        {
+            "total": len(tasks),
+            "output": str(output),
+        },
+    )
     print(f"wrote {len(tasks)} rows to {output}")
 
 
-def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
+def _run_task(
+    task: dict[str, Any],
+    args: argparse.Namespace,
+    *,
+    progress_path: str | None = None,
+    index: int | None = None,
+    total: int | None = None,
+) -> dict[str, Any]:
     train_key = task.get("train_key")
     validation_key = task.get("validation_key")
     if validation_key is None:
@@ -193,6 +261,19 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
     )
     train_dataset = _make_task_dataset(train_config, args, task, split="train")
     validation_dataset = _make_task_dataset(validation_config, args, task, split="validation")
+    _write_progress(
+        progress_path,
+        "cache_ready",
+        {
+            "index": index,
+            "total": total,
+            "dataset_cache_enabled": bool(args.dataset_cache_root),
+            "train_rows": int(train_dataset.features.shape[0]),
+            "validation_rows": int(validation_dataset.features.shape[0]),
+            "input_bits": int(train_dataset.features.shape[1]),
+            **_task_progress_payload(task),
+        },
+    )
     model = build_model(
         model_key,
         input_bits=train_dataset.features.shape[1],
@@ -262,6 +343,44 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
             "pairs_per_sample": validation_dataset.metadata["pairs_per_sample"],
             "samples_per_class": validation_dataset.metadata["samples_per_class"],
         },
+    }
+
+
+def _reset_progress(path: str | None) -> None:
+    if not path:
+        return
+    progress_path = Path(path)
+    progress_path.parent.mkdir(parents=True, exist_ok=True)
+    progress_path.write_text("", encoding="utf-8")
+
+
+def _write_progress(path: str | None, event: str, payload: dict[str, Any] | None = None) -> None:
+    if not path:
+        return
+    progress_path = Path(path)
+    progress_path.parent.mkdir(parents=True, exist_ok=True)
+    record = {
+        "event": event,
+        "time": time.time(),
+        **(payload or {}),
+    }
+    with progress_path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(record, sort_keys=True) + "\n")
+
+
+def _task_progress_payload(task: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "cipher_key": task["cipher_key"],
+        "model": task["model_key"],
+        "architecture": task["architecture"],
+        "rounds": task["rounds"],
+        "seed": task["seed"],
+        "samples_per_class": task["samples_per_class"],
+        "pairs_per_sample": task["pairs_per_sample"],
+        "feature_encoding": task["feature_encoding"],
+        "negative_mode": task["negative_mode"],
+        "difference_profile": task.get("difference_profile", ""),
+        "difference_member": task.get("difference_member", ""),
     }
 
 

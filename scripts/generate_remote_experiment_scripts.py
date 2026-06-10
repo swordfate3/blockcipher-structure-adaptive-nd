@@ -124,6 +124,7 @@ if not exist results mkdir results
 if not exist dataset_cache mkdir dataset_cache
 if exist logs\%RUN_ID%_stdout.txt del logs\%RUN_ID%_stdout.txt
 if exist logs\%RUN_ID%_stderr.txt del logs\%RUN_ID%_stderr.txt
+if exist logs\%RUN_ID%_progress.jsonl del logs\%RUN_ID%_progress.jsonl
 if exist results\%RUN_ID%.jsonl del results\%RUN_ID%.jsonl
 if exist results\%RUN_ID%_summary.csv del results\%RUN_ID%_summary.csv
 
@@ -141,6 +142,7 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   --optimizer {optimizer} ^
   --weight-decay {weight_decay} ^
   --device {device}{dataset_cache_args} ^
+  --progress-output logs\%RUN_ID%_progress.jsonl ^
   --output results\%RUN_ID%.jsonl ^
   > logs\%RUN_ID%_stdout.txt ^
   2> logs\%RUN_ID%_stderr.txt
@@ -184,6 +186,7 @@ copy "%RUN_DIR%\logs\%RUN_ID%_torch_info.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_torch_info_stderr.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_stderr.txt" "results_archive\%RUN_ID%\"
+if exist "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" copy "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_result_gate.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_summary_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_summary_stderr.txt" "results_archive\%RUN_ID%\"
