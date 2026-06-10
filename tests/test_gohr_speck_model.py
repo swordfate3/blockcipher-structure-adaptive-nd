@@ -2,7 +2,7 @@ import pytest
 import torch
 
 from blockcipher_ai_eval.experiments import build_model
-from blockcipher_ai_eval.models.gohr_speck import (
+from blockcipher_ai_eval.models.baseline.gohr_speck import (
     GohrSpeckDistinguisher,
     reshape_speck_ciphertext_pair,
 )

@@ -11,6 +11,7 @@ from blockcipher_ai_eval.models.baseline import (
 )
 from blockcipher_ai_eval.models.structure import (
     AdaptiveDBitNetDistinguisher,
+    ArxStructureAdaptivePairSetDBitNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
@@ -21,6 +22,7 @@ from blockcipher_ai_eval.models.structure import (
 
 __all__ = [
     "AdaptiveDBitNetDistinguisher",
+    "ArxStructureAdaptivePairSetDBitNetDistinguisher",
     "CnnDistinguisher",
     "DBitNetDistinguisher",
     "GohrSpeckDistinguisher",

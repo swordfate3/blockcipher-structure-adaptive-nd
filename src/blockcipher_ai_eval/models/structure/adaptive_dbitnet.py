@@ -5,7 +5,7 @@ import math
 import torch
 from torch import nn
 
-from blockcipher_ai_eval.models.components import (
+from blockcipher_ai_eval.models.common.components import (
     AttentionPooling,
     GatedAttentionPooling,
     build_activation,

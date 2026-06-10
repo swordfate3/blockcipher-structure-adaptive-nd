@@ -1,1 +1,5 @@
-"""ARX-specific structure-aware models will live here as they mature."""
+from blockcipher_ai_eval.models.structure.arx.pairset_dbitnet import (
+    ArxStructureAdaptivePairSetDBitNetDistinguisher,
+)
+
+__all__ = ["ArxStructureAdaptivePairSetDBitNetDistinguisher"]

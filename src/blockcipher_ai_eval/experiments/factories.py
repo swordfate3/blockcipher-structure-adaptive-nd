@@ -28,6 +28,7 @@ from blockcipher_ai_eval.ciphers import (
 )
 from blockcipher_ai_eval.models import (
     AdaptiveDBitNetDistinguisher,
+    ArxStructureAdaptivePairSetDBitNetDistinguisher,
     CnnDistinguisher,
     DBitNetDistinguisher,
     GohrSpeckDistinguisher,
@@ -200,6 +201,20 @@ def build_model(
             pair_bits=pair_bits or 96,
             base_channels=hidden_bits,
             pooling=pairwise_pooling_keys[name],
+        )
+    arx_pairset_pooling_keys = {
+        "arx_structure_adaptive_pairset_dbitnet": "attention_mean_max",
+        "arx_pairset_dbitnet": "attention_mean_max",
+        "arx_pairset_dbitnet_attention": "attention",
+        "arx_pairset_dbitnet_mean_max": "mean_max",
+    }
+    if name in arx_pairset_pooling_keys:
+        return ArxStructureAdaptivePairSetDBitNetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 96,
+            base_channels=hidden_bits,
+            structure=structure if structure != "generic" else "ARX",
+            pooling=arx_pairset_pooling_keys[name],
         )
     pairset_pooling_keys = {
         "structure_adaptive_pairset_dbitnet": "attention_mean_max",

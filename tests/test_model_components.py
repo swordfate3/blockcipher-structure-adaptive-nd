@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from blockcipher_ai_eval.models.components import (
+from blockcipher_ai_eval.models.common.components import (
     GatedAttentionPooling,
     build_activation,
     build_norm,

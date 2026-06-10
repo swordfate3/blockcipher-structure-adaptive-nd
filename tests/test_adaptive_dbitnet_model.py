@@ -2,24 +2,25 @@ import pytest
 import torch
 
 from blockcipher_ai_eval.experiments import build_model
-from blockcipher_ai_eval.models.adaptive_dbitnet import (
+from blockcipher_ai_eval.models.structure.adaptive_dbitnet import (
     AdaptiveDBitNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
-    SpnCellPairSetDBitNetDistinguisher,
-    SpnNibbleConvPairSetDistinguisher,
-    SpnTokenMixerPairSetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
     adaptive_dbitnet_dilations,
     structure_conditioned_dilations,
 )
+from blockcipher_ai_eval.models.structure.arx import ArxStructureAdaptivePairSetDBitNetDistinguisher
 
-from blockcipher_ai_eval.models.spn import (
+from blockcipher_ai_eval.models.structure.spn import (
+    SpnCellPairSetDBitNetDistinguisher,
     SpnCellPairSetDBitNetDistinguisher as ModularSpnCellPairSetDBitNetDistinguisher,
 )
-from blockcipher_ai_eval.models.spn import (
+from blockcipher_ai_eval.models.structure.spn import (
+    SpnNibbleConvPairSetDistinguisher,
     SpnNibbleConvPairSetDistinguisher as ModularSpnNibbleConvPairSetDistinguisher,
 )
-from blockcipher_ai_eval.models.spn import (
+from blockcipher_ai_eval.models.structure.spn import (
+    SpnTokenMixerPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher as ModularSpnTokenMixerPairSetDistinguisher,
 )
 
@@ -239,6 +240,24 @@ def test_build_model_supports_structure_adaptive_pairset_key():
     logits = model(batch)
 
     assert isinstance(model, StructureAdaptivePairSetDBitNetDistinguisher)
+    assert logits.shape == (3, 1)
+
+
+def test_build_model_supports_arx_pairset_dbitnet_key():
+    model = build_model(
+        "arx_structure_adaptive_pairset_dbitnet",
+        input_bits=384,
+        hidden_bits=8,
+        pair_bits=96,
+    )
+    batch = torch.zeros((3, 384), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert isinstance(model, ArxStructureAdaptivePairSetDBitNetDistinguisher)
+    assert model.structure == "ARX"
+    assert model.encoder.structure == "ARX"
+    assert model.encoder.dilations[:2] == [15, 5]
     assert logits.shape == (3, 1)
 
 

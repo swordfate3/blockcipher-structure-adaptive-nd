@@ -2,10 +2,10 @@ import torch
 
 from blockcipher_ai_eval.innovation_one import CipherProfile
 from blockcipher_ai_eval.models import StructureAwareMoEDistinguisher
-from blockcipher_ai_eval.models.adaptive_dbitnet import AdaptiveDBitNetDistinguisher
-from blockcipher_ai_eval.models.adaptive_dbitnet import PairwiseAdaptiveDBitNetDistinguisher
-from blockcipher_ai_eval.models.adaptive_dbitnet import SpnTokenMixerPairSetDistinguisher
-from blockcipher_ai_eval.models.structure_moe import (
+from blockcipher_ai_eval.models.structure.adaptive_dbitnet import AdaptiveDBitNetDistinguisher
+from blockcipher_ai_eval.models.structure.adaptive_dbitnet import PairwiseAdaptiveDBitNetDistinguisher
+from blockcipher_ai_eval.models.structure.spn import SpnTokenMixerPairSetDistinguisher
+from blockcipher_ai_eval.models.structure.moe import (
     EXPERT_KEYS,
     V2_EXPERT_KEYS,
     V3_EXPERT_KEYS,
