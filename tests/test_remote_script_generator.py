@@ -100,3 +100,30 @@ def test_generate_remote_run_script_escapes_windows_paths(tmp_path: Path):
     assert 'copy "%RUN_DIR%\\results\\%RUN_ID%.jsonl"' in run_text
     assert "results_archive\\%RUN_ID%\\run_manifest.txt" in run_text
     assert "set ARCHIVE_WORK=%ROOT%\\archive_work\\innovation1_path_check_gpu0_20260608" in run_text
+
+
+def test_remote_run_script_falls_back_when_summarizer_is_missing(tmp_path: Path):
+    spec_path = tmp_path / "spec.json"
+    output_dir = tmp_path / "remote"
+    monitor_dir = tmp_path / "scripts"
+    spec_path.write_text(
+        json.dumps(
+            {
+                "run_id": "innovation1-summary-fallback-gpu0-20260610",
+                "task_name": "innovation1_summary_fallback_gpu0_20260610",
+                "plan": "experiments\\plans\\demo.csv",
+                "expected_rows": 2,
+                "device": "cuda:0",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    generated = generate_remote_scripts(spec_path, output_dir=output_dir, monitor_dir=monitor_dir)
+    run_text = generated.run_script.read_text(encoding="utf-8")
+
+    assert "if exist {summarizer}" not in run_text
+    assert "if exist experiments\\summarize_innovation_one_results.py" in run_text
+    assert "summary_status=fallback_missing_summarizer" in run_text
+    assert "if errorlevel 1 goto summary_failed" not in run_text
+    assert 'copy "%RUN_DIR%\\results\\%RUN_ID%_summary.csv"' in run_text

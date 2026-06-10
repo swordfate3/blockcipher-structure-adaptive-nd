@@ -64,3 +64,35 @@ Target signs:
 - raw should also move above random if the current training scale was suppressing the Gohr-profile signal.
 
 If large-scale v2 approaches `0.58` to `0.60` calibrated accuracy or AUC moves substantially upward, promote ARX work to stronger architecture experiments. If it stays around `0.54`, prioritize `ArxWordMixerPairSet` before further scale increases.
+
+
+## Medium-Scale Result
+
+The medium-scale run completed on 2026-06-10 and was manually retrieved because the remote archive script failed after training at the summary-generation stage. The training gate itself passed: `result_lines=8`, `expected_rows=8`.
+
+```text
+run_id: innovation1-arx-speck32-v2-scale-m-gpu0-20260609
+result_dir: outputs/remote_results/innovation1-arx-speck32-v2-scale-m-gpu0-20260609/
+rows: 8/8
+```
+
+Summary over seeds 0..3:
+
+| Feature | Mean calibrated accuracy | Mean AUC |
+|---|---:|---:|
+| raw `ciphertext_pair_xor_bits` | 0.543276 | 0.560338 |
+| ARX v2 `ciphertext_pair_xor_arx_partial_inverse_bits` | 0.789639 | 0.869151 |
+| delta | +0.246363 | +0.308813 |
+
+Per-seed paired comparison:
+
+| seed | raw cal_acc | v2 cal_acc | delta cal_acc | raw AUC | v2 AUC | delta AUC |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0.568916 | 0.796089 | +0.227173 | 0.595679 | 0.875474 | +0.279795 |
+| 1 | 0.535156 | 0.776558 | +0.241402 | 0.549477 | 0.855342 | +0.305865 |
+| 2 | 0.556122 | 0.797379 | +0.241257 | 0.578808 | 0.876711 | +0.297903 |
+| 3 | 0.512909 | 0.788528 | +0.275620 | 0.517387 | 0.869077 | +0.351691 |
+
+All four seeds improved in both calibrated accuracy and AUC. This supports the thesis claim that ARX-specific public partial-inverse representation is a strong structure-adaptive input organization for SPECK32/64 under the current multi-pair StructureAdaptive-PairSet-DBitNet protocol.
+
+The large-scale run produced only one raw row before stopping and is not used as a paired comparison.

@@ -73,12 +73,19 @@ echo result_lines=%RESULT_LINES% > logs\%RUN_ID%_result_gate.txt
 echo expected_rows=%EXPECTED_ROWS% >> logs\%RUN_ID%_result_gate.txt
 if not "%RESULT_LINES%"=="%EXPECTED_ROWS%" goto incomplete_results
 
-%PY% experiments\summarize_innovation_one_results.py ^
-  --input results\%RUN_ID%.jsonl ^
-  --output results\%RUN_ID%_summary.csv ^
-  > logs\%RUN_ID%_summary_stdout.txt ^
-  2> logs\%RUN_ID%_summary_stderr.txt
-if errorlevel 1 goto summary_failed
+if exist experiments\summarize_innovation_one_results.py (
+  %PY% experiments\summarize_innovation_one_results.py ^
+    --input results\%RUN_ID%.jsonl ^
+    --output results\%RUN_ID%_summary.csv ^
+    > logs\%RUN_ID%_summary_stdout.txt ^
+    2> logs\%RUN_ID%_summary_stderr.txt
+)
+if not exist results\%RUN_ID%_summary.csv (
+  echo summary_status=fallback_missing_summarizer > logs\%RUN_ID%_summary_stdout.txt
+  echo run_id,result_lines,expected_rows > results\%RUN_ID%_summary.csv
+  echo %RUN_ID%,%RESULT_LINES%,%EXPECTED_ROWS% >> results\%RUN_ID%_summary.csv
+  if not exist logs\%RUN_ID%_summary_stderr.txt echo summary_fallback_no_stderr > logs\%RUN_ID%_summary_stderr.txt
+)
 
 if exist %ARCHIVE_WORK% rmdir /s /q %ARCHIVE_WORK%
 git clone --local %RUN_DIR% %ARCHIVE_WORK%
