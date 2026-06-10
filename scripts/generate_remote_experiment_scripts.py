@@ -61,6 +61,20 @@ def render_run_script(spec: dict[str, Any]) -> str:
     validation_label = str(spec.get("validation_label", "remote_experiment"))
     runner = str(spec.get("runner", r"experiments\run_innovation_one_matrix.py"))
     summarizer = str(spec.get("summarizer", r"experiments\summarize_innovation_one_results.py"))
+    dataset_cache_root = str(spec.get("dataset_cache_root", r"dataset_cache"))
+    dataset_cache_chunk_size = int(spec.get("dataset_cache_chunk_size", 8192))
+    dataset_cache_args = ""
+    dataset_cache_manifest = ""
+    if bool(spec.get("dataset_cache", False)):
+        dataset_cache_args = (
+            " ^\n"
+            f"  --dataset-cache-root {dataset_cache_root} ^\n"
+            f"  --dataset-cache-chunk-size {dataset_cache_chunk_size}"
+        )
+        dataset_cache_manifest = (
+            f"echo dataset_cache_root={dataset_cache_root}>> results_archive\\%RUN_ID%\\run_manifest.txt\n"
+            f"echo dataset_cache_chunk_size={dataset_cache_chunk_size}>> results_archive\\%RUN_ID%\\run_manifest.txt"
+        )
 
     return rf"""@echo off
 setlocal
@@ -94,7 +108,7 @@ git config --global --add safe.directory %PROJECT_DIR%
 git config --global --add safe.directory %PROJECT_DIR%\.git
 git fetch origin
 git checkout %BRANCH%
-git reset --hard origin/%BRANCH%
+git pull --ff-only origin %BRANCH%
 
 cd /d %RUN_ROOT%
 if exist %RUN_ID% rmdir /s /q %RUN_ID%
@@ -107,6 +121,7 @@ git remote set-url origin %REPO_URL%
 
 if not exist logs mkdir logs
 if not exist results mkdir results
+if not exist dataset_cache mkdir dataset_cache
 if exist logs\%RUN_ID%_stdout.txt del logs\%RUN_ID%_stdout.txt
 if exist logs\%RUN_ID%_stderr.txt del logs\%RUN_ID%_stderr.txt
 if exist results\%RUN_ID%.jsonl del results\%RUN_ID%.jsonl
@@ -125,7 +140,7 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   --learning-rate {learning_rate} ^
   --optimizer {optimizer} ^
   --weight-decay {weight_decay} ^
-  --device {device} ^
+  --device {device}{dataset_cache_args} ^
   --output results\%RUN_ID%.jsonl ^
   > logs\%RUN_ID%_stdout.txt ^
   2> logs\%RUN_ID%_stderr.txt
@@ -187,6 +202,7 @@ echo batch_size={batch_size}>> results_archive\%RUN_ID%\run_manifest.txt
 echo hidden_bits={hidden_bits}>> results_archive\%RUN_ID%\run_manifest.txt
 echo optimizer={optimizer}>> results_archive\%RUN_ID%\run_manifest.txt
 echo weight_decay={weight_decay}>> results_archive\%RUN_ID%\run_manifest.txt
+{dataset_cache_manifest}
 echo validation={validation_label}>> results_archive\%RUN_ID%\run_manifest.txt
 
 git add results_archive\%RUN_ID%

@@ -14,7 +14,11 @@ SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
-from blockcipher_ai_eval.datasets import DifferentialDatasetConfig, make_differential_dataset
+from blockcipher_ai_eval.datasets import (
+    DifferentialDatasetConfig,
+    make_chunked_differential_dataset,
+    make_differential_dataset,
+)
 from blockcipher_ai_eval.experiments import (
     build_cipher,
     build_model,
@@ -108,6 +112,17 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional literature-ranked CSV plan from build_innovation_one_matrix.py.",
     )
+    parser.add_argument(
+        "--dataset-cache-root",
+        default=None,
+        help="Optional root directory for chunk-generated disk-backed datasets.",
+    )
+    parser.add_argument(
+        "--dataset-cache-chunk-size",
+        type=int,
+        default=8192,
+        help="Rows per class generated before flushing to dataset cache.",
+    )
     parser.add_argument("--output", default="outputs/innovation_one_matrix_results.jsonl")
     return parser.parse_args()
 
@@ -157,28 +172,26 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         task["feature_encoding"],
         task["pairs_per_sample"],
     )
-    train_dataset = make_differential_dataset(
-        DifferentialDatasetConfig(
-            cipher=train_cipher,
-            input_difference=input_difference,
-            samples_per_class=task["samples_per_class"],
-            seed=task["seed"],
-            feature_encoding=task["feature_encoding"],
-            pairs_per_sample=task["pairs_per_sample"],
-            negative_mode=task["negative_mode"],
-        )
+    train_config = DifferentialDatasetConfig(
+        cipher=train_cipher,
+        input_difference=input_difference,
+        samples_per_class=task["samples_per_class"],
+        seed=task["seed"],
+        feature_encoding=task["feature_encoding"],
+        pairs_per_sample=task["pairs_per_sample"],
+        negative_mode=task["negative_mode"],
     )
-    validation_dataset = make_differential_dataset(
-        DifferentialDatasetConfig(
-            cipher=validation_cipher,
-            input_difference=input_difference,
-            samples_per_class=max(8, task["samples_per_class"] // 2),
-            seed=task["seed"] + 10_000,
-            feature_encoding=task["feature_encoding"],
-            pairs_per_sample=task["pairs_per_sample"],
-            negative_mode=task["negative_mode"],
-        )
+    validation_config = DifferentialDatasetConfig(
+        cipher=validation_cipher,
+        input_difference=input_difference,
+        samples_per_class=max(8, task["samples_per_class"] // 2),
+        seed=task["seed"] + 10_000,
+        feature_encoding=task["feature_encoding"],
+        pairs_per_sample=task["pairs_per_sample"],
+        negative_mode=task["negative_mode"],
     )
+    train_dataset = _make_task_dataset(train_config, args, task, split="train")
+    validation_dataset = _make_task_dataset(validation_config, args, task, split="validation")
     model = build_model(
         model_key,
         input_bits=train_dataset.features.shape[1],
@@ -231,6 +244,8 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         "history": result.history,
         "training": {
             **result.metadata,
+            "dataset_cache_root": args.dataset_cache_root,
+            "dataset_cache_chunk_size": args.dataset_cache_chunk_size if args.dataset_cache_root else None,
             "input_bits": int(train_dataset.features.shape[1]),
             "feature_encoding": task["feature_encoding"],
             "pairs_per_sample": task["pairs_per_sample"],
@@ -248,6 +263,36 @@ def _run_task(task: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
         },
     }
 
+
+
+def _make_task_dataset(
+    config: DifferentialDatasetConfig,
+    args: argparse.Namespace,
+    task: dict[str, Any],
+    *,
+    split: str,
+):
+    if not args.dataset_cache_root:
+        return make_differential_dataset(config)
+    return make_chunked_differential_dataset(
+        config,
+        cache_dir=_dataset_cache_dir(Path(args.dataset_cache_root), task, config, split),
+        chunk_size=args.dataset_cache_chunk_size,
+    )
+
+
+def _dataset_cache_dir(
+    root: Path,
+    task: dict[str, Any],
+    config: DifferentialDatasetConfig,
+    split: str,
+) -> Path:
+    key = task.get("train_key") if split == "train" else task.get("validation_key")
+    key_part = "key-default" if key is None else f"key-{int(key):x}"
+    return root / task["cipher_key"] / f"r{task['rounds']}" / split / (
+        f"seed-{config.seed}_samples-{config.samples_per_class}_pairs-{config.pairs_per_sample}_"
+        f"diff-{config.input_difference:x}_{config.feature_encoding}_{config.negative_mode}_{key_part}"
+    )
 
 def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
     if args.plan:

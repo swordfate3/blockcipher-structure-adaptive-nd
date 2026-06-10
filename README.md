@@ -124,8 +124,45 @@ uv run python experiments/run_innovation_one_matrix.py --help
 | `--difference-member` | 多差分 profile 的 member 编号 |
 | `--plan` | 使用 CSV 计划文件批量运行 |
 | `--output` | JSONL 输出路径 |
+| `--dataset-cache-root` | 可选。启用后按批次生成数据并保存为 `features.npy` / `labels.npy`，训练时按 batch 读取，不再一次性把整套数据转成 Tensor |
+| `--dataset-cache-chunk-size` | 可选。启用缓存时每批生成的每类样本数，默认 `8192` |
 
 输出是 JSONL，每一行是一组实验结果。
+
+
+### 批次生成与数据集缓存
+
+大规模实验建议启用数据集缓存，避免一次性生成全部样本并一次性转成 PyTorch Tensor：
+
+```bash
+uv run python experiments/run_innovation_one_matrix.py \
+  --plan experiments/plans/innovation1_arx_speck32_v2_scale_l.csv \
+  --epochs 24 \
+  --batch-size 1024 \
+  --hidden-bits 64 \
+  --optimizer adamw \
+  --device cuda:1 \
+  --dataset-cache-root outputs/dataset_cache/innovation1_arx_speck32_v2_scale_l \
+  --dataset-cache-chunk-size 8192 \
+  --output outputs/innovation1_arx_speck32_v2_scale_l.jsonl
+```
+
+启用后，每个 train/validation split 会保存：
+
+```text
+features.npy
+labels.npy
+metadata.json
+```
+
+同配置再次运行会复用缓存。JSONL 的 `training` 字段会记录：
+
+```text
+train_dataset_storage=disk
+validation_dataset_storage=disk
+dataset_cache_root=...
+dataset_cache_chunk_size=...
+```
 
 ## 4. 支持的密码与文献差分
 

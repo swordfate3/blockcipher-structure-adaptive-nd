@@ -7,9 +7,9 @@ from typing import Any
 import numpy as np
 import torch
 from torch import nn
-from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.data import DataLoader, Dataset, TensorDataset
 
-from blockcipher_ai_eval.datasets import DifferentialDataset
+from blockcipher_ai_eval.datasets import DifferentialDataset, DiskDifferentialDataset
 
 
 class Lion(torch.optim.Optimizer):
@@ -179,6 +179,8 @@ def train_binary_classifier(
     metadata = {
         "epochs": config.epochs,
         "batch_size": config.batch_size,
+        "train_dataset_storage": "disk" if isinstance(train_dataset, DiskDifferentialDataset) else "memory",
+        "validation_dataset_storage": "disk" if isinstance(validation_dataset, DiskDifferentialDataset) else "memory",
         "learning_rate": config.learning_rate,
         "optimizer": config.optimizer,
         "amsgrad": config.amsgrad,
@@ -259,9 +261,12 @@ def _make_loader(
     shuffle: bool,
     seed: int = 0,
 ) -> DataLoader:
-    features = torch.tensor(dataset.features, dtype=torch.float32)
-    labels = torch.tensor(dataset.labels, dtype=torch.float32)
-    torch_dataset = TensorDataset(features, labels)
+    if isinstance(dataset, DiskDifferentialDataset):
+        torch_dataset: Dataset = _DiskDifferentialTorchDataset(dataset)
+    else:
+        features = torch.tensor(dataset.features, dtype=torch.float32)
+        labels = torch.tensor(dataset.labels, dtype=torch.float32)
+        torch_dataset = TensorDataset(features, labels)
     generator = torch.Generator().manual_seed(seed)
     return DataLoader(
         torch_dataset,
@@ -269,6 +274,20 @@ def _make_loader(
         shuffle=shuffle,
         generator=generator if shuffle else None,
     )
+
+
+class _DiskDifferentialTorchDataset(Dataset):
+    def __init__(self, dataset: DiskDifferentialDataset) -> None:
+        self.features = dataset.features
+        self.labels = dataset.labels
+
+    def __len__(self) -> int:
+        return int(self.labels.shape[0])
+
+    def __getitem__(self, index: int) -> tuple[torch.Tensor, torch.Tensor]:
+        feature = torch.as_tensor(np.asarray(self.features[index]).copy(), dtype=torch.float32)
+        label = torch.tensor(float(self.labels[index]), dtype=torch.float32)
+        return feature, label
 
 
 def _select_device(device: str) -> torch.device:

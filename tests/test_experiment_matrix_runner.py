@@ -1063,3 +1063,53 @@ def test_run_innovation_one_matrix_can_execute_speck_arx_aligned_plan(tmp_path: 
     assert rows[0]["input_difference"] == 0x00400000
     assert rows[0]["training"]["pair_bits"] == 128
     assert rows[0]["training"]["input_bits"] == 256
+
+
+def test_run_innovation_one_matrix_can_use_chunked_dataset_cache(tmp_path: Path):
+    plan_path = tmp_path / "cache_plan.csv"
+    output_path = tmp_path / "cache_results.jsonl"
+    cache_root = tmp_path / "dataset_cache"
+    plan_path.write_text(
+        "\n".join(
+            [
+                "cipher,structure,network,model_key,family,architecture_rank,score,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode,train_key,validation_key,difference_profile,difference_member,evidence,literature",
+                "SPECK32/64,ARX,MLP,mlp,mlp,0,1,1,0,8,2,ciphertext_pair_xor_bits,encrypted_random_plaintexts,0x1918111009080100,0x0f0e0d0c0b0a0908,speck32_gohr2019,0,cache smoke,Gohr 2019",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--plan",
+            str(plan_path),
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--device",
+            "cpu",
+            "--dataset-cache-root",
+            str(cache_root),
+            "--dataset-cache-chunk-size",
+            "3",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+
+    assert completed.returncode == 0
+    assert rows[0]["training"]["train_dataset_storage"] == "disk"
+    assert rows[0]["training"]["validation_dataset_storage"] == "disk"
+    assert rows[0]["training"]["dataset_cache_root"] == str(cache_root)
+    assert rows[0]["training"]["dataset_cache_chunk_size"] == 3
+    assert list(cache_root.rglob("features.npy"))
+    assert list(cache_root.rglob("labels.npy"))

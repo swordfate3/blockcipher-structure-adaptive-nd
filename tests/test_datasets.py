@@ -3,7 +3,9 @@ import pytest
 from blockcipher_ai_eval.ciphers import Present80, Speck32_64
 from blockcipher_ai_eval.datasets import (
     DifferentialDatasetConfig,
+    DiskDifferentialDataset,
     int_to_bits,
+    make_chunked_differential_dataset,
     make_differential_dataset,
 )
 
@@ -222,3 +224,35 @@ def test_spn_aligned_feature_encoding_requires_inverse_permutation_layer():
 
     with pytest.raises(ValueError, match="inverse_permutation_layer"):
         make_differential_dataset(config)
+
+
+def test_make_chunked_differential_dataset_writes_and_reuses_disk_cache(tmp_path):
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=5,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_pair_xor_bits",
+        pairs_per_sample=2,
+        negative_mode="encrypted_random_plaintexts",
+    )
+    cache_dir = tmp_path / "speck_cache"
+
+    dataset = make_chunked_differential_dataset(config, cache_dir=cache_dir, chunk_size=3)
+    reused = make_chunked_differential_dataset(config, cache_dir=cache_dir, chunk_size=2)
+
+    assert isinstance(dataset, DiskDifferentialDataset)
+    assert dataset.features.shape == (10, 192)
+    assert dataset.labels.shape == (10,)
+    assert dataset.labels[:5].tolist() == [1, 1, 1, 1, 1]
+    assert dataset.labels[5:].tolist() == [0, 0, 0, 0, 0]
+    assert dataset.metadata["cache_status"] == "created"
+    assert dataset.metadata["generation_chunk_size"] == 3
+    assert dataset.metadata["pair_bits"] == 96
+    assert (cache_dir / "features.npy").exists()
+    assert (cache_dir / "labels.npy").exists()
+    assert (cache_dir / "metadata.json").exists()
+    assert reused.metadata["cache_status"] == "reused"
+    assert reused.features.tolist() == dataset.features.tolist()

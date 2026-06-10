@@ -1,7 +1,11 @@
 import numpy as np
 
 from blockcipher_ai_eval.ciphers import Speck32_64
-from blockcipher_ai_eval.datasets import DifferentialDatasetConfig, make_differential_dataset
+from blockcipher_ai_eval.datasets import (
+    DifferentialDatasetConfig,
+    make_chunked_differential_dataset,
+    make_differential_dataset,
+)
 from blockcipher_ai_eval.models import MlpDistinguisher
 from blockcipher_ai_eval.training import (
     TrainingConfig,
@@ -134,3 +138,32 @@ def test_train_binary_classifier_supports_lion_and_cosine_warmup():
     assert result.metadata["optimizer"] == "lion"
     assert result.metadata["lr_scheduler"] == "cosine_warmup"
     assert result.history[0]["learning_rate"] >= 0.0
+
+
+def test_train_binary_classifier_supports_disk_backed_dataset_without_eager_tensor_copy(tmp_path, monkeypatch):
+    config = DifferentialDatasetConfig(
+        cipher=Speck32_64(rounds=2, key=0x1918111009080100),
+        input_difference=0x0040,
+        samples_per_class=16,
+        seed=5,
+    )
+    dataset = make_chunked_differential_dataset(config, cache_dir=tmp_path / "dataset", chunk_size=8)
+    model = MlpDistinguisher(input_bits=dataset.features.shape[1], hidden_bits=16)
+    training_config = TrainingConfig(epochs=1, batch_size=8, learning_rate=1e-3, seed=99)
+
+    import blockcipher_ai_eval.training.binary as binary_training
+
+    original_tensor = binary_training.torch.tensor
+
+    def guarded_tensor(value, *args, **kwargs):
+        if value is dataset.features:
+            raise AssertionError("disk-backed features should not be eagerly converted")
+        return original_tensor(value, *args, **kwargs)
+
+    monkeypatch.setattr(binary_training.torch, "tensor", guarded_tensor)
+
+    result = train_binary_classifier(model, dataset, dataset, training_config)
+
+    assert result.metadata["train_dataset_storage"] == "disk"
+    assert result.metadata["validation_dataset_storage"] == "disk"
+    assert len(result.history) == 1

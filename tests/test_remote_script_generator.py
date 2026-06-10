@@ -39,6 +39,9 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
                 "archive_work_id": "demo_20260608",
                 "validation_label": "demo_validation",
                 "monitor_script_name": "monitor_demo_results.sh",
+                "dataset_cache": True,
+                "dataset_cache_root": "dataset_cache",
+                "dataset_cache_chunk_size": 4096,
             }
         ),
         encoding="utf-8",
@@ -59,9 +62,15 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "--device cuda:0" in run_text
     assert "--epochs 3" in run_text
     assert "--batch-size 128" in run_text
+    assert "--dataset-cache-root dataset_cache" in run_text
+    assert "--dataset-cache-chunk-size 4096" in run_text
+    assert "dataset_cache_root=dataset_cache" in run_text
+    assert "dataset_cache_chunk_size=4096" in run_text
     assert "git add results_archive\\%RUN_ID%" in run_text
     assert "git push origin results/%RUN_ID%" in run_text
     assert "validation=demo_validation" in run_text
+    assert "git pull --ff-only origin %BRANCH%" in run_text
+    assert "git reset --hard" not in run_text
 
     launcher_text = generated.launch_script.read_text(encoding="utf-8")
     assert "run_innovation1-demo-gpu0-20260608_and_push.cmd" in launcher_text
