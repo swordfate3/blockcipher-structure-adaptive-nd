@@ -1,44 +1,20 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import json
 from pathlib import Path
-from typing import Any
 
 import numpy as np
-from numpy.typing import NDArray
 
-from blockcipher_ai_eval.ciphers import ReducedRoundCipher
+from blockcipher_ai_eval.data.differential import (
+    DifferentialDataset,
+    DifferentialDatasetConfig,
+    DiskDifferentialDataset,
+)
 from blockcipher_ai_eval.features.encodings import (
     encode_ciphertext_pair,
     int_to_bits,
     pair_bits_for_encoding,
 )
-
-
-@dataclass(frozen=True)
-class DifferentialDatasetConfig:
-    cipher: ReducedRoundCipher
-    input_difference: int
-    samples_per_class: int
-    seed: int
-    shuffle: bool = True
-    feature_encoding: str = "ciphertext_pair_bits"
-    pairs_per_sample: int = 1
-    negative_mode: str = "random_ciphertext"
-
-
-@dataclass(frozen=True)
-class DifferentialDataset:
-    features: NDArray[np.uint8]
-    labels: NDArray[np.uint8]
-    metadata: dict[str, Any]
-
-
-@dataclass(frozen=True)
-class DiskDifferentialDataset(DifferentialDataset):
-    cache_dir: Path
-
 
 def make_differential_dataset(config: DifferentialDatasetConfig) -> DifferentialDataset:
     if config.pairs_per_sample < 1:

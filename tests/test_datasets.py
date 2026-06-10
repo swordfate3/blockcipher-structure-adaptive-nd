@@ -256,3 +256,15 @@ def test_make_chunked_differential_dataset_writes_and_reuses_disk_cache(tmp_path
     assert (cache_dir / "metadata.json").exists()
     assert reused.metadata["cache_status"] == "reused"
     assert reused.features.tolist() == dataset.features.tolist()
+
+
+def test_differential_dataset_config_is_available_from_canonical_data_module():
+    from blockcipher_ai_eval.data.differential import (
+        DifferentialDataset,
+        DifferentialDatasetConfig,
+        DiskDifferentialDataset,
+    )
+
+    assert DifferentialDatasetConfig is not None
+    assert DifferentialDataset is not None
+    assert DiskDifferentialDataset is not None
