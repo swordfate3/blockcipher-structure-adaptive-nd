@@ -1,0 +1,13 @@
+run_id=innovation1-arx-speck32-v2-scale-m-gpu0-20260609
+project_id=blockcipher-structure-adaptive-nd
+branch=main
+plan=experiments\plans\innovation1_arx_speck32_v2_scale_m.csv
+device=cuda:0
+expected_rows=8
+epochs=16
+batch_size=1024
+hidden_bits=64
+optimizer=adamw
+weight_decay=0.0001
+validation=speck32_arx_v2_scale_m
+archive_note=manual_archive_after_remote_summary_fallback_bug
