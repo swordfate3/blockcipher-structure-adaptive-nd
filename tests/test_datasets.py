@@ -268,3 +268,9 @@ def test_differential_dataset_config_is_available_from_canonical_data_module():
     assert DifferentialDatasetConfig is not None
     assert DifferentialDataset is not None
     assert DiskDifferentialDataset is not None
+
+
+def test_chunked_dataset_cache_builder_is_available_from_canonical_cache_module():
+    from blockcipher_ai_eval.data.cache import make_chunked_differential_dataset
+
+    assert make_chunked_differential_dataset is not None
