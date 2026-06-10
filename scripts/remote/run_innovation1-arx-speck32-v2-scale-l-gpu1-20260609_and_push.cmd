@@ -30,7 +30,7 @@ git config --global --add safe.directory %PROJECT_DIR%
 git config --global --add safe.directory %PROJECT_DIR%\.git
 git fetch origin
 git checkout %BRANCH%
-git reset --hard origin/%BRANCH%
+git pull --ff-only origin %BRANCH%
 
 cd /d %RUN_ROOT%
 if exist %RUN_ID% rmdir /s /q %RUN_ID%
@@ -43,6 +43,7 @@ git remote set-url origin %REPO_URL%
 
 if not exist logs mkdir logs
 if not exist results mkdir results
+if not exist dataset_cache mkdir dataset_cache
 if exist logs\%RUN_ID%_stdout.txt del logs\%RUN_ID%_stdout.txt
 if exist logs\%RUN_ID%_stderr.txt del logs\%RUN_ID%_stderr.txt
 if exist results\%RUN_ID%.jsonl del results\%RUN_ID%.jsonl
@@ -62,6 +63,8 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   --optimizer adamw ^
   --weight-decay 0.0001 ^
   --device cuda:1 ^
+  --dataset-cache-root dataset_cache ^
+  --dataset-cache-chunk-size 8192 ^
   --output results\%RUN_ID%.jsonl ^
   > logs\%RUN_ID%_stdout.txt ^
   2> logs\%RUN_ID%_stderr.txt
@@ -123,6 +126,8 @@ echo batch_size=1024>> results_archive\%RUN_ID%\run_manifest.txt
 echo hidden_bits=64>> results_archive\%RUN_ID%\run_manifest.txt
 echo optimizer=adamw>> results_archive\%RUN_ID%\run_manifest.txt
 echo weight_decay=0.0001>> results_archive\%RUN_ID%\run_manifest.txt
+echo dataset_cache_root=dataset_cache>> results_archive\%RUN_ID%\run_manifest.txt
+echo dataset_cache_chunk_size=8192>> results_archive\%RUN_ID%\run_manifest.txt
 echo validation=speck32_arx_v2_scale_l>> results_archive\%RUN_ID%\run_manifest.txt
 
 git add results_archive\%RUN_ID%
