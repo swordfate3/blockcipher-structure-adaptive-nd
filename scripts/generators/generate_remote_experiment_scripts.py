@@ -250,15 +250,16 @@ exit /b 3
 def render_launch_script(run_script_name: str, run_id: str, spec: dict[str, Any]) -> str:
     root = str(spec.get("root", r"G:\lxy"))
     project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
+    python_exe = str(spec.get("python", r"F:\Anaconda\envs\DWT\torch310\python.exe"))
+    run_dir = rf"{root}\{project_id}-runs\{run_id}"
     progress_path = rf"{root}\{project_id}-runs\{run_id}\logs\{run_id}_progress.jsonl"
+    tail_script = rf"{run_dir}\scripts\tail_progress.py"
     progress_command = (
         "while ($true) { "
+        f"if (Test-Path '{tail_script}') {{ & '{python_exe}' '{tail_script}' '{progress_path}' --interval 5; break }}; "
         "cls; "
-        f"Write-Host 'progress {run_id}'; "
-        "Get-Date; "
-        f"if (Test-Path '{progress_path}') {{ Get-Content '{progress_path}' -Tail 30 }} "
-        f"else {{ Write-Host 'waiting for {progress_path}' }}; "
-        "Start-Sleep -Seconds 5 "
+        f"Write-Host 'waiting for progress viewer {tail_script}'; "
+        "Start-Sleep -Seconds 2 "
         "}"
     )
     return (

@@ -63,6 +63,7 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   --learning-rate 0.001 ^
   --optimizer adamw ^
   --weight-decay 0.0001 ^
+  --key-rotation-interval 0 ^
   --device cuda:1 ^
   --dataset-cache-root dataset_cache ^
   --dataset-cache-chunk-size 2048 ^
@@ -129,6 +130,7 @@ echo batch_size=512>> results_archive\%RUN_ID%\run_manifest.txt
 echo hidden_bits=64>> results_archive\%RUN_ID%\run_manifest.txt
 echo optimizer=adamw>> results_archive\%RUN_ID%\run_manifest.txt
 echo weight_decay=0.0001>> results_archive\%RUN_ID%\run_manifest.txt
+echo key_rotation_interval=0>> results_archive\%RUN_ID%\run_manifest.txt
 echo dataset_cache_root=dataset_cache>> results_archive\%RUN_ID%\run_manifest.txt
 echo dataset_cache_chunk_size=2048>> results_archive\%RUN_ID%\run_manifest.txt
 echo validation=speck32_arx_v2_scale_smoke>> results_archive\%RUN_ID%\run_manifest.txt
