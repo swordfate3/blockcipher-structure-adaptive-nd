@@ -32,7 +32,8 @@ src/blockcipher_ai_eval/
 │   ├── registry.py                  # Model registry for canonical model keys
 ├── data/                            # Differential dataset configs, generation, and disk cache
 ├── experiments/                     # Cipher/model factories and difference profiles
-└── training/                        # Binary training and evaluation utilities
+├── evaluation/                      # Result summaries and comparison utilities
+└── training/                        # Binary training utilities
 ```
 
 ## Canonical Imports
@@ -86,7 +87,7 @@ experiments/
 │   ├── hparam_spaces/               # HPO search spaces
 │   └── summaries/                   # Curated result summaries
 ├── run_innovation_one_matrix.py     # Main matrix runner
-└── summarize_*.py                   # Result summarizers
+└── summarize_*.py                   # Thin CLI wrappers over evaluation/
 
 archive/legacy/experiments/builders/ # Historical build_innovation1_* builders
 ```
