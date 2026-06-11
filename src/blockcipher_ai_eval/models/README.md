@@ -1,7 +1,8 @@
 # Model Package Layout
 
-This package keeps implementation modules separate from compatibility shims.
-New model code should be added to the canonical implementation areas below.
+This package keeps model implementations in canonical subpackages. Do not add
+single-file top-level forwarding modules; use `baseline/`, `common/`, and
+`structure/` directly.
 
 ## Canonical Implementation Paths
 
@@ -17,14 +18,9 @@ New model code should be added to the canonical implementation areas below.
   - `structure/moe.py`: structure-aware expert fusion models.
 - `registry.py`: stable `model_key -> class` lookup used by experiments.
 
-## Compatibility Shims
+## Imports
 
-The top-level files such as `mlp.py`, `cnn.py`, `dbitnet.py`, `adaptive_dbitnet.py`,
-`spn.py`, `components.py`, and `structure_moe.py` are compatibility shims for
-older scripts, notebooks, tests, and experiment artifacts. They should not receive
-new implementation logic.
-
-Prefer these imports in new code:
+Use these canonical imports:
 
 ```python
 from blockcipher_ai_eval.models.baseline.gohr_speck import GohrSpeckDistinguisher
@@ -34,5 +30,4 @@ from blockcipher_ai_eval.models.structure.spn import SpnTokenMixerPairSetDisting
 from blockcipher_ai_eval.models.structure.moe import StructureAwareMoEDistinguisher
 ```
 
-Use `blockcipher_ai_eval.models` only as a stable public facade, and use
-`registry.py` / `experiments.factories.build_model()` for experiment construction.
+Use `registry.py` / `experiments.factories.build_model()` for experiment construction.

@@ -1,7 +1,7 @@
 import torch
 
 from blockcipher_ai_eval.experiments import build_model
-from blockcipher_ai_eval.models import ResNetBitSliceDistinguisher
+from blockcipher_ai_eval.models.baseline import ResNetBitSliceDistinguisher
 
 
 def test_resnet_bitslice_distinguisher_outputs_binary_logits():

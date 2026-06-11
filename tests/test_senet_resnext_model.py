@@ -2,7 +2,7 @@ import pytest
 import torch
 
 from blockcipher_ai_eval.experiments import build_model
-from blockcipher_ai_eval.models import SeResNeXtDistinguisher
+from blockcipher_ai_eval.models.baseline import SeResNeXtDistinguisher
 
 
 def test_senet_resnext_outputs_binary_logits():

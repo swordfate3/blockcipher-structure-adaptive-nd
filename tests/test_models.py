@@ -1,6 +1,6 @@
 import torch
 
-from blockcipher_ai_eval.models import MlpDistinguisher
+from blockcipher_ai_eval.models.baseline import MlpDistinguisher
 
 
 def test_mlp_distinguisher_is_torch_module_and_outputs_logits():

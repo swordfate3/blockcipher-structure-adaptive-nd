@@ -1,6 +1,6 @@
 # Blockcipher Structure-Adaptive ND Project Structure
 
-This project is organized around innovation one: structure-aware neural differential distinguishers for reduced-round block ciphers. The codebase keeps legacy import paths for reproducibility, but new code should follow the canonical structure below.
+This project is organized around innovation one: structure-aware neural differential distinguishers for reduced-round block ciphers. The refactor branch uses canonical paths only; old root-level experiment assets and single-file model/data shims are removed.
 
 ## Source Layout
 
@@ -30,8 +30,7 @@ src/blockcipher_ai_eval/
 │   │   ├── arx/                     # Future ARX-specific experts
 │   │   └── feistel/                 # Future Feistel-specific experts
 │   ├── registry.py                  # Model registry for canonical model keys
-│   └── *.py                         # Legacy import facades for reproducibility
-├── datasets.py                      # Differential sample generation, delegates feature encoding
+├── data/                            # Differential dataset configs, generation, and disk cache
 ├── experiments/                     # Cipher/model factories and difference profiles
 └── training/                        # Binary training and evaluation utilities
 ```
@@ -50,14 +49,13 @@ from blockcipher_ai_eval.features.pair_features import encode_ciphertext_pair
 from blockcipher_ai_eval.features.spn_aligned import inverse_permutation_difference
 ```
 
-The legacy paths still work for old plans and result reproducibility:
+Avoid removed compatibility paths such as `blockcipher_ai_eval.datasets` and `blockcipher_ai_eval.models.mlp`. Use canonical package paths:
 
 ```python
-from blockcipher_ai_eval.models import SpnTokenMixerPairSetDistinguisher
-from blockcipher_ai_eval.models.adaptive_dbitnet import SpnTokenMixerPairSetDistinguisher
-from blockcipher_ai_eval.models.spn import SpnTokenMixerPairSetDistinguisher
-from blockcipher_ai_eval.structure_features import structure_feature_vector
-from blockcipher_ai_eval.datasets import int_to_bits
+from blockcipher_ai_eval.data.differential import DifferentialDatasetConfig
+from blockcipher_ai_eval.data.differential.generator import make_differential_dataset
+from blockcipher_ai_eval.data.cache import make_chunked_differential_dataset
+from blockcipher_ai_eval.features.pair_features import int_to_bits
 ```
 
 ## Innovation-One Boundary
@@ -87,16 +85,13 @@ experiments/
 │   ├── plans/                       # Generated CSV matrices
 │   ├── hparam_spaces/               # HPO search spaces
 │   └── summaries/                   # Curated result summaries
-├── configs/                         # Legacy-compatible configs during migration
-├── plans/                           # Legacy-compatible generated CSV matrices
-├── hparam_spaces/                   # Legacy-compatible HPO search spaces
 ├── run_innovation_one_matrix.py     # Main matrix runner
 └── summarize_*.py                   # Result summarizers
 
 archive/legacy/experiments/builders/ # Historical build_innovation1_* builders
 ```
 
-Historical one-off builders are archived under `archive/legacy/experiments/builders/` for reproducibility. New experiments should use `experiments/build_plan.py` with JSON configs under `experiments/innovation1/configs/`. Legacy configs under `experiments/configs/innovation1/` remain valid while old remote runs are reproducible. For example:
+Historical one-off builders are archived under `archive/legacy/experiments/builders/` for reference. New experiments use `experiments/build_plan.py` with JSON configs under `experiments/innovation1/configs/`. For example:
 
 ```bash
 uv run python experiments/build_plan.py experiments/innovation1/configs/spn_present_strict_crosskey_10seed.json
@@ -106,12 +101,9 @@ uv run python experiments/build_plan.py experiments/innovation1/configs/spn_pres
 
 ```text
 scripts/
-├── generate_remote_experiment_scripts.py # Compatibility wrapper for the remote generator
 ├── generators/                           # Canonical generators for reproducible scripts/assets
+├── generated/                            # Generated run/launch/schedule/monitor files
 └── monitor_remote_results.py             # Generic result-branch monitor/retriever
-
-archive/legacy/scripts/monitors/          # Historical monitor_innovation1_*.sh wrappers
-archive/legacy/scripts/remote/            # Historical generated/hand-written Windows scripts
 ```
 
 Stable remote workflow:
@@ -123,7 +115,7 @@ local commit/push -> remote G:/lxy/<project> pull -> run torch310 -> push result
 Remote configs live under `experiments/innovation1/configs/remote/`. New remote experiments should prefer:
 
 ```bash
-uv run python scripts/generate_remote_experiment_scripts.py experiments/innovation1/configs/remote/<run>.json
+uv run python scripts/generators/generate_remote_experiment_scripts.py experiments/innovation1/configs/remote/<run>.json
 ```
 
 Historical hand-written remote scripts are archived under `archive/legacy/scripts/` because they are part of prior result reproducibility, not active entry points.

@@ -9,7 +9,7 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader, Dataset, TensorDataset
 
-from blockcipher_ai_eval.datasets import DifferentialDataset, DiskDifferentialDataset
+from blockcipher_ai_eval.data.differential import DifferentialDataset, DiskDifferentialDataset
 
 
 class Lion(torch.optim.Optimizer):

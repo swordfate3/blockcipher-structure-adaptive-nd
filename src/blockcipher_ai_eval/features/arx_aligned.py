@@ -88,6 +88,6 @@ def aligned_difference_bits(
     width: int,
     cipher: ReducedRoundCipher,
 ) -> list[int]:
-    from blockcipher_ai_eval.datasets import int_to_bits
+    from blockcipher_ai_eval.features.pair_features import int_to_bits
 
     return int_to_bits(arx_aligned_difference(difference, width, cipher), width)

@@ -2,17 +2,19 @@ import pytest
 import torch
 
 from blockcipher_ai_eval.experiments import build_model
-from blockcipher_ai_eval.models import (
-    AdaptiveDBitNetDistinguisher,
+from blockcipher_ai_eval.models.baseline import (
     DBitNetDistinguisher,
     GohrSpeckDistinguisher,
     LstmRoundSeqDistinguisher,
     MultiScaleDenseResNetDistinguisher,
-    PairwiseAdaptiveDBitNetDistinguisher,
     SeResNeXtDistinguisher,
+    TransformerEncoderDistinguisher,
+)
+from blockcipher_ai_eval.models.structure import (
+    AdaptiveDBitNetDistinguisher,
+    PairwiseAdaptiveDBitNetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
     StructureAwareMoEDistinguisher,
-    TransformerEncoderDistinguisher,
 )
 
 

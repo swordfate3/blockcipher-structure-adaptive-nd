@@ -75,7 +75,7 @@ def test_build_plan_generates_cartesian_csv_from_json_config(tmp_path: Path):
 def test_existing_present_strict_config_matches_committed_plan_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
-    config_path = repo_root / "experiments" / "configs" / "innovation1" / "spn_present_strict_crosskey_10seed.json"
+    config_path = repo_root / "experiments" / "innovation1" / "configs" / "spn_present_strict_crosskey_10seed.json"
     rows = module.build_plan_rows(module.load_plan_config(config_path))
 
     assert len(rows) == 40
@@ -92,7 +92,7 @@ def test_existing_present_strict_config_matches_committed_plan_shape():
 def test_gift64_spn_aligned_screen_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
-    config_path = repo_root / "experiments" / "configs" / "innovation1" / "spn_gift64_aligned_screen.json"
+    config_path = repo_root / "experiments" / "innovation1" / "configs" / "spn_gift64_aligned_screen.json"
     rows = module.build_plan_rows(module.load_plan_config(config_path))
 
     assert len(rows) == 24
@@ -110,7 +110,7 @@ def test_gift64_spn_aligned_screen_config_shape():
 def test_gift64_spn_aligned_confirm_10seed_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
-    config_path = repo_root / "experiments" / "configs" / "innovation1" / "spn_gift64_aligned_confirm_10seed.json"
+    config_path = repo_root / "experiments" / "innovation1" / "configs" / "spn_gift64_aligned_confirm_10seed.json"
     rows = module.build_plan_rows(module.load_plan_config(config_path))
 
     assert len(rows) == 40
@@ -127,7 +127,7 @@ def test_gift64_spn_aligned_confirm_10seed_config_shape():
 def test_speck32_arx_aligned_screen_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
-    config_path = repo_root / "experiments" / "configs" / "innovation1" / "arx_speck32_aligned_screen.json"
+    config_path = repo_root / "experiments" / "innovation1" / "configs" / "arx_speck32_aligned_screen.json"
     rows = module.build_plan_rows(module.load_plan_config(config_path))
 
     assert len(rows) == 16
@@ -145,7 +145,7 @@ def test_speck32_arx_aligned_screen_config_shape():
 def test_speck32_arx_v2_feature_screen_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
-    config_path = repo_root / "experiments" / "configs" / "innovation1" / "arx_speck32_v2_feature_screen.json"
+    config_path = repo_root / "experiments" / "innovation1" / "configs" / "arx_speck32_v2_feature_screen.json"
     rows = module.build_plan_rows(module.load_plan_config(config_path))
 
     assert len(rows) == 32
@@ -165,7 +165,7 @@ def test_speck32_arx_v2_feature_screen_config_shape():
 def test_speck32_arx_v2_confirm_10seed_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
-    config_path = repo_root / "experiments" / "configs" / "innovation1" / "arx_speck32_v2_confirm_10seed.json"
+    config_path = repo_root / "experiments" / "innovation1" / "configs" / "arx_speck32_v2_confirm_10seed.json"
     rows = module.build_plan_rows(module.load_plan_config(config_path))
 
     assert len(rows) == 30
@@ -185,7 +185,7 @@ def test_speck32_arx_v2_confirm_10seed_config_shape():
 def test_speck32_arx_v2_scale_m_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
-    config_path = repo_root / "experiments" / "configs" / "innovation1" / "arx_speck32_v2_scale_m.json"
+    config_path = repo_root / "experiments" / "innovation1" / "configs" / "arx_speck32_v2_scale_m.json"
     rows = module.build_plan_rows(module.load_plan_config(config_path))
 
     assert len(rows) == 8
@@ -205,7 +205,7 @@ def test_speck32_arx_v2_scale_m_config_shape():
 def test_speck32_arx_v2_scale_l_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
-    config_path = repo_root / "experiments" / "configs" / "innovation1" / "arx_speck32_v2_scale_l.json"
+    config_path = repo_root / "experiments" / "innovation1" / "configs" / "arx_speck32_v2_scale_l.json"
     rows = module.build_plan_rows(module.load_plan_config(config_path))
 
     assert len(rows) == 8

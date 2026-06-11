@@ -26,26 +26,28 @@ from blockcipher_ai_eval.ciphers import (
     Speck32_64,
     TripleDes,
 )
-from blockcipher_ai_eval.models import (
-    AdaptiveDBitNetDistinguisher,
-    ArxStructureAdaptivePairSetDBitNetDistinguisher,
+from blockcipher_ai_eval.models.baseline import (
     CnnDistinguisher,
     DBitNetDistinguisher,
     GohrSpeckDistinguisher,
     LstmRoundSeqDistinguisher,
     MlpDistinguisher,
     MultiScaleDenseResNetDistinguisher,
-    PairwiseAdaptiveDBitNetDistinguisher,
     ResNetBitSliceDistinguisher,
     SeResNeXtDistinguisher,
+    TransformerEncoderDistinguisher,
+)
+from blockcipher_ai_eval.models.structure import (
+    AdaptiveDBitNetDistinguisher,
+    ArxStructureAdaptivePairSetDBitNetDistinguisher,
+    PairwiseAdaptiveDBitNetDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
     StructureAwareMoEDistinguisher,
-    TransformerEncoderDistinguisher,
 )
-from blockcipher_ai_eval.features import STRUCTURE_FEATURE_NAMES
+from blockcipher_ai_eval.features.profile import STRUCTURE_FEATURE_NAMES
 
 
 MOE_V5_PRESENT_HPO_TRIAL20_OPTIONS = {

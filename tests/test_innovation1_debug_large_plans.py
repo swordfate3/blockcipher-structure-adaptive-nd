@@ -8,7 +8,7 @@ def _rows(path: str):
 
 
 def test_debug_large_gpu0_plan_covers_speck_and_present():
-    rows = _rows("experiments/plans/innovation1_debug_large_gpu0.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_debug_large_gpu0.csv")
 
     assert len(rows) == 216
     assert {row["cipher"] for row in rows} == {"SPECK32/64", "PRESENT-80"}
@@ -23,7 +23,7 @@ def test_debug_large_gpu0_plan_covers_speck_and_present():
 
 
 def test_debug_large_gpu1_plan_covers_sm4():
-    rows = _rows("experiments/plans/innovation1_debug_large_gpu1.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_debug_large_gpu1.csv")
 
     assert len(rows) == 108
     assert {row["cipher"] for row in rows} == {"SM4"}
@@ -36,7 +36,7 @@ def test_debug_large_gpu1_plan_covers_sm4():
 
 
 def test_debug_large_plans_use_expected_model_set():
-    rows = _rows("experiments/plans/innovation1_debug_large_gpu0.csv") + _rows("experiments/plans/innovation1_debug_large_gpu1.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_debug_large_gpu0.csv") + _rows("experiments/innovation1/plans/innovation1_debug_large_gpu1.csv")
 
     assert {row["model_key"] for row in rows} == {
         "mlp",
@@ -52,7 +52,7 @@ def test_debug_large_plans_use_expected_model_set():
 
 
 def test_structure_pairset_gpu0_plan_covers_speck_and_present():
-    rows = _rows("experiments/plans/innovation1_structure_pairset_gpu0.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_structure_pairset_gpu0.csv")
 
     assert len(rows) == 72
     assert {row["cipher"] for row in rows} == {"SPECK32/64", "PRESENT-80"}
@@ -64,7 +64,7 @@ def test_structure_pairset_gpu0_plan_covers_speck_and_present():
 
 
 def test_structure_pairset_gpu1_plan_covers_sm4():
-    rows = _rows("experiments/plans/innovation1_structure_pairset_gpu1.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_structure_pairset_gpu1.csv")
 
     assert len(rows) == 36
     assert {row["cipher"] for row in rows} == {"SM4"}
@@ -75,7 +75,7 @@ def test_structure_pairset_gpu1_plan_covers_sm4():
 
 
 def test_structure_pairset_plans_use_expected_model_set():
-    rows = _rows("experiments/plans/innovation1_structure_pairset_gpu0.csv") + _rows("experiments/plans/innovation1_structure_pairset_gpu1.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_structure_pairset_gpu0.csv") + _rows("experiments/innovation1/plans/innovation1_structure_pairset_gpu1.csv")
 
     assert {row["model_key"] for row in rows} == {
         "adaptive_dbitnet_pairwise",
@@ -85,7 +85,7 @@ def test_structure_pairset_plans_use_expected_model_set():
 
 
 def test_spn_pairset_v2_plan_targets_present_with_expected_models():
-    rows = _rows("experiments/plans/innovation1_spn_pairset_v2_present.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_spn_pairset_v2_present.csv")
 
     assert len(rows) == 48
     assert {row["cipher"] for row in rows} == {"PRESENT-80"}
@@ -102,7 +102,7 @@ def test_spn_pairset_v2_plan_targets_present_with_expected_models():
 
 
 def test_spn_token_mixer_plan_targets_present_r5_pairset_comparison():
-    rows = _rows("experiments/plans/innovation1_spn_token_mixer_present.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_spn_token_mixer_present.csv")
 
     assert len(rows) == 10
     assert {row["cipher"] for row in rows} == {"PRESENT-80"}
@@ -121,7 +121,7 @@ def test_spn_token_mixer_plan_targets_present_r5_pairset_comparison():
 
 
 def test_moe_v5_plan_targets_present_r5_structure_expert_comparison():
-    rows = _rows("experiments/plans/innovation1_moe_v5_present.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_moe_v5_present.csv")
 
     assert len(rows) == 10
     assert {row["cipher"] for row in rows} == {"PRESENT-80"}
@@ -140,7 +140,7 @@ def test_moe_v5_plan_targets_present_r5_structure_expert_comparison():
 
 
 def test_moe_v5_hpo_best_validation_plan_targets_fixed_multiseed_protocol():
-    rows = _rows("experiments/plans/innovation1_moe_v5_hpo_best_validate_present.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_moe_v5_hpo_best_validate_present.csv")
 
     assert len(rows) == 20
     assert {row["cipher"] for row in rows} == {"PRESENT-80"}
@@ -161,7 +161,7 @@ def test_moe_v5_hpo_best_validation_plan_targets_fixed_multiseed_protocol():
 
 
 def test_moe_v5_hpo_multiseed_best_validation_plan_targets_fixed_multiseed_protocol():
-    rows = _rows("experiments/plans/innovation1_moe_v5_hpo_multiseed_best_validate_present.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_moe_v5_hpo_multiseed_best_validate_present.csv")
 
     assert len(rows) == 25
     assert {row["cipher"] for row in rows} == {"PRESENT-80"}
@@ -183,7 +183,7 @@ def test_moe_v5_hpo_multiseed_best_validation_plan_targets_fixed_multiseed_proto
 
 
 def test_spn_aligned_present_plan_compares_raw_and_aligned_inputs():
-    rows = _rows("experiments/plans/innovation1_spn_aligned_present.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_spn_aligned_present.csv")
 
     assert len(rows) == 30
     assert {row["cipher"] for row in rows} == {"PRESENT-80"}
@@ -204,7 +204,7 @@ def test_spn_aligned_present_plan_compares_raw_and_aligned_inputs():
 
 
 def test_spn_aligned_present_confirm_plan_extends_to_ten_seeds():
-    rows = _rows("experiments/plans/innovation1_spn_aligned_present_confirm.csv")
+    rows = _rows("experiments/innovation1/plans/innovation1_spn_aligned_present_confirm.csv")
 
     assert len(rows) == 40
     assert {row["cipher"] for row in rows} == {"PRESENT-80"}

@@ -22,7 +22,7 @@ Medium scale:
 
 ```text
 run_id: innovation1-arx-speck32-v2-scale-m-gpu0-20260609
-plan: experiments/plans/innovation1_arx_speck32_v2_scale_m.csv
+plan: experiments/innovation1/plans/innovation1_arx_speck32_v2_scale_m.csv
 expected_rows: 8
 device: cuda:0
 samples_per_class: 131072
@@ -33,7 +33,7 @@ Large scale:
 
 ```text
 run_id: innovation1-arx-speck32-v2-scale-l-gpu1-20260609
-plan: experiments/plans/innovation1_arx_speck32_v2_scale_l.csv
+plan: experiments/innovation1/plans/innovation1_arx_speck32_v2_scale_l.csv
 expected_rows: 8
 device: cuda:1
 samples_per_class: 524288

@@ -23,13 +23,6 @@ def _load_generator():
 generate_remote_scripts = _load_generator()
 
 
-def test_remote_script_generator_compatibility_wrapper_exists():
-    wrapper = Path(__file__).resolve().parents[1] / "scripts" / "generate_remote_experiment_scripts.py"
-
-    assert wrapper.exists()
-    assert "scripts.generators.generate_remote_experiment_scripts" in wrapper.read_text(encoding="utf-8")
-
-
 def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path: Path):
     spec_path = tmp_path / "spec.json"
     output_dir = tmp_path / "remote"
@@ -39,7 +32,7 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
             {
                 "run_id": "innovation1-demo-gpu0-20260608",
                 "task_name": "innovation1_demo_gpu0_20260608",
-                "plan": "experiments\\plans\\demo.csv",
+                "plan": "experiments\\innovation1\\plans\\demo.csv",
                 "expected_rows": 4,
                 "device": "cuda:0",
                 "epochs": 3,
@@ -70,7 +63,7 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "set ROOT=G:\\lxy" in run_text
     assert "set RUN_ID=innovation1-demo-gpu0-20260608" in run_text
     assert "set EXPECTED_ROWS=4" in run_text
-    assert "--plan experiments\\plans\\demo.csv" in run_text
+    assert "--plan experiments\\innovation1\\plans\\demo.csv" in run_text
     assert "--device cuda:0" in run_text
     assert "--epochs 3" in run_text
     assert "--batch-size 128" in run_text
@@ -107,7 +100,7 @@ def test_generate_remote_run_script_escapes_windows_paths(tmp_path: Path):
             {
                 "run_id": "innovation1-path-check-gpu0-20260608",
                 "task_name": "innovation1_path_check_gpu0_20260608",
-                "plan": "experiments\\plans\\demo.csv",
+                "plan": "experiments\\innovation1\\plans\\demo.csv",
                 "expected_rows": 1,
                 "device": "cuda:0",
             }

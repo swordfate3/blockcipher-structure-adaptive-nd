@@ -267,7 +267,7 @@ def render_monitor_script(run_id: str, expected_rows: int) -> str:
     return (
         "#!/usr/bin/env bash\n"
         "set -euo pipefail\n"
-        "cd \"$(dirname \"$0\")/..\"\n"
+        "cd \"$(dirname \"$0\")/../../..\"\n"
         "uv run python scripts/monitor_remote_results.py \\\n"
         f"  --run-id {run_id}={expected_rows}\n"
     )
@@ -276,8 +276,8 @@ def render_monitor_script(run_id: str, expected_rows: int) -> str:
 def generate_remote_scripts(
     spec_path: Path,
     *,
-    output_dir: Path = Path("scripts/remote"),
-    monitor_dir: Path = Path("scripts"),
+    output_dir: Path = Path("scripts/generated/remote"),
+    monitor_dir: Path = Path("scripts/generated/monitors"),
 ) -> GeneratedRemoteScripts:
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
     run_id = str(_required(spec, "run_id"))
@@ -309,8 +309,8 @@ def generate_remote_scripts(
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate remote Windows GPU experiment scripts from a JSON spec.")
     parser.add_argument("spec", type=Path)
-    parser.add_argument("--output-dir", type=Path, default=Path("scripts/remote"))
-    parser.add_argument("--monitor-dir", type=Path, default=Path("scripts"))
+    parser.add_argument("--output-dir", type=Path, default=Path("scripts/generated/remote"))
+    parser.add_argument("--monitor-dir", type=Path, default=Path("scripts/generated/monitors"))
     return parser
 
 

@@ -11,14 +11,14 @@ Restructure `blockcipher-structure-adaptive-nd` into a research-grade codebase t
 - Experiments are grouped by thesis innovation and can run locally or remotely through generated scripts.
 - Results, memory notes, papers, and docs remain separated from source code.
 
-The redesign must keep old experiment artifacts reproducible. Existing model keys, runner commands, and remote result branches should continue to work during the transition.
+The refactor branch now prioritizes a clean canonical structure over old path compatibility. Existing result artifacts remain in Git history and archived outputs, but active code and generated scripts should use only the new layout.
 
 ## Non-Goals
 
 - Do not rewrite neural network math during the structure migration.
 - Do not rename completed remote result branches.
 - Do not break current `main` remote runs.
-- Do not delete compatibility import shims until the thesis experiments are stable.
+- Remove compatibility import shims once canonical imports and tests are updated on this branch.
 - Do not move large `outputs/` artifacts into tracked source code.
 
 ## Recommended Architecture
@@ -118,7 +118,7 @@ data/cache/disk.py               DiskDifferentialDataset and memmap cache helper
 data/protocols/negative.py       random-ciphertext vs encrypted-random-plaintext protocols
 ```
 
-Compatibility: keep `blockcipher_ai_eval.datasets` as a shim until all runners and docs migrate.
+Removed compatibility targets: `blockcipher_ai_eval.datasets`, `blockcipher_ai_eval.structure_features`, and `blockcipher_ai_eval.features.encodings`. Runners and tests import directly from `data.differential`, `data.cache`, `features.profile`, `features.pair_features`, and `features.registry`.
 
 ### `features/`
 
@@ -147,7 +147,7 @@ models/structure/spn/  SPN-specific TokenMixer / cell / nibble models
 models/structure/moe/  expert routing and structure-aware fusion
 ```
 
-Top-level files such as `models/adaptive_dbitnet.py`, `models/spn.py`, and `models/structure_moe.py` remain compatibility shims during the thesis cycle. New code should import from canonical paths documented in `models/README.md`.
+Top-level single-file model shims such as `models/adaptive_dbitnet.py`, `models/spn.py`, and `models/structure_moe.py` are removed. Model implementation code lives under `models/baseline/`, `models/common/`, and `models/structure/`.
 
 ### `training/`
 
@@ -192,36 +192,31 @@ experiments/innovation1/hparam_spaces/
 experiments/innovation1/summaries/
 ```
 
-Existing paths such as `experiments/plans/*.csv` should be supported by compatibility wrappers or symlinks during migration.
+Flat experiment asset paths are removed from this branch. Use the `experiments/innovation1/` tree directly.
 
 ## Experiment Asset Strategy
 
 The current flat experiment/script layout should migrate gradually:
 
 ```text
-experiments/configs/innovation1/*.json -> experiments/innovation1/configs/*.json
-experiments/configs/remote/*.json      -> experiments/innovation1/configs/remote/*.json
-experiments/plans/*.csv                -> experiments/innovation1/plans/*.csv
-experiments/hparam_spaces/*.json       -> experiments/innovation1/hparam_spaces/*.json
-scripts/remote/*.cmd                   -> scripts/remote/*.cmd, generated only
-monitor_*.sh                           -> scripts/monitors/*.sh
-script generators                      -> scripts/generators/
+configs          -> experiments/innovation1/configs/*.json
+remote configs   -> experiments/innovation1/configs/remote/*.json
+plans            -> experiments/innovation1/plans/*.csv
+hparam spaces    -> experiments/innovation1/hparam_spaces/*.json
+generated .cmd   -> scripts/generated/remote/*.cmd
+generated monitors -> scripts/generated/monitors/*.sh
+script generators  -> scripts/generators/
 ```
 
-The script generator should be the source of truth for remote `.cmd` and monitor scripts. Hand-written per-run scripts should move to `archive/legacy/` after the generated path is verified.
+The script generator is the source of truth for remote `.cmd` and monitor scripts. Generated artifacts live under `scripts/generated/`.
 
-## Backward Compatibility Rules
+## Canonicalization Rules
 
-1. Existing model keys remain valid:
-   - `structure_adaptive_pairset_dbitnet`
-   - `spn_token_mixer_pairset`
-   - `moe_v5_soft`, `moe_v5_hard`
-2. New clearer model keys may be added:
-   - `arx_structure_adaptive_pairset_dbitnet`
-   - `arx_pairset_dbitnet`
-3. Existing runner paths keep working until all docs and remote specs migrate.
-4. Compatibility shims may warn later, but should not warn during active remote experiments.
-5. Result archive paths and branch names are immutable.
+1. Python imports use canonical package paths; root-level data/model shim files are removed.
+2. Experiment assets live under `experiments/innovation1/`.
+3. Generated remote scripts live under `scripts/generated/`.
+4. Model keys used by experiment CSVs remain stable unless an experiment plan is intentionally regenerated.
+5. Result archive paths and branch names are immutable once produced.
 
 ## Migration Plan
 
@@ -237,7 +232,7 @@ Already started on `refactor/model-project-structure`:
 
 ### Phase 2: Data Layer Split
 
-Move dataset generation and disk caching from `datasets.py` into `data/` modules. Keep `datasets.py` as a public shim.
+Move dataset generation and disk caching from `datasets.py` into `data/` modules. Delete `datasets.py` after runners/tests use canonical imports.
 
 Validation:
 
@@ -247,7 +242,7 @@ uv run pytest tests/test_datasets.py tests/test_training.py tests/test_experimen
 
 ### Phase 3: Experiment Asset Layout
 
-Create `experiments/innovation1/` and migrate configs/plans/hparam spaces. Update script generator to resolve both old and new paths. Keep old assets until remote scripts are regenerated and verified.
+Create `experiments/innovation1/` and migrate configs/plans/hparam spaces. Delete the old flat asset directories from the tracked tree.
 
 Validation:
 
@@ -257,7 +252,7 @@ uv run pytest tests/test_remote_script_generator.py tests/test_experiment_matrix
 
 ### Phase 4: Script Layout
 
-Move monitor scripts under `scripts/monitors/` and generators under `scripts/generators/`. Keep thin root-level wrappers only where users already run them manually.
+Move generated monitor scripts under `scripts/generated/monitors/` and generators under `scripts/generators/`. Do not keep root-level compatibility wrappers.
 
 Validation:
 
@@ -290,9 +285,9 @@ Remote experiments should not be restarted solely because of refactoring. Push r
 ## Risks and Mitigations
 
 - Risk: path migration breaks old remote scripts.
-  - Mitigation: keep old paths and wrappers until generated remote scripts are verified.
+  - Mitigation: regenerate scripts from canonical remote configs before scheduling new jobs.
 - Risk: model key rename invalidates old result files.
-  - Mitigation: never remove old keys; add new clearer aliases.
+  - Mitigation: do not rename model keys in existing CSVs unless intentionally regenerating a plan.
 - Risk: massive one-shot refactor becomes hard to review.
   - Mitigation: phase commits by layer.
 - Risk: long remote jobs still look stuck.
@@ -303,8 +298,8 @@ Remote experiments should not be restarted solely because of refactoring. Push r
 The redesign is successful when:
 
 1. New code has clear canonical locations documented in `models/README.md` and architecture docs.
-2. Old imports, model keys, and runner paths still work during transition.
+2. Old root-level imports and flat experiment asset paths are removed from active code.
 3. Innovation-one ARX, SPN, and MoE model mappings are obvious from directory names.
-4. Experiment assets are grouped under `experiments/innovation1/` without breaking current scripts.
+4. Experiment assets are grouped under `experiments/innovation1/`, and generated scripts point there.
 5. Remote jobs emit progress logs before final result rows are written.
 6. The relevant test suites pass after each migration phase.

@@ -2,7 +2,7 @@ import pytest
 import torch
 
 from blockcipher_ai_eval.experiments import build_model
-from blockcipher_ai_eval.models import MultiScaleDenseResNetDistinguisher
+from blockcipher_ai_eval.models.baseline import MultiScaleDenseResNetDistinguisher
 
 
 def test_multiscale_dense_resnet_outputs_binary_logits():

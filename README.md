@@ -79,7 +79,8 @@ src/blockcipher_ai_eval/
     arx/                   ARX 结构，例如 SPECK
     spn/                   SPN 结构，例如 AES、PRESENT
     feistel/               Feistel-like 结构，例如 DES、SIMON、SM4
-  datasets.py              差分数据集生成
+  data/                    差分数据集配置、生成与磁盘缓存
+  features/                输入特征编码与结构对齐特征
   models/                  神经区分器模型
   experiments/             cipher/model 工厂与文献差分
   training/                PyTorch 训练与评估
@@ -97,8 +98,8 @@ experiments/
     summaries/                          人工整理的对比表与小结
 
 scripts/
-  generate_remote_experiment_scripts.py 远程脚本生成器兼容入口
   generators/                           远程 run/launch/schedule/monitor 生成器实现
+  generated/                            已生成的远程 .cmd 与 monitor wrapper
   monitor_remote_results.py             通用远程结果分支监控与拉回
 
 archive/legacy/            旧版一次性 builder、远程 .cmd、monitor wrapper 归档
@@ -143,7 +144,7 @@ uv run python experiments/run_innovation_one_matrix.py --help
 
 ```bash
 uv run python experiments/run_innovation_one_matrix.py \
-  --plan experiments/plans/innovation1_arx_speck32_v2_scale_l.csv \
+  --plan experiments/innovation1/plans/innovation1_arx_speck32_v2_scale_l.csv \
   --epochs 24 \
   --batch-size 1024 \
   --hidden-bits 64 \
@@ -349,13 +350,13 @@ cuda
 这组实验用于比较当前最强 pairwise baseline、新增结构自适应 PairSet DBitNet、以及 `moe_v4_soft`：
 
 ```text
-experiments/plans/innovation1_structure_pairset_gpu0.csv  # SPECK32/64 + PRESENT-80, 72 rows
-experiments/plans/innovation1_structure_pairset_gpu1.csv  # SM4, 36 rows
+experiments/innovation1/plans/innovation1_structure_pairset_gpu0.csv  # SPECK32/64 + PRESENT-80, 72 rows
+experiments/innovation1/plans/innovation1_structure_pairset_gpu1.csv  # SM4, 36 rows
 archive/legacy/scripts/remote/run_innovation1_structure_pairset_gpu0_and_push.cmd
 archive/legacy/scripts/remote/run_innovation1_structure_pairset_gpu1_and_push.cmd
 ```
 
-说明：这些 `.cmd` 是历史运行脚本，已移到 `archive/legacy/`。新远程实验优先用 `scripts/generate_remote_experiment_scripts.py` 从 JSON 配置生成。
+说明：这些 `.cmd` 是历史运行脚本，已移到 `archive/legacy/`。新远程实验优先用 `scripts/generators/generate_remote_experiment_scripts.py` 从 JSON 配置生成。
 
 远程按技能流程从 GitHub 拉取 `main` 后运行，结果分支：
 

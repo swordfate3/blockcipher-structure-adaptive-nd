@@ -1,13 +1,10 @@
 import pytest
 
 from blockcipher_ai_eval.ciphers import Present80, Speck32_64
-from blockcipher_ai_eval.datasets import (
-    DifferentialDatasetConfig,
-    DiskDifferentialDataset,
-    int_to_bits,
-    make_chunked_differential_dataset,
-    make_differential_dataset,
-)
+from blockcipher_ai_eval.data.cache import make_chunked_differential_dataset
+from blockcipher_ai_eval.data.differential import DifferentialDatasetConfig, DiskDifferentialDataset
+from blockcipher_ai_eval.data.differential.generator import make_differential_dataset
+from blockcipher_ai_eval.features.pair_features import int_to_bits
 
 
 def test_int_to_bits_uses_fixed_width_big_endian_encoding():

@@ -1,41 +1,8 @@
-from blockcipher_ai_eval.models.baseline import (
-    CnnDistinguisher,
-    DBitNetDistinguisher,
-    GohrSpeckDistinguisher,
-    LstmRoundSeqDistinguisher,
-    MlpDistinguisher,
-    MultiScaleDenseResNetDistinguisher,
-    ResNetBitSliceDistinguisher,
-    SeResNeXtDistinguisher,
-    TransformerEncoderDistinguisher,
-)
-from blockcipher_ai_eval.models.structure import (
-    AdaptiveDBitNetDistinguisher,
-    ArxStructureAdaptivePairSetDBitNetDistinguisher,
-    PairwiseAdaptiveDBitNetDistinguisher,
-    SpnCellPairSetDBitNetDistinguisher,
-    SpnNibbleConvPairSetDistinguisher,
-    SpnTokenMixerPairSetDistinguisher,
-    StructureAdaptivePairSetDBitNetDistinguisher,
-    StructureAwareMoEDistinguisher,
-)
+"""Neural model package. Import architectures from canonical subpackages.
 
-__all__ = [
-    "AdaptiveDBitNetDistinguisher",
-    "ArxStructureAdaptivePairSetDBitNetDistinguisher",
-    "CnnDistinguisher",
-    "DBitNetDistinguisher",
-    "GohrSpeckDistinguisher",
-    "LstmRoundSeqDistinguisher",
-    "MlpDistinguisher",
-    "MultiScaleDenseResNetDistinguisher",
-    "PairwiseAdaptiveDBitNetDistinguisher",
-    "ResNetBitSliceDistinguisher",
-    "SeResNeXtDistinguisher",
-    "SpnCellPairSetDBitNetDistinguisher",
-    "SpnNibbleConvPairSetDistinguisher",
-    "SpnTokenMixerPairSetDistinguisher",
-    "StructureAdaptivePairSetDBitNetDistinguisher",
-    "StructureAwareMoEDistinguisher",
-    "TransformerEncoderDistinguisher",
-]
+Use ``blockcipher_ai_eval.models.baseline`` for literature baselines and
+``blockcipher_ai_eval.models.structure`` for structure-aware architectures.
+The top-level package intentionally does not re-export model classes.
+"""
+
+__all__: list[str] = []

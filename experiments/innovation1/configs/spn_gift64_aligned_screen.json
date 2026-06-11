@@ -1,0 +1,38 @@
+{
+  "output": "experiments/innovation1/plans/innovation1_spn_gift64_aligned_screen.csv",
+  "defaults": {
+    "cipher": "GIFT-64",
+    "structure": "SPN",
+    "network": "SPN-TokenMixer-PairSet",
+    "model_key": "spn_token_mixer_pairset",
+    "family": "spn_token_mixer",
+    "architecture_rank": 0,
+    "score": 68,
+    "samples_per_class": 32768,
+    "pairs_per_sample": 4,
+    "negative_mode": "encrypted_random_plaintexts",
+    "train_key": "0x00000000000000000000000000000000",
+    "validation_key": "0x11111111111111111111111111111111",
+    "difference_profile": "gift64_shen2024_spn_screen",
+    "difference_member": 0,
+    "evidence": "GIFT-64 SPN migration screen for public inverse-permutation aligned input",
+    "literature": "Shen/Song/Lu/Long/Tian 2024 GIFT neural distinguishers; innovation-one SPN structure alignment"
+  },
+  "sweep": {
+    "rounds": [
+      4,
+      5,
+      6
+    ],
+    "feature_encoding": [
+      "ciphertext_pair_xor_bits",
+      "ciphertext_pair_xor_spn_aligned_bits"
+    ],
+    "seed": {
+      "range": [
+        0,
+        4
+      ]
+    }
+  }
+}

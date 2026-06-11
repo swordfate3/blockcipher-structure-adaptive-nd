@@ -18,7 +18,7 @@ v3 RX/carry-inspired features are intentionally excluded from this confirmation 
 
 ```text
 run_id: innovation1-arx-speck32-v2-confirm-10seed-gpu1-20260609
-plan: experiments/plans/innovation1_arx_speck32_v2_confirm_10seed.csv
+plan: experiments/innovation1/plans/innovation1_arx_speck32_v2_confirm_10seed.csv
 expected_rows: 30
 device: cuda:1
 ```

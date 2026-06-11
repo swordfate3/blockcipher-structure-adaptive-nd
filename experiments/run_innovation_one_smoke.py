@@ -12,8 +12,9 @@ if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
 from blockcipher_ai_eval.ciphers import Speck32_64
-from blockcipher_ai_eval.datasets import DifferentialDatasetConfig, make_differential_dataset
-from blockcipher_ai_eval.models import MlpDistinguisher
+from blockcipher_ai_eval.data.differential import DifferentialDatasetConfig
+from blockcipher_ai_eval.data.differential.generator import make_differential_dataset
+from blockcipher_ai_eval.models.baseline import MlpDistinguisher
 from blockcipher_ai_eval.training import TrainingConfig, train_binary_classifier
 
 

@@ -6,7 +6,7 @@ from blockcipher_ai_eval.data.differential.config import (
     DifferentialDataset,
     DifferentialDatasetConfig,
 )
-from blockcipher_ai_eval.features.encodings import encode_ciphertext_pair, pair_bits_for_encoding
+from blockcipher_ai_eval.features.pair_features import encode_ciphertext_pair, pair_bits_for_encoding
 
 
 def make_differential_dataset(config: DifferentialDatasetConfig) -> DifferentialDataset:

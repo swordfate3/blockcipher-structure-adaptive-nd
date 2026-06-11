@@ -1,7 +1,7 @@
 import torch
 
 from blockcipher_ai_eval.innovation_one import CipherProfile
-from blockcipher_ai_eval.models import StructureAwareMoEDistinguisher
+from blockcipher_ai_eval.models.structure import StructureAwareMoEDistinguisher
 from blockcipher_ai_eval.models.structure.adaptive_dbitnet import AdaptiveDBitNetDistinguisher
 from blockcipher_ai_eval.models.structure.adaptive_dbitnet import PairwiseAdaptiveDBitNetDistinguisher
 from blockcipher_ai_eval.models.structure.spn import SpnTokenMixerPairSetDistinguisher
@@ -12,7 +12,7 @@ from blockcipher_ai_eval.models.structure.moe import (
     V4_EXPERT_KEYS,
     V5_EXPERT_KEYS,
 )
-from blockcipher_ai_eval.structure_features import structure_feature_vector
+from blockcipher_ai_eval.features.profile import structure_feature_vector
 
 
 def _features(cipher, rounds):

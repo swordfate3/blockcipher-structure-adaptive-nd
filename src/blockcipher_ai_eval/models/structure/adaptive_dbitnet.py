@@ -341,19 +341,3 @@ class StructureAdaptivePairSetDBitNetDistinguisher(nn.Module):
         else:
             pooled = torch.cat([attention_embedding, mean_embedding, max_embedding], dim=1)
         return self.classifier(pooled)
-
-_SPN_COMPAT_EXPORTS = {
-    "SpnCellPairSetDBitNetDistinguisher",
-    "SpnNibbleConvPairSetDistinguisher",
-    "SpnTokenMixerPairSetDistinguisher",
-}
-
-
-def __getattr__(name: str):
-    if name in _SPN_COMPAT_EXPORTS:
-        from blockcipher_ai_eval.models import spn as spn_models
-
-        value = getattr(spn_models, name)
-        globals()[name] = value
-        return value
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

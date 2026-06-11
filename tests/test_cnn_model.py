@@ -1,6 +1,6 @@
 import torch
 
-from blockcipher_ai_eval.models import CnnDistinguisher
+from blockcipher_ai_eval.models.baseline import CnnDistinguisher
 
 
 def test_cnn_distinguisher_outputs_binary_logits():

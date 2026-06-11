@@ -1,0 +1,37 @@
+{
+  "output": "experiments/innovation1/plans/innovation1_arx_speck32_v2_confirm_10seed.csv",
+  "defaults": {
+    "cipher": "SPECK32/64",
+    "structure": "ARX",
+    "network": "StructureAdaptive-PairSet-DBitNet",
+    "model_key": "structure_adaptive_pairset_dbitnet",
+    "family": "structure_pairset",
+    "architecture_rank": 0,
+    "score": 70,
+    "samples_per_class": 32768,
+    "pairs_per_sample": 4,
+    "negative_mode": "encrypted_random_plaintexts",
+    "train_key": "0x1918111009080100",
+    "validation_key": "0x0f0e0d0c0b0a0908",
+    "difference_profile": "speck32_gohr2019",
+    "difference_member": 0,
+    "evidence": "10-seed confirmation for SPECK32/64 ARX keyless partial-inverse structure feature after 4-seed screen",
+    "literature": "Gohr 2019 SPECK32 neural differential cryptanalysis; ARX public partial-inverse structure alignment for innovation one"
+  },
+  "sweep": {
+    "rounds": [
+      7
+    ],
+    "feature_encoding": [
+      "ciphertext_pair_xor_bits",
+      "ciphertext_pair_xor_arx_aligned_bits",
+      "ciphertext_pair_xor_arx_partial_inverse_bits"
+    ],
+    "seed": {
+      "range": [
+        0,
+        10
+      ]
+    }
+  }
+}

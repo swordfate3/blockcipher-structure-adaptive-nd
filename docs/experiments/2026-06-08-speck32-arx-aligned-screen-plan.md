@@ -23,9 +23,9 @@ Align_ARX(Delta_C) = ROR7(Delta_L) || ROL2(Delta_R)
 
 ## 远程筛查协议
 
-- 配置：`experiments/configs/innovation1/arx_speck32_aligned_screen.json`
-- 计划：`experiments/plans/innovation1_arx_speck32_aligned_screen.csv`
-- 远程配置：`experiments/configs/remote/innovation1_arx_speck32_aligned_screen_gpu1.json`
+- 配置：`experiments/innovation1/configs/arx_speck32_aligned_screen.json`
+- 计划：`experiments/innovation1/plans/innovation1_arx_speck32_aligned_screen.csv`
+- 远程配置：`experiments/innovation1/configs/remote/innovation1_arx_speck32_aligned_screen_gpu1.json`
 - run id：`innovation1-arx-speck32-aligned-screen-gpu1-20260608`
 - 行数：16
 - cipher：SPECK32/64

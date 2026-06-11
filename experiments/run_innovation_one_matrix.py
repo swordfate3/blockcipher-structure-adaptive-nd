@@ -16,11 +16,9 @@ SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
-from blockcipher_ai_eval.datasets import (
-    DifferentialDatasetConfig,
-    make_chunked_differential_dataset,
-    make_differential_dataset,
-)
+from blockcipher_ai_eval.data.cache import make_chunked_differential_dataset
+from blockcipher_ai_eval.data.differential import DifferentialDatasetConfig
+from blockcipher_ai_eval.data.differential.generator import make_differential_dataset
 from blockcipher_ai_eval.experiments import (
     build_cipher,
     build_model,
@@ -29,8 +27,8 @@ from blockcipher_ai_eval.experiments import (
     literature_difference_profiles,
 )
 from blockcipher_ai_eval.innovation_one import CipherProfile
-from blockcipher_ai_eval.features import structure_feature_vector
-from blockcipher_ai_eval.features.encodings import pair_bits_for_encoding
+from blockcipher_ai_eval.features.profile import structure_feature_vector
+from blockcipher_ai_eval.features.registry import pair_bits_for_encoding
 from blockcipher_ai_eval.training import TrainingConfig, train_binary_classifier
 
 
