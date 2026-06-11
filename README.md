@@ -83,13 +83,15 @@ src/blockcipher_ai_eval/
   features/                输入特征编码与结构对齐特征
   models/                  神经区分器模型
   experiments/             cipher/model 工厂与文献差分
-  training/                PyTorch 训练与评估
+  evaluation/              JSONL 汇总、HPO summary 与后续统计比较逻辑
+  training/                PyTorch 训练循环与指标计算
 
 experiments/
   run_innovation_one_matrix.py          主实验入口
   build_plan.py                         JSON 配置生成 CSV plan
   build_innovation_one_matrix.py        生成文献排序实验计划
-  summarize_innovation_one_results.py   JSONL 汇总为 CSV
+  summarize_innovation_one_results.py   JSONL 汇总为 CSV，薄 CLI，核心逻辑在 evaluation/
+  summarize_hparam_search.py              HPO JSONL 汇总为 CSV，薄 CLI，核心逻辑在 evaluation/
   innovation1/                          创新一实验资产 canonical 目录
     plans/                              CSV 实验矩阵
     configs/                            JSON plan 配置
@@ -333,6 +335,15 @@ uv run python experiments/summarize_innovation_one_results.py \
   --output outputs/readme_smoke_summary.csv
 ```
 
+`experiments/summarize_innovation_one_results.py` 和 `experiments/summarize_hparam_search.py` 只是命令行入口；可复用的汇总逻辑在：
+
+```python
+from blockcipher_ai_eval.evaluation import (
+    hparam_summary_rows,
+    innovation_one_summary_rows,
+)
+```
+
 查看 JSONL 是否使用 GPU：
 
 ```bash
@@ -345,25 +356,74 @@ python -c 'import json; rows=[json.loads(l) for l in open("outputs/readme_smoke.
 cuda
 ```
 
-## 7. 远程实验：结构自适应 PairSet DBitNet 对照
+## 7. 远程实验：新架构运行流程
 
-这组实验用于比较当前最强 pairwise baseline、新增结构自适应 PairSet DBitNet、以及 `moe_v4_soft`：
-
-```text
-experiments/innovation1/plans/innovation1_structure_pairset_gpu0.csv  # SPECK32/64 + PRESENT-80, 72 rows
-experiments/innovation1/plans/innovation1_structure_pairset_gpu1.csv  # SM4, 36 rows
-archive/legacy/scripts/remote/run_innovation1_structure_pairset_gpu0_and_push.cmd
-archive/legacy/scripts/remote/run_innovation1_structure_pairset_gpu1_and_push.cmd
-```
-
-说明：这些 `.cmd` 是历史运行脚本，已移到 `archive/legacy/`。新远程实验优先用 `scripts/generators/generate_remote_experiment_scripts.py` 从 JSON 配置生成。
-
-远程按技能流程从 GitHub 拉取 `main` 后运行，结果分支：
+远程 Windows GPU 实验不再维护手写 `.cmd`。当前流程是：
 
 ```text
-results/innovation1-structure-pairset-gpu0-20260605
-results/innovation1-structure-pairset-gpu1-20260605
+本地修改/测试/提交 -> 推送 GitHub 分支 -> remote JSON 指定 branch/plan -> 生成 scripts/generated -> 远程 G:\lxy\<project> 拉取该分支 -> torch310 运行 -> 推送 results/<run_id> 分支
 ```
+
+远程配置统一放在：
+
+```text
+experiments/innovation1/configs/remote/*.json
+```
+
+配置中的 `plan` 必须使用 canonical 路径，例如：
+
+```json
+{
+  "branch": "refactor/model-project-structure",
+  "plan": "experiments\\innovation1\\plans\\innovation1_arx_speck32_v2_scale_l.csv"
+}
+```
+
+生成远程 run/launch/schedule/monitor 脚本：
+
+```bash
+uv run python scripts/generators/generate_remote_experiment_scripts.py \
+  experiments/innovation1/configs/remote/innovation1_arx_speck32_v2_scale_l_gpu1.json
+```
+
+生成物会写到：
+
+```text
+scripts/generated/remote/*.cmd
+scripts/generated/monitors/*.sh
+```
+
+远程机器固定项目根目录：
+
+```text
+G:\lxy\blockcipher-structure-adaptive-nd
+```
+
+启动前要确认远程脚本里的两个关键字段：
+
+```cmd
+set BRANCH=refactor/model-project-structure
+--plan experiments\innovation1\plans\<plan>.csv
+```
+
+远程运行时会在独立 run 目录中执行：
+
+```text
+G:\lxy\blockcipher-structure-adaptive-nd-runs\<run_id>
+```
+
+运行证据文件包括：
+
+```text
+logs/<run_id>_git_revision.txt
+logs/<run_id>_torch_info.txt
+logs/<run_id>_gpu_info.txt
+logs/<run_id>_progress.jsonl
+results/<run_id>.jsonl
+results/<run_id>_summary.csv
+```
+
+历史手写脚本已经归档在 `archive/legacy/scripts/`，只用于复查旧结果，不作为新实验入口。
 
 本地也可以先跑一个超小 smoke：
 
