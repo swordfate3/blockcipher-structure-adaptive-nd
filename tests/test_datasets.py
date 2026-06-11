@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from blockcipher_ai_eval.ciphers import Present80, Speck32_64
 from blockcipher_ai_eval.data.cache import make_chunked_differential_dataset
+from blockcipher_ai_eval.data.cache.disk import _generate_chunk
 from blockcipher_ai_eval.data.differential import DifferentialDatasetConfig, DiskDifferentialDataset
 from blockcipher_ai_eval.data.differential.generator import make_differential_dataset
 from blockcipher_ai_eval.features.pair_features import int_to_bits
@@ -381,3 +382,23 @@ def test_chunked_dataset_cache_builder_is_available_from_canonical_cache_module(
     from blockcipher_ai_eval.data.cache import make_chunked_differential_dataset
 
     assert make_chunked_differential_dataset is not None
+
+
+def test_generate_chunk_streams_rows_into_preallocated_uint8_array():
+    calls: list[int] = []
+
+    def make_row(offset: int) -> list[int]:
+        calls.append(offset)
+        return [offset % 2, 1, 0]
+
+    chunk = _generate_chunk(count=4, input_bits=3, row_factory=make_row)
+
+    assert calls == [0, 1, 2, 3]
+    assert chunk.dtype.name == "uint8"
+    assert chunk.shape == (4, 3)
+    assert chunk.tolist() == [[0, 1, 0], [1, 1, 0], [0, 1, 0], [1, 1, 0]]
+
+
+def test_generate_chunk_rejects_unexpected_row_width():
+    with pytest.raises(ValueError, match="generated row has 2 bits, expected 3"):
+        _generate_chunk(count=1, input_bits=3, row_factory=lambda _offset: [1, 0])

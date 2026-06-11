@@ -101,11 +101,14 @@ def make_chunked_differential_dataset(
     row_index = 0
     for start in range(0, config.samples_per_class, chunk_size):
         count = min(chunk_size, config.samples_per_class - start)
-        chunk_rows = [
-            generate_positive_row(config, rng, block_bits, mask, row_index=start + offset)
-            for offset in range(count)
-        ]
-        features[row_index : row_index + count] = np.asarray(chunk_rows, dtype=np.uint8)
+        chunk = _generate_chunk(
+            count=count,
+            input_bits=input_bits,
+            row_factory=lambda offset: generate_positive_row(
+                config, rng, block_bits, mask, row_index=start + offset
+            ),
+        )
+        features[row_index : row_index + count] = chunk
         labels[row_index : row_index + count] = 1
         row_index += count
         _emit_progress(
@@ -122,11 +125,14 @@ def make_chunked_differential_dataset(
 
     for start in range(0, config.samples_per_class, chunk_size):
         count = min(chunk_size, config.samples_per_class - start)
-        chunk_rows = [
-            generate_negative_row(config, rng, block_bits, row_index=start + offset)
-            for offset in range(count)
-        ]
-        features[row_index : row_index + count] = np.asarray(chunk_rows, dtype=np.uint8)
+        chunk = _generate_chunk(
+            count=count,
+            input_bits=input_bits,
+            row_factory=lambda offset: generate_negative_row(
+                config, rng, block_bits, row_index=start + offset
+            ),
+        )
+        features[row_index : row_index + count] = chunk
         labels[row_index : row_index + count] = 0
         row_index += count
         _emit_progress(
@@ -176,6 +182,21 @@ def make_chunked_differential_dataset(
         metadata=metadata,
         cache_dir=cache_path,
     )
+
+
+def _generate_chunk(
+    *,
+    count: int,
+    input_bits: int,
+    row_factory: Callable[[int], list[int]],
+) -> np.ndarray:
+    chunk = np.empty((count, input_bits), dtype=np.uint8)
+    for offset in range(count):
+        row = row_factory(offset)
+        if len(row) != input_bits:
+            raise ValueError(f"generated row has {len(row)} bits, expected {input_bits}")
+        chunk[offset] = row
+    return chunk
 
 
 def _cache_matches(

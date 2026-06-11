@@ -251,9 +251,12 @@ def render_launch_script(run_script_name: str, run_id: str, spec: dict[str, Any]
     root = str(spec.get("root", r"G:\lxy"))
     project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
     python_exe = str(spec.get("python", r"F:\Anaconda\envs\DWT\torch310\python.exe"))
-    run_dir = rf"{root}\{project_id}-runs\{run_id}"
-    progress_path = rf"{root}\{project_id}-runs\{run_id}\logs\{run_id}_progress.jsonl"
+    project_dir = rf"{root}\{project_id}"
+    run_root = rf"{root}\{project_id}-runs"
+    run_dir = rf"{run_root}\{run_id}"
+    progress_path = rf"{run_dir}\logs\{run_id}_progress.jsonl"
     tail_script = rf"{run_dir}\scripts\tail_progress.py"
+    run_script_path = rf"{project_dir}\scripts\generated\remote\{run_script_name}"
     progress_command = (
         "while ($true) { "
         f"if (Test-Path '{tail_script}') {{ & '{python_exe}' '{tail_script}' '{progress_path}' --interval 5; break }}; "
@@ -264,18 +267,30 @@ def render_launch_script(run_script_name: str, run_id: str, spec: dict[str, Any]
     )
     return (
         "@echo off\n"
+        "setlocal\n"
+        f"set ROOT={root}\n"
+        f"set PROJECT_ID={project_id}\n"
+        f"set RUN_ID={run_id}\n"
+        f"set RUN_ROOT={run_root}\n"
+        "set LAUNCH_LOG_DIR=%RUN_ROOT%\\launcher_logs\n"
+        "if not exist %RUN_ROOT% mkdir %RUN_ROOT%\n"
+        "if not exist %LAUNCH_LOG_DIR% mkdir %LAUNCH_LOG_DIR%\n"
         f"start \"progress_{run_id}\" cmd.exe /k powershell -NoProfile -ExecutionPolicy Bypass -Command \"{progress_command}\"\n"
-        f"call C:\\Users\\1304Lijinlin\\{run_script_name} > "
-        f"C:\\Users\\1304Lijinlin\\{run_id}_launcher_stdout.txt 2> "
-        f"C:\\Users\\1304Lijinlin\\{run_id}_launcher_stderr.txt\n"
+        f"call {run_script_path} > "
+        f"%LAUNCH_LOG_DIR%\\%RUN_ID%_launcher_stdout.txt 2> "
+        f"%LAUNCH_LOG_DIR%\\%RUN_ID%_launcher_stderr.txt\n"
+        "endlocal\n"
     )
 
 
-def render_schedule_script(task_name: str, launch_script_name: str) -> str:
+def render_schedule_script(task_name: str, launch_script_name: str, spec: dict[str, Any]) -> str:
+    root = str(spec.get("root", r"G:\lxy"))
+    project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
+    launch_script_path = rf"{root}\{project_id}\scripts\generated\remote\{launch_script_name}"
     return (
         "@echo off\n"
         f"schtasks /Create /TN {task_name} /SC ONCE /ST 23:59 /TR "
-        f"\"cmd.exe /c C:\\Users\\1304Lijinlin\\{launch_script_name}\" /F\n"
+        f"\"cmd.exe /c {launch_script_path}\" /F\n"
         f"schtasks /Run /TN {task_name}\n"
         f"schtasks /Query /TN {task_name} /V /FO LIST\n"
     )
@@ -312,7 +327,7 @@ def generate_remote_scripts(
 
     run_script.write_text(render_run_script(spec), encoding="utf-8")
     launch_script.write_text(render_launch_script(run_script.name, run_id, spec), encoding="utf-8")
-    schedule_script.write_text(render_schedule_script(task_name, launch_script.name), encoding="utf-8")
+    schedule_script.write_text(render_schedule_script(task_name, launch_script.name, spec), encoding="utf-8")
     monitor_script.write_text(render_monitor_script(run_id, expected_rows), encoding="utf-8")
     monitor_script.chmod(0o755)
 
