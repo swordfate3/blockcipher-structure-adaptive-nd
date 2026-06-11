@@ -66,6 +66,35 @@ def test_train_binary_classifier_returns_history_and_final_metrics():
     assert result.metadata["batch_size"] == 16
 
 
+def test_train_binary_classifier_reports_epoch_progress():
+    dataset = make_differential_dataset(
+        DifferentialDatasetConfig(
+            cipher=Speck32_64(rounds=2, key=0x1918111009080100),
+            input_difference=0x0040,
+            samples_per_class=16,
+            seed=2,
+        )
+    )
+    model = MlpDistinguisher(input_bits=dataset.features.shape[1], hidden_bits=16)
+    config = TrainingConfig(epochs=2, batch_size=8, learning_rate=1e-3, seed=99)
+    events = []
+
+    train_binary_classifier(
+        model,
+        dataset,
+        dataset,
+        config,
+        progress_callback=lambda event, payload: events.append((event, payload)),
+    )
+
+    event_names = [event for event, _ in events]
+    assert event_names[0] == "train_start"
+    assert event_names.count("epoch_start") == 2
+    assert event_names.count("epoch_end") == 2
+    assert event_names[-1] == "train_done"
+    assert events[-1][1]["epochs"] == 2
+
+
 def test_train_binary_classifier_supports_gohr_style_optimizer_options():
     dataset = make_differential_dataset(
         DifferentialDatasetConfig(

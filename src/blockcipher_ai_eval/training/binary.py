@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 import torch
@@ -10,6 +10,9 @@ from torch import nn
 from torch.utils.data import DataLoader, Dataset, TensorDataset
 
 from blockcipher_ai_eval.data.differential import DifferentialDataset, DiskDifferentialDataset
+
+
+ProgressCallback = Callable[[str, dict[str, Any]], None]
 
 
 class Lion(torch.optim.Optimizer):
@@ -121,6 +124,7 @@ def train_binary_classifier(
     train_dataset: DifferentialDataset,
     validation_dataset: DifferentialDataset,
     config: TrainingConfig,
+    progress_callback: ProgressCallback | None = None,
 ) -> TrainingResult:
     torch.manual_seed(config.seed)
     selected_device = _select_device(config.device)
@@ -134,13 +138,31 @@ def train_binary_classifier(
         shuffle=True,
         seed=config.seed,
     )
+    steps_per_epoch = len(train_loader)
+    _emit_progress(
+        progress_callback,
+        "train_start",
+        epochs=config.epochs,
+        batch_size=config.batch_size,
+        train_rows=int(len(train_dataset.labels)),
+        validation_rows=int(len(validation_dataset.labels)),
+        steps_per_epoch=steps_per_epoch,
+        device=str(selected_device),
+    )
 
     history: list[dict[str, float]] = []
     for epoch in range(1, config.epochs + 1):
+        _emit_progress(
+            progress_callback,
+            "epoch_start",
+            epoch=epoch,
+            epochs=config.epochs,
+            steps_per_epoch=steps_per_epoch,
+        )
         model.train()
         total_loss = 0.0
         total_seen = 0
-        for features, labels in train_loader:
+        for step, (features, labels) in enumerate(train_loader, start=1):
             features = features.to(selected_device)
             labels = labels.to(selected_device)
             optimizer.zero_grad(set_to_none=True)
@@ -152,7 +174,27 @@ def train_binary_classifier(
                 scheduler.step()
             total_loss += float(loss.detach().cpu()) * len(labels)
             total_seen += len(labels)
+            if _should_report_step(step, steps_per_epoch):
+                _emit_progress(
+                    progress_callback,
+                    "train_batch",
+                    epoch=epoch,
+                    epochs=config.epochs,
+                    step=step,
+                    steps_per_epoch=steps_per_epoch,
+                    train_rows_seen=total_seen,
+                    train_rows=int(len(train_dataset.labels)),
+                    train_loss=total_loss / max(1, total_seen),
+                    learning_rate=_current_learning_rate(optimizer),
+                )
 
+        _emit_progress(
+            progress_callback,
+            "validation_start",
+            epoch=epoch,
+            epochs=config.epochs,
+            validation_rows=int(len(validation_dataset.labels)),
+        )
         validation_metrics = evaluate_binary_classifier(
             model,
             validation_dataset,
@@ -169,7 +211,19 @@ def train_binary_classifier(
                 "learning_rate": _current_learning_rate(optimizer),
             }
         )
+        _emit_progress(
+            progress_callback,
+            "epoch_end",
+            epoch=epoch,
+            epochs=config.epochs,
+            train_loss=history[-1]["train_loss"],
+            val_loss=history[-1]["val_loss"],
+            val_accuracy=history[-1]["val_accuracy"],
+            val_auc=history[-1]["val_auc"],
+            learning_rate=history[-1]["learning_rate"],
+        )
 
+    _emit_progress(progress_callback, "final_evaluation_start")
     final_metrics = evaluate_binary_classifier(
         model,
         validation_dataset,
@@ -190,6 +244,14 @@ def train_binary_classifier(
         "seed": config.seed,
         "device": str(selected_device),
     }
+    _emit_progress(
+        progress_callback,
+        "train_done",
+        epochs=config.epochs,
+        accuracy=final_metrics["accuracy"],
+        auc=final_metrics["auc"],
+        calibrated_accuracy=final_metrics["calibrated_accuracy"],
+    )
     return TrainingResult(history=history, final_metrics=final_metrics, metadata=metadata)
 
 
@@ -294,6 +356,19 @@ def _select_device(device: str) -> torch.device:
     if device == "auto":
         return torch.device("cuda" if torch.cuda.is_available() else "cpu")
     return torch.device(device)
+
+
+def _should_report_step(step: int, steps_per_epoch: int) -> bool:
+    if steps_per_epoch <= 10:
+        return True
+    interval = max(1, steps_per_epoch // 10)
+    return step == 1 or step == steps_per_epoch or step % interval == 0
+
+
+def _emit_progress(callback: ProgressCallback | None, event: str, **payload: Any) -> None:
+    if callback is None:
+        return
+    callback(event, payload)
 
 
 def _binary_auc(labels: np.ndarray, scores: np.ndarray) -> float:

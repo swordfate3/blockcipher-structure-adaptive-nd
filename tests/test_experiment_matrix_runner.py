@@ -89,19 +89,18 @@ def test_run_innovation_one_matrix_writes_progress_jsonl(tmp_path: Path):
         text=True,
     )
     progress_rows = [json.loads(line) for line in progress_path.read_text().splitlines()]
+    events = [row["event"] for row in progress_rows]
 
     assert completed.returncode == 0
-    assert [row["event"] for row in progress_rows] == [
-        "run_start",
-        "row_start",
-        "cache_ready",
-        "row_done",
-        "run_done",
-    ]
+    assert events[:3] == ["run_start", "row_start", "cache_ready"]
+    assert events.index("train_start") < events.index("epoch_end") < events.index("train_done")
+    assert events[-2:] == ["row_done", "run_done"]
     assert progress_rows[1]["cipher_key"] == "speck32"
-    assert progress_rows[2]["train_rows"] == 16
-    assert progress_rows[2]["validation_rows"] == 16
-    assert progress_rows[3]["selected_model"] == "mlp"
+    cache_ready = next(row for row in progress_rows if row["event"] == "cache_ready")
+    row_done = next(row for row in progress_rows if row["event"] == "row_done")
+    assert cache_ready["train_rows"] == 16
+    assert cache_ready["validation_rows"] == 16
+    assert row_done["selected_model"] == "mlp"
     assert progress_rows[-1]["total"] == 1
 
 

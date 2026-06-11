@@ -255,6 +255,54 @@ def test_make_chunked_differential_dataset_writes_and_reuses_disk_cache(tmp_path
     assert reused.features.tolist() == dataset.features.tolist()
 
 
+def test_chunked_disk_cache_does_not_physically_shuffle_when_requested(tmp_path):
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=6,
+        seed=7,
+        shuffle=True,
+    )
+
+    dataset = make_chunked_differential_dataset(config, cache_dir=tmp_path / "cache", chunk_size=2)
+
+    assert dataset.labels[:6].tolist() == [1, 1, 1, 1, 1, 1]
+    assert dataset.labels[6:].tolist() == [0, 0, 0, 0, 0, 0]
+    assert dataset.metadata["requested_shuffle"] is True
+    assert dataset.metadata["physical_shuffle"] is False
+    assert dataset.metadata["training_shuffle"] is True
+
+
+def test_chunked_disk_cache_reports_generation_progress(tmp_path):
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=5,
+        seed=7,
+        shuffle=True,
+    )
+    events = []
+
+    make_chunked_differential_dataset(
+        config,
+        cache_dir=tmp_path / "cache",
+        chunk_size=3,
+        progress_callback=lambda event, payload: events.append((event, payload)),
+        progress_context={"split": "train"},
+    )
+
+    event_names = [event for event, _ in events]
+    assert "cache_start" in event_names
+    assert event_names.count("cache_positive_chunk") == 2
+    assert event_names.count("cache_negative_chunk") == 2
+    assert "cache_flush_start" in event_names
+    assert "cache_done" in event_names
+    assert events[0][1]["split"] == "train"
+    assert events[-1][1]["total_rows"] == 10
+
+
 def test_differential_dataset_config_is_available_from_canonical_data_module():
     from blockcipher_ai_eval.data.differential import (
         DifferentialDataset,

@@ -81,6 +81,9 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
 
     launcher_text = generated.launch_script.read_text(encoding="utf-8")
     assert "run_innovation1-demo-gpu0-20260608_and_push.cmd" in launcher_text
+    assert "start \"progress_innovation1-demo-gpu0-20260608\"" in launcher_text
+    assert "innovation1-demo-gpu0-20260608_progress.jsonl" in launcher_text
+    assert "Get-Content" in launcher_text
 
     schedule_text = generated.schedule_script.read_text(encoding="utf-8")
     assert "schtasks /Create /TN innovation1_demo_gpu0_20260608" in schedule_text

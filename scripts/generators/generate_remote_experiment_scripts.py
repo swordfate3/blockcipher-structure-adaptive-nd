@@ -244,9 +244,23 @@ exit /b 3
 """
 
 
-def render_launch_script(run_script_name: str, run_id: str) -> str:
+def render_launch_script(run_script_name: str, run_id: str, spec: dict[str, Any]) -> str:
+    root = str(spec.get("root", r"G:\lxy"))
+    project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
+    progress_path = rf"{root}\{project_id}-runs\{run_id}\logs\{run_id}_progress.jsonl"
+    progress_command = (
+        "while ($true) { "
+        "cls; "
+        f"Write-Host 'progress {run_id}'; "
+        "Get-Date; "
+        f"if (Test-Path '{progress_path}') {{ Get-Content '{progress_path}' -Tail 30 }} "
+        f"else {{ Write-Host 'waiting for {progress_path}' }}; "
+        "Start-Sleep -Seconds 5 "
+        "}"
+    )
     return (
         "@echo off\n"
+        f"start \"progress_{run_id}\" cmd.exe /k powershell -NoProfile -ExecutionPolicy Bypass -Command \"{progress_command}\"\n"
         f"call C:\\Users\\1304Lijinlin\\{run_script_name} > "
         f"C:\\Users\\1304Lijinlin\\{run_id}_launcher_stdout.txt 2> "
         f"C:\\Users\\1304Lijinlin\\{run_id}_launcher_stderr.txt\n"
@@ -293,7 +307,7 @@ def generate_remote_scripts(
     monitor_script = monitor_dir / str(spec.get("monitor_script_name", f"monitor_{run_id.replace('-', '_')}_results.sh"))
 
     run_script.write_text(render_run_script(spec), encoding="utf-8")
-    launch_script.write_text(render_launch_script(run_script.name, run_id), encoding="utf-8")
+    launch_script.write_text(render_launch_script(run_script.name, run_id, spec), encoding="utf-8")
     schedule_script.write_text(render_schedule_script(task_name, launch_script.name), encoding="utf-8")
     monitor_script.write_text(render_monitor_script(run_id, expected_rows), encoding="utf-8")
     monitor_script.chmod(0o755)

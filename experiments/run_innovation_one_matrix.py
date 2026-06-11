@@ -257,8 +257,24 @@ def _run_task(
         pairs_per_sample=task["pairs_per_sample"],
         negative_mode=task["negative_mode"],
     )
-    train_dataset = _make_task_dataset(train_config, args, task, split="train")
-    validation_dataset = _make_task_dataset(validation_config, args, task, split="validation")
+    train_dataset = _make_task_dataset(
+        train_config,
+        args,
+        task,
+        split="train",
+        progress_path=progress_path,
+        index=index,
+        total=total,
+    )
+    validation_dataset = _make_task_dataset(
+        validation_config,
+        args,
+        task,
+        split="validation",
+        progress_path=progress_path,
+        index=index,
+        total=total,
+    )
     _write_progress(
         progress_path,
         "cache_ready",
@@ -295,6 +311,13 @@ def _run_task(
             max_learning_rate=args.max_learning_rate,
             seed=task["seed"],
             device=args.device,
+        ),
+        progress_callback=_progress_callback(
+            progress_path,
+            "training",
+            task,
+            index=index,
+            total=total,
         ),
     )
     return {
@@ -366,6 +389,30 @@ def _write_progress(path: str | None, event: str, payload: dict[str, Any] | None
         handle.write(json.dumps(record, sort_keys=True) + "\n")
 
 
+def _progress_callback(
+    path: str | None,
+    stage: str,
+    task: dict[str, Any],
+    *,
+    index: int | None,
+    total: int | None,
+    split: str | None = None,
+):
+    def callback(event: str, payload: dict[str, Any]) -> None:
+        record = {
+            "stage": stage,
+            "index": index,
+            "total": total,
+            **_task_progress_payload(task),
+            **payload,
+        }
+        if split is not None:
+            record["split"] = split
+        _write_progress(path, event, record)
+
+    return callback
+
+
 def _task_progress_payload(task: dict[str, Any]) -> dict[str, Any]:
     return {
         "cipher_key": task["cipher_key"],
@@ -389,6 +436,9 @@ def _make_task_dataset(
     task: dict[str, Any],
     *,
     split: str,
+    progress_path: str | None = None,
+    index: int | None = None,
+    total: int | None = None,
 ):
     if not args.dataset_cache_root:
         return make_differential_dataset(config)
@@ -396,6 +446,15 @@ def _make_task_dataset(
         config,
         cache_dir=_dataset_cache_dir(Path(args.dataset_cache_root), task, config, split),
         chunk_size=args.dataset_cache_chunk_size,
+        progress_callback=_progress_callback(
+            progress_path,
+            "dataset_cache",
+            task,
+            index=index,
+            total=total,
+            split=split,
+        ),
+        progress_context={"split": split},
     )
 
 
