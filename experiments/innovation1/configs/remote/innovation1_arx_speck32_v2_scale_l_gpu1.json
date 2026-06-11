@@ -1,7 +1,7 @@
 {
   "run_id": "innovation1-arx-speck32-v2-scale-l-gpu1-20260609",
   "task_name": "innovation1_arx_speck32_v2_scale_l_gpu1_20260609",
-  "plan": "experiments\\plans\\innovation1_arx_speck32_v2_scale_l.csv",
+  "plan": "experiments\\innovation1\\plans\\innovation1_arx_speck32_v2_scale_l.csv",
   "expected_rows": 8,
   "device": "cuda:1",
   "epochs": 24,
@@ -15,5 +15,6 @@
   "monitor_script_name": "monitor_innovation1_arx_speck32_v2_scale_l_results.sh",
   "dataset_cache": true,
   "dataset_cache_root": "dataset_cache",
-  "dataset_cache_chunk_size": 8192
+  "dataset_cache_chunk_size": 8192,
+  "branch": "refactor/model-project-structure"
 }

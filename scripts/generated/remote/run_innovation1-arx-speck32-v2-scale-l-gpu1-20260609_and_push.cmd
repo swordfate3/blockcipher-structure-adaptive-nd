@@ -9,7 +9,7 @@ set PROJECT_ID=blockcipher-structure-adaptive-nd
 set PROJECT_DIR=%ROOT%\%PROJECT_ID%
 set CLONE_URL=https://github.com/swordfate3/blockcipher-structure-adaptive-nd.git
 set REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
-set BRANCH=main
+set BRANCH=refactor/model-project-structure
 set RUN_ID=innovation1-arx-speck32-v2-scale-l-gpu1-20260609
 set EXPECTED_ROWS=8
 set RUN_ROOT=%ROOT%\%PROJECT_ID%-runs
@@ -46,6 +46,7 @@ if not exist results mkdir results
 if not exist dataset_cache mkdir dataset_cache
 if exist logs\%RUN_ID%_stdout.txt del logs\%RUN_ID%_stdout.txt
 if exist logs\%RUN_ID%_stderr.txt del logs\%RUN_ID%_stderr.txt
+if exist logs\%RUN_ID%_progress.jsonl del logs\%RUN_ID%_progress.jsonl
 if exist results\%RUN_ID%.jsonl del results\%RUN_ID%.jsonl
 if exist results\%RUN_ID%_summary.csv del results\%RUN_ID%_summary.csv
 
@@ -65,6 +66,7 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   --device cuda:1 ^
   --dataset-cache-root dataset_cache ^
   --dataset-cache-chunk-size 8192 ^
+  --progress-output logs\%RUN_ID%_progress.jsonl ^
   --output results\%RUN_ID%.jsonl ^
   > logs\%RUN_ID%_stdout.txt ^
   2> logs\%RUN_ID%_stderr.txt
@@ -108,6 +110,7 @@ copy "%RUN_DIR%\logs\%RUN_ID%_torch_info.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_torch_info_stderr.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_stderr.txt" "results_archive\%RUN_ID%\"
+if exist "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" copy "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_result_gate.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_summary_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_summary_stderr.txt" "results_archive\%RUN_ID%\"
