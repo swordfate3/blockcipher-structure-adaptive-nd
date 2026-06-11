@@ -41,6 +41,7 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
                 "learning_rate": 0.002,
                 "optimizer": "adamw",
                 "weight_decay": 0.0001,
+                "key_rotation_interval": 128,
                 "archive_work_id": "demo_20260608",
                 "validation_label": "demo_validation",
                 "monitor_script_name": "monitor_demo_results.sh",
@@ -67,12 +68,14 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "--device cuda:0" in run_text
     assert "--epochs 3" in run_text
     assert "--batch-size 128" in run_text
+    assert "--key-rotation-interval 128" in run_text
     assert "--progress-output logs\\%RUN_ID%_progress.jsonl" in run_text
     assert "--dataset-cache-root dataset_cache" in run_text
     assert "--dataset-cache-chunk-size 4096" in run_text
     assert 'copy "%RUN_DIR%\\logs\\%RUN_ID%_progress.jsonl"' in run_text
     assert "dataset_cache_root=dataset_cache" in run_text
     assert "dataset_cache_chunk_size=4096" in run_text
+    assert "key_rotation_interval=128" in run_text
     assert "git add results_archive\\%RUN_ID%" in run_text
     assert "git push origin results/%RUN_ID%" in run_text
     assert "validation=demo_validation" in run_text

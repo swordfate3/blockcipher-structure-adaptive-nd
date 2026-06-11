@@ -129,6 +129,7 @@ uv run python experiments/run_innovation_one_matrix.py --help
 | `--seeds` | 随机种子 |
 | `--samples-per-class` | 每类样本数，正样本和负样本各这么多 |
 | `--pairs-per-sample` | 每个训练样本包含几个 ciphertext pair |
+| `--key-rotation-interval` | 密钥切换频率。`0` 表示整组数据固定使用 plan/CLI 指定 key；`1` 表示每个样本组换一把随机 key；`N` 表示每 `N` 个样本组换一把随机 key。multi-pair 时一个样本组内部的 `pairs_per_sample` 对密文共用同一把 key |
 | `--feature-encoding` | 输入编码方式 |
 | `--difference-profile` | 文献差分 profile |
 | `--difference-member` | 多差分 profile 的 member 编号 |
@@ -138,6 +139,10 @@ uv run python experiments/run_innovation_one_matrix.py --help
 | `--dataset-cache-chunk-size` | 可选。启用缓存时每批生成的每类样本数，默认 `8192` |
 
 输出是 JSONL，每一行是一组实验结果。
+
+CSV plan 可增加同名列 `key_rotation_interval` 覆盖 CLI 默认值。这个字段会写入
+结果 JSONL、缓存 metadata 和缓存目录 identity，避免不同密钥切换频率误复用同一份
+磁盘缓存。
 
 
 ### 批次生成与数据集缓存
@@ -649,12 +654,14 @@ JSONL 每行包含：
 | `input_difference` | 输入差分 |
 | `difference_profile` | 文献差分 profile |
 | `pairs_per_sample` | 每个样本包含的 pair 数 |
+| `key_rotation_interval` | 密钥切换频率；`0` 为固定 key，正整数为每 N 个样本组换随机 key |
 | `feature_encoding` | 输入编码 |
 | `metrics` | 最终验证指标 |
 | `history` | 每 epoch 训练历史 |
 | `training.device` | `cuda` 或 `cpu` |
 | `training.input_bits` | 输入 bit 宽度 |
 | `training.pair_bits` | pairwise 模型每个 pair 的 bit 宽度 |
+| `training.key_rotation_interval` | 训练数据实际使用的密钥切换频率 |
 
 常用指标：
 

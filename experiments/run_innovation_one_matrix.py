@@ -97,6 +97,15 @@ def parse_args() -> argparse.Namespace:
         help="How negative-class ciphertext pairs are generated.",
     )
     parser.add_argument(
+        "--key-rotation-interval",
+        type=int,
+        default=0,
+        help=(
+            "Number of sample groups that share one random key. "
+            "Use 0 for the fixed cipher key from the plan/CLI."
+        ),
+    )
+    parser.add_argument(
         "--difference-profile",
         default=None,
         help="Optional literature-backed input-difference profile.",
@@ -247,6 +256,7 @@ def _run_task(
         feature_encoding=task["feature_encoding"],
         pairs_per_sample=task["pairs_per_sample"],
         negative_mode=task["negative_mode"],
+        key_rotation_interval=task["key_rotation_interval"],
     )
     validation_config = DifferentialDatasetConfig(
         cipher=validation_cipher,
@@ -256,6 +266,7 @@ def _run_task(
         feature_encoding=task["feature_encoding"],
         pairs_per_sample=task["pairs_per_sample"],
         negative_mode=task["negative_mode"],
+        key_rotation_interval=task["key_rotation_interval"],
     )
     train_dataset = _make_task_dataset(
         train_config,
@@ -343,6 +354,7 @@ def _run_task(
         "pairs_per_sample": task["pairs_per_sample"],
         "feature_encoding": task["feature_encoding"],
         "negative_mode": task["negative_mode"],
+        "key_rotation_interval": task["key_rotation_interval"],
         "metrics": result.final_metrics,
         "history": result.history,
         "training": {
@@ -353,6 +365,7 @@ def _run_task(
             "feature_encoding": task["feature_encoding"],
             "pairs_per_sample": task["pairs_per_sample"],
             "pair_bits": pair_bits,
+            "key_rotation_interval": task["key_rotation_interval"],
         },
         **_model_metadata(model),
         "validation": {
@@ -363,6 +376,7 @@ def _run_task(
             "negative_mode": validation_dataset.metadata["negative_mode"],
             "pairs_per_sample": validation_dataset.metadata["pairs_per_sample"],
             "samples_per_class": validation_dataset.metadata["samples_per_class"],
+            "key_rotation_interval": validation_dataset.metadata["key_rotation_interval"],
         },
     }
 
@@ -424,6 +438,7 @@ def _task_progress_payload(task: dict[str, Any]) -> dict[str, Any]:
         "pairs_per_sample": task["pairs_per_sample"],
         "feature_encoding": task["feature_encoding"],
         "negative_mode": task["negative_mode"],
+        "key_rotation_interval": task["key_rotation_interval"],
         "difference_profile": task.get("difference_profile", ""),
         "difference_member": task.get("difference_member", ""),
     }
@@ -474,6 +489,7 @@ def _dataset_cache_dir(
         "input_difference": config.input_difference,
         "feature_encoding": config.feature_encoding,
         "negative_mode": config.negative_mode,
+        "key_rotation_interval": config.key_rotation_interval,
         "key": task.get("train_key") if split == "train" else task.get("validation_key"),
     }
     digest = hashlib.sha256(
@@ -514,6 +530,7 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "pairs_per_sample": args.pairs_per_sample,
                             "feature_encoding": args.feature_encoding,
                             "negative_mode": args.negative_mode,
+                            "key_rotation_interval": args.key_rotation_interval,
                             "train_key": None,
                             "validation_key": None,
                             **_difference_metadata(
@@ -569,6 +586,9 @@ def _plan_task(
             "pairs_per_sample": int(row.get("pairs_per_sample") or pairs_per_sample),
             "feature_encoding": row.get("feature_encoding") or feature_encoding,
             "negative_mode": row.get("negative_mode") or "random_ciphertext",
+            "key_rotation_interval": _optional_int(row.get("key_rotation_interval"))
+            if row.get("key_rotation_interval") not in {None, ""}
+            else 0,
             "train_key": _optional_int(row.get("train_key")),
             "validation_key": _optional_int(row.get("validation_key")),
     }

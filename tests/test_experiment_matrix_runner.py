@@ -1024,6 +1024,58 @@ def test_run_innovation_one_matrix_plan_supports_keys_negative_mode_and_xor_alig
     assert rows[0]["validation"]["negative_mode"] == "encrypted_random_plaintexts"
 
 
+def test_run_innovation_one_matrix_plan_supports_key_rotation_interval(
+    tmp_path: Path,
+):
+    plan_path = tmp_path / "key_rotation_plan.csv"
+    output_path = tmp_path / "key_rotation_results.jsonl"
+    cache_root = tmp_path / "cache"
+    plan_path.write_text(
+        "\n".join(
+            [
+                "cipher,structure,network,model_key,family,architecture_rank,score,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode,train_key,validation_key,key_rotation_interval",
+                "SPECK32/64,ARX,MLP,mlp,mlp,1,1,1,0,8,2,ciphertext_pair_bits,encrypted_random_plaintexts,0x1918111009080100,0x0f0e0d0c0b0a0908,1",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "experiments/run_innovation_one_matrix.py",
+            "--plan",
+            str(plan_path),
+            "--epochs",
+            "1",
+            "--batch-size",
+            "8",
+            "--hidden-bits",
+            "8",
+            "--device",
+            "cpu",
+            "--dataset-cache-root",
+            str(cache_root),
+            "--dataset-cache-chunk-size",
+            "4",
+            "--output",
+            str(output_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = [json.loads(line) for line in output_path.read_text().splitlines()]
+    metadata_files = list(cache_root.rglob("metadata.json"))
+    metadata_rows = [json.loads(path.read_text(encoding="utf-8")) for path in metadata_files]
+
+    assert completed.returncode == 0
+    assert rows[0]["key_rotation_interval"] == 1
+    assert rows[0]["training"]["key_rotation_interval"] == 1
+    assert all(row["key_rotation_interval"] == 1 for row in metadata_rows)
+    assert all(row["key_schedule"] == "rotating" for row in metadata_rows)
+
+
 def test_run_innovation_one_matrix_plan_defaults_validation_key_to_train_key(
     tmp_path: Path,
 ):

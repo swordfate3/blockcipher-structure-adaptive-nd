@@ -33,6 +33,8 @@ def make_chunked_differential_dataset(
         raise ValueError("chunk_size must be at least 1")
     if config.pairs_per_sample < 1:
         raise ValueError("pairs_per_sample must be at least 1")
+    if config.key_rotation_interval < 0:
+        raise ValueError("key_rotation_interval must be non-negative")
     if config.negative_mode not in {"random_ciphertext", "encrypted_random_plaintexts"}:
         raise ValueError(f"unsupported negative_mode: {config.negative_mode}")
 
@@ -100,7 +102,8 @@ def make_chunked_differential_dataset(
     for start in range(0, config.samples_per_class, chunk_size):
         count = min(chunk_size, config.samples_per_class - start)
         chunk_rows = [
-            generate_positive_row(config, rng, block_bits, mask) for _ in range(count)
+            generate_positive_row(config, rng, block_bits, mask, row_index=start + offset)
+            for offset in range(count)
         ]
         features[row_index : row_index + count] = np.asarray(chunk_rows, dtype=np.uint8)
         labels[row_index : row_index + count] = 1
@@ -119,7 +122,10 @@ def make_chunked_differential_dataset(
 
     for start in range(0, config.samples_per_class, chunk_size):
         count = min(chunk_size, config.samples_per_class - start)
-        chunk_rows = [generate_negative_row(config, rng, block_bits) for _ in range(count)]
+        chunk_rows = [
+            generate_negative_row(config, rng, block_bits, row_index=start + offset)
+            for offset in range(count)
+        ]
         features[row_index : row_index + count] = np.asarray(chunk_rows, dtype=np.uint8)
         labels[row_index : row_index + count] = 0
         row_index += count

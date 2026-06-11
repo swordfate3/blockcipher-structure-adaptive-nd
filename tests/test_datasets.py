@@ -1,10 +1,31 @@
 import pytest
+from dataclasses import dataclass
 
 from blockcipher_ai_eval.ciphers import Present80, Speck32_64
 from blockcipher_ai_eval.data.cache import make_chunked_differential_dataset
 from blockcipher_ai_eval.data.differential import DifferentialDatasetConfig, DiskDifferentialDataset
 from blockcipher_ai_eval.data.differential.generator import make_differential_dataset
 from blockcipher_ai_eval.features.pair_features import int_to_bits
+
+
+@dataclass(frozen=True)
+class _LoggingToyCipher:
+    rounds: int
+    key: int
+
+    log: list[int] = None  # type: ignore[assignment]
+    name: str = "TOY"
+    structure: str = "ARX"
+    block_bits: int = 16
+    key_bits: int = 64
+
+    def __post_init__(self) -> None:
+        if self.log is None:
+            object.__setattr__(self, "log", [])
+
+    def encrypt(self, plaintext: int) -> int:
+        self.log.append(self.key)
+        return (plaintext ^ (self.key & 0xFFFF)) & 0xFFFF
 
 
 def test_int_to_bits_uses_fixed_width_big_endian_encoding():
@@ -99,6 +120,47 @@ def test_make_differential_dataset_can_group_multiple_pairs_per_sample():
     assert dataset.features.shape == (4, 192)
     assert dataset.labels.tolist() == [1, 1, 0, 0]
     assert dataset.metadata["pairs_per_sample"] == 2
+
+
+def test_make_differential_dataset_can_rotate_keys_per_sample_group():
+    cipher = _LoggingToyCipher(rounds=1, key=0)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=3,
+        seed=7,
+        shuffle=False,
+        pairs_per_sample=2,
+        negative_mode="encrypted_random_plaintexts",
+        key_rotation_interval=1,
+    )
+
+    dataset = make_differential_dataset(config)
+
+    positive_row_encrypt_keys = [cipher.log[index : index + 4] for index in range(0, 12, 4)]
+    assert all(len(set(row_keys)) == 1 for row_keys in positive_row_encrypt_keys)
+    assert len({row_keys[0] for row_keys in positive_row_encrypt_keys}) == 3
+    assert dataset.metadata["key_rotation_interval"] == 1
+    assert dataset.metadata["key_schedule"] == "rotating"
+
+
+def test_make_differential_dataset_can_reuse_key_for_custom_interval():
+    cipher = _LoggingToyCipher(rounds=1, key=0)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0040,
+        samples_per_class=3,
+        seed=7,
+        shuffle=False,
+        pairs_per_sample=1,
+        key_rotation_interval=2,
+    )
+
+    make_differential_dataset(config)
+
+    positive_row_keys = [cipher.log[index] for index in range(0, 6, 2)]
+    assert positive_row_keys[0] == positive_row_keys[1]
+    assert positive_row_keys[2] != positive_row_keys[1]
 
 
 def test_make_differential_dataset_is_reproducible_for_same_seed():

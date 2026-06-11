@@ -194,6 +194,15 @@ def test_build_cipher_accepts_present80_key_override():
     assert default_cipher.encrypt(0x0123456789ABCDEF) != keyed_cipher.encrypt(0x0123456789ABCDEF)
 
 
+def test_build_cipher_honors_speck32_key_override():
+    default_cipher = build_cipher("speck32", rounds=5)
+    keyed_cipher = build_cipher("speck32", rounds=5, key=0x0F0E0D0C0B0A0908)
+
+    assert default_cipher.key == 0x1918111009080100
+    assert keyed_cipher.key == 0x0F0E0D0C0B0A0908
+    assert default_cipher.encrypt(0x6574694C) != keyed_cipher.encrypt(0x6574694C)
+
+
 def test_build_cipher_supports_simon64():
     cipher = build_cipher("simon64", rounds=44)
 
