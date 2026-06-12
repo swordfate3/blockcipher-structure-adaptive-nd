@@ -63,6 +63,12 @@ def render_run_script(spec: dict[str, Any]) -> str:
     branch = str(spec.get("branch", "main"))
     root = str(spec.get("root", r"G:\lxy"))
     python_exe = str(spec.get("python", r"F:\Anaconda\envs\DWT\torch310\python.exe"))
+    github_ssh_key = str(
+        spec.get(
+            "github_ssh_key",
+            "C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519",
+        )
+    )
     git_user_name = str(spec.get("git_user_name", "fate"))
     git_user_email = str(spec.get("git_user_email", "2968195987@qq.com"))
     archive_work_id = str(spec.get("archive_work_id", run_id.replace("-", "_")))
@@ -111,6 +117,8 @@ set CLONE_URL={clone_url}
 set REPO_URL={repo_url}
 set RESULT_REPO_URL={result_repo_url}
 set BRANCH={branch}
+set GITHUB_SSH_KEY={github_ssh_key}
+set GIT_SSH_COMMAND=ssh -i %GITHUB_SSH_KEY% -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new
 set RUN_ID={run_id}
 set EXPECTED_ROWS={expected_rows}
 set RUN_ROOT=%ROOT%\%PROJECT_ID%-runs
