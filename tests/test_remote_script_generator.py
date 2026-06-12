@@ -95,6 +95,7 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     schedule_text = generated.schedule_script.read_text(encoding="utf-8")
     assert "schtasks /Create /TN innovation1_demo_gpu0_20260608" in schedule_text
     assert "G:\\lxy\\blockcipher-structure-adaptive-nd\\scripts\\generated\\remote\\launch_innovation1-demo-gpu0-20260608.cmd" in schedule_text
+    assert "schtasks /Delete /TN innovation1_demo_gpu0_20260608 /F" in schedule_text
     assert "C:\\Users" not in schedule_text
 
     monitor_text = generated.monitor_script.read_text(encoding="utf-8")

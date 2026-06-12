@@ -293,6 +293,7 @@ def render_schedule_script(task_name: str, launch_script_name: str, spec: dict[s
         f"\"cmd.exe /c {launch_script_path}\" /F\n"
         f"schtasks /Run /TN {task_name}\n"
         f"schtasks /Query /TN {task_name} /V /FO LIST\n"
+        f"schtasks /Delete /TN {task_name} /F\n"
     )
 
 
