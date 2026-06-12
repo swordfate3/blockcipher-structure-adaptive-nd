@@ -1,0 +1,5 @@
+[1/4] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=0 pairs=4
+[2/4] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=1 pairs=4
+[3/4] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=2 pairs=4
+[4/4] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=3 pairs=4
+wrote 4 rows to results\innovation1-arx-speck32-v2-scale-m-v2-arxbest-gpu1-20260612.jsonl
