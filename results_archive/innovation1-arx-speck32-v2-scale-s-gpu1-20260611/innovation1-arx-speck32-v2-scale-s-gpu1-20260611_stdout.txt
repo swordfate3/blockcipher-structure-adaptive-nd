@@ -1,0 +1,9 @@
+[1/8] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=0 pairs=4
+[2/8] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=1 pairs=4
+[3/8] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=2 pairs=4
+[4/8] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=3 pairs=4
+[5/8] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=0 pairs=4
+[6/8] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=1 pairs=4
+[7/8] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=2 pairs=4
+[8/8] SPECK32/64 r=7 model=structure_adaptive_pairset_dbitnet seed=3 pairs=4
+wrote 8 rows to results\innovation1-arx-speck32-v2-scale-s-gpu1-20260611.jsonl
