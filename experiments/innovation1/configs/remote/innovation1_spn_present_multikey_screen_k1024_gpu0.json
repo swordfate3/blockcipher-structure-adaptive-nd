@@ -1,0 +1,21 @@
+{
+  "run_id": "innovation1-spn-present-multikey-k1024-screen-gpu0-20260612",
+  "task_name": "innovation1_spn_present_multikey_k1024_screen_gpu0_20260612",
+  "plan": "experiments\\innovation1\\plans\\innovation1_spn_present_multikey_screen_k1024.csv",
+  "expected_rows": 12,
+  "device": "cuda:0",
+  "epochs": 10,
+  "batch_size": 1024,
+  "hidden_bits": 64,
+  "learning_rate": 0.001,
+  "optimizer": "adamw",
+  "weight_decay": 0.0001,
+  "key_rotation_interval": 1024,
+  "archive_work_id": "spn_present_multikey_k1024_screen_20260612",
+  "validation_label": "present_spn_multikey_k1024_screen",
+  "monitor_script_name": "monitor_innovation1_spn_present_multikey_k1024_screen_results.sh",
+  "dataset_cache": true,
+  "dataset_cache_root": "dataset_cache",
+  "dataset_cache_chunk_size": 8192,
+  "branch": "refactor/model-project-structure"
+}
