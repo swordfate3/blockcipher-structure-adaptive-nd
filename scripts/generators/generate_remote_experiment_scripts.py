@@ -55,9 +55,12 @@ def render_run_script(spec: dict[str, Any]) -> str:
     project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
     clone_url = str(spec.get("clone_url", "https://github.com/swordfate3/blockcipher-structure-adaptive-nd.git"))
     repo_url = str(spec.get("repo_url", "git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git"))
+    result_repo_url = str(spec.get("result_repo_url", repo_url))
     branch = str(spec.get("branch", "main"))
     root = str(spec.get("root", r"G:\lxy"))
     python_exe = str(spec.get("python", r"F:\Anaconda\envs\DWT\torch310\python.exe"))
+    git_user_name = str(spec.get("git_user_name", "fate"))
+    git_user_email = str(spec.get("git_user_email", "2968195987@qq.com"))
     archive_work_id = str(spec.get("archive_work_id", run_id.replace("-", "_")))
     validation_label = str(spec.get("validation_label", "remote_experiment"))
     runner = str(spec.get("runner", r"experiments\run_innovation_one_matrix.py"))
@@ -88,6 +91,7 @@ set PROJECT_ID={project_id}
 set PROJECT_DIR=%ROOT%\%PROJECT_ID%
 set CLONE_URL={clone_url}
 set REPO_URL={repo_url}
+set RESULT_REPO_URL={result_repo_url}
 set BRANCH={branch}
 set RUN_ID={run_id}
 set EXPECTED_ROWS={expected_rows}
@@ -174,7 +178,9 @@ if exist %ARCHIVE_WORK% rmdir /s /q %ARCHIVE_WORK%
 git clone --local %RUN_DIR% %ARCHIVE_WORK%
 cd /d %ARCHIVE_WORK%
 git config --global --add safe.directory %ARCHIVE_WORK%
-git remote set-url origin %REPO_URL%
+git config user.name "{git_user_name}"
+git config user.email "{git_user_email}"
+git remote set-url origin %RESULT_REPO_URL%
 git checkout -B results/%RUN_ID%
 if exist results_archive\%RUN_ID% rmdir /s /q results_archive\%RUN_ID%
 mkdir results_archive\%RUN_ID%

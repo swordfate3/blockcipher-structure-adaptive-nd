@@ -9,6 +9,7 @@ set PROJECT_ID=blockcipher-structure-adaptive-nd
 set PROJECT_DIR=%ROOT%\%PROJECT_ID%
 set CLONE_URL=https://github.com/swordfate3/blockcipher-structure-adaptive-nd.git
 set REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
+set RESULT_REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set BRANCH=refactor/model-project-structure
 set RUN_ID=innovation1-arx-speck32-v2-scale-m-v2-arxonly-gpu1-20260612
 set EXPECTED_ROWS=4
@@ -97,7 +98,9 @@ if exist %ARCHIVE_WORK% rmdir /s /q %ARCHIVE_WORK%
 git clone --local %RUN_DIR% %ARCHIVE_WORK%
 cd /d %ARCHIVE_WORK%
 git config --global --add safe.directory %ARCHIVE_WORK%
-git remote set-url origin %REPO_URL%
+git config user.name "fate"
+git config user.email "2968195987@qq.com"
+git remote set-url origin %RESULT_REPO_URL%
 git checkout -B results/%RUN_ID%
 if exist results_archive\%RUN_ID% rmdir /s /q results_archive\%RUN_ID%
 mkdir results_archive\%RUN_ID%

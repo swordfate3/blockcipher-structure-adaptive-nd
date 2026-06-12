@@ -64,6 +64,7 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "set ROOT=G:\\lxy" in run_text
     assert "set RUN_ID=innovation1-demo-gpu0-20260608" in run_text
     assert "set EXPECTED_ROWS=4" in run_text
+    assert "set RESULT_REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git" in run_text
     assert "--plan experiments\\innovation1\\plans\\demo.csv" in run_text
     assert "--device cuda:0" in run_text
     assert "--epochs 3" in run_text
@@ -76,6 +77,9 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "dataset_cache_root=dataset_cache" in run_text
     assert "dataset_cache_chunk_size=4096" in run_text
     assert "key_rotation_interval=128" in run_text
+    assert "git config user.name \"fate\"" in run_text
+    assert "git config user.email \"2968195987@qq.com\"" in run_text
+    assert "git remote set-url origin %RESULT_REPO_URL%" in run_text
     assert "git add results_archive\\%RUN_ID%" in run_text
     assert "git push origin results/%RUN_ID%" in run_text
     assert "validation=demo_validation" in run_text
