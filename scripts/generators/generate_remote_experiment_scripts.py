@@ -52,6 +52,8 @@ def render_run_script(spec: dict[str, Any]) -> str:
     optimizer = str(spec.get("optimizer", "adamw"))
     weight_decay = _format_float(spec.get("weight_decay", 0.0001))
     key_rotation_interval = int(spec.get("key_rotation_interval", 0))
+    sample_structure = str(spec.get("sample_structure", "independent_pairs"))
+    integral_active_nibble = int(spec.get("integral_active_nibble", 0))
     checkpoint_metric = str(spec.get("checkpoint_metric", "val_accuracy"))
     restore_best_checkpoint = bool(spec.get("restore_best_checkpoint", False))
     early_stopping_patience = int(spec.get("early_stopping_patience", 0))
@@ -173,6 +175,8 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   --optimizer {optimizer} ^
   --weight-decay {weight_decay} ^
   --key-rotation-interval {key_rotation_interval} ^
+  --sample-structure {sample_structure} ^
+  --integral-active-nibble {integral_active_nibble} ^
   --device {device}{dataset_cache_args}{checkpoint_args} ^
   --progress-output logs\%RUN_ID%_progress.jsonl ^
   --output results\%RUN_ID%.jsonl ^
@@ -240,6 +244,8 @@ echo hidden_bits={hidden_bits}>> results_archive\%RUN_ID%\run_manifest.txt
 echo optimizer={optimizer}>> results_archive\%RUN_ID%\run_manifest.txt
 echo weight_decay={weight_decay}>> results_archive\%RUN_ID%\run_manifest.txt
 echo key_rotation_interval={key_rotation_interval}>> results_archive\%RUN_ID%\run_manifest.txt
+echo sample_structure={sample_structure}>> results_archive\%RUN_ID%\run_manifest.txt
+echo integral_active_nibble={integral_active_nibble}>> results_archive\%RUN_ID%\run_manifest.txt
 echo checkpoint_metric={checkpoint_metric}>> results_archive\%RUN_ID%\run_manifest.txt
 echo restore_best_checkpoint={restore_best_checkpoint}>> results_archive\%RUN_ID%\run_manifest.txt
 echo early_stopping_patience={early_stopping_patience}>> results_archive\%RUN_ID%\run_manifest.txt

@@ -238,3 +238,21 @@ def test_spn_present_highround_aligned_screen_targets_r7_r8_aligned_only():
     assert {row["key_rotation_interval"] for row in rows} == {"1024"}
     assert {row["difference_profile"] for row in rows} == {"present_wang_jain2021"}
     assert {row["model_key"] for row in rows} == {"spn_token_mixer_pairset"}
+
+
+def test_spn_present_paligned_integral_screen_uses_plaintext_integral_structure():
+    rows = _rows("experiments/innovation1/plans/innovation1_spn_present_paligned_integral_screen.csv")
+
+    assert len(rows) == 8
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["rounds"] for row in rows} == {"6", "7"}
+    assert {row["seed"] for row in rows} == {"0", "1", "2", "3"}
+    assert {row["samples_per_class"] for row in rows} == {"8192"}
+    assert {row["pairs_per_sample"] for row in rows} == {"16"}
+    assert {row["feature_encoding"] for row in rows} == {"ciphertext_xor_spn_paligned_bits"}
+    assert {row["sample_structure"] for row in rows} == {"plaintext_integral_nibble"}
+    assert {row["integral_active_nibble"] for row in rows} == {"0"}
+    assert {row["negative_mode"] for row in rows} == {"encrypted_random_plaintexts"}
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["model_key"] for row in rows} == {"spn_token_mixer_pairset"}

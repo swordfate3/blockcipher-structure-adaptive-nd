@@ -402,3 +402,51 @@ def test_generate_chunk_streams_rows_into_preallocated_uint8_array():
 def test_generate_chunk_rejects_unexpected_row_width():
     with pytest.raises(ValueError, match="generated row has 2 bits, expected 3"):
         _generate_chunk(count=1, input_bits=3, row_factory=lambda _offset: [1, 0])
+
+
+def test_make_differential_dataset_can_group_plaintext_integral_nibble_with_p_alignment():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0700000000000700,
+        samples_per_class=1,
+        seed=7,
+        shuffle=False,
+        feature_encoding="ciphertext_xor_spn_paligned_bits",
+        pairs_per_sample=16,
+        negative_mode="encrypted_random_plaintexts",
+        sample_structure="plaintext_integral_nibble",
+        integral_active_nibble=0,
+    )
+
+    dataset = make_differential_dataset(config)
+    first_row = dataset.features[0].tolist()
+    first_pair = first_row[:128]
+    difference = first_pair[:64]
+    aligned_difference = first_pair[64:]
+    difference_value = int("".join(str(bit) for bit in difference), 2)
+    expected_aligned = int_to_bits(Present80.inverse_permutation_layer(difference_value), 64)
+
+    assert dataset.features.shape == (2, 16 * 128)
+    assert dataset.labels.tolist() == [1, 0]
+    assert aligned_difference == expected_aligned
+    assert dataset.metadata["feature_encoding"] == "ciphertext_xor_spn_paligned_bits"
+    assert dataset.metadata["pair_bits"] == 128
+    assert dataset.metadata["pairs_per_sample"] == 16
+    assert dataset.metadata["sample_structure"] == "plaintext_integral_nibble"
+    assert dataset.metadata["integral_active_nibble"] == 0
+
+
+def test_plaintext_integral_nibble_requires_power_of_two_pair_count():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=0x0700000000000700,
+        samples_per_class=1,
+        seed=7,
+        pairs_per_sample=3,
+        sample_structure="plaintext_integral_nibble",
+    )
+
+    with pytest.raises(ValueError, match="power-of-two pairs_per_sample"):
+        make_differential_dataset(config)

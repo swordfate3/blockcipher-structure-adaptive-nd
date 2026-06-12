@@ -105,6 +105,7 @@ def parse_args() -> argparse.Namespace:
             "ciphertext_pair_bits",
             "ciphertext_xor_bits",
             "ciphertext_xor_spn_aligned_bits",
+            "ciphertext_xor_spn_paligned_bits",
             "ciphertext_pair_xor_bits",
             "ciphertext_pair_xor_spn_aligned_bits",
             "ciphertext_pair_xor_arx_aligned_bits",
@@ -127,6 +128,18 @@ def parse_args() -> argparse.Namespace:
             "Number of sample groups that share one random key. "
             "Use 0 for the fixed cipher key from the plan/CLI."
         ),
+    )
+    parser.add_argument(
+        "--sample-structure",
+        default="independent_pairs",
+        choices=["independent_pairs", "plaintext_integral_nibble"],
+        help="How multiple pairs inside one sample are organized.",
+    )
+    parser.add_argument(
+        "--integral-active-nibble",
+        type=int,
+        default=0,
+        help="Active plaintext nibble index for plaintext_integral_nibble samples.",
     )
     parser.add_argument(
         "--difference-profile",
@@ -280,6 +293,8 @@ def _run_task(
         pairs_per_sample=task["pairs_per_sample"],
         negative_mode=task["negative_mode"],
         key_rotation_interval=task["key_rotation_interval"],
+        sample_structure=task["sample_structure"],
+        integral_active_nibble=task["integral_active_nibble"],
     )
     validation_config = DifferentialDatasetConfig(
         cipher=validation_cipher,
@@ -290,6 +305,8 @@ def _run_task(
         pairs_per_sample=task["pairs_per_sample"],
         negative_mode=task["negative_mode"],
         key_rotation_interval=task["key_rotation_interval"],
+        sample_structure=task["sample_structure"],
+        integral_active_nibble=task["integral_active_nibble"],
     )
     train_dataset = _make_task_dataset(
         train_config,
@@ -382,6 +399,8 @@ def _run_task(
         "feature_encoding": task["feature_encoding"],
         "negative_mode": task["negative_mode"],
         "key_rotation_interval": task["key_rotation_interval"],
+        "sample_structure": task["sample_structure"],
+        "integral_active_nibble": task["integral_active_nibble"],
         "metrics": result.final_metrics,
         "history": result.history,
         "training": {
@@ -393,6 +412,8 @@ def _run_task(
             "pairs_per_sample": task["pairs_per_sample"],
             "pair_bits": pair_bits,
             "key_rotation_interval": task["key_rotation_interval"],
+            "sample_structure": task["sample_structure"],
+            "integral_active_nibble": task["integral_active_nibble"],
         },
         **_model_metadata(model),
         "validation": {
@@ -404,6 +425,8 @@ def _run_task(
             "pairs_per_sample": validation_dataset.metadata["pairs_per_sample"],
             "samples_per_class": validation_dataset.metadata["samples_per_class"],
             "key_rotation_interval": validation_dataset.metadata["key_rotation_interval"],
+            "sample_structure": validation_dataset.metadata["sample_structure"],
+            "integral_active_nibble": validation_dataset.metadata["integral_active_nibble"],
         },
     }
 
@@ -468,6 +491,8 @@ def _task_progress_payload(task: dict[str, Any]) -> dict[str, Any]:
         "key_rotation_interval": task["key_rotation_interval"],
         "difference_profile": task.get("difference_profile", ""),
         "difference_member": task.get("difference_member", ""),
+        "sample_structure": task["sample_structure"],
+        "integral_active_nibble": task["integral_active_nibble"],
     }
 
 
@@ -517,6 +542,8 @@ def _dataset_cache_dir(
         "feature_encoding": config.feature_encoding,
         "negative_mode": config.negative_mode,
         "key_rotation_interval": config.key_rotation_interval,
+        "sample_structure": config.sample_structure,
+        "integral_active_nibble": config.integral_active_nibble,
         "key": task.get("train_key") if split == "train" else task.get("validation_key"),
     }
     digest = hashlib.sha256(
@@ -558,6 +585,8 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "feature_encoding": args.feature_encoding,
                             "negative_mode": args.negative_mode,
                             "key_rotation_interval": args.key_rotation_interval,
+                            "sample_structure": args.sample_structure,
+                            "integral_active_nibble": args.integral_active_nibble,
                             "train_key": None,
                             "validation_key": None,
                             **_difference_metadata(
@@ -615,6 +644,10 @@ def _plan_task(
             "negative_mode": row.get("negative_mode") or "random_ciphertext",
             "key_rotation_interval": _optional_int(row.get("key_rotation_interval"))
             if row.get("key_rotation_interval") not in {None, ""}
+            else 0,
+            "sample_structure": row.get("sample_structure") or "independent_pairs",
+            "integral_active_nibble": _optional_int(row.get("integral_active_nibble"))
+            if row.get("integral_active_nibble") not in {None, ""}
             else 0,
             "train_key": _optional_int(row.get("train_key")),
             "validation_key": _optional_int(row.get("validation_key")),

@@ -42,6 +42,8 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
                 "optimizer": "adamw",
                 "weight_decay": 0.0001,
                 "key_rotation_interval": 128,
+                "sample_structure": "plaintext_integral_nibble",
+                "integral_active_nibble": 0,
                 "checkpoint_metric": "val_auc",
                 "restore_best_checkpoint": True,
                 "early_stopping_patience": 3,
@@ -76,6 +78,8 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "--epochs 3" in run_text
     assert "--batch-size 128" in run_text
     assert "--key-rotation-interval 128" in run_text
+    assert "--sample-structure plaintext_integral_nibble" in run_text
+    assert "--integral-active-nibble 0" in run_text
     assert "--checkpoint-metric val_auc" in run_text
     assert "--restore-best-checkpoint" in run_text
     assert "--early-stopping-patience 3" in run_text
@@ -87,6 +91,8 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "dataset_cache_root=dataset_cache" in run_text
     assert "dataset_cache_chunk_size=4096" in run_text
     assert "key_rotation_interval=128" in run_text
+    assert "sample_structure=plaintext_integral_nibble" in run_text
+    assert "integral_active_nibble=0" in run_text
     assert "checkpoint_metric=val_auc" in run_text
     assert "restore_best_checkpoint=True" in run_text
     assert "early_stopping_patience=3" in run_text

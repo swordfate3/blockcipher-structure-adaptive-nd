@@ -21,6 +21,8 @@ class DifferentialDatasetConfig:
     pairs_per_sample: int = 1
     negative_mode: str = "random_ciphertext"
     key_rotation_interval: int = 0
+    sample_structure: str = "independent_pairs"
+    integral_active_nibble: int = 0
 
 
 @dataclass(frozen=True)

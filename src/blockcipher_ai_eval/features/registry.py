@@ -9,6 +9,7 @@ FEATURE_ENCODINGS = {
     "ciphertext_pair_bits",
     "ciphertext_xor_bits",
     "ciphertext_xor_spn_aligned_bits",
+    "ciphertext_xor_spn_paligned_bits",
     "ciphertext_pair_xor_bits",
     "ciphertext_pair_xor_spn_aligned_bits",
     "ciphertext_pair_xor_arx_aligned_bits",

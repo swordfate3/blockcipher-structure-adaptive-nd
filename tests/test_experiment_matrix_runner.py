@@ -1,7 +1,19 @@
+import importlib.util
 import json
 import subprocess
 import sys
 from pathlib import Path
+
+
+def _load_matrix_runner():
+    script = Path(__file__).resolve().parents[1] / "experiments" / "run_innovation_one_matrix.py"
+    spec = importlib.util.spec_from_file_location("run_innovation_one_matrix", script)
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
 
 
 def test_run_innovation_one_matrix_writes_jsonl_rows(tmp_path: Path):
@@ -1219,3 +1231,26 @@ def test_run_innovation_one_matrix_can_use_chunked_dataset_cache(tmp_path: Path)
     assert all(len(path.name) <= 32 for path in cache_dirs)
     assert all("encrypted_random_plaintexts" not in path.name for path in cache_dirs)
     assert all("ciphertext_pair_xor_bits" not in path.name for path in cache_dirs)
+
+
+def test_plan_task_reads_plaintext_integral_sample_structure(tmp_path):
+    plan = tmp_path / "plan.csv"
+    plan.write_text(
+        "cipher,structure,network,model_key,family,architecture_rank,score,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode,train_key,validation_key,key_rotation_interval,sample_structure,integral_active_nibble,difference_profile,difference_member,evidence,literature\n"
+        "PRESENT-80,SPN,SPN-TokenMixer-PairSet,spn_token_mixer_pairset,spn_token_mixer,0,72,6,0,4,16,ciphertext_xor_spn_paligned_bits,encrypted_random_plaintexts,0x0,0x1,1024,plaintext_integral_nibble,0,present_wang_jain2021,0,evidence,literature\n",
+        encoding="utf-8",
+    )
+
+    runner = _load_matrix_runner()
+    tasks = runner._tasks_from_plan(
+        plan,
+        feature_encoding="ciphertext_pair_bits",
+        pairs_per_sample=1,
+        difference_profile=None,
+        difference_member=0,
+    )
+
+    assert tasks[0]["sample_structure"] == "plaintext_integral_nibble"
+    assert tasks[0]["integral_active_nibble"] == 0
+    assert tasks[0]["feature_encoding"] == "ciphertext_xor_spn_paligned_bits"
+    assert tasks[0]["pairs_per_sample"] == 16

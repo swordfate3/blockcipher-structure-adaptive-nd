@@ -25,7 +25,7 @@ def encode_ciphertext_pair(
         return pair_to_bits(left, right, width)
     if feature_encoding == "ciphertext_xor_bits":
         return xor_bits(left, right, width)
-    if feature_encoding == "ciphertext_xor_spn_aligned_bits":
+    if feature_encoding in {"ciphertext_xor_spn_aligned_bits", "ciphertext_xor_spn_paligned_bits"}:
         difference = left ^ right
         return int_to_bits(difference, width) + int_to_bits(
             inverse_permutation_difference(difference, width, cipher),
@@ -77,7 +77,7 @@ def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
         return block_bits * 2
     if feature_encoding == "ciphertext_xor_bits":
         return block_bits
-    if feature_encoding == "ciphertext_xor_spn_aligned_bits":
+    if feature_encoding in {"ciphertext_xor_spn_aligned_bits", "ciphertext_xor_spn_paligned_bits"}:
         return block_bits * 2
     if feature_encoding == "ciphertext_pair_xor_bits":
         return block_bits * 3
