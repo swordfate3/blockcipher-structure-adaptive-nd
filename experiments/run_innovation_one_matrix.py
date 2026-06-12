@@ -76,6 +76,29 @@ def parse_args() -> argparse.Namespace:
         help="Maximum learning rate for cyclic scheduling.",
     )
     parser.add_argument(
+        "--checkpoint-metric",
+        default="val_accuracy",
+        choices=["val_accuracy", "val_auc", "val_loss"],
+        help="Validation metric used to select the best checkpoint.",
+    )
+    parser.add_argument(
+        "--restore-best-checkpoint",
+        action="store_true",
+        help="Evaluate and report the best validation checkpoint instead of the final epoch.",
+    )
+    parser.add_argument(
+        "--early-stopping-patience",
+        type=int,
+        default=0,
+        help="Stop after this many non-improving epochs; 0 disables early stopping.",
+    )
+    parser.add_argument(
+        "--early-stopping-min-delta",
+        type=float,
+        default=0.0,
+        help="Minimum checkpoint metric improvement required to reset patience.",
+    )
+    parser.add_argument(
         "--feature-encoding",
         default="ciphertext_pair_bits",
         choices=[
@@ -320,6 +343,10 @@ def _run_task(
             weight_decay=args.weight_decay,
             lr_scheduler=args.lr_scheduler,
             max_learning_rate=args.max_learning_rate,
+            checkpoint_metric=args.checkpoint_metric,
+            restore_best_checkpoint=args.restore_best_checkpoint,
+            early_stopping_patience=args.early_stopping_patience,
+            early_stopping_min_delta=args.early_stopping_min_delta,
             seed=task["seed"],
             device=args.device,
         ),

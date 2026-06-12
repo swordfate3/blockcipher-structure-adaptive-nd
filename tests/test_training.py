@@ -66,6 +66,70 @@ def test_train_binary_classifier_returns_history_and_final_metrics():
     assert result.metadata["batch_size"] == 16
 
 
+def test_train_binary_classifier_can_restore_best_checkpoint():
+    dataset = make_differential_dataset(
+        DifferentialDatasetConfig(
+            cipher=Speck32_64(rounds=2, key=0x1918111009080100),
+            input_difference=0x0040,
+            samples_per_class=32,
+            seed=12,
+        )
+    )
+    model = MlpDistinguisher(input_bits=dataset.features.shape[1], hidden_bits=16)
+    config = TrainingConfig(
+        epochs=3,
+        batch_size=16,
+        learning_rate=1e-3,
+        seed=99,
+        checkpoint_metric="val_accuracy",
+        restore_best_checkpoint=True,
+    )
+
+    result = train_binary_classifier(model, dataset, dataset, config)
+
+    assert len(result.history) == 3
+    assert result.metadata["selected_checkpoint"] == "best"
+    assert 1 <= result.metadata["best_epoch"] <= 3
+    assert result.metadata["best_checkpoint_metric"] is not None
+    assert result.metadata["epochs_ran"] == 3
+
+
+def test_train_binary_classifier_supports_early_stopping():
+    dataset = make_differential_dataset(
+        DifferentialDatasetConfig(
+            cipher=Speck32_64(rounds=2, key=0x1918111009080100),
+            input_difference=0x0040,
+            samples_per_class=32,
+            seed=13,
+        )
+    )
+    model = MlpDistinguisher(input_bits=dataset.features.shape[1], hidden_bits=16)
+    events = []
+    config = TrainingConfig(
+        epochs=5,
+        batch_size=16,
+        learning_rate=1e-3,
+        seed=99,
+        checkpoint_metric="val_accuracy",
+        restore_best_checkpoint=True,
+        early_stopping_patience=1,
+        early_stopping_min_delta=1.0,
+    )
+
+    result = train_binary_classifier(
+        model,
+        dataset,
+        dataset,
+        config,
+        progress_callback=lambda event, payload: events.append((event, payload)),
+    )
+
+    assert result.metadata["selected_checkpoint"] == "best"
+    assert result.metadata["epochs_ran"] < 5
+    assert result.metadata["stopped_epoch"] == result.metadata["epochs_ran"]
+    assert "early_stopping" in [event for event, _ in events]
+
+
 def test_train_binary_classifier_reports_epoch_progress():
     dataset = make_differential_dataset(
         DifferentialDatasetConfig(

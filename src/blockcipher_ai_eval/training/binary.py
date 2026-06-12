@@ -66,6 +66,10 @@ class TrainingConfig:
     weight_decay: float = 0.0
     lr_scheduler: str = "none"
     max_learning_rate: float | None = None
+    checkpoint_metric: str = "val_accuracy"
+    restore_best_checkpoint: bool = False
+    early_stopping_patience: int = 0
+    early_stopping_min_delta: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -151,6 +155,12 @@ def train_binary_classifier(
     )
 
     history: list[dict[str, float]] = []
+    _validate_checkpoint_metric(config.checkpoint_metric)
+    best_state_dict: dict[str, torch.Tensor] | None = None
+    best_epoch = 0
+    best_metric_value: float | None = None
+    epochs_without_improvement = 0
+    stopped_epoch = 0
     for epoch in range(1, config.epochs + 1):
         _emit_progress(
             progress_callback,
@@ -211,6 +221,26 @@ def train_binary_classifier(
                 "learning_rate": _current_learning_rate(optimizer),
             }
         )
+        current_metric_value = history[-1][config.checkpoint_metric]
+        if _is_checkpoint_improved(
+            current=current_metric_value,
+            best=best_metric_value,
+            metric=config.checkpoint_metric,
+            min_delta=config.early_stopping_min_delta,
+        ):
+            best_metric_value = current_metric_value
+            best_epoch = epoch
+            epochs_without_improvement = 0
+            best_state_dict = _clone_state_dict_to_cpu(model)
+            _emit_progress(
+                progress_callback,
+                "checkpoint_improved",
+                epoch=epoch,
+                metric=config.checkpoint_metric,
+                value=current_metric_value,
+            )
+        else:
+            epochs_without_improvement += 1
         _emit_progress(
             progress_callback,
             "epoch_end",
@@ -221,8 +251,37 @@ def train_binary_classifier(
             val_accuracy=history[-1]["val_accuracy"],
             val_auc=history[-1]["val_auc"],
             learning_rate=history[-1]["learning_rate"],
+            best_epoch=best_epoch,
+            best_checkpoint_metric=best_metric_value,
         )
+        if (
+            config.early_stopping_patience > 0
+            and epochs_without_improvement >= config.early_stopping_patience
+        ):
+            stopped_epoch = epoch
+            _emit_progress(
+                progress_callback,
+                "early_stopping",
+                epoch=epoch,
+                patience=config.early_stopping_patience,
+                best_epoch=best_epoch,
+                metric=config.checkpoint_metric,
+                best_value=best_metric_value,
+            )
+            break
 
+    selected_checkpoint = "last"
+    if config.restore_best_checkpoint and best_state_dict is not None:
+        model.load_state_dict(best_state_dict)
+        model = model.to(selected_device)
+        selected_checkpoint = "best"
+        _emit_progress(
+            progress_callback,
+            "checkpoint_restored",
+            best_epoch=best_epoch,
+            metric=config.checkpoint_metric,
+            best_value=best_metric_value,
+        )
     _emit_progress(progress_callback, "final_evaluation_start")
     final_metrics = evaluate_binary_classifier(
         model,
@@ -241,6 +300,15 @@ def train_binary_classifier(
         "weight_decay": config.weight_decay,
         "lr_scheduler": config.lr_scheduler,
         "max_learning_rate": config.max_learning_rate,
+        "checkpoint_metric": config.checkpoint_metric,
+        "restore_best_checkpoint": config.restore_best_checkpoint,
+        "early_stopping_patience": config.early_stopping_patience,
+        "early_stopping_min_delta": config.early_stopping_min_delta,
+        "best_epoch": best_epoch,
+        "best_checkpoint_metric": best_metric_value,
+        "selected_checkpoint": selected_checkpoint,
+        "stopped_epoch": stopped_epoch,
+        "epochs_ran": len(history),
         "seed": config.seed,
         "device": str(selected_device),
     }
@@ -248,6 +316,7 @@ def train_binary_classifier(
         progress_callback,
         "train_done",
         epochs=config.epochs,
+        epochs_ran=len(history),
         accuracy=final_metrics["accuracy"],
         auc=final_metrics["auc"],
         calibrated_accuracy=final_metrics["calibrated_accuracy"],
@@ -315,6 +384,32 @@ def _make_scheduler(
 
 def _current_learning_rate(optimizer: torch.optim.Optimizer) -> float:
     return float(optimizer.param_groups[0]["lr"])
+
+
+def _validate_checkpoint_metric(metric: str) -> None:
+    if metric not in {"val_accuracy", "val_auc", "val_loss"}:
+        raise ValueError(f"unsupported checkpoint metric: {metric}")
+
+
+def _clone_state_dict_to_cpu(model: nn.Module) -> dict[str, torch.Tensor]:
+    return {
+        key: value.detach().cpu().clone()
+        for key, value in model.state_dict().items()
+    }
+
+
+def _is_checkpoint_improved(
+    *,
+    current: float,
+    best: float | None,
+    metric: str,
+    min_delta: float,
+) -> bool:
+    if best is None:
+        return True
+    if metric == "val_loss":
+        return current < best - min_delta
+    return current > best + min_delta
 
 
 def _make_loader(

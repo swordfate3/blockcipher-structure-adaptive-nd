@@ -52,6 +52,10 @@ def render_run_script(spec: dict[str, Any]) -> str:
     optimizer = str(spec.get("optimizer", "adamw"))
     weight_decay = _format_float(spec.get("weight_decay", 0.0001))
     key_rotation_interval = int(spec.get("key_rotation_interval", 0))
+    checkpoint_metric = str(spec.get("checkpoint_metric", "val_accuracy"))
+    restore_best_checkpoint = bool(spec.get("restore_best_checkpoint", False))
+    early_stopping_patience = int(spec.get("early_stopping_patience", 0))
+    early_stopping_min_delta = _format_float(spec.get("early_stopping_min_delta", 0.0))
     project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
     clone_url = str(spec.get("clone_url", "https://github.com/swordfate3/blockcipher-structure-adaptive-nd.git"))
     repo_url = str(spec.get("repo_url", "git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git"))
@@ -78,6 +82,20 @@ def render_run_script(spec: dict[str, Any]) -> str:
         dataset_cache_manifest = (
             f"echo dataset_cache_root={dataset_cache_root}>> results_archive\\%RUN_ID%\\run_manifest.txt\n"
             f"echo dataset_cache_chunk_size={dataset_cache_chunk_size}>> results_archive\\%RUN_ID%\\run_manifest.txt"
+        )
+    checkpoint_args = (
+        " ^\n"
+        f"  --checkpoint-metric {checkpoint_metric} ^\n"
+        f"  --early-stopping-patience {early_stopping_patience} ^\n"
+        f"  --early-stopping-min-delta {early_stopping_min_delta}"
+    )
+    if restore_best_checkpoint:
+        checkpoint_args = (
+            " ^\n"
+            f"  --checkpoint-metric {checkpoint_metric} ^\n"
+            "  --restore-best-checkpoint ^\n"
+            f"  --early-stopping-patience {early_stopping_patience} ^\n"
+            f"  --early-stopping-min-delta {early_stopping_min_delta}"
         )
 
     return rf"""@echo off
@@ -147,7 +165,7 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   --optimizer {optimizer} ^
   --weight-decay {weight_decay} ^
   --key-rotation-interval {key_rotation_interval} ^
-  --device {device}{dataset_cache_args} ^
+  --device {device}{dataset_cache_args}{checkpoint_args} ^
   --progress-output logs\%RUN_ID%_progress.jsonl ^
   --output results\%RUN_ID%.jsonl ^
   > logs\%RUN_ID%_stdout.txt ^
@@ -214,6 +232,10 @@ echo hidden_bits={hidden_bits}>> results_archive\%RUN_ID%\run_manifest.txt
 echo optimizer={optimizer}>> results_archive\%RUN_ID%\run_manifest.txt
 echo weight_decay={weight_decay}>> results_archive\%RUN_ID%\run_manifest.txt
 echo key_rotation_interval={key_rotation_interval}>> results_archive\%RUN_ID%\run_manifest.txt
+echo checkpoint_metric={checkpoint_metric}>> results_archive\%RUN_ID%\run_manifest.txt
+echo restore_best_checkpoint={restore_best_checkpoint}>> results_archive\%RUN_ID%\run_manifest.txt
+echo early_stopping_patience={early_stopping_patience}>> results_archive\%RUN_ID%\run_manifest.txt
+echo early_stopping_min_delta={early_stopping_min_delta}>> results_archive\%RUN_ID%\run_manifest.txt
 {dataset_cache_manifest}
 echo validation={validation_label}>> results_archive\%RUN_ID%\run_manifest.txt
 

@@ -42,6 +42,10 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
                 "optimizer": "adamw",
                 "weight_decay": 0.0001,
                 "key_rotation_interval": 128,
+                "checkpoint_metric": "val_auc",
+                "restore_best_checkpoint": True,
+                "early_stopping_patience": 3,
+                "early_stopping_min_delta": 0.001,
                 "archive_work_id": "demo_20260608",
                 "validation_label": "demo_validation",
                 "monitor_script_name": "monitor_demo_results.sh",
@@ -70,6 +74,10 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "--epochs 3" in run_text
     assert "--batch-size 128" in run_text
     assert "--key-rotation-interval 128" in run_text
+    assert "--checkpoint-metric val_auc" in run_text
+    assert "--restore-best-checkpoint" in run_text
+    assert "--early-stopping-patience 3" in run_text
+    assert "--early-stopping-min-delta 0.001" in run_text
     assert "--progress-output logs\\%RUN_ID%_progress.jsonl" in run_text
     assert "--dataset-cache-root dataset_cache" in run_text
     assert "--dataset-cache-chunk-size 4096" in run_text
@@ -77,6 +85,10 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "dataset_cache_root=dataset_cache" in run_text
     assert "dataset_cache_chunk_size=4096" in run_text
     assert "key_rotation_interval=128" in run_text
+    assert "checkpoint_metric=val_auc" in run_text
+    assert "restore_best_checkpoint=True" in run_text
+    assert "early_stopping_patience=3" in run_text
+    assert "early_stopping_min_delta=0.001" in run_text
     assert "git config user.name \"fate\"" in run_text
     assert "git config user.email \"2968195987@qq.com\"" in run_text
     assert "git remote set-url origin %RESULT_REPO_URL%" in run_text
