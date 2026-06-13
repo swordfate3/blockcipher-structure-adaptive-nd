@@ -256,3 +256,20 @@ def test_spn_present_paligned_integral_screen_uses_plaintext_integral_structure(
     assert {row["negative_mode"] for row in rows} == {"encrypted_random_plaintexts"}
     assert {row["key_rotation_interval"] for row in rows} == {"1024"}
     assert {row["model_key"] for row in rows} == {"spn_token_mixer_pairset"}
+
+
+def test_spn_present_paligned_integral_nibble_scan_covers_all_active_nibbles():
+    rows = []
+    rows.extend(_rows("experiments/innovation1/plans/innovation1_spn_present_paligned_integral_nibble_scan_gpu0.csv"))
+    rows.extend(_rows("experiments/innovation1/plans/innovation1_spn_present_paligned_integral_nibble_scan_gpu1.csv"))
+
+    assert len(rows) == 32
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["rounds"] for row in rows} == {"7"}
+    assert {row["seed"] for row in rows} == {"0", "1"}
+    assert {row["samples_per_class"] for row in rows} == {"4096"}
+    assert {row["pairs_per_sample"] for row in rows} == {"16"}
+    assert {row["feature_encoding"] for row in rows} == {"ciphertext_xor_spn_paligned_bits"}
+    assert {row["sample_structure"] for row in rows} == {"plaintext_integral_nibble"}
+    assert {row["integral_active_nibble"] for row in rows} == {str(index) for index in range(16)}
+    assert {row["model_key"] for row in rows} == {"spn_token_mixer_pairset"}
