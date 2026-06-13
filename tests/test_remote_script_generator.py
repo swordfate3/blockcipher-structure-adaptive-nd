@@ -203,3 +203,30 @@ def test_remote_run_script_falls_back_when_summarizer_is_missing(tmp_path: Path)
     assert "summary_status=fallback_missing_summarizer" in run_text
     assert "if errorlevel 1 goto summary_failed" not in run_text
     assert 'copy "%RUN_DIR%\\results\\%RUN_ID%_summary.csv"' in run_text
+
+
+def test_generate_remote_run_script_marks_plan_scoped_integral_nibble(tmp_path: Path):
+    spec_path = tmp_path / "spec.json"
+    output_dir = tmp_path / "remote"
+    monitor_dir = tmp_path / "scripts"
+    spec_path.write_text(
+        json.dumps(
+            {
+                "run_id": "innovation1-plan-scoped-gpu0-20260613",
+                "task_name": "innovation1_plan_scoped_gpu0_20260613",
+                "plan": "experiments\\innovation1\\plans\\demo.csv",
+                "expected_rows": 2,
+                "device": "cuda:0",
+                "sample_structure": "plaintext_integral_nibble",
+                "integral_active_nibble": 0,
+                "plan_scoped_fields": ["integral_active_nibble"],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    generated = generate_remote_scripts(spec_path, output_dir=output_dir, monitor_dir=monitor_dir)
+    run_text = generated.run_script.read_text(encoding="utf-8")
+
+    assert "--integral-active-nibble 0" in run_text
+    assert "integral_active_nibble=from_plan" in run_text

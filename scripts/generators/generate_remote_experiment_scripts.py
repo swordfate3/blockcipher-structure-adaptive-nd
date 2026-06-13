@@ -54,6 +54,12 @@ def render_run_script(spec: dict[str, Any]) -> str:
     key_rotation_interval = int(spec.get("key_rotation_interval", 0))
     sample_structure = str(spec.get("sample_structure", "independent_pairs"))
     integral_active_nibble = int(spec.get("integral_active_nibble", 0))
+    plan_scoped_fields = {str(field) for field in spec.get("plan_scoped_fields", [])}
+    integral_active_nibble_manifest = (
+        "from_plan"
+        if "integral_active_nibble" in plan_scoped_fields
+        else str(integral_active_nibble)
+    )
     checkpoint_metric = str(spec.get("checkpoint_metric", "val_accuracy"))
     restore_best_checkpoint = bool(spec.get("restore_best_checkpoint", False))
     early_stopping_patience = int(spec.get("early_stopping_patience", 0))
@@ -245,7 +251,7 @@ echo optimizer={optimizer}>> results_archive\%RUN_ID%\run_manifest.txt
 echo weight_decay={weight_decay}>> results_archive\%RUN_ID%\run_manifest.txt
 echo key_rotation_interval={key_rotation_interval}>> results_archive\%RUN_ID%\run_manifest.txt
 echo sample_structure={sample_structure}>> results_archive\%RUN_ID%\run_manifest.txt
-echo integral_active_nibble={integral_active_nibble}>> results_archive\%RUN_ID%\run_manifest.txt
+echo integral_active_nibble={integral_active_nibble_manifest}>> results_archive\%RUN_ID%\run_manifest.txt
 echo checkpoint_metric={checkpoint_metric}>> results_archive\%RUN_ID%\run_manifest.txt
 echo restore_best_checkpoint={restore_best_checkpoint}>> results_archive\%RUN_ID%\run_manifest.txt
 echo early_stopping_patience={early_stopping_patience}>> results_archive\%RUN_ID%\run_manifest.txt
