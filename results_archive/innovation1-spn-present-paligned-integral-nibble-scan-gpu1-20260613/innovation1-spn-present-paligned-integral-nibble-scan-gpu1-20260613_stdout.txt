@@ -1,0 +1,17 @@
+[1/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=0 pairs=16
+[2/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=1 pairs=16
+[3/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=0 pairs=16
+[4/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=1 pairs=16
+[5/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=0 pairs=16
+[6/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=1 pairs=16
+[7/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=0 pairs=16
+[8/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=1 pairs=16
+[9/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=0 pairs=16
+[10/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=1 pairs=16
+[11/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=0 pairs=16
+[12/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=1 pairs=16
+[13/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=0 pairs=16
+[14/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=1 pairs=16
+[15/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=0 pairs=16
+[16/16] PRESENT-80 r=7 model=spn_token_mixer_pairset seed=1 pairs=16
+wrote 16 rows to results\innovation1-spn-present-paligned-integral-nibble-scan-gpu1-20260613.jsonl
