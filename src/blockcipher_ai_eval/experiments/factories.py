@@ -41,6 +41,7 @@ from blockcipher_ai_eval.models.structure import (
     AdaptiveDBitNetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
+    PresentInceptionMCNDDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
@@ -245,6 +246,18 @@ def build_model(
             base_channels=hidden_bits,
             structure=structure,
             pooling=pairset_pooling_keys[name],
+        )
+    if name == "present_inception_mcnd":
+        return PresentInceptionMCNDDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 128,
+            base_channels=hidden_bits,
+            branches=_int_option(options, "branches"),
+            blocks=_int_option(options, "blocks", 3) or 3,
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "batchnorm1d")),
+            pooling=str(options.get("pooling", "attention_mean_max")),
+            dropout=float(options.get("dropout", 0.0)),
         )
     if name == "spn_pairset_dbitnet_v2":
         return SpnCellPairSetDBitNetDistinguisher(

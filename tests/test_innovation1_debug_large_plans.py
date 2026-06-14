@@ -293,3 +293,36 @@ def test_spn_present_paligned_integral_selected_nibbles_confirm_plan():
     assert sum(1 for row in rows if row["integral_active_nibble"] == "7") == 10
     assert sum(1 for row in rows if row["integral_active_nibble"] == "13") == 10
     assert {row["model_key"] for row in rows} == {"spn_token_mixer_pairset"}
+
+
+def test_spn_present_inception_mcnd_smoke_plan_targets_present_r7_multipair_baseline():
+    rows = _rows("experiments/innovation1/plans/innovation1_spn_present_inception_mcnd_smoke.csv")
+
+    assert len(rows) == 3
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["rounds"] for row in rows} == {"7"}
+    assert {row["seed"] for row in rows} == {"0"}
+    assert {row["samples_per_class"] for row in rows} == {"256"}
+    assert {row["pairs_per_sample"] for row in rows} == {"4", "8", "16"}
+    assert {row["feature_encoding"] for row in rows} == {"ciphertext_pair_bits"}
+    assert {row["negative_mode"] for row in rows} == {"encrypted_random_plaintexts"}
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["difference_profile"] for row in rows} == {"present_wang_jain2021"}
+    assert {row["model_key"] for row in rows} == {"present_inception_mcnd"}
+
+
+def test_spn_present_inception_mcnd_medium_plan_covers_r6_r7_multipair_baseline():
+    rows = _rows("experiments/innovation1/plans/innovation1_spn_present_inception_mcnd_medium.csv")
+
+    assert len(rows) == 18
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["rounds"] for row in rows} == {"6", "7"}
+    assert {row["seed"] for row in rows} == {"0", "1", "2"}
+    assert {row["samples_per_class"] for row in rows} == {"8192"}
+    assert {row["pairs_per_sample"] for row in rows} == {"4", "8", "16"}
+    assert {row["feature_encoding"] for row in rows} == {"ciphertext_pair_bits"}
+    assert {row["negative_mode"] for row in rows} == {"encrypted_random_plaintexts"}
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["difference_profile"] for row in rows} == {"present_wang_jain2021"}
+    assert {row["model_key"] for row in rows} == {"present_inception_mcnd"}
