@@ -1,0 +1,19 @@
+[1/18] PRESENT-80 r=6 model=present_inception_mcnd seed=0 pairs=4
+[2/18] PRESENT-80 r=6 model=present_inception_mcnd seed=1 pairs=4
+[3/18] PRESENT-80 r=6 model=present_inception_mcnd seed=2 pairs=4
+[4/18] PRESENT-80 r=6 model=present_inception_mcnd seed=0 pairs=8
+[5/18] PRESENT-80 r=6 model=present_inception_mcnd seed=1 pairs=8
+[6/18] PRESENT-80 r=6 model=present_inception_mcnd seed=2 pairs=8
+[7/18] PRESENT-80 r=6 model=present_inception_mcnd seed=0 pairs=16
+[8/18] PRESENT-80 r=6 model=present_inception_mcnd seed=1 pairs=16
+[9/18] PRESENT-80 r=6 model=present_inception_mcnd seed=2 pairs=16
+[10/18] PRESENT-80 r=7 model=present_inception_mcnd seed=0 pairs=4
+[11/18] PRESENT-80 r=7 model=present_inception_mcnd seed=1 pairs=4
+[12/18] PRESENT-80 r=7 model=present_inception_mcnd seed=2 pairs=4
+[13/18] PRESENT-80 r=7 model=present_inception_mcnd seed=0 pairs=8
+[14/18] PRESENT-80 r=7 model=present_inception_mcnd seed=1 pairs=8
+[15/18] PRESENT-80 r=7 model=present_inception_mcnd seed=2 pairs=8
+[16/18] PRESENT-80 r=7 model=present_inception_mcnd seed=0 pairs=16
+[17/18] PRESENT-80 r=7 model=present_inception_mcnd seed=1 pairs=16
+[18/18] PRESENT-80 r=7 model=present_inception_mcnd seed=2 pairs=16
+wrote 18 rows to results\innovation1-spn-present-inception-mcnd-medium-gpu0-20260614.jsonl
