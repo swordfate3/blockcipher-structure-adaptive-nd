@@ -78,6 +78,44 @@ def test_summarize_innovation_one_results_writes_csv(tmp_path: Path):
     assert int(summary_rows[0]["runs"]) == 2
 
 
+def test_summarize_innovation_one_results_runs_from_non_repo_cwd(tmp_path: Path):
+    input_path = tmp_path / "results.jsonl"
+    output_path = tmp_path / "summary.csv"
+    input_path.write_text(
+        json.dumps({
+            "cipher": "PRESENT-80",
+            "structure": "SPN",
+            "model": "present_inception_mcnd",
+            "architecture": "Present-Inception-MCND",
+            "rounds": 7,
+            "seed": 0,
+            "samples_per_class": 8,
+            "pairs_per_sample": 4,
+            "metrics": {"accuracy": 0.5, "auc": 0.51, "advantage": 0.0, "loss": 0.69},
+        })
+        + "\n",
+        encoding="utf-8",
+    )
+    script = Path.cwd() / "experiments" / "summarize_innovation_one_results.py"
+
+    subprocess.run(
+        [
+            sys.executable,
+            str(script),
+            "--input",
+            str(input_path),
+            "--output",
+            str(output_path),
+        ],
+        cwd=tmp_path,
+        check=True,
+    )
+
+    summary_rows = list(csv.DictReader(output_path.open()))
+    assert len(summary_rows) == 1
+    assert summary_rows[0]["cipher"] == "PRESENT-80"
+
+
 def test_summarize_innovation_one_results_keeps_pair_counts_separate(tmp_path: Path):
     input_path = tmp_path / "results.jsonl"
     output_path = tmp_path / "summary.csv"
