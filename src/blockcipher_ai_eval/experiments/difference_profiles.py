@@ -80,6 +80,15 @@ def literature_difference_profiles() -> dict[str, DifferenceProfile]:
             differences=(0x0007000000000007,),
             source="Wang differentials via Jain/Kohli/Mishra 2020/2021",
         ),
+        "present_zhang_wang2022_mcnd": DifferenceProfile(
+            name="present_zhang_wang2022_mcnd",
+            cipher="present80",
+            kind="fixed",
+            differences=(0x0000000000000009,),
+            source="Zhang/Wang 2022 PRESENT Inception-MCND differential-neural distinguisher",
+            word_difference=("0x0000", "0x0000", "0x0000", "0x0009"),
+            note="Input difference (0,0,0,0x9) for PRESENT 6-7 round MCND experiments in arXiv:2204.06341.",
+        ),
         "gift64_shen2024_spn_screen": DifferenceProfile(
             name="gift64_shen2024_spn_screen",
             cipher="gift64",

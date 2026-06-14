@@ -25,27 +25,24 @@ class PresentInceptionMCNDBlock(nn.Module):
         activation: str = "gelu",
         norm: str = "batchnorm1d",
         dropout: float = 0.0,
+        kernel_sizes: tuple[int, ...] = (1, 3, 5),
     ) -> None:
         super().__init__()
         if branch_channels < 1:
             raise ValueError("branch_channels must be >= 1")
+        if not kernel_sizes:
+            raise ValueError("kernel_sizes must not be empty")
+        conv_branches = [
+            nn.Sequential(
+                nn.Conv1d(channels, branch_channels, kernel_size=kernel_size, padding="same"),
+                _conv_norm(norm, branch_channels),
+                build_activation(activation),
+            )
+            for kernel_size in kernel_sizes
+        ]
         self.branches = nn.ModuleList(
             [
-                nn.Sequential(
-                    nn.Conv1d(channels, branch_channels, kernel_size=1, padding=0),
-                    _conv_norm(norm, branch_channels),
-                    build_activation(activation),
-                ),
-                nn.Sequential(
-                    nn.Conv1d(channels, branch_channels, kernel_size=3, padding=1),
-                    _conv_norm(norm, branch_channels),
-                    build_activation(activation),
-                ),
-                nn.Sequential(
-                    nn.Conv1d(channels, branch_channels, kernel_size=5, padding=2),
-                    _conv_norm(norm, branch_channels),
-                    build_activation(activation),
-                ),
+                *conv_branches,
                 nn.Sequential(
                     nn.MaxPool1d(kernel_size=3, stride=1, padding=1),
                     nn.Conv1d(channels, branch_channels, kernel_size=1),
@@ -87,6 +84,7 @@ class PresentInceptionMCNDDistinguisher(nn.Module):
         norm: str = "batchnorm1d",
         pooling: str = "attention_mean_max",
         dropout: float = 0.0,
+        kernel_sizes: tuple[int, ...] = (1, 3, 5),
     ) -> None:
         super().__init__()
         if input_bits % pair_bits != 0:
@@ -108,6 +106,7 @@ class PresentInceptionMCNDDistinguisher(nn.Module):
         self.norm = norm
         self.pooling = pooling
         self.dropout = dropout
+        self.kernel_sizes = tuple(kernel_sizes)
 
         self.pair_bit_encoder = nn.Sequential(
             nn.Conv1d(1, base_channels, kernel_size=7, padding=3),
@@ -123,6 +122,7 @@ class PresentInceptionMCNDDistinguisher(nn.Module):
                     activation=activation,
                     norm=norm,
                     dropout=dropout,
+                    kernel_sizes=self.kernel_sizes,
                 )
                 for _ in range(blocks)
             ]

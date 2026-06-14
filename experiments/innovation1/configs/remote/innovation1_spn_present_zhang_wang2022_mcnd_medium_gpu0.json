@@ -1,0 +1,30 @@
+{
+  "archive_work_id": "spn_present_zhang_wang2022_mcnd_medium_gpu0_20260614",
+  "batch_size": 512,
+  "branch": "refactor/model-project-structure",
+  "checkpoint_metric": "val_auc",
+  "dataset_cache": true,
+  "dataset_cache_chunk_size": 4096,
+  "dataset_cache_root": "dataset_cache",
+  "device": "cuda:0",
+  "early_stopping_min_delta": 0.0001,
+  "early_stopping_patience": 3,
+  "epochs": 12,
+  "expected_rows": 6,
+  "hidden_bits": 32,
+  "key_rotation_interval": 1024,
+  "learning_rate": 0.001,
+  "monitor_script_name": "monitor_innovation1_spn_present_zhang_wang2022_mcnd_medium_gpu0_results.sh",
+  "optimizer": "adamw",
+  "plan": "experiments\\innovation1\\plans\\innovation1_spn_present_zhang_wang2022_mcnd_medium.csv",
+  "plan_scoped_fields": [
+    "sample_structure",
+    "integral_active_nibble"
+  ],
+  "restore_best_checkpoint": true,
+  "run_id": "innovation1-spn-present-zhang-wang2022-mcnd-medium-gpu0-20260614",
+  "sample_structure": "independent_pairs",
+  "task_name": "innovation1_spn_present_zhang_wang2022_mcnd_medium_gpu0_20260614",
+  "validation_label": "zhang_wang2022_present_mcnd_reproduction_medium",
+  "weight_decay": 0.0001
+}

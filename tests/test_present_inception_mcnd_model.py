@@ -22,9 +22,25 @@ def test_build_model_supports_present_inception_mcnd_for_multipair_present_input
 
     assert isinstance(model, PresentInceptionMCNDDistinguisher)
     assert model.pairs_per_sample == 16
+    assert model.kernel_sizes == (1, 3, 5)
     assert logits.shape == (3, 1)
 
 
 def test_present_inception_mcnd_rejects_non_pairset_input_width():
     with pytest.raises(ValueError, match="multiple of pair_bits"):
         build_model("present_inception_mcnd", input_bits=2049, hidden_bits=16, pair_bits=128)
+
+
+def test_build_model_passes_present_inception_kernel_size_options():
+    model = build_model(
+        "present_inception_mcnd",
+        input_bits=2048,
+        hidden_bits=16,
+        pair_bits=128,
+        structure="SPN",
+        model_options={"kernel_sizes": [1, 2, 4], "blocks": 1},
+    )
+
+    assert isinstance(model, PresentInceptionMCNDDistinguisher)
+    assert model.kernel_sizes == (1, 2, 4)
+    assert model.blocks == 1

@@ -132,7 +132,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--sample-structure",
         default="independent_pairs",
-        choices=["independent_pairs", "plaintext_integral_nibble"],
+        choices=["independent_pairs", "plaintext_integral_nibble", "zhang_wang_case2_mcnd"],
         help="How multiple pairs inside one sample are organized.",
     )
     parser.add_argument(
@@ -345,6 +345,7 @@ def _run_task(
         hidden_bits=args.hidden_bits,
         pair_bits=pair_bits,
         structure=train_cipher.structure,
+        model_options=task.get("model_options"),
     )
     _configure_structure_aware_model(model, task["cipher_key"], task["rounds"])
     result = train_binary_classifier(
@@ -414,6 +415,7 @@ def _run_task(
             "key_rotation_interval": task["key_rotation_interval"],
             "sample_structure": task["sample_structure"],
             "integral_active_nibble": task["integral_active_nibble"],
+            "model_options": task.get("model_options", {}),
         },
         **_model_metadata(model),
         "validation": {
@@ -587,6 +589,7 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "key_rotation_interval": args.key_rotation_interval,
                             "sample_structure": args.sample_structure,
                             "integral_active_nibble": args.integral_active_nibble,
+                            "model_options": {},
                             "train_key": None,
                             "validation_key": None,
                             **_difference_metadata(
@@ -649,6 +652,7 @@ def _plan_task(
             "integral_active_nibble": _optional_int(row.get("integral_active_nibble"))
             if row.get("integral_active_nibble") not in {None, ""}
             else 0,
+            "model_options": _optional_json(row.get("model_options")),
             "train_key": _optional_int(row.get("train_key")),
             "validation_key": _optional_int(row.get("validation_key")),
     }
@@ -721,6 +725,18 @@ def _infer_pair_bits(
         return pair_bits_for_encoding(block_bits, feature_encoding)
     except ValueError:
         return None
+
+
+def _optional_json(value: str | None) -> dict[str, Any]:
+    if value is None:
+        return {}
+    value = value.strip()
+    if not value:
+        return {}
+    parsed = json.loads(value)
+    if not isinstance(parsed, dict):
+        raise ValueError("model_options must be a JSON object")
+    return parsed
 
 
 def _optional_int(value: str | None) -> int | None:

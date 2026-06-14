@@ -1254,3 +1254,50 @@ def test_plan_task_reads_plaintext_integral_sample_structure(tmp_path):
     assert tasks[0]["integral_active_nibble"] == 0
     assert tasks[0]["feature_encoding"] == "ciphertext_xor_spn_paligned_bits"
     assert tasks[0]["pairs_per_sample"] == 16
+
+
+def test_run_innovation_one_matrix_reads_zhang_wang_case2_mcnd_plan_options(tmp_path: Path):
+    runner = _load_matrix_runner()
+    plan_path = tmp_path / "zw_plan.csv"
+    plan_path.write_text(
+        "\n".join(
+            [
+                "cipher,structure,network,model_key,family,architecture_rank,score,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode,train_key,validation_key,key_rotation_interval,sample_structure,integral_active_nibble,difference_profile,difference_member,model_options,evidence,literature",
+                'PRESENT-80,SPN,Present-Inception-MCND-ZW2022,present_inception_mcnd,present_inception_mcnd,0,92,6,0,8,16,ciphertext_pair_bits,encrypted_random_plaintexts,0x0,0x1,1024,zhang_wang_case2_mcnd,0,present_zhang_wang2022_mcnd,0,"{""kernel_sizes"": [1, 2, 4], ""blocks"": 1}",zw evidence,Zhang/Wang 2022',
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    tasks = runner._tasks_from_plan(
+        plan_path,
+        feature_encoding="ciphertext_pair_bits",
+        pairs_per_sample=1,
+        difference_profile=None,
+        difference_member=0,
+    )
+
+    assert len(tasks) == 1
+    task = tasks[0]
+    assert task["sample_structure"] == "zhang_wang_case2_mcnd"
+    assert task["input_difference"] == 0x0000000000000009
+    assert task["pairs_per_sample"] == 16
+    assert task["model_options"] == {"kernel_sizes": [1, 2, 4], "blocks": 1}
+
+
+def test_zhang_wang2022_present_mcnd_plans_exist_and_target_r6_r7():
+    rows = []
+    for path in [
+        Path("experiments/innovation1/plans/innovation1_spn_present_zhang_wang2022_mcnd_smoke.csv"),
+        Path("experiments/innovation1/plans/innovation1_spn_present_zhang_wang2022_mcnd_medium.csv"),
+    ]:
+        import csv
+
+        with path.open(newline="", encoding="utf-8") as handle:
+            rows.extend(csv.DictReader(handle))
+
+    assert {row["difference_profile"] for row in rows} == {"present_zhang_wang2022_mcnd"}
+    assert {row["sample_structure"] for row in rows} == {"zhang_wang_case2_mcnd"}
+    assert {row["pairs_per_sample"] for row in rows} == {"16"}
+    assert {row["feature_encoding"] for row in rows} == {"ciphertext_pair_bits"}
+    assert {row["rounds"] for row in rows if row["samples_per_class"] == "8192"} == {"6", "7"}

@@ -258,6 +258,7 @@ def build_model(
             norm=str(options.get("norm", "batchnorm1d")),
             pooling=str(options.get("pooling", "attention_mean_max")),
             dropout=float(options.get("dropout", 0.0)),
+            kernel_sizes=_int_tuple_option(options, "kernel_sizes", (1, 3, 5)),
         )
     if name == "spn_pairset_dbitnet_v2":
         return SpnCellPairSetDBitNetDistinguisher(
@@ -495,6 +496,22 @@ def _moe_v5_options(options: dict[str, object]) -> dict[str, object]:
     for key in string_keys:
         if key in expanded_options:
             result[key] = str(expanded_options[key])
+    return result
+
+
+def _int_tuple_option(
+    options: dict[str, object],
+    key: str,
+    default: tuple[int, ...],
+) -> tuple[int, ...]:
+    value = options.get(key)
+    if value is None:
+        return default
+    if not isinstance(value, (list, tuple)):
+        raise ValueError(f"model option {key} must be a list or tuple")
+    result = tuple(int(item) for item in value)
+    if not result:
+        raise ValueError(f"model option {key} must not be empty")
     return result
 
 
