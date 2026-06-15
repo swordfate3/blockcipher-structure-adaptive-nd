@@ -6,17 +6,35 @@ PROJECT_DIR="G:/lxy/blockcipher-structure-adaptive-nd"
 SCHEDULE="G:/lxy/blockcipher-structure-adaptive-nd/scripts/generated/remote/schedule_innovation1_arx_speck32_trail_mixer_curriculum_r7r8_gpu1_20260615.cmd"
 INTERVAL_SECONDS="${INTERVAL_SECONDS:-300}"
 SSH_TARGET="${SSH_TARGET:-lxy-a6000}"
+GPU_INDEX="${GPU_INDEX:-1}"
 
 while true; do
-  echo "[$(date -Is)] checking GPU1 for ${RUN_ID}"
-  gpu1_processes=$(ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" 'powershell -NoProfile -Command "nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_memory --format=csv,noheader"' || true)
-  echo "${gpu1_processes}"
-  if ! printf '%s\n' "${gpu1_processes}" | rg -q 'python.exe'; then
-    echo "[$(date -Is)] GPU appears idle for python.exe; launching ${RUN_ID}"
-    ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" "cmd.exe /c cd /d ${PROJECT_DIR} && ${SCHEDULE}"
-    echo "[$(date -Is)] launch requested"
-    exit 0
+  echo "[$(date -Is)] checking GPU${GPU_INDEX} for ${RUN_ID}"
+  gpu_table=$(ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" 'nvidia-smi --query-gpu=index,uuid --format=csv,noheader' || true)
+  gpu_uuid=$(printf '%s
+' "${gpu_table}" | awk -F, -v idx="${GPU_INDEX}" '$1 ~ "^ *"idx" *$" {gsub(/^ +| +$/, "", $2); print $2; exit}')
+  if [[ -z "${gpu_uuid}" ]]; then
+    echo "[$(date -Is)] unable to resolve GPU${GPU_INDEX} UUID; sleeping ${INTERVAL_SECONDS}s"
+    printf '%s
+' "${gpu_table}"
+    sleep "${INTERVAL_SECONDS}"
+    continue
   fi
-  echo "[$(date -Is)] GPU busy; sleeping ${INTERVAL_SECONDS}s"
-  sleep "${INTERVAL_SECONDS}"
+
+  gpu_processes=$(ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" 'nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_memory --format=csv,noheader' || true)
+  gpu_python_processes=$(printf '%s
+' "${gpu_processes}" | awk -F, -v uuid="${gpu_uuid}" '$1 == uuid && $3 ~ /python\.exe/ {print}')
+  echo "GPU${GPU_INDEX}_UUID=${gpu_uuid}"
+  if [[ -n "${gpu_python_processes}" ]]; then
+    printf '%s
+' "${gpu_python_processes}"
+    echo "[$(date -Is)] GPU${GPU_INDEX} busy; sleeping ${INTERVAL_SECONDS}s"
+    sleep "${INTERVAL_SECONDS}"
+    continue
+  fi
+
+  echo "[$(date -Is)] GPU${GPU_INDEX} appears idle for python.exe; launching ${RUN_ID}"
+  ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" "cmd.exe /c cd /d ${PROJECT_DIR} && ${SCHEDULE}"
+  echo "[$(date -Is)] launch requested"
+  exit 0
 done
