@@ -767,3 +767,176 @@ tmux sessions active:
   relay_arx_round_hybrid
 The new relay_after_arx_round_hybrid_to_partial_inverse_confirm.sh must be started after this commit is pushed.
 ```
+
+## Update 2026-06-16 01:40 CST
+
+User explicitly required ARX to keep moving, but main objective remains SPN/PRESENT high-round improvement. The queue was adjusted so SPN compact trail evidence is tested before the ARX GPU1 side run.
+
+New commits:
+
+```text
+0f18ad8 feat(innovation1): add compact spn trail screen and arx rx roles
+fef6fa7 chore(remote): queue compact spn before arx side runs
+```
+
+Both commits were synced to the remote Windows project and pushed to GitHub branch:
+
+```text
+refactor/model-project-structure
+remote HEAD: fef6fa7
+```
+
+### New SPN Compact Candidate
+
+Added feature:
+
+```text
+present_delta_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits
+```
+
+Per PRESENT ciphertext pair, this drops raw `C` and `C'` words and keeps only public structure evidence:
+
+```text
+Delta_C
+InvP(Delta_C)
+InvS(InvP(C)) xor InvS(InvP(C'))
+4-beam, 3-depth public SBox-DDT trail words seeded from the structural inverse difference
+```
+
+PRESENT-64 pair width:
+
+```text
+48 x 64-bit words = 3072 bits per pair
+```
+
+Rationale: the previous fused feature had 50 words and included raw ciphertext words. For r7, raw `C/C'` may dilute weak differential evidence. The compact feature tests whether removing raw ciphertext noise and keeping only public nonlinear-trail evidence improves r7.
+
+New SPN screen:
+
+```text
+run_id: innovation1-spn-present-delta-sinv-beam4deep3-r7-gpu1-20260616
+plan: experiments/innovation1/plans/innovation1_spn_present_delta_sinv_beam4deep3_r7_screen.csv
+config: experiments/innovation1/configs/remote/innovation1_spn_present_delta_sinv_beam4deep3_r7_gpu1_20260616.json
+rows: 4
+rounds: PRESENT r7 only
+seeds: 0,1
+models:
+  - present_matrix_trail_hybrid_pairset
+  - present_trail_mixer_pairset
+samples/class: 65536
+pairs/sample: 16
+key_rotation_interval: 1024
+sample_structure: zhang_wang_case2_mcnd
+pretrain: r6 for 6 epochs from plan
+```
+
+Local verification:
+
+```text
+uv run python experiments/run_innovation_one_matrix.py ... --feature-encoding present_delta_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits ... --device cpu
+=> wrote 1 row to /tmp/delta_sinv_beam4deep3_smoke.jsonl
+```
+
+### ARX Side-Line Improvement
+
+ARX worker patch added explicit SPECK RX feature role grouping inside:
+
+```text
+src/blockcipher_ai_eval/models/structure/arx/round_function_hybrid.py
+```
+
+For 11-word RX feature inputs, the model now exposes:
+
+```text
+left, right, difference, rotation_aligned_difference,
+partial_inverse_left_y, partial_inverse_right_y, partial_inverse_delta_y,
+rx_alpha, rx_beta, carry_left_delta, carry_right_delta
+```
+
+and pools these relation groups:
+
+```text
+(left, right, difference)
+(difference, rotation_aligned_difference)
+(partial_inverse_left_y, partial_inverse_right_y, partial_inverse_delta_y)
+(rx_alpha, rx_beta)
+(carry_left_delta, carry_right_delta)
+```
+
+This keeps the ARX route structure-adaptive instead of treating all 32-bit words as anonymous tokens.
+
+New ARX smoke:
+
+```text
+run_id: innovation1-arx-speck32-round-hybrid-rx-smoke-gpu0-20260616
+plan: experiments/innovation1/plans/innovation1_arx_speck32_round_hybrid_rx_smoke.csv
+config: experiments/innovation1/configs/remote/innovation1_arx_speck32_round_hybrid_rx_smoke_gpu0_20260616.json
+rows: 4
+rounds: SPECK32/64 r6,r7
+seeds: 0,1
+feature: ciphertext_pair_xor_arx_partial_inverse_rx_bits
+model: arx_round_function_hybrid_pairset
+samples/class: 32768
+pairs/sample: 4
+key_rotation_interval: 1024
+r7 pretrain: r6 for 4 epochs from plan
+```
+
+### Verification
+
+Full local targeted verification after SPN+ARX changes:
+
+```text
+uv run pytest tests/test_feature_encodings.py tests/test_adaptive_dbitnet_model.py tests/test_build_plan_config.py tests/test_remote_script_generator.py tests/test_experiment_matrix_runner.py -q
+122 passed, 9 warnings
+```
+
+Additional smoke:
+
+```text
+SPN compact CPU smoke: wrote 1 row
+ARX RX hybrid CPU smoke: wrote 1 row
+```
+
+### Active Remote Queue
+
+Current remote GPU processes at update time:
+
+```text
+GPU0: python.exe PID 31416
+  run: innovation1-spn-present-spnaligned-r6-controls-10seed-gpu0-20260615
+  latest: row 18/30, PRESENT r6 seed 7, epoch 11/20
+
+GPU1: python.exe PID 16484
+  run: innovation1-spn-present-spnaligned-r7-matrix-screen-gpu1-20260615
+  latest: row 9/24, PRESENT r7 seed 2, epoch 20/24
+  observed r7 signal remains near random so far
+```
+
+New watcher chain:
+
+```text
+GPU1 current r7 matrix
+  -> protocol spn-aligned scale-m
+  -> SInv matrix
+  -> SInv + SBoxDDT Beam4Deep3 highround
+  -> compact Delta + SInv + SBoxDDT Beam4Deep3 r7
+  -> ARX TrailMixer curriculum r7/r8
+
+GPU0 current r6 controls
+  -> ARX RoundFunctionHybrid RX smoke r6/r7
+```
+
+Old direct `SInv+Beam4Deep3 -> ARX` watcher was deleted. New watcher tasks are active and waiting for result branches:
+
+```text
+innovation1_watch_after_sinv_beam4deep3_to_delta_sinv_20260616
+innovation1_watch_after_delta_sinv_to_arx_trail_20260616
+innovation1_watch_after_spn_r6_controls_to_arx_rx_20260616
+```
+
+Watcher logs confirmed they are waiting normally, not failing.
+
+### Decision Rule
+
+Do not claim SPN/PRESENT r7 breakthrough unless the compact or fused branch produces a gated result branch and r7 metrics clearly exceed near-random behavior under the Zhang/Wang MCND-style protocol. If compact r7 remains random, the next SPN step should move to score-distribution / selected-bit confirmation rather than simply widening raw ciphertext features.
