@@ -116,6 +116,12 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "git -c core.longpaths=true -c http.proxy= -c https.proxy= clone %CLONE_URL% %PROJECT_ID%" in run_text
     assert "git -c core.longpaths=true clone --local %PROJECT_DIR% %RUN_ID%" in run_text
     assert "git -c core.longpaths=true clone --local %RUN_DIR% %ARCHIVE_WORK%" in run_text
+    assert "set GPU_BUSY_COUNT=0" in run_text
+    assert 'findstr /I /C:"run_innovation_one_matrix.py"' in run_text
+    assert 'findstr /I /C:"--device cuda:0"' in run_text
+    assert "goto gpu_busy" in run_text
+    assert "RUN_GATE_BLOCKED_GPU_BUSY" in run_text
+    assert "gpu_guard=enabled:cuda:0" in run_text
     assert "git reset --hard" not in run_text
 
     launcher_text = generated.launch_script.read_text(encoding="utf-8")
@@ -245,3 +251,29 @@ def test_generate_remote_run_script_marks_plan_scoped_integral_nibble(tmp_path: 
 
     assert "--integral-active-nibble 0" in run_text
     assert "integral_active_nibble=from_plan" in run_text
+
+
+def test_generate_remote_run_script_can_disable_gpu_guard(tmp_path: Path):
+    spec_path = tmp_path / "spec.json"
+    output_dir = tmp_path / "remote"
+    monitor_dir = tmp_path / "scripts"
+    spec_path.write_text(
+        json.dumps(
+            {
+                "run_id": "innovation1-no-guard-gpu0-20260616",
+                "task_name": "innovation1_no_guard_gpu0_20260616",
+                "plan": "experiments\\innovation1\\plans\\demo.csv",
+                "expected_rows": 1,
+                "device": "cuda:0",
+                "gpu_guard": False,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    generated = generate_remote_scripts(spec_path, output_dir=output_dir, monitor_dir=monitor_dir)
+    run_text = generated.run_script.read_text(encoding="utf-8")
+
+    assert "set GPU_BUSY_COUNT=0" not in run_text
+    assert "RUN_GATE_BLOCKED_GPU_BUSY" in run_text
+    assert "gpu_guard=disabled" in run_text

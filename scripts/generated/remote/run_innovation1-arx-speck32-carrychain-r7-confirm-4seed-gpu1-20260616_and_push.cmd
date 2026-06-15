@@ -61,6 +61,13 @@ git status --short --branch > logs\%RUN_ID%_git_status_before_run.txt
 nvidia-smi > logs\%RUN_ID%_gpu_info.txt
 %PY% -c "import sys, torch; print('python', sys.executable); print('torch', torch.__version__); print('cuda_version', torch.version.cuda); print('cuda_available', torch.cuda.is_available()); print('device_count', torch.cuda.device_count()); print('device0', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'NA')" > logs\%RUN_ID%_torch_info.txt 2> logs\%RUN_ID%_torch_info_stderr.txt
 
+set GPU_BUSY_COUNT=0
+for /f "usebackq delims=" %%P in (`wmic process where "name='python.exe'" get CommandLine /VALUE ^| findstr /I /C:"run_innovation_one_matrix.py" ^| findstr /I /C:"--device cuda:1"`) do set /a GPU_BUSY_COUNT+=1
+echo gpu_guard_device=cuda:1 > logs\%RUN_ID%_gpu_guard.txt
+echo gpu_busy_count=%GPU_BUSY_COUNT% >> logs\%RUN_ID%_gpu_guard.txt
+if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
+
+
 %PY% experiments\run_innovation_one_matrix.py ^
   --plan experiments\innovation1\plans\innovation1_arx_speck32_carrychain_r7_confirm_4seed.csv ^
   --epochs 16 ^
@@ -123,6 +130,7 @@ copy "%RUN_DIR%\logs\%RUN_ID%_git_status_before_run.txt" "results_archive\%RUN_I
 copy "%RUN_DIR%\logs\%RUN_ID%_gpu_info.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_torch_info.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_torch_info_stderr.txt" "results_archive\%RUN_ID%\"
+if exist "%RUN_DIR%\logs\%RUN_ID%_gpu_guard.txt" copy "%RUN_DIR%\logs\%RUN_ID%_gpu_guard.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_stderr.txt" "results_archive\%RUN_ID%\"
 if exist "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" copy "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" "results_archive\%RUN_ID%\"
@@ -138,6 +146,7 @@ echo archive_work=%ARCHIVE_WORK%>> results_archive\%RUN_ID%\run_manifest.txt
 echo branch=%BRANCH%>> results_archive\%RUN_ID%\run_manifest.txt
 echo plan=experiments\innovation1\plans\innovation1_arx_speck32_carrychain_r7_confirm_4seed.csv>> results_archive\%RUN_ID%\run_manifest.txt
 echo device=cuda:1>> results_archive\%RUN_ID%\run_manifest.txt
+echo gpu_guard=enabled:cuda:1>> results_archive\%RUN_ID%\run_manifest.txt
 echo expected_rows=%EXPECTED_ROWS%>> results_archive\%RUN_ID%\run_manifest.txt
 echo epochs=16>> results_archive\%RUN_ID%\run_manifest.txt
 echo batch_size=512>> results_archive\%RUN_ID%\run_manifest.txt
@@ -181,6 +190,11 @@ exit /b 4
 echo RUN_GATE_BLOCKED_RUN_FAILED
 type logs\%RUN_ID%_stderr.txt
 exit /b 1
+
+:gpu_busy
+echo RUN_GATE_BLOCKED_GPU_BUSY
+type logs\%RUN_ID%_gpu_guard.txt
+exit /b 5
 
 :summary_failed
 echo RUN_GATE_BLOCKED_SUMMARY_FAILED
