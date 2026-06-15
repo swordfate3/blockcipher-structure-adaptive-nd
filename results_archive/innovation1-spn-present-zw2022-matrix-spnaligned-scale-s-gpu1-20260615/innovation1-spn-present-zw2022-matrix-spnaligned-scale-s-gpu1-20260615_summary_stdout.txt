@@ -1,0 +1,1 @@
+wrote 3 summary rows to results\innovation1-spn-present-zw2022-matrix-spnaligned-scale-s-gpu1-20260615_summary.csv
