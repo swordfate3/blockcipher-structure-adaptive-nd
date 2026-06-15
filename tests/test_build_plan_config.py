@@ -328,6 +328,40 @@ def test_present_delta_only_structural_r7_plan_shape():
     }
 
 
+def test_speck32_arx_carrychain_micro_smoke_plan_shape():
+    repo_root = Path(__file__).resolve().parents[1]
+    plan_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "plans"
+        / "innovation1_arx_speck32_carrychain_micro_smoke.csv"
+    )
+
+    with plan_path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 2
+    assert {row["cipher"] for row in rows} == {"SPECK32/64"}
+    assert {row["structure"] for row in rows} == {"ARX"}
+    assert {row["model_key"] for row in rows} == {"arx_round_function_hybrid_pairset"}
+    assert {row["family"] for row in rows} == {"arx_round_function_hybrid_carrychain_micro_smoke"}
+    assert {row["rounds"] for row in rows} == {"6", "7"}
+    assert {row["seed"] for row in rows} == {"0"}
+    assert {row["samples_per_class"] for row in rows} == {"8192"}
+    assert {row["pairs_per_sample"] for row in rows} == {"4"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "ciphertext_pair_xor_arx_partial_inverse_rx_carrychain_bits",
+    }
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["sample_structure"] for row in rows} == {"independent_pairs"}
+    assert {row["loss"] for row in rows} == {"mse"}
+    assert {row["lr_scheduler"] for row in rows} == {"cyclic"}
+    assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
+    assert {row["pretrain_rounds"] for row in rows if row["rounds"] == "7"} == {"6"}
+    assert {row["pretrain_epochs"] for row in rows if row["rounds"] == "7"} == {"2"}
+
+
 def test_speck32_arx_v2_scale_l_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
