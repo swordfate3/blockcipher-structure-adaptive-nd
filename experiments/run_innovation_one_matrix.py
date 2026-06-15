@@ -304,6 +304,7 @@ def _run_task(
         key_rotation_interval=task["key_rotation_interval"],
         sample_structure=task["sample_structure"],
         integral_active_nibble=task["integral_active_nibble"],
+        selected_bit_indices=task["selected_bit_indices"],
     )
     validation_config = DifferentialDatasetConfig(
         cipher=validation_cipher,
@@ -316,6 +317,7 @@ def _run_task(
         key_rotation_interval=task["key_rotation_interval"],
         sample_structure=task["sample_structure"],
         integral_active_nibble=task["integral_active_nibble"],
+        selected_bit_indices=task["selected_bit_indices"],
     )
     train_dataset = _make_task_dataset(
         train_config,
@@ -426,6 +428,7 @@ def _run_task(
             "sample_structure": task["sample_structure"],
             "integral_active_nibble": task["integral_active_nibble"],
             "model_options": task.get("model_options", {}),
+            "selected_bit_indices": task["selected_bit_indices"],
         },
         **_model_metadata(model),
         "validation": {
@@ -505,6 +508,7 @@ def _task_progress_payload(task: dict[str, Any]) -> dict[str, Any]:
         "difference_member": task.get("difference_member", ""),
         "sample_structure": task["sample_structure"],
         "integral_active_nibble": task["integral_active_nibble"],
+        "selected_bit_indices": task["selected_bit_indices"],
         "loss": task.get("loss", ""),
     }
 
@@ -557,6 +561,7 @@ def _dataset_cache_dir(
         "key_rotation_interval": config.key_rotation_interval,
         "sample_structure": config.sample_structure,
         "integral_active_nibble": config.integral_active_nibble,
+        "selected_bit_indices": config.selected_bit_indices,
         "key": task.get("train_key") if split == "train" else task.get("validation_key"),
     }
     digest = hashlib.sha256(
@@ -600,6 +605,7 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "key_rotation_interval": args.key_rotation_interval,
                             "sample_structure": args.sample_structure,
                             "integral_active_nibble": args.integral_active_nibble,
+                            "selected_bit_indices": (),
                             "loss": args.loss,
                             "model_options": {},
                             "train_key": None,
@@ -675,6 +681,7 @@ def _plan_task(
             "early_stopping_patience": _optional_int(row.get("early_stopping_patience")),
             "early_stopping_min_delta": _optional_float(row.get("early_stopping_min_delta")),
             "model_options": _optional_json(row.get("model_options")),
+            "selected_bit_indices": _optional_int_tuple(row.get("selected_bit_indices")),
             "train_key": _optional_int(row.get("train_key")),
             "validation_key": _optional_int(row.get("validation_key")),
     }
@@ -760,6 +767,18 @@ def _optional_json(value: str | None) -> dict[str, Any]:
         raise ValueError("model_options must be a JSON object")
     return parsed
 
+
+
+def _optional_int_tuple(value: str | None) -> tuple[int, ...]:
+    if value is None:
+        return ()
+    value = value.strip()
+    if not value:
+        return ()
+    parsed = json.loads(value)
+    if not isinstance(parsed, list) or not all(isinstance(item, int) for item in parsed):
+        raise ValueError("selected_bit_indices must be a JSON list of integers")
+    return tuple(parsed)
 
 
 def _optional_float(value: str | None) -> float | None:

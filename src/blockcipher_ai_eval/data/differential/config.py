@@ -23,6 +23,7 @@ class DifferentialDatasetConfig:
     key_rotation_interval: int = 0
     sample_structure: str = "independent_pairs"
     integral_active_nibble: int = 0
+    selected_bit_indices: tuple[int, ...] = ()
 
 
 @dataclass(frozen=True)

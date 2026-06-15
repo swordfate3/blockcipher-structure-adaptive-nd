@@ -1337,3 +1337,23 @@ def test_plan_rows_can_override_training_protocol_fields(tmp_path):
     assert task["checkpoint_metric"] == "val_loss"
     assert task["restore_best_checkpoint"] is True
     assert task["early_stopping_patience"] == 0
+
+
+def test_plan_rows_can_pass_selected_bit_indices(tmp_path):
+    module = _load_matrix_runner()
+    plan = tmp_path / "selected_bits_plan.csv"
+    plan.write_text(
+        "cipher,model_key,network,architecture_rank,score,evidence,literature,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode,selected_bit_indices\n"
+        'PRESENT-80,mlp,Entropy-Selected-MLP,0,100,entropy,Entropy PRESENT 2026,6,0,32,1,ciphertext_xor_bits,encrypted_random_plaintexts,"[0, 2, 18, 50]"\n',
+        encoding="utf-8",
+    )
+
+    tasks = module._tasks_from_plan(
+        plan,
+        feature_encoding="ciphertext_pair_bits",
+        pairs_per_sample=1,
+        difference_profile="present_entropy2026_gohr",
+        difference_member=0,
+    )
+
+    assert tasks[0]["selected_bit_indices"] == (0, 2, 18, 50)

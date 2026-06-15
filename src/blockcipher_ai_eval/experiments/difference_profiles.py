@@ -98,6 +98,15 @@ def literature_difference_profiles() -> dict[str, DifferenceProfile]:
             word_difference=("0x0000", "0x0000", "0x0d00", "0x0000"),
             note="Input difference 0xd000000 reported for weak 8-9 round PRESENT DBitNet distinguishers; treat as a high-round search seed, not a strong MCND baseline.",
         ),
+        "present_entropy2026_gohr": DifferenceProfile(
+            name="present_entropy2026_gohr",
+            cipher="present80",
+            kind="fixed",
+            differences=(0x0000000000D00000,),
+            source="Gauthier-Umana/Martinez/Obando/Perez 2026 entropy-based PRESENT neural distinguisher",
+            word_difference=("0x0000", "0x0000", "0x00d0", "0x0000"),
+            note="Input difference used by the 2026 entropy-based bit-reduced PRESENT distinguisher; pair feature selection should be supplied separately.",
+        ),
         "gift64_shen2024_spn_screen": DifferenceProfile(
             name="gift64_shen2024_spn_screen",
             cipher="gift64",

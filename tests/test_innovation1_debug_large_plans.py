@@ -372,3 +372,21 @@ def test_spn_present_zw2022_matrix_spnaligned_scale_s_plan_uses_oom_safe_protoco
     assert {row["model_options"] for row in rows} == {
         '{"kernel_sizes": [[1, 1], [1, 2], [2, 4]], "blocks": 2, "dropout": 0.0, "pooling": "attention_mean_max"}'
     }
+
+
+def test_spn_present_entropy_selected_scale_s_plan_matches_2026_protocol_shape():
+    rows = _rows("experiments/innovation1/plans/innovation1_spn_present_entropy_selected_scale_s.csv")
+
+    assert len(rows) == 6
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["rounds"] for row in rows} == {"6", "7"}
+    assert {row["seed"] for row in rows} == {"0", "1", "2"}
+    assert {row["samples_per_class"] for row in rows} == {"65536"}
+    assert {row["pairs_per_sample"] for row in rows} == {"1"}
+    assert {row["feature_encoding"] for row in rows} == {"ciphertext_pair_bits"}
+    assert {row["difference_profile"] for row in rows} == {"present_entropy2026_gohr"}
+    assert {row["model_key"] for row in rows} == {"mlp"}
+    assert {row["loss"] for row in rows} == {"mse"}
+    selected = {row["selected_bit_indices"] for row in rows}
+    assert len(selected) == 1
+    assert len(__import__("json").loads(next(iter(selected)))) == 56

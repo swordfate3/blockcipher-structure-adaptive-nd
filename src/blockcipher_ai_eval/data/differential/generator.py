@@ -61,7 +61,9 @@ def dataset_metadata(config: DifferentialDatasetConfig) -> dict[str, int | str |
         "key_schedule": "rotating" if config.key_rotation_interval > 0 else "fixed",
         "sample_structure": config.sample_structure,
         "integral_active_nibble": config.integral_active_nibble,
-        "pair_bits": pair_bits_for_encoding(block_bits, config.feature_encoding),
+        "pair_bits": _effective_pair_bits(config, block_bits),
+        "base_pair_bits": pair_bits_for_encoding(block_bits, config.feature_encoding),
+        "selected_bit_indices": list(config.selected_bit_indices),
     }
 
 
@@ -234,13 +236,16 @@ def _mcnd_plaintext_masks(
 
 
 def _encode_pair(left: int, right: int, block_bits: int, config: DifferentialDatasetConfig, cipher) -> list[int]:
-    return encode_ciphertext_pair(
+    encoded = encode_ciphertext_pair(
         left,
         right,
         width=block_bits,
         feature_encoding=config.feature_encoding,
         cipher=cipher,
     )
+    if not config.selected_bit_indices:
+        return encoded
+    return [encoded[index] for index in config.selected_bit_indices]
 
 
 def _integral_base_plaintext(
@@ -283,6 +288,17 @@ def _validate_config(config: DifferentialDatasetConfig) -> None:
             raise ValueError("integral_active_nibble is outside the cipher block")
     if config.sample_structure == "zhang_wang_case2_mcnd" and config.pairs_per_sample < 1:
         raise ValueError("zhang_wang_case2_mcnd requires pairs_per_sample >= 1")
+    base_pair_bits = pair_bits_for_encoding(config.cipher.block_bits, config.feature_encoding)
+    for index in config.selected_bit_indices:
+        if index < 0 or index >= base_pair_bits:
+            raise ValueError("selected_bit_indices must reference encoded pair bits")
+
+
+def _effective_pair_bits(config: DifferentialDatasetConfig, block_bits: int) -> int:
+    if config.selected_bit_indices:
+        return len(config.selected_bit_indices)
+    return pair_bits_for_encoding(block_bits, config.feature_encoding)
+
 
 def _cipher_for_row(config: DifferentialDatasetConfig, rng: np.random.Generator, row_index: int):
     if config.key_rotation_interval == 0:
