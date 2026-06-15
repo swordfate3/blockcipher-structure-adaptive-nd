@@ -179,3 +179,48 @@ GPU0 PID 31416: innovation1-spn-present-spnaligned-r6-controls-10seed-gpu0-20260
 GPU1 PID 16484: innovation1-spn-present-spnaligned-r7-matrix-screen-gpu1-20260615, 5/24 rows, stderr 0 bytes
 ARX TrailMixer: not currently running, no result branch yet
 ```
+
+## Update 2026-06-15 23:45 CST
+
+Added a next-generation SPN/PRESENT structure-adaptive candidate:
+
+```text
+model key: present_matrix_trail_hybrid_pairset
+class: PresentMatrixTrailHybridPairSetDistinguisher
+file: src/blockcipher_ai_eval/models/structure/spn/present_matrix_trail_hybrid.py
+```
+
+Purpose:
+
+```text
+Fuse two evidence views that were previously tested mostly separately:
+1. PRESENT cell-matrix local evidence over raw/xor/paligned/DDT words.
+2. PRESENT public DDT trail-role evidence with P-layer message passing.
+```
+
+This keeps the innovation-one claim aligned with structure adaptation: the model is not a generic MLP; it encodes PRESENT word roles, nibble positions, P-layer mixing, and matrix-local cell patterns over public keyless S-box DDT trail features.
+
+Local verification:
+
+```text
+73 passed: adaptive model + feature encoding + remote script generator tests
+Hybrid runner smoke: experiments/run_innovation_one_matrix.py wrote 1 row to /tmp/present_hybrid_smoke_results.jsonl
+```
+
+Remote queued run prepared:
+
+```text
+run_id: innovation1-spn-present-matrix-trail-hybrid-highround-gpu0-20260615
+plan: experiments/innovation1/plans/innovation1_spn_present_matrix_trail_hybrid_highround_screen.csv
+config: experiments/innovation1/configs/remote/innovation1_spn_present_matrix_trail_hybrid_highround_gpu0_20260615.json
+monitor: scripts/generated/monitors/monitor_innovation1_spn_present_matrix_trail_hybrid_highround_gpu0_results.sh
+relay: scripts/generated/monitors/relay_after_spn_sboxddt_curriculum_to_matrix_trail_hybrid.sh
+expected rows: 4
+rounds: PRESENT r7/r8
+features: SBoxDDT back2 and beam2 public trail encodings
+curriculum: r6 pretrain, 6 epochs from plan
+samples/class: r7 65536, r8 131072
+pairs/sample: 16
+key_rotation_interval: 1024
+sample_structure: zhang_wang_case2_mcnd
+```

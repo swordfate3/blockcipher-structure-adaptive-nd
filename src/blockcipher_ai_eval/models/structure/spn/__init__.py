@@ -1,6 +1,9 @@
 from blockcipher_ai_eval.models.structure.spn.cell_pairset import SpnCellPairSetDBitNetDistinguisher
 from blockcipher_ai_eval.models.structure.spn.nibble_conv_pairset import SpnNibbleConvPairSetDistinguisher
 from blockcipher_ai_eval.models.structure.spn.present_trail_mixer import PresentTrailMixerPairSetDistinguisher
+from blockcipher_ai_eval.models.structure.spn.present_matrix_trail_hybrid import (
+    PresentMatrixTrailHybridPairSetDistinguisher,
+)
 from blockcipher_ai_eval.models.structure.spn.present_p_layer_mixer import (
     PresentPLayerMixerBlock,
     PresentPLayerMixerPairSetDistinguisher,
@@ -21,6 +24,7 @@ __all__ = [
     "PresentPLayerMixerBlock",
     "PresentPLayerMixerPairSetDistinguisher",
     "PresentTrailMixerPairSetDistinguisher",
+    "PresentMatrixTrailHybridPairSetDistinguisher",
     "PresentInceptionMCNDBlock",
     "PresentInceptionMCNDDistinguisher",
     "PresentInceptionMCNDGlobalMatrixDistinguisher",
