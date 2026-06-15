@@ -23,6 +23,8 @@ INNOVATION_ONE_GROUP_FIELDS = (
     "gate_mode",
     "samples_per_class",
     "pairs_per_sample",
+    "key_rotation_interval",
+    "sample_structure",
     "feature_encoding",
 )
 INNOVATION_ONE_METRIC_FIELDS = (

@@ -78,14 +78,14 @@ if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
     early_stopping_min_delta = _format_float(spec.get("early_stopping_min_delta", 0.0))
     pretrain_rounds = spec.get("pretrain_rounds")
     pretrain_epochs = int(spec.get("pretrain_epochs", 0))
-    pretrain_args = ""
+    pretrain_args: list[str] = []
     pretrain_rounds_manifest = "from_plan" if "pretrain_rounds" in plan_scoped_fields else "none"
     pretrain_epochs_manifest = "from_plan" if "pretrain_epochs" in plan_scoped_fields else str(pretrain_epochs)
     if pretrain_rounds is not None:
-        pretrain_args += f" ^\n  --pretrain-rounds {int(pretrain_rounds)}"
+        pretrain_args.extend(["--pretrain-rounds", str(int(pretrain_rounds))])
         pretrain_rounds_manifest = str(int(pretrain_rounds))
     if pretrain_epochs > 0:
-        pretrain_args += f" ^\n  --pretrain-epochs {pretrain_epochs}"
+        pretrain_args.extend(["--pretrain-epochs", str(pretrain_epochs)])
     project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
     clone_url = str(spec.get("clone_url", "https://github.com/swordfate3/blockcipher-structure-adaptive-nd.git"))
     repo_url = str(spec.get("repo_url", "git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git"))
@@ -107,32 +107,75 @@ if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
     summarizer = str(spec.get("summarizer", r"experiments\summarize_innovation_one_results.py"))
     dataset_cache_root = str(spec.get("dataset_cache_root", r"dataset_cache"))
     dataset_cache_chunk_size = int(spec.get("dataset_cache_chunk_size", 8192))
-    dataset_cache_args = ""
+    dataset_cache_args: list[str] = []
     dataset_cache_manifest = ""
     if bool(spec.get("dataset_cache", False)):
-        dataset_cache_args = (
-            " ^\n"
-            f"  --dataset-cache-root {dataset_cache_root} ^\n"
-            f"  --dataset-cache-chunk-size {dataset_cache_chunk_size}"
-        )
+        dataset_cache_args = [
+            "--dataset-cache-root",
+            dataset_cache_root,
+            "--dataset-cache-chunk-size",
+            str(dataset_cache_chunk_size),
+        ]
         dataset_cache_manifest = (
             f"echo dataset_cache_root={dataset_cache_root}>> results_archive\\%RUN_ID%\\run_manifest.txt\n"
             f"echo dataset_cache_chunk_size={dataset_cache_chunk_size}>> results_archive\\%RUN_ID%\\run_manifest.txt"
         )
-    checkpoint_args = (
-        " ^\n"
-        f"  --checkpoint-metric {checkpoint_metric} ^\n"
-        f"  --early-stopping-patience {early_stopping_patience} ^\n"
-        f"  --early-stopping-min-delta {early_stopping_min_delta}"
-    )
+    checkpoint_args = [
+        "--checkpoint-metric",
+        checkpoint_metric,
+        "--early-stopping-patience",
+        str(early_stopping_patience),
+        "--early-stopping-min-delta",
+        str(early_stopping_min_delta),
+    ]
     if restore_best_checkpoint:
-        checkpoint_args = (
-            " ^\n"
-            f"  --checkpoint-metric {checkpoint_metric} ^\n"
-            "  --restore-best-checkpoint ^\n"
-            f"  --early-stopping-patience {early_stopping_patience} ^\n"
-            f"  --early-stopping-min-delta {early_stopping_min_delta}"
-        )
+        checkpoint_args = [
+            "--checkpoint-metric",
+            checkpoint_metric,
+            "--restore-best-checkpoint",
+            "--early-stopping-patience",
+            str(early_stopping_patience),
+            "--early-stopping-min-delta",
+            str(early_stopping_min_delta),
+        ]
+    runner_args = [
+        runner,
+        "--plan",
+        plan,
+        "--epochs",
+        str(epochs),
+        "--batch-size",
+        str(batch_size),
+        "--hidden-bits",
+        str(hidden_bits),
+        "--learning-rate",
+        str(learning_rate),
+        "--optimizer",
+        optimizer,
+        "--weight-decay",
+        str(weight_decay),
+        "--key-rotation-interval",
+        str(key_rotation_interval),
+        "--sample-structure",
+        sample_structure,
+        "--integral-active-nibble",
+        str(integral_active_nibble),
+        "--device",
+        device,
+        *dataset_cache_args,
+        *checkpoint_args,
+        *pretrain_args,
+        "--progress-output",
+        r"logs\%RUN_ID%_progress.jsonl",
+        "--output",
+        r"results\%RUN_ID%.jsonl",
+    ]
+    runner_command = f"%PY% {' '.join(runner_args)} > logs\\%RUN_ID%_stdout.txt 2> logs\\%RUN_ID%_stderr.txt"
+    summary_command = (
+        f"%PY% {summarizer} --input results\\%RUN_ID%.jsonl "
+        f"--output results\\%RUN_ID%_summary.csv "
+        f"> logs\\%RUN_ID%_summary_stdout.txt 2> logs\\%RUN_ID%_summary_stderr.txt"
+    )
 
     return rf"""@echo off
 setlocal
@@ -198,22 +241,7 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
 %PY% -c "import sys, torch; print('python', sys.executable); print('torch', torch.__version__); print('cuda_version', torch.version.cuda); print('cuda_available', torch.cuda.is_available()); print('device_count', torch.cuda.device_count()); print('device0', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'NA')" > logs\%RUN_ID%_torch_info.txt 2> logs\%RUN_ID%_torch_info_stderr.txt
 {gpu_guard_args}
 
-%PY% {runner} ^
-  --plan {plan} ^
-  --epochs {epochs} ^
-  --batch-size {batch_size} ^
-  --hidden-bits {hidden_bits} ^
-  --learning-rate {learning_rate} ^
-  --optimizer {optimizer} ^
-  --weight-decay {weight_decay} ^
-  --key-rotation-interval {key_rotation_interval} ^
-  --sample-structure {sample_structure} ^
-  --integral-active-nibble {integral_active_nibble} ^
-  --device {device}{dataset_cache_args}{checkpoint_args}{pretrain_args} ^
-  --progress-output logs\%RUN_ID%_progress.jsonl ^
-  --output results\%RUN_ID%.jsonl ^
-  > logs\%RUN_ID%_stdout.txt ^
-  2> logs\%RUN_ID%_stderr.txt
+{runner_command}
 if errorlevel 1 goto run_failed
 
 set RESULT_LINES=0
@@ -223,11 +251,7 @@ echo expected_rows=%EXPECTED_ROWS% >> logs\%RUN_ID%_result_gate.txt
 if not "%RESULT_LINES%"=="%EXPECTED_ROWS%" goto incomplete_results
 
 if exist {summarizer} (
-  %PY% {summarizer} ^
-    --input results\%RUN_ID%.jsonl ^
-    --output results\%RUN_ID%_summary.csv ^
-    > logs\%RUN_ID%_summary_stdout.txt ^
-    2> logs\%RUN_ID%_summary_stderr.txt
+  {summary_command}
 )
 if not exist results\%RUN_ID%_summary.csv (
   echo summary_status=fallback_missing_summarizer > logs\%RUN_ID%_summary_stdout.txt

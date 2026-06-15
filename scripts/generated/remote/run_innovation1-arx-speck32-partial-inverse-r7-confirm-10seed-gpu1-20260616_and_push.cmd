@@ -68,28 +68,7 @@ echo gpu_busy_count=%GPU_BUSY_COUNT% >> logs\%RUN_ID%_gpu_guard.txt
 if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
 
 
-%PY% experiments\run_innovation_one_matrix.py ^
-  --plan experiments\innovation1\plans\innovation1_arx_speck32_partial_inverse_r7_confirm_10seed.csv ^
-  --epochs 16 ^
-  --batch-size 1024 ^
-  --hidden-bits 64 ^
-  --learning-rate 0.001 ^
-  --optimizer adamw ^
-  --weight-decay 0.0001 ^
-  --key-rotation-interval 1024 ^
-  --sample-structure independent_pairs ^
-  --integral-active-nibble 0 ^
-  --device cuda:1 ^
-  --dataset-cache-root dataset_cache ^
-  --dataset-cache-chunk-size 8192 ^
-  --checkpoint-metric val_accuracy ^
-  --restore-best-checkpoint ^
-  --early-stopping-patience 4 ^
-  --early-stopping-min-delta 0 ^
-  --progress-output logs\%RUN_ID%_progress.jsonl ^
-  --output results\%RUN_ID%.jsonl ^
-  > logs\%RUN_ID%_stdout.txt ^
-  2> logs\%RUN_ID%_stderr.txt
+%PY% experiments\run_innovation_one_matrix.py --plan experiments\innovation1\plans\innovation1_arx_speck32_partial_inverse_r7_confirm_10seed.csv --epochs 16 --batch-size 1024 --hidden-bits 64 --learning-rate 0.001 --optimizer adamw --weight-decay 0.0001 --key-rotation-interval 1024 --sample-structure independent_pairs --integral-active-nibble 0 --device cuda:1 --dataset-cache-root dataset_cache --dataset-cache-chunk-size 8192 --checkpoint-metric val_accuracy --restore-best-checkpoint --early-stopping-patience 4 --early-stopping-min-delta 0 --progress-output logs\%RUN_ID%_progress.jsonl --output results\%RUN_ID%.jsonl > logs\%RUN_ID%_stdout.txt 2> logs\%RUN_ID%_stderr.txt
 if errorlevel 1 goto run_failed
 
 set RESULT_LINES=0
@@ -99,11 +78,7 @@ echo expected_rows=%EXPECTED_ROWS% >> logs\%RUN_ID%_result_gate.txt
 if not "%RESULT_LINES%"=="%EXPECTED_ROWS%" goto incomplete_results
 
 if exist experiments\summarize_innovation_one_results.py (
-  %PY% experiments\summarize_innovation_one_results.py ^
-    --input results\%RUN_ID%.jsonl ^
-    --output results\%RUN_ID%_summary.csv ^
-    > logs\%RUN_ID%_summary_stdout.txt ^
-    2> logs\%RUN_ID%_summary_stderr.txt
+  %PY% experiments\summarize_innovation_one_results.py --input results\%RUN_ID%.jsonl --output results\%RUN_ID%_summary.csv > logs\%RUN_ID%_summary_stdout.txt 2> logs\%RUN_ID%_summary_stderr.txt
 )
 if not exist results\%RUN_ID%_summary.csv (
   echo summary_status=fallback_missing_summarizer > logs\%RUN_ID%_summary_stdout.txt

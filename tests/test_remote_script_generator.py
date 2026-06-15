@@ -92,6 +92,11 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "--progress-output logs\\%RUN_ID%_progress.jsonl" in run_text
     assert "--dataset-cache-root dataset_cache" in run_text
     assert "--dataset-cache-chunk-size 4096" in run_text
+    run_command = next(
+        line for line in run_text.splitlines() if "experiments\\run_innovation_one_matrix.py" in line
+    )
+    assert "^" not in run_command
+    assert " > logs\\%RUN_ID%_stdout.txt 2> logs\\%RUN_ID%_stderr.txt" in run_command
     assert 'copy "%RUN_DIR%\\logs\\%RUN_ID%_progress.jsonl"' in run_text
     assert "dataset_cache_root=dataset_cache" in run_text
     assert "dataset_cache_chunk_size=4096" in run_text
