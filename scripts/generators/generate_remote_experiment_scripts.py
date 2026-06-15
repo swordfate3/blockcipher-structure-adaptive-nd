@@ -143,6 +143,7 @@ set RUN_ROOT=%ROOT%\%PROJECT_ID%-runs
 set RUN_DIR=%RUN_ROOT%\%RUN_ID%
 set ARCHIVE_WORK=%ROOT%\archive_work\{archive_work_id}
 set PY={python_exe}
+set PYTHONPATH=%RUN_DIR%\src;%PYTHONPATH%
 
 if not exist %ROOT% mkdir %ROOT%
 if not exist %RUN_ROOT% mkdir %RUN_ROOT%

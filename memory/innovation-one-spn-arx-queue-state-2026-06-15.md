@@ -400,3 +400,74 @@ and wrote /tmp/present_candidate_confirm.csv.
 ```
 
 This does not prove a high-round breakthrough; it removes a workflow delay once the pending SBoxDDT/MatrixTrailHybrid/Beam4Deep3 results land.
+
+## Update 2026-06-16 00:30 CST
+
+ARX/SPECK line was rechecked because the user explicitly asked to keep ARX moving too.
+
+Current verified local ARX result summaries:
+
+```text
+SPECK32/64 r6, aligned screen:
+calibrated_accuracy_mean ~= 0.8795
+auc_mean ~= 0.9444
+
+SPECK32/64 r7, small feature screens:
+calibrated_accuracy_mean ~= 0.513-0.523
+auc_mean ~= 0.516-0.530
+
+SPECK32/64 r7, scale-m partial-inverse:
+outputs/remote_results/innovation1-arx-speck32-v2-scale-m-gpu0-20260609
+calibrated_accuracy_mean ~= 0.6665
+auc_mean ~= 0.7147
+
+SPECK32/64 r7, scale-m-v2 arxbest partial-inverse:
+outputs/remote_results/innovation1-arx-speck32-v2-scale-m-v2-arxbest-gpu1-20260612
+calibrated_accuracy_mean ~= 0.6632
+auc_mean ~= 0.7236
+
+SPECK32/64 r7, scale-s partial-inverse:
+calibrated_accuracy_mean ~= 0.5498
+auc_mean ~= 0.5563
+```
+
+Interpretation:
+
+```text
+The plain partial-inverse ARX feature has real r7 signal under larger sample counts.
+RX/carry-expanded feature did not show signal in tiny 8192-sample smoke runs, but it has not yet been validated under the dedicated TrailMixer/RoundFunctionHybrid large protocol.
+The next ARX priority is not a new broad architecture sweep; it is a same-protocol r7/r8 confirmation of:
+  1. arx_trail_mixer_pairset over ciphertext_pair_xor_arx_partial_inverse_rx_bits
+  2. arx_word_mixer_pairset partial-inverse control
+  3. arx_round_function_hybrid_pairset over ciphertext_pair_xor_arx_partial_inverse_rx_bits
+  4. structure_adaptive_pairset_dbitnet RX control
+```
+
+Remote script generator fix:
+
+```text
+scripts/generators/generate_remote_experiment_scripts.py now emits
+set PYTHONPATH=%RUN_DIR%\src;%PYTHONPATH%
+before running the summarizer.
+```
+
+Reason:
+
+```text
+Some earlier ARX remote runs had complete JSONL and passing result_line gates, but empty summary CSVs because remote summarization failed with:
+ModuleNotFoundError: No module named 'blockcipher_ai_eval'
+```
+
+Regenerated ARX run scripts with the fix:
+
+```text
+scripts/generated/remote/run_innovation1-arx-speck32-trail-mixer-curriculum-r7r8-gpu1-20260615_and_push.cmd
+scripts/generated/remote/run_innovation1-arx-speck32-round-hybrid-r7r8-gpu1-20260615_and_push.cmd
+```
+
+Local verification:
+
+```text
+uv run pytest tests/test_feature_encodings.py tests/test_adaptive_dbitnet_model.py tests/test_remote_script_generator.py -q
+76 passed
+```

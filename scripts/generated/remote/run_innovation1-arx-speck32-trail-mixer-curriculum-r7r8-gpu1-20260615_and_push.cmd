@@ -19,6 +19,7 @@ set RUN_ROOT=%ROOT%\%PROJECT_ID%-runs
 set RUN_DIR=%RUN_ROOT%\%RUN_ID%
 set ARCHIVE_WORK=%ROOT%\archive_work\arx_speck32_trail_mixer_curriculum_r7r8_gpu1_20260615
 set PY=F:\Anaconda\envs\DWT\torch310\python.exe
+set PYTHONPATH=%RUN_DIR%\src;%PYTHONPATH%
 
 if not exist %ROOT% mkdir %ROOT%
 if not exist %RUN_ROOT% mkdir %RUN_ROOT%
