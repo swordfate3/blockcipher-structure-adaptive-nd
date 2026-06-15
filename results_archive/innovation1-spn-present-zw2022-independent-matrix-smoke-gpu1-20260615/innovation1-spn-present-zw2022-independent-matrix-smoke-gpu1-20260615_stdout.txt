@@ -1,0 +1,3 @@
+[1/2] PRESENT-80 r=6 model=present_inception_mcnd_matrix seed=0 pairs=16
+[2/2] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=0 pairs=16
+wrote 2 rows to results\innovation1-spn-present-zw2022-independent-matrix-smoke-gpu1-20260615.jsonl
