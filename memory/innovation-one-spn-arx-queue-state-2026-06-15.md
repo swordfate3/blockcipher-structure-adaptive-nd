@@ -940,3 +940,98 @@ Watcher logs confirmed they are waiting normally, not failing.
 ### Decision Rule
 
 Do not claim SPN/PRESENT r7 breakthrough unless the compact or fused branch produces a gated result branch and r7 metrics clearly exceed near-random behavior under the Zhang/Wang MCND-style protocol. If compact r7 remains random, the next SPN step should move to score-distribution / selected-bit confirmation rather than simply widening raw ciphertext features.
+
+## Update 2026-06-16 01:50 CST
+
+Remote monitoring found that the old GPU1 r7 matrix run is still active and has advanced into the larger `N65536` r7 rows:
+
+```text
+run: innovation1-spn-present-spnaligned-r7-matrix-screen-gpu1-20260615
+latest completed row before larger N:
+  index 9/24, PRESENT r7, seed 2, samples/class 32768
+  accuracy = 0.5
+  auc ~= 0.5093
+  calibrated_accuracy ~= 0.5088
+interpretation: still near random, no r7 breakthrough
+```
+
+GPU0 r6 controls also continue:
+
+```text
+run: innovation1-spn-present-spnaligned-r6-controls-10seed-gpu0-20260615
+latest completed row:
+  index 18/30, PRESENT r6, seed 7
+  accuracy ~= 0.8023
+  auc ~= 0.8850
+  calibrated_accuracy ~= 0.8029
+interpretation: r6 control remains strong, but does not satisfy high-round objective
+```
+
+### Score-Distribution Hardening
+
+Found and fixed a real completion bug in:
+
+```text
+experiments/run_score_distribution.py
+```
+
+Before this fix, `run_score_distribution_experiment()` returned:
+
+```python
+"selected_bit_indices": list(selected_bit_indices)
+```
+
+but `selected_bit_indices` was not defined in the function scope. This could make the long score-distribution remote run fail at the final result-writing stage even if training completed.
+
+Fix:
+
+```text
+parse selected_bit_indices once at experiment start
+pass the parsed tuple into all base/meta dataset builders
+return the same parsed selected_bit_indices in the result row
+```
+
+Regression test added:
+
+```text
+tests/test_score_distribution.py::test_run_score_distribution_experiment_records_selected_bit_indices
+```
+
+Validation:
+
+```text
+uv run pytest tests/test_score_distribution.py tests/test_training.py::test_predict_binary_probabilities_returns_one_probability_per_row tests/test_remote_script_generator.py -q
+12 passed
+
+uv run python experiments/run_score_distribution.py ... --device cpu
+=> wrote score-distribution result to /tmp/score_distribution_smoke.jsonl
+```
+
+### Updated GPU1 Watcher Chain
+
+The previous compact-SPN watcher would have gone directly to ARX. It was changed so the SPN high-round queue remains active before ARX:
+
+```text
+... SInv + SBoxDDT Beam4Deep3 highround
+  -> compact Delta + SInv + SBoxDDT Beam4Deep3 r7
+  -> entropy-selected score-distribution r7 cached
+  -> ARX TrailMixer curriculum r7/r8
+```
+
+Active watcher logs confirm the new chain:
+
+```text
+watch_after_innovation1-spn-present-delta-sinv-beam4deep3-r7-gpu1-20260616_to_innovation1-spn-present-entropy-score-dist-r7-cached-gpu1-20260615.log
+  Checking upstream branch ...delta-sinv... before launching ...entropy-score-dist...
+
+watch_after_innovation1-spn-present-entropy-score-dist-r7-cached-gpu1-20260615_to_innovation1-arx-speck32-trail-mixer-curriculum-r7r8-gpu1-20260615.log
+  Checking upstream branch ...entropy-score-dist... before launching ...arx-trail-mixer...
+```
+
+New commit:
+
+```text
+b046db1 fix(innovation1): harden score distribution queue
+```
+
+Remote project and GitHub branch are both at `b046db1`.
