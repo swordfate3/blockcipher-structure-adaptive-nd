@@ -1,0 +1,3 @@
+[1/2] SPECK32/64 r=6 model=arx_round_function_hybrid_pairset seed=0 pairs=4
+[2/2] SPECK32/64 r=7 model=arx_round_function_hybrid_pairset seed=0 pairs=4
+wrote 2 rows to results\innovation1-arx-speck32-carrychain-micro-smoke-gpu1-20260616.jsonl
