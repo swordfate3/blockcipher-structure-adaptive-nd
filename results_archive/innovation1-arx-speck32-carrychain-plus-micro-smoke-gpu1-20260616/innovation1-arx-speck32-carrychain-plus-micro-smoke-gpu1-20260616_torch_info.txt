@@ -1,0 +1,6 @@
+python F:\Anaconda\envs\DWT\torch310\python.exe
+torch 2.5.1+cu118
+cuda_version 11.8
+cuda_available True
+device_count 2
+device0 NVIDIA RTX A6000
