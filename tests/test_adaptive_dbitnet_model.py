@@ -12,6 +12,7 @@ from blockcipher_ai_eval.models.structure.adaptive_dbitnet import (
 from blockcipher_ai_eval.models.structure.arx import (
     ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
+    ArxRoundStatsHybridPairSetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     ArxTrailMixerPairSetDistinguisher,
     ArxWordMixerBlock,
@@ -568,6 +569,65 @@ def test_build_model_supports_arx_pairset_stats_hybrid_key_and_options():
     assert model.pair_bits == 224
     assert model.token_dim == 24
     assert model.word_branch.mixer_depth == 1
+    assert model.stats_hidden_bits == 48
+    assert model.activation == "silu"
+    assert model.norm == "rmsnorm"
+    assert model.dropout == 0.05
+
+
+def test_arx_round_stats_hybrid_fuses_round_groups_and_cross_pair_statistics():
+    model = ArxRoundStatsHybridPairSetDistinguisher(
+        input_bits=1472,
+        pair_bits=736,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=1,
+        group_mixer_depth=1,
+        stats_hidden_bits=32,
+    )
+    batch = torch.randint(0, 2, (2, 1472), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "ARX"
+    assert model.feature_words_per_pair == 23
+    assert model.role_group_count == 9
+    assert model.stats_feature_bits == 23 * 2 * 5 + 23 * 8 + 9 * 5 + 6
+    assert model.round_branch.feature_role_names[-6:] == (
+        "carry_chain_xy_delta",
+        "carry_chain_xy_prime_delta",
+        "carry_chain_rot_pre_delta",
+        "carry_chain_rot_pre_prime_delta",
+        "addition_xy_delta",
+        "addition_rot_pre_delta",
+    )
+    assert model.fused_embedding_bits == model.round_pair_embedding_bits * 3 + 32
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_arx_round_stats_hybrid_key_and_options():
+    model = build_model(
+        "arx_round_stats_hybrid_pairset",
+        input_bits=1472,
+        hidden_bits=8,
+        pair_bits=736,
+        structure="ARX",
+        model_options={
+            "token_dim": 24,
+            "mixer_depth": 1,
+            "group_mixer_depth": 1,
+            "stats_hidden_bits": 48,
+            "activation": "silu",
+            "norm": "rmsnorm",
+            "dropout": 0.05,
+        },
+    )
+
+    assert isinstance(model, ArxRoundStatsHybridPairSetDistinguisher)
+    assert model.pair_bits == 736
+    assert model.token_dim == 24
+    assert model.round_branch.mixer_depth == 1
+    assert model.round_branch.group_mixer_depth == 1
     assert model.stats_hidden_bits == 48
     assert model.activation == "silu"
     assert model.norm == "rmsnorm"

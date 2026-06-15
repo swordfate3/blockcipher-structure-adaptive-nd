@@ -14,10 +14,14 @@ from blockcipher_ai_eval.models.structure.arx.trail_mixer_pairset import (
 from blockcipher_ai_eval.models.structure.arx.round_function_hybrid import (
     ArxRoundFunctionHybridPairSetDistinguisher,
 )
+from blockcipher_ai_eval.models.structure.arx.round_stats_hybrid import (
+    ArxRoundStatsHybridPairSetDistinguisher,
+)
 
 __all__ = [
     "ArxPairSetStatsHybridDistinguisher",
     "ArxRoundFunctionHybridPairSetDistinguisher",
+    "ArxRoundStatsHybridPairSetDistinguisher",
     "ArxStructureAdaptivePairSetDBitNetDistinguisher",
     "ArxTrailMixerPairSetDistinguisher",
     "ArxWordMixerBlock",

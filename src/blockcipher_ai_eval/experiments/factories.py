@@ -41,6 +41,7 @@ from blockcipher_ai_eval.models.structure import (
     AdaptiveDBitNetDistinguisher,
     ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
+    ArxRoundStatsHybridPairSetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     ArxTrailMixerPairSetDistinguisher,
     ArxWordMixerPairSetDistinguisher,
@@ -305,6 +306,20 @@ def build_model(
             dropout=float(options.get("dropout", 0.0)),
             top_k=_int_option(options, "top_k", 4) or 4,
             lse_temperature=float(options.get("lse_temperature", 1.0)),
+        )
+    if name == "arx_round_stats_hybrid_pairset":
+        return ArxRoundStatsHybridPairSetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 736,
+            base_channels=hidden_bits,
+            token_dim=_int_option(options, "token_dim"),
+            mixer_depth=_int_option(options, "mixer_depth", 3),
+            group_mixer_depth=_int_option(options, "group_mixer_depth", 2),
+            token_mlp_ratio=_int_option(options, "token_mlp_ratio", 2),
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            dropout=float(options.get("dropout", 0.0)),
+            stats_hidden_bits=_int_option(options, "stats_hidden_bits"),
         )
     pairset_pooling_keys = {
         "structure_adaptive_pairset_dbitnet": "attention_mean_max",
