@@ -348,3 +348,27 @@ def test_spn_present_inception_mcnd_medium_plan_covers_r6_r7_multipair_baseline(
     assert {row["key_rotation_interval"] for row in rows} == {"1024"}
     assert {row["difference_profile"] for row in rows} == {"present_wang_jain2021"}
     assert {row["model_key"] for row in rows} == {"present_inception_mcnd"}
+
+
+def test_spn_present_zw2022_matrix_spnaligned_scale_s_plan_uses_oom_safe_protocol():
+    rows = _rows("experiments/innovation1/plans/innovation1_spn_present_zw2022_matrix_spnaligned_scale_s.csv")
+
+    assert len(rows) == 9
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["rounds"] for row in rows} == {"6", "7", "8"}
+    assert {row["seed"] for row in rows} == {"0", "1", "2"}
+    assert {row["samples_per_class"] for row in rows} == {"32768"}
+    assert {row["pairs_per_sample"] for row in rows} == {"16"}
+    assert {row["feature_encoding"] for row in rows} == {"present_pair_xor_paligned_cell_matrix_bits"}
+    assert {row["negative_mode"] for row in rows} == {"encrypted_random_plaintexts"}
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["sample_structure"] for row in rows} == {"zhang_wang_case2_mcnd"}
+    assert {row["difference_profile"] for row in rows} == {"present_zhang_wang2022_mcnd"}
+    assert {row["loss"] for row in rows} == {"mse"}
+    assert {row["lr_scheduler"] for row in rows} == {"cyclic"}
+    assert {row["max_learning_rate"] for row in rows} == {"0.002"}
+    assert {row["model_key"] for row in rows} == {"present_inception_mcnd_matrix"}
+    assert {row["model_options"] for row in rows} == {
+        '{"kernel_sizes": [[1, 1], [1, 2], [2, 4]], "blocks": 2, "dropout": 0.0, "pooling": "attention_mean_max"}'
+    }
