@@ -9,7 +9,11 @@ from blockcipher_ai_eval.models.structure.adaptive_dbitnet import (
     adaptive_dbitnet_dilations,
     structure_conditioned_dilations,
 )
-from blockcipher_ai_eval.models.structure.arx import ArxStructureAdaptivePairSetDBitNetDistinguisher
+from blockcipher_ai_eval.models.structure.arx import (
+    ArxStructureAdaptivePairSetDBitNetDistinguisher,
+    ArxWordMixerBlock,
+    ArxWordMixerPairSetDistinguisher,
+)
 
 from blockcipher_ai_eval.models.structure.spn import (
     SpnCellPairSetDBitNetDistinguisher,
@@ -261,6 +265,69 @@ def test_build_model_supports_arx_pairset_dbitnet_key():
     assert model.encoder.structure == "ARX"
     assert model.encoder.dilations[:2] == [15, 5]
     assert logits.shape == (3, 1)
+
+
+def test_arx_word_mixer_pairset_preserves_word_tokens_and_evidence_pooling():
+    model = ArxWordMixerPairSetDistinguisher(
+        input_bits=896,
+        pair_bits=224,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=2,
+        pooling="topk_logsumexp",
+        top_k=2,
+        lse_temperature=0.75,
+    )
+    batch = torch.randn((2, 896), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "ARX"
+    assert model.arx_words_per_pair == 7
+    assert model.tokens_per_pair == 14
+    assert model.last_attention_weights is not None
+    assert model.last_attention_weights.shape == (2, 4)
+    assert torch.count_nonzero(model.last_attention_weights, dim=1).tolist() == [2, 2]
+    assert logits.shape == (2, 1)
+
+
+def test_arx_word_mixer_block_uses_rotation_messages_and_carry_proxy():
+    block = ArxWordMixerBlock(token_dim=8)
+    hidden = torch.randn((2, 14, 8), dtype=torch.float32)
+    ror7_message = torch.randn((2, 14, 8), dtype=torch.float32)
+    rol2_message = torch.randn((2, 14, 8), dtype=torch.float32)
+    carry_proxy = torch.rand((2, 14, 1), dtype=torch.float32)
+
+    mixed = block(hidden, ror7_message, rol2_message, carry_proxy)
+
+    assert mixed.shape == hidden.shape
+
+
+def test_build_model_supports_arx_word_mixer_pairset_key_and_options():
+    model = build_model(
+        "arx_word_mixer_pairset",
+        input_bits=896,
+        hidden_bits=8,
+        pair_bits=224,
+        structure="ARX",
+        model_options={
+            "token_dim": 24,
+            "mixer_depth": 2,
+            "pooling": "topk_mean",
+            "top_k": 3,
+            "lse_temperature": 0.5,
+        },
+    )
+
+    assert isinstance(model, ArxWordMixerPairSetDistinguisher)
+    assert model.pair_bits == 224
+    assert model.arx_words_per_pair == 7
+    assert model.tokens_per_pair == 14
+    assert model.token_dim == 24
+    assert model.mixer_depth == 2
+    assert model.pooling == "topk_mean"
+    assert model.top_k == 3
+    assert model.lse_temperature == 0.5
 
 
 def test_spn_cell_pairset_dbitnet_adds_cell_encoder_to_pair_embedding():

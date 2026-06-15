@@ -3,7 +3,10 @@ from blockcipher_ai_eval.models.structure.adaptive_dbitnet import (
     PairwiseAdaptiveDBitNetDistinguisher,
     StructureAdaptivePairSetDBitNetDistinguisher,
 )
-from blockcipher_ai_eval.models.structure.arx import ArxStructureAdaptivePairSetDBitNetDistinguisher
+from blockcipher_ai_eval.models.structure.arx import (
+    ArxStructureAdaptivePairSetDBitNetDistinguisher,
+    ArxWordMixerPairSetDistinguisher,
+)
 from blockcipher_ai_eval.models.structure.moe import StructureAwareMoEDistinguisher
 from blockcipher_ai_eval.models.structure.spn import (
     PresentInceptionMCNDDistinguisher,
@@ -24,6 +27,7 @@ __all__ = [
     "PresentPLayerMixerPairSetDistinguisher",
     "AdaptiveDBitNetDistinguisher",
     "ArxStructureAdaptivePairSetDBitNetDistinguisher",
+    "ArxWordMixerPairSetDistinguisher",
     "PairwiseAdaptiveDBitNetDistinguisher",
     "SpnCellPairSetDBitNetDistinguisher",
     "SpnNibbleConvPairSetDistinguisher",

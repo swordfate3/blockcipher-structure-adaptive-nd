@@ -19,6 +19,7 @@ from blockcipher_ai_eval.models.baseline import (
 from blockcipher_ai_eval.models.structure import (
     AdaptiveDBitNetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
+    ArxWordMixerPairSetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
     PresentInceptionMCNDDistinguisher,
     PresentInceptionMCNDGlobalMatrixDistinguisher,
@@ -48,6 +49,7 @@ MODEL_REGISTRY: dict[str, type[nn.Module]] = {
     "structure_adaptive_pairset_dbitnet": StructureAdaptivePairSetDBitNetDistinguisher,
     "arx_structure_adaptive_pairset_dbitnet": ArxStructureAdaptivePairSetDBitNetDistinguisher,
     "arx_pairset_dbitnet": ArxStructureAdaptivePairSetDBitNetDistinguisher,
+    "arx_word_mixer_pairset": ArxWordMixerPairSetDistinguisher,
     "present_inception_mcnd": PresentInceptionMCNDDistinguisher,
     "present_inception_mcnd_global_matrix": PresentInceptionMCNDGlobalMatrixDistinguisher,
     "present_inception_mcnd_pair_stack_matrix": PresentInceptionMCNDPairStackMatrixDistinguisher,
