@@ -6,6 +6,7 @@ from blockcipher_ai_eval.features.pair_features import (
     encode_ciphertext_pair,
     int_to_bits,
     pair_bits_for_encoding,
+    present_sbox_ddt_words,
 )
 
 
@@ -215,6 +216,35 @@ def test_present_mcnd_cell_matrix_encoding_orders_pair_bits_as_four_bit_planes()
 
 def test_present_mcnd_cell_matrix_encoding_is_registered():
     assert is_supported_feature_encoding("present_mcnd_cell_matrix_bits")
+
+
+def test_present_paligned_sboxddt_cell_matrix_encoding_adds_public_ddt_words():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    left = 0x0123456789ABCDEF
+    right = left ^ 0x0700000000000700
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding="present_pair_xor_paligned_sboxddt_cell_matrix_bits",
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    aligned = Present80.inverse_permutation_layer(difference)
+
+    assert pair_bits_for_encoding(64, "present_pair_xor_paligned_sboxddt_cell_matrix_bits") == 384
+    assert is_supported_feature_encoding("present_pair_xor_paligned_sboxddt_cell_matrix_bits")
+    best_input_difference, ddt_confidence = present_sbox_ddt_words(aligned, 64)
+
+    assert len(encoded) == 384
+    assert encoded == _cell_matrix_bit_planes(
+        [left, right, difference, aligned, best_input_difference, ddt_confidence],
+        64,
+    )
+    assert any(_cell_matrix_bit_planes([best_input_difference, ddt_confidence], 64))
+    assert encoded != _cell_matrix_bit_planes([left, right, difference, aligned, 0, 0], 64)
 
 
 def _cell_matrix_bit_planes(words: list[int], width: int) -> list[int]:

@@ -9,6 +9,20 @@ from blockcipher_ai_eval.features.arx_aligned import (
 from blockcipher_ai_eval.features.spn_aligned import inverse_permutation_difference
 
 
+def _present_sbox_ddt() -> list[list[int]]:
+    from blockcipher_ai_eval.ciphers.spn.present import PRESENT_SBOX
+
+    table = [[0 for _ in range(16)] for _ in range(16)]
+    for input_difference in range(16):
+        for value in range(16):
+            output_difference = PRESENT_SBOX[value] ^ PRESENT_SBOX[value ^ input_difference]
+            table[input_difference][output_difference] += 1
+    return table
+
+
+PRESENT_SBOX_DDT = _present_sbox_ddt()
+
+
 def int_to_bits(value: int, width: int) -> list[int]:
     return [(value >> shift) & 1 for shift in range(width - 1, -1, -1)]
 
@@ -31,6 +45,8 @@ def encode_ciphertext_pair(
         return present_pair_xor_paligned_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_pair_xor_paligned_sinv_cell_matrix_bits":
         return present_pair_xor_paligned_sinv_cell_matrix_bits(left, right, width, cipher)
+    if feature_encoding == "present_pair_xor_paligned_sboxddt_cell_matrix_bits":
+        return present_pair_xor_paligned_sboxddt_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return present_xor_paligned_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "ciphertext_xor_bits":
@@ -110,6 +126,38 @@ def present_pair_xor_paligned_sinv_cell_matrix_bits(
     )
 
 
+def present_pair_xor_paligned_sboxddt_cell_matrix_bits(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> list[int]:
+    difference = left ^ right
+    aligned_difference = inverse_permutation_difference(difference, width, cipher)
+    best_input_difference, ddt_confidence = present_sbox_ddt_words(aligned_difference, width)
+    return words_to_present_cell_matrix_bits(
+        [left, right, difference, aligned_difference, best_input_difference, ddt_confidence],
+        width,
+        "present_pair_xor_paligned_sboxddt_cell_matrix_bits",
+    )
+
+
+def present_sbox_ddt_words(aligned_difference: int, width: int) -> tuple[int, int]:
+    if width % 4 != 0:
+        raise ValueError("present_sbox_ddt_words requires a 4-bit cell block size")
+    best_word = 0
+    confidence_word = 0
+    for nibble_index in range(width // 4):
+        output_difference = (aligned_difference >> (4 * nibble_index)) & 0xF
+        column = [PRESENT_SBOX_DDT[input_difference][output_difference] for input_difference in range(16)]
+        best_input_difference = max(range(16), key=lambda input_difference: column[input_difference])
+        best_count = column[best_input_difference]
+        confidence = min(15, round(best_count * 15 / 16))
+        best_word |= best_input_difference << (4 * nibble_index)
+        confidence_word |= confidence << (4 * nibble_index)
+    return best_word, confidence_word
+
+
 def present_structural_inverse_sbox_difference(
     left: int,
     right: int,
@@ -173,6 +221,8 @@ def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
         return block_bits * 4
     if feature_encoding == "present_pair_xor_paligned_sinv_cell_matrix_bits":
         return block_bits * 5
+    if feature_encoding == "present_pair_xor_paligned_sboxddt_cell_matrix_bits":
+        return block_bits * 6
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return block_bits * 2
     if feature_encoding == "ciphertext_xor_bits":

@@ -28,7 +28,7 @@ from blockcipher_ai_eval.experiments import (
 )
 from blockcipher_ai_eval.innovation_one import CipherProfile
 from blockcipher_ai_eval.features.profile import structure_feature_vector
-from blockcipher_ai_eval.features.registry import pair_bits_for_encoding
+from blockcipher_ai_eval.features.registry import FEATURE_ENCODINGS, pair_bits_for_encoding
 from blockcipher_ai_eval.training import TrainingConfig, TrainingResult, train_binary_classifier
 
 
@@ -119,22 +119,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--feature-encoding",
         default="ciphertext_pair_bits",
-        choices=[
-            "ciphertext_pair_bits",
-            "present_mcnd_cell_matrix_bits",
-            "present_xor_paligned_cell_matrix_bits",
-            "present_pair_xor_paligned_cell_matrix_bits",
-            "present_pair_xor_paligned_sinv_cell_matrix_bits",
-            "present_pair_xor_cell_matrix_bits",
-            "ciphertext_xor_bits",
-            "ciphertext_xor_spn_aligned_bits",
-            "ciphertext_xor_spn_paligned_bits",
-            "ciphertext_pair_xor_bits",
-            "ciphertext_pair_xor_spn_aligned_bits",
-            "ciphertext_pair_xor_arx_aligned_bits",
-            "ciphertext_pair_xor_arx_partial_inverse_bits",
-            "ciphertext_pair_xor_arx_partial_inverse_rx_bits",
-        ],
+        choices=sorted(FEATURE_ENCODINGS),
         help="Feature encoding for generated ciphertext pairs.",
     )
     parser.add_argument(
