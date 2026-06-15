@@ -60,6 +60,45 @@ def test_innovation_one_summary_rows_keeps_feature_encodings_separate():
     }
 
 
+def test_innovation_one_summary_rows_labels_key_protocols():
+    base = {
+        "cipher": "SPECK32/64",
+        "structure": "ARX",
+        "model": "arx_pairset_dbitnet",
+        "rounds": 7,
+        "samples_per_class": 8,
+        "pairs_per_sample": 4,
+        "metrics": {"accuracy": 0.60, "auc": 0.70, "advantage": 0.20, "loss": 0.6},
+    }
+    rows = [
+        {
+            **base,
+            "feature_encoding": "fixed_cross_key",
+            "train_key": "0x01",
+            "validation_key": "0x02",
+        },
+        {
+            **base,
+            "feature_encoding": "rotating",
+            "train_key": "0x01",
+            "validation_key": "0x02",
+            "key_rotation_interval": 1024,
+        },
+        {**base, "feature_encoding": "unspecified"},
+    ]
+
+    summary = {
+        row["feature_encoding"]: row["key_protocol"]
+        for row in innovation_one_summary_rows(rows)
+    }
+
+    assert summary == {
+        "fixed_cross_key": "fixed_train_cross_key_validation",
+        "rotating": "key_rotating_multi_key",
+        "unspecified": "unspecified",
+    }
+
+
 def test_hparam_summary_rows_sort_by_calibrated_accuracy_and_keep_component_config():
     rows = [
         {

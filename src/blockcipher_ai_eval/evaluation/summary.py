@@ -23,6 +23,7 @@ INNOVATION_ONE_GROUP_FIELDS = (
     "gate_mode",
     "samples_per_class",
     "pairs_per_sample",
+    "key_protocol",
     "key_rotation_interval",
     "sample_structure",
     "feature_encoding",
@@ -179,4 +180,24 @@ def _innovation_one_metric_value(metrics: dict[str, Any], metric: str) -> float:
 def _innovation_one_group_value(row: dict[str, Any], field: str) -> Any:
     if field == "architecture":
         return row.get("architecture", row["model"])
+    if field == "key_protocol":
+        return _innovation_one_key_protocol(row)
     return row.get(field, "")
+
+
+def _innovation_one_key_protocol(row: dict[str, Any]) -> str:
+    rotation = row.get("key_rotation_interval", "")
+    if rotation not in {"", None}:
+        try:
+            if int(rotation) > 0:
+                return "key_rotating_multi_key"
+        except (TypeError, ValueError):
+            return "key_rotating_multi_key"
+
+    train_key = row.get("train_key", "")
+    validation_key = row.get("validation_key", "")
+    if train_key and validation_key and str(train_key).lower() != str(validation_key).lower():
+        return "fixed_train_cross_key_validation"
+    if train_key or validation_key:
+        return "fixed_key"
+    return "unspecified"
