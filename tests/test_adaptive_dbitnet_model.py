@@ -31,6 +31,7 @@ from blockcipher_ai_eval.models.structure.spn import (
 from blockcipher_ai_eval.models.structure.spn import (
     PresentPLayerMixerBlock,
     PresentMatrixTrailHybridPairSetDistinguisher,
+    PresentPairSetGlobalStatsDistinguisher,
     PresentPairSetGlobalStatsHybridDistinguisher,
     PresentPairSetHistogramHybridDistinguisher,
     PresentPairSetStatsHybridDistinguisher,
@@ -941,6 +942,45 @@ def test_build_model_supports_present_pairset_global_stats_hybrid_key_and_option
     assert model.activation == "silu"
     assert model.norm == "rmsnorm"
     assert model.dropout == 0.05
+
+
+def test_present_pairset_global_stats_uses_only_r7_oriented_global_statistics():
+    model = PresentPairSetGlobalStatsDistinguisher(
+        input_bits=4992,
+        pair_bits=2496,
+        base_channels=8,
+        global_hidden_bits=32,
+    )
+    batch = torch.randint(0, 2, (2, 4992), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "SPN"
+    assert model.words_per_pair == 39
+    assert model.cells_per_word == 16
+    assert model.global_stats_bits == 39 * 4 + 16 * 4 + 2 * 4 + 12
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_present_pairset_global_stats_key_and_options():
+    model = build_model(
+        "present_pairset_global_stats",
+        input_bits=4992,
+        hidden_bits=8,
+        pair_bits=2496,
+        structure="SPN",
+        model_options={
+            "global_hidden_bits": 48,
+            "activation": "silu",
+            "norm": "rmsnorm",
+            "dropout": 0.05,
+        },
+    )
+
+    assert isinstance(model, PresentPairSetGlobalStatsDistinguisher)
+    assert model.pair_bits == 2496
+    assert model.global_hidden_bits == 48
+    assert model.global_stats_bits == 39 * 4 + 16 * 4 + 2 * 4 + 12
 
 
 def test_spn_cell_pairset_dbitnet_adds_cell_encoder_to_pair_embedding():

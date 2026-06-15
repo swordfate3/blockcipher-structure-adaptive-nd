@@ -603,6 +603,40 @@ def test_present_global_stats_hybrid_beamstats8deep4_r7_plan_shape():
     assert {row["pretrain_epochs"] for row in rows} == {"6"}
 
 
+def test_present_global_stats_only_beamstats8deep4_r7_plan_shape():
+    repo_root = Path(__file__).resolve().parents[1]
+    plan_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "plans"
+        / "innovation1_spn_present_global_stats_only_beamstats8deep4_r7_screen.csv"
+    )
+
+    with plan_path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 4
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["model_key"] for row in rows} == {
+        "present_pairset_global_stats",
+        "present_pairset_global_stats_hybrid",
+    }
+    assert {row["rounds"] for row in rows} == {"7"}
+    assert {row["seed"] for row in rows} == {"0", "1"}
+    assert {row["samples_per_class"] for row in rows} == {"65536"}
+    assert {row["pairs_per_sample"] for row in rows} == {"16"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "present_delta_paligned_sinv_sboxddt_beamstats8deep4_cell_matrix_bits",
+    }
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["sample_structure"] for row in rows} == {"zhang_wang_case2_mcnd"}
+    assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
+    assert {row["pretrain_rounds"] for row in rows} == {"6"}
+    assert {row["pretrain_epochs"] for row in rows} == {"6"}
+
+
 def test_speck32_arx_partial_inverse_r7_clean_ablation_10seed_plan_shape():
     repo_root = Path(__file__).resolve().parents[1]
     plan_path = (

@@ -99,71 +99,12 @@ class PresentPairSetGlobalStatsHybridDistinguisher(nn.Module):
         return None
 
     def _global_statistics(self, features: torch.Tensor) -> torch.Tensor:
-        batch_size = features.shape[0]
-        cells = features.float().reshape(
-            batch_size,
-            self.pairs_per_sample,
-            self.words_per_pair,
-            self.cells_per_word,
-            self.nibble_bits,
-        )
-        cell_activity = cells.mean(dim=-1)
-        word_activity = cell_activity.mean(dim=-1)
-        pair_activity = cell_activity.mean(dim=(2, 3))
-
-        word_mean = word_activity.mean(dim=1)
-        word_std = word_activity.std(dim=1, unbiased=False)
-        word_delta = word_activity[:, -1] - word_activity[:, 0]
-        word_span = word_activity.amax(dim=1) - word_activity.amin(dim=1)
-
-        cell_mean = cell_activity.mean(dim=(1, 2))
-        cell_std = cell_activity.std(dim=(1, 2), unbiased=False)
-        first_last_cell_delta = cell_activity[:, -1].mean(dim=1) - cell_activity[:, 0].mean(dim=1)
-        even_odd_cell_delta = cell_activity[:, :, :, ::2].mean(dim=(1, 2)) - cell_activity[:, :, :, 1::2].mean(dim=(1, 2))
-
-        pair_centered = pair_activity - pair_activity.mean(dim=1, keepdim=True)
-        pair_stats = torch.cat(
-            [
-                pair_activity,
-                pair_centered,
-                pair_activity - pair_activity[:, :1],
-                pair_activity[:, -1:] - pair_activity,
-            ],
-            dim=1,
-        )
-
-        global_stats = torch.stack(
-            [
-                cell_activity.mean(dim=(1, 2, 3)),
-                cell_activity.std(dim=(1, 2, 3), unbiased=False),
-                word_activity.mean(dim=(1, 2)),
-                word_activity.std(dim=(1, 2), unbiased=False),
-                pair_activity.mean(dim=1),
-                pair_activity.std(dim=1, unbiased=False),
-                pair_activity[:, -1] - pair_activity[:, 0],
-                word_activity[:, :, -1].mean(dim=1) - word_activity[:, :, 0].mean(dim=1),
-                cell_activity[:, :, :, -1].mean(dim=(1, 2)) - cell_activity[:, :, :, 0].mean(dim=(1, 2)),
-                cell_activity[:, :, ::2].mean(dim=(1, 2, 3)) - cell_activity[:, :, 1::2].mean(dim=(1, 2, 3)),
-            ],
-            dim=1,
-        )
-        global_abs_stats = torch.abs(global_stats)
-
-        return torch.cat(
-            [
-                word_mean,
-                word_std,
-                word_delta,
-                word_span,
-                cell_mean,
-                cell_std,
-                first_last_cell_delta,
-                even_odd_cell_delta,
-                pair_stats,
-                global_stats,
-                global_abs_stats,
-            ],
-            dim=1,
+        return present_global_pairset_statistics(
+            features.float(),
+            pairs_per_sample=self.pairs_per_sample,
+            words_per_pair=self.words_per_pair,
+            cells_per_word=self.cells_per_word,
+            nibble_bits=self.nibble_bits,
         )
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
@@ -188,4 +129,163 @@ class PresentPairSetGlobalStatsHybridDistinguisher(nn.Module):
         )
 
 
-__all__ = ["PresentPairSetGlobalStatsHybridDistinguisher"]
+class PresentPairSetGlobalStatsDistinguisher(nn.Module):
+    """PRESENT pair-set classifier using only r7-oriented global statistics."""
+
+    def __init__(
+        self,
+        input_bits: int,
+        pair_bits: int = 2496,
+        base_channels: int = 32,
+        nibble_bits: int = 4,
+        activation: str = "gelu",
+        norm: str = "layernorm",
+        dropout: float = 0.0,
+        global_hidden_bits: int | None = None,
+    ) -> None:
+        super().__init__()
+        if input_bits % pair_bits != 0:
+            raise ValueError("PresentPairSetGlobalStats input_bits must be a multiple of pair_bits")
+        if pair_bits % 64 != 0:
+            raise ValueError("PresentPairSetGlobalStats pair_bits must be a multiple of 64-bit PRESENT words")
+        if pair_bits % nibble_bits != 0:
+            raise ValueError("PresentPairSetGlobalStats pair_bits must be a multiple of nibble_bits")
+        if input_bits // pair_bits < 2:
+            raise ValueError("PresentPairSetGlobalStats needs at least two pairs per sample")
+
+        self.input_bits = input_bits
+        self.pair_bits = pair_bits
+        self.pairs_per_sample = input_bits // pair_bits
+        self.structure = "SPN"
+        self.nibble_bits = nibble_bits
+        self.words_per_pair = pair_bits // 64
+        self.cells_per_word = 64 // nibble_bits
+        self.global_hidden_bits = global_hidden_bits or max(64, base_channels * 8)
+        self.global_stats_bits = present_global_stats_feature_bits(
+            self.words_per_pair,
+            self.cells_per_word,
+            self.pairs_per_sample,
+        )
+        classifier_hidden = max(64, base_channels * 4)
+        self.classifier = nn.Sequential(
+            build_norm(norm, self.global_stats_bits),
+            nn.Linear(self.global_stats_bits, self.global_hidden_bits),
+            build_activation(activation),
+            nn.Dropout(dropout),
+            nn.Linear(self.global_hidden_bits, classifier_hidden),
+            build_activation(activation),
+            nn.Linear(classifier_hidden, 1),
+        )
+
+    def set_cipher_structure(self, structure: str) -> None:
+        return None
+
+    def set_structure_features(self, features: torch.Tensor) -> None:
+        return None
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        if features.ndim != 2 or features.shape[1] != self.input_bits:
+            raise ValueError(f"expected {self.input_bits} input bits, got {tuple(features.shape)}")
+        stats = present_global_pairset_statistics(
+            features.float(),
+            pairs_per_sample=self.pairs_per_sample,
+            words_per_pair=self.words_per_pair,
+            cells_per_word=self.cells_per_word,
+            nibble_bits=self.nibble_bits,
+        )
+        return self.classifier(stats)
+
+
+def present_global_stats_feature_bits(
+    words_per_pair: int,
+    cells_per_word: int,
+    pairs_per_sample: int,
+) -> int:
+    return words_per_pair * 4 + cells_per_word * 4 + pairs_per_sample * 4 + 12
+
+
+def present_global_pairset_statistics(
+    features: torch.Tensor,
+    *,
+    pairs_per_sample: int,
+    words_per_pair: int,
+    cells_per_word: int,
+    nibble_bits: int,
+) -> torch.Tensor:
+    batch_size = features.shape[0]
+    cells = features.reshape(
+        batch_size,
+        pairs_per_sample,
+        words_per_pair,
+        cells_per_word,
+        nibble_bits,
+    )
+    cell_activity = cells.mean(dim=-1)
+    word_activity = cell_activity.mean(dim=-1)
+    pair_activity = cell_activity.mean(dim=(2, 3))
+
+    word_mean = word_activity.mean(dim=1)
+    word_std = word_activity.std(dim=1, unbiased=False)
+    word_delta = word_activity[:, -1] - word_activity[:, 0]
+    word_span = word_activity.amax(dim=1) - word_activity.amin(dim=1)
+
+    cell_mean = cell_activity.mean(dim=(1, 2))
+    cell_std = cell_activity.std(dim=(1, 2), unbiased=False)
+    first_last_cell_delta = cell_activity[:, -1].mean(dim=1) - cell_activity[:, 0].mean(dim=1)
+    even_odd_cell_delta = (
+        cell_activity[:, :, :, ::2].mean(dim=(1, 2))
+        - cell_activity[:, :, :, 1::2].mean(dim=(1, 2))
+    )
+
+    pair_centered = pair_activity - pair_activity.mean(dim=1, keepdim=True)
+    pair_stats = torch.cat(
+        [
+            pair_activity,
+            pair_centered,
+            pair_activity - pair_activity[:, :1],
+            pair_activity[:, -1:] - pair_activity,
+        ],
+        dim=1,
+    )
+
+    global_stats = torch.stack(
+        [
+            cell_activity.mean(dim=(1, 2, 3)),
+            cell_activity.std(dim=(1, 2, 3), unbiased=False),
+            word_activity.mean(dim=(1, 2)),
+            word_activity.std(dim=(1, 2), unbiased=False),
+            pair_activity.mean(dim=1),
+            pair_activity.std(dim=1, unbiased=False),
+            pair_activity[:, -1] - pair_activity[:, 0],
+            word_activity[:, :, -1].mean(dim=1) - word_activity[:, :, 0].mean(dim=1),
+            cell_activity[:, :, :, -1].mean(dim=(1, 2)) - cell_activity[:, :, :, 0].mean(dim=(1, 2)),
+            cell_activity[:, :, ::2].mean(dim=(1, 2, 3)) - cell_activity[:, :, 1::2].mean(dim=(1, 2, 3)),
+        ],
+        dim=1,
+    )
+    global_abs_stats = torch.abs(global_stats)
+
+    return torch.cat(
+        [
+            word_mean,
+            word_std,
+            word_delta,
+            word_span,
+            cell_mean,
+            cell_std,
+            first_last_cell_delta,
+            even_odd_cell_delta,
+            pair_stats,
+            global_stats,
+            global_abs_stats,
+        ],
+        dim=1,
+    )
+
+
+__all__ = [
+    "PresentPairSetGlobalStatsDistinguisher",
+    "PresentPairSetGlobalStatsHybridDistinguisher",
+    "present_global_pairset_statistics",
+    "present_global_stats_feature_bits",
+]
