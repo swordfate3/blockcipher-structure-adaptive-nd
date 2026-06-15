@@ -8,6 +8,7 @@ UPSTREAM_ROWS="4"
 NEXT_RUN="innovation1-spn-present-sboxddt-back2-highround-screen-gpu0-20260615"
 NEXT_ROWS="4"
 SSH_TARGET="${SSH_TARGET:-lxy-a6000}"
+RESULT_REMOTE="${RESULT_REMOTE:-origin-ssh}"
 INTERVAL_SECONDS="${INTERVAL_SECONDS:-600}"
 STATE_DIR="${STATE_DIR:-outputs/remote_results/.state}"
 LAUNCHED_FLAG="${STATE_DIR}/${NEXT_RUN}.launched"
@@ -19,7 +20,7 @@ while true; do
   now="$(date '+%F %T')"
   echo "[${now}] checking upstream ${UPSTREAM_RUN} before launching ${NEXT_RUN}"
 
-  if UV_CACHE_DIR=/tmp/uv-cache PYTHONDONTWRITEBYTECODE=1 uv run python scripts/monitor_remote_results.py --once --run-id "${NEXT_RUN}=${NEXT_ROWS}"; then
+  if UV_CACHE_DIR=/tmp/uv-cache PYTHONDONTWRITEBYTECODE=1 uv run python scripts/monitor_remote_results.py --remote "${RESULT_REMOTE}" --once --run-id "${NEXT_RUN}=${NEXT_ROWS}"; then
     echo "DONE ${NEXT_RUN} already retrieved"
     exit 0
   fi
@@ -30,7 +31,7 @@ while true; do
     continue
   fi
 
-  if UV_CACHE_DIR=/tmp/uv-cache PYTHONDONTWRITEBYTECODE=1 uv run python scripts/monitor_remote_results.py --once --run-id "${UPSTREAM_RUN}=${UPSTREAM_ROWS}"; then
+  if UV_CACHE_DIR=/tmp/uv-cache PYTHONDONTWRITEBYTECODE=1 uv run python scripts/monitor_remote_results.py --remote "${RESULT_REMOTE}" --once --run-id "${UPSTREAM_RUN}=${UPSTREAM_ROWS}"; then
     echo "UPSTREAM gate passed; launching ${NEXT_RUN}"
     ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" "cmd.exe /c ${SCHEDULE_SCRIPT}"
     date '+%F %T' > "${LAUNCHED_FLAG}"

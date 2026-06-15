@@ -4,6 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/../../.."
 
 SSH_TARGET="${SSH_TARGET:-lxy-a6000}"
+RESULT_REMOTE="${RESULT_REMOTE:-origin-ssh}"
 REMOTE_PROJECT="${REMOTE_PROJECT:-G:\\lxy\\blockcipher-structure-adaptive-nd}"
 RUN_ID="${RUN_ID:-innovation1-arx-speck32-word-mixer-r7r8-gpu1-20260615}"
 EXPECTED_ROWS="${EXPECTED_ROWS:-16}"
@@ -31,6 +32,7 @@ launch_remote_run() {
 
 monitor_result_branch_once() {
   uv run python scripts/monitor_remote_results.py \
+    --remote "${RESULT_REMOTE}" \
     --interval-minutes "$(( INTERVAL_SECONDS / 60 ))" \
     --once \
     --run-id "${RUN_ID}=${EXPECTED_ROWS}"
