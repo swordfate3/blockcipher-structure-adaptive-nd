@@ -500,6 +500,66 @@ def test_present_paligned_sboxddt_beam4deep3_cell_matrix_encoding_tracks_deep_be
     assert trail_words[12] != 0
 
 
+def test_present_parameterized_sboxddt_beam_cell_matrix_encoding_tracks_configured_depth():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    left = 0x0123456789ABCDEF
+    right = left ^ 0x0700000000000700
+    feature_encoding = "present_pair_xor_paligned_sboxddt_beam8deep4_cell_matrix_bits"
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding=feature_encoding,
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    aligned = Present80.inverse_permutation_layer(difference)
+    trail_words = present_sbox_ddt_beam_words(aligned, 64, cipher, beam_width=8, depth=4)
+
+    assert pair_bits_for_encoding(64, feature_encoding) == 64 * (4 + 4 * (3 * 8 + 3))
+    assert is_supported_feature_encoding(feature_encoding)
+    assert len(trail_words) == 108
+    assert len(encoded) == 7168
+    assert encoded == _cell_matrix_bit_planes([left, right, difference, aligned, *trail_words], 64)
+    assert any(_cell_matrix_bit_planes(list(trail_words), 64))
+
+
+def test_present_parameterized_delta_sinv_sboxddt_beamstats_encoding_keeps_compact_trail_statistics():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    left = 0x0123456789ABCDEF
+    right = left ^ 0x0700000000000700
+    feature_encoding = "present_delta_paligned_sinv_sboxddt_beamstats8deep4_cell_matrix_bits"
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding=feature_encoding,
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    aligned = Present80.inverse_permutation_layer(difference)
+    structural_inverse = cipher.inverse_sbox_layer(
+        Present80.inverse_permutation_layer(left),
+    ) ^ cipher.inverse_sbox_layer(Present80.inverse_permutation_layer(right))
+    stats = present_sbox_ddt_beam_statistics_words(
+        structural_inverse,
+        64,
+        cipher,
+        beam_width=8,
+        depth=4,
+    )
+
+    assert pair_bits_for_encoding(64, feature_encoding) == 64 * (3 + 4 * 9)
+    assert is_supported_feature_encoding(feature_encoding)
+    assert len(stats) == 36
+    assert len(encoded) == 2496
+    assert encoded == _cell_matrix_bit_planes([difference, aligned, structural_inverse, *stats], 64)
+
+
 def _cell_matrix_bit_planes(words: list[int], width: int) -> list[int]:
     bits = []
     for word in words:

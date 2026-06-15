@@ -28,7 +28,7 @@ from blockcipher_ai_eval.experiments import (
 )
 from blockcipher_ai_eval.innovation_one import CipherProfile
 from blockcipher_ai_eval.features.profile import structure_feature_vector
-from blockcipher_ai_eval.features.registry import FEATURE_ENCODINGS, pair_bits_for_encoding
+from blockcipher_ai_eval.features.registry import FEATURE_ENCODINGS, is_supported_feature_encoding, pair_bits_for_encoding
 from blockcipher_ai_eval.training import TrainingConfig, TrainingResult, train_binary_classifier
 
 
@@ -119,7 +119,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--feature-encoding",
         default="ciphertext_pair_bits",
-        choices=sorted(FEATURE_ENCODINGS),
         help="Feature encoding for generated ciphertext pairs.",
     )
     parser.add_argument(
@@ -182,7 +181,16 @@ def parse_args() -> argparse.Namespace:
         help="Optional JSONL path for run progress events.",
     )
     parser.add_argument("--output", default="outputs/innovation_one_matrix_results.jsonl")
-    return parser.parse_args()
+    args = parser.parse_args()
+    if not is_supported_feature_encoding(args.feature_encoding):
+        examples = ", ".join(sorted(FEATURE_ENCODINGS))
+        parser.error(
+            f"unsupported feature encoding: {args.feature_encoding}. "
+            f"Known fixed encodings include: {examples}. "
+            "Parameterized PRESENT SBox-DDT encodings such as "
+            "present_delta_paligned_sinv_sboxddt_beamstats8deep4_cell_matrix_bits are also supported."
+        )
+    return args
 
 
 def main() -> None:

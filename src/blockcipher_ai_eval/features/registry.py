@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from blockcipher_ai_eval.features.pair_features import (
     encode_ciphertext_pair,
+    is_parameterized_present_sboxddt_encoding,
     pair_bits_for_encoding,
 )
 
@@ -34,7 +35,7 @@ FEATURE_ENCODINGS = {
 
 
 def is_supported_feature_encoding(feature_encoding: str) -> bool:
-    return feature_encoding in FEATURE_ENCODINGS
+    return feature_encoding in FEATURE_ENCODINGS or is_parameterized_present_sboxddt_encoding(feature_encoding)
 
 
 __all__ = [

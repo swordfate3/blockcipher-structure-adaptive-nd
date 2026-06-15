@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from blockcipher_ai_eval.ciphers import ReducedRoundCipher
 from blockcipher_ai_eval.features.arx_aligned import (
     arx_aligned_difference,
@@ -23,6 +25,12 @@ def _present_sbox_ddt() -> list[list[int]]:
 
 
 PRESENT_SBOX_DDT = _present_sbox_ddt()
+_PRESENT_SBOXDDT_TRAIL_ENCODING_PATTERN = re.compile(
+    r"^present_(?P<scope>pair_xor|delta)_paligned"
+    r"(?P<sinv>_sinv)?_sboxddt_"
+    r"(?P<kind>beamstats|beam)(?P<beam_width>[1-9][0-9]*)deep(?P<depth>[1-9][0-9]*)"
+    r"_cell_matrix_bits$"
+)
 
 
 def int_to_bits(value: int, width: int) -> list[int]:
@@ -108,6 +116,16 @@ def encode_ciphertext_pair(
         for word in speck32_partial_inverse_rx_carrychain_plus_feature_words(left, right, width, cipher):
             extra_bits.extend(int_to_bits(word, width))
         return left_bits + right_bits + difference_bits + extra_bits
+    present_trail_config = parse_parameterized_present_sboxddt_encoding(feature_encoding)
+    if present_trail_config is not None:
+        return parameterized_present_sboxddt_cell_matrix_bits(
+            left,
+            right,
+            width,
+            cipher,
+            feature_encoding=feature_encoding,
+            **present_trail_config,
+        )
     raise ValueError(f"unsupported feature encoding: {feature_encoding}")
 
 
@@ -444,6 +462,75 @@ def present_delta_paligned_sinv_sboxddt_beamstats4deep3_cell_matrix_bits(
     )
 
 
+def parameterized_present_sboxddt_cell_matrix_bits(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+    *,
+    include_pair: bool,
+    include_sinv: bool,
+    use_statistics: bool,
+    beam_width: int,
+    depth: int,
+    feature_encoding: str,
+) -> list[int]:
+    difference = left ^ right
+    aligned_difference = inverse_permutation_difference(difference, width, cipher)
+    source_difference = aligned_difference
+    prefix_words = [difference, aligned_difference]
+    if include_pair:
+        prefix_words = [left, right, *prefix_words]
+    if include_sinv:
+        source_difference = present_structural_inverse_sbox_difference(left, right, width, cipher)
+        prefix_words.append(source_difference)
+    if use_statistics:
+        trail_words = present_sbox_ddt_beam_statistics_words(
+            source_difference,
+            width,
+            cipher,
+            beam_width=beam_width,
+            depth=depth,
+        )
+    else:
+        trail_words = present_sbox_ddt_beam_words(
+            source_difference,
+            width,
+            cipher,
+            beam_width=beam_width,
+            depth=depth,
+        )
+    return words_to_present_cell_matrix_bits(
+        [*prefix_words, *trail_words],
+        width,
+        feature_encoding,
+    )
+
+
+def parse_parameterized_present_sboxddt_encoding(feature_encoding: str) -> dict[str, int | bool] | None:
+    match = _PRESENT_SBOXDDT_TRAIL_ENCODING_PATTERN.fullmatch(feature_encoding)
+    if match is None:
+        return None
+    scope = match.group("scope")
+    include_sinv = match.group("sinv") is not None
+    use_statistics = match.group("kind") == "beamstats"
+    if scope == "delta" and not include_sinv:
+        return None
+    if use_statistics and (scope != "delta" or not include_sinv):
+        return None
+    return {
+        "include_pair": scope == "pair_xor",
+        "include_sinv": include_sinv,
+        "use_statistics": use_statistics,
+        "beam_width": int(match.group("beam_width")),
+        "depth": int(match.group("depth")),
+    }
+
+
+def is_parameterized_present_sboxddt_encoding(feature_encoding: str) -> bool:
+    return parse_parameterized_present_sboxddt_encoding(feature_encoding) is not None
+
+
 def present_sbox_ddt_beam_statistics_words(
     aligned_difference: int,
     width: int,
@@ -685,6 +772,18 @@ def pair_xor_bits(left: int, right: int, width: int) -> tuple[list[int], list[in
 
 
 def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
+    present_trail_config = parse_parameterized_present_sboxddt_encoding(feature_encoding)
+    if present_trail_config is not None:
+        prefix_words = 2
+        if present_trail_config["include_pair"]:
+            prefix_words += 2
+        if present_trail_config["include_sinv"]:
+            prefix_words += 1
+        if present_trail_config["use_statistics"]:
+            trail_words = present_trail_config["depth"] * 9
+        else:
+            trail_words = present_trail_config["depth"] * (3 * present_trail_config["beam_width"] + 3)
+        return block_bits * (prefix_words + trail_words)
     if feature_encoding in {"ciphertext_pair_bits", "present_mcnd_cell_matrix_bits"}:
         return block_bits * 2
     if feature_encoding == "present_pair_xor_cell_matrix_bits":

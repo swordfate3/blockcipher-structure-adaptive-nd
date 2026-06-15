@@ -1393,3 +1393,20 @@ def test_zhang_wang2022_present_independent_mcnd_smoke_plan_aligns_protocol():
     assert {row["pairs_per_sample"] for row in rows} == {"16"}
     assert {row["difference_profile"] for row in rows} == {"present_zhang_wang2022_mcnd"}
     assert {row["feature_encoding"] for row in rows} == {"present_mcnd_cell_matrix_bits"}
+
+
+def test_cli_accepts_parameterized_present_sboxddt_feature_encoding(monkeypatch):
+    module = _load_matrix_runner()
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "run_innovation_one_matrix.py",
+            "--feature-encoding",
+            "present_delta_paligned_sinv_sboxddt_beamstats8deep4_cell_matrix_bits",
+        ],
+    )
+
+    args = module.parse_args()
+
+    assert args.feature_encoding == "present_delta_paligned_sinv_sboxddt_beamstats8deep4_cell_matrix_bits"

@@ -473,6 +473,72 @@ def test_present_sinv_curriculum_r7_plan_shape():
     assert {row["pretrain_epochs"] for row in rows if row["rounds"] == "7"} == {"6"}
 
 
+def test_present_parameterized_sboxddt_beam8deep4_r7_plan_shape():
+    repo_root = Path(__file__).resolve().parents[1]
+    plan_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "plans"
+        / "innovation1_spn_present_parameterized_sboxddt_beam8deep4_r7_screen.csv"
+    )
+
+    with plan_path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 8
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["rounds"] for row in rows} == {"7"}
+    assert {row["seed"] for row in rows} == {"0", "1"}
+    assert {row["samples_per_class"] for row in rows} == {"65536"}
+    assert {row["pairs_per_sample"] for row in rows} == {"16"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "present_pair_xor_paligned_sboxddt_beam8deep4_cell_matrix_bits",
+        "present_delta_paligned_sinv_sboxddt_beamstats8deep4_cell_matrix_bits",
+    }
+    assert {row["model_key"] for row in rows} == {
+        "present_matrix_trail_hybrid_pairset",
+        "present_trail_mixer_pairset",
+    }
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["sample_structure"] for row in rows} == {"zhang_wang_case2_mcnd"}
+    assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
+    assert {row["pretrain_rounds"] for row in rows} == {"6"}
+    assert {row["pretrain_epochs"] for row in rows} == {"6"}
+
+
+def test_speck32_arx_partial_inverse_r7_clean_ablation_10seed_plan_shape():
+    repo_root = Path(__file__).resolve().parents[1]
+    plan_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "plans"
+        / "innovation1_arx_speck32_partial_inverse_r7_clean_ablation_10seed.csv"
+    )
+
+    with plan_path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 20
+    assert {row["cipher"] for row in rows} == {"SPECK32/64"}
+    assert {row["structure"] for row in rows} == {"ARX"}
+    assert {row["model_key"] for row in rows} == {"structure_adaptive_pairset_dbitnet"}
+    assert {row["rounds"] for row in rows} == {"7"}
+    assert {row["seed"] for row in rows} == {str(seed) for seed in range(10)}
+    assert {row["samples_per_class"] for row in rows} == {"131072"}
+    assert {row["pairs_per_sample"] for row in rows} == {"4"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "ciphertext_pair_xor_bits",
+        "ciphertext_pair_xor_arx_partial_inverse_bits",
+    }
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["sample_structure"] for row in rows} == {"independent_pairs"}
+    assert {row["difference_profile"] for row in rows} == {"speck32_gohr2019"}
+    assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
+
+
 def test_speck32_arx_v2_scale_l_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
