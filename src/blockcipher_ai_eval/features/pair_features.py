@@ -45,6 +45,8 @@ def encode_ciphertext_pair(
         return present_pair_xor_paligned_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_pair_xor_paligned_sinv_cell_matrix_bits":
         return present_pair_xor_paligned_sinv_cell_matrix_bits(left, right, width, cipher)
+    if feature_encoding == "present_pair_xor_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits":
+        return present_pair_xor_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_pair_xor_paligned_sboxddt_cell_matrix_bits":
         return present_pair_xor_paligned_sboxddt_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits":
@@ -338,6 +340,36 @@ def present_pair_xor_paligned_sboxddt_beam4deep3_cell_matrix_bits(
     )
 
 
+def present_pair_xor_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> list[int]:
+    difference = left ^ right
+    aligned_difference = inverse_permutation_difference(difference, width, cipher)
+    structural_inverse_difference = present_structural_inverse_sbox_difference(left, right, width, cipher)
+    trail_words = present_sbox_ddt_beam_words(
+        structural_inverse_difference,
+        width,
+        cipher,
+        beam_width=4,
+        depth=3,
+    )
+    return words_to_present_cell_matrix_bits(
+        [
+            left,
+            right,
+            difference,
+            aligned_difference,
+            structural_inverse_difference,
+            *trail_words,
+        ],
+        width,
+        "present_pair_xor_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits",
+    )
+
+
 def present_sbox_ddt_beam_words(
     aligned_difference: int,
     width: int,
@@ -519,6 +551,8 @@ def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
         return block_bits * 4
     if feature_encoding == "present_pair_xor_paligned_sinv_cell_matrix_bits":
         return block_bits * 5
+    if feature_encoding == "present_pair_xor_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits":
+        return block_bits * 50
     if feature_encoding == "present_pair_xor_paligned_sboxddt_cell_matrix_bits":
         return block_bits * 6
     if feature_encoding == "present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits":

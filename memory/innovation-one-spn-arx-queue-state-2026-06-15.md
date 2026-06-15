@@ -375,6 +375,67 @@ The after-protocol watcher now launches SInv first. A new after-SInv watcher lau
 scripts/generated/remote/watch_after_sinv_to_arx_trail_mixer_20260616.ps1
 scripts/generated/remote/schedule_watch_after_sinv_to_arx_trail_mixer_20260616.cmd
 ```
+
+## Update 2026-06-16 01:45 CST
+
+Because the plain r7 SPN-aligned matrix screen remains near random during training:
+
+```text
+run_id: innovation1-spn-present-spnaligned-r7-matrix-screen-gpu1-20260615
+observed row: index 9/24
+seed: 2
+epoch 1 val_auc: 0.5030903164
+```
+
+added a stronger SPN fused nonlinear-trail feature:
+
+```text
+feature: present_pair_xor_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits
+pair width: 3200 bits for PRESENT-64
+public words:
+  - C
+  - C'
+  - C xor C'
+  - InvP(C xor C')
+  - InvS(InvP(C)) xor InvS(InvP(C'))
+  - 4-beam, 3-depth public SBox-DDT trail words seeded from the structural inverse difference
+```
+
+This is intended to test whether the public zero-key nonlinear inverse approximation gives a better start point for SBox-DDT beam backtracking than plain `InvP(C xor C')`.
+
+Added screen:
+
+```text
+run_id: innovation1-spn-present-sinv-sboxddt-beam4deep3-highround-gpu1-20260616
+plan: experiments/innovation1/plans/innovation1_spn_present_sinv_sboxddt_beam4deep3_highround_screen.csv
+config: experiments/innovation1/configs/remote/innovation1_spn_present_sinv_sboxddt_beam4deep3_highround_gpu1_20260616.json
+expected rows: 8
+device: cuda:1
+rounds: PRESENT r7/r8
+seeds: 0,1
+samples/class: r7 65536, r8 131072
+models:
+  - present_matrix_trail_hybrid_pairset
+  - present_trail_mixer_pairset
+pretrain: r6 for 6 epochs from plan
+```
+
+GPU1 watcher chain is now:
+
+```text
+current r7 matrix
+  -> protocol aligned scale-m
+  -> SInv matrix screen
+  -> SInv + SBoxDDT Beam4Deep3 high-round screen
+  -> ARX TrailMixer
+```
+
+New ARX relay after fused SPN screen:
+
+```text
+scripts/generated/remote/watch_after_sinv_sboxddt_beam4deep3_to_arx_trail_mixer_20260616.ps1
+scripts/generated/remote/schedule_watch_after_sinv_sboxddt_beam4deep3_to_arx_trail_mixer_20260616.cmd
+```
 ARX RoundFunctionHybrid CPU smoke: wrote 1 row to /tmp/arx_round_hybrid_smoke_results.jsonl
 bash -n relay/monitor scripts: pass
 75 passed: adaptive model + feature encoding + remote script generator tests
