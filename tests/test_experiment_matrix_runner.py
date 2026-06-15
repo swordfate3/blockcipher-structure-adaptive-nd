@@ -1339,6 +1339,28 @@ def test_plan_rows_can_override_training_protocol_fields(tmp_path):
     assert task["early_stopping_patience"] == 0
 
 
+def test_plan_rows_can_request_curriculum_pretraining(tmp_path):
+    module = _load_matrix_runner()
+    plan = tmp_path / "curriculum_plan.csv"
+    plan.write_text(
+        "cipher,model_key,network,architecture_rank,score,evidence,literature,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode,pretrain_rounds,pretrain_epochs\n"
+        "PRESENT-80,present_inception_mcnd_matrix,Present-Matrix-Curriculum,0,100,curriculum,Innovation1,7,0,32,16,present_pair_xor_paligned_cell_matrix_bits,encrypted_random_plaintexts,6,3\n",
+        encoding="utf-8",
+    )
+
+    tasks = module._tasks_from_plan(
+        plan,
+        feature_encoding="ciphertext_pair_bits",
+        pairs_per_sample=1,
+        difference_profile="present_zhang_wang2022_mcnd",
+        difference_member=0,
+    )
+
+    assert tasks[0]["rounds"] == 7
+    assert tasks[0]["pretrain_rounds"] == 6
+    assert tasks[0]["pretrain_epochs"] == 3
+
+
 def test_plan_rows_can_pass_selected_bit_indices(tmp_path):
     module = _load_matrix_runner()
     plan = tmp_path / "selected_bits_plan.csv"
@@ -1371,4 +1393,3 @@ def test_zhang_wang2022_present_independent_mcnd_smoke_plan_aligns_protocol():
     assert {row["pairs_per_sample"] for row in rows} == {"16"}
     assert {row["difference_profile"] for row in rows} == {"present_zhang_wang2022_mcnd"}
     assert {row["feature_encoding"] for row in rows} == {"present_mcnd_cell_matrix_bits"}
-

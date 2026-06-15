@@ -29,7 +29,7 @@ from blockcipher_ai_eval.experiments import (
 from blockcipher_ai_eval.innovation_one import CipherProfile
 from blockcipher_ai_eval.features.profile import structure_feature_vector
 from blockcipher_ai_eval.features.registry import pair_bits_for_encoding
-from blockcipher_ai_eval.training import TrainingConfig, train_binary_classifier
+from blockcipher_ai_eval.training import TrainingConfig, TrainingResult, train_binary_classifier
 
 
 def parse_args() -> argparse.Namespace:
@@ -105,11 +105,24 @@ def parse_args() -> argparse.Namespace:
         help="Minimum checkpoint metric improvement required to reset patience.",
     )
     parser.add_argument(
+        "--pretrain-rounds",
+        type=int,
+        default=None,
+        help="Optional curriculum pretraining round count before each target row.",
+    )
+    parser.add_argument(
+        "--pretrain-epochs",
+        type=int,
+        default=0,
+        help="Optional curriculum pretraining epochs before each target row.",
+    )
+    parser.add_argument(
         "--feature-encoding",
         default="ciphertext_pair_bits",
         choices=[
             "ciphertext_pair_bits",
             "present_mcnd_cell_matrix_bits",
+            "present_xor_paligned_cell_matrix_bits",
             "present_pair_xor_paligned_cell_matrix_bits",
             "present_pair_xor_cell_matrix_bits",
             "ciphertext_xor_bits",
@@ -359,31 +372,21 @@ def _run_task(
         model_options=task.get("model_options"),
     )
     _configure_structure_aware_model(model, task["cipher_key"], task["rounds"])
+    pretrain_result = _run_optional_pretraining(
+        model,
+        task,
+        args,
+        pair_bits=pair_bits,
+        progress_path=progress_path,
+        index=index,
+        total=total,
+    )
+    _configure_structure_aware_model(model, task["cipher_key"], task["rounds"])
     result = train_binary_classifier(
         model,
         train_dataset,
         validation_dataset,
-        TrainingConfig(
-            epochs=args.epochs,
-            batch_size=args.batch_size,
-            learning_rate=float(task.get("learning_rate") or args.learning_rate),
-            optimizer=str(task.get("optimizer") or args.optimizer),
-            amsgrad=args.amsgrad,
-            weight_decay=float(task.get("weight_decay") if task.get("weight_decay") is not None else args.weight_decay),
-            lr_scheduler=str(task.get("lr_scheduler") or args.lr_scheduler),
-            max_learning_rate=task.get("max_learning_rate") if task.get("max_learning_rate") is not None else args.max_learning_rate,
-            checkpoint_metric=str(task.get("checkpoint_metric") or args.checkpoint_metric),
-            restore_best_checkpoint=bool(task.get("restore_best_checkpoint") if task.get("restore_best_checkpoint") is not None else args.restore_best_checkpoint),
-            early_stopping_patience=int(task.get("early_stopping_patience") if task.get("early_stopping_patience") is not None else args.early_stopping_patience),
-            early_stopping_min_delta=float(
-                task.get("early_stopping_min_delta")
-                if task.get("early_stopping_min_delta") is not None
-                else args.early_stopping_min_delta
-            ),
-            loss=str(task.get("loss", args.loss)),
-            seed=task["seed"],
-            device=args.device,
-        ),
+        _training_config(task, args, epochs=args.epochs, seed=task["seed"]),
         progress_callback=_progress_callback(
             progress_path,
             "training",
@@ -433,6 +436,7 @@ def _run_task(
             "integral_active_nibble": task["integral_active_nibble"],
             "model_options": task.get("model_options", {}),
             "selected_bit_indices": task["selected_bit_indices"],
+            "pretraining": _pretraining_metadata(pretrain_result),
         },
         **_model_metadata(model),
         "validation": {
@@ -447,6 +451,172 @@ def _run_task(
             "sample_structure": validation_dataset.metadata["sample_structure"],
             "integral_active_nibble": validation_dataset.metadata["integral_active_nibble"],
         },
+    }
+
+
+def _run_optional_pretraining(
+    model: torch.nn.Module,
+    task: dict[str, Any],
+    args: argparse.Namespace,
+    *,
+    pair_bits: int | None,
+    progress_path: str | None,
+    index: int | None,
+    total: int | None,
+) -> TrainingResult | None:
+    pretrain_epochs = int(
+        task.get("pretrain_epochs")
+        if task.get("pretrain_epochs") is not None
+        else args.pretrain_epochs
+    )
+    pretrain_rounds = (
+        int(task["pretrain_rounds"])
+        if task.get("pretrain_rounds") is not None
+        else args.pretrain_rounds
+    )
+    if pretrain_epochs <= 0 or pretrain_rounds is None:
+        return None
+    if pretrain_rounds == task["rounds"]:
+        raise ValueError("pretrain_rounds must differ from target rounds")
+
+    pretrain_task = {**task, "rounds": pretrain_rounds}
+    _configure_structure_aware_model(model, pretrain_task["cipher_key"], pretrain_rounds)
+    pretrain_cipher = build_cipher(
+        pretrain_task["cipher_key"],
+        pretrain_rounds,
+        key=pretrain_task.get("train_key"),
+    )
+    validation_key = pretrain_task.get("validation_key")
+    if validation_key is None:
+        validation_key = pretrain_task.get("train_key")
+    pretrain_validation_cipher = build_cipher(
+        pretrain_task["cipher_key"],
+        pretrain_rounds,
+        key=validation_key,
+    )
+    input_difference = pretrain_task["input_difference"]
+    pretrain_train_config = DifferentialDatasetConfig(
+        cipher=pretrain_cipher,
+        input_difference=input_difference,
+        samples_per_class=pretrain_task["samples_per_class"],
+        seed=pretrain_task["seed"] + 20_000,
+        feature_encoding=pretrain_task["feature_encoding"],
+        pairs_per_sample=pretrain_task["pairs_per_sample"],
+        negative_mode=pretrain_task["negative_mode"],
+        key_rotation_interval=pretrain_task["key_rotation_interval"],
+        sample_structure=pretrain_task["sample_structure"],
+        integral_active_nibble=pretrain_task["integral_active_nibble"],
+        selected_bit_indices=pretrain_task["selected_bit_indices"],
+    )
+    pretrain_validation_config = DifferentialDatasetConfig(
+        cipher=pretrain_validation_cipher,
+        input_difference=input_difference,
+        samples_per_class=max(8, pretrain_task["samples_per_class"] // 2),
+        seed=pretrain_task["seed"] + 30_000,
+        feature_encoding=pretrain_task["feature_encoding"],
+        pairs_per_sample=pretrain_task["pairs_per_sample"],
+        negative_mode=pretrain_task["negative_mode"],
+        key_rotation_interval=pretrain_task["key_rotation_interval"],
+        sample_structure=pretrain_task["sample_structure"],
+        integral_active_nibble=pretrain_task["integral_active_nibble"],
+        selected_bit_indices=pretrain_task["selected_bit_indices"],
+    )
+    pretrain_dataset = _make_task_dataset(
+        pretrain_train_config,
+        args,
+        pretrain_task,
+        split="pretrain_train",
+        progress_path=progress_path,
+        index=index,
+        total=total,
+    )
+    pretrain_validation_dataset = _make_task_dataset(
+        pretrain_validation_config,
+        args,
+        pretrain_task,
+        split="pretrain_validation",
+        progress_path=progress_path,
+        index=index,
+        total=total,
+    )
+    expected_input_bits = int(pretrain_dataset.features.shape[1])
+    if pair_bits is not None and expected_input_bits % pair_bits != 0:
+        raise ValueError("pretraining feature width is incompatible with target pair_bits")
+    _write_progress(
+        progress_path,
+        "pretrain_cache_ready",
+        {
+            "index": index,
+            "total": total,
+            "target_rounds": task["rounds"],
+            "pretrain_rounds": pretrain_rounds,
+            "pretrain_epochs": pretrain_epochs,
+            "train_rows": int(pretrain_dataset.features.shape[0]),
+            "validation_rows": int(pretrain_validation_dataset.features.shape[0]),
+            "input_bits": expected_input_bits,
+            **_task_progress_payload(pretrain_task),
+        },
+    )
+    return train_binary_classifier(
+        model,
+        pretrain_dataset,
+        pretrain_validation_dataset,
+        _training_config(
+            pretrain_task,
+            args,
+            epochs=pretrain_epochs,
+            seed=pretrain_task["seed"] + 40_000,
+        ),
+        progress_callback=_progress_callback(
+            progress_path,
+            "pretraining",
+            pretrain_task,
+            index=index,
+            total=total,
+        ),
+    )
+
+
+def _training_config(
+    task: dict[str, Any],
+    args: argparse.Namespace,
+    *,
+    epochs: int,
+    seed: int,
+) -> TrainingConfig:
+    return TrainingConfig(
+        epochs=epochs,
+        batch_size=args.batch_size,
+        learning_rate=float(task.get("learning_rate") or args.learning_rate),
+        optimizer=str(task.get("optimizer") or args.optimizer),
+        amsgrad=args.amsgrad,
+        weight_decay=float(task.get("weight_decay") if task.get("weight_decay") is not None else args.weight_decay),
+        lr_scheduler=str(task.get("lr_scheduler") or args.lr_scheduler),
+        max_learning_rate=task.get("max_learning_rate") if task.get("max_learning_rate") is not None else args.max_learning_rate,
+        checkpoint_metric=str(task.get("checkpoint_metric") or args.checkpoint_metric),
+        restore_best_checkpoint=bool(task.get("restore_best_checkpoint") if task.get("restore_best_checkpoint") is not None else args.restore_best_checkpoint),
+        early_stopping_patience=int(task.get("early_stopping_patience") if task.get("early_stopping_patience") is not None else args.early_stopping_patience),
+        early_stopping_min_delta=float(
+            task.get("early_stopping_min_delta")
+            if task.get("early_stopping_min_delta") is not None
+            else args.early_stopping_min_delta
+        ),
+        loss=str(task.get("loss", args.loss)),
+        seed=seed,
+        device=args.device,
+    )
+
+
+def _pretraining_metadata(result: TrainingResult | None) -> dict[str, Any]:
+    if result is None:
+        return {"enabled": False}
+    return {
+        "enabled": True,
+        "metrics": result.final_metrics,
+        "epochs_ran": result.metadata.get("epochs_ran"),
+        "best_epoch": result.metadata.get("best_epoch"),
+        "best_checkpoint_metric": result.metadata.get("best_checkpoint_metric"),
+        "selected_checkpoint": result.metadata.get("selected_checkpoint"),
     }
 
 
@@ -514,6 +684,8 @@ def _task_progress_payload(task: dict[str, Any]) -> dict[str, Any]:
         "integral_active_nibble": task["integral_active_nibble"],
         "selected_bit_indices": task["selected_bit_indices"],
         "loss": task.get("loss", ""),
+        "pretrain_rounds": task.get("pretrain_rounds"),
+        "pretrain_epochs": task.get("pretrain_epochs"),
     }
 
 
@@ -566,7 +738,7 @@ def _dataset_cache_dir(
         "sample_structure": config.sample_structure,
         "integral_active_nibble": config.integral_active_nibble,
         "selected_bit_indices": config.selected_bit_indices,
-        "key": task.get("train_key") if split == "train" else task.get("validation_key"),
+        "key": task.get("train_key") if split in {"train", "pretrain_train"} else task.get("validation_key"),
     }
     digest = hashlib.sha256(
         json.dumps(cache_identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -611,6 +783,8 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "integral_active_nibble": args.integral_active_nibble,
                             "selected_bit_indices": (),
                             "loss": args.loss,
+                            "pretrain_rounds": args.pretrain_rounds,
+                            "pretrain_epochs": args.pretrain_epochs,
                             "model_options": {},
                             "train_key": None,
                             "validation_key": None,
@@ -684,6 +858,8 @@ def _plan_task(
             "restore_best_checkpoint": _optional_bool(row.get("restore_best_checkpoint")),
             "early_stopping_patience": _optional_int(row.get("early_stopping_patience")),
             "early_stopping_min_delta": _optional_float(row.get("early_stopping_min_delta")),
+            "pretrain_rounds": _optional_int(row.get("pretrain_rounds")),
+            "pretrain_epochs": _optional_int(row.get("pretrain_epochs")),
             "model_options": _optional_json(row.get("model_options")),
             "selected_bit_indices": _optional_int_tuple(row.get("selected_bit_indices")),
             "train_key": _optional_int(row.get("train_key")),

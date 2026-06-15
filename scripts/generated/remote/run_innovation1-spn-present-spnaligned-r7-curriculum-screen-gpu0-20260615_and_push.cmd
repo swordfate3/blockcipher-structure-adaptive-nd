@@ -13,11 +13,11 @@ set RESULT_REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.
 set BRANCH=refactor/model-project-structure
 set GITHUB_SSH_KEY=C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519
 set GIT_SSH_COMMAND=ssh -i %GITHUB_SSH_KEY% -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new
-set RUN_ID=innovation1-spn-present-delta-paligned-matrix-screen-gpu0-20260615
-set EXPECTED_ROWS=18
+set RUN_ID=innovation1-spn-present-spnaligned-r7-curriculum-screen-gpu0-20260615
+set EXPECTED_ROWS=6
 set RUN_ROOT=%ROOT%\%PROJECT_ID%-runs
 set RUN_DIR=%RUN_ROOT%\%RUN_ID%
-set ARCHIVE_WORK=%ROOT%\archive_work\spn_present_delta_paligned_matrix_screen_gpu0_20260615
+set ARCHIVE_WORK=%ROOT%\archive_work\spn_present_spnaligned_r7_curriculum_screen_gpu0_20260615
 set PY=F:\Anaconda\envs\DWT\torch310\python.exe
 
 if not exist %ROOT% mkdir %ROOT%
@@ -61,8 +61,8 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
 %PY% -c "import sys, torch; print('python', sys.executable); print('torch', torch.__version__); print('cuda_version', torch.version.cuda); print('cuda_available', torch.cuda.is_available()); print('device_count', torch.cuda.device_count()); print('device0', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'NA')" > logs\%RUN_ID%_torch_info.txt 2> logs\%RUN_ID%_torch_info_stderr.txt
 
 %PY% experiments\run_innovation_one_matrix.py ^
-  --plan experiments\innovation1\plans\innovation1_spn_present_delta_paligned_matrix_screen.csv ^
-  --epochs 20 ^
+  --plan experiments\innovation1\plans\innovation1_spn_present_spnaligned_r7_curriculum_screen.csv ^
+  --epochs 16 ^
   --batch-size 128 ^
   --hidden-bits 32 ^
   --learning-rate 0.0001 ^
@@ -116,7 +116,7 @@ if exist results_archive\%RUN_ID% rmdir /s /q results_archive\%RUN_ID%
 mkdir results_archive\%RUN_ID%
 copy "%RUN_DIR%\results\%RUN_ID%.jsonl" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\results\%RUN_ID%_summary.csv" "results_archive\%RUN_ID%\"
-copy "%RUN_DIR%\experiments\innovation1\plans\innovation1_spn_present_delta_paligned_matrix_screen.csv" "results_archive\%RUN_ID%\"
+copy "%RUN_DIR%\experiments\innovation1\plans\innovation1_spn_present_spnaligned_r7_curriculum_screen.csv" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_git_revision.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_git_status_before_run.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_gpu_info.txt" "results_archive\%RUN_ID%\"
@@ -135,10 +135,10 @@ echo project_dir=%PROJECT_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
 echo run_dir=%RUN_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
 echo archive_work=%ARCHIVE_WORK%>> results_archive\%RUN_ID%\run_manifest.txt
 echo branch=%BRANCH%>> results_archive\%RUN_ID%\run_manifest.txt
-echo plan=experiments\innovation1\plans\innovation1_spn_present_delta_paligned_matrix_screen.csv>> results_archive\%RUN_ID%\run_manifest.txt
+echo plan=experiments\innovation1\plans\innovation1_spn_present_spnaligned_r7_curriculum_screen.csv>> results_archive\%RUN_ID%\run_manifest.txt
 echo device=cuda:0>> results_archive\%RUN_ID%\run_manifest.txt
 echo expected_rows=%EXPECTED_ROWS%>> results_archive\%RUN_ID%\run_manifest.txt
-echo epochs=20>> results_archive\%RUN_ID%\run_manifest.txt
+echo epochs=16>> results_archive\%RUN_ID%\run_manifest.txt
 echo batch_size=128>> results_archive\%RUN_ID%\run_manifest.txt
 echo hidden_bits=32>> results_archive\%RUN_ID%\run_manifest.txt
 echo optimizer=adam>> results_archive\%RUN_ID%\run_manifest.txt
@@ -150,11 +150,11 @@ echo checkpoint_metric=val_loss>> results_archive\%RUN_ID%\run_manifest.txt
 echo restore_best_checkpoint=True>> results_archive\%RUN_ID%\run_manifest.txt
 echo early_stopping_patience=0>> results_archive\%RUN_ID%\run_manifest.txt
 echo early_stopping_min_delta=0>> results_archive\%RUN_ID%\run_manifest.txt
-echo pretrain_rounds=none>> results_archive\%RUN_ID%\run_manifest.txt
-echo pretrain_epochs=0>> results_archive\%RUN_ID%\run_manifest.txt
+echo pretrain_rounds=from_plan>> results_archive\%RUN_ID%\run_manifest.txt
+echo pretrain_epochs=from_plan>> results_archive\%RUN_ID%\run_manifest.txt
 echo dataset_cache_root=dataset_cache>> results_archive\%RUN_ID%\run_manifest.txt
 echo dataset_cache_chunk_size=2048>> results_archive\%RUN_ID%\run_manifest.txt
-echo validation=present_delta_paligned_matrix_screen_gpu0>> results_archive\%RUN_ID%\run_manifest.txt
+echo validation=present_spnaligned_r7_curriculum_screen_gpu0>> results_archive\%RUN_ID%\run_manifest.txt
 
 git add results_archive\%RUN_ID%
 git commit -m "results: %RUN_ID% remote run"

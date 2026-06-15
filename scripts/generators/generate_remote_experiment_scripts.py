@@ -64,6 +64,16 @@ def render_run_script(spec: dict[str, Any]) -> str:
     restore_best_checkpoint = bool(spec.get("restore_best_checkpoint", False))
     early_stopping_patience = int(spec.get("early_stopping_patience", 0))
     early_stopping_min_delta = _format_float(spec.get("early_stopping_min_delta", 0.0))
+    pretrain_rounds = spec.get("pretrain_rounds")
+    pretrain_epochs = int(spec.get("pretrain_epochs", 0))
+    pretrain_args = ""
+    pretrain_rounds_manifest = "from_plan" if "pretrain_rounds" in plan_scoped_fields else "none"
+    pretrain_epochs_manifest = "from_plan" if "pretrain_epochs" in plan_scoped_fields else str(pretrain_epochs)
+    if pretrain_rounds is not None:
+        pretrain_args += f" ^\n  --pretrain-rounds {int(pretrain_rounds)}"
+        pretrain_rounds_manifest = str(int(pretrain_rounds))
+    if pretrain_epochs > 0:
+        pretrain_args += f" ^\n  --pretrain-epochs {pretrain_epochs}"
     project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
     clone_url = str(spec.get("clone_url", "https://github.com/swordfate3/blockcipher-structure-adaptive-nd.git"))
     repo_url = str(spec.get("repo_url", "git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git"))
@@ -185,7 +195,7 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
   --key-rotation-interval {key_rotation_interval} ^
   --sample-structure {sample_structure} ^
   --integral-active-nibble {integral_active_nibble} ^
-  --device {device}{dataset_cache_args}{checkpoint_args} ^
+  --device {device}{dataset_cache_args}{checkpoint_args}{pretrain_args} ^
   --progress-output logs\%RUN_ID%_progress.jsonl ^
   --output results\%RUN_ID%.jsonl ^
   > logs\%RUN_ID%_stdout.txt ^
@@ -258,6 +268,8 @@ echo checkpoint_metric={checkpoint_metric}>> results_archive\%RUN_ID%\run_manife
 echo restore_best_checkpoint={restore_best_checkpoint}>> results_archive\%RUN_ID%\run_manifest.txt
 echo early_stopping_patience={early_stopping_patience}>> results_archive\%RUN_ID%\run_manifest.txt
 echo early_stopping_min_delta={early_stopping_min_delta}>> results_archive\%RUN_ID%\run_manifest.txt
+echo pretrain_rounds={pretrain_rounds_manifest}>> results_archive\%RUN_ID%\run_manifest.txt
+echo pretrain_epochs={pretrain_epochs_manifest}>> results_archive\%RUN_ID%\run_manifest.txt
 {dataset_cache_manifest}
 echo validation={validation_label}>> results_archive\%RUN_ID%\run_manifest.txt
 
