@@ -28,6 +28,7 @@ from blockcipher_ai_eval.models.structure.spn import (
 from blockcipher_ai_eval.models.structure.spn import (
     PresentPLayerMixerBlock,
     PresentMatrixTrailHybridPairSetDistinguisher,
+    PresentPairSetStatsHybridDistinguisher,
     PresentPLayerMixerPairSetDistinguisher,
     PresentTrailMixerPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
@@ -636,6 +637,57 @@ def test_build_model_supports_present_matrix_trail_hybrid_pairset_key_and_option
     assert model.pooling == "topk_mean"
     assert model.top_k == 2
     assert model.lse_temperature == 0.5
+
+
+def test_present_pairset_stats_hybrid_fuses_trail_and_cross_pair_statistics():
+    model = PresentPairSetStatsHybridDistinguisher(
+        input_bits=4992,
+        pair_bits=2496,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=1,
+        role_mixer_depth=1,
+        stats_hidden_bits=32,
+    )
+    batch = torch.randn((2, 4992), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "SPN"
+    assert model.words_per_pair == 39
+    assert model.cells_per_word == 16
+    assert model.stats_feature_bits == 39 * 16 * 5 + 39 * 8
+    assert model.fused_embedding_bits == model.trail_pair_embedding_bits * 3 + 32
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_present_pairset_stats_hybrid_key_and_options():
+    model = build_model(
+        "present_pairset_stats_hybrid",
+        input_bits=4992,
+        hidden_bits=8,
+        pair_bits=2496,
+        structure="SPN",
+        model_options={
+            "token_dim": 24,
+            "mixer_depth": 1,
+            "role_mixer_depth": 1,
+            "stats_hidden_bits": 48,
+            "activation": "silu",
+            "norm": "rmsnorm",
+            "dropout": 0.05,
+        },
+    )
+
+    assert isinstance(model, PresentPairSetStatsHybridDistinguisher)
+    assert model.pair_bits == 2496
+    assert model.token_dim == 24
+    assert model.trail_branch.mixer_depth == 1
+    assert model.trail_branch.role_mixer_depth == 1
+    assert model.stats_hidden_bits == 48
+    assert model.activation == "silu"
+    assert model.norm == "rmsnorm"
+    assert model.dropout == 0.05
 
 
 def test_spn_cell_pairset_dbitnet_adds_cell_encoder_to_pair_embedding():
