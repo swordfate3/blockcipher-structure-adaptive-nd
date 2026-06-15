@@ -265,6 +265,33 @@ def test_present_pair_xor_paligned_cell_matrix_encoding_includes_inverse_p_diffe
     assert len(encoded) == 4 * 64
 
 
+def test_present_pair_xor_paligned_sinv_cell_matrix_encoding_includes_public_inverse_sbox_difference():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    left = 0x0123456789ABCDEF
+    right = 0x0123456789ABCDEF ^ 0x0700000000000700
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding="present_pair_xor_paligned_sinv_cell_matrix_bits",
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    aligned_difference = Present80.inverse_permutation_layer(difference)
+    left_structural_inverse = Present80.inverse_sbox_layer(Present80.inverse_permutation_layer(left))
+    right_structural_inverse = Present80.inverse_sbox_layer(Present80.inverse_permutation_layer(right))
+    structural_inverse_difference = left_structural_inverse ^ right_structural_inverse
+    expected = _cell_matrix_bit_planes(
+        [left, right, difference, aligned_difference, structural_inverse_difference],
+        64,
+    )
+    assert pair_bits_for_encoding(64, "present_pair_xor_paligned_sinv_cell_matrix_bits") == 320
+    assert encoded == expected
+    assert len(encoded) == 4 * 80
+
+
 def test_present_xor_paligned_cell_matrix_encoding_keeps_only_difference_planes():
     cipher = Present80(rounds=1, key=0x00000000000000000000)
     left = 0x0123456789ABCDEF
@@ -289,4 +316,5 @@ def test_present_xor_paligned_cell_matrix_encoding_keeps_only_difference_planes(
 def test_present_cell_matrix_extended_encodings_are_registered():
     assert is_supported_feature_encoding("present_pair_xor_cell_matrix_bits")
     assert is_supported_feature_encoding("present_pair_xor_paligned_cell_matrix_bits")
+    assert is_supported_feature_encoding("present_pair_xor_paligned_sinv_cell_matrix_bits")
     assert is_supported_feature_encoding("present_xor_paligned_cell_matrix_bits")

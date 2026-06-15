@@ -29,6 +29,8 @@ def encode_ciphertext_pair(
         return present_pair_xor_cell_matrix_bits(left, right, width)
     if feature_encoding == "present_pair_xor_paligned_cell_matrix_bits":
         return present_pair_xor_paligned_cell_matrix_bits(left, right, width, cipher)
+    if feature_encoding == "present_pair_xor_paligned_sinv_cell_matrix_bits":
+        return present_pair_xor_paligned_sinv_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return present_xor_paligned_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "ciphertext_xor_bits":
@@ -92,6 +94,40 @@ def present_pair_xor_paligned_cell_matrix_bits(
     )
 
 
+def present_pair_xor_paligned_sinv_cell_matrix_bits(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> list[int]:
+    difference = left ^ right
+    aligned_difference = inverse_permutation_difference(difference, width, cipher)
+    structural_inverse_difference = present_structural_inverse_sbox_difference(left, right, width, cipher)
+    return words_to_present_cell_matrix_bits(
+        [left, right, difference, aligned_difference, structural_inverse_difference],
+        width,
+        "present_pair_xor_paligned_sinv_cell_matrix_bits",
+    )
+
+
+def present_structural_inverse_sbox_difference(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> int:
+    inverse_sbox = getattr(cipher, "inverse_sbox_layer", None)
+    if inverse_sbox is None or not callable(inverse_sbox):
+        raise ValueError(
+            "present_pair_xor_paligned_sinv_cell_matrix_bits requires a cipher with "
+            "inverse_sbox_layer"
+        )
+    left_aligned = inverse_permutation_difference(left, width, cipher)
+    right_aligned = inverse_permutation_difference(right, width, cipher)
+    mask = (1 << width) - 1
+    return (int(inverse_sbox(left_aligned)) ^ int(inverse_sbox(right_aligned))) & mask
+
+
 def present_xor_paligned_cell_matrix_bits(
     left: int,
     right: int,
@@ -135,6 +171,8 @@ def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
         return block_bits * 3
     if feature_encoding == "present_pair_xor_paligned_cell_matrix_bits":
         return block_bits * 4
+    if feature_encoding == "present_pair_xor_paligned_sinv_cell_matrix_bits":
+        return block_bits * 5
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return block_bits * 2
     if feature_encoding == "ciphertext_xor_bits":

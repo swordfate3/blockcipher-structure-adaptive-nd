@@ -81,6 +81,21 @@ def test_present80_permutation_layer_round_trips_through_inverse():
         assert restored == state
 
 
+def test_present80_sbox_layer_round_trips_through_inverse():
+    samples = [
+        0x0000000000000000,
+        0xFFFFFFFFFFFFFFFF,
+        0x0123456789ABCDEF,
+        0xFEDCBA9876543210,
+    ]
+
+    for state in samples:
+        substituted = Present80._sbox_layer(state)
+        restored = Present80.inverse_sbox_layer(substituted)
+
+        assert restored == state
+
+
 def test_sm4_full_round_matches_public_test_vector():
     cipher = Sm4Reduced(rounds=32, key=0x0123456789ABCDEFFEDCBA9876543210)
 

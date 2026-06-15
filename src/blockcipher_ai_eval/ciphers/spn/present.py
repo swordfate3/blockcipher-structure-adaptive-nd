@@ -24,6 +24,8 @@ PRESENT_SBOX = (
     0x2,
 )
 
+PRESENT_INV_SBOX = tuple(PRESENT_SBOX.index(value) for value in range(16))
+
 
 @dataclass(frozen=True)
 class Present80:
@@ -52,6 +54,14 @@ class Present80:
         for nibble_index in range(16):
             nibble = (state >> (4 * nibble_index)) & 0xF
             out |= PRESENT_SBOX[nibble] << (4 * nibble_index)
+        return out
+
+    @staticmethod
+    def inverse_sbox_layer(state: int) -> int:
+        out = 0
+        for nibble_index in range(16):
+            nibble = (state >> (4 * nibble_index)) & 0xF
+            out |= PRESENT_INV_SBOX[nibble] << (4 * nibble_index)
         return out
 
     @staticmethod
@@ -85,4 +95,3 @@ class Present80:
         key_register |= PRESENT_SBOX[top_nibble] << 76
         key_register ^= (round_counter & 0x1F) << 15
         return key_register & ((1 << 80) - 1)
-

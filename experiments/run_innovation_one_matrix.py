@@ -124,6 +124,7 @@ def parse_args() -> argparse.Namespace:
             "present_mcnd_cell_matrix_bits",
             "present_xor_paligned_cell_matrix_bits",
             "present_pair_xor_paligned_cell_matrix_bits",
+            "present_pair_xor_paligned_sinv_cell_matrix_bits",
             "present_pair_xor_cell_matrix_bits",
             "ciphertext_xor_bits",
             "ciphertext_xor_spn_aligned_bits",
