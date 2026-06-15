@@ -539,6 +539,37 @@ def test_speck32_arx_partial_inverse_r7_clean_ablation_10seed_plan_shape():
     assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
 
 
+def test_speck32_arx_partial_inverse_r8_boundary_10seed_plan_shape():
+    repo_root = Path(__file__).resolve().parents[1]
+    plan_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "plans"
+        / "innovation1_arx_speck32_partial_inverse_r8_boundary_10seed.csv"
+    )
+
+    with plan_path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 20
+    assert {row["cipher"] for row in rows} == {"SPECK32/64"}
+    assert {row["structure"] for row in rows} == {"ARX"}
+    assert {row["model_key"] for row in rows} == {"structure_adaptive_pairset_dbitnet"}
+    assert {row["rounds"] for row in rows} == {"8"}
+    assert {row["seed"] for row in rows} == {str(seed) for seed in range(10)}
+    assert {row["samples_per_class"] for row in rows} == {"262144"}
+    assert {row["pairs_per_sample"] for row in rows} == {"4"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "ciphertext_pair_xor_bits",
+        "ciphertext_pair_xor_arx_partial_inverse_bits",
+    }
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["sample_structure"] for row in rows} == {"independent_pairs"}
+    assert {row["difference_profile"] for row in rows} == {"speck32_gohr2019"}
+    assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
+
+
 def test_speck32_arx_v2_scale_l_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]
