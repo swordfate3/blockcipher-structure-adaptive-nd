@@ -114,3 +114,13 @@ Result: r6 `acc=0.5087890625`, `AUC=0.5106733143`; r7 `acc=0.5`, `AUC=0.49973419
 
 Action taken: launched `innovation1-spn-present-zw2022-pairstack-matrix-smoke-gpu1-20260615`, which uses `present_inception_mcnd_pair_stack_matrix` and reshapes input as `(batch, 1, m*4, 32)` so pair rows remain a spatial axis.
 
+## 2026-06-15 Pair-Stack Independent Case2 Smoke Result
+
+Pulled remote run `innovation1-spn-present-zw2022-pairstack-matrix-smoke-gpu1-20260615` into `outputs/remote_results/innovation1-spn-present-zw2022-pairstack-matrix-smoke-gpu1-20260615`.
+
+Protocol: `present_inception_mcnd_pair_stack_matrix`, raw `present_mcnd_cell_matrix_bits`, `zhang_wang_case2_independent_mcnd`, `m=16`, key per sample (`key_rotation_interval=1`), MSE, Adam, weight decay `1e-5`, cyclic LR `1e-4 -> 2e-3`, 20 epochs, `samples_per_class=8192` smoke.
+
+Result: r6 `acc=0.4996337891`, `AUC=0.5028857589`; r7 `acc=0.4991455078`, `AUC=0.4973554909`. This is a negative result. It shows the pair-stack spatial layout alone does not recover the Zhang/Wang r6/r7 signal under independent Case2 at smoke scale.
+
+Configuration correction: the first base-mask launch accidentally used `key_rotation_interval=1` from the CSV plan rows overriding the JSON default. That run was stopped and its remote run directory was removed. Commit `e9b496b` fixes the base-mask CSV rows to `key_rotation_interval=1024`; the corrected remote progress confirms `key_rotation_interval=1024`.
+
