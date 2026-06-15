@@ -124,3 +124,13 @@ Result: r6 `acc=0.4996337891`, `AUC=0.5028857589`; r7 `acc=0.4991455078`, `AUC=0
 
 Configuration correction: the first base-mask launch accidentally used `key_rotation_interval=1` from the CSV plan rows overriding the JSON default. That run was stopped and its remote run directory was removed. Commit `e9b496b` fixes the base-mask CSV rows to `key_rotation_interval=1024`; the corrected remote progress confirms `key_rotation_interval=1024`.
 
+## 2026-06-15 Base-Mask Global Matrix Result and Raw MCND Decision
+
+Pulled corrected base-mask run artifacts into `outputs/remote_results/innovation1-spn-present-zw2022-global-matrix-basemask-smoke-gpu1-20260615` via SCP after the Git result-branch monitor failed to read the branch gate. Remote gate passed (`result_lines=2`, `expected_rows=2`) and stderr was empty.
+
+Protocol: `present_inception_mcnd_global_matrix`, raw `present_mcnd_cell_matrix_bits`, legacy `zhang_wang_case2_mcnd` base+mask grouping, `m=16`, `key_rotation_interval=1024`, MSE, Adam, weight decay `1e-5`, cyclic LR `1e-4 -> 2e-3`, 20 epochs, `samples_per_class=8192` smoke.
+
+Result: r6 `acc=0.5034179688`, `AUC=0.5011024177`; r7 `acc=0.5091552734`, `AUC=0.5078672767`. This is still near random. Together with independent matrix, independent global matrix, and independent pair-stack matrix, raw Zhang/Wang-style MCND is not reproduced in the current implementation/data scale.
+
+Decision: stop treating raw MCND reproduction as the main breakthrough path for Innovation 1. The current strongest PRESENT/SPN evidence remains the SPN-aligned structure-adaptive route (`present_pair_xor_paligned_cell_matrix_bits` / public inverse P-layer alignment), where previous scale-s r6 reached `acc_mean=0.8822`, `AUC_mean=0.9519`. Next work should scale and harden the SPN-aligned route with seeds and controls, not keep expanding raw MCND variants.
+
