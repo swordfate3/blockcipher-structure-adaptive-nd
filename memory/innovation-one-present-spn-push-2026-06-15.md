@@ -104,3 +104,13 @@ Decision gate:
 2. If pair-stack independent still random, launch base-mask global to test whether the older group-correlated sample construction is the source of the previous r6 signal.
 3. Do not claim r7 breakthrough unless final results clearly exceed random and survive at least a seed/control check.
 
+## 2026-06-15 Global Matrix Independent Case2 Smoke Result
+
+Pulled remote run `innovation1-spn-present-zw2022-global-matrix-smoke-gpu1-20260615` into `outputs/remote_results/innovation1-spn-present-zw2022-global-matrix-smoke-gpu1-20260615`.
+
+Protocol: `present_inception_mcnd_global_matrix`, raw `present_mcnd_cell_matrix_bits`, `zhang_wang_case2_independent_mcnd`, `m=16`, key per sample (`key_rotation_interval=1`), MSE, Adam, weight decay `1e-5`, cyclic LR `1e-4 -> 2e-3`, 20 epochs, `samples_per_class=8192` smoke.
+
+Result: r6 `acc=0.5087890625`, `AUC=0.5106733143`; r7 `acc=0.5`, `AUC=0.4997341931`. This is still a negative result. It rules out the first global long-width matrix layout as sufficient under independent Case2 at smoke scale.
+
+Action taken: launched `innovation1-spn-present-zw2022-pairstack-matrix-smoke-gpu1-20260615`, which uses `present_inception_mcnd_pair_stack_matrix` and reshapes input as `(batch, 1, m*4, 32)` so pair rows remain a spatial axis.
+
