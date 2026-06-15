@@ -4,6 +4,7 @@ from blockcipher_ai_eval.models.structure.adaptive_dbitnet import (
     StructureAdaptivePairSetDBitNetDistinguisher,
 )
 from blockcipher_ai_eval.models.structure.arx import (
+    ArxRoundFunctionHybridPairSetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     ArxTrailMixerPairSetDistinguisher,
     ArxWordMixerPairSetDistinguisher,
@@ -31,6 +32,7 @@ __all__ = [
     "PresentPLayerMixerPairSetDistinguisher",
     "PresentTrailMixerPairSetDistinguisher",
     "AdaptiveDBitNetDistinguisher",
+    "ArxRoundFunctionHybridPairSetDistinguisher",
     "ArxStructureAdaptivePairSetDBitNetDistinguisher",
     "ArxTrailMixerPairSetDistinguisher",
     "ArxWordMixerPairSetDistinguisher",

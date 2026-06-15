@@ -39,6 +39,7 @@ from blockcipher_ai_eval.models.baseline import (
 )
 from blockcipher_ai_eval.models.structure import (
     AdaptiveDBitNetDistinguisher,
+    ArxRoundFunctionHybridPairSetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     ArxTrailMixerPairSetDistinguisher,
     ArxWordMixerPairSetDistinguisher,
@@ -265,6 +266,22 @@ def build_model(
             token_dim=_int_option(options, "token_dim"),
             mixer_depth=_int_option(options, "mixer_depth", 3),
             role_mixer_depth=_int_option(options, "role_mixer_depth", 2),
+            token_mlp_ratio=_int_option(options, "token_mlp_ratio", 2),
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            pooling=str(options.get("pooling", "topk_logsumexp")),
+            dropout=float(options.get("dropout", 0.0)),
+            top_k=_int_option(options, "top_k", 4) or 4,
+            lse_temperature=float(options.get("lse_temperature", 1.0)),
+        )
+    if name == "arx_round_function_hybrid_pairset":
+        return ArxRoundFunctionHybridPairSetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 352,
+            base_channels=hidden_bits,
+            token_dim=_int_option(options, "token_dim"),
+            mixer_depth=_int_option(options, "mixer_depth", 3),
+            group_mixer_depth=_int_option(options, "group_mixer_depth", 2),
             token_mlp_ratio=_int_option(options, "token_mlp_ratio", 2),
             activation=str(options.get("activation", "gelu")),
             norm=str(options.get("norm", "layernorm")),

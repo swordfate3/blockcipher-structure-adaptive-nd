@@ -143,6 +143,86 @@ key_rotation_interval: 1024
 sample_structure: zhang_wang_case2_mcnd
 ```
 
+## Update 2026-06-16 00:00 CST
+
+The PRESENT/SPN sidecar explorer confirmed the current SPN status:
+
+```text
+Verified strong: PRESENT r5/r6 and GIFT r5 structure-aligned evidence.
+Known weak/failed: plain SPNAligned/matrix/integral variants at PRESENT r7/r8.
+Highest-priority pending: SBoxDDT back2/beam2 TrailMixer curriculum and MatrixTrailHybrid.
+If those fail: implement configurable multi-depth/multi-beam DDT trail features, not just deeper generic models.
+```
+
+Remote state observed during this update:
+
+```text
+GPU0 PID 31416:
+innovation1-spn-present-spnaligned-r6-controls-10seed-gpu0-20260615
+progress: index 14/30, dataset cache for seed 3
+
+GPU1 PID 16484:
+innovation1-spn-present-spnaligned-r7-matrix-screen-gpu1-20260615
+progress: index 6/24, epoch 15/24
+train loss near 0.25, so this specific r7 screen currently looks weak/random-like.
+```
+
+ARX was explicitly advanced, not left as a side branch. Added a new SPECK32/64 model:
+
+```text
+model key: arx_round_function_hybrid_pairset
+class: ArxRoundFunctionHybridPairSetDistinguisher
+file: src/blockcipher_ai_eval/models/structure/arx/round_function_hybrid.py
+```
+
+Purpose:
+
+```text
+Use existing public keyless SPECK partial-inverse/RX/carry feature words, but group them as 16-bit
+round-function tokens and explicitly mix ror7, rol2, left/right branch peer messages, addition proxy,
+carry proxy, feature-word groups, and multi-pair top-k/logsumexp evidence.
+```
+
+This ARX candidate is more structure-adaptive than a generic pairset DBitNet and is intended to test
+whether SPECK round-function priors improve the strong verified r7 ARX partial-inverse result:
+
+```text
+SPECK32/64 r7
+model: structure_adaptive_pairset_dbitnet
+feature: ciphertext_pair_xor_arx_partial_inverse_bits
+samples/class: 131072
+pairs/sample: 4
+seeds: 0..3
+cal_acc_mean: 0.789639
+auc_mean: 0.869151
+```
+
+New ARX screen prepared:
+
+```text
+run_id: innovation1-arx-speck32-round-hybrid-r7r8-gpu1-20260615
+plan: experiments/innovation1/plans/innovation1_arx_speck32_round_hybrid_r7r8_screen.csv
+config: experiments/innovation1/configs/remote/innovation1_arx_speck32_round_hybrid_r7r8_gpu1_20260615.json
+monitor: scripts/generated/monitors/monitor_innovation1_arx_speck32_round_hybrid_r7r8_gpu1_results.sh
+relay: scripts/generated/monitors/relay_after_arx_trail_mixer_to_round_hybrid.sh
+expected rows: 8
+rounds: SPECK32/64 r7/r8
+models: arx_round_function_hybrid_pairset and same-protocol structure_adaptive_pairset_dbitnet RX control
+feature: ciphertext_pair_xor_arx_partial_inverse_rx_bits
+curriculum: r6 pretrain, 6 epochs from plan
+samples/class: r7 131072, r8 262144
+pairs/sample: 4
+key_rotation_interval: 1024
+```
+
+Local verification:
+
+```text
+ARX RoundFunctionHybrid CPU smoke: wrote 1 row to /tmp/arx_round_hybrid_smoke_results.jsonl
+bash -n relay/monitor scripts: pass
+75 passed: adaptive model + feature encoding + remote script generator tests
+```
+
 Remote script generator was fixed so generated monitor scripts default to:
 
 ```text
