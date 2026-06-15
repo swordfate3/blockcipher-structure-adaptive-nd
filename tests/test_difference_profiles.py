@@ -21,6 +21,12 @@ def test_literature_difference_profiles_include_core_cipher_settings():
         0x0007000000000007,
     )
 
+    autond_present = profiles["present_autond_dbitnet2023_highround"]
+    assert autond_present.cipher == "present80"
+    assert autond_present.difference == 0x000000000D000000
+    assert "AutoND" in autond_present.source
+    assert "0xd000000" in autond_present.note
+
     assert (
         profiles["sm4_yu2023_conv_resnet"].difference
         == 0x00000000000000000000000000000001

@@ -89,6 +89,15 @@ def literature_difference_profiles() -> dict[str, DifferenceProfile]:
             word_difference=("0x0000", "0x0000", "0x0000", "0x0009"),
             note="Input difference (0,0,0,0x9) for PRESENT 6-7 round MCND experiments in arXiv:2204.06341.",
         ),
+        "present_autond_dbitnet2023_highround": DifferenceProfile(
+            name="present_autond_dbitnet2023_highround",
+            cipher="present80",
+            kind="fixed",
+            differences=(0x000000000D000000,),
+            source="AutoND/DBitNet 2023 cipher-agnostic neural training pipeline PRESENT high-round screen",
+            word_difference=("0x0000", "0x0000", "0x0d00", "0x0000"),
+            note="Input difference 0xd000000 reported for weak 8-9 round PRESENT DBitNet distinguishers; treat as a high-round search seed, not a strong MCND baseline.",
+        ),
         "gift64_shen2024_spn_screen": DifferenceProfile(
             name="gift64_shen2024_spn_screen",
             cipher="gift64",
