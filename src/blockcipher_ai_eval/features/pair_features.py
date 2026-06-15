@@ -49,6 +49,8 @@ def encode_ciphertext_pair(
         return present_pair_xor_paligned_sboxddt_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits":
         return present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits(left, right, width, cipher)
+    if feature_encoding == "present_pair_xor_paligned_sboxddt_back2_cell_matrix_bits":
+        return present_pair_xor_paligned_sboxddt_back2_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return present_xor_paligned_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "ciphertext_xor_bits":
@@ -206,6 +208,45 @@ def present_sbox_ddt_top2_words(aligned_difference: int, width: int) -> tuple[in
     return top1_word, top2_word, confidence1_word, confidence2_word
 
 
+def present_pair_xor_paligned_sboxddt_back2_cell_matrix_bits(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> list[int]:
+    difference = left ^ right
+    aligned_difference = inverse_permutation_difference(difference, width, cipher)
+    layer1, confidence1 = present_sbox_ddt_words(aligned_difference, width)
+    layer1_paligned = inverse_permutation_difference(layer1, width, cipher)
+    layer2, confidence2 = present_sbox_ddt_words(layer1_paligned, width)
+    return words_to_present_cell_matrix_bits(
+        [
+            left,
+            right,
+            difference,
+            aligned_difference,
+            layer1,
+            confidence1,
+            layer1_paligned,
+            layer2,
+            confidence2,
+        ],
+        width,
+        "present_pair_xor_paligned_sboxddt_back2_cell_matrix_bits",
+    )
+
+
+def present_sbox_ddt_back2_words(
+    aligned_difference: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> tuple[int, int, int, int, int]:
+    layer1, confidence1 = present_sbox_ddt_words(aligned_difference, width)
+    layer1_paligned = inverse_permutation_difference(layer1, width, cipher)
+    layer2, confidence2 = present_sbox_ddt_words(layer1_paligned, width)
+    return layer1, confidence1, layer1_paligned, layer2, confidence2
+
+
 def present_structural_inverse_sbox_difference(
     left: int,
     right: int,
@@ -273,6 +314,8 @@ def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
         return block_bits * 6
     if feature_encoding == "present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits":
         return block_bits * 8
+    if feature_encoding == "present_pair_xor_paligned_sboxddt_back2_cell_matrix_bits":
+        return block_bits * 9
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return block_bits * 2
     if feature_encoding == "ciphertext_xor_bits":
