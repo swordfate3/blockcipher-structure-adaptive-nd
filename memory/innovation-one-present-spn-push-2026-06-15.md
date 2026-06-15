@@ -134,3 +134,33 @@ Result: r6 `acc=0.5034179688`, `AUC=0.5011024177`; r7 `acc=0.5091552734`, `AUC=0
 
 Decision: stop treating raw MCND reproduction as the main breakthrough path for Innovation 1. The current strongest PRESENT/SPN evidence remains the SPN-aligned structure-adaptive route (`present_pair_xor_paligned_cell_matrix_bits` / public inverse P-layer alignment), where previous scale-s r6 reached `acc_mean=0.8822`, `AUC_mean=0.9519`. Next work should scale and harden the SPN-aligned route with seeds and controls, not keep expanding raw MCND variants.
 
+
+
+## 2026-06-15 SPN-Aligned R6 Controls and R7 Matrix Screen
+
+Committed and pushed:
+
+- `0804e61 experiment(innovation1): add SPN-aligned PRESENT r6/r7 runs`.
+- `d694b47 fix(remote): avoid ambiguous branch pull in generated runs`.
+- `4c3dc2b feat(innovation1): add PRESENT delta paligned matrix screen`.
+
+Remote runs launched from revision `0804e6192657840a688502ebfec4baf96ce64d79`:
+
+- `innovation1-spn-present-spnaligned-r6-controls-10seed-gpu0-20260615`, expected rows `30`. Purpose: publication-grade r6 control table under Zhang/Wang Case2 MCND scaffold. Rows compare raw `present_mcnd_cell_matrix_bits`, `present_pair_xor_cell_matrix_bits`, and SPN-aligned `present_pair_xor_paligned_cell_matrix_bits` over seeds `0..9`, `samples_per_class=32768`, `pairs_per_sample=16`, `key_rotation_interval=1024`, MSE, Adam, cyclic LR.
+- `innovation1-spn-present-spnaligned-r7-matrix-screen-gpu1-20260615`, expected rows `24`. Purpose: targeted r7 rescue screen only on SPN-aligned feature `C || Cprime || Delta || InvP(Delta)`, comparing `present_inception_mcnd_matrix`, `present_inception_mcnd_global_matrix`, and `present_inception_mcnd_pair_stack_matrix` at `samples_per_class=32768` and `65536`, seeds `0..2`, `pairs_per_sample=16`, `key_rotation_interval=1024`, MSE, Adam, cyclic LR.
+
+Both runs entered dataset cache generation with empty run stderr. Low GPU memory during this stage is expected because sample generation/cache writing is CPU/disk-bound. Local tmux monitors started:
+
+- `mon_spn_r6_controls` -> monitor expected `30` rows.
+- `mon_spn_r7_screen` -> monitor expected `24` rows.
+
+Infrastructure fix: generated remote scripts now use `git fetch origin %BRANCH%` plus `git merge --ff-only FETCH_HEAD` instead of `git pull --ff-only origin %BRANCH%`, avoiding Git for Windows ambiguous multiple-branch stderr when result branches exist. Current already-started runs are not interrupted; this fix applies to future generated-script reruns.
+
+New next-candidate feature prepared but not launched yet:
+
+- Feature encoding: `present_xor_paligned_cell_matrix_bits` = `Delta || InvP(Delta)` in PRESENT 4-bit cell-matrix bit-plane order, `128` bits per pair for PRESENT-64.
+- Plan/config/scripts: `innovation1_spn_present_delta_paligned_matrix_screen.csv`, run id `innovation1-spn-present-delta-paligned-matrix-screen-gpu0-20260615`, expected rows `18`.
+- Purpose: r6/r7 ablation that removes raw ciphertext words `C,Cprime`, testing whether ciphertext noise is hurting r7 while preserving the public SPN-aligned difference signal.
+- Verified locally with `uv run pytest tests/test_feature_encodings.py tests/test_present_inception_mcnd_model.py tests/test_remote_script_generator.py -q` -> `25 passed`.
+
+Decision: the current batch is not a claimed breakthrough. It is the next rigorous push after raw MCND negative evidence: harden the r6 aligned gain and test whether r7 can be rescued by SPN-aligned matrix layout/capacity. The Delta+InvP-only candidate is queued as the next route if full `C,Cprime,Delta,InvP(Delta)` r7 remains near random.
