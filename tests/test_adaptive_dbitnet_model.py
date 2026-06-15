@@ -30,6 +30,7 @@ from blockcipher_ai_eval.models.structure.spn import (
 from blockcipher_ai_eval.models.structure.spn import (
     PresentPLayerMixerBlock,
     PresentMatrixTrailHybridPairSetDistinguisher,
+    PresentPairSetGlobalStatsHybridDistinguisher,
     PresentPairSetHistogramHybridDistinguisher,
     PresentPairSetStatsHybridDistinguisher,
     PresentPLayerMixerPairSetDistinguisher,
@@ -846,6 +847,57 @@ def test_build_model_supports_present_pairset_histogram_hybrid_key_and_options()
     assert model.trail_branch.mixer_depth == 1
     assert model.trail_branch.role_mixer_depth == 1
     assert model.histogram_hidden_bits == 48
+    assert model.activation == "silu"
+    assert model.norm == "rmsnorm"
+    assert model.dropout == 0.05
+
+
+def test_present_pairset_global_stats_hybrid_fuses_r7_oriented_global_statistics():
+    model = PresentPairSetGlobalStatsHybridDistinguisher(
+        input_bits=4992,
+        pair_bits=2496,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=1,
+        role_mixer_depth=1,
+        global_hidden_bits=32,
+    )
+    batch = torch.randint(0, 2, (2, 4992), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "SPN"
+    assert model.words_per_pair == 39
+    assert model.cells_per_word == 16
+    assert model.global_stats_bits == 39 * 4 + 16 * 4 + 2 * 4 + 12
+    assert model.fused_embedding_bits == model.trail_pair_embedding_bits * 4 + 32
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_present_pairset_global_stats_hybrid_key_and_options():
+    model = build_model(
+        "present_pairset_global_stats_hybrid",
+        input_bits=4992,
+        hidden_bits=8,
+        pair_bits=2496,
+        structure="SPN",
+        model_options={
+            "token_dim": 24,
+            "mixer_depth": 1,
+            "role_mixer_depth": 1,
+            "global_hidden_bits": 48,
+            "activation": "silu",
+            "norm": "rmsnorm",
+            "dropout": 0.05,
+        },
+    )
+
+    assert isinstance(model, PresentPairSetGlobalStatsHybridDistinguisher)
+    assert model.pair_bits == 2496
+    assert model.token_dim == 24
+    assert model.trail_branch.mixer_depth == 1
+    assert model.trail_branch.role_mixer_depth == 1
+    assert model.global_hidden_bits == 48
     assert model.activation == "silu"
     assert model.norm == "rmsnorm"
     assert model.dropout == 0.05
