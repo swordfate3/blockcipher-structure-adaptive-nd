@@ -360,3 +360,43 @@ remote relay/monitor bash syntax: pass
 76 passed: feature + adaptive model + remote script generator tests
 plan parse check: 8 rows; model_options/pretrain fields parsed correctly
 ```
+
+## Update 2026-06-16 00:35 CST
+
+Remote check:
+
+```text
+No new SPN result branches yet.
+GPU0 PID 31416 still running r6 controls, around index 14/30.
+GPU1 PID 16484 still running r7 matrix screen, around index 7/24.
+GPU0 r6 control remains healthy: example seed 3 epoch 18 val_auc about 0.8914.
+GPU1 r7 matrix remains weak/random-like in training loss around 0.25.
+```
+
+Added a result-driven next-step helper so completed high-round screens can be scaled without manual CSV triage:
+
+```text
+script: experiments/innovation1/select_highround_candidates.py
+test: tests/test_select_highround_candidates.py
+```
+
+Purpose:
+
+```text
+Read one or more remote *_summary.csv files.
+Filter PRESENT-80 r7/r8+ candidates by calibrated accuracy and/or AUC.
+Rank by round, calibrated accuracy, AUC, run count, and sample size.
+Copy the matching row from a source plan.
+Emit a multi-seed confirm CSV with larger samples_per_class.
+```
+
+Validation:
+
+```text
+Synthetic selector test: 1 passed.
+Historical real-summary smoke: selected r7/r8 candidates from
+outputs/remote_results/innovation1-spn-present-zw2022-matrix-spnaligned-scale-s-gpu1-20260615
+and wrote /tmp/present_candidate_confirm.csv.
+```
+
+This does not prove a high-round breakthrough; it removes a workflow delay once the pending SBoxDDT/MatrixTrailHybrid/Beam4Deep3 results land.
