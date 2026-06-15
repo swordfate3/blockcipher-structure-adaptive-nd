@@ -1116,3 +1116,81 @@ Tiny CPU smoke with a temporary /tmp one-row mini plan:
 uv run python experiments/run_innovation_one_matrix.py --plan /tmp/arx_rx_confirm_tiny.csv ...
 => wrote 1 rows to /tmp/arx_rx_confirm_tiny.jsonl
 ```
+
+## 2026-06-16 SPN Beam-Statistics Candidate
+
+The current PRESENT r7 matrix run remains near random while r6 controls remain strong. To keep moving toward an actual r7 breakthrough instead of waiting, added a compact public trail-stat feature:
+
+```text
+feature:
+  present_delta_paligned_sinv_sboxddt_beamstats4deep3_cell_matrix_bits
+
+contents per ciphertext pair:
+  Delta_C
+  InvP(Delta_C)
+  InvS(InvP(C)) xor InvS(InvP(C'))
+  for each of 3 public SBox-DDT beam layers:
+    top beam word
+    top confidence word
+    top margin word
+    beam disagreement word
+    confidence union word
+    margin union word
+    per-beam layer score word
+    per-beam cumulative score word
+    per-beam active-nibble count word
+
+width:
+  30 x 64-bit words = 1920 bits per pair
+
+rationale:
+  The previous compact beam4deep3 feature kept 48 words per pair and may still dilute weak r7 signal with full candidate paths.
+  Beamstats keeps the shape of the public trail distribution while dropping most individual path words.
+```
+
+New experiment assets:
+
+```text
+plan:
+  experiments/innovation1/plans/innovation1_spn_present_delta_sinv_beamstats4deep3_r7_screen.csv
+
+remote config:
+  experiments/innovation1/configs/remote/innovation1_spn_present_delta_sinv_beamstats4deep3_r7_gpu1_20260616.json
+
+run id:
+  innovation1-spn-present-delta-sinv-beamstats4deep3-r7-gpu1-20260616
+
+rows:
+  4 = MatrixTrailHybrid seeds 0,1 + TrailMixer seeds 0,1
+
+protocol:
+  PRESENT-80 r7, Zhang/Wang Case2 MCND, 16 pairs/sample,
+  samples/class 65536, key_rotation_interval 1024,
+  r6 curriculum pretrain for 6 epochs.
+```
+
+Local validation:
+
+```text
+uv run pytest tests/test_feature_encodings.py \
+  tests/test_build_plan_config.py::test_present_delta_sinv_beamstats4deep3_r7_plan_shape \
+  tests/test_remote_script_generator.py \
+  tests/test_adaptive_dbitnet_model.py::test_build_model_supports_present_matrix_trail_hybrid_pairset_key_and_options -q
+=> 31 passed
+
+Tiny CPU smoke:
+uv run python experiments/run_innovation_one_matrix.py --plan /tmp/spn_beamstats_tiny.csv ...
+=> wrote 1 rows to /tmp/spn_beamstats_tiny.jsonl
+```
+
+Queue adjustment:
+
+```text
+The old delta-sinv -> entropy-score-dist continuation should be avoided because entropy-score-dist already produced an incomplete-result gate.
+New watcher:
+  scripts/generated/remote/watch_after_delta_sinv_beam4deep3_to_beamstats4deep3_20260616.ps1
+
+Chain:
+  compact Delta+SInv+Beam4Deep3 r7
+    -> compact Delta+SInv+BeamStats4Deep3 r7
+```

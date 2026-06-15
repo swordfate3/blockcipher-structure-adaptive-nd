@@ -7,6 +7,7 @@ from blockcipher_ai_eval.features.pair_features import (
     int_to_bits,
     pair_bits_for_encoding,
     present_sbox_ddt_back2_words,
+    present_sbox_ddt_beam_statistics_words,
     present_sbox_ddt_beam_words,
     present_sbox_ddt_top2_words,
     present_sbox_ddt_top2_margin_words,
@@ -531,6 +532,40 @@ def test_present_delta_paligned_sinv_sboxddt_beam4deep3_encoding_drops_raw_pair_
     assert len(encoded) == 4 * 768
     assert encoded == expected
     assert encoded[:128] != raw_pair_prefix
+
+
+def test_present_delta_paligned_sinv_sboxddt_beamstats4deep3_encoding_keeps_compact_trail_statistics():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    left = 0x0123456789ABCDEF
+    right = left ^ 0x0700000000000700
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding="present_delta_paligned_sinv_sboxddt_beamstats4deep3_cell_matrix_bits",
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    aligned = Present80.inverse_permutation_layer(difference)
+    structural_inverse = cipher.inverse_sbox_layer(
+        Present80.inverse_permutation_layer(left),
+    ) ^ cipher.inverse_sbox_layer(Present80.inverse_permutation_layer(right))
+    stats = present_sbox_ddt_beam_statistics_words(
+        structural_inverse,
+        64,
+        cipher,
+        beam_width=4,
+        depth=3,
+    )
+
+    assert pair_bits_for_encoding(64, "present_delta_paligned_sinv_sboxddt_beamstats4deep3_cell_matrix_bits") == 1920
+    assert is_supported_feature_encoding("present_delta_paligned_sinv_sboxddt_beamstats4deep3_cell_matrix_bits")
+    assert len(stats) == 27
+    assert len(encoded) == 1920
+    assert encoded == _cell_matrix_bit_planes([difference, aligned, structural_inverse, *stats], 64)
+    assert encoded != _cell_matrix_bit_planes([difference, aligned, structural_inverse, *([0] * 27)], 64)
 
 
 def test_present_xor_paligned_cell_matrix_encoding_keeps_only_difference_planes():
