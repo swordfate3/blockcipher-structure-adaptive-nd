@@ -14,6 +14,7 @@ FEATURE_ENCODINGS = {
     "present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits",
     "present_pair_xor_paligned_sboxddt_back2_cell_matrix_bits",
     "present_pair_xor_paligned_sboxddt_beam2_cell_matrix_bits",
+    "present_pair_xor_paligned_sboxddt_beam4deep3_cell_matrix_bits",
     "present_pair_xor_cell_matrix_bits",
     "present_xor_paligned_cell_matrix_bits",
     "ciphertext_xor_bits",

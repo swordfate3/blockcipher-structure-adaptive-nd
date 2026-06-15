@@ -53,6 +53,8 @@ def encode_ciphertext_pair(
         return present_pair_xor_paligned_sboxddt_back2_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_pair_xor_paligned_sboxddt_beam2_cell_matrix_bits":
         return present_pair_xor_paligned_sboxddt_beam2_cell_matrix_bits(left, right, width, cipher)
+    if feature_encoding == "present_pair_xor_paligned_sboxddt_beam4deep3_cell_matrix_bits":
+        return present_pair_xor_paligned_sboxddt_beam4deep3_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return present_xor_paligned_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "ciphertext_xor_bits":
@@ -308,6 +310,141 @@ def present_pair_xor_paligned_sboxddt_beam2_cell_matrix_bits(
     )
 
 
+def present_pair_xor_paligned_sboxddt_beam4deep3_cell_matrix_bits(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> list[int]:
+    difference = left ^ right
+    aligned_difference = inverse_permutation_difference(difference, width, cipher)
+    trail_words = present_sbox_ddt_beam_words(
+        aligned_difference,
+        width,
+        cipher,
+        beam_width=4,
+        depth=3,
+    )
+    return words_to_present_cell_matrix_bits(
+        [
+            left,
+            right,
+            difference,
+            aligned_difference,
+            *trail_words,
+        ],
+        width,
+        "present_pair_xor_paligned_sboxddt_beam4deep3_cell_matrix_bits",
+    )
+
+
+def present_sbox_ddt_beam_words(
+    aligned_difference: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+    *,
+    beam_width: int,
+    depth: int,
+) -> tuple[int, ...]:
+    if width % 4 != 0:
+        raise ValueError("present_sbox_ddt_beam_words requires a 4-bit cell block size")
+    if beam_width < 1:
+        raise ValueError("beam_width must be >= 1")
+    if depth < 1:
+        raise ValueError("depth must be >= 1")
+    beams: list[tuple[int, int]] = [(aligned_difference, 0)]
+    output_words: list[int] = []
+    mask = (1 << width) - 1
+    for _layer in range(depth):
+        candidates: list[tuple[int, int, int, int, int, int]] = []
+        for current, cumulative_score in beams:
+            top_words, confidence_words, margin_words, scores = present_sbox_ddt_topk_words(
+                current,
+                width,
+                top_k=beam_width,
+            )
+            for word, confidence, margin, score in zip(top_words, confidence_words, margin_words, scores):
+                candidates.append((cumulative_score + score, word, confidence, margin, current, score))
+        candidates.sort(key=lambda item: (item[0], item[1]), reverse=True)
+        selected = candidates[:beam_width]
+        selected_words = [item[1] for item in selected]
+        selected_confidences = [item[2] for item in selected]
+        selected_margins = [item[3] for item in selected]
+        selected_scores = [item[5] for item in selected]
+        while len(selected_words) < beam_width:
+            selected_words.append(0)
+            selected_confidences.append(0)
+            selected_margins.append(0)
+            selected_scores.append(0)
+        top_word = selected_words[0]
+        disagreement = 0
+        score_word = 0
+        active_word = 0
+        for index, word in enumerate(selected_words[:beam_width]):
+            disagreement ^= top_word ^ word
+            score_word |= present_sbox_ddt_score_nibble(selected_scores[index], width) << (4 * index)
+            active_word |= present_active_nibble_count(word, width) << (4 * index)
+        output_words.extend(selected_words[:beam_width])
+        output_words.extend(selected_confidences[:beam_width])
+        output_words.extend(selected_margins[:beam_width])
+        output_words.extend([disagreement & mask, score_word, active_word])
+        beams = [(inverse_permutation_difference(word, width, cipher), selected[index][0]) for index, word in enumerate(selected_words[:beam_width])]
+    return tuple(output_words)
+
+
+def present_sbox_ddt_topk_words(
+    aligned_difference: int,
+    width: int,
+    *,
+    top_k: int,
+) -> tuple[tuple[int, ...], tuple[int, ...], tuple[int, ...], tuple[int, ...]]:
+    if width % 4 != 0:
+        raise ValueError("present_sbox_ddt_topk_words requires a 4-bit cell block size")
+    if top_k < 1:
+        raise ValueError("top_k must be >= 1")
+    words = [0 for _ in range(top_k)]
+    confidence_words = [0 for _ in range(top_k)]
+    margin_words = [0 for _ in range(top_k)]
+    scores = [0 for _ in range(top_k)]
+    for nibble_index in range(width // 4):
+        output_difference = (aligned_difference >> (4 * nibble_index)) & 0xF
+        ranked = sorted(
+            range(16),
+            key=lambda input_difference: (
+                PRESENT_SBOX_DDT[input_difference][output_difference],
+                -input_difference,
+            ),
+            reverse=True,
+        )
+        selected = ranked[:top_k]
+        while len(selected) < top_k:
+            selected.append(0)
+        counts = [PRESENT_SBOX_DDT[input_difference][output_difference] for input_difference in selected]
+        for index, (input_difference, count) in enumerate(zip(selected, counts)):
+            next_count = counts[index + 1] if index + 1 < len(counts) else 0
+            confidence = min(15, round(count * 15 / 16))
+            margin = min(15, max(0, count - next_count))
+            words[index] |= input_difference << (4 * nibble_index)
+            confidence_words[index] |= confidence << (4 * nibble_index)
+            margin_words[index] |= margin << (4 * nibble_index)
+            scores[index] += count
+    return tuple(words), tuple(confidence_words), tuple(margin_words), tuple(scores)
+
+
+def present_sbox_ddt_score_nibble(score: int, width: int) -> int:
+    nibbles = max(1, width // 4)
+    return min(15, max(0, round(score * 15 / (16 * nibbles))))
+
+
+def present_active_nibble_count(word: int, width: int) -> int:
+    count = 0
+    max_nibbles = min(16, width // 4)
+    for nibble_index in range(max_nibbles):
+        if ((word >> (4 * nibble_index)) & 0xF) != 0:
+            count += 1
+    return min(15, count)
+
+
 def present_sbox_ddt_back2_words(
     aligned_difference: int,
     width: int,
@@ -390,6 +527,8 @@ def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
         return block_bits * 9
     if feature_encoding == "present_pair_xor_paligned_sboxddt_beam2_cell_matrix_bits":
         return block_bits * 12
+    if feature_encoding == "present_pair_xor_paligned_sboxddt_beam4deep3_cell_matrix_bits":
+        return block_bits * 49
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return block_bits * 2
     if feature_encoding == "ciphertext_xor_bits":

@@ -304,3 +304,59 @@ pairs/sample: 16
 key_rotation_interval: 1024
 sample_structure: zhang_wang_case2_mcnd
 ```
+
+## Update 2026-06-16 00:20 CST
+
+To keep pushing the main PRESENT/SPN high-round objective rather than waiting idly, added a deeper public SBox-DDT beam feature:
+
+```text
+feature: present_pair_xor_paligned_sboxddt_beam4deep3_cell_matrix_bits
+implementation: src/blockcipher_ai_eval/features/pair_features.py
+registered: src/blockcipher_ai_eval/features/registry.py
+pair_bits for PRESENT-64: 3136
+```
+
+This feature extends the previous `beam2` encoding from a shallow two-candidate view to a fixed four-beam, three-depth public trail family. Per pair it encodes:
+
+```text
+C, C', Delta_C, P^-1(Delta_C)
+for each of 3 public DDT-backtracking layers:
+  top 4 candidate input-difference words
+  top 4 confidence words
+  top 4 margin words
+  beam disagreement word
+  compact score word
+  compact active-nibble proxy word
+```
+
+The intent is to test the sidecar conclusion that PRESENT r7/r8 likely needs a trail-family signal, not another generic wider/deeper model over the old `P^-1(Delta)` view.
+
+New queued SPN high-round screen:
+
+```text
+run_id: innovation1-spn-present-sboxddt-beam4deep3-highround-gpu0-20260616
+plan: experiments/innovation1/plans/innovation1_spn_present_sboxddt_beam4deep3_highround_screen.csv
+config: experiments/innovation1/configs/remote/innovation1_spn_present_sboxddt_beam4deep3_highround_gpu0_20260616.json
+monitor: scripts/generated/monitors/monitor_innovation1_spn_present_sboxddt_beam4deep3_highround_gpu0_results.sh
+relay: scripts/generated/monitors/relay_after_spn_matrix_trail_hybrid_to_beam4deep3.sh
+expected rows: 8
+rounds: PRESENT r7/r8
+models: present_matrix_trail_hybrid_pairset and present_trail_mixer_pairset
+feature: present_pair_xor_paligned_sboxddt_beam4deep3_cell_matrix_bits
+curriculum: r6 pretrain, 6 epochs from plan
+samples/class: r7 65536, r8 131072
+pairs/sample: 16
+key_rotation_interval: 1024
+batch_size: 64
+dataset_cache_chunk_size: 1024
+```
+
+Local verification:
+
+```text
+feature tests: 21 passed
+beam4deep3 + PresentMatrixTrailHybrid CPU smoke: wrote 1 row to /tmp/present_beam4deep3_hybrid_smoke.jsonl
+remote relay/monitor bash syntax: pass
+76 passed: feature + adaptive model + remote script generator tests
+plan parse check: 8 rows; model_options/pretrain fields parsed correctly
+```
