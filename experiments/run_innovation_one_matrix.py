@@ -110,6 +110,8 @@ def parse_args() -> argparse.Namespace:
         choices=[
             "ciphertext_pair_bits",
             "present_mcnd_cell_matrix_bits",
+            "present_pair_xor_paligned_cell_matrix_bits",
+            "present_pair_xor_cell_matrix_bits",
             "ciphertext_xor_bits",
             "ciphertext_xor_spn_aligned_bits",
             "ciphertext_xor_spn_paligned_bits",

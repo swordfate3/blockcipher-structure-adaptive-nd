@@ -215,3 +215,56 @@ def test_present_mcnd_cell_matrix_encoding_orders_pair_bits_as_four_bit_planes()
 
 def test_present_mcnd_cell_matrix_encoding_is_registered():
     assert is_supported_feature_encoding("present_mcnd_cell_matrix_bits")
+
+
+def _cell_matrix_bit_planes(words: list[int], width: int) -> list[int]:
+    bits = []
+    for word in words:
+        bits.extend(int_to_bits(word, width))
+    cells = [bits[index : index + 4] for index in range(0, len(bits), 4)]
+    return [cell[bit_index] for bit_index in range(4) for cell in cells]
+
+
+def test_present_pair_xor_cell_matrix_encoding_orders_pair_xor_bits_as_bit_planes():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    left = 0x0123456789ABCDEF
+    right = 0xFEDCBA9876543210
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding="present_pair_xor_cell_matrix_bits",
+        cipher=cipher,
+    )
+
+    expected = _cell_matrix_bit_planes([left, right, left ^ right], 64)
+    assert pair_bits_for_encoding(64, "present_pair_xor_cell_matrix_bits") == 192
+    assert encoded == expected
+    assert len(encoded) == 4 * 48
+
+
+def test_present_pair_xor_paligned_cell_matrix_encoding_includes_inverse_p_difference():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    left = 0x0123456789ABCDEF
+    right = 0x0123456789ABCDEF ^ 0x0700000000000700
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding="present_pair_xor_paligned_cell_matrix_bits",
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    aligned_difference = Present80.inverse_permutation_layer(difference)
+    expected = _cell_matrix_bit_planes([left, right, difference, aligned_difference], 64)
+    assert pair_bits_for_encoding(64, "present_pair_xor_paligned_cell_matrix_bits") == 256
+    assert encoded == expected
+    assert len(encoded) == 4 * 64
+
+
+def test_present_cell_matrix_extended_encodings_are_registered():
+    assert is_supported_feature_encoding("present_pair_xor_cell_matrix_bits")
+    assert is_supported_feature_encoding("present_pair_xor_paligned_cell_matrix_bits")
