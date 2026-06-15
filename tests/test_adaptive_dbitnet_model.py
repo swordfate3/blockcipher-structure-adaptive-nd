@@ -446,6 +446,31 @@ def test_arx_round_function_hybrid_pairset_exposes_speck_rx_feature_role_groups(
     assert model.pair_embedding_bits == 14 * model.token_dim
 
 
+def test_arx_round_function_hybrid_pairset_exposes_carrychain_role_groups():
+    model = ArxRoundFunctionHybridPairSetDistinguisher(
+        input_bits=2176,
+        pair_bits=544,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=1,
+        group_mixer_depth=1,
+    )
+
+    assert model.feature_words_per_pair == 17
+    assert model.tokens_per_pair == 34
+    assert model.feature_role_names[-6:] == (
+        "carry_generate_xy_delta",
+        "carry_propagate_xy_delta",
+        "carry_edge_xy_delta",
+        "carry_generate_rot_pre_delta",
+        "carry_propagate_rot_pre_delta",
+        "carry_edge_rot_pre_delta",
+    )
+    assert model.round_relation_groups[-2:] == ((11, 12, 13), (14, 15, 16))
+    assert model.group_summary_bits == 7 * model.token_dim
+    assert model.pair_embedding_bits == 16 * model.token_dim
+
+
 def test_build_model_supports_arx_round_function_hybrid_pairset_key_and_options():
     model = build_model(
         "arx_round_function_hybrid_pairset",

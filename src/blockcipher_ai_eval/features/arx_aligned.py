@@ -74,6 +74,64 @@ def speck32_partial_inverse_rx_feature_words(
     return (*base_words, rx_alpha, rx_beta, carry_left_delta, carry_right_delta)
 
 
+def _speck32_carry_chain_mask(a: int, b: int, word_bits: int = 16) -> int:
+    mask = (1 << word_bits) - 1
+    carry = 0
+    carry_chain = 0
+    for bit_index in range(word_bits):
+        a_bit = (a >> bit_index) & 1
+        b_bit = (b >> bit_index) & 1
+        carry = (a_bit & b_bit) | (a_bit & carry) | (b_bit & carry)
+        carry_chain |= carry << bit_index
+    return carry_chain & mask
+
+
+def speck32_partial_inverse_rx_carrychain_feature_words(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> tuple[int, ...]:
+    _require_speck32(width, cipher)
+    base_words = speck32_partial_inverse_rx_feature_words(left, right, width, cipher)
+    mask = 0xFFFF
+    x = (left >> 16) & mask
+    y = left & mask
+    x_prime = (right >> 16) & mask
+    y_prime = right & mask
+    pre_y, pre_y_prime, _delta_pre_y = speck32_partial_inverse_words(left, right, width)
+    ror_x = ror(x, 7, 16)
+    ror_x_prime = ror(x_prime, 7, 16)
+
+    generate_xy = x & y
+    generate_xy_prime = x_prime & y_prime
+    propagate_xy = x ^ y
+    propagate_xy_prime = x_prime ^ y_prime
+    carry_xy = _speck32_carry_chain_mask(x, y)
+    carry_xy_prime = _speck32_carry_chain_mask(x_prime, y_prime)
+    carry_edge_xy = carry_xy ^ rol(carry_xy, 1, 16)
+    carry_edge_xy_prime = carry_xy_prime ^ rol(carry_xy_prime, 1, 16)
+
+    generate_rot_pre = ror_x & pre_y
+    generate_rot_pre_prime = ror_x_prime & pre_y_prime
+    propagate_rot_pre = ror_x ^ pre_y
+    propagate_rot_pre_prime = ror_x_prime ^ pre_y_prime
+    carry_rot_pre = _speck32_carry_chain_mask(ror_x, pre_y)
+    carry_rot_pre_prime = _speck32_carry_chain_mask(ror_x_prime, pre_y_prime)
+    carry_edge_rot_pre = carry_rot_pre ^ rol(carry_rot_pre, 1, 16)
+    carry_edge_rot_pre_prime = carry_rot_pre_prime ^ rol(carry_rot_pre_prime, 1, 16)
+
+    return (
+        *base_words,
+        (generate_xy << 16) | (generate_xy ^ generate_xy_prime),
+        (propagate_xy << 16) | (propagate_xy ^ propagate_xy_prime),
+        (carry_edge_xy << 16) | (carry_edge_xy ^ carry_edge_xy_prime),
+        (generate_rot_pre << 16) | (generate_rot_pre ^ generate_rot_pre_prime),
+        (propagate_rot_pre << 16) | (propagate_rot_pre ^ propagate_rot_pre_prime),
+        (carry_edge_rot_pre << 16) | (carry_edge_rot_pre ^ carry_edge_rot_pre_prime),
+    )
+
+
 def arx_aligned_difference(
     difference: int,
     width: int,

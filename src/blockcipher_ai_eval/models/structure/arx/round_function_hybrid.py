@@ -72,7 +72,7 @@ class ArxRoundFunctionHybridPairSetDistinguisher(nn.Module):
         self.dropout = dropout
         self.top_k = top_k
         self.lse_temperature = lse_temperature
-        self.feature_role_names = (
+        rx_role_names = (
             "left",
             "right",
             "difference",
@@ -85,13 +85,36 @@ class ArxRoundFunctionHybridPairSetDistinguisher(nn.Module):
             "carry_left_delta",
             "carry_right_delta",
         )
-        if self.feature_words_per_pair == len(self.feature_role_names):
+        carrychain_role_names = (
+            *rx_role_names,
+            "carry_generate_xy_delta",
+            "carry_propagate_xy_delta",
+            "carry_edge_xy_delta",
+            "carry_generate_rot_pre_delta",
+            "carry_propagate_rot_pre_delta",
+            "carry_edge_rot_pre_delta",
+        )
+        if self.feature_words_per_pair == len(carrychain_role_names):
+            self.feature_role_names = carrychain_role_names
+        else:
+            self.feature_role_names = rx_role_names
+        if self.feature_words_per_pair == len(rx_role_names):
             self.round_relation_groups = (
                 (0, 1, 2),
                 (2, 3),
                 (4, 5, 6),
                 (7, 8),
                 (9, 10),
+            )
+        elif self.feature_words_per_pair == len(carrychain_role_names):
+            self.round_relation_groups = (
+                (0, 1, 2),
+                (2, 3),
+                (4, 5, 6),
+                (7, 8),
+                (9, 10),
+                (11, 12, 13),
+                (14, 15, 16),
             )
         else:
             self.round_relation_groups = tuple((index,) for index in range(self.feature_words_per_pair))
