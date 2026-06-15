@@ -97,6 +97,18 @@ def _generate_positive_row(
         return _generate_integral_positive_row(config, rng, block_bits, mask, row_index)
     if config.sample_structure == "zhang_wang_case2_mcnd":
         return _generate_zhang_wang_case2_positive_row(config, rng, block_bits, mask, row_index)
+    if config.sample_structure == "zhang_wang_case2_independent_mcnd":
+        return _generate_independent_positive_row(config, rng, block_bits, mask, row_index)
+    return _generate_independent_positive_row(config, rng, block_bits, mask, row_index)
+
+
+def _generate_independent_positive_row(
+    config: DifferentialDatasetConfig,
+    rng: np.random.Generator,
+    block_bits: int,
+    mask: int,
+    row_index: int,
+) -> list[int]:
     encoded_pairs: list[int] = []
     cipher = _cipher_for_row(config, rng, row_index)
     for _pair_index in range(config.pairs_per_sample):
@@ -118,6 +130,17 @@ def _generate_negative_row(
         return _generate_integral_negative_row(config, rng, block_bits, row_index)
     if config.sample_structure == "zhang_wang_case2_mcnd":
         return _generate_zhang_wang_case2_negative_row(config, rng, block_bits, row_index)
+    if config.sample_structure == "zhang_wang_case2_independent_mcnd":
+        return _generate_independent_negative_row(config, rng, block_bits, row_index)
+    return _generate_independent_negative_row(config, rng, block_bits, row_index)
+
+
+def _generate_independent_negative_row(
+    config: DifferentialDatasetConfig,
+    rng: np.random.Generator,
+    block_bits: int,
+    row_index: int,
+) -> list[int]:
     encoded_pairs: list[int] = []
     cipher = _cipher_for_row(config, rng, row_index)
     for _pair_index in range(config.pairs_per_sample):
@@ -276,6 +299,7 @@ def _validate_config(config: DifferentialDatasetConfig) -> None:
         "independent_pairs",
         "plaintext_integral_nibble",
         "zhang_wang_case2_mcnd",
+        "zhang_wang_case2_independent_mcnd",
     }:
         raise ValueError(f"unsupported sample_structure: {config.sample_structure}")
     if config.sample_structure == "plaintext_integral_nibble":
@@ -286,8 +310,8 @@ def _validate_config(config: DifferentialDatasetConfig) -> None:
         max_nibble = config.cipher.block_bits // 4
         if config.integral_active_nibble < 0 or config.integral_active_nibble >= max_nibble:
             raise ValueError("integral_active_nibble is outside the cipher block")
-    if config.sample_structure == "zhang_wang_case2_mcnd" and config.pairs_per_sample < 1:
-        raise ValueError("zhang_wang_case2_mcnd requires pairs_per_sample >= 1")
+    if config.sample_structure in {"zhang_wang_case2_mcnd", "zhang_wang_case2_independent_mcnd"} and config.pairs_per_sample < 1:
+        raise ValueError(f"{config.sample_structure} requires pairs_per_sample >= 1")
     base_pair_bits = pair_bits_for_encoding(config.cipher.block_bits, config.feature_encoding)
     for index in config.selected_bit_indices:
         if index < 0 or index >= base_pair_bits:

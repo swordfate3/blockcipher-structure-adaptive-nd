@@ -141,7 +141,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--sample-structure",
         default="independent_pairs",
-        choices=["independent_pairs", "plaintext_integral_nibble", "zhang_wang_case2_mcnd"],
+        choices=["independent_pairs", "plaintext_integral_nibble", "zhang_wang_case2_mcnd", "zhang_wang_case2_independent_mcnd"],
         help="How multiple pairs inside one sample are organized.",
     )
     parser.add_argument(

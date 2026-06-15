@@ -1357,3 +1357,18 @@ def test_plan_rows_can_pass_selected_bit_indices(tmp_path):
     )
 
     assert tasks[0]["selected_bit_indices"] == (0, 2, 18, 50)
+
+def test_zhang_wang2022_present_independent_mcnd_smoke_plan_aligns_protocol():
+    import csv
+
+    path = Path("experiments/innovation1/plans/innovation1_spn_present_zhang_wang2022_independent_matrix_smoke.csv")
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert {row["rounds"] for row in rows} == {"6", "7"}
+    assert {row["sample_structure"] for row in rows} == {"zhang_wang_case2_independent_mcnd"}
+    assert {row["key_rotation_interval"] for row in rows} == {"1"}
+    assert {row["pairs_per_sample"] for row in rows} == {"16"}
+    assert {row["difference_profile"] for row in rows} == {"present_zhang_wang2022_mcnd"}
+    assert {row["feature_encoding"] for row in rows} == {"present_mcnd_cell_matrix_bits"}
+
