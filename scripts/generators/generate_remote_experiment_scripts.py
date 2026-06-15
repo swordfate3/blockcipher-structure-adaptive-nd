@@ -146,9 +146,9 @@ if not exist %PROJECT_DIR% (
 cd /d %PROJECT_DIR%
 git config --global --add safe.directory %PROJECT_DIR%
 git config --global --add safe.directory %PROJECT_DIR%\.git
-git fetch origin
+git fetch origin %BRANCH%
 git checkout %BRANCH%
-git pull --ff-only origin %BRANCH%
+git merge --ff-only FETCH_HEAD
 
 cd /d %RUN_ROOT%
 if exist %RUN_ID% rmdir /s /q %RUN_ID%
