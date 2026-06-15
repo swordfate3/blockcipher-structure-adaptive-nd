@@ -412,6 +412,40 @@ def test_arx_round_function_hybrid_pairset_preserves_rx_groups_and_evidence_pool
     assert logits.shape == (2, 1)
 
 
+def test_arx_round_function_hybrid_pairset_exposes_speck_rx_feature_role_groups():
+    model = ArxRoundFunctionHybridPairSetDistinguisher(
+        input_bits=1408,
+        pair_bits=352,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=1,
+        group_mixer_depth=1,
+    )
+
+    assert model.feature_role_names == (
+        "left",
+        "right",
+        "difference",
+        "rotation_aligned_difference",
+        "partial_inverse_left_y",
+        "partial_inverse_right_y",
+        "partial_inverse_delta_y",
+        "rx_alpha",
+        "rx_beta",
+        "carry_left_delta",
+        "carry_right_delta",
+    )
+    assert model.round_relation_groups == (
+        (0, 1, 2),
+        (2, 3),
+        (4, 5, 6),
+        (7, 8),
+        (9, 10),
+    )
+    assert model.group_summary_bits == 5 * model.token_dim
+    assert model.pair_embedding_bits == 14 * model.token_dim
+
+
 def test_build_model_supports_arx_round_function_hybrid_pairset_key_and_options():
     model = build_model(
         "arx_round_function_hybrid_pairset",

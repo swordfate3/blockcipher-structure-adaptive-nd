@@ -495,6 +495,44 @@ def test_present_pair_xor_paligned_sinv_sboxddt_beam4deep3_encoding_fuses_invers
     assert len(encoded) == 4 * 800
 
 
+def test_present_delta_paligned_sinv_sboxddt_beam4deep3_encoding_drops_raw_pair_words():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    left = 0x0123456789ABCDEF
+    right = 0x0123456789ABCDEF ^ 0x0700000000000700
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding="present_delta_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits",
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    aligned_difference = Present80.inverse_permutation_layer(difference)
+    left_structural_inverse = Present80.inverse_sbox_layer(Present80.inverse_permutation_layer(left))
+    right_structural_inverse = Present80.inverse_sbox_layer(Present80.inverse_permutation_layer(right))
+    structural_inverse_difference = left_structural_inverse ^ right_structural_inverse
+    trail_words = present_sbox_ddt_beam_words(
+        structural_inverse_difference,
+        64,
+        cipher,
+        beam_width=4,
+        depth=3,
+    )
+    expected = _cell_matrix_bit_planes(
+        [difference, aligned_difference, structural_inverse_difference, *trail_words],
+        64,
+    )
+    raw_pair_prefix = _cell_matrix_bit_planes([left, right], 64)
+
+    assert pair_bits_for_encoding(64, "present_delta_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits") == 3072
+    assert is_supported_feature_encoding("present_delta_paligned_sinv_sboxddt_beam4deep3_cell_matrix_bits")
+    assert len(encoded) == 4 * 768
+    assert encoded == expected
+    assert encoded[:128] != raw_pair_prefix
+
+
 def test_present_xor_paligned_cell_matrix_encoding_keeps_only_difference_planes():
     cipher = Present80(rounds=1, key=0x00000000000000000000)
     left = 0x0123456789ABCDEF

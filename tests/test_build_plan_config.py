@@ -202,6 +202,27 @@ def test_speck32_arx_v2_scale_m_config_shape():
     assert {str(row["pairs_per_sample"]) for row in rows} == {"4"}
 
 
+def test_speck32_arx_round_hybrid_rx_smoke_config_shape():
+    module = _load_build_plan_module()
+    repo_root = Path(__file__).resolve().parents[1]
+    config_path = repo_root / "experiments" / "innovation1" / "configs" / "arx_speck32_round_hybrid_rx_smoke.json"
+    rows = module.build_plan_rows(module.load_plan_config(config_path))
+
+    assert len(rows) == 4
+    assert {row["cipher"] for row in rows} == {"SPECK32/64"}
+    assert {row["structure"] for row in rows} == {"ARX"}
+    assert {row["model_key"] for row in rows} == {"arx_round_function_hybrid_pairset"}
+    assert {row["family"] for row in rows} == {"arx_round_function_hybrid_rx_smoke"}
+    assert {str(row["rounds"]) for row in rows} == {"6", "7"}
+    assert {str(row["seed"]) for row in rows} == {"0", "1"}
+    assert {str(row["samples_per_class"]) for row in rows} == {"32768"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "ciphertext_pair_xor_arx_partial_inverse_rx_bits",
+    }
+    assert {row["difference_profile"] for row in rows} == {"speck32_gohr2019"}
+    assert {str(row["pairs_per_sample"]) for row in rows} == {"4"}
+
+
 def test_speck32_arx_v2_scale_l_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]

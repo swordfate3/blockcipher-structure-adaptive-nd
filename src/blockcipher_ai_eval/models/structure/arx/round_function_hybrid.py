@@ -72,6 +72,29 @@ class ArxRoundFunctionHybridPairSetDistinguisher(nn.Module):
         self.dropout = dropout
         self.top_k = top_k
         self.lse_temperature = lse_temperature
+        self.feature_role_names = (
+            "left",
+            "right",
+            "difference",
+            "rotation_aligned_difference",
+            "partial_inverse_left_y",
+            "partial_inverse_right_y",
+            "partial_inverse_delta_y",
+            "rx_alpha",
+            "rx_beta",
+            "carry_left_delta",
+            "carry_right_delta",
+        )
+        if self.feature_words_per_pair == len(self.feature_role_names):
+            self.round_relation_groups = (
+                (0, 1, 2),
+                (2, 3),
+                (4, 5, 6),
+                (7, 8),
+                (9, 10),
+            )
+        else:
+            self.round_relation_groups = tuple((index,) for index in range(self.feature_words_per_pair))
 
         self.word_encoder = nn.Sequential(
             nn.Linear(word_bits, self.token_dim),
@@ -107,7 +130,8 @@ class ArxRoundFunctionHybridPairSetDistinguisher(nn.Module):
         self.group_mixer = nn.TransformerEncoder(encoder_layer, num_layers=group_mixer_depth)
         self.sequence_norm = build_norm(norm, self.token_dim)
 
-        self.pair_embedding_bits = self.token_dim * 9
+        self.group_summary_bits = self.token_dim * len(self.round_relation_groups)
+        self.pair_embedding_bits = self.token_dim * 9 + self.group_summary_bits
         projected_bits = max(32, base_channels * 4)
         self.pair_projection = nn.Sequential(
             nn.Linear(self.pair_embedding_bits, max(64, base_channels * 8)),
@@ -174,6 +198,13 @@ class ArxRoundFunctionHybridPairSetDistinguisher(nn.Module):
             self.word_bits,
         )
 
+    def _round_relation_summary(self, by_group: torch.Tensor) -> torch.Tensor:
+        summaries = []
+        for group in self.round_relation_groups:
+            group_tokens = by_group[:, group, :]
+            summaries.append(group_tokens.mean(dim=1))
+        return torch.cat(summaries, dim=1)
+
     def _encode_pairs(self, pair_features: torch.Tensor) -> torch.Tensor:
         words = pair_features.reshape(pair_features.shape[0], self.feature_words_per_pair, 2, self.word_bits)
         tokens = words.transpose(1, 2)
@@ -199,6 +230,7 @@ class ArxRoundFunctionHybridPairSetDistinguisher(nn.Module):
         by_side = hidden.reshape(pair_features.shape[0], 2, self.feature_words_per_pair, self.token_dim)
         by_group = by_side.mean(dim=1)
         by_group = self.group_mixer(by_group)
+        relation_summary = self._round_relation_summary(by_group)
 
         token_mean = hidden.mean(dim=1)
         token_max = hidden.max(dim=1).values
@@ -221,6 +253,7 @@ class ArxRoundFunctionHybridPairSetDistinguisher(nn.Module):
                 first_last_delta,
                 inverse_delta,
                 rx_delta,
+                relation_summary,
             ],
             dim=1,
         )

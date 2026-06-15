@@ -1,0 +1,36 @@
+{
+  "output": "experiments/innovation1/plans/innovation1_arx_speck32_round_hybrid_rx_smoke.csv",
+  "defaults": {
+    "cipher": "SPECK32/64",
+    "structure": "ARX",
+    "network": "ARX-RoundFunctionHybrid-RX-Smoke",
+    "model_key": "arx_round_function_hybrid_pairset",
+    "family": "arx_round_function_hybrid_rx_smoke",
+    "architecture_rank": 0,
+    "score": 126,
+    "samples_per_class": 32768,
+    "pairs_per_sample": 4,
+    "negative_mode": "encrypted_random_plaintexts",
+    "train_key": "0x1918111009080100",
+    "validation_key": "0x0f0e0d0c0b0a0908",
+    "difference_profile": "speck32_gohr2019",
+    "difference_member": 0,
+    "evidence": "SPECK32 ARX round-function hybrid smoke over explicit RX feature-role groups",
+    "literature": "Gohr 2019 SPECK neural distinguisher; Innovation 1 ARX public partial-inverse RX/carry features; Speck round-function role grouping"
+  },
+  "sweep": {
+    "rounds": [
+      6,
+      7
+    ],
+    "feature_encoding": [
+      "ciphertext_pair_xor_arx_partial_inverse_rx_bits"
+    ],
+    "seed": {
+      "range": [
+        0,
+        2
+      ]
+    }
+  }
+}
