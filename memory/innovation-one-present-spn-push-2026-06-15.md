@@ -80,3 +80,27 @@ Result: r6 `acc=0.5`, `AUC=0.5067992806`; r7 `acc=0.5`, `AUC=0.5043639243`. This
 
 Next main route: run `present_inception_mcnd_global_matrix` under the same independent Case2 raw feature protocol so all `m` pairs share one 2D convolutional field before pooling. Use r6 as the gate; do not scale r7/r8 unless r6 recovers strong signal.
 
+## 2026-06-15 Running Queue After Global-Matrix Patch
+
+Committed and pushed:
+
+- `d9610d6 feat(innovation1): add global PRESENT MCND matrix smoke`.
+- `be8e105 experiment(innovation1): prepare global matrix basemask smoke`.
+- `ff17790 feat(innovation1): add PRESENT pair-stack MCND matrix model`.
+
+Remote running:
+
+- `innovation1-spn-present-zw2022-global-matrix-smoke-gpu1-20260615`: `present_inception_mcnd_global_matrix`, independent Case2, raw `present_mcnd_cell_matrix_bits`, r6/r7, m=16. Early r6/r7 validation AUC stayed near random (~0.505 / ~0.501), but wait for final gate before conclusion.
+- `innovation1-spn-present-zw2022-matrix-scale-m-gpu0-20260615`: still running on GPU0, last row pending.
+
+Prepared next runs, not yet launched:
+
+- `innovation1-spn-present-zw2022-pairstack-matrix-smoke-gpu1-20260615`: `present_inception_mcnd_pair_stack_matrix`, independent Case2. This layout reshapes input to `(batch, 1, m*4, 32)` so pair rows participate as a spatial axis; intended to better match the paper's `m x omega x 2L/omega` input-module description than the long-width global matrix.
+- `innovation1-spn-present-zw2022-global-matrix-basemask-smoke-gpu1-20260615`: global matrix with legacy `zhang_wang_case2_mcnd` base+mask grouping and key rotation 1024. Use this only as protocol contrast if independent Case2 stays random.
+
+Decision gate:
+
+1. If independent global final r6 is random, launch pair-stack independent next.
+2. If pair-stack independent still random, launch base-mask global to test whether the older group-correlated sample construction is the source of the previous r6 signal.
+3. Do not claim r7 breakthrough unless final results clearly exceed random and survive at least a seed/control check.
+
