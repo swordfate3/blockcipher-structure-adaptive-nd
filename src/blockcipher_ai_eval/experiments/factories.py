@@ -50,6 +50,7 @@ from blockcipher_ai_eval.models.structure import (
     PresentInceptionMCNDMatrixDistinguisher,
     PresentInceptionMCNDPairStackMatrixDistinguisher,
     PresentMatrixTrailHybridPairSetDistinguisher,
+    PresentPairSetHistogramHybridDistinguisher,
     PresentPairSetStatsHybridDistinguisher,
     PresentPLayerMixerPairSetDistinguisher,
     PresentTrailMixerPairSetDistinguisher,
@@ -453,6 +454,20 @@ def build_model(
             norm=str(options.get("norm", "layernorm")),
             dropout=float(options.get("dropout", 0.0)),
             stats_hidden_bits=_int_option(options, "stats_hidden_bits"),
+        )
+    if name == "present_pairset_histogram_hybrid":
+        return PresentPairSetHistogramHybridDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 2496,
+            base_channels=hidden_bits,
+            token_dim=_int_option(options, "token_dim"),
+            mixer_depth=_int_option(options, "mixer_depth", 2) or 2,
+            role_mixer_depth=_int_option(options, "role_mixer_depth", 1) or 1,
+            token_mlp_ratio=_int_option(options, "token_mlp_ratio", 2) or 2,
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            dropout=float(options.get("dropout", 0.0)),
+            histogram_hidden_bits=_int_option(options, "histogram_hidden_bits"),
         )
     if name == "present_p_layer_mixer_pairset":
         return PresentPLayerMixerPairSetDistinguisher(
