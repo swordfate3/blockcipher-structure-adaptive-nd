@@ -442,6 +442,69 @@ def test_build_model_passes_spn_token_mixer_component_options():
     assert model.dropout == 0.10
 
 
+def test_spn_pairset_models_support_evidence_pooling_modes():
+    for cls in (SpnNibbleConvPairSetDistinguisher, SpnTokenMixerPairSetDistinguisher):
+        model = cls(
+            input_bits=768,
+            pair_bits=192,
+            base_channels=8,
+            pooling="topk_logsumexp",
+            top_k=2,
+            lse_temperature=0.7,
+        )
+        batch = torch.randn((2, 768), dtype=torch.float32)
+
+        logits = model(batch)
+
+        assert model.pooling == "topk_logsumexp"
+        assert model.top_k == 2
+        assert model.lse_temperature == 0.7
+        assert model.last_attention_weights is not None
+        assert model.last_attention_weights.shape == (2, 4)
+        assert torch.count_nonzero(model.last_attention_weights, dim=1).tolist() == [2, 2]
+        assert logits.shape == (2, 1)
+
+
+def test_build_model_passes_spn_token_mixer_evidence_pooling_options():
+    model = build_model(
+        "spn_token_mixer_pairset",
+        input_bits=768,
+        hidden_bits=8,
+        pair_bits=192,
+        structure="SPN",
+        model_options={
+            "pooling": "topk_mean",
+            "top_k": 3,
+            "lse_temperature": 0.5,
+        },
+    )
+
+    assert isinstance(model, SpnTokenMixerPairSetDistinguisher)
+    assert model.pooling == "topk_mean"
+    assert model.top_k == 3
+    assert model.lse_temperature == 0.5
+
+
+def test_build_model_passes_spn_nibble_conv_evidence_pooling_options():
+    model = build_model(
+        "spn_nibble_conv_pairset",
+        input_bits=768,
+        hidden_bits=8,
+        pair_bits=192,
+        structure="SPN",
+        model_options={
+            "pooling": "logsumexp",
+            "top_k": 3,
+            "lse_temperature": 0.8,
+        },
+    )
+
+    assert isinstance(model, SpnNibbleConvPairSetDistinguisher)
+    assert model.pooling == "logsumexp"
+    assert model.top_k == 3
+    assert model.lse_temperature == 0.8
+
+
 def test_adaptive_dbitnet_rejects_too_small_or_odd_inputs():
     with pytest.raises(ValueError, match="even number of input bits"):
         AdaptiveDBitNetDistinguisher(input_bits=95, base_channels=8)

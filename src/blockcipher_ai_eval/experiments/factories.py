@@ -321,6 +321,8 @@ def build_model(
             norm=str(options.get("norm", "layernorm")),
             pooling=str(options.get("pooling", "attention_mean_max")),
             dropout=float(options.get("dropout", 0.0)),
+            top_k=_int_option(options, "top_k", 4) or 4,
+            lse_temperature=float(options.get("lse_temperature", 1.0)),
         )
     if name == "spn_token_mixer_pairset":
         return SpnTokenMixerPairSetDistinguisher(
@@ -334,6 +336,8 @@ def build_model(
             norm=str(options.get("norm", "layernorm")),
             pooling=str(options.get("pooling", "attention_mean_max")),
             dropout=float(options.get("dropout", 0.0)),
+            top_k=_int_option(options, "top_k", 4) or 4,
+            lse_temperature=float(options.get("lse_temperature", 1.0)),
         )
     if name == "gohr_resnet_speck":
         return GohrSpeckDistinguisher(input_bits=input_bits, filters=hidden_bits)

@@ -6,6 +6,7 @@ from torch import nn
 from blockcipher_ai_eval.models.structure.adaptive_dbitnet import StructureConditionedDBitNetEncoder
 from blockcipher_ai_eval.models.common.components import (
     AttentionPooling,
+    EvidencePooling,
     GatedAttentionPooling,
     build_activation,
     build_norm,
@@ -137,6 +138,8 @@ class SpnNibbleConvPairSetDistinguisher(nn.Module):
         norm: str = "layernorm",
         pooling: str = "attention_mean_max",
         dropout: float = 0.0,
+        top_k: int = 4,
+        lse_temperature: float = 1.0,
     ) -> None:
         super().__init__()
         if input_bits % pair_bits != 0:
@@ -147,7 +150,7 @@ class SpnNibbleConvPairSetDistinguisher(nn.Module):
             raise ValueError("SpnNibbleConvPairSet conv_depth must be >= 1")
         if kernel_size < 1 or kernel_size % 2 == 0:
             raise ValueError("SpnNibbleConvPairSet kernel_size must be a positive odd integer")
-        if pooling not in {"attention", "attention_mean_max", "mean_max", "gated_attention"}:
+        if pooling not in {"attention", "attention_mean_max", "mean_max", "gated_attention", "topk_mean", "logsumexp", "topk_logsumexp"}:
             raise ValueError(f"unsupported pooling: {pooling}")
         self.input_bits = input_bits
         self.pair_bits = pair_bits
@@ -162,6 +165,8 @@ class SpnNibbleConvPairSetDistinguisher(nn.Module):
         self.norm = norm
         self.pooling = pooling
         self.dropout = dropout
+        self.top_k = top_k
+        self.lse_temperature = lse_temperature
 
         self.nibble_encoder = nn.Sequential(
             nn.Linear(nibble_bits, self.nibble_embed_dim),
@@ -202,6 +207,16 @@ class SpnNibbleConvPairSetDistinguisher(nn.Module):
             self.attention = GatedAttentionPooling(
                 self.projected_pair_embedding_bits,
                 hidden_bits=max(32, base_channels * 4),
+            )
+        elif pooling in {"topk_mean", "logsumexp", "topk_logsumexp"}:
+            self.attention = EvidencePooling(
+                self.projected_pair_embedding_bits,
+                hidden_bits=max(32, base_channels * 4),
+                mode=pooling,
+                top_k=top_k,
+                lse_temperature=lse_temperature,
+                activation=activation,
+                norm=norm,
             )
         else:
             self.attention = AttentionPooling(
@@ -261,7 +276,7 @@ class SpnNibbleConvPairSetDistinguisher(nn.Module):
         self.last_attention_weights = attention_weights.detach()
         mean_embedding = pair_embeddings.mean(dim=1)
         max_embedding = pair_embeddings.max(dim=1).values
-        if self.pooling in {"attention", "gated_attention"}:
+        if self.pooling in {"attention", "gated_attention", "topk_mean", "logsumexp", "topk_logsumexp"}:
             pooled = attention_embedding
         elif self.pooling == "mean_max":
             pooled = torch.cat([mean_embedding, max_embedding], dim=1)
@@ -329,6 +344,8 @@ class SpnTokenMixerPairSetDistinguisher(nn.Module):
         norm: str = "layernorm",
         pooling: str = "attention_mean_max",
         dropout: float = 0.0,
+        top_k: int = 4,
+        lse_temperature: float = 1.0,
     ) -> None:
         super().__init__()
         if input_bits % pair_bits != 0:
@@ -339,7 +356,7 @@ class SpnTokenMixerPairSetDistinguisher(nn.Module):
             raise ValueError("SpnTokenMixerPairSet mixer_depth must be >= 1")
         if token_mlp_ratio < 1:
             raise ValueError("SpnTokenMixerPairSet token_mlp_ratio must be >= 1")
-        if pooling not in {"attention", "attention_mean_max", "mean_max", "gated_attention"}:
+        if pooling not in {"attention", "attention_mean_max", "mean_max", "gated_attention", "topk_mean", "logsumexp", "topk_logsumexp"}:
             raise ValueError(f"unsupported pooling: {pooling}")
         self.input_bits = input_bits
         self.pair_bits = pair_bits
@@ -354,6 +371,8 @@ class SpnTokenMixerPairSetDistinguisher(nn.Module):
         self.norm = norm
         self.pooling = pooling
         self.dropout = dropout
+        self.top_k = top_k
+        self.lse_temperature = lse_temperature
 
         self.nibble_encoder = nn.Sequential(
             nn.Linear(nibble_bits, self.token_dim),
@@ -392,6 +411,16 @@ class SpnTokenMixerPairSetDistinguisher(nn.Module):
             self.attention = GatedAttentionPooling(
                 projected_bits,
                 hidden_bits=max(32, base_channels * 4),
+            )
+        elif pooling in {"topk_mean", "logsumexp", "topk_logsumexp"}:
+            self.attention = EvidencePooling(
+                projected_bits,
+                hidden_bits=max(32, base_channels * 4),
+                mode=pooling,
+                top_k=top_k,
+                lse_temperature=lse_temperature,
+                activation=activation,
+                norm=norm,
             )
         else:
             self.attention = AttentionPooling(
@@ -456,7 +485,7 @@ class SpnTokenMixerPairSetDistinguisher(nn.Module):
         self.last_attention_weights = attention_weights.detach()
         mean_embedding = pair_embeddings.mean(dim=1)
         max_embedding = pair_embeddings.max(dim=1).values
-        if self.pooling in {"attention", "gated_attention"}:
+        if self.pooling in {"attention", "gated_attention", "topk_mean", "logsumexp", "topk_logsumexp"}:
             pooled = attention_embedding
         elif self.pooling == "mean_max":
             pooled = torch.cat([mean_embedding, max_embedding], dim=1)

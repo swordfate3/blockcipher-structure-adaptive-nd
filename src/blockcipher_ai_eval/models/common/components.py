@@ -86,3 +86,55 @@ class AttentionPooling(nn.Module):
         weights = torch.softmax(logits, dim=1)
         pooled = torch.sum(embeddings * weights.unsqueeze(-1), dim=1)
         return pooled, weights
+
+
+class EvidencePooling(nn.Module):
+    """MIL-style pooling for weak evidence concentrated in a few pair embeddings."""
+
+    def __init__(
+        self,
+        embedding_bits: int,
+        hidden_bits: int = 128,
+        mode: str = "topk_logsumexp",
+        top_k: int = 4,
+        lse_temperature: float = 1.0,
+        activation: str = "gelu",
+        norm: str = "layernorm",
+    ) -> None:
+        super().__init__()
+        if mode not in {"topk_mean", "logsumexp", "topk_logsumexp"}:
+            raise ValueError(f"unsupported evidence pooling mode: {mode}")
+        if top_k < 1:
+            raise ValueError("EvidencePooling top_k must be >= 1")
+        if lse_temperature <= 0.0:
+            raise ValueError("EvidencePooling lse_temperature must be > 0")
+        self.mode = mode
+        self.top_k = top_k
+        self.lse_temperature = lse_temperature
+        self.scorer = nn.Sequential(
+            build_norm(norm, embedding_bits),
+            nn.Linear(embedding_bits, hidden_bits),
+            build_activation(activation),
+            nn.Linear(hidden_bits, 1),
+        )
+
+    def forward(self, embeddings: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        if embeddings.ndim != 3:
+            raise ValueError(f"expected [batch, items, embedding], got {tuple(embeddings.shape)}")
+        logits = self.scorer(embeddings).squeeze(-1)
+        if self.mode == "logsumexp":
+            weights = torch.softmax(logits / self.lse_temperature, dim=1)
+            pooled = torch.sum(embeddings * weights.unsqueeze(-1), dim=1)
+            return pooled, weights
+
+        k = min(self.top_k, embeddings.shape[1])
+        top_values, top_indices = torch.topk(logits, k=k, dim=1)
+        if self.mode == "topk_mean":
+            weights = torch.zeros_like(logits)
+            weights.scatter_(1, top_indices, 1.0 / float(k))
+        else:
+            top_weights = torch.softmax(top_values / self.lse_temperature, dim=1)
+            weights = torch.zeros_like(logits)
+            weights.scatter_(1, top_indices, top_weights)
+        pooled = torch.sum(embeddings * weights.unsqueeze(-1), dim=1)
+        return pooled, weights
