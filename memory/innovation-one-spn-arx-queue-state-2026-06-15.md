@@ -284,6 +284,37 @@ G:\lxy\blockcipher-structure-adaptive-nd
 ```
 
 instead of relying on the SSH default working directory.
+
+## Update 2026-06-16 01:05 CST
+
+Local tmux/background monitor launch was blocked by the local permission review timeout, so the GPU1 queue was moved to remote-side Windows watchers. This avoids depending on the local Codex session staying alive.
+
+Added remote Task Scheduler wrappers:
+
+```text
+scripts/generated/remote/watch_gpu1_then_schedule_innovation1_spn_present_protocol_spnaligned_scale_m_20260616.ps1
+scripts/generated/remote/schedule_watch_gpu1_then_spn_protocol_spnaligned_scale_m_20260616.cmd
+scripts/generated/remote/watch_after_spn_protocol_to_arx_trail_mixer_20260616.ps1
+scripts/generated/remote/schedule_watch_after_spn_protocol_to_arx_trail_mixer_20260616.cmd
+```
+
+Remote watcher policy:
+
+```text
+1. Watch GPU1 for python.exe processes.
+2. When GPU1 is idle, launch:
+   innovation1-spn-present-protocol-spnaligned-scale-m-gpu1-20260616
+3. Independently watch GitHub for:
+   results/innovation1-spn-present-protocol-spnaligned-scale-m-gpu1-20260616
+4. After that gated result branch appears, launch:
+   innovation1-arx-speck32-trail-mixer-curriculum-r7r8-gpu1-20260615
+```
+
+Watcher logs are written under:
+
+```text
+G:\lxy\blockcipher-structure-adaptive-nd-runs\launcher_logs
+```
 ARX RoundFunctionHybrid CPU smoke: wrote 1 row to /tmp/arx_round_hybrid_smoke_results.jsonl
 bash -n relay/monitor scripts: pass
 75 passed: adaptive model + feature encoding + remote script generator tests
