@@ -365,6 +365,7 @@ def render_monitor_script(run_id: str, expected_rows: int) -> str:
         "set -euo pipefail\n"
         "cd \"$(dirname \"$0\")/../../..\"\n"
         "uv run python scripts/monitor_remote_results.py \\\n"
+        "  --remote \"${RESULT_REMOTE:-origin-ssh}\" \\\n"
         f"  --run-id {run_id}={expected_rows}\n"
     )
 

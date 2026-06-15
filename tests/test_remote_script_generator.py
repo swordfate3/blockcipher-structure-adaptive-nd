@@ -138,6 +138,7 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     monitor_text = generated.monitor_script.read_text(encoding="utf-8")
     assert "innovation1-demo-gpu0-20260608=4" in monitor_text
     assert "scripts/monitor_remote_results.py" in monitor_text
+    assert '--remote "${RESULT_REMOTE:-origin-ssh}"' in monitor_text
 
 
 def test_generate_remote_run_script_escapes_windows_paths(tmp_path: Path):
