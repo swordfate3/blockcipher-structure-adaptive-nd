@@ -1,0 +1,1 @@
+wrote 2 summary rows to results\innovation1-spn-present-zw2022-global-matrix-smoke-gpu1-20260615_summary.csv

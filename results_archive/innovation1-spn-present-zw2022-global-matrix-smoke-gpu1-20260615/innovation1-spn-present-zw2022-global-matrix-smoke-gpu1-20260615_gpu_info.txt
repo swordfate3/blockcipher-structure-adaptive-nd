@@ -1,0 +1,36 @@
+Mon Jun 15 18:29:09 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 596.59                 Driver Version: 596.59         CUDA Version: 13.2     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                  Driver-Model | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000             WDDM  |   00000000:3B:00.0 Off |                  Off |
+| 73%   87C    P2            262W /  300W |   25298MiB /  49140MiB |     52%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000             WDDM  |   00000000:AF:00.0 Off |                  Off |
+| 30%   45C    P8              7W /  300W |     129MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A            3368    C+G   ...8bbwe\PhoneExperienceHost.exe      N/A      |
+|    0   N/A  N/A           14008    C+G   C:\Windows\explorer.exe               N/A      |
+|    0   N/A  N/A           15476    C+G   F:\ToDesk\ToDesk.exe                  N/A      |
+|    0   N/A  N/A           16592    C+G   ...h_cw5n1h2txyewy\SearchApp.exe      N/A      |
+|    0   N/A  N/A           21056    C+G   ....0.4022.52\msedgewebview2.exe      N/A      |
+|    0   N/A  N/A           22452    C+G   F:\Doubao\app\Doubao.exe              N/A      |
+|    0   N/A  N/A           29324    C+G   ...ffice6\promecefpluginhost.exe      N/A      |
+|    0   N/A  N/A           37584      C   ...\envs\DWT\torch310\python.exe      N/A      |
+|    1   N/A  N/A            5264    C+G   ...App_cw5n1h2txyewy\LockApp.exe      N/A      |
+|    1   N/A  N/A           13572    C+G   ...5n1h2txyewy\TextInputHost.exe      N/A      |
+|    1   N/A  N/A           16592    C+G   ...h_cw5n1h2txyewy\SearchApp.exe      N/A      |
+|    1   N/A  N/A           35776    C+G   ...xyewy\ShellExperienceHost.exe      N/A      |
+|    1   N/A  N/A           36748    C+G   ...h_cw5n1h2txyewy\SearchApp.exe      N/A      |
++-----------------------------------------------------------------------------------------+
