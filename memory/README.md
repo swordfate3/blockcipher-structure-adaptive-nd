@@ -21,4 +21,5 @@
 - `conversation-archive-2026-06-05.md`：截至 2026-06-05 的连续对话归档，重点记录创新一模型路线、远程实验结论、SPN v2 负向结果和下一步 MoE v5 / SPN nibble expert 方向。
 - `innovation-one-speck32-arx-aligned-plan-2026-06-08.md`：SPECK32/64 ARX 结构对齐特征、筛查计划和本地验证。
 - `innovation-one-speck32-arx-v2-feature-screen-2026-06-09.md`：SPECK32/64 ARX v2/v3 partial-inverse、RX/carry-inspired 输入特征筛查计划。
+- `innovation-one-arx-partial-inverse-boundary-queue-2026-06-16.md`：SPECK32/64 ARX partial-inverse 从 r7 confirm、r7 clean ablation 到 r8 boundary 的远程队列、协议和判定门槛。
 - `thesis-stage-memory-2026-06-09.md`：毕业论文所有创新完成前的阶段性存档，记录创新一 SPN/ARX 进展、远程实验流程、结果边界和下一步优先级。
