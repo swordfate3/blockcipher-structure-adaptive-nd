@@ -23,9 +23,10 @@ set PY=F:\Anaconda\envs\DWT\torch310\python.exe
 if not exist %ROOT% mkdir %ROOT%
 if not exist %RUN_ROOT% mkdir %RUN_ROOT%
 if not exist %ROOT%\archive_work mkdir %ROOT%\archive_work
+git config --global core.longpaths true
 cd /d %ROOT%
 if not exist %PROJECT_DIR% (
-  git -c http.proxy= -c https.proxy= clone %CLONE_URL% %PROJECT_ID%
+  git -c core.longpaths=true -c http.proxy= -c https.proxy= clone %CLONE_URL% %PROJECT_ID%
 )
 
 cd /d %PROJECT_DIR%
@@ -37,10 +38,11 @@ git pull --ff-only origin %BRANCH%
 
 cd /d %RUN_ROOT%
 if exist %RUN_ID% rmdir /s /q %RUN_ID%
-git clone --local %PROJECT_DIR% %RUN_ID%
+git -c core.longpaths=true clone --local %PROJECT_DIR% %RUN_ID%
 
 cd /d %RUN_DIR%
 git config --global --add safe.directory %RUN_DIR%
+git config core.longpaths true
 git checkout %BRANCH%
 git remote set-url origin %REPO_URL%
 
@@ -103,7 +105,7 @@ if not exist results\%RUN_ID%_summary.csv (
 )
 
 if exist %ARCHIVE_WORK% rmdir /s /q %ARCHIVE_WORK%
-git clone --local %RUN_DIR% %ARCHIVE_WORK%
+git -c core.longpaths=true clone --local %RUN_DIR% %ARCHIVE_WORK%
 cd /d %ARCHIVE_WORK%
 git config --global --add safe.directory %ARCHIVE_WORK%
 git config user.name "fate"

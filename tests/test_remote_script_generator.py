@@ -104,6 +104,10 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "git push origin results/%RUN_ID%" in run_text
     assert "validation=demo_validation" in run_text
     assert "git pull --ff-only origin %BRANCH%" in run_text
+    assert "git config --global core.longpaths true" in run_text
+    assert "git -c core.longpaths=true -c http.proxy= -c https.proxy= clone %CLONE_URL% %PROJECT_ID%" in run_text
+    assert "git -c core.longpaths=true clone --local %PROJECT_DIR% %RUN_ID%" in run_text
+    assert "git -c core.longpaths=true clone --local %RUN_DIR% %ARCHIVE_WORK%" in run_text
     assert "git reset --hard" not in run_text
 
     launcher_text = generated.launch_script.read_text(encoding="utf-8")
