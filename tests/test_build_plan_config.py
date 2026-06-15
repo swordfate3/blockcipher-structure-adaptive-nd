@@ -396,6 +396,48 @@ def test_speck32_arx_carrychain_plus_micro_smoke_plan_shape():
     assert {row["pretrain_epochs"] for row in rows if row["rounds"] == "7"} == {"2"}
 
 
+def test_speck32_arx_gohr_protocol_alignment_smoke_plan_shape():
+    repo_root = Path(__file__).resolve().parents[1]
+    plan_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "plans"
+        / "innovation1_arx_speck32_gohr_protocol_alignment_smoke.csv"
+    )
+
+    with plan_path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 10
+    assert {row["cipher"] for row in rows} == {"SPECK32/64"}
+    assert {row["structure"] for row in rows} == {"ARX"}
+    assert {row["rounds"] for row in rows} == {"6", "7"}
+    assert {row["seed"] for row in rows} == {"0"}
+    assert {row["samples_per_class"] for row in rows} == {"16384"}
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["sample_structure"] for row in rows} == {"independent_pairs"}
+    assert {row["difference_profile"] for row in rows} == {"speck32_gohr2019"}
+    assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
+    assert {row["pretrain_rounds"] for row in rows if row["rounds"] == "7"} == {"6"}
+    assert {row["pretrain_epochs"] for row in rows if row["rounds"] == "7"} == {"3"}
+
+    single_pair_rows = [row for row in rows if row["model_key"] == "gohr_resnet_speck_depth10"]
+    assert len(single_pair_rows) == 2
+    assert {row["pairs_per_sample"] for row in single_pair_rows} == {"1"}
+    assert {row["feature_encoding"] for row in single_pair_rows} == {"ciphertext_pair_bits"}
+
+    pairset_rows = [row for row in rows if row["model_key"] != "gohr_resnet_speck_depth10"]
+    assert len(pairset_rows) == 8
+    assert {row["pairs_per_sample"] for row in pairset_rows} == {"4"}
+    assert {row["feature_encoding"] for row in pairset_rows} == {
+        "ciphertext_pair_xor_bits",
+        "ciphertext_pair_xor_arx_partial_inverse_bits",
+        "ciphertext_pair_xor_arx_partial_inverse_rx_bits",
+        "ciphertext_pair_xor_arx_partial_inverse_rx_carrychain_bits",
+    }
+
+
 def test_present_sinv_curriculum_r7_plan_shape():
     repo_root = Path(__file__).resolve().parents[1]
     plan_path = (
