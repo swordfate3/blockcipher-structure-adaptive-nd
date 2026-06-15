@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/../../.."
+uv run python scripts/monitor_remote_results.py   --run-id innovation1-spn-present-entropy-score-dist-r7-gpu1-20260615=1

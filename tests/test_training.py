@@ -8,6 +8,7 @@ from blockcipher_ai_eval.models.baseline import MlpDistinguisher
 from blockcipher_ai_eval.training import (
     TrainingConfig,
     evaluate_binary_classifier,
+    predict_binary_probabilities,
     train_binary_classifier,
 )
 from blockcipher_ai_eval.training.binary import _binary_auc
@@ -43,6 +44,25 @@ def test_evaluate_binary_classifier_returns_core_metrics():
     assert -1.0 <= metrics["calibrated_advantage"] <= 1.0
     assert 0.0 <= metrics["auc"] <= 1.0
     assert 0.0 <= metrics["calibrated_threshold"] <= 1.0
+
+
+def test_predict_binary_probabilities_returns_one_probability_per_row():
+    dataset = make_differential_dataset(
+        DifferentialDatasetConfig(
+            cipher=Speck32_64(rounds=1, key=0x1918111009080100),
+            input_difference=0x0040,
+            samples_per_class=8,
+            seed=17,
+        )
+    )
+    model = MlpDistinguisher(input_bits=dataset.features.shape[1], hidden_bits=8)
+
+    probabilities = predict_binary_probabilities(model, dataset, batch_size=4, device="cpu")
+
+    assert probabilities.shape == (16,)
+    assert probabilities.dtype == np.float32
+    assert np.all(probabilities >= 0.0)
+    assert np.all(probabilities <= 1.0)
 
 
 def test_train_binary_classifier_returns_history_and_final_metrics():

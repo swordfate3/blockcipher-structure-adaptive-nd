@@ -80,6 +80,27 @@ class TrainingResult:
     metadata: dict[str, Any]
 
 
+def predict_binary_probabilities(
+    model: nn.Module,
+    dataset: DifferentialDataset,
+    batch_size: int = 256,
+    device: str = "auto",
+) -> np.ndarray:
+    selected_device = _select_device(device)
+    model = model.to(selected_device)
+    model.eval()
+    loader = _make_loader(dataset, batch_size=batch_size, shuffle=False)
+
+    probabilities: list[float] = []
+    with torch.no_grad():
+        for features, _batch_labels in loader:
+            features = features.to(selected_device)
+            logits = model(features).squeeze(1)
+            probs = torch.sigmoid(logits).detach().cpu().numpy()
+            probabilities.extend(float(item) for item in probs)
+    return np.array(probabilities, dtype=np.float32)
+
+
 def evaluate_binary_classifier(
     model: nn.Module,
     dataset: DifferentialDataset,
@@ -93,7 +114,6 @@ def evaluate_binary_classifier(
     loss_fn = nn.BCEWithLogitsLoss(reduction="sum")
 
     total_loss = 0.0
-    probabilities: list[float] = []
     labels: list[float] = []
     with torch.no_grad():
         for features, batch_labels in loader:
@@ -101,12 +121,10 @@ def evaluate_binary_classifier(
             batch_labels = batch_labels.to(selected_device)
             logits = model(features).squeeze(1)
             total_loss += float(loss_fn(logits, batch_labels).cpu())
-            probs = torch.sigmoid(logits).detach().cpu().numpy()
-            probabilities.extend(float(item) for item in probs)
             labels.extend(float(item) for item in batch_labels.cpu().numpy())
 
     label_array = np.array(labels, dtype=np.float32)
-    prob_array = np.array(probabilities, dtype=np.float32)
+    prob_array = predict_binary_probabilities(model, dataset, batch_size=batch_size, device=str(selected_device))
     predictions = (prob_array >= 0.5).astype(np.float32)
     accuracy = float((predictions == label_array).mean()) if len(label_array) else 0.0
     calibrated_accuracy, calibrated_threshold = _best_threshold_accuracy_and_threshold(
