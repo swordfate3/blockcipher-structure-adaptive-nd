@@ -94,7 +94,18 @@ class ArxRoundFunctionHybridPairSetDistinguisher(nn.Module):
             "carry_propagate_rot_pre_delta",
             "carry_edge_rot_pre_delta",
         )
-        if self.feature_words_per_pair == len(carrychain_role_names):
+        carrychain_plus_role_names = (
+            *carrychain_role_names,
+            "carry_chain_xy_delta",
+            "carry_chain_xy_prime_delta",
+            "carry_chain_rot_pre_delta",
+            "carry_chain_rot_pre_prime_delta",
+            "addition_xy_delta",
+            "addition_rot_pre_delta",
+        )
+        if self.feature_words_per_pair == len(carrychain_plus_role_names):
+            self.feature_role_names = carrychain_plus_role_names
+        elif self.feature_words_per_pair == len(carrychain_role_names):
             self.feature_role_names = carrychain_role_names
         else:
             self.feature_role_names = rx_role_names
@@ -115,6 +126,18 @@ class ArxRoundFunctionHybridPairSetDistinguisher(nn.Module):
                 (9, 10),
                 (11, 12, 13),
                 (14, 15, 16),
+            )
+        elif self.feature_words_per_pair == len(carrychain_plus_role_names):
+            self.round_relation_groups = (
+                (0, 1, 2),
+                (2, 3),
+                (4, 5, 6),
+                (7, 8),
+                (9, 10),
+                (11, 12, 13),
+                (14, 15, 16),
+                (17, 18, 19, 20),
+                (21, 22),
             )
         else:
             self.round_relation_groups = tuple((index,) for index in range(self.feature_words_per_pair))

@@ -26,6 +26,7 @@ def test_pair_features_module_exposes_bit_helpers_and_pair_widths():
     assert pair_bits_for_encoding(32, "ciphertext_pair_xor_arx_partial_inverse_bits") == 224
     assert pair_bits_for_encoding(32, "ciphertext_pair_xor_arx_partial_inverse_rx_bits") == 352
     assert pair_bits_for_encoding(32, "ciphertext_pair_xor_arx_partial_inverse_rx_carrychain_bits") == 544
+    assert pair_bits_for_encoding(32, "ciphertext_pair_xor_arx_partial_inverse_rx_carrychain_plus_bits") == 736
 
 
 def test_pair_features_module_encodes_spn_aligned_pair_features():
@@ -250,6 +251,64 @@ def test_pair_features_module_encodes_speck_arx_rx_carrychain_pair_features():
     assert encoded[352:384] == int_to_bits((generate_xy << 16) | (generate_xy ^ generate_xy_prime), 32)
     assert encoded[384:416] == int_to_bits((propagate_xy << 16) | (propagate_xy ^ propagate_xy_prime), 32)
     assert encoded[416:448] == int_to_bits((carry_edge_xy << 16) | (carry_edge_xy ^ carry_edge_xy_prime), 32)
+
+
+def test_pair_features_module_encodes_speck_arx_rx_carrychain_plus_pair_features():
+    cipher = Speck32_64(rounds=1, key=0x1918111009080100)
+    left = 0x12345678
+    right = left ^ 0x00400080
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=32,
+        feature_encoding="ciphertext_pair_xor_arx_partial_inverse_rx_carrychain_plus_bits",
+        cipher=cipher,
+    )
+
+    x = (left >> 16) & 0xFFFF
+    y = left & 0xFFFF
+    x_prime = (right >> 16) & 0xFFFF
+    y_prime = right & 0xFFFF
+    pre_y = ror(y ^ x, 2, 16)
+    pre_y_prime = ror(y_prime ^ x_prime, 2, 16)
+    ror_x = ror(x, 7, 16)
+    ror_x_prime = ror(x_prime, 7, 16)
+
+    def carry_chain(a: int, b: int) -> int:
+        carry = 0
+        chain = 0
+        for bit_index in range(16):
+            a_bit = (a >> bit_index) & 1
+            b_bit = (b >> bit_index) & 1
+            carry = (a_bit & b_bit) | (a_bit & carry) | (b_bit & carry)
+            chain |= carry << bit_index
+        return chain & 0xFFFF
+
+    carry_xy = carry_chain(x, y)
+    carry_xy_prime = carry_chain(x_prime, y_prime)
+    carry_rot_pre = carry_chain(ror_x, pre_y)
+    carry_rot_pre_prime = carry_chain(ror_x_prime, pre_y_prime)
+    add_xy = (x + y) & 0xFFFF
+    add_xy_prime = (x_prime + y_prime) & 0xFFFF
+    add_rot_pre = (ror_x + pre_y) & 0xFFFF
+    add_rot_pre_prime = (ror_x_prime + pre_y_prime) & 0xFFFF
+
+    assert len(encoded) == 736
+    assert is_supported_feature_encoding("ciphertext_pair_xor_arx_partial_inverse_rx_carrychain_plus_bits")
+    assert encoded[:544] == encode_ciphertext_pair(
+        left,
+        right,
+        width=32,
+        feature_encoding="ciphertext_pair_xor_arx_partial_inverse_rx_carrychain_bits",
+        cipher=cipher,
+    )
+    assert encoded[544:576] == int_to_bits((carry_xy << 16) | (carry_xy ^ carry_xy_prime), 32)
+    assert encoded[576:608] == int_to_bits((carry_xy_prime << 16) | (carry_xy ^ carry_xy_prime), 32)
+    assert encoded[608:640] == int_to_bits((carry_rot_pre << 16) | (carry_rot_pre ^ carry_rot_pre_prime), 32)
+    assert encoded[640:672] == int_to_bits((carry_rot_pre_prime << 16) | (carry_rot_pre ^ carry_rot_pre_prime), 32)
+    assert encoded[672:704] == int_to_bits((add_xy << 16) | (add_xy ^ add_xy_prime), 32)
+    assert encoded[704:736] == int_to_bits((add_rot_pre << 16) | (add_rot_pre ^ add_rot_pre_prime), 32)
 
 
 def test_present_mcnd_cell_matrix_encoding_orders_pair_bits_as_four_bit_planes():

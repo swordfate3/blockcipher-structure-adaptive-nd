@@ -137,6 +137,45 @@ def speck32_partial_inverse_rx_carrychain_feature_words(
     )
 
 
+def speck32_partial_inverse_rx_carrychain_plus_feature_words(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> tuple[int, ...]:
+    _require_speck32(width, cipher)
+    base_words = speck32_partial_inverse_rx_carrychain_feature_words(left, right, width, cipher)
+    mask = 0xFFFF
+    x = (left >> 16) & mask
+    y = left & mask
+    x_prime = (right >> 16) & mask
+    y_prime = right & mask
+    pre_y, pre_y_prime, _delta_pre_y = speck32_partial_inverse_words(left, right, width)
+    ror_x = ror(x, 7, 16)
+    ror_x_prime = ror(x_prime, 7, 16)
+
+    carry_xy = _speck32_carry_chain_mask(x, y)
+    carry_xy_prime = _speck32_carry_chain_mask(x_prime, y_prime)
+    carry_xy_delta = carry_xy ^ carry_xy_prime
+    carry_rot_pre = _speck32_carry_chain_mask(ror_x, pre_y)
+    carry_rot_pre_prime = _speck32_carry_chain_mask(ror_x_prime, pre_y_prime)
+    carry_rot_pre_delta = carry_rot_pre ^ carry_rot_pre_prime
+    add_xy = (x + y) & mask
+    add_xy_prime = (x_prime + y_prime) & mask
+    add_rot_pre = (ror_x + pre_y) & mask
+    add_rot_pre_prime = (ror_x_prime + pre_y_prime) & mask
+
+    return (
+        *base_words,
+        (carry_xy << 16) | carry_xy_delta,
+        (carry_xy_prime << 16) | carry_xy_delta,
+        (carry_rot_pre << 16) | carry_rot_pre_delta,
+        (carry_rot_pre_prime << 16) | carry_rot_pre_delta,
+        (add_xy << 16) | (add_xy ^ add_xy_prime),
+        (add_rot_pre << 16) | (add_rot_pre ^ add_rot_pre_prime),
+    )
+
+
 def arx_aligned_difference(
     difference: int,
     width: int,
