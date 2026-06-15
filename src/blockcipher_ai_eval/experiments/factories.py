@@ -44,6 +44,7 @@ from blockcipher_ai_eval.models.structure import (
     PresentInceptionMCNDDistinguisher,
     PresentInceptionMCNDGlobalMatrixDistinguisher,
     PresentInceptionMCNDMatrixDistinguisher,
+    PresentInceptionMCNDPairStackMatrixDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
@@ -287,6 +288,19 @@ def build_model(
             norm=str(options.get("norm", "batchnorm2d")),
             dropout=float(options.get("dropout", 0.0)),
             kernel_sizes=tuple(_matrix_kernel_size_option(item) for item in options.get("kernel_sizes", [[1, 1], [1, 2], [2, 4]])),
+            cell_bits=_int_option(options, "cell_bits", 4) or 4,
+        )
+    if name == "present_inception_mcnd_pair_stack_matrix":
+        return PresentInceptionMCNDPairStackMatrixDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 128,
+            base_channels=hidden_bits,
+            branches=_int_option(options, "branches"),
+            blocks=_int_option(options, "blocks", 3) or 3,
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "batchnorm2d")),
+            dropout=float(options.get("dropout", 0.0)),
+            kernel_sizes=tuple(_matrix_kernel_size_option(item) for item in options.get("kernel_sizes", [[1, 1], [1, 2], [2, 4], [4, 4]])),
             cell_bits=_int_option(options, "cell_bits", 4) or 4,
         )
     if name == "spn_pairset_dbitnet_v2":

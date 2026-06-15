@@ -5,6 +5,7 @@ from blockcipher_ai_eval.models.structure.spn.present_inception_mcnd import (
     PresentInceptionMCNDDistinguisher,
     PresentInceptionMCNDGlobalMatrixDistinguisher,
     PresentInceptionMCNDMatrixDistinguisher,
+    PresentInceptionMCNDPairStackMatrixDistinguisher,
 )
 from blockcipher_ai_eval.models.structure.spn.token_mixer_pairset import (
     SpnTokenMixerBlock,
@@ -16,6 +17,7 @@ __all__ = [
     "PresentInceptionMCNDDistinguisher",
     "PresentInceptionMCNDGlobalMatrixDistinguisher",
     "PresentInceptionMCNDMatrixDistinguisher",
+    "PresentInceptionMCNDPairStackMatrixDistinguisher",
     "SpnCellPairSetDBitNetDistinguisher",
     "SpnNibbleConvPairSetDistinguisher",
     "SpnTokenMixerBlock",
