@@ -81,8 +81,8 @@ function Get-TrainingProcessesOnGpu {
     }
 
     $training = @()
-    foreach ($pid in $pids) {
-        $processId = [int]$pid
+    foreach ($processPid in $pids) {
+        $processId = [int]$processPid
         try {
             $process = Get-CimInstance Win32_Process -Filter "ProcessId = $processId"
         }
@@ -94,7 +94,7 @@ function Get-TrainingProcessesOnGpu {
         }
         $cmd = $process.CommandLine
         if ($cmd -match "run_innovation_one_matrix\.py" -and $cmd -match "--device cuda:$GpuIndex") {
-            $training += "$pid $cmd"
+            $training += "$processPid $cmd"
         }
     }
     return $training
