@@ -26,6 +26,7 @@ from blockcipher_ai_eval.models.structure.spn import (
 from blockcipher_ai_eval.models.structure.spn import (
     PresentPLayerMixerBlock,
     PresentPLayerMixerPairSetDistinguisher,
+    PresentTrailMixerPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher as ModularSpnTokenMixerPairSetDistinguisher,
 )
@@ -327,6 +328,60 @@ def test_build_model_supports_arx_word_mixer_pairset_key_and_options():
     assert model.mixer_depth == 2
     assert model.pooling == "topk_mean"
     assert model.top_k == 3
+    assert model.lse_temperature == 0.5
+
+
+def test_present_trail_mixer_pairset_preserves_word_roles_and_evidence_pooling():
+    model = PresentTrailMixerPairSetDistinguisher(
+        input_bits=1536,
+        pair_bits=768,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=1,
+        role_mixer_depth=1,
+        pooling="topk_logsumexp",
+        top_k=1,
+        lse_temperature=0.75,
+    )
+    batch = torch.randn((2, 1536), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "SPN"
+    assert model.words_per_pair == 12
+    assert model.nibbles_per_pair == 192
+    assert model.role_embedding.shape[1] == 12
+    assert model.last_attention_weights is not None
+    assert model.last_attention_weights.shape == (2, 2)
+    assert torch.count_nonzero(model.last_attention_weights, dim=1).tolist() == [1, 1]
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_present_trail_mixer_pairset_key_and_options():
+    model = build_model(
+        "present_trail_mixer_pairset",
+        input_bits=1536,
+        hidden_bits=8,
+        pair_bits=768,
+        structure="SPN",
+        model_options={
+            "token_dim": 24,
+            "mixer_depth": 1,
+            "role_mixer_depth": 1,
+            "pooling": "topk_mean",
+            "top_k": 2,
+            "lse_temperature": 0.5,
+        },
+    )
+
+    assert isinstance(model, PresentTrailMixerPairSetDistinguisher)
+    assert model.pair_bits == 768
+    assert model.words_per_pair == 12
+    assert model.token_dim == 24
+    assert model.mixer_depth == 1
+    assert model.role_mixer_depth == 1
+    assert model.pooling == "topk_mean"
+    assert model.top_k == 2
     assert model.lse_temperature == 0.5
 
 
