@@ -7,10 +7,11 @@ SCHEDULE="G:/lxy/blockcipher-structure-adaptive-nd/scripts/generated/remote/sche
 INTERVAL_SECONDS="${INTERVAL_SECONDS:-300}"
 SSH_TARGET="${SSH_TARGET:-lxy-a6000}"
 GPU_INDEX="${GPU_INDEX:-1}"
+DRY_RUN="${DRY_RUN:-0}"
 
 while true; do
   echo "[$(date -Is)] checking GPU${GPU_INDEX} for ${RUN_ID}"
-  gpu_table=$(ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" 'nvidia-smi --query-gpu=index,uuid --format=csv,noheader' || true)
+  gpu_table=$(ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" 'nvidia-smi --query-gpu=index,uuid --format=csv,noheader' | tr -d '\r' || true)
   gpu_uuid=$(printf '%s
 ' "${gpu_table}" | awk -F, -v idx="${GPU_INDEX}" '$1 ~ "^ *"idx" *$" {gsub(/^ +| +$/, "", $2); print $2; exit}')
   if [[ -z "${gpu_uuid}" ]]; then
@@ -21,7 +22,7 @@ while true; do
     continue
   fi
 
-  gpu_processes=$(ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" 'nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_memory --format=csv,noheader' || true)
+  gpu_processes=$(ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" 'nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_memory --format=csv,noheader' | tr -d '\r' || true)
   gpu_python_processes=$(printf '%s
 ' "${gpu_processes}" | awk -F, -v uuid="${gpu_uuid}" '$1 == uuid && $3 ~ /python\.exe/ {print}')
   echo "GPU${GPU_INDEX}_UUID=${gpu_uuid}"
@@ -33,7 +34,12 @@ while true; do
     continue
   fi
 
-  echo "[$(date -Is)] GPU${GPU_INDEX} appears idle for python.exe; launching ${RUN_ID}"
+  echo "[$(date -Is)] GPU${GPU_INDEX} appears idle for python.exe"
+  if [[ "${DRY_RUN}" == "1" ]]; then
+    echo "[$(date -Is)] DRY_RUN=1; not launching ${RUN_ID}"
+    exit 0
+  fi
+  echo "[$(date -Is)] launching ${RUN_ID}"
   ssh -o BatchMode=yes -o ConnectTimeout=8 "${SSH_TARGET}" "cmd.exe /c cd /d ${PROJECT_DIR} && ${SCHEDULE}"
   echo "[$(date -Is)] launch requested"
   exit 0
