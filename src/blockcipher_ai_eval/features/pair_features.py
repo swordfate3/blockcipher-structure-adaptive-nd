@@ -47,6 +47,8 @@ def encode_ciphertext_pair(
         return present_pair_xor_paligned_sinv_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_pair_xor_paligned_sboxddt_cell_matrix_bits":
         return present_pair_xor_paligned_sboxddt_cell_matrix_bits(left, right, width, cipher)
+    if feature_encoding == "present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits":
+        return present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return present_xor_paligned_cell_matrix_bits(left, right, width, cipher)
     if feature_encoding == "ciphertext_xor_bits":
@@ -158,6 +160,52 @@ def present_sbox_ddt_words(aligned_difference: int, width: int) -> tuple[int, in
     return best_word, confidence_word
 
 
+def present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits(
+    left: int,
+    right: int,
+    width: int,
+    cipher: ReducedRoundCipher,
+) -> list[int]:
+    difference = left ^ right
+    aligned_difference = inverse_permutation_difference(difference, width, cipher)
+    top1, top2, confidence1, confidence2 = present_sbox_ddt_top2_words(aligned_difference, width)
+    return words_to_present_cell_matrix_bits(
+        [left, right, difference, aligned_difference, top1, top2, confidence1, confidence2],
+        width,
+        "present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits",
+    )
+
+
+def present_sbox_ddt_top2_words(aligned_difference: int, width: int) -> tuple[int, int, int, int]:
+    if width % 4 != 0:
+        raise ValueError("present_sbox_ddt_top2_words requires a 4-bit cell block size")
+    top1_word = 0
+    top2_word = 0
+    confidence1_word = 0
+    confidence2_word = 0
+    for nibble_index in range(width // 4):
+        output_difference = (aligned_difference >> (4 * nibble_index)) & 0xF
+        ranked = sorted(
+            range(16),
+            key=lambda input_difference: (
+                PRESENT_SBOX_DDT[input_difference][output_difference],
+                -input_difference,
+            ),
+            reverse=True,
+        )
+        top1 = ranked[0]
+        top2 = ranked[1]
+        count1 = PRESENT_SBOX_DDT[top1][output_difference]
+        count2 = PRESENT_SBOX_DDT[top2][output_difference]
+        confidence1 = min(15, round(count1 * 15 / 16))
+        confidence2 = min(15, round(count2 * 15 / 16))
+        top1_word |= top1 << (4 * nibble_index)
+        top2_word |= top2 << (4 * nibble_index)
+        confidence1_word |= confidence1 << (4 * nibble_index)
+        confidence2_word |= confidence2 << (4 * nibble_index)
+    return top1_word, top2_word, confidence1_word, confidence2_word
+
+
 def present_structural_inverse_sbox_difference(
     left: int,
     right: int,
@@ -223,6 +271,8 @@ def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
         return block_bits * 5
     if feature_encoding == "present_pair_xor_paligned_sboxddt_cell_matrix_bits":
         return block_bits * 6
+    if feature_encoding == "present_pair_xor_paligned_sboxddt_top2_cell_matrix_bits":
+        return block_bits * 8
     if feature_encoding == "present_xor_paligned_cell_matrix_bits":
         return block_bits * 2
     if feature_encoding == "ciphertext_xor_bits":
