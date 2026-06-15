@@ -235,8 +235,8 @@ def test_pair_features_module_encodes_speck_arx_rx_carrychain_pair_features():
         y_bit = (y_prime >> bit_index) & 1
         carry = (x_bit & y_bit) | (x_bit & carry) | (y_bit & carry)
         carry_xy_prime |= carry << bit_index
-    carry_edge_xy = carry_xy ^ rol(carry_xy, 1, 16)
-    carry_edge_xy_prime = carry_xy_prime ^ rol(carry_xy_prime, 1, 16)
+    carry_edge_xy = carry_xy ^ ((carry_xy << 1) & 0xFFFF)
+    carry_edge_xy_prime = carry_xy_prime ^ ((carry_xy_prime << 1) & 0xFFFF)
 
     assert len(encoded) == 544
     assert is_supported_feature_encoding("ciphertext_pair_xor_arx_partial_inverse_rx_carrychain_bits")

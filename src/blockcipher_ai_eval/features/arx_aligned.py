@@ -86,6 +86,11 @@ def _speck32_carry_chain_mask(a: int, b: int, word_bits: int = 16) -> int:
     return carry_chain & mask
 
 
+def _speck32_carry_edge_mask(carry_chain: int, word_bits: int = 16) -> int:
+    mask = (1 << word_bits) - 1
+    return (carry_chain ^ ((carry_chain << 1) & mask)) & mask
+
+
 def speck32_partial_inverse_rx_carrychain_feature_words(
     left: int,
     right: int,
@@ -109,8 +114,8 @@ def speck32_partial_inverse_rx_carrychain_feature_words(
     propagate_xy_prime = x_prime ^ y_prime
     carry_xy = _speck32_carry_chain_mask(x, y)
     carry_xy_prime = _speck32_carry_chain_mask(x_prime, y_prime)
-    carry_edge_xy = carry_xy ^ rol(carry_xy, 1, 16)
-    carry_edge_xy_prime = carry_xy_prime ^ rol(carry_xy_prime, 1, 16)
+    carry_edge_xy = _speck32_carry_edge_mask(carry_xy)
+    carry_edge_xy_prime = _speck32_carry_edge_mask(carry_xy_prime)
 
     generate_rot_pre = ror_x & pre_y
     generate_rot_pre_prime = ror_x_prime & pre_y_prime
@@ -118,8 +123,8 @@ def speck32_partial_inverse_rx_carrychain_feature_words(
     propagate_rot_pre_prime = ror_x_prime ^ pre_y_prime
     carry_rot_pre = _speck32_carry_chain_mask(ror_x, pre_y)
     carry_rot_pre_prime = _speck32_carry_chain_mask(ror_x_prime, pre_y_prime)
-    carry_edge_rot_pre = carry_rot_pre ^ rol(carry_rot_pre, 1, 16)
-    carry_edge_rot_pre_prime = carry_rot_pre_prime ^ rol(carry_rot_pre_prime, 1, 16)
+    carry_edge_rot_pre = _speck32_carry_edge_mask(carry_rot_pre)
+    carry_edge_rot_pre_prime = _speck32_carry_edge_mask(carry_rot_pre_prime)
 
     return (
         *base_words,
