@@ -36,6 +36,30 @@ def test_innovation_one_summary_rows_groups_runs_and_fills_calibrated_metrics():
     assert summary[0]["calibrated_advantage_mean"] == 0.4
 
 
+def test_innovation_one_summary_rows_keeps_feature_encodings_separate():
+    base = {
+        "cipher": "SPECK32/64",
+        "structure": "ARX",
+        "model": "arx_pairset_dbitnet",
+        "rounds": 7,
+        "samples_per_class": 8,
+        "pairs_per_sample": 4,
+        "metrics": {"accuracy": 0.60, "auc": 0.70, "advantage": 0.20, "loss": 0.6},
+    }
+    rows = [
+        {**base, "feature_encoding": "ciphertext_pair_xor_bits"},
+        {**base, "feature_encoding": "ciphertext_pair_xor_arx_partial_inverse_bits"},
+    ]
+
+    summary = innovation_one_summary_rows(rows)
+
+    assert len(summary) == 2
+    assert {row["feature_encoding"] for row in summary} == {
+        "ciphertext_pair_xor_bits",
+        "ciphertext_pair_xor_arx_partial_inverse_bits",
+    }
+
+
 def test_hparam_summary_rows_sort_by_calibrated_accuracy_and_keep_component_config():
     rows = [
         {

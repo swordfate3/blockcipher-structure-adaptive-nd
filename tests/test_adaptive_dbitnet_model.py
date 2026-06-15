@@ -11,6 +11,7 @@ from blockcipher_ai_eval.models.structure.adaptive_dbitnet import (
 )
 from blockcipher_ai_eval.models.structure.arx import (
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
+    ArxTrailMixerPairSetDistinguisher,
     ArxWordMixerBlock,
     ArxWordMixerPairSetDistinguisher,
 )
@@ -328,6 +329,59 @@ def test_build_model_supports_arx_word_mixer_pairset_key_and_options():
     assert model.mixer_depth == 2
     assert model.pooling == "topk_mean"
     assert model.top_k == 3
+    assert model.lse_temperature == 0.5
+
+
+def test_arx_trail_mixer_pairset_preserves_rx_trail_words_and_evidence_pooling():
+    model = ArxTrailMixerPairSetDistinguisher(
+        input_bits=1408,
+        pair_bits=352,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=1,
+        role_mixer_depth=1,
+        pooling="topk_logsumexp",
+        top_k=2,
+        lse_temperature=0.75,
+    )
+    batch = torch.randn((2, 1408), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "ARX"
+    assert model.feature_words_per_pair == 11
+    assert model.tokens_per_pair == 22
+    assert model.last_attention_weights is not None
+    assert model.last_attention_weights.shape == (2, 4)
+    assert torch.count_nonzero(model.last_attention_weights, dim=1).tolist() == [2, 2]
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_arx_trail_mixer_pairset_key_and_options():
+    model = build_model(
+        "arx_trail_mixer_pairset",
+        input_bits=1408,
+        hidden_bits=8,
+        pair_bits=352,
+        structure="ARX",
+        model_options={
+            "token_dim": 24,
+            "mixer_depth": 1,
+            "role_mixer_depth": 1,
+            "pooling": "topk_mean",
+            "top_k": 2,
+            "lse_temperature": 0.5,
+        },
+    )
+
+    assert isinstance(model, ArxTrailMixerPairSetDistinguisher)
+    assert model.pair_bits == 352
+    assert model.feature_words_per_pair == 11
+    assert model.token_dim == 24
+    assert model.mixer_depth == 1
+    assert model.role_mixer_depth == 1
+    assert model.pooling == "topk_mean"
+    assert model.top_k == 2
     assert model.lse_temperature == 0.5
 
 
