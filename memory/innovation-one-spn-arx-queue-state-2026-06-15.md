@@ -218,6 +218,72 @@ key_rotation_interval: 1024
 Local verification:
 
 ```text
+65 passed in 47.94s for remote script generator, feature encodings, PRESENT Inception MCND model, and matrix runner.
+```
+
+## Update 2026-06-16 00:45 CST
+
+SPN/PRESENT remains the main success criterion. ARX/SPECK should continue, but it must not take GPU1 before the next PRESENT protocol-calibration run.
+
+Prepared and locally verified a new SPN protocol + SPN-aligned medium screen:
+
+```text
+run_id: innovation1-spn-present-protocol-spnaligned-scale-m-gpu1-20260616
+plan: experiments/innovation1/plans/innovation1_spn_present_protocol_spnaligned_scale_m.csv
+config: experiments/innovation1/configs/remote/innovation1_spn_present_protocol_spnaligned_scale_m_gpu1_20260616.json
+expected rows: 12
+device: cuda:1
+rounds: PRESENT r6/r7
+seeds: 0,1
+samples/class: 32768
+pairs/sample: 16
+sample_structure: zhang_wang_case2_independent_mcnd
+difference_profile: present_zhang_wang2022_mcnd
+negative_mode: encrypted_random_plaintexts
+key_rotation_interval: 1
+features:
+  - present_mcnd_cell_matrix_bits
+  - present_pair_xor_paligned_cell_matrix_bits
+models:
+  - present_inception_mcnd_global_matrix
+  - present_inception_mcnd_matrix
+```
+
+Purpose:
+
+```text
+Separate protocol risk from architecture risk:
+1. Re-check Zhang/Wang-style independent-pair MCND protocol.
+2. Compare raw MCND cell matrix against public P-layer inverse-aligned SPN feature.
+3. See whether the strong previous r6 aligned result survives under key_rotation_interval=1 and independent pairs.
+4. If r6 recovers but r7 stays random, continue with DDT/deeper trail features rather than generic model scaling.
+```
+
+Generated local wait/relay scripts:
+
+```text
+scripts/generated/monitors/wait_gpu1_then_launch_innovation1_spn_present_protocol_spnaligned_scale_m.sh
+scripts/generated/monitors/relay_after_spn_protocol_to_arx_trail_mixer.sh
+scripts/generated/monitors/monitor_innovation1_spn_present_protocol_spnaligned_scale_m_gpu1_results.sh
+```
+
+Scheduling policy:
+
+```text
+GPU1 current PRESENT r7 matrix screen
+  -> SPN protocol aligned scale-m run
+  -> ARX trail-mixer curriculum r7/r8
+  -> ARX round-hybrid
+  -> ARX partial-inverse r7 confirm
+```
+
+The ARX relay was adjusted to launch from:
+
+```text
+G:\lxy\blockcipher-structure-adaptive-nd
+```
+
+instead of relying on the SSH default working directory.
 ARX RoundFunctionHybrid CPU smoke: wrote 1 row to /tmp/arx_round_hybrid_smoke_results.jsonl
 bash -n relay/monitor scripts: pass
 75 passed: adaptive model + feature encoding + remote script generator tests
