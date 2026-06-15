@@ -1,4 +1,5 @@
 import importlib.util
+from argparse import Namespace
 from pathlib import Path
 
 import numpy as np
@@ -58,3 +59,36 @@ def test_parse_selected_bit_indices_rejects_non_integer_values():
         assert "JSON list of integers" in str(exc)
     else:
         raise AssertionError("expected invalid selected bit indices to fail")
+
+def test_make_single_pair_dataset_uses_stage_specific_disk_cache(tmp_path):
+    module = _load_module()
+    from blockcipher_ai_eval.ciphers import Speck32_64
+
+    args = Namespace(
+        cipher="speck32",
+        feature_encoding="ciphertext_pair_bits",
+        negative_mode="encrypted_random_plaintexts",
+        key_rotation_interval=1,
+        sample_structure="independent_pairs",
+        selected_bit_indices="",
+        dataset_cache_root=str(tmp_path / "cache"),
+        dataset_cache_chunk_size=2,
+        progress_output=None,
+    )
+    cipher = Speck32_64(rounds=2, key=0)
+
+    dataset = module._make_single_pair_dataset(
+        args,
+        cipher,
+        input_difference=0x0040,
+        samples_per_class=3,
+        seed=7,
+        shuffle=False,
+        stage="meta_train_source",
+    )
+
+    assert dataset.features.shape == (6, 64)
+    assert (
+        tmp_path / "cache" / "score_distribution" / "speck32" / "r2" / "meta_train_source" / "seed-7"
+    ).exists()
+

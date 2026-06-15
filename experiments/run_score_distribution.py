@@ -14,6 +14,7 @@ SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
+from blockcipher_ai_eval.data.cache import make_chunked_differential_dataset
 from blockcipher_ai_eval.data.differential import DifferentialDataset, DifferentialDatasetConfig
 from blockcipher_ai_eval.data.differential.generator import make_differential_dataset
 from blockcipher_ai_eval.experiments import build_cipher, build_model, difference_for_profile
@@ -88,6 +89,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--progress-output", default=None)
+    parser.add_argument("--dataset-cache-root", default=None)
+    parser.add_argument("--dataset-cache-chunk-size", type=int, default=8192)
     parser.add_argument("--output", default="outputs/score_distribution.jsonl")
     return parser.parse_args()
 
@@ -140,41 +143,28 @@ def _progress_callback(path: str | None, stage: str):
 
 
 def run_score_distribution_experiment(args: argparse.Namespace) -> dict[str, Any]:
-    selected_bit_indices = parse_selected_bit_indices(args.selected_bit_indices)
     _write_progress(args.progress_output, "run_start", {"rounds": args.rounds, "score_group_size": args.score_group_size})
     cipher = build_cipher(args.cipher, args.rounds)
     validation_cipher = build_cipher(args.cipher, args.rounds, key=0x11111111111111111111)
     input_difference = difference_for_profile(args.difference_profile, args.difference_member)
 
-    base_train = make_differential_dataset(
-        DifferentialDatasetConfig(
-            cipher=cipher,
-            input_difference=input_difference,
-            samples_per_class=args.base_samples_per_class,
-            seed=args.seed,
-            feature_encoding=args.feature_encoding,
-            pairs_per_sample=1,
-            negative_mode=args.negative_mode,
-            key_rotation_interval=args.key_rotation_interval,
-            sample_structure=args.sample_structure,
-            selected_bit_indices=selected_bit_indices,
-            shuffle=True,
-        )
+    base_train = _make_single_pair_dataset(
+        args,
+        cipher,
+        input_difference,
+        samples_per_class=args.base_samples_per_class,
+        seed=args.seed,
+        shuffle=True,
+        stage="base_train",
     )
-    base_validation = make_differential_dataset(
-        DifferentialDatasetConfig(
-            cipher=validation_cipher,
-            input_difference=input_difference,
-            samples_per_class=max(8, args.base_samples_per_class // 2),
-            seed=args.seed + 10_000,
-            feature_encoding=args.feature_encoding,
-            pairs_per_sample=1,
-            negative_mode=args.negative_mode,
-            key_rotation_interval=args.key_rotation_interval,
-            sample_structure=args.sample_structure,
-            selected_bit_indices=selected_bit_indices,
-            shuffle=True,
-        )
+    base_validation = _make_single_pair_dataset(
+        args,
+        validation_cipher,
+        input_difference,
+        samples_per_class=max(8, args.base_samples_per_class // 2),
+        seed=args.seed + 10_000,
+        shuffle=True,
+        stage="base_validation",
     )
     _write_progress(args.progress_output, "base_dataset_ready", {"train_rows": int(base_train.features.shape[0]), "validation_rows": int(base_validation.features.shape[0]), "input_bits": int(base_train.features.shape[1])})
     base_model = build_model(
@@ -202,12 +192,13 @@ def run_score_distribution_experiment(args: argparse.Namespace) -> dict[str, Any
     )
 
     _write_progress(args.progress_output, "base_training_done", {"accuracy": base_result.final_metrics["accuracy"], "auc": base_result.final_metrics["auc"]})
-    meta_train_source = _make_unshuffled_single_pair_dataset(args, cipher, input_difference, args.seed + 20_000)
+    meta_train_source = _make_unshuffled_single_pair_dataset(args, cipher, input_difference, args.seed + 20_000, stage="meta_train_source")
     meta_validation_source = _make_unshuffled_single_pair_dataset(
         args,
         validation_cipher,
         input_difference,
         args.seed + 30_000,
+        stage="meta_validation_source",
     )
     _write_progress(args.progress_output, "meta_source_ready", {"train_rows": int(meta_train_source.features.shape[0]), "validation_rows": int(meta_validation_source.features.shape[0])})
     train_scores = predict_binary_probabilities(
@@ -286,22 +277,78 @@ def _make_unshuffled_single_pair_dataset(
     cipher,
     input_difference: int,
     seed: int,
+    *,
+    stage: str,
 ) -> DifferentialDataset:
-    return make_differential_dataset(
-        DifferentialDatasetConfig(
-            cipher=cipher,
-            input_difference=input_difference,
-            samples_per_class=args.meta_samples_per_class * args.score_group_size,
-            seed=seed,
-            feature_encoding=args.feature_encoding,
-            pairs_per_sample=1,
-            negative_mode=args.negative_mode,
-            key_rotation_interval=args.key_rotation_interval,
-            sample_structure=args.sample_structure,
-            selected_bit_indices=parse_selected_bit_indices(args.selected_bit_indices),
-            shuffle=False,
-        )
+    return _make_single_pair_dataset(
+        args,
+        cipher,
+        input_difference,
+        samples_per_class=args.meta_samples_per_class * args.score_group_size,
+        seed=seed,
+        shuffle=False,
+        stage=stage,
     )
+
+
+def _make_single_pair_dataset(
+    args: argparse.Namespace,
+    cipher,
+    input_difference: int,
+    *,
+    samples_per_class: int,
+    seed: int,
+    shuffle: bool,
+    stage: str,
+) -> DifferentialDataset:
+    config = DifferentialDatasetConfig(
+        cipher=cipher,
+        input_difference=input_difference,
+        samples_per_class=samples_per_class,
+        seed=seed,
+        feature_encoding=args.feature_encoding,
+        pairs_per_sample=1,
+        negative_mode=args.negative_mode,
+        key_rotation_interval=args.key_rotation_interval,
+        sample_structure=args.sample_structure,
+        selected_bit_indices=parse_selected_bit_indices(args.selected_bit_indices),
+        shuffle=shuffle,
+    )
+    if not getattr(args, "dataset_cache_root", None):
+        _write_progress(
+            args.progress_output,
+            "dataset_generate_start",
+            {"stage": stage, "samples_per_class": samples_per_class, "seed": seed, "shuffle": shuffle},
+        )
+        dataset = make_differential_dataset(config)
+        _write_progress(
+            args.progress_output,
+            "dataset_generate_done",
+            {"stage": stage, "rows": int(dataset.features.shape[0]), "input_bits": int(dataset.features.shape[1])},
+        )
+        return dataset
+
+    cache_dir = _score_distribution_cache_dir(Path(args.dataset_cache_root), args, cipher, stage, seed)
+    return make_chunked_differential_dataset(
+        config,
+        cache_dir=cache_dir,
+        chunk_size=args.dataset_cache_chunk_size,
+        progress_callback=_progress_callback(args.progress_output, "dataset_cache"),
+        progress_context={
+            "split": stage,
+            "cipher_key": getattr(args, "cipher", getattr(cipher, "name", cipher.__class__.__name__)),
+            "rounds": getattr(args, "rounds", getattr(cipher, "rounds")),
+            "seed": seed,
+            "requested_shuffle": shuffle,
+        },
+    )
+
+
+def _score_distribution_cache_dir(root: Path, args: argparse.Namespace, cipher, stage: str, seed: int) -> Path:
+    cipher_id = getattr(args, "cipher", None) or getattr(cipher, "name", cipher.__class__.__name__)
+    cipher_id = str(cipher_id).lower().replace("-", "").replace("/", "")
+    rounds = getattr(args, "rounds", getattr(cipher, "rounds"))
+    return root / "score_distribution" / cipher_id / f"r{rounds}" / stage / f"seed-{seed}"
 
 
 if __name__ == "__main__":

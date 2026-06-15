@@ -57,6 +57,7 @@ git remote set-url origin %REPO_URL%
 
 if not exist logs mkdir logs
 if not exist results mkdir results
+if not exist dataset_cache mkdir dataset_cache
 if exist logs/%RUN_ID%_stdout.txt del logs/%RUN_ID%_stdout.txt
 if exist logs/%RUN_ID%_stderr.txt del logs/%RUN_ID%_stderr.txt
 if exist logs/%RUN_ID%_progress.jsonl del logs/%RUN_ID%_progress.jsonl
@@ -87,6 +88,8 @@ nvidia-smi > logs/%RUN_ID%_gpu_info.txt
   --base-batch-size 4096 ^
   --base-learning-rate 0.0001 ^
   --base-loss mse ^
+  --dataset-cache-root dataset_cache ^
+  --dataset-cache-chunk-size 8192 ^
   --meta-hidden-bits 96 ^
   --meta-epochs 30 ^
   --meta-batch-size 1024 ^
@@ -149,6 +152,8 @@ echo selected_bit_indices=[0, 2, 3, 4, 6, 8, 10, 11, 16, 18, 20, 22, 24, 26, 27,
 echo base_samples_per_class=131072>> results_archive/%RUN_ID%/run_manifest.txt
 echo meta_samples_per_class=8192>> results_archive/%RUN_ID%/run_manifest.txt
 echo score_group_size=16>> results_archive/%RUN_ID%/run_manifest.txt
+echo dataset_cache_root=dataset_cache>> results_archive/%RUN_ID%/run_manifest.txt
+echo dataset_cache_chunk_size=8192>> results_archive/%RUN_ID%/run_manifest.txt
 echo validation=entropy_selected_score_distribution_r7>> results_archive/%RUN_ID%/run_manifest.txt
 
 git add results_archive/%RUN_ID%
