@@ -375,7 +375,11 @@ def _run_task(
             checkpoint_metric=str(task.get("checkpoint_metric") or args.checkpoint_metric),
             restore_best_checkpoint=bool(task.get("restore_best_checkpoint") if task.get("restore_best_checkpoint") is not None else args.restore_best_checkpoint),
             early_stopping_patience=int(task.get("early_stopping_patience") if task.get("early_stopping_patience") is not None else args.early_stopping_patience),
-            early_stopping_min_delta=float(task.get("early_stopping_min_delta", args.early_stopping_min_delta)),
+            early_stopping_min_delta=float(
+                task.get("early_stopping_min_delta")
+                if task.get("early_stopping_min_delta") is not None
+                else args.early_stopping_min_delta
+            ),
             loss=str(task.get("loss", args.loss)),
             seed=task["seed"],
             device=args.device,

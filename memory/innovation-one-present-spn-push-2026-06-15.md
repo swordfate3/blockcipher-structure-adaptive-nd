@@ -69,3 +69,14 @@ Run id prepared but not started: `innovation1-spn-present-entropy-selected-scale
 3. Pull result branches only after full gate passes; until then inspect run-dir JSONL/progress by SSH.
 4. Start entropy-selected run only after GPU1 is free or if user explicitly wants to queue/replace.
 5. If aligned r7 remains below literature, use entropy-selected route and possibly score-distribution second-stage classifier as next implementation.
+
+## 2026-06-15 Independent Case2 Matrix Smoke Result
+
+Pulled remote run `innovation1-spn-present-zw2022-independent-matrix-smoke-gpu1-20260615` into `outputs/remote_results/innovation1-spn-present-zw2022-independent-matrix-smoke-gpu1-20260615`.
+
+Protocol: `present_inception_mcnd_matrix`, `present_mcnd_cell_matrix_bits`, `zhang_wang_case2_independent_mcnd`, `m=16`, `key_rotation_interval=1`, MSE, Adam, weight decay `1e-5`, cyclic LR `1e-4 -> 2e-3`, 20 epochs, `samples_per_class=8192` smoke.
+
+Result: r6 `acc=0.5`, `AUC=0.5067992806`; r7 `acc=0.5`, `AUC=0.5043639243`. This is a negative smoke result, not a r6/r7 reproduction. It suggests the per-pair 2D encoder plus late attention pooling is not sufficient under independent Case2 at this data scale.
+
+Next main route: run `present_inception_mcnd_global_matrix` under the same independent Case2 raw feature protocol so all `m` pairs share one 2D convolutional field before pooling. Use r6 as the gate; do not scale r7/r8 unless r6 recovers strong signal.
+
