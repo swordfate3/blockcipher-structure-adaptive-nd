@@ -735,6 +735,42 @@ def test_speck32_arx_round_stats_hybrid_r7_screen_plan_shape():
     assert {row["pretrain_epochs"] for row in rows} == {"4"}
 
 
+def test_speck32_arx_round_stats_only_r7_screen_plan_shape():
+    repo_root = Path(__file__).resolve().parents[1]
+    plan_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "plans"
+        / "innovation1_arx_speck32_round_stats_only_r7_screen.csv"
+    )
+
+    with plan_path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 6
+    assert {row["cipher"] for row in rows} == {"SPECK32/64"}
+    assert {row["structure"] for row in rows} == {"ARX"}
+    assert {row["model_key"] for row in rows} == {
+        "arx_round_function_hybrid_pairset",
+        "arx_round_stats_pairset",
+        "arx_round_stats_hybrid_pairset",
+    }
+    assert {row["rounds"] for row in rows} == {"7"}
+    assert {row["seed"] for row in rows} == {"0", "1"}
+    assert {row["samples_per_class"] for row in rows} == {"65536"}
+    assert {row["pairs_per_sample"] for row in rows} == {"4"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "ciphertext_pair_xor_arx_partial_inverse_rx_carrychain_plus_bits",
+    }
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["sample_structure"] for row in rows} == {"independent_pairs"}
+    assert {row["difference_profile"] for row in rows} == {"speck32_gohr2019"}
+    assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
+    assert {row["pretrain_rounds"] for row in rows} == {"6"}
+    assert {row["pretrain_epochs"] for row in rows} == {"4"}
+
+
 def test_speck32_arx_v2_scale_l_config_shape():
     module = _load_build_plan_module()
     repo_root = Path(__file__).resolve().parents[1]

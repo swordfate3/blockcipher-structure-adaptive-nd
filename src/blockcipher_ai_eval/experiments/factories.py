@@ -42,6 +42,7 @@ from blockcipher_ai_eval.models.structure import (
     ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
     ArxRoundStatsHybridPairSetDistinguisher,
+    ArxRoundStatsPairSetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     ArxTrailMixerPairSetDistinguisher,
     ArxWordMixerPairSetDistinguisher,
@@ -317,6 +318,16 @@ def build_model(
             mixer_depth=_int_option(options, "mixer_depth", 3),
             group_mixer_depth=_int_option(options, "group_mixer_depth", 2),
             token_mlp_ratio=_int_option(options, "token_mlp_ratio", 2),
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            dropout=float(options.get("dropout", 0.0)),
+            stats_hidden_bits=_int_option(options, "stats_hidden_bits"),
+        )
+    if name == "arx_round_stats_pairset":
+        return ArxRoundStatsPairSetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 736,
+            base_channels=hidden_bits,
             activation=str(options.get("activation", "gelu")),
             norm=str(options.get("norm", "layernorm")),
             dropout=float(options.get("dropout", 0.0)),

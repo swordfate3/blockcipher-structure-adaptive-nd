@@ -13,6 +13,7 @@ from blockcipher_ai_eval.models.structure.arx import (
     ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
     ArxRoundStatsHybridPairSetDistinguisher,
+    ArxRoundStatsPairSetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     ArxTrailMixerPairSetDistinguisher,
     ArxWordMixerBlock,
@@ -633,6 +634,45 @@ def test_build_model_supports_arx_round_stats_hybrid_key_and_options():
     assert model.activation == "silu"
     assert model.norm == "rmsnorm"
     assert model.dropout == 0.05
+
+
+def test_arx_round_stats_pairset_uses_only_cross_pair_statistics():
+    model = ArxRoundStatsPairSetDistinguisher(
+        input_bits=1472,
+        pair_bits=736,
+        base_channels=8,
+        stats_hidden_bits=32,
+    )
+    batch = torch.randint(0, 2, (2, 1472), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "ARX"
+    assert model.feature_words_per_pair == 23
+    assert model.role_group_count == 9
+    assert model.stats_feature_bits == 23 * 2 * 5 + 23 * 8 + 9 * 5 + 6
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_arx_round_stats_pairset_key_and_options():
+    model = build_model(
+        "arx_round_stats_pairset",
+        input_bits=1472,
+        hidden_bits=8,
+        pair_bits=736,
+        structure="ARX",
+        model_options={
+            "stats_hidden_bits": 48,
+            "activation": "silu",
+            "norm": "rmsnorm",
+            "dropout": 0.05,
+        },
+    )
+
+    assert isinstance(model, ArxRoundStatsPairSetDistinguisher)
+    assert model.pair_bits == 736
+    assert model.stats_hidden_bits == 48
+    assert model.stats_feature_bits == 23 * 2 * 5 + 23 * 8 + 9 * 5 + 6
 
 
 def test_present_trail_mixer_pairset_preserves_word_roles_and_evidence_pooling():

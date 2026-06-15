@@ -242,12 +242,15 @@ nvidia-smi > logs\%RUN_ID%_gpu_info.txt
 {gpu_guard_args}
 
 {runner_command}
-if errorlevel 1 goto run_failed
+set RUNNER_EXIT_CODE=%ERRORLEVEL%
+echo runner_exit_code=%RUNNER_EXIT_CODE% > logs\%RUN_ID%_runner_exit.txt
+if not exist results\%RUN_ID%.jsonl goto run_failed
 
 set RESULT_LINES=0
 for /f "tokens=3" %%L in ('find /c /v "" results\%RUN_ID%.jsonl') do set RESULT_LINES=%%L
 echo result_lines=%RESULT_LINES% > logs\%RUN_ID%_result_gate.txt
 echo expected_rows=%EXPECTED_ROWS% >> logs\%RUN_ID%_result_gate.txt
+echo runner_exit_code=%RUNNER_EXIT_CODE% >> logs\%RUN_ID%_result_gate.txt
 if not "%RESULT_LINES%"=="%EXPECTED_ROWS%" goto incomplete_results
 
 if exist {summarizer} (
@@ -279,6 +282,7 @@ copy "%RUN_DIR%\logs\%RUN_ID%_gpu_info.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_torch_info.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_torch_info_stderr.txt" "results_archive\%RUN_ID%\"
 if exist "%RUN_DIR%\logs\%RUN_ID%_gpu_guard.txt" copy "%RUN_DIR%\logs\%RUN_ID%_gpu_guard.txt" "results_archive\%RUN_ID%\"
+copy "%RUN_DIR%\logs\%RUN_ID%_runner_exit.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_stderr.txt" "results_archive\%RUN_ID%\"
 if exist "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" copy "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" "results_archive\%RUN_ID%\"

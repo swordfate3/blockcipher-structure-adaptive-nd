@@ -97,7 +97,11 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     )
     assert "^" not in run_command
     assert " > logs\\%RUN_ID%_stdout.txt 2> logs\\%RUN_ID%_stderr.txt" in run_command
+    assert "set RUNNER_EXIT_CODE=%ERRORLEVEL%" in run_text
+    assert "runner_exit_code=%RUNNER_EXIT_CODE%" in run_text
+    assert "if not exist results\\%RUN_ID%.jsonl goto run_failed" in run_text
     assert 'copy "%RUN_DIR%\\logs\\%RUN_ID%_progress.jsonl"' in run_text
+    assert 'copy "%RUN_DIR%\\logs\\%RUN_ID%_runner_exit.txt"' in run_text
     assert "dataset_cache_root=dataset_cache" in run_text
     assert "dataset_cache_chunk_size=4096" in run_text
     assert "key_rotation_interval=128" in run_text
