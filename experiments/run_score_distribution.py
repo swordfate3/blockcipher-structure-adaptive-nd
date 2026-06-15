@@ -147,6 +147,7 @@ def run_score_distribution_experiment(args: argparse.Namespace) -> dict[str, Any
     cipher = build_cipher(args.cipher, args.rounds)
     validation_cipher = build_cipher(args.cipher, args.rounds, key=0x11111111111111111111)
     input_difference = difference_for_profile(args.difference_profile, args.difference_member)
+    selected_bit_indices = parse_selected_bit_indices(args.selected_bit_indices)
 
     base_train = _make_single_pair_dataset(
         args,
@@ -156,6 +157,7 @@ def run_score_distribution_experiment(args: argparse.Namespace) -> dict[str, Any
         seed=args.seed,
         shuffle=True,
         stage="base_train",
+        selected_bit_indices=selected_bit_indices,
     )
     base_validation = _make_single_pair_dataset(
         args,
@@ -165,6 +167,7 @@ def run_score_distribution_experiment(args: argparse.Namespace) -> dict[str, Any
         seed=args.seed + 10_000,
         shuffle=True,
         stage="base_validation",
+        selected_bit_indices=selected_bit_indices,
     )
     _write_progress(args.progress_output, "base_dataset_ready", {"train_rows": int(base_train.features.shape[0]), "validation_rows": int(base_validation.features.shape[0]), "input_bits": int(base_train.features.shape[1])})
     base_model = build_model(
@@ -192,13 +195,21 @@ def run_score_distribution_experiment(args: argparse.Namespace) -> dict[str, Any
     )
 
     _write_progress(args.progress_output, "base_training_done", {"accuracy": base_result.final_metrics["accuracy"], "auc": base_result.final_metrics["auc"]})
-    meta_train_source = _make_unshuffled_single_pair_dataset(args, cipher, input_difference, args.seed + 20_000, stage="meta_train_source")
+    meta_train_source = _make_unshuffled_single_pair_dataset(
+        args,
+        cipher,
+        input_difference,
+        args.seed + 20_000,
+        stage="meta_train_source",
+        selected_bit_indices=selected_bit_indices,
+    )
     meta_validation_source = _make_unshuffled_single_pair_dataset(
         args,
         validation_cipher,
         input_difference,
         args.seed + 30_000,
         stage="meta_validation_source",
+        selected_bit_indices=selected_bit_indices,
     )
     _write_progress(args.progress_output, "meta_source_ready", {"train_rows": int(meta_train_source.features.shape[0]), "validation_rows": int(meta_validation_source.features.shape[0])})
     train_scores = predict_binary_probabilities(
@@ -279,6 +290,7 @@ def _make_unshuffled_single_pair_dataset(
     seed: int,
     *,
     stage: str,
+    selected_bit_indices: tuple[int, ...] | None = None,
 ) -> DifferentialDataset:
     return _make_single_pair_dataset(
         args,
@@ -288,6 +300,7 @@ def _make_unshuffled_single_pair_dataset(
         seed=seed,
         shuffle=False,
         stage=stage,
+        selected_bit_indices=selected_bit_indices,
     )
 
 
@@ -300,7 +313,9 @@ def _make_single_pair_dataset(
     seed: int,
     shuffle: bool,
     stage: str,
+    selected_bit_indices: tuple[int, ...] | None = None,
 ) -> DifferentialDataset:
+    selected_bit_indices = selected_bit_indices or parse_selected_bit_indices(args.selected_bit_indices)
     config = DifferentialDatasetConfig(
         cipher=cipher,
         input_difference=input_difference,
@@ -311,7 +326,7 @@ def _make_single_pair_dataset(
         negative_mode=args.negative_mode,
         key_rotation_interval=args.key_rotation_interval,
         sample_structure=args.sample_structure,
-        selected_bit_indices=parse_selected_bit_indices(args.selected_bit_indices),
+        selected_bit_indices=selected_bit_indices,
         shuffle=shuffle,
     )
     if not getattr(args, "dataset_cache_root", None):

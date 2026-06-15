@@ -5,10 +5,10 @@ $ProjectId = "blockcipher-structure-adaptive-nd"
 $ProjectPath = Join-Path $Root $ProjectId
 $RunRoot = Join-Path $Root "$ProjectId-runs"
 $LogDir = Join-Path $RunRoot "launcher_logs"
-$UpstreamRun = "innovation1-spn-present-delta-sinv-beam4deep3-r7-gpu1-20260616"
-$NextRun = "innovation1-spn-present-entropy-score-dist-r7-cached-gpu1-20260615"
+$UpstreamRun = "innovation1-spn-present-entropy-score-dist-r7-cached-gpu1-20260615"
+$NextRun = "innovation1-arx-speck32-trail-mixer-curriculum-r7r8-gpu1-20260615"
 $UpstreamBranch = "results/$UpstreamRun"
-$NextScheduleScript = Join-Path $ProjectPath "scripts\generated\remote\schedule_innovation1_spn_present_entropy_score_dist_r7_cached_gpu1_20260615.cmd"
+$NextScheduleScript = Join-Path $ProjectPath "scripts\generated\remote\schedule_innovation1_arx_speck32_trail_mixer_curriculum_r7r8_gpu1_20260615.cmd"
 $LogPath = Join-Path $LogDir "watch_after_${UpstreamRun}_to_${NextRun}.log"
 $PollSeconds = 600
 $env:GIT_SSH_COMMAND = "ssh -i C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
