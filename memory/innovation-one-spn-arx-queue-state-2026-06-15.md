@@ -315,6 +315,66 @@ Watcher logs are written under:
 ```text
 G:\lxy\blockcipher-structure-adaptive-nd-runs\launcher_logs
 ```
+
+## Update 2026-06-16 01:25 CST
+
+Current GPU1 r7 matrix screen still looks weak during training:
+
+```text
+run_id: innovation1-spn-present-spnaligned-r7-matrix-screen-gpu1-20260615
+observed row: index 8/24
+observed epoch: 20-21/24
+val_accuracy: 0.5
+val_auc: 0.5
+```
+
+To keep the main SPN/PRESENT objective ahead of the ARX side queue, GPU1 chaining was adjusted from:
+
+```text
+current r7 matrix -> protocol aligned scale-m -> ARX TrailMixer
+```
+
+to:
+
+```text
+current r7 matrix
+  -> innovation1-spn-present-protocol-spnaligned-scale-m-gpu1-20260616
+  -> innovation1-spn-present-sinv-matrix-screen-gpu1-20260616
+  -> innovation1-arx-speck32-trail-mixer-curriculum-r7r8-gpu1-20260615
+```
+
+Added GPU1 SInv screen:
+
+```text
+config: experiments/innovation1/configs/remote/innovation1_spn_present_sinv_matrix_screen_gpu1_20260616.json
+run_id: innovation1-spn-present-sinv-matrix-screen-gpu1-20260616
+expected rows: 12
+device: cuda:1
+plan: experiments/innovation1/plans/innovation1_spn_present_sinv_matrix_screen.csv
+feature: present_pair_xor_paligned_sinv_cell_matrix_bits
+models:
+  - present_inception_mcnd_matrix
+  - present_inception_mcnd_global_matrix
+  - present_inception_mcnd_pair_stack_matrix
+rounds: PRESENT r6/r7
+seeds: 0,1
+samples/class: 32768
+pairs/sample: 16
+key_rotation_interval: 1024
+```
+
+Purpose:
+
+```text
+Test whether the public zero-key InvP+InvS structural approximation preserves the known r6 signal and raises r7 above random. If r6 collapses, the SInv feature is likely destructive. If r6 survives and r7 rises, expand to multi-seed confirmation before claiming a high-round improvement.
+```
+
+The after-protocol watcher now launches SInv first. A new after-SInv watcher launches ARX TrailMixer only after the SInv result branch appears:
+
+```text
+scripts/generated/remote/watch_after_sinv_to_arx_trail_mixer_20260616.ps1
+scripts/generated/remote/schedule_watch_after_sinv_to_arx_trail_mixer_20260616.cmd
+```
 ARX RoundFunctionHybrid CPU smoke: wrote 1 row to /tmp/arx_round_hybrid_smoke_results.jsonl
 bash -n relay/monitor scripts: pass
 75 passed: adaptive model + feature encoding + remote script generator tests
