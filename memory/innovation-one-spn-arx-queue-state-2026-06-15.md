@@ -1035,3 +1035,84 @@ b046db1 fix(innovation1): harden score distribution queue
 ```
 
 Remote project and GitHub branch are both at `b046db1`.
+
+## 2026-06-16 ARX Side-Line Queue Update
+
+User explicitly reminded: ARX also needs to progress, while SPN/PRESENT high-round remains the main Innovation 1 target.
+
+Remote read-only monitor state:
+
+```text
+GPU0: python PID 31416, low current util but still occupied.
+GPU1: python PID 16484, busy.
+
+Running:
+- innovation1-spn-present-spnaligned-r7-matrix-screen-gpu1-20260615
+  - row 10/24, epoch around 8/24
+  - latest completed val_auc around 0.5000
+  - no result gate yet, stderr 0 bytes
+- innovation1-spn-present-spnaligned-r6-controls-10seed-gpu0-20260615
+  - row 19/30, latest completed epoch 16/20
+  - latest val_auc around 0.8890
+  - no result gate yet, stderr 0 bytes
+
+Queued:
+- innovation1-spn-present-delta-sinv-beam4deep3-r7-gpu1-20260616
+- innovation1-arx-speck32-round-hybrid-rx-smoke-gpu0-20260616
+
+Blocked/failed gates:
+- innovation1-spn-present-entropy-score-dist-r7-cached-gpu1-20260615
+  - result_lines=0, expected_rows=1
+  - launcher reported RUN_GATE_BLOCKED_INCOMPLETE_RESULTS
+  - progress stopped during base_training, stderr 0 bytes
+- innovation1-arx-speck32-trail-mixer-curriculum-r7r8-gpu1-20260615
+  - launcher reported RUN_GATE_BLOCKED_RUN_FAILED
+  - progress stopped during dataset cache, stderr 0 bytes
+```
+
+ARX implementation/queue additions:
+
+```text
+New confirm plan:
+- experiments/innovation1/plans/innovation1_arx_speck32_round_hybrid_rx_r7_confirm_10seed.csv
+
+Purpose:
+- 10-seed SPECK32/64 r7 confirmation for arx_round_function_hybrid_pairset
+- feature: ciphertext_pair_xor_arx_partial_inverse_rx_bits
+- samples/class: 131072
+- pairs/sample: 4
+- key_rotation_interval: 1024
+- sample_structure: independent_pairs
+- loss/scheduler: mse + cyclic lr
+- checkpoint_metric: val_auc
+- r6 curriculum: pretrain_rounds=6, pretrain_epochs=6
+
+Remote spec/scripts:
+- experiments/innovation1/configs/remote/innovation1_arx_speck32_round_hybrid_rx_r7_confirm_10seed_gpu0_20260616.json
+- scripts/generated/remote/run_innovation1-arx-speck32-round-hybrid-rx-r7-confirm-10seed-gpu0-20260616_and_push.cmd
+- scripts/generated/remote/launch_innovation1-arx-speck32-round-hybrid-rx-r7-confirm-10seed-gpu0-20260616.cmd
+- scripts/generated/remote/schedule_innovation1_arx_speck32_round_hybrid_rx_r7_confirm_10seed_gpu0_20260616.cmd
+- scripts/generated/monitors/monitor_innovation1_arx_speck32_round_hybrid_rx_r7_confirm_10seed_gpu0_results.sh
+
+New watcher:
+- scripts/generated/remote/watch_after_arx_rx_smoke_to_r7_confirm_20260616.ps1
+- scripts/generated/remote/schedule_watch_after_arx_rx_smoke_to_r7_confirm_20260616.cmd
+
+Chain:
+SPN r6 controls result branch
+  -> ARX RX smoke
+  -> ARX RX r7 10-seed confirm
+```
+
+Local validation:
+
+```text
+uv run pytest tests/test_build_plan_config.py::test_speck32_arx_round_hybrid_rx_r7_confirm_plan_shape \
+  tests/test_adaptive_dbitnet_model.py::test_arx_round_function_hybrid_pairset_exposes_speck_rx_feature_role_groups \
+  tests/test_adaptive_dbitnet_model.py::test_build_model_supports_arx_round_function_hybrid_pairset_key_and_options -q
+=> 3 passed
+
+Tiny CPU smoke with a temporary /tmp one-row mini plan:
+uv run python experiments/run_innovation_one_matrix.py --plan /tmp/arx_rx_confirm_tiny.csv ...
+=> wrote 1 rows to /tmp/arx_rx_confirm_tiny.jsonl
+```
