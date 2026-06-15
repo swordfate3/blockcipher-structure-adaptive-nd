@@ -1,0 +1,1465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">An Assessment of Differential-Neural Distinguishers</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author role="corresp">
+							<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+							<email>aron.gohr@gmail.com</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Independent Researcher ,</note>
+								<orgName type="institution">Independent Researcher</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Ruhr University Bochum , Bochum , Germany,</note>
+								<orgName type="institution">Ruhr University Bochum</orgName>
+								<address>
+									<settlement>Bochum</settlement>
+									<country key="DE">Germany</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Patrick</forename><surname>Neumann</surname></persName>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Ruhr University Bochum , Bochum , Germany,</note>
+								<orgName type="institution">Ruhr University Bochum</orgName>
+								<address>
+									<settlement>Bochum</settlement>
+									<country key="DE">Germany</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">An Assessment of Differential-Neural Distinguishers</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">9834C571C21060F3FAD0878440E4AF31</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T16:05+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Deep Learning</term>
+					<term>Differential Cryptanalysis</term>
+					<term>Simon</term>
+					<term>Speck</term>
+					<term>Skinny</term>
+					<term>Present</term>
+					<term>Katan</term>
+					<term>ChaCha</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Since the introduction of differential-neural cryptanalysis, as the machine learning assisted differential cryptanalysis proposed in [Goh19] is coined by now, a lot of followup works have been published, showing the applicability for a wide variety of ciphers. In this work, we set out to vet a multitude of differential-neural distinguishers presented so far, and additionally provide general insights. Firstly, we show for a selection of different ciphers how differential-neural distinguishers for those ciphers can be (automatically) optimized, also providing guidance to do so for other ciphers as well. Secondly, we explore a correlation between a differentialneural distinguisher's accuracy and a standard notion of difference between the two underlying distributions. Furthermore, we show that for a whole (practically relevant) class of ciphers, the differential-neural distinguisher can use differential features only. At last, we also rectify a common mistake in current literature, and show that, making use of an idea already presented in the foundational work[Goh19], the claimed improvements from using multiple ciphertext-pairs at once are at most marginal, if not non-existent.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>Evaluating the security of a cipher is of great importance. In symmetric cryptography this is, for the most time, done by proving resilience against already known types of attacks and by the absence of (known) attacks against the full version of the cipher, often including some security margin. For most types of attacks, automated search strategies for the underlying properties were developed. Examples of this are finding differential and/or linear characteristics with highest probability/correlation for a certain number of rounds[MWGP11, MP13, SHW + 14], or to automatically find integral attacks <ref type="bibr" target="#b38">[Tod15,</ref><ref type="bibr" target="#b39">XZBL16]</ref>. Such tools often reduce the underlying problem to, for example, a SAT or MILP instance, which can be solved using already existing solvers.</p><p>Not too long ago, a new, machine learning assisted, type of attack on the block cipher Speck was proposed in <ref type="bibr" target="#b18">[Goh19]</ref>. Having its foundations in differential cryptanalysis, the idea is to distinguish ciphertext-pairs that belong to a fixed plaintext difference from random ones. For this, neuronal networks are employed, leading to an 11-round key recovery attack on Speck32/64 that is at least competitive with classical ones.</p><p>While it is clear that machine learning will not completely substitute classical cryptanalysis, especially since we will see that, at least for the problem at hand, they tend to need a quite pronounced difference in the distributions of the learning problem, the question arises how generic this approach is and to which extend it can complement the work of a cryptanalyst. In other words, can we see machine learning as a tool assisting cryptanalysis, similar to how SAT and MILP solvers, among others, are seen by now?</p><p>While the successful application of differential-neural cryptanalysis to a wide variety of different ciphers[ZW22, BBCD21, CSYY22, JKM20, LLL + 22, ZWW22, HRC21a, HRC21b, BGL + 21, SZM20] already shows the generality of this technique, we explore on the basis of six ciphers, representing five different cipher designs, if (and by how much) a differential-neural distinguisher, as the machine learning based distinguisher from <ref type="bibr" target="#b18">[Goh19]</ref> is coined by now, can be optimized further. Despite our distinguishers leading to better result than previously published ones, see Table <ref type="table">1</ref> for a comparison 1 , the increase in distinguishing performance over the best previously known distinguisher is not that big, and is disproportionate to the explored search space, making it quite likely that bigger improvements may not be possible. We will indeed see that, under some common assumptions, our results for Simon are nearly optimal. Based on this observation and the fact that the most important hyper-parameters appear to be identical for all six ciphers, we also provide guidance on how to change the neural networks hyper-parameters for other ciphers, allowing for automatic optimizations.</p><p>As another contribution, we show that the accuracy of a differential-neural distinguisher is strongly correlated with the mean absolute distance of the ciphertext-difference distribution and the uniform one, which, under some common assumptions, completely explains the features that the neural network is able to utilize for a whole class of ciphers. Still, for ciphers of a different class, it is already known from <ref type="bibr" target="#b18">[Goh19]</ref> that more than purely differential features are used, and we provide additional example where this is likely to be the case, too. Using Simon as an example where only differential features can be used, we show that the differential-neural distinguisher is able to reach the same distinguishing quality as a purely differential distinguisher, while we are also able to show for toy versions of Speck that, similar to Speck32/64, the differential-neural distinguishers are able to surpass the purely differential ones. In both cases, the differential-neural distinguishers are able to learn a good approximation of the ciphertext-pair distribution, which is effectively the ciphertext-difference distribution in the case of Simon. If we consider that the ciphertext-difference distribution is classically computationally expensive to calculate, if not infeasible, such an approximation could be useful for cryptanalysis, especially since it is obtainable in a matter of hours on consumer grade hardware. Hence, this, the generality and the competitiveness of attacks relying on this technique show that, despite the already known limitations of differential-neural cryptanalysis such as limited explainability and number of rounds directly covered by the differential-neural distinguisher, it can be a valuable addition to the cryptanalyst's toolkit.</p><p>Finally, we also set out to straighten up some claims about distinguisher performance. It has become quite common in works following <ref type="bibr" target="#b18">[Goh19]</ref> to use more than just one ciphertext-pair at once, see for example [CSYY22, ZWW22, ZW22, LLL + 22, <ref type="bibr" target="#b20">HRC21b]</ref>. While this approach has the potential to use dependencies between the ciphertext-pairs that come from using the same key, current literature fails to put the results into the right perspective. Based on an idea already used in the underlying work <ref type="bibr" target="#b18">[Goh19]</ref>, we show how a fair comparison could be done and rectify some of the claims made in those works. Most crucially, some of the works that claim a huge improvement in distinguishing power are even worse than the original neural distinguishers from <ref type="bibr" target="#b18">[Goh19]</ref>, while the improvements of others are at most marginal, despite the high claims of the authors, see Table <ref type="table">2</ref>. This is especially unfortunate since it is exactly this idea that is used to (implicitly) turn the single-pair distinguisher into a multi-pair one for the original attacks against Speck32/64.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Related Work</head><p>Following the introduction of differential-neural cryptanalysis <ref type="bibr" target="#b18">[Goh19]</ref>, many different directions have been explored. For instance, Baksi et al. <ref type="bibr" target="#b5">[BBCD21]</ref> and Jain 1 Note that the input differences for Present differ. But even using the same input difference as in <ref type="bibr" target="#b15">[CSYY22]</ref>, the accuracies of our distinguishers (without any further adjustments) are 0.662 and 0.550 for 6 and 7 rounds respectively.</p><p>Table 1: Comparison of neural distinguishers. For convenience of the reader, the results for each round-reduced cipher are ordered by accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Cipher</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Full Rounds Rounds Accuracy Source</head><p>Simon32/64 32 9 0.598 <ref type="bibr" target="#b20">[HRC21b]</ref> 0.628 [SZM20] &lt;0.63 [HRC21a] 0.659 [BGL + 21] 0.661 This Work 10 0.501 † [SZM20] 0.566 * [BGL + 21] 0.567 * This Work 11 0.517 * [BGL + 21] 0.520 * This Work Speck32/64 22 7 0.607 [CSYY22] 0.616 [Goh19] 0.617 This Work 8 0.514 * [Goh19] Skinny64/64 32 7 0.937 This Work Present 31 6 0.658 [CSYY22] 0.712 This Work 7 0.549 [CSYY22] 0.563 This Work Katan32 254 61 0.536 This Work 63 0.522 This Work 65 0.514 This Work 66 0.505 This Work ChaCha 8/12/20 3 0.989 This Work</p><p>†: As far as we understand, the accuracy is evaluated using 10 6 samples, which means that the probability that this is just random noise is around 3.6%. * : Results need a more elaborate training procedure; there is no known way to obtain them by simple variations of direct training.</p><p>Table 2: Comparison of multi-pair differential-neural distinguishers. Combined means that the corresponding single pair distinguisher was used by combining the scores under independence assumption. For this, 10 6 samples, each consisting of the given number of pairs, were used to evaluating the accuracy.</p><p>Pairs Cipher Rounds Neural Distinguisher 1 2 4 8 16 32 64 Simon32/64 9 [HRC21b] 0.591 0.586 0.623 --0.823 -[SZM20] 0.628 0.637 † -----[LLL + 22] ------0.993 [ZWW22] -0.724 0.810 0.896 0.963 --Our (combined) 0.661 0.730 0.811 0.896 0.963 0.994 1.00 10 [LLL + 22] ------0.861 [SZM20] 0.501 0.502 † -----[HRC21b] -----0.611 -[ZWW22] -0.591 0.634 0.690 0.761 --Our (combined) 0.567 0.598 0.637 0.692 0.761 0.842 0.922 11 [LLL + 22] ------0.596 [ZWW22] -0.524 0.539 0.559 0.588 --Our (combined) 0.520 0.529 0.543 0.563 0.589 0.625 0.675 12 [ZWW22] ---0.515 0.523 --Speck32/64 5 [CSYY22] 0.926 0.974 0.991 0.999 1.000 --[CSYY22] (combined) 0.926 0.978 0.997 1.000 1.000 1.000 1.000 [Goh19] (combined) 0.929 0.978 0.997 1.000 1.000 1.000 1.000 6 [CSYY22] 0.784 0.867 0.936 0.953 0.979 --[CSYY22] (combined) 0.784 0.873 0.947 0.989 0.999 1.000 1.000 [ZWW22] -0.877 0.950 0.990 0.999 --[Goh19] (combined) 0.788 0.877 0.950 0.990 1.000 1.000 1.000 7 [CSYY22] 0.607 0.640 0.685 0.701 0.649 --[HRC21b] -----0.889 -[CSYY22] (combined) 0.607 0.650 0.706 0.779 0.861 0.938 0.985 [ZWW22] -0.665 0.728 0.811 0.896 --[Goh19] (combined) 0.616 0.661 0.722 0.796 0.877 0.948 0.988 Our (combined) 0.617 0.663 0.725 0.801 0.883 0.954 0.991 8 [HRC21b] -----0.565 -[ZWW22] --0.543 0.556 0.585 --[Goh19] (combined) 0.514 0.521 0.530 0.543 0.560 0.585 0.621 9 [ZWW22] ---0.502 0.505 --Present 6 [CSYY22] 0.658 0.720 0.795 0.831 0.826 --[CSYY22] (combined) 0.658 0.730 0.815 0.902 0.967 --[ZW22] -0.733 0.820 0.907 0.970 --Our (combined) 0.712 0.799 0.889 0.960 0.993 1.000 -7 [CSYY22] 0.549 0.550 0.585 0.579 0.582 --[CSYY22] (combined) 0.549 0.573 0.605 0.650 0.711 --[ZW22] -0.572 0.607 0.656 0.721 --Our (combined) 0.563 0.593 0.635 0.691 0.765 0.849 -Skinny 7 Our (combined) 0.937 0.992 1.000 1.000 1.000 1.000 1.000 Katan 66 Our (combined) 0.505 0.509 0.516 0.524 0.536 0.551 0.571 ChaCha 3 Our (combined) 0.989 0.999 1.000 1.000 1.000 1.000 1.000 †: Result is based on a difference-polytope that consists of 3 differences (i. e. 4 plain-/ciphertexts are used per sample).</p><p>et al. <ref type="bibr" target="#b24">[JKM20]</ref> classify input differences instead of distinguishing between real and random samples. In addition, the work of Benamira et al. <ref type="bibr" target="#b10">[BGPT21]</ref> explores the explainability of the results in <ref type="bibr" target="#b18">[Goh19]</ref>. Also, similar approaches to <ref type="bibr" target="#b18">[Goh19]</ref> have been applied to other ciphers, such as ASCON . Furthermore, Bacuieti et al. <ref type="bibr" target="#b6">[BBP22]</ref> explored the direction of finding smaller, and therefore more efficient, neural distinguishers, which, despite inferior distinguishing performance, have the potential to lower the attack complexity.</p><p>Outline. We start in Section 2 with introducing some basic notation, the general setting of our distinguishers and the structure of the employed neuronal network, as well as the ciphers under scrutiny. Afterwards, we perform a case study of optimizing the original differential-neural distinguisher for six ciphers, following five different design approaches, in Section 3 and provide some general guidance on which hyper-parameters should be considered. This is followed up by pointing out some manual optimizations that can be done for the ciphers at hand in Section 4. After that, we show in Section 5 that the distinguishing performance of a differential-neural distinguisher is strongly correlated to the mean absolute distance of the two underlying distributions, which is essentially the accuracy a purely differential distinguisher is able to achieve, as well as that for a class of ciphers it is impossible for any distinguisher to use more than differential features. This is followed up by conducting the real difference experiment proposed in <ref type="bibr" target="#b18">[Goh19]</ref> for all ciphers under scrutiny in Section 6. We then show in Section 7 that it is rather likely for differential-neural distinguisher to require a quite pronounced skewness of the ciphertext-pair distribution in order to be able to learn, followed by a rectification of distinguisher comparisons for using multiple ciphertext-pairs at once in Section 8<ref type="foot" target="#foot_0">foot_0</ref> . At last, we conclude our work in Section 9.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Preliminaries</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Notation</head><p>In this work, F 2 denotes the finite field consisting of the two elements {0, 1}, and F n 2 the n-dimensional vector space over this field. For convenience, we will implicitly identify (x n , ..., x 1 ) ∈ F n 2 with the integer n i=1 x i 2 i , and the other way around, based on the context. We will therefore call x 1 the least significant bit (lsb) and x n the most significant bit (msb). Furthermore, ⊕, , denote XOR, modular addition and bitwise product, and ≪, ≫ denote left and right rotation respectively. Additionally, gcd(a, b) will denote the greatest common divisor of the two integers a and b.</p><p>At last, let us introduce some basic notation about differentials. For this, let |S| denote the cardinality of the set S.</p><p>Definition 1 (Differential Probability (DP)). Let F : F n 2 → F n 2 , as well as γ, δ ∈ F n 2 . Then we call p γ δ (F ) := 2 -n |{x ∈ F n 2 |F (x) ⊕ F (x ⊕ γ) = δ}| the DP of the differential (γ, δ). If γ and F are clear from the context, we will just write p δ .</p><p>As all ciphers under scrutiny are of an iterative nature, we will also recall the DP under Markov assumption.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Corollary 1 (DP under Markov Assumption).</head><p>Let F 1 , ..., F r : F n 2 → F n 2 , as well as γ 1 , ..., γ r+1 ∈ F n 2 . Then, under Markov assumption,</p><formula xml:id="formula_0">p γ1 γr+1 (F r • ... • F 1 ) = γ2,...,γr∈F n 2 r i=1 p γi γi+1 (F i ).</formula><p>We are mainly interested in the maximal DP, either over the choice of output difference or both, input and output difference.</p><p>Definition 2 (Maximal DP). Let F : F n 2 → F n 2 . Then the maximal DP for a fixed input difference γ ∈ F n 2 is max δ∈F n 2 \{0} p γ δ (F ). In addition, the maximal DP is max γ,δ∈F n 2 \{0} p γ δ (F ).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Differential Scenario</head><p>While cryptographers will most likely have some intuition on what we may mean by a differential distinguisher, let us provide a bit more details. Given an encryption function E : F n k 2 × F np 2 → F nc 2 , where n k denotes number of key bits, n p the number of plaintext bits and n c the number of ciphertext bits, the task of a differential distinguisher in this work will be to distinguish samples of the form (E(k, p), E(k, p ⊕ ∆)), for a fixed ∆ ∈ F n 2 , as well as independent and identical distributed k ∈ F n k 2 and p ∈ F np 2 , which we shall call encryption samples, from independent and identical distributed (c, c ) ∈ (F nc 2 ) 2 , which we shall simply call random samples<ref type="foot" target="#foot_1">foot_1</ref> . We will also refer to the distributions those samples are drawn from as the encryption and random distribution respectively.</p><p>This approach is motivated by the wrong-key-randomization-hypothesis, which states that a wrong (round-)key guess should lead to something that is indistinguishable from a random sample. While it is well known that, especially for the ciphers under scrutiny, this hypothesis does not hold, this assumption is still typical for attacks, and results like the ones from <ref type="bibr" target="#b18">[Goh19]</ref> show that such a distinguisher can be very useful in an attack.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Structure of the Neural Network</head><p>Let us quickly recall the structure of the neural network used in <ref type="bibr" target="#b18">[Goh19]</ref>, which is shown in Fig. <ref type="figure" target="#fig_1">1</ref>. Given a ciphertext-pair (c 1 , c 2 ) the neural network first splits the ciphertexts up into words (e. g. left and right side in the case of Speck) in what we shall call the preprocessing layer. The result then goes through the bit sliced layer, where a convolution with a filter size of one and 32 filters is applied, followed by batch normalization and a Rectified Linear Unit (ReLU) activation layer. After that, 10 residual blocks are applied<ref type="foot" target="#foot_2">foot_2</ref> , each consisting of two iterations of convolutional layer (each using a filter size of 3 and 32 filters), batch normalization and (ReLU) activation, and a final addition of the input. At last, the output of the last residual block is processed by the prediction head, which consists of two iterations of a densely connected layer (using 64 neurons), batch normalization and activation, and a final densely connected layer, which uses the sigmoid activation function and one neuron only.</p><p>For training, the Adam optimizer is used, together with a cyclic Learning Rate (LR). The loss is calculated as the Mean Squared Error (MSE) between the prediction and the class label, together with a L2 regularization penalty.  <ref type="bibr" target="#b18">[Goh19]</ref>. </p><formula xml:id="formula_1">l i ≪ α ≪ β ≪ γ k i r i l i+1 r i+1 (a) Simon l i r i ≫ α ≪ β k i l i+1 r i+1 (b) Speck</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.4">Ciphers under Scrutiny</head><p>Let us quickly recall the ciphers Speck, Skinny, Present, Katan and ChaCha that we will analyze in this work.</p><p>The Ciphers Simon and Speck Simon and Speck are families of lightweight block cipher designed by the NSA[BSS + 13]. For the most part, we will concentrate on the variant using a 32-bit state and a 64-bit key, which we shall denote as Simon32/64 and Speck32/64 respectively. During encryption, the state is split into two equal sized words, which are then processed by Feistel-like round functions depicted in Fig. <ref type="figure" target="#fig_2">2</ref>. The rotational constants for Simon32/64 are α = 1, β = 8 and γ = 2, while the ones for Speck32/64 are α = 7 and β = 2. Note that, even without knowing the key, part of the last round can always be reverted, i. e. based on a ciphertext (l i , r i ) we are able to calculate (l i-1 , r i-1 ⊕ k i-1 ) in the case of Simon and (l i , r i-1 ) in the case of Speck. We will refer to this as calculating the ciphertexts back.</p><p>For more details on Simon and Speck, the reader may consult [BSS + 13].</p><p>The Cipher Skinny Skinny[BJK + 16] is a tweakable block cipher and was designed by Beierle et al. It uses a round function, which is depicted in Fig. <ref type="figure">3</ref> and inspired by the Advanced Encryption Standard (AES). We will only consider the smaller version that uses a 64-bit block size and a (tweak-)key of the same size. Furthermore, we will call each of the 16 (4-bit) cells a word of the state. To be in line with the framework from <ref type="bibr" target="#b18">[Goh19]</ref> we will ignore the tweak and use the tweakkey as an ordinary key. Again, part of the round function can be reverted, without any knowledge about the key. This includes reverting the linear part (MixColumns and ShiftRows), as well as the addition of the round constants (AC) and the application of the S-box (SC) to the last two rows. In other words, it is possible to calculate the green cells (Fig. <ref type="figure">3</ref>) within the last round. More details on Skinny can be found in [BJK + 16]. The Cipher Present Present[BKL + 07], a cipher designed by Bogdanov et al., also has a 64-bit block size, and we focus on the version that uses a 80-bit key. Its round function is shaped like a classical Substitution-Permutation Network (SPN), as can be seen in Fig. 4. Note that after the last round a final round key addition takes place, as otherwise most of the last round could trivially be reverted. This means that whenever we refer to the number of rounds for Present, this should be understood as the number of applications SC AC ART ≫ 1 ≫ 2 ≫ 3 ShiftRows MixColumns Figure 3: Round function of Skinny [Jea16]. The 16 green cells indicate to which point the last round function can be reverted without knowing the key. S S S S S S S S S S S S S S S S k i Figure 4: Round function of Present (modified version of [Jea15]). of the round function, and the number of key additions is the number of rounds increased by one. See [BKL + 07] for more details on Present.</p><p>While for Present, the bit-permutation right before the last key addition is, by nature, a linear operation, and we could revert this part, similar to how we revert non-key dependent operations for the other ciphers under scrutiny, we will not do so, since we do not expect changing the order of the bits to make a big difference.</p><p>The Cipher Katan Katan <ref type="bibr" target="#b16">[DDK09]</ref> is a block cipher that uses shift registers and nonlinear feedback functions to manipulate the state during en-/decryption. Here, we only consider the 32-bit version depicted in Fig. <ref type="figure" target="#fig_3">5</ref>. For more details on Katan we refer to its specification <ref type="bibr" target="#b16">[DDK09]</ref>.</p><p>As for most of the other ciphers, we will also consider reverting non-key dependent parts of the round function. Since for Katan, this means reverting 17 (partial) rounds, we provide the details of this in Appendix B.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The Cipher ChaCha</head><p>The last cipher we consider here is ChaCha <ref type="bibr" target="#b8">[Ber08]</ref>. While ChaCha is a stream cipher, we will handle a keystream block as a ciphertext, and nonce and counter (i. e. the input data that may be controlled by an adversary) as the plaintext. This enables us to use similar techniques for all of the ciphers under scrutiny.</p><p>The key stream generation works as follows. First, an initial state, which is usually  depicted as a 4 × 4 matrix of 32-bit words, is constructed by setting the first row to a constant, the next two rows to the 256 key bits, and the last row to nonce and counter. This state is then modified by an iterative application of the round function, which applies the quarter round function depicted in Fig. <ref type="figure" target="#fig_4">6</ref> to the columns resp. the diagonals of the matrix in parallel in even and odd rounds respectively. At the end, the initial state is added using modular addition. For more details, we refer to the design paper <ref type="bibr" target="#b8">[Ber08]</ref>.</p><p>For backwards calculation, we only consider reverting the modular addition of the two known rows of the initial state. While, in addition, the two outer outputs of the quarter round (a i and d i ) are known, calculating d i back to d i-1 ⊕ (a i-1 b i-1 ) could make it harder to recognize any dependencies between d i and the other three outputs. One possibility to prevent this would be to just provide d n-1 ⊕ (a n-1 b n-1 ) as additional data. But this would increase the size of one sample (ciphertext-pair) from 1024 bits to 1280 bits. Also, we would hope that the neural network would be able to revert one simple XOR and two rotations itself. As we will see later, the accuracy of our differential neural-distinguisher is already 0.989. Hence, we do not provide this additional data.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">A Case Study on Various Ciphers</head><p>In <ref type="bibr" target="#b18">[Goh19]</ref> it was shown that for Speck neural networks can be used as distinguishers that lead to attacks that are at least competitive with classical ones. Naturally, this raises the following question.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.">Is the presented technique of differential-neural cryptanalysis generic? In other words,</head><p>is the general idea applicable to a wide variety of ciphers? Considering that followup works for the ciphers Ascon 2. How generic is the underlying neural network, i. e. can it be used to learn a multitude of different ciphers? For this, it should be noted that not all of the works cited above employ the same network architecture as in <ref type="bibr" target="#b18">[Goh19]</ref>, which could be understood as this architecture not being suitable for all of the ciphers.</p><p>3. Is it possible to improve the neural network form <ref type="bibr" target="#b18">[Goh19]</ref> any further? While it is to be expected that for Speck32/64 the neural network may already be optimal, this Table <ref type="table">3</ref>: Overview of used input differences. Differences without a reference were chosen such that diffusion in the first few rounds is limited and were found to perform better than ones from literature.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Cipher Difference</head><p>Speck 0x0040 0000[Goh19, ALLW15] Simon 0x0000 0040[KLT15, ALLW13] Skinny 0x0000 0000 0000 2000 Present 0x0000 0000 00d0 0000 Katan 0x00002000 ChaCha 0x00000000 00000000 00000000 00008000 expectation should still be tested. In addition, assuming that the neural network can also be used for other ciphers than Speck, can we optimize it further for each specific cipher, and which of the hyper-parameters are important?</p><p>In the following of this section, we will set out to answer the last two (still open) questions. To this end, we will train and further optimize the neural network from <ref type="bibr" target="#b18">[Goh19]</ref> for six different ciphers, following five different design approaches, namely Simon and Speck, representing Feistel networks, Present and Skinny, representing a SPN using a simple and a more involved (AES-like) linear layer respectively, Katan, that is based on nonlinear feedback shift registers, as well as ChaCha, which is in contrast to the other ciphers not a block cipher, but a stream cipher. As we will see, using a bit of (automatic) optimization/customization for each cipher leads to a quite promising differential-neural distinguisher for a not insignificant number of rounds, which further supports the generality of the approach and of the employed neural network. In addition, we show that we can slightly improve over the best previously known differential-neural distinguishers, but despite considering a great amount of hyper-parameters, no groundbreaking improvements could be found.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">On the used Input Difference</head><p>As described in Section 2.2, the encryption distribution requires an input difference ∆. We will see later that this difference has a major impact on the accuracy a (purely differential) distinguisher is able to achieve. Also, training the neural network from <ref type="bibr" target="#b18">[Goh19]</ref> using a variety of differences shows that the choice of difference has a big impact on the accuracy of the neural network, too. It is therefore crucial to choose a reasonable good input difference for each cipher.</p><p>Our approach to this problem is as follows. First, we try differences that belong to differential characteristics of high probability reported in literature. In addition, we also try differences which should lead to low diffusion in the first few rounds. The later approach is motivated by the conjecture that low diffusion may help the neural network to better learn the encryption distribution.</p><p>Note that we first chose the input difference and then try to optimize the used hyperparameters of the neural network. Even though the network is optimized for Speck, initial experiments show that it is also able to learn for other ciphers, be it with a lower accuracy and/or number of rounds compared to a cipher-optimized version.</p><p>We summarize the differences that led to the best results in our experiments, and that we will use in the rest of this paper (if not stated otherwise), in Table <ref type="table">3</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Cipher Specific Optimizations</head><p>A neural network, as the one used in <ref type="bibr" target="#b18">[Goh19]</ref>, exhibits a certain structure, which must be set in advance. This structure is defined by the so-called hyper-parameters, like the number of layers or neurons in each layer, which can have a big impact on the networks ability to learn. Hence, it is common in machine learning to search for hyper-parameters that lead to the best results by trying different combinations. We did so for all the ciphers under scrutiny.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The Search Space</head><p>We started with a quite broad search space for both, Simon and Speck, which we than reduced to a more reasonable one for the other ciphers based on the results for those two ciphers.</p><p>The first search space is shown in Table <ref type="table" target="#tab_0">4</ref>. The last column gives the values used in <ref type="bibr" target="#b18">[Goh19]</ref>[Section 4.2]<ref type="foot" target="#foot_3">foot_3</ref> . The concrete search space for each hyper-parameter was determined by two factors, hardware limitations<ref type="foot" target="#foot_4">foot_4</ref> and/or degradation in distinguishing power. For more details on those hyper-parameter, we refer to Appendix A.</p><p>Out of all those parameters, only batch size, the use of circular convolutions, the number of neurons in the densely connected layers, the number of filters, the filter size, the LR (while using the cyclic LR schedule), the number of residual blocks and the L2 penalty seem to have a significant (positive) effect. Hence, we restricted the search space for the other ciphers to only those hyper-parameters. The overall results are shown in Table <ref type="table" target="#tab_1">5</ref> (hyperparameters not shown are as in <ref type="bibr" target="#b18">[Goh19]</ref>[Section 4.2]). Out of all the hyper-parameters we tested, the ones that appear to have the biggest impact are LR, L2 penalty and especially the filter size. For Simon the higher filter size of 7 leads to an accuracy that is multiple percent points higher than with a filter size of 3. One possible explanation for this is that the neuronal network most likely (effectively) reverts deterministic transformations at the end of the encryption process, which in the case of Simon is one complete round (up to key addition). Hence, reverting such calculations in advance (i. e. before providing the samples to the neural network), which we shall denote as calculating the ciphertexts back, can be seen as one additional hyper-parameter of our search space. Doing so indeed improved the results for half of the ciphers in our experiments. For Speck, on the other hand, we do not see any significant improvement, which may be due to the neural network already being optimized to perform this calculation itself, and the same appears to be the case for Simon if a filter size of at least 7 is used.</p><p>We want to highlight that at least a small hyper-parameter search, with different LRs, L2 penalties and filter sizes, should be conducted if one plans to use a neural distinguisher for another cipher. But given that such a search can be automated using a tool like Optuna[ASY + 19], the results in Table <ref type="table" target="#tab_1">5</ref> show that the neural network from <ref type="bibr" target="#b18">[Goh19]</ref> is quite generic.</p><p>Comparison to Literature As we mentioned before, there already exist results for Simon, Speck and Present in literature. If we take a look at Table 1, we see that, for the same number of rounds, our results are always superior (in terms of accuracy), even if not by much in the cases of Simon and Speck (and also Present if we use the same input difference). Given the size of the search space, it is likely that much greater improvements are simply not possible. We will see in Section 5 that at least for Simon this is most certainly the case.</p><p>Note that we naturally tried to increase to number of rounds, but did not find more rounds to be learnable without any changes to the training data and/or process. This  </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Manual Optimizations</head><p>In the previous section, we studied the performance of a generic neural network based cryptanalytic training pipeline on a wide variety of different ciphers. In this section, we will show that the presented results can be significantly improved with some limited guidance from a cryptanalyst.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Types of Manual Optimization</head><p>Cryptanalytic attacks on block ciphers can usually be roughly divided into two parts, namely a statistical distinguisher against the block cipher and a key extraction phase. Typically, the distinguisher will recognize some event that happens in the middle of the cipher's execution and which is triggered (with some probability) by sending well-chosen input values into the cipher. The key extraction phase then uses the distinguisher to verify guesses of the last round keys and, sometimes, also to guide the search for these subkey values. In this article, this second step is not of interest.</p><p>When designing a machine learning based attack, the cryptanalyst will aim to capture a stronger distinguishing signal than would be available using classical techniques and to bridge as many rounds as possible using an automatic techniques, while retaining a simple interface to classical pre-and post-processing steps and a reasonably high level of distinguisher efficiency. In other words, ideally they would want to reliably detect an event deep inside the cipher that can be controlled well by classical chosen input techniques.</p><p>In the context of optimizing the neural part of neural-differential attacks, this naturally opens up the following ideas for optimization of existing distinguishers:</p><p>1. We can improve the choice of input differences. In principle, this does not necessarily mean picking input differences that generate deeper distinguishers; it is perfectly conceivable that improvements to an attack can be obtained by trading a slightly weaker machine-learned distinguisher for more control over the event that it detects. However, in this work, we will solely focus on optimizing input differences to obtain stronger distinguishers.</p><p>2. The designer can also try to obtain neural distinguishers that work for more rounds by modifying the distinguisher to cover more rounds. In general, the most natural approach to do this are staged training or extension by key-averaging as introduced in <ref type="bibr" target="#b18">[Goh19]</ref>; in this article, we will see that for Present, simply using the same distinguisher for more rounds works to a significant extent.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Optimizations for Simon</head><p>Before diving into evaluating the Present distinguishers on more rounds, we would like to quickly explain how we trained the differential-neural distinguishers for 10-and 11-round Simon32/64, that we report of in Tables <ref type="table">1</ref> and <ref type="table">2</ref>. Similar to the training of the 11-round distinguisher in [BGL + 21], we applied the staged training method introduced in <ref type="bibr" target="#b18">[Goh19]</ref>.</p><p>We started with training 8-round distinguishers based on our 9-round distinguisher, but for the input differences 0x0180 0040 and 0x0440 0100, which are the most likely differences to occur after 2 and 3 rounds respectively. Based on those two distinguishers, we trained the 10 and 11 round distinguisher (using 10 8 samples) for one epoch with a learning rate of 10 -4 , and another two/nine epochs using a learning rate of 10 -5 . The results actually slightly surpass the ones reported in [BGL + 21], as our 10-round distinguisher achieves an accuracy of 0.567 instead of 0.566 and the 11-round distinguisher achieves one of 0.520 instead of 0.517. Note that the increase in accuracy, despite being small, is still significant.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Optimizations for Present</head><p>For Present, we investigated whether staged training leads to learning of additional rounds; doing so, we found at first that our distinguisher was adapting extremely quickly to higher round numbers and then realized that it simply kept working without retraining, albeit at reduced distinguishing advantage. We also found that the same distinguisher works well for several input differences.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Evaluating the Advantage of a Neural Distinguisher</head><p>To the best of our knowledge, in all of the literature since <ref type="bibr" target="#b18">[Goh19]</ref>, the distinguishing advantage of neural distinguishers has so far been characterised by two measures: their accuracy on the one hand and the keyranking advantage obtained in attacks on the other hand. Additionally, the performance of these distinguishers is implicitly being measured by the loss functions used during training; mean square error loss is the most common choice in the literature.</p><p>All of these measures of success for a distinguisher encounter problems when we try to determine how well a given neural distinguisher works for output distributions other than the one it was trained for:</p><p>1. Accuracy collapses the output values of the distinguisher into binary choices, which loses a lot of information. This loss of information is usually not too critical for distinguishers that we can obtain by training on the output distribution, as the biases discovered by training will usually be large enough to lead to statistically significant accuracy results on test samples of the same order of magnitude as the training data (or much smaller). However, for distinguishers obtained by transferring an existing distinguisher to a different output pair distribution, one would be interested in being able to show the existence of very small biases.</p><p>2. Mean square error loss is not necessarily easy to interpret for poorly calibrated distinguishers. For instance, a given neural distinguisher D and the same distinguisher with binary thresholding will by definition reach the same accuracy level, but the mean square error of the latter will usually be far larger than even for the baseline that outputs a value of 0.5 for every sample. A natural alternative approach is to measure distinguisher performance by sampling the output distribution (without thresholding) of a distinguisher on real and on random test data and applying standard hypothesis testing to see whether the hypothesis that both distributions are the same can be rejected. In principle, there are a variety of tests that can be used for this purpose, but we will in this work settle for a very simple method. If we denote the distinguisher output for sample i with X i and assume that we have n samples chosen independently at random either all from the real or all from the random distribution, then the X i are independent and identically distributed random variables with range [0, 1]. As such, they have a mean µ j (where index j = 1 is the real case and j = 0 indicates the random distribution) and standard deviation σ j . The mean and standard deviation of the empirical mean 1 n i = 1 n X i are µ j and 1/ √ nσ j and by the central limit theorem, the distribution of the empirical mean is well approximated by a normal distribution with these parameters.</p><p>In general, it is sufficient to show that sampling from the real and random output distribution of a cryptographic distinguisher yields recognisably different results for these two cases. In the case of Present, we will, however, assume that µ 1 ≥ µ 0 . Since the random distribution does not depend on number of rounds or input difference considered, empirical estimates of the parameters of the random distinguisher output distribution can be computed once on a large sample for a given distinguisher and then reused across experiments. This allows us to be fairly certain about the parameters for the distinguisher output distribution on the random samples. In Table <ref type="table" target="#tab_3">7</ref>, we report an advantage at more than three standard errors s = µ1-µ0 σ0 of the random distribution for up to ten rounds; this advantage can be shown to still exist at 11 rounds, although in our trials we saw it reliably only with significantly more real ciphertext pairs (roughly 10 8 were clearly sufficient). For comparison, Table <ref type="table" target="#tab_2">6</ref> shows the observed empirical accuracy values for two different distinguishers against Present as measured by the standard test of running the distinguisher on 10 7 samples collected from the real and the random distribution in roughly equal proportion.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Optimizations for Katan</head><p>A similar phenomenon as described in the previous section for Present was also evident for Katan. While we did not find that our neural distinguishers were directly applicable to more rounds than we had trained the distinguishers in question for, we found that fine-tuning the weights of the last network layer of the distinguisher provided a quite effective way to adapt them for higher round numbers. To this end, we used one of our ordinary distinguishers for Katan as the base model and removed the final sigmoid output layer. The resulting model outputs for any observed Katan ciphertext pair an internal representation vector consisting of 64 floating-point numbers. To attack n + k rounds, we then performed linear regression to find a linear decision surface that would classify n + k-round output as real or random as accurately as possible. Using our 60-round distinguisher as the base model, applying the same backwards calculation as for that model, and training the final linear distinguisher on 5 • 10 6 samples, we obtained a distinguisher against 71-round Katan with an accuracy of 50.15 percent; applying the same test as in the last section for Present, the mean response of the resulting fine-tuned distinguisher to real samples was estimated more than 12 times the standard error of the observed random samples above the mean for the random samples.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">Relations to Classical Differential Attacks</head><p>While it is common in differential cryptanalysis to use just a single differential to mount an attack, it can actually be beneficial to use all possible output differences (or more precise their probability), see for example <ref type="bibr" target="#b0">[AL13]</ref>. Of course, this is often infeasible as it would require the calculation of one row of the Difference Distribution Table (DDT). But at least for Simon32/64 and Speck32/64 it is, under Markov assumption, feasible using the methods provided in <ref type="bibr" target="#b25">[KLT15]</ref> and <ref type="bibr" target="#b27">[LM02]</ref> respectively, and was already done in [BGL + 21] for Simon32/64 and in <ref type="bibr" target="#b18">[Goh19]</ref> for Speck32/64.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The Accuracy of a Purely Differential Distinguisher</head><p>Given the probability p δ for every output difference δ ∈ F n 2 (and a fixed input difference) a distinguisher could just use p δ &gt; 1 2 n -1 as a decision rule, i. e. the ciphertext-pair is coined to belong to the encryption distribution if the probability of the observed ciphertext difference is greater in the encryption case than the probability of the same difference to appear in the random case <ref type="foot" target="#foot_5">7</ref> . With this, the accuracy of such a distinguisher would be 1 2</p><formula xml:id="formula_2">p δ &gt; 1 2 n -1 p δ + 1 2 p δ ≤ 1 2 n -1 1 2 n -1 ,</formula><p>assuming that both, the encryption and the random case, appear with probability 1 2 , as it is the case for training the neural network (and evaluating its accuracy). Note that if both cases are equiprobable, this is actually the best that can be done if only the ciphertext-differences of single samples are considered.</p><p>Interestingly, this accuracy is basically the same as the mean absolute distance of the ciphertext-difference distribution and the uniform one.</p><p>Lemma 1. The accuracy of a purely differential distinguisher is the same (up to constants) as the mean absolute distance of the ciphertext-difference distribution and the uniform one.</p><p>Proof. Since both p δ and 1 2 n -1 sum to 1 over all possible δ ∈ F n 2 \ {0}, we have</p><formula xml:id="formula_3">p δ &gt; 1 2 n -1 p δ + p δ ≤ 1 2 n -1 1 2 n -1 = 1 - p δ ≤ 1 2 n -1 p δ + p δ ≤ 1 2 n -1 1 2 n -1 = 1 + p δ ≤ 1 2 n -1 1 2 n -1 -p δ ,</formula><p>as well as</p><formula xml:id="formula_4">p δ &gt; 1 2 n -1 p δ + p δ ≤ 1 2 n -1 1 2 n -1 = p δ &gt; 1 2 n -1 p δ + 1 - p δ &gt; 1 2 n -1 1 2 n -1 = p δ &gt; 1 2 n -1 p δ - 1 2 n -1 + 1.</formula><p>Combining both, we get 1 2</p><formula xml:id="formula_5">p δ &gt; 1 2 n -1 p δ + 1 2 p δ ≤ 1 2 n -1 1 2 n -1 = 1 4   1 + p δ ≤ 1 2 n -1 1 2 n -1 -p δ + p δ &gt; 1 2 n -1 p δ - 1 2 n -1 + 1   = 1 2 + 1 4 δ∈F n 2 \{0} p δ - 1 2 n -1 .</formula><p>This means that maximizing the accuracy of such a distinguisher (over the chosen input difference) may not lead to the same input difference as if one tries to maximize the probability of a differential, as the former maximizes the mean absolute distance, while the later maximizes the maximal distance.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">On the Ciphertext-Pair Distribution</head><p>While it was shown in <ref type="bibr" target="#b18">[Goh19]</ref> that the neural distinguisher for Speck is able to use more than just differential features, the same is unlikely to be true for ciphers like Simon and Present. To see why this is the case, let us recall that a sample from the encryption distribution is of the form (c 1 , c 2 ) = (E(k, p), E(k, p ⊕ ∆)) for k ∈ F n k 2 and p ∈ F np 2 drawn independently and uniformly at random, which has to be distinguished from the two ciphertexts being drawn independently and uniformly at random. If E(k, .) is bijective, choosing p uniform at random is the same as choosing c 1 or c 2 uniform at random. Hence, looking only at c 1 (or only at c 2 ) there is no difference to the uniform distribution. So, a distinguisher needs to look at (parts of) c 1 and (parts of) c 2 at once in order to distinguish the encryption distribution from the uniform one.</p><p>Knowing that c 1 and c 2 are uniform distributed also tells us that the marginal distribution of each bit is a Bernoulli-distribution with probability 1 2 for it to be 1 (or 0). Obviously, adding independent key bits from a key chosen uniform at random removes any potential dependency between bits.</p><p>Lemma 2. Let X 1 , ..., X m , Y 1 , ..., Y l and K 1 , ..., K l be Bernoulli-distributed random variables. Let further (for every i) K i be 1 with probability 1 2 and independent of X 1 , ..., X m , Y 1 , ..., Y l and K 1 , ...</p><formula xml:id="formula_6">K i-1 , K i+1 , K l . Then Pr [X i = x i ∀i, Y j = y j ⊕ K j ∀j] = 2 -l Pr [X i = x i ∀i] . Proof. Pr [X i = x i ∀i, Y j = y j ⊕ K j ∀j] = (k1,...,k l )∈F l 2 Pr [X i = x i ∀i, Y j = y j ⊕ k j ∀j] • Pr [K j = k j ∀j] =2 -l (k1,...,k l )∈F l 2 Pr [X i = x i ∀i, Y j = y j ⊕ k j ∀j] =2 -l Pr [X i = x i ∀i]</formula><p>By interpreting the X i as bits from c 1 and Y i as bits from c 2 this means that if we add independent key bits (more precisely key bits that are independent of the bits from c 1 and c 2 we are looking at) to c 2 we would get</p><formula xml:id="formula_7">Pr [X 1 = x 1 , ..., X m = x m , Y 1 = y 1 ⊕ K 1 , ..., Y l = y l ⊕ K l ] = 2 -l Pr [X 1 = x 1 , ..., X m = x m ] = 2 -m-l ,</formula><p>i. e. the bits would look uniform distributed. But there is also a different interpretation. If we divide the bits from c 1 and c 2 that we are looking at in a group of bits that get added by the same key bits (or no key bits at all), i. e. we have dependencies between the key bits that get added to the bits, and interpret them as X 1 , ..., X m (after key addition), and interpret the rest of the bits, i. e. the ones where we add independent key bits, as Y 1 ⊕ K 1 , ..., Y l ⊕ K l , we can see that we only need to consider the group corresponding to the dependent key bits.</p><p>For illustration let us look at a Feistel cipher with round function F : </p><formula xml:id="formula_8">F 2n 2 → F 2n 2 , F k (l, r) = (r ⊕ k ⊕ f (l),</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>DDT vs. Ciphertext-Pair Distribution</head><p>While it is clear that it is possible to calculate the DDT knowing the probability distribution of (c 1 , c 2 ), it is interesting to note that the reverse is also true under some conditions.</p><p>Lemma 3. Let X 1 , ..., X m and Y 1 , ..., Y m be Bernoulli-distributed random variables and (z 1 , ...z m ), (w 1 , ..., w m ) as well as (δ 1 , ..., δ m ) be elements of F m 2 . Let further</p><formula xml:id="formula_9">Pr [V j = v j | X i = v i , Y i = v i ⊕ δ i ∀i = j] = 1 2 (<label>1</label></formula><formula xml:id="formula_10">)</formula><p>hold for all (v 1 , ..., v m ) ∈ F m 2 and all V j ∈ {X j , Y j }. Then we have that</p><formula xml:id="formula_11">Pr [X i = z i , Y i = z i ⊕ δ i ∀i] = Pr [X i = w i , Y i = w i ⊕ δ i ∀i] ,</formula><p>i. e. the probability is independent of the concrete choice of z 1 , ...z m .</p><p>Proof. Let us assume that (z 1 , ...z m ) = (w 1 , ..., w m ) as otherwise the lemma would already be true. This means that there exists an j such that z j = w j . We will show that the probability stays the same when replacing z j with w j = z j ⊕ 1. For this let us look at</p><formula xml:id="formula_12">Pr [X i = z i , Y i = z i ⊕ δ i ∀i] = Pr [X j = z j , Y j = z j ⊕ δ j | X i = z i , Y i = z i ⊕ δ i ∀i = j] • Pr [X i = z i , Y i = z i ⊕ δ i ∀i = j] .</formula><p>By using Eq. ( <ref type="formula" target="#formula_9">1</ref>) we get that</p><formula xml:id="formula_13">Pr [X j = z j , Y j = z j ⊕ δ j | X i = z i , Y i = z i ⊕ δ i ∀i = j] = 1 2 -Pr [X j = z j , Y j = z j ⊕ 1 ⊕ δ j | X i = z i , Y i = z i ⊕ δ i ∀i = j] = 1 2 - 1 2 -Pr [X j = z j ⊕ 1, Y j = z j ⊕ 1 ⊕ δ j | X i = z i , Y i = z i ⊕ δ i ∀i = j] = Pr [X j = w j , Y j = w j ⊕ δ j | X i = z i , Y i = z i ⊕ δ i ∀i = j] .</formula><p>Thus, we have</p><formula xml:id="formula_14">Pr [X i = z i , Y i = z i ⊕ δ i ∀i] = Pr [X i = z i , Y i = z i ⊕ δ i ∀i = j, X j = w j , Y j = w j ⊕ δ j ] .</formula><p>The lemma follows now from repeating this for all z i = w i .</p><p>For us this means that as long as Eq. ( <ref type="formula" target="#formula_9">1</ref>) holds the probability distribution does only depend on the difference between c 1 and c 2 and can therefore be calculated using the DDT. This can easily be seen by expressing the probability of a difference as the sum of every possible bit configuration</p><formula xml:id="formula_15">Pr [X i = Y i ⊕ δ i ∀i] = (zi,...,zm) Pr [X i = z i , Y i = z i ⊕ δ i ∀i] .</formula><p>Since the lemma tells us that all configurations have the same probability, calculating them from the probability of the difference is just a matter of dividing by the number of possible configurations. Hence, if we want to see whether it could be possible to learn additional features aside from the ones provided by the DDT, we can check if Eq. ( <ref type="formula" target="#formula_9">1</ref>) does not hold.</p><p>For example, let us assume we have a cipher with round function of the from R : F n 2 × F n 2 → F n 2 , R(k, x) = f (x) ⊕ k for some f : F n 2 → F n 2 and independent round key k. Then we know from Lemma 2 that Eq. (1) holds. Therefore, we cannot expect to learn additional information from the distribution of ciphertext-pairs than we could already learn from the DDT 8 . More general, we have shown the following.</p><p>Theorem 1. If for a (bijective) cipher there exist a transformation of the ciphertexts independent of the key such that the transformed ciphertexts have the from c ⊕ k , where k are independent key bits, then the encryption distribution and the ciphertext-difference distribution (where the difference is calculated after applying the key independent transformation) contain the same information.</p><p>Hence, in order to show that the encryption distribution does not provide any additional information to the DDT we have to show that we can represent ciphertexts as c ⊕ k for independent key bits k . Obviously, this is the case for Present if we assume independent round keys, as well as all other key-alternating ciphers.</p><p>Additionally, this is also the case for Feistel ciphers. To see that, let us denote the round function of such a cipher as F k (l, r) = (r ⊕ k ⊕ f (l), l) for some function f : F n 2 → F n 2 and round key k. Obviously, we can see the key addition as the first operation in the round and calculate one round back up to the key addition. Hence, instead of looking at ciphertexts of the from (r i ⊕ k i ⊕ f (l i ), l i ) we can look at ones of the form</p><formula xml:id="formula_16">(r i ⊕ k i , l i ) = (r i ⊕ k i , r i-1 ⊕ k i-1 ⊕ f (l i-1 )) = (r i , r i-1 ⊕ f (l i-1 )) ⊕ (k i , k i-1</formula><p>). Since r i , r i-1 , l i-1 do not depend on the round keys k i , k i-1 (assuming independent round keys) 8 That is if we know the real DDT, i. e. the model used to calculate the DDT does not contain any assumptions that are not met such as the Markov assumption that is often used even though it does not hold in most cases. Otherwise, we would only have an approximation of the DDT, and therefore of the distribution of ciphertext-pairs, and could still hope to find a better one.</p><p>Table 8: Accuracy comparison between neural distinguisher and DDT based one (after reverting one round up to key addition) for Simon32/64.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Distinguisher Rounds 9</head><p>10 11 Neural 0.661 0.567 0.520 DDT[BGL + 21] 0.663 0.568 0.520 we know that we can calculate the probability distribution of the ciphertexts (calculated back up to key addition) by using the DDT. In other words, Simon is another example where only differential features can be used, again, assuming independent round keys. But for Feistel ciphers, such as Simon, we first need to revert one round, up to key addition.</p><p>Knowing that, and given that Bao et al.[BGL + 21] already calculated the accuracy a DDT based distinguisher is able to achieve, we can actually judge the quality of the approximation the differential-neural distinguisher is able to produce for Simon32/64. As can be seen in Table <ref type="table">8</ref>, the accuracies of the two distinguishers are almost identical, supporting the conjecture that the results we have seen in Section 3 may be (almost) optimal. We will later see that the same is true for toy versions of Simon, which makes it reasonable to assume that this observation can be extrapolated to the 48-, 64-, 96and 128-bit block versions of Simon, too. Note that, while calculating the DDT for the 32-bit version of Simon is possible, at least under Markov assumption, it is already computationally expensive, and one can expect it to become infeasible for greater block sizes. Hence, the use of differential-neural distinguishers could be even more valuable for greater block sizes.</p><p>A Chance to Still Use More Than Differential Features While the results above show that for single ciphertext-pairs only their difference may provide information, one option to still improve over purely differential distinguishers could be to use multiple ciphertext-pairs at once, making use of dependencies between the pairs, especially if the key is fixed. But as we will see in Section 8, the dependencies are either not that strong, or they simply do not get used much by current state of the art multi-pair distinguishers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Influence of the Key Schedule</head><p>Applying Theorem 1 to Simon and Present has the caveat of assuming independent round keys. While this assumption is not uncommon, it is conceivable that a differential-neural distinguisher may use (potential) weaknesses within the key schedule. In the end, this could as well be the reason why the differential-neural distinguisher in <ref type="bibr" target="#b18">[Goh19]</ref> is able to perform better than the purely differential one. To answer this question we conducted a simple experiment, replacing the original round keys derived using the corresponding key schedule by independent and identical distributed round keys (i. e. using a free key schedule) and evaluating the differential-neural distinguisher on the so created samples. For all six ciphers, doing so does not lead to any significant difference in accuracy. Hence, we can conclude that the key schedule has no (notable) impact on the distinguishing performance, at least for the assessed ciphers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Experiments using Small Scale Variants of Simon and Speck.</head><p>To analyze the relation between differential-neural and classical cryptanalysis further, we conducted experiments on small scale variants of Simon and Speck. First, we calculated the whole DDT, under Markov assumption, using the methods from <ref type="bibr" target="#b25">[KLT15,</ref><ref type="bibr" target="#b27">LM02]</ref>. While doing so for the 32-bit variants is feasible, and was already done in [BGL + 21, Goh19] for a fixed input difference, it is still computationally expensive. To make our experiment more economic, and since it is unlikely that the results would look significantly different for bigger block sizes, we will consider 16-bit versions of the two ciphers instead.</p><p>But since 16-bit versions of Simon and Speck are not specified, it is not clear which rotational constants to use<ref type="foot" target="#foot_6">foot_6</ref> . Hence, we will first reduce the amount of rotational constants by considering reasonable choices (with respect to purely differential attacks) only.</p><p>Small Scale Simon Starting with Simon, the authors of <ref type="bibr" target="#b25">[KLT15,</ref><ref type="bibr" target="#b7">Bei16]</ref> already provide constraints for choosing reasonable rotational constants α, β and γ (using the notation from Fig. <ref type="figure" target="#fig_10">2a</ref>). The most obvious one is that α and β can be switched and, of course, α = β should hold. Also, it should hold that gcd(| α -β |, n) = 1, where n = 8 is the word size, in order to keep the differential probabilities low. For the same reason γ / ∈ {α, β} should hold, too. In addition, Kölbl et al. also show in <ref type="bibr" target="#b25">[KLT15]</ref> that multiplying all rotational constants by s ∈ Z * n results in the same cipher apart from bit permutations (and changes within the key schedule). We will adopt their notation of structural equivalence for this.</p><p>Definition 3 (Structural equivalence <ref type="bibr" target="#b25">[KLT15]</ref>). If two ciphers are identical apart from bit permutations of the input, output and round key bits we will call them structural equivalent.</p><p>Furthermore, we want to note that the following also holds.</p><p>Lemma 4. For Simon, adding n/2 to all rotational constants, where n denotes the word size, leads to a structural equivalent cipher.</p><formula xml:id="formula_17">Proof. Let f (x) (α,β,γ) = ((x ≪ α) (x ≪ β)) ⊕ (x ≪ γ)</formula><p>be the Feistel function of Simon. It is easy to see that, for any integer ρ, f (x) (α+ρ,β+ρ,γ+ρ) = f (x) (α,β,γ) ≪ ρ holds. If we denote by</p><formula xml:id="formula_18">R (k) (α,β,γ) (l, r) = r ⊕ f (l) (α,β,γ) ⊕ k, l</formula><p>the round function of Simon, then by using ρ = n/2 it is easy to see that</p><formula xml:id="formula_19">R (k) (α+n/2,β+n/2,γ+n/2) (l, r ≪ n/2) = (r ⊕ f (l) (α,β,γ) ⊕ (k ≪ n/2)) ≪ n/2, l and R (k) (α+n/2,β+n/2,γ+n/2) (l ≪ n/2, r) = r ⊕ f (l) (α,β,γ) ⊕ k, l ≪ n/2 .</formula><p>Hence, using (α, β, γ) and (α + n/2, β + n/2, γ + n/2) produces structural equivalent ciphers.</p><p>Therefore, we have classes of equivalent rotational constants, leading to structural equivalent ciphers. For selecting one combination of rotational constants of each of these equivalence classes we make use of the following lemma.</p><p>Lemma 5. Let n be the word size. If n is even, n ≥ 4 and gcd(| α -β |, n) = 1, then there exist unique and non-negative integers b &lt; n/2 (even) and c &lt; n -1 such that, for Simon, using the constants (α, β, γ) is structural equivalent to using the constants (1, b, c).</p><p>Table <ref type="table">9</ref>: Maximal DP and accuracy (based on DDT) for 7-round small scale Simon and different choices of rotational constants, together with the input difference which leads to those results, and ordered by maximal DP. Rotational constant α is fixed to 1. β γ Difference log(max DP) Difference max Acc.</p><p>2 3 0x00 0b -11.3 0x00 01 0.566 2 5 0x01 20 -11.0 0x00 01 0.547 2 7 0x01 80 -11.0 0x00 01 0.587 0 7 0x01 80 -11.0 0x00 01 0.688 0 5 0x01 20 -11.0 0x00 01 0.546 0 6 0x00 01 -10.4 0x00 01 0.546 0 2 0x00 01 -10.4 0x00 01 0.574 0 3 0x00 05 -10.3 0x00 01 0.547 2 6 0x00 01 -8.7 0x00 01 0.694 0 4 0x00 01 -7.4 0x00 01 0.701 2 4 0x00 01 -7.2 0x00 01 0.619 2 0 0x00 01 -6.8 0x00 01 0.737</p><formula xml:id="formula_20">Proof. Since gcd(| α -β |, n) = 1</formula><p>and n is even, α -β must be odd. This means that one of them (α or β) has to be even and the other one odd. Hence, by multiplying all constants with s ∈ Z * n we can bring the odd one to 1 while the even one remains even. For the sake of simplicity let us assume that α = 1. Now we can choose b as either β if β &lt; n/2 already holds or as β + n/2 by simply adding n/2 to all constants (and reducing modulo n). Of course, this means that we could change α from 1 to 1 + n/2, but by multiplying all constants with 1 + n/2 we can return α to (1 + n/2) 2 = 1 mod n (since n ≥ 4 even) and also leave b &lt; n/2 untouched since b • (1 + n/2) = b + n • b 2 = b mod n as β and therefore b is even. The uniqueness follows from the fact that adding n/2 and multiplying by s ∈ Z * n is commutative and every combination of those can be written as a single multiplication by s and at most one addition of n/2. Adding n/2 or multiplying by s alone would violate the first constant being 1 while doing both would require 1 • s + n/2 = 1 for the first constant to remain 1, which means that s has to be n/2 + 1, i. e. b • s + n/2 = b • (n/2 + 1) + n/2 = b + n/2 &gt; n/2 since b is even and b &lt; n/2. Hence, b and c are unique. This leaves us with the rotational constants (α, β, γ) ∈ {(1, b, c)|b ∈ {0, 2}, γ ∈ {0, 2, 3, 4, 5, 6, 7}\{b}} .</p><p>(</p><p>We calculated the DDT for 7 rounds by making use of Theorem 3 from <ref type="bibr" target="#b25">[KLT15]</ref> for those constants. Note that since the round function is invariant under rotations (i. e. rotation both words of the input by d is the same as doing so at the output) we only need to consider input differences up to rotational equivalence. Table <ref type="table">9</ref> provides the maximal DP, as well as the maximal accuracy of a purely differential distinguisher, together with the input differences leading to those results. Here, it becomes already apparent that choosing the rotational constants such that the maximal DP is minimized, as it is normally done 10 , does not necessarily minimize the accuracy a purely differential distinguisher is able to achieve. We already know from Section 5.1 that an r-round distinguisher would use the DDT for r -1 rounds. Hence, we trained differential-neural distinguishers 11 on 8 rounds using Figure <ref type="figure">7</ref>: Network performance for small scale Simon and different choices of rotational constants when using the input difference 0x00 01 and one additional round, i. e. 8 rounds, while the DDT is still calculated for 7 rounds. α is fixed to 1 and the results are ordered by the accuracy of the neural network.</p><p>the input difference 0x00 01, which leads to the highest accuracies for the DDT-based distinguisher, no matter the rotational constants. As can be seen in Fig. <ref type="figure">7</ref>, if the neural network did learn at all, the accuracies are virtually identical.</p><p>Note that the input difference 0x00 01, which is found to be the best (in terms of accuracy), is rotational equivalent to every other input difference with only one active bit that is in the right words. In other words, the input difference we have chosen for Simon32/64, namely 0x0000 0040, is rotational equivalent to 0x0000 0001, which is a reasonable candidate for the best input difference for the 32-bit version, based on the results we have seen here.</p><p>Next, let us fix the rotational constants to (α, β, γ) = (1, 2, 3), i. e. the ones that lead to the lowest maximal DP. Since 7 rounds seem to be harder for the neural network to learn, we will use 6 rounds instead, in order to have more meaningful results.</p><p>Starting with the input differences that lead to the maximal DP, it can be seen in Fig. <ref type="figure" target="#fig_10">8a</ref> that both accuracies, the one based on the DDT and the one of the neural network, are again virtually identical. The same can be seen for input differences leading to maximal accuracy (based on the DDT), see Fig. <ref type="figure">8b</ref>. Therefore, we conclude that for Simon the neural network seems to be able to find a good approximation of the DDT, which may not be that interesting for the small scale variant, but, as we have already seen, also seems to be the case for Simon32/64, and is therefore also likely to be true for variants with greater block sizes, where calculating the DDT becomes infeasible. Hence, such an approximation, especially for larger block sizes, could get quite useful.</p><p>Small Scale Speck For Speck, we, again, need to chose the rotational constants. For this, we can make similar arguments. Once more, we need α and β to be not both divisible by 2 in order to achieve better diffusion. Also, α = n -β mod n (n being the word size) should be avoided, as the rotations would otherwise be identical. In addition, we incorporate the rational of the THREEFISH designers[FLS + 10] and ignore the rotational constants -1, 0 and 1 since diffusion in adjacent bits should already be provided by the modular addition.</p><p>The best input differences for purely differential distinguishers on 6-round Speck and different choices of rotational constants are given in Table <ref type="table" target="#tab_4">10</ref>. Note that, once more, the best input difference in terms of DP and the best in terms of accuracy based on the DDT are not identical.</p><p>In contrast to small scale Simon, where the input difference 0x00 01 always lead to Figure <ref type="figure">8</ref>: Network performance for small scale Simon, using rotational constants (α, β, γ) = (1, 2, 3), for the top ten input differences (up to rotational equivalence) based on and ordered by DP (for 7 rounds) and accuracy (DDT) respectively. The network was trained on 7 rounds, but the accuracy based on the DDT is reported for 6 rounds.</p><p>the highest accuracy and is the natural counterpart to 0x0000 0040 (up to rotational equivalence), the choice of input difference is not as clear cut for the different variants of small scale Speck. But if we take a closer look at the input difference used for Speck32/64 in <ref type="bibr" target="#b18">[Goh19]</ref>, we notice that at the first modular addition only the msb of the left word is active. This leads to a deterministic first round transition and can easily be adapted for other choices of rotational constants. Using such differences, we can see once more that the accuracy based on the DDT is a good approximation of the one of the neural distinguisher, see Fig. <ref type="figure" target="#fig_10">9a</ref>. But as already noted in <ref type="bibr" target="#b18">[Goh19]</ref>, the neural distinguisher is able to surpass the purely differential one in most of the cases, and as can be seen in Fig. <ref type="figure" target="#fig_9">9b</ref>, just optimizing the size of the filters enables the neural distinguisher to at lest catch up to the purely differential one in the cases where the purely differential distinguisher was superior before.</p><p>We would like to note that trying different filter sizes for small scale Simon did not make any significant difference. In other words, the version of Fig. <ref type="figure">7</ref> optimized for filter size would not look any different.</p><p>Given that the rotational constants α = 5 and β = 2 lead to the lowest maximal DP, let us now fix those constants. We can see the top ten input differences, as well as the corresponding maximal DP and accuracies for both, the neural network, as well as the DDT, in Fig. <ref type="figure" target="#fig_10">10a</ref>. Here, we would like to point out two things. Firstly, if the neural network is able to learn at all, it either reaches the same accuracy as the distinguisher based on the DDT or it surpasses it. Secondly, the figure definitely shows that there is no clear relation between the accuracy (based on the DDT) and the maximal DP, which is not surprising as we already know that one corresponds to the mean and the other to the maximal distance of the distributions.</p><p>Moving on to the top ten input differences according to the accuracy of the purely differential distinguisher, we can see in Fig. <ref type="figure" target="#fig_1">10b</ref> that the accuracy based on the DDT is once more a good approximation for the one of the neural distinguisher, and, again, the neural distinguisher is at least as good as the purely differential one and even surpasses it in most cases.</p><p>If we take a closer look at the input differences that lead to the highest accuracies for small scale Speck, we see that the counterpart to the input difference used for Speck32/64 (i. e. 0x10 00) does not lead to the highest accuracy. Hence, the question arises if we are able to find a better input difference based on those results. While it is not completely    Figure <ref type="figure" target="#fig_1">10</ref>: Network performance for 6-round small scale Speck, using rotational constants (α, β) = (5, 2), for the top ten input differences based on and ordered by DP and accuracy (DDT) respectively.</p><p>clear how one can find a counterpart of one difference for a different variant of Speck, we will still try to do so based on the word size and the rotational constants. For the difference 0x04 20 for example, one can notice that after rotation the left side by α the two sides are identical, i. e. the differences in both words are the same right before the first modular addition. Furthermore, rotating the right side by β yields a difference in the msb only. The counterpart of 0x04 20 is therefore likely to be 0x0010 2000. But for Speck32/64 this difference leads to an accuracy of 0.595, which is slightly worse than the original input difference, but still the best result of all differences such that the two sides are identical up to rotating the left side by α. It hence looks reasonable that the choice of input difference in <ref type="bibr" target="#b18">[Goh19]</ref> could already be optimal, at least if we consider the neural distinguisher on its own.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">Real-Difference-Experiment</head><p>In <ref type="bibr" target="#b18">[Goh19]</ref> the Real-Difference-Experiment is proposed to show that the neural distinguisher for Speck is not a purely differential distinguish. For this, 10 7 samples<ref type="foot" target="#foot_9">foot_9</ref> of the form (c 1 , c 2 ) are drawn from the encryption distribution. Then half of the samples get blinded as (c 1 ⊕ b, c 2 ⊕ b) by independent blinding values b chosen uniformly at random. The resulting samples get judged by the distinguisher and the accuracy of distinguishing the blinded from the un-blinded samples is evaluated using the distinguishers trained for the scenario described in Section 2.2. As explained in <ref type="bibr" target="#b18">[Goh19]</ref>, the rationale behind this is that the blinded samples contain the same ciphertext difference, but all additional information is lost. Hence, if only differential features would be used by a distinguisher the accuracy would be around 0.5. If the accuracy is significantly higher, then more than just the ciphertext difference is used.</p><p>Actually, the distinguishing performance on the non-blinded encryption samples will stay the same, as a sample labeled as encryption sample is still an encryption sample, while one labeled as random sample is now a blinded encryption sample. This means we could just compare the performance on random and blinded encryption samples, both labeled as random samples, which is typically called the True Negative Rate (TNR) in both, the default network evaluation, as well as the Real-Difference-Experiment. If the TNR would be the same in both cases, then the blinded encryption samples would look  <ref type="table" target="#tab_1">5</ref>, except for Simon where we used a version of the neural distinguisher trained on samples where the last round was reverted, given the results from Section 5.1. like random samples to the network. If it would go down, then at least some differential features get used.</p><p>Still, we think that the accuracy of the Real-Difference-Experiment is the more intuitive metric, which is why we will simply report both. If we take a look at the results in Fig. <ref type="figure" target="#fig_11">11</ref>, we see that for Simon32/64, Skinny and Present the accuracy drops to 0.5 in the Real-Difference-Experiment, indicating that the neural distinguisher only makes use of the ciphertext difference (or more precise, the difference after a deterministic transformation of the ciphertexts in the cases of Simon and Skinny). While this was to be expected for Simon and Present, given the results from Section 5.1, for Skinny it is not as clear cut. Still, the experiment shows that for Skinny only differential features were used, too. Whether this is because other features do not exist or because the neural network was unable to learn them is not clear.</p><p>While the results for Katan look like also only differential features are used, a closer look on the accuracy of 0.501 reveals that, as it was evaluated using 10 7 samples, it still deviates significantly from 0.5, which means that more than purely differential features were used. Similar can be seen for ChaCha and Speck32/64, where the accuracy drops are not too high.</p><p>We would like to point out that while the results for Simon, Present and Skinny clearly indicate that only differential features are used, we cannot conclude the opposite for Katan and ChaCha, as we only considered one (natural) representation. If we, for example, look at Simon32/64 without backwards calculation, we see that the accuracy in the Real-Difference-Experiment would still be 0.645 (with a TNR of 0.708). In other words, we would need to repeat the Real-Difference-Experiment for all possible (deterministic) transformations of the ciphertexts (up to linear equivalence), if we would want to make such a conclusion plainly based on the Real-Difference-Experiment. Nevertheless, the results show that using the given representation, more than just differential features can be used. Additionally, at least for Speck, it was already show in <ref type="bibr" target="#b18">[Goh19]</ref>, and also in Section 5.3, that the neural distinguisher uses more than just differential features.</p><p>All in all, neural distinguishers are able to make use of more than just differential feature, even in a setting that is differential by nature (i. e. using a fixed input difference). It would therefore be interesting to classically explain such features, as this may have the potential to lead to new classes of attacks, and hence improve current security estimations as well as provide new guidance for cipher design.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">Empirical Evaluation of Differential-Linear Biases</head><p>Next, we would like to distinguish the encryption distribution using statistical means. Given the complexity of this distribution, the idea is to reduce it to the distribution of one bit only. As it turns out, the found one-bit biases for the same amount of rounds as the differential-neural distinguishers cover are quite pronounced.</p><p>From Lemma 2 it is clear that reducing our analysis to (parts of) one ciphertext only would reduce the distribution to a uniform one. Therefore, we will look at one bit of the difference of the two ciphertexts of a ciphertext-pair<ref type="foot" target="#foot_10">foot_10</ref> . In other words, we will empirically evaluate the differential-linear biases for each possible one bit linear mask, together with the input difference we used for our neural distinguishers.</p><p>For each of the six ciphers under scrutiny here, we show in Fig. <ref type="figure" target="#fig_2">12</ref> the differential-linear biases that pass a significance test with significance level 0.01 (after Bonferroni correction for the number of linear masks evaluated). Interestingly, the biases for Present are all negative, which is related to the fact that the output differences are biased towards lower weight. In addition, the biases for Skinny are clearly clustered into four bit blocks, which happen to align with the word structure of Skinny.</p><p>Unsurprisingly, the biases seem to be strongly related to the accuracy the neural disitnguishers are able to achieve. Both, the ChaCha and Skinny distinguisher achieve accuracies above 0.9, and have many high absolute biases. For Present, Simon and Speck the biases get lower and/or less frequent, and the accuracies of the neural distinguishers are between 0.56 and 0.66. For Katan, the biases are the lowest, as is the accuracy.</p><p>We would like to note that the lowest absolute bias passing the significance test would be around 2 -11 . Since the amount of samples used here is the same as we train the neural networks with (i. e. 10 7 ), this means that a lower bias would be unlikely to even be noticeable during training. In contrast, such an absolute bias is not disproportionally low for it to be used in an attack. Of course, depending on the cipher there exist information not visible in the differential-linear biases, as it is the case for Speck, given that the neural distinguisher uses more than just differential features <ref type="bibr" target="#b18">[Goh19]</ref>, but our experiments still show a strong correlation between the biases and the networks performance.</p><p>Given that we used the highest number of rounds for which we were able to directly<ref type="foot" target="#foot_11">foot_11</ref> train a neural distinguisher, it looks like there needs to exist a certain degree of skewness in the encryption distribution for it to be distinguishable from the uniform one by neural networks as the one from <ref type="bibr" target="#b18">[Goh19]</ref>. While this should be no surprise, the biases in Fig. <ref type="figure" target="#fig_2">12</ref> indicate that the degree of skewness may need to be relatively high. In other words, it is unlikely that neural distinguishers will be useful for breaking any reasonable (full round) cipher, but we still think that they can be a useful tool to evaluate its security, as they can be expected to procure good approximations of the DDT and/or ciphertext-pair-distribution for non-trivial numbers of rounds.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">Using Multiple Ciphertext-Pairs</head><p>One current trend in the vicinity of machine learning assisted cryptanalysis is the use of multiple ciphertext-pairs per sample. While this could be a valid approach to improve upon using single pairs due to possible dependencies between the pairs, and especially could help to surpass classical distingiushers even for ciphers where this is not possible using single pairs (see Section 5), current literature fails to put the results into the right perspective, which we would like to chance. For this, it is important to note that differential-neural distinguishers, like the one from <ref type="bibr" target="#b18">[Goh19]</ref>, actually produces a score between 0 and 1 for each sample, representing its confidence for the sample to belong to the encryption class (instead of the random class). To evaluate the accuracy, we reduce this confidence into a hard decision by simply comparing it to 0.5, i. e. we loose information. But if we simply interpret each score as the probability of the sample to belong to the encryption class, and if we assume independence, we can actually make use of the whole score.</p><p>Corollary 2. Let us assume that we have m samples, each drawn from the same distribution (encryption or random). Let us denote the probability that the i-th samples is an encryption samples as p i . If the probabilities p 1 , ..., p m are independent, then the probability that all m samples are drawn from the encryption distribution is</p><formula xml:id="formula_22">1 1 + m i=1 1-pi pi .</formula><p>Note that this was already implicitly used in <ref type="bibr" target="#b18">[Goh19]</ref>, as a ranking of m ciphertext-pairs based on this combined probability is the same as one by</p><formula xml:id="formula_23">i log p i 1 -p i ,</formula><p>which is how the keys are ranked in <ref type="bibr" target="#b18">[Goh19]</ref> when using multiple ciphertext-pairs during trial decryption. In other words, <ref type="bibr" target="#b18">[Goh19]</ref> already used multi-pair distinguishers, even if only implicitly. Using this rule of combining probabilities/distinguisher responses, we are able to explicitly turn a distinguisher for one ciphertext-pair into one for an arbitrary amount of ciphertext-pairs. A comparison of such distinguishers and results from literature is shown in Table <ref type="table">2</ref>  <ref type="foot" target="#foot_12">15</ref> . As can be seen, the claimed improvement is at best non-existent in most cases. In the case of <ref type="bibr" target="#b15">[CSYY22]</ref>, the multi-pair results are even worse than just using their singlepair distinguishers. Only <ref type="bibr" target="#b41">[ZWW22]</ref> manage to improve over the combined distinguishers, but not as much as they reported, and in the case of 7-to 9-round Speck32/64, as well as 12-round Simon32/64 only.</p><p>To be fair to the authors, our distinguishers were not available for them to compare to, but at least comparisons to published distinguishers, such as the ones for Speck32/64 from <ref type="bibr" target="#b18">[Goh19]</ref>, or even to their own single pair distinguishers, would have been desirable.</p><p>In addition to the results in Table <ref type="table">2</ref>, Benamira et al. <ref type="bibr" target="#b10">[BGPT21,</ref><ref type="bibr">Section 6]</ref> claim to improve the distinguisher from <ref type="bibr" target="#b18">[Goh19]</ref> by averaging over the score of multiple (singlepair) samples or combining them using a neural network, effectively creating a multi-pair distinguisher. Unfortunately, they fail to notice that the key recovery attacks in <ref type="bibr" target="#b18">[Goh19]</ref> effectively combine the scores as detailed above. Despite their claims, they do not manage to improve the results from <ref type="bibr" target="#b18">[Goh19]</ref> at all, see Table <ref type="table" target="#tab_5">11</ref>.</p><p>Given the results for using multiple ciphertext-pairs when training a neural distinguisher, one could come to the conclusion that this may be the best way to learn more rounds. Indeed, if we look for example at the accuracies the authors of <ref type="bibr" target="#b41">[ZWW22]</ref> achieved for 9-round Speck32/64 when using at least 8 pairs, it seems unlikely that we could tell an accuracy for one pair apart from 0.5 using 10 6 (or even 10 7 ) samples. In other words, it could be that single-pair distinguishers for 9-round Speck32/64 already were trained, but were not identified as being useful due to the noise that comes from experimentally evaluating the accuracy. A good example for this are our results for 66-round Katan. 505 only, which one could easily mistake for random noise, using (for instance) 8 pairs leads to an accuracy of 0.524, for which it is out of the gate more believable to be better than random guessing, but which is still way higher than the accuracy of 0.502 (reported in <ref type="bibr" target="#b41">[ZWW22]</ref> for 9-round Speck32/64 and 8 pairs). We would like to emphasise that we do think that using more than just one ciphertextpair could be a viable way to improve on already existing distinguishers, as there should exist dependencies between the pairs that could be used, but we would like to ask for a fair comparison, for example as we did here. Especially, a fair comparison does not include using the same total amount of plain-/ciphertexts when evaluating the accuracy, but keeping the amount used for one sample constant. It should be clear that the amount of samples/trials only effects the quality of the accuracy estimation, but not the distinguishing performance itself.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="9">Conclusion</head><p>We have seen that differential-neural distinguishers are quite generic and can be applied to a wide variety of ciphers and cipher designs. Furthermore, we provide guidance on how the network hyper-parameters should be chosen in order to produce potent differential-neural distinguishers. Despite the size of the explored search space, only a few hyper-parameters needed to be changed for the six ciphers under scrutiny, which makes it plausible that the same may be true for other ciphers as well.</p><p>In addition, we have seen that the best input difference with respect to the probability of a differential is not necessarily the best for differential-neural distinguishers, and also that there is a pronounced correlation between the accuracy a differential-neural distinguisher is able to achieve and the mean absolute distance between the output difference distribution and the uniform one, which is essentially the accuracy of a DDT-based distinguisher.</p><p>For a whole class of ciphers, we were able to see that only differential features can be used, assuming independent round keys. Furthermore, we have seen examples of ciphers not belonging to this class, where it is most likely that more than differential features are used by the differential-neural distinguishers presented in this work.</p><p>While the skewness of the encryption distribution most likely needs to be quite pronounced for the neural network to learn, this does not diminish the fact that differentialneural distinguishers seem to be able to learn a good approximation of the ciphertextdifference distribution, which, especially for greater block sizes, should be much faster than calculating the corresponding part of the DDT.</p><p>At last, we were able to rectify results from literature for using multiple ciphertext-pairs at once, showing that the claimed improvements are at best marginal, if not non-existent. This is especially important as the approach of combining distinguisher responses is by no means new, but is already used in the underlying work <ref type="bibr" target="#b18">[Goh19]</ref>, be it only implicitly. We hope that going forward, this gives authors a straightforward way of comparing such distinguishers to single-pair ones.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Discussion</head><p>One downside of neural network based cryptanalysis is without doubt the explainability of the used features. It would be desirable to understand the neuraldistinguishers decision in order to gain insights for (classical) cryptanalysis and cipher design. While there does exist work in this direction (e. g. <ref type="bibr" target="#b10">[BGPT21]</ref>), it is (so far) distinguisher (and therefor cipher) specific. On the other hand, we were able to show that for a great number of ciphers any distinguisher in the differential setting we discussed here can at most make use of the ciphertext-difference distribution<ref type="foot" target="#foot_13">foot_13</ref> , which completely explains the features a neural network could use. For such ciphers, we can even see differential-neural distinguishers as a tool providing (in a reasonable amount of time) a lower bound on the mean absolute distance of the ciphertext-difference distribution and the uniform one, but with the drawback that it may be unclear how tight this bound is.</p><p>In addition, even if unknown features get used by a machine learning based distinguisher, knowing of the existence of such features is at least a first step in gaining insights, and is preferable over being unaware of such features.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Future Work</head><p>We see multiple directions in the area of differential-neural cryptanalysis that could be worth exploring. For one, we were, despite a quite significant effort, not able to improve the distinguisher performance for Speck32/64 from [Goh19] by much, and also show that the ones for Simon are most likely almost optimal. It is therefore conceivable that the differential-neural distinguishers cannot be improved much further. But one way to still improve current machine learning based attacks is to make the distinguisher evaluations more efficient, for example by using a smaller neural network as in <ref type="bibr" target="#b6">[BBP22]</ref>. During our hyper-parameter search for 7-round Speck32/64 we incidentally found a differential-neural distinguisher that has only 29,921 instead of 44,321 <ref type="bibr" target="#b18">[Goh19]</ref> overall parameters<ref type="foot" target="#foot_14">foot_14</ref> , but still achieves an accuracy of 0.616. Given that we did not try to optimize the number of parameters at all, it would be unreasonable to assume that this is as low as we can go.</p><p>Another approach could be to try to find better input differences. While our experiments using toy versions of Simon and Speck suggest that the input differences we use may already by optimal (with regards to distinguishing performance), it would be unreasonable to assume that the same is true for the other ciphers under scrutiny here.</p><p>On the other hand, it could be more beneficial to chose the input difference with the classical part in mind. In this work, we focused plainly on distinguishing performance, while <ref type="bibr" target="#b18">[Goh19]</ref> augments their neural distinguisher using a classical differential. This is, of course, somewhat limited by the chosen input difference the neural distinguisher was trained with, especially if neutral bits for the differential transition should be used. It is therefore quite likely that the optimal input difference with regards to the distinguishing performance may not be the best for an overall attack.</p><p>Despite our findings that published multi-pair distinguisher do not perform much better than single pair ones, we still think that there should be a way to make use of the dependencies between the pairs. It would therefore be interesting to see if such distinguishers can indeed lead to greatly increased distinguishing performance, but it could be that the dependencies would need to be more pronounced for this to be possible.</p><p>Also interesting could be to try to find the best input difference by classical means. While it is possible that this is as hard as computing the DDT, given that the best input difference for a differential-neural distinguisher seems to be the one that maximizes the mean absolute distance between the ciphertext-difference distribution and the uniform one, this could also prove useful for general security estimations, as it would especially be a nice addition to just knowing the maximal distance, i. e. the maximal probability of a differential, since an adversary is by no means limited to one ciphertext-difference only.</p><p>At last, for ciphers like Simon32/64, where differential-neural distinguishers are unlikely to exceed a distinguisher based on the DDT, and where it is feasible to compute the needed part of the DDT, it could be interesting to see if an attack that basically replaces the differential-neural distinguisher by one based on the DDT in the attack from <ref type="bibr" target="#b18">[Goh19]</ref> can be competitive with existing attacks. While evaluating the distinguisher could be a problem for the overall time complexity, making use of all possible output differences should be superior to using just a single one.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A Neural Network Hyper-Parameters</head><p>While most of the hyper-parameters we refer to in Section 3.2 should be clear to people familiar with neural networks, others are a bit ambiguous and require some explanation. Therefore, let us go through the list of considered hyper-parameters (Table <ref type="table" target="#tab_0">4</ref>) and give a bit more detail.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Learning Rates and Learning Rate Schedules</head><p>In <ref type="bibr" target="#b18">[Goh19]</ref> a cyclic LR schedule, which starts at 2 • 10 -3 (to which we refer as high LR), then linearly drops to 10 -4 (low LR) over 10 epochs, and jumps back to 2 • 10 -3 completing the cycle, is used. Looking at the validation accuracy and loss during training, we had the conjecture that returning to the high LR of 2 • 10 -3 may prevent the neural network from refining the weights, as it seems to regularly get out of a (local and approximated) minimum (of the loss function). While this can be useful to find a better minimum, it could be beneficial to commit to one minimum at some point. With this reasoning, we tried the LR schedules depicted in Fig. <ref type="figure" target="#fig_13">13</ref>, in addition to constant ones. In the end, we did not find the choice of a different LR schedule to give any significant improvement. xi Convolution Batch Normalization Activation Convolution Batch Normalization Activation + xi+1 (a) [Goh19, HZRS16] xi Activation Convolution Batch Normalization Activation Convolution Batch Normalization + xi+1 (b) [HZRS16]</p><p>xi Batch Normalization Activation Convolution Batch Normalization Activation Convolution + xi+1 (c) [HZRS16]</p><p>xi Convolution Activation Convolution Activation + xi+1 (d) [SKSS16]</p><p>xi Activation Convolution Activation Convolution + xi+1 (e) [SKSS16]</p><p>xi Convolution Activation Convolution Batch Normalization + xi+1 (f) [SKSS16] </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Residual Block Design</head><p>We tested a variety of different residual blocks, see Fig. <ref type="figure" target="#fig_14">14</ref>, all using two convolutional layers. In addition, we also tried in-/decreasing the number of convolutional layers using the original design shown in Fig. <ref type="figure" target="#fig_14">14a</ref>. Here, the number of convolutions actually refers to the number of applications of the composition of convolutional layer, batch normalization and activation.</p><p>Inception Given the importance of the filter size, we also tried to use Inception[SLJ + 14], which allows the use of multiple filter sizes at the same time, in a way enabling the network to learn the filter size. A graphic representation of our implementation can be found in Fig. <ref type="figure" target="#fig_15">15</ref>. Since calculating multiple convolutional layers with different filter sizes instead of one convolutional layer with a fixed filter size is computationally more expensive, the authors of [SLJ + 14] proposed to reduce the number of filters for the layers with a filter size greater than one by adding additional convolutional layers with filter size one and less filters before these layers. Given the increase in training time, but not in accuracy, we found it to be more efficient to directly search for the optimal filter size using a hyper-parameter search.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Circular Convolutions</head><p>Based on the fact that many of the ciphers under scrutiny make use of some sort of bit cyclic shift (i. e. rotation), it seems reasonable that a cyclic representation would make more sense. To achieve this, Schubert et al. <ref type="bibr" target="#b36">[SNPP19]</ref> propose to pad the input using data from the opposing side, instead of with zero. We adapted this approach to the neural network from <ref type="bibr" target="#b18">[Goh19]</ref>, and found it to make small improvements. But in total, those improvements also seem possible by tweaking the remaining hyper-parameters.</p><p>xi Convolution (Red.) Convolution (1) Convolution (Red.) Max. Pooling (3) Batch Normalization Batch Normalization Convolution (1) Activation Activation Convolution (3) Convolution (5) Concatenate Batch Normalization Activation Convolution (Red.) Convolution (1) Convolution (Red.) Max. Pooling (3) Batch Normalization Batch Normalization Convolution (1) Activation Activation Convolution (3) Convolution (5) Concatenate Batch Normalization Activation + xi+1 </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Dropout</head><p>As an additional form or regularization, we also considered dropping out neurons in the densely connected layers, but did not find this to be helpful.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Batch Normalization</head><p>The original network from <ref type="bibr" target="#b18">[Goh19]</ref> already uses batch normalization. We therefore wanted to find out which effect it has on the performance of the neural distinguisher. As batch normalization after convolutions is already part of the residual block design, we tested removing batch normalization after the densely connected layers only, and found it to be quite essential.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Residual Scaling</head><p>The residual block takes some input x, calculated some function F on it and adds the input to the result. While this can enable deeper neural networks in the first place, our idea is to control the impact of F by scaling it accordingly, i. e. instead of calculating F (x) + x, we calculate λ • F (x) + x for a scalar λ. This was found to have only a limited effect.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Bit Encoding</head><p>In <ref type="bibr" target="#b18">[Goh19]</ref> the samples are represented as arrays of bits, encoded as zero and one. But note that most layers of the neural network just perform matrix multiplication over real numbers. Therefore, using zero as one possible encoding could have the drawback that every multiplication with zero gives zero. Based on this observation, we tried encoding the bits as -1 and 1, as well as 1 and 2, but did not find this to make any difference.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>B Reverting Deterministic Parts of the Katan Round Function</head><p>Let us take a look at how we calculate ciphertexts back for the cipher Katan. Let (x r 0 , ..., x r 31 ) ∈ F 32 2 be the state of Katan after round r, where (x r 0 , ..., x r 12 ) is the content of the first shift register and (x r 13 , ..., x r 31 ) the content of the second one. If we look at the structure of Katan in Fig. <ref type="figure" target="#fig_3">5</ref>, we know that x r-j i = x r i+j for 0 ≤ i ≤ 12 -j and x r-j i = x r i+j for 13 ≤ i ≤ 31 -j.</p><p>Let further (k r a , k r b ) ∈ F 2 2 be the round key and IR r ∈ F 2 the round constant of round r. Hence</p><formula xml:id="formula_24">x r-1 12 = x r 13 ⊕ x r-1 8 • x r-1 5 ⊕ x r-1 7 ⊕ x r-1 3 • IR r ⊕ k r a and x r-1 31 = x r 0 ⊕ x r-1 16 • x r-1 21 ⊕ x r-1 20 ⊕ x r-1 23 • x r-1 25 ⊕ k r b .</formula><p>Therefore, we know every variable except the round keys for the last four rounds, which means we that we can calculate</p><formula xml:id="formula_25">x r-4 9+i ⊕ k r-i a for 0 ≤ i ≤ 3 and x r-4 28+i ⊕ k r-i b for 0 ≤ i ≤ 3.</formula><p>In other words, we know the state of four rounds before (up to the eight key bits).</p><p>But since we only know x r-4 9 ⊕ k r a and not x r-4 9 itself, we can no longer calculate x r-5 12 as it would require us to know x r-5 8 = x r-4 9 . On the other hand, it is still possible to calculate at least parts of some more rounds backwards. While we do not know x r-5 8 and therefore cannot revert the addition of x r-5 8 • x r-5 5 to x r-5 12 , we can still revert the addition of x r-5 7 ⊕ x r-5 3 • IR r-4 . Furthermore, we can still calculate x r-5 31 ⊕ k r-4 b and x r-6 31 ⊕ k r-5 b , before x r-7 23 • x r-7 25 becomes unknown. Hence, partly reverting six rounds gives x r-6 i for 0 ≤ i ≤ 6, x r-6 i ⊕ k r+7-i a for 7 ≤ i ≤ 10, x r-6 i ⊕ x r+6-i 8 • x r+6-i 5 ⊕ k r+7-i a for 11 ≤ i ≤ 12, x r-6 i for 13 ≤ i ≤ 25 and x r-6 i ⊕ k r+26-i b for 26 ≤ i ≤ 31.</p><p>As already mentioned, we now no longer are able to calculate x r-7 23 • x r-7 25 . Despite that, we can still continue to calculate part of the rounds backwards. After all, it takes another four rounds for x r-10 12 to become unknown (up to key addition), because we cannot calculate x r-10 3 • IR r-9 . Also, x r-10 7 = x r-6 11 which is not only masked by the round key k r-4 a , but also by x r-5 8 • x r-5 5 . Therefore, calculating nine rounds (partially) backwards gives</p><formula xml:id="formula_26">x r-9 i for 0 ≤ i ≤ 3, x r-9 i ⊕ k r+4-i a for 4 ≤ i ≤ 7, x r-9 i ⊕ x r+3-i 8 • x r+3-i 5 ⊕ k r+4-</formula><p>i a for 8 ≤ i ≤ 12, x r-9 i for 13 ≤ i ≤ 22, x r-9 i ⊕ k r+23-i b for 23 ≤ i ≤ 28 and x r-9 i ⊕ x r+22-i 23 • x r+22-i 25 ⊕ k r+23-i b for 29 ≤ i ≤ 31, but after that we can only revert the addition of x r-10 16 • x r-10 21 for the next round, whereas the one of x r-i 20 can still be reverted (up to addition of the round key) up to i = 17. Hence, partially reverting ten rounds gives x r-10 i for 0 ≤ i ≤ 2, x r-10 i ⊕ k r+3-i a for 3 ≤ i ≤ 6, x r-10 i ⊕ x r+2-i 8 • x r+2-i 5 ⊕ k r+3-i a for 7 ≤ i ≤ 11, x r-10 i ⊕ x r-10 8 • x r-10 5 ⊕ x r-10 7 ⊕ x r-10 3 • IR r-9 ⊕ k r-9 a for i = 12 x r-10 i for 13 ≤ i ≤ 21, x r-10 i ⊕ k r+22-i b for 22 ≤ i ≤ 27 and x r-10 i ⊕ x r+21-i 23 • x r+21-i 25 ⊕ k r+22-i b for 28 ≤ i ≤ 31.</p><p>We now can continue reverting the addition of x r-i 20 for three additional rounds until all values within the first register are masked by a key, i. e.</p><formula xml:id="formula_27">x r-13 i ⊕ k r-i a for 0 ≤ i ≤ 3, x r-13 i ⊕ x r-1-i 8 • x r-1-i 5 ⊕ k r-i a for 4 ≤ i ≤ 8, x r-13 i ⊕ x r-1-i 8 • x r-1-i 5 ⊕ x r-1-i 7 ⊕ x r-1-i 3 • IR r-i ⊕ k r-i a for 9 ≤ i ≤ 12, x r-13 i for 13 ≤ i ≤ 18, x r-13 i ⊕ k r+19-i b for 19 ≤ i ≤ 24, x r-13 i ⊕ x r+18-i 23 • x r+18-i 25 ⊕ k r+19-i b for 25 ≤ i ≤ 28 and x r-13 i ⊕ x r+18-i 16 • x r+18-i 21 ⊕ x r+18-i 23 • x r+18-i 25 ⊕ k r+19-i b for 29 ≤ i ≤ 31.</formula><p>As already mentioned, the next obstacle is that x r-18 20 = x r-13 25 is not known (even not up to key addition). But we can still (partially) revert 17 rounds.</p><p>x r-17 i ⊕ x r-5-i 8 • x r-5-i 5 ⊕ k r-4-i a for 0 ≤ i ≤ 4, x r-17 i ⊕ x r-5-i 8 • x r-5-i 5 ⊕ x r-5-i 7 ⊕ x r-5-i 3 • IR r-4-i ⊕ k r-4-i a for 5 ≤ i ≤ 12, x r-17 i for 13 ≤ i ≤ 14, x r-17 i ⊕ k r+15-i b for 15 ≤ i ≤ 20, x r-17 i ⊕ x r+14-i 23 • x r+14-i 25 ⊕ k r+15-i b for 21 ≤ i ≤ 24, x r-17 i ⊕ x r+14-i 16 • x r+14-i 21 ⊕ x r+14-i 23 • x r+14-i 25 ⊕ k r+15-i b for 25 ≤ i ≤ 27 and x r-17 i ⊕ x r+14-i 16 • x r+14-i 21 ⊕ x r+14-i 23 • x r+14-i 25 ⊕ k r+15-i b ⊕ k r+28-i a for 28 ≤ i ≤ 31</p><p>From now on, we cannot even revert parts of the round function. Hence, this is the state we are referring to if we talk about ciphertexts calculated back.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><figDesc>[BBCD21], Chaskey[ZW22, BBCD21, CSYY22], DES[ZW22, CSYY22], GIMLI[BBCD21], KNOT[BBCD21], Present[CSYY22, ZW22, JKM20], Simon[LLL + 22, ZWW22, HRC21a, HRC21b, BGL + 21, SZM20] and Simeck[LLL + 22]</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Figure 1 :</head><label>1</label><figDesc>Figure 1: Structure of neural network used in [Goh19].</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Figure 2 :</head><label>2</label><figDesc>Figure 2: Round functions of Simon and Speck.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Figure 5 :</head><label>5</label><figDesc>Figure 5: Structure of Katan (modified version of [Ava17]).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>Figure 6 :</head><label>6</label><figDesc>Figure6: Quarter round of ChaCha (modified version of<ref type="bibr" target="#b13">[Bre17]</ref>).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><figDesc>[BBCD21], Chaskey[ZW22, BBCD21, CSYY22], DES[ZW22, CSYY22], GIMLI[BBCD21], Knot[BBCD21], Simon[LLL + 22, ZWW22, HRC21a, HRC21b, BGL + 21, SZM20], Simeck[LLL + 22] and Present[CSYY22, ZW22, JKM20, CSYY22] exist, this question can be answered positively.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6"><head>n</head><figDesc>l) and Feistel function f : F n 2 → F n 2 . Let us consider the two ciphertexts c 1 = (s we would see no dependency since the last round key got added to s independent round keys. Analog, there can also be no dependency between s</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7"><head>( a )</head><label>a</label><figDesc>Top ten differences based on DP (b) Top ten differences based on accuracy (DDT)</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8"><head>( a )</head><label>a</label><figDesc>Without hyper-parameter optimization.(b) Using filter sizes 3, 5 or 7.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9"><head>Figure 9 :</head><label>9</label><figDesc>Figure9: Network performance for 6-round small scale Speck and different choices of rotational constants when using the input difference such that only the msb of the left side is active right before the modular addition in the first round, extended by the accuracy calculated using the DDT (for the same number of rounds). The results are ordered by the accuracy of the neural network in the left image.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10"><head>( a )</head><label>a</label><figDesc>Top ten differences based on DP (b) Top ten differences based on accuracy (DDT)</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11"><head>Figure 11 :</head><label>11</label><figDesc>Figure 11: Results of Real-Difference-Experiment using the neural distinguisher from Table5, except for Simon where we used a version of the neural distinguisher trained on samples where the last round was reverted, given the results from Section 5.1.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12"><figDesc>Figure12: Differential-linear biases when using the usual input differences as well as one-bit linear masks, empirically evaluated using 10 7 samples. Results that do not pass a Bonferroni corrected significance test with significance level 0.01 are not shown. The two critical values for the significance test are shown by the two horizontal lines.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13"><head>Figure 13 :</head><label>13</label><figDesc>Figure13: Examples of tried LR schedules, compared to the cyclic one used in<ref type="bibr" target="#b18">[Goh19]</ref> (original).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_14"><head>Figure 14 :</head><label>14</label><figDesc>Figure 14: Tried residual block designs.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_15"><head>Figure 15 :</head><label>15</label><figDesc>Figure 15: Residual block using the Inception Model. Convolutional layers marked with (Red.) are used for filter reduction and use filter size of one. All other convolutional layers have their filter size written in parentheses. For max. pooling, the number in parentheses represent the used pool size.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 4 :</head><label>4</label><figDesc>Considered Hyper-Parameters.</figDesc><table><row><cell>Hyper-Parameter</cell><cell>Options</cell><cell>[Goh19]</cell></row><row><cell>Optimizer</cell><cell>Adadelta, Adagrad, Adam, Adamax,</cell><cell>Adam</cell></row><row><cell></cell><cell>Ftrl, Nadam, RMSprop, SGD</cell><cell></cell></row><row><cell>LR Schedule</cell><cell>constant, cyclic, cyclic to constant,</cell><cell>cyclic</cell></row><row><cell></cell><cell>exponential decay, inverse time decay,</cell><cell></cell></row><row><cell></cell><cell>linear cyclic, picewise constant decay,</cell><cell></cell></row><row><cell></cell><cell>polynomial decay</cell><cell></cell></row><row><cell>Loss Function</cell><cell>Kullback-Leibler Divergence, Mean</cell><cell>MSE</cell></row><row><cell></cell><cell>Absolute Error, Mean Absolute</cell><cell></cell></row><row><cell></cell><cell>Percentage Error, MSE, Mean</cell><cell></cell></row><row><cell></cell><cell>Squared Logarithmic Error, Binary</cell><cell></cell></row><row><cell></cell><cell>Crossentropy, Hinge, LogCosh,</cell><cell></cell></row><row><cell></cell><cell>Poisson, squared Hinge, Huber</cell><cell></cell></row><row><cell>Activation Function</cell><cell>ELU, ReLU, Leaky ReLU,</cell><cell>ReLU</cell></row><row><cell></cell><cell>SELU, Softplus, Swish</cell><cell></cell></row><row><cell>Batch Size</cell><cell>10 3 to 5 • 10 4</cell><cell>5 • 10 3</cell></row><row><cell># Densely Connected Neurons</cell><cell>48 to 96 per layer</cell><cell>64</cell></row><row><cell># Densely Connected Layers</cell><cell>0 to 4</cell><cell>2</cell></row><row><cell># Residual Blocks (depth)</cell><cell>0 to 48</cell><cell>10</cell></row><row><cell>Residual Block Design</cell><cell>See Fig. 14</cell><cell>Fig. 14a</cell></row><row><cell># Convolutions in</cell><cell>1, 2, 3</cell><cell>2</cell></row><row><cell>Residual Block</cell><cell></cell><cell></cell></row><row><cell># Filters</cell><cell>8 to 256</cell><cell>32</cell></row><row><cell>Filter Size</cell><cell>1 to 11</cell><cell>3</cell></row><row><cell>Filter Size Bit Sliced</cell><cell>1, 3</cell><cell>1</cell></row><row><cell>Inception[SLJ + 15] instead</cell><cell>true, false</cell><cell>false</cell></row><row><cell>of Convolution</cell><cell></cell><cell></cell></row><row><cell cols="2">Circular Convolutions[SNPP19] true, false</cell><cell>false</cell></row><row><cell>Dropout Rate</cell><cell>0 and from 0.02 to 0.0025</cell><cell>0</cell></row><row><cell>Batch Normalization</cell><cell>true, false</cell><cell>true</cell></row><row><cell>Regularization</cell><cell>L1, L2, L1 and L2</cell><cell>L2</cell></row><row><cell>Regularization Factor</cell><cell>2.5 • 10 -3 to 8 • 10 -8</cell><cell>10 -5</cell></row><row><cell>Residual Scaling</cell><cell>1 to 0.1</cell><cell>1</cell></row><row><cell>Bit Encoding</cell><cell>0/1, 1/2, -1/1</cell><cell>0/1</cell></row><row><cell>Label Smoothing  *</cell><cell>0 to 0.3</cell><cell>0</cell></row><row><cell></cell><cell></cell><cell></cell></row></table><note><p>* : Only for using Binary Crossentropy as the loss function.</p></note></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 5 :</head><label>5</label><figDesc>Overview of differential-neural distinguishers from hyper-parameter search. Parameters not mentioned are as in<ref type="bibr" target="#b18">[Goh19]</ref>. The accuracy is evaluated usingl 10 7 samples, i. e. an accuracy above 0.5005 reaches a significance level of 0.001.</figDesc><table><row><cell>Cipher</cell><cell cols="6">Speck Simon Skinny Present Katan ChaCha</cell></row><row><cell>Full Rounds</cell><cell>22</cell><cell>32</cell><cell>32</cell><cell>31</cell><cell>258</cell><cell>20</cell></row><row><cell>Round</cell><cell>7</cell><cell>9</cell><cell>7</cell><cell>7</cell><cell>66</cell><cell>3</cell></row><row><cell>Accuracy (Acc.)</cell><cell>0.617</cell><cell>0.661</cell><cell>0.937</cell><cell>0.563</cell><cell>0.505</cell><cell>0.989</cell></row><row><cell>High LR (/10 -3 )</cell><cell>3.5</cell><cell>2.7</cell><cell>1.1</cell><cell>3</cell><cell>1.7</cell><cell>2</cell></row><row><cell>Low LR (/10 -5 )</cell><cell>22</cell><cell>20</cell><cell>4.5</cell><cell>28</cell><cell>6</cell><cell>14</cell></row><row><cell>Neurons</cell><cell>80</cell><cell>64</cell><cell>64</cell><cell>64</cell><cell>64</cell><cell>64</cell></row><row><cell>Filter Size</cell><cell>3</cell><cell>7</cell><cell>3</cell><cell>1</cell><cell>7</cell><cell>7</cell></row><row><cell>Number Filters</cell><cell>16</cell><cell>32</cell><cell>32</cell><cell>32</cell><cell>32</cell><cell>32</cell></row><row><cell>L2 (/10 -8 )</cell><cell>84.9</cell><cell>220</cell><cell>4.3</cell><cell>62</cell><cell>600</cell><cell>1400</cell></row><row><cell>Circular Convolution</cell><cell>false</cell><cell>true</cell><cell>false</cell><cell>false</cell><cell>false</cell><cell>false</cell></row><row><cell>Calculate Back</cell><cell>false</cell><cell>false</cell><cell>true</cell><cell>false</cell><cell>true</cell><cell>true</cell></row></table><note><p>seems to be in line with literature, as the results for more rounds are either not free from doubt, or use the more elaborate training processes introduced in<ref type="bibr" target="#b18">[Goh19]</ref></p><p>.</p></note></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 6 :</head><label>6</label><figDesc>Present distinguisher evaluated (using 10 7 samples) on more rounds than it was trained on. Every result other than the ones for 10 rounds passes a significance test with significance level 0.001.</figDesc><table><row><cell cols="3">Encryption Rounds 6-round Distinguisher 7-round Distinguisher</cell></row><row><cell>6</cell><cell>0.658</cell><cell>-</cell></row><row><cell>7</cell><cell>0.557</cell><cell>0.563</cell></row><row><cell>8</cell><cell>0.509</cell><cell>0.512</cell></row><row><cell>9</cell><cell>0.502</cell><cell>0.502</cell></row><row><cell>10</cell><cell>0.500</cell><cell>0.500</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 7 :</head><label>7</label><figDesc>Present distinguisher evaluated (using 10 7 samples from the real distribution and a fixed set of 10 8 samples from the random distribution) on more rounds than it was trained on. All reported results except the one on 11 rounds are significant at the 3σ level or more. The 11-round result becomes significant when 10 8 real labels are used, at an empirical deviation of ≈ 5σ 0 .</figDesc><table><row><cell cols="2">Encryption Rounds 7-round Distinguisher, (µ 1 -µ 0 )/σ 0</cell></row><row><cell>8</cell><cell>229</cell></row><row><cell>9</cell><cell>34.8</cell></row><row><cell>10</cell><cell>4.8</cell></row><row><cell>11</cell><cell>0.7</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>Table 10 :</head><label>10</label><figDesc>Maximal DP and accuracy (based on DDT) for 6-round small scale Speck and different choices of rotational constants together with the input difference which leads to those results, ordered by maximal DP.</figDesc><table><row><cell cols="4">α β Difference log(max DP) Difference max Acc.</cell></row><row><cell>5 2</cell><cell>0x08 60</cell><cell>-11.7 0x04 20</cell><cell>0.591</cell></row><row><cell>3 2</cell><cell>0x28 01</cell><cell>-11.7 0x01 20</cell><cell>0.580</cell></row><row><cell>3 6</cell><cell>0x84 98</cell><cell>-11.6 0x10 02</cell><cell>0.596</cell></row><row><cell>6 5</cell><cell>0x20 00</cell><cell>-11.0 0x01 04</cell><cell>0.581</cell></row><row><cell>5 6</cell><cell>0x20 01</cell><cell>-11.0 0x10 00</cell><cell>0.563</cell></row><row><cell>2 5</cell><cell>0x48 10</cell><cell>-11.0 0x10 04</cell><cell>0.587</cell></row><row><cell>6 3</cell><cell>0x28 a9</cell><cell>-11.0 0x04 10</cell><cell>0.580</cell></row><row><cell>5 4</cell><cell>0x12 91</cell><cell>-10.0 0x10 80</cell><cell>0.644</cell></row><row><cell>3 3</cell><cell>0x34 02</cell><cell>-10.0 0x24 80</cell><cell>0.592</cell></row><row><cell>5 5</cell><cell>0xd0 94</cell><cell>-10.0 0x12 80</cell><cell>0.598</cell></row><row><cell>2 3</cell><cell>0x02 80</cell><cell>-9.7 0x40 10</cell><cell>0.559</cell></row><row><cell>4 3</cell><cell>0x28 32</cell><cell>-9.0 0x48 80</cell><cell>0.599</cell></row><row><cell>3 4</cell><cell>0x01 20</cell><cell>-8.4 0x04 80</cell><cell>0.615</cell></row><row><cell>4 5</cell><cell>0x84 40</cell><cell>-8.0 0x08 00</cell><cell>0.664</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5"><head>Table 11 :</head><label>11</label><figDesc>Accuracy (for Speck32/64) when using the score combination method implicitly used in<ref type="bibr" target="#b18">[Goh19]</ref> compared to the ones proposed in<ref type="bibr" target="#b10">[BGPT21]</ref>.</figDesc><table><row><cell cols="5">Rounds Pairs [Goh19] Averaging[BGPT21] 2D-CNN[BGPT21]</cell></row><row><cell>5</cell><cell>5</cell><cell>0.999</cell><cell>0.998</cell><cell>0.994</cell></row><row><cell></cell><cell>10</cell><cell>1.000</cell><cell>1.000</cell><cell>1.000</cell></row><row><cell>6</cell><cell>5</cell><cell>0.967</cell><cell>0.954</cell><cell>0.933</cell></row><row><cell></cell><cell>10</cell><cell>0.995</cell><cell>0.990</cell><cell>0.977</cell></row><row><cell></cell><cell>50</cell><cell>1.000</cell><cell>1.000</cell><cell>1.000</cell></row><row><cell>7</cell><cell>5</cell><cell>0.743</cell><cell>0.735</cell><cell>-</cell></row><row><cell></cell><cell>10</cell><cell>0.821</cell><cell>0.808</cell><cell>-</cell></row><row><cell></cell><cell>50</cell><cell>0.977</cell><cell>0.967</cell><cell>-</cell></row><row><cell></cell><cell>100</cell><cell>0.997</cell><cell>0.997</cell><cell>-</cell></row><row><cell cols="3">While a single pair leads to an accuracy of 0.</cell><cell></cell><cell></cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="2" xml:id="foot_0"><p>The source code for our experiments and the neural distinguishers can be found at https://github. com/differential-neural/An-Assessment-of-Differential-Neural-Distinguishers</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="3" xml:id="foot_1"><p>Since ciphers are usually bijective mappings if the key is fixed, strictly speaking the case that c = c should be excluded. But given that nc is at least 32 for the ciphers under scrutiny, the probability of this happening is negligible.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="4" xml:id="foot_2"><p>Note that less blocks were used to produce the final distinguishers in<ref type="bibr" target="#b18">[Goh19]</ref>.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="5" xml:id="foot_3"><p>Note that we use 10 residual blocks as our default/baseline despite the fact that less blocks were used to produce the final distinguishers in<ref type="bibr" target="#b18">[Goh19]</ref>.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="6" xml:id="foot_4"><p>We used a Nvidia RTX 2080 Ti and 32GB of RAM for most of our experiments.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="7" xml:id="foot_5"><p>Note that the zero difference cannot appear, which means that (in the random case) the differences can be seen as drawn uniformly from F n 2 \ {0}.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="9" xml:id="foot_6"><p>For Simon it is also not clear how the key schedule should be adapted, which is why we use independent rounds keys instead. For Speck, on the other hand, the key schedule makes use of the round function only, which makes adaptation of the key schedule straight forward.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="10" xml:id="foot_7"><p>Of course, other kinds of attacks then differential ones would also be considered.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="11" xml:id="foot_8"><p>The hyper-parameters were chosen to be as in<ref type="bibr" target="#b18">[Goh19]</ref>[Section 4.2], i. e. no cipher specific hyperparameter optimization was done.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="12" xml:id="foot_9"><p>We increased the amount of samples from 10 6 to 10 7 in order to get more precise estimates for Katan.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="13" xml:id="foot_10"><p>Strictly speaking, we revert deterministic parts of the last round function before calculating the ciphertext difference (except for present, as this would just result in a permutation of the bit positions), which is motivated by Section 5.1</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="14" xml:id="foot_11"><p>I. e. without any form of pre-training or more elaborate training process.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="15" xml:id="foot_12"><p>To avoid dividing by zero, we will use the number of times that p i = 0 or p i = 1 holds as a decision rule in case that at least one of the p i is zero. Also, note that we used independent keys for each ciphertext-pair, but do not expect the results to look significantly different if the same key were to be used for all pairs contained in one sample.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="16" xml:id="foot_13"><p>If we assume independent round keys, which is a standard assumption in symmetric cryptanalysis.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="17" xml:id="foot_14"><p>We provide this distinguisher as part of our source code, too, see https://github.com/ differential-neural/An-Assessment-of-Differential-Neural-Distinguishers</p></note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">An All-In-One Approach to Differential Cryptanalysis for Small Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Martin</forename><forename type="middle">R</forename><surname>Albrecht</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-35999-6_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Lars</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Huapeng</forename><surname>Wu</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2013-08">August 2013</date>
+			<biblScope unit="volume">7707</biblScope>
+			<biblScope unit="page" from="1" to="15" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Martin R. Albrecht and Gregor Leander. An all-in-one approach to differential cryptanalysis for small block ciphers. In Lars R. Knudsen and Huapeng Wu, editors, SAC 2012, volume 7707 of LNCS, pages 1-15. Springer, Heidelberg, August 2013.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Round-Reduced Simon and Speck</title>
+		<author>
+			<persName><forename type="first">Farzaneh</forename><surname>Abed</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eik</forename><surname>List</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Lucks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakob</forename><surname>Wenzel</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-46706-0_27</idno>
+		<idno>Report 2013/526</idno>
+		<ptr target="https://eprint.iacr.org/2013/526" />
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2013">2013</date>
+			<biblScope unit="page" from="525" to="545" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Farzaneh Abed, Eik List, Stefan Lucks, and Jakob Wenzel. Differential and linear cryptanalysis of reduced-round Simon. Cryptology ePrint Archive, Report 2013/526, 2013. https://eprint.iacr.org/2013/526.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Round-Reduced Simon and Speck</title>
+		<author>
+			<persName><forename type="first">Farzaneh</forename><surname>Abed</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eik</forename><surname>List</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Lucks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakob</forename><surname>Wenzel</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-46706-0_27</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Carlos</forename><surname>Cid</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Christian</forename><surname>Rechberger</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2015-03">March 2015</date>
+			<biblScope unit="volume">8540</biblScope>
+			<biblScope unit="page" from="525" to="545" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Farzaneh Abed, Eik List, Stefan Lucks, and Jakob Wenzel. Differential cryptanalysis of round-reduced Simon and Speck. In Carlos Cid and Christian Rechberger, editors, FSE 2014, volume 8540 of LNCS, pages 525-545. Springer, Heidelberg, March 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Optuna</title>
+		<author>
+			<persName><forename type="first">Takuya</forename><surname>Akiba</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shotaro</forename><surname>Sano</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Toshihiko</forename><surname>Yanase</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Takeru</forename><surname>Ohta</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Masanori</forename><surname>Koyama</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/3292500.3330701</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining</title>
+		<editor>
+			<persName><forename type="first">Ankur</forename><surname>Teredesai</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Vipin</forename><surname>Kumar</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Ying</forename><surname>Li</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Rómer</forename><surname>Rosales</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Evimaria</forename><surname>Terzi</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">George</forename><surname>Karypis</surname></persName>
+		</editor>
+		<meeting>the 25th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining<address><addrLine>Anchorage, AK, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2019-07-25">August 4-8, 2019. 2019</date>
+			<biblScope unit="page" from="2623" to="2631" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Takuya Akiba, Shotaro Sano, Toshihiko Yanase, Takeru Ohta, and Masanori Koyama. Optuna: A next-generation hyperparameter optimization frame- work. In Ankur Teredesai, Vipin Kumar, Ying Li, Rómer Rosales, Evimaria Terzi, and George Karypis, editors, Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining, KDD 2019, Anchorage, AK, USA, August 4-8, 2019, pages 2623-2631. ACM, 2019.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b4">
+	<monogr>
+		<author>
+			<persName><forename type="first">Roberto</forename><surname>Avanzi</surname></persName>
+		</author>
+		<ptr target="https://www.iacr.org/authors/tikz/,2017" />
+		<title level="m">Structure of KATAN/KTANTAN</title>
+		<imprint/>
+	</monogr>
+	<note type="raw_reference">Roberto Avanzi. Structure of KATAN/KTANTAN. https://www.iacr.org/ authors/tikz/, 2017.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<meeting><address><addrLine>Grenoble, France</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-02-01">February 1-5, 2021. 2021</date>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Anubhab Baksi, Jakub Breier, Yi Chen, and Xiaoyang Dong. Machine learning assisted differential distinguishers for lightweight ciphers. In Design, Automation &amp; Test in Europe Conference &amp; Exhibition, DATE 2021, Grenoble, France, February 1-5, 2021, pages 176-181. IEEE, 2021.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Deep neural networks aiding cryptanalysis: A case study of the speck distinguisher</title>
+		<author>
+			<persName><forename type="first">Nicoleta-Norica</forename><surname>Bacuieti</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lejla</forename><surname>Batina</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stjepan</forename><surname>Picek</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Applied Cryptography and Network Security -20th International Conference, ACNS 2022</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Giuseppe</forename><surname>Ateniese</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Daniele</forename><surname>Venturi</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Rome, Italy</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2022">June 20-23, 2022. 2022</date>
+			<biblScope unit="volume">13269</biblScope>
+			<biblScope unit="page" from="809" to="829" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Nicoleta-Norica Bacuieti, Lejla Batina, and Stjepan Picek. Deep neural networks aiding cryptanalysis: A case study of the speck distinguisher. In Giuseppe Ateniese and Daniele Venturi, editors, Applied Cryptography and Network Security -20th International Conference, ACNS 2022, Rome, Italy, June 20-23, 2022, Proceedings, volume 13269 of Lecture Notes in Computer Science, pages 809-829. Springer, 2022.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Pen and Paper Arguments for SIMON and SIMON-like Designs</title>
+		<author>
+			<persName><forename type="first">Christof</forename><surname>Beierle</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-44618-9_23</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<title level="s">SCN</title>
+		<editor>
+			<persName><forename type="first">Vassilis</forename><surname>Zikas</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Roberto</forename><surname>De</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Prisco</forename></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2016-09">9841. August / September 2016</date>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page" from="431" to="446" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Christof Beierle. Pen and paper arguments for SIMON and SIMON-like designs. In Vassilis Zikas and Roberto De Prisco, editors, SCN 16, volume 9841 of LNCS, pages 431-446. Springer, Heidelberg, August / September 2016.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b8">
+	<monogr>
+		<title level="m" type="main">Chacha, a variant of salsa20</title>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">J</forename><surname>Bernstein</surname></persName>
+		</author>
+		<ptr target="http://cr.yp.to/chacha/chacha-20080128.pdf" />
+		<imprint>
+			<date type="published" when="2008">2008</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">D. J. Bernstein. Chacha, a variant of salsa20, 2008. http://cr.yp.to/ chacha/chacha-20080128.pdf.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Conditional differential-neural cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Guo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Meicheng</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Ma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+		</author>
+		<idno>Report 2021/719</idno>
+		<ptr target="https://eprint.iacr.org/2021/719" />
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhenzhen Bao, Jian Guo, Meicheng Liu, Li Ma, and Yi Tu. Conditional differential-neural cryptanalysis. Cryptology ePrint Archive, Report 2021/719, 2021. https://eprint.iacr.org/2021/719.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quan</forename><forename type="middle">Quan</forename><surname>Tan</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-77870-5_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Anne</forename><surname>Canteaut</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">François-Xavier</forename><surname>Standaert</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021-10">October 2021</date>
+			<biblScope unit="volume">12696</biblScope>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Adrien Benamira, David Gérault, Thomas Peyrin, and Quan Quan Tan. A deeper look at machine learning-based cryptanalysis. In Anne Canteaut and François-Xavier Standaert, editors, EUROCRYPT 2021, Part I, volume 12696 of LNCS, pages 805-835. Springer, Heidelberg, October 2021.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">The SKINNY family of block ciphers and its low-latency variant MANTIS</title>
+		<author>
+			<persName><forename type="first">Christof</forename><surname>Beierle</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jérémy</forename><surname>Jean</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Kölbl</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Amir</forename><surname>Moradi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Sasaki</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pascal</forename><surname>Sasdrich</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siang Meng</forename><surname>Sim</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">CRYPTO 2016, Part II</title>
+		<editor>
+			<persName><forename type="first">Matthew</forename><surname>Robshaw</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Jonathan</forename><surname>Katz</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2016-08">August 2016</date>
+			<biblScope unit="volume">9815</biblScope>
+			<biblScope unit="page" from="123" to="153" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Christof Beierle, Jérémy Jean, Stefan Kölbl, Gregor Leander, Amir Moradi, Thomas Peyrin, Yu Sasaki, Pascal Sasdrich, and Siang Meng Sim. The SKINNY family of block ciphers and its low-latency variant MANTIS. In Matthew Robshaw and Jonathan Katz, editors, CRYPTO 2016, Part II, volume 9815 of LNCS, pages 123-153. Springer, Heidelberg, August 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">PRESENT: An Ultra-Lightweight Block Cipher</title>
+		<author>
+			<persName><forename type="first">Andrey</forename><surname>Bogdanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lars</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Christof</forename><surname>Paar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Axel</forename><surname>Poschmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">J B</forename><surname>Robshaw</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Seurin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Vikkelsoe</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-74735-2_31</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Pascal</forename><surname>Paillier</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Ingrid</forename><surname>Verbauwhede</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007-09">September 2007</date>
+			<biblScope unit="volume">4727</biblScope>
+			<biblScope unit="page" from="450" to="466" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Andrey Bogdanov, Lars R. Knudsen, Gregor Leander, Christof Paar, Axel Poschmann, Matthew J. B. Robshaw, Yannick Seurin, and C. Vikkelsoe. PRESENT: An ultra-lightweight block cipher. In Pascal Paillier and Ingrid Verbauwhede, editors, CHES 2007, volume 4727 of LNCS, pages 450-466. Springer, Heidelberg, September 2007.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Figure 3: Input and quarter round function of ChaCha 20 cipher.</title>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<idno type="DOI">10.7717/peerjcs.989/fig-3</idno>
+		<ptr target="https://www.iacr.org/authors/tikz/,2017" />
+	</analytic>
+	<monogr>
+		<title level="m">ChaCha Quarter-Round</title>
+		<imprint>
+			<publisher>PeerJ</publisher>
+			<date>null</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jakub Breier. ChaCha Quarter-Round. https://www.iacr.org/authors/ tikz/, 2017.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+		<idno>Report 2013/404</idno>
+		<ptr target="https://eprint.iacr.org/2013/404" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2013">2013</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ray Beaulieu, Douglas Shors, Jason Smith, Stefan Treatman-Clark, Bryan Weeks, and Louis Wingers. The SIMON and SPECK families of lightweight block ciphers. Cryptology ePrint Archive, Report 2013/404, 2013. https: //eprint.iacr.org/2013/404.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">A New Neural Distinguisher Considering Features Derived From Multiple Ciphertext Pairs</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sitong</forename><surname>Yuan</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac019</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1419" to="1433" />
+			<date type="published" when="2022-03-11">2022</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yi Chen, Yantian Shen, Hongbo Yu, and Sitong Yuan. A New Neural Distinguisher Considering Features Derived From Multiple Ciphertext Pairs. The Computer Journal, 03 2022. bxac019.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">KATAN and KTANTAN -a family of small and efficient hardware-oriented block ciphers</title>
+		<author>
+			<persName><forename type="first">Christophe</forename><surname>De Cannière</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Orr</forename><surname>Dunkelman</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Miroslav</forename><surname>Knežević</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">CHES 2009</title>
+		<editor>
+			<persName><forename type="first">Christophe</forename><surname>Clavier</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Kris</forename><surname>Gaj</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2009-09">September 2009</date>
+			<biblScope unit="volume">5747</biblScope>
+			<biblScope unit="page" from="272" to="288" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Christophe De Cannière, Orr Dunkelman, and Miroslav Knežević. KATAN and KTANTAN -a family of small and efficient hardware-oriented block ciphers. In Christophe Clavier and Kris Gaj, editors, CHES 2009, volume 5747 of LNCS, pages 272-288. Springer, Heidelberg, September 2009.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Helix: Fast Encryption and Authentication in a Single Cryptographic Primitive</title>
+		<author>
+			<persName><forename type="first">Niels</forename><surname>Ferguson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Doug</forename><surname>Whiting</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bruce</forename><surname>Schneier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">John</forename><surname>Kelsey</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Lucks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tadayoshi</forename><surname>Kohno</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-39887-5_24</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2010">2010</date>
+			<biblScope unit="page" from="330" to="346" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Niels Ferguson, Stefan Lucks, Bruce Schneier, Doug Whiting, Mihir Bellare, Tadayoshi Kohno, Jon Callas, and Jesse Walker. The skein hash function family, 2010.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Alexandra</forename><surname>Boldyreva</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Daniele</forename><surname>Micciancio</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019-08">August 2019</date>
+			<biblScope unit="volume">11693</biblScope>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Aron Gohr. Improving attacks on round-reduced Speck32/64 using deep learn- ing. In Alexandra Boldyreva and Daniele Micciancio, editors, CRYPTO 2019, Part II, volume 11693 of LNCS, pages 150-179. Springer, Heidelberg, August 2019.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Cryptanalysis of roundreduced SIMON32 based on deep learning</title>
+		<author>
+			<persName><forename type="first">Zezhou</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+		<idno>Report 2021/362</idno>
+		<ptr target="https://eprint.iacr.org/2021/362" />
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zezhou Hou, Jiongjiong Ren, and Shaozhen Chen. Cryptanalysis of round- reduced SIMON32 based on deep learning. Cryptology ePrint Archive, Report 2021/362, 2021. https://eprint.iacr.org/2021/362.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Improve neural distinguisher for cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Zezhou</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+		<idno>Report 2021/1017</idno>
+		<ptr target="https://eprint.iacr.org/2021/1017" />
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zezhou Hou, Jiongjiong Ren, and Shaozhen Chen. Improve neural distinguisher for cryptanalysis. Cryptology ePrint Archive, Report 2021/1017, 2021. https: //eprint.iacr.org/2021/1017.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Identity Mappings in Deep Residual Networks</title>
+		<author>
+			<persName><forename type="first">Kaiming</forename><surname>He</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiangyu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaoqing</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-46493-0_38</idno>
+		<idno>CoRR, abs/1603.05027</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="630" to="645" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Identity mappings in deep residual networks. CoRR, abs/1603.05027, 2016.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b22">
+	<monogr>
+		<author>
+			<persName><forename type="first">Jérémy</forename><surname>Jean</surname></persName>
+		</author>
+		<ptr target="https://www.iacr.org/authors/tikz/,2015" />
+		<title level="m">PRESENT block cipher</title>
+		<imprint/>
+	</monogr>
+	<note type="raw_reference">Jérémy Jean. PRESENT block cipher. https://www.iacr.org/authors/ tikz/, 2015.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b23">
+	<monogr>
+		<author>
+			<persName><forename type="first">Jérémy</forename><surname>Jean</surname></persName>
+		</author>
+		<ptr target="https://www.iacr.org/authors/tikz/,2016" />
+		<title level="m">Skinny Round Function</title>
+		<imprint/>
+	</monogr>
+	<note type="raw_reference">Jérémy Jean. Skinny Round Function. https://www.iacr.org/authors/ tikz/, 2016.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Deep learning based differential distinguisher for lightweight cipher PRESENT</title>
+		<author>
+			<persName><forename type="first">Aayush</forename><surname>Jain</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Varun</forename><surname>Kohli</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Girish</forename><surname>Mishra</surname></persName>
+		</author>
+		<idno>Report 2020/846</idno>
+		<ptr target="https://eprint.iacr.org/2020/846" />
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2020">2020</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Aayush Jain, Varun Kohli, and Girish Mishra. Deep learning based differential distinguisher for lightweight cipher PRESENT. Cryptology ePrint Archive, Report 2020/846, 2020. https://eprint.iacr.org/2020/846.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Observations on the SIMON Block Cipher Family</title>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Kölbl</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tyge</forename><surname>Tiessen</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-47989-6_8</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Rosario</forename><surname>Gennaro</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">J</forename><forename type="middle">B</forename><surname>Matthew</surname></persName>
+		</editor>
+		<editor>
+			<persName><surname>Robshaw</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2015-08">9215. August 2015</date>
+			<biblScope unit="page" from="161" to="185" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Stefan Kölbl, Gregor Leander, and Tyge Tiessen. Observations on the SIMON block cipher family. In Rosario Gennaro and Matthew J. B. Robshaw, editors, CRYPTO 2015, Part I, volume 9215 of LNCS, pages 161-185. Springer, Heidelberg, August 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Improved (Related-Key) Differential-Based Neural Distinguishers for SIMON and SIMECK Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guoqiang</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bing</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Liu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac195</idno>
+		<idno>Report 2022/030</idno>
+		<ptr target="https://eprint.iacr.org/2022/030" />
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">67</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="537" to="547" />
+			<date type="published" when="2022">2022</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jinyu Lu, Guoqiang Liu, Yunwen Liu, Bing Sun, Chao Li, and Li Liu. Improved neural distinguishers with (related-key) differentials: Applications in SIMON and SIMECK. Cryptology ePrint Archive, Report 2022/030, 2022. https: //eprint.iacr.org/2022/030.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Efficient Algorithms for Computing Differential Properties of Addition</title>
+		<author>
+			<persName><forename type="first">Helger</forename><surname>Lipmaa</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shiho</forename><surname>Moriai</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-45473-x_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Mitsuru</forename><surname>Matsui</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2002-04">April 2002</date>
+			<biblScope unit="volume">2355</biblScope>
+			<biblScope unit="page" from="336" to="350" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Helger Lipmaa and Shiho Moriai. Efficient algorithms for computing differential properties of addition. In Mitsuru Matsui, editor, FSE 2001, volume 2355 of LNCS, pages 336-350. Springer, Heidelberg, April 2002.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Towards finding optimal differential characteristics for ARX: Application to Salsa20</title>
+		<author>
+			<persName><forename type="first">Nicky</forename><surname>Mouha</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Preneel</surname></persName>
+		</author>
+		<idno>Report 2013/328</idno>
+		<ptr target="https://eprint.iacr.org/2013/328" />
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2013">2013</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Nicky Mouha and Bart Preneel. Towards finding optimal differential charac- teristics for ARX: Application to Salsa20. Cryptology ePrint Archive, Report 2013/328, 2013. https://eprint.iacr.org/2013/328.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Information Security and Cryptology</title>
+		<author>
+			<persName><forename type="first">Nicky</forename><surname>Mouha</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qingju</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dawu</forename><surname>Gu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Preneel</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-34704-7</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Information Security and Cryptology -7th International Conference, Inscrypt 2011</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Chuankun</forename><surname>Wu</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Moti</forename><surname>Yung</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Dongdai</forename><surname>Lin</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Beijing, China</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2011-12-03">November 30 -December 3, 2011. 2011</date>
+			<biblScope unit="volume">7537</biblScope>
+			<biblScope unit="page" from="57" to="76" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Nicky Mouha, Qingju Wang, Dawu Gu, and Bart Preneel. Differential and linear cryptanalysis using mixed-integer linear programming. In Chuankun Wu, Moti Yung, and Dongdai Lin, editors, Information Security and Cryptology - 7th International Conference, Inscrypt 2011, Beijing, China, November 30 - December 3, 2011. Revised Selected Papers, volume 7537 of Lecture Notes in Computer Science, pages 57-76. Springer, 2011.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Towards finding the best characteristics of some bit-oriented block ciphers and automatic enumeration of (related-key) differential and linear characteristics with predefined properties</title>
+		<author>
+			<persName><forename type="first">Siwei</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lei</forename><surname>Hu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peng</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kexin</forename><surname>Qiao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoshuang</forename><surname>Ma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Danping</forename><surname>Shi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ling</forename><surname>Song</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kai</forename><surname>Fu</surname></persName>
+		</author>
+		<idno>Report 2014/747</idno>
+		<ptr target="https://eprint.iacr.org/2014/747" />
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2014">2014</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Siwei Sun, Lei Hu, Meiqin Wang, Peng Wang, Kexin Qiao, Xiaoshuang Ma, Danping Shi, Ling Song, and Kai Fu. Towards finding the best characteristics of some bit-oriented block ciphers and automatic enumeration of (related-key) differential and linear characteristics with predefined properties. Cryptology ePrint Archive, Report 2014/747, 2014. https://eprint.iacr.org/2014/ 747.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Deep Residual Networks with Exponential Linear Unit</title>
+		<author>
+			<persName><forename type="first">Anish</forename><surname>Shah</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eashan</forename><surname>Kadam</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hena</forename><surname>Shah</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sameer</forename><surname>Shinde</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sandip</forename><surname>Shingade</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2983402.2983406</idno>
+		<idno>CoRR, abs/1604.04112</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Third International Symposium on Computer Vision and the Internet</title>
+		<meeting>the Third International Symposium on Computer Vision and the Internet</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2016-09-21">2016</date>
+			<biblScope unit="page" from="59" to="65" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Anish Shah, Eashan Kadam, Hena Shah, and Sameer Shinde. Deep residual networks with exponential linear unit. CoRR, abs/1604.04112, 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Sawerigading Law Journal</title>
+		<idno type="DOI">10.62084/slj</idno>
+	</analytic>
+	<monogr>
+		<title level="j">SLJ</title>
+		<idno type="ISSNe">2828-4054</idno>
+		<imprint>
+			<biblScope unit="volume">+</biblScope>
+			<date>null</date>
+			<publisher>Universitas Sawerigading Makassar</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">SLJ +</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Going deeper with convolutions</title>
+		<author>
+			<persName><forename type="first">Christian</forename><surname>Szegedy</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Wei Liu</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Yangqing Jia</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pierre</forename><surname>Sermanet</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Scott</forename><forename type="middle">E</forename><surname>Reed</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dragomir</forename><surname>Anguelov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dumitru</forename><surname>Erhan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vincent</forename><surname>Vanhoucke</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andrew</forename><surname>Rabinovich</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2015.7298594</idno>
+		<idno>CoRR, abs/1409.4842</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2015 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="1" to="9" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott E. Reed, Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, and Andrew Rabi- novich. Going deeper with convolutions. CoRR, abs/1409.4842, 2014.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Sawerigading Law Journal</title>
+		<idno type="DOI">10.62084/slj</idno>
+	</analytic>
+	<monogr>
+		<title level="j">SLJ</title>
+		<idno type="ISSNe">2828-4054</idno>
+		<imprint>
+			<biblScope unit="volume">+</biblScope>
+			<date>null</date>
+			<publisher>Universitas Sawerigading Makassar</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">SLJ +</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Going deeper with convolutions</title>
+		<author>
+			<persName><forename type="first">Christian</forename><surname>Szegedy</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Wei Liu</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Yangqing Jia</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pierre</forename><surname>Sermanet</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Scott</forename><surname>Reed</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dragomir</forename><surname>Anguelov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dumitru</forename><surname>Erhan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vincent</forename><surname>Vanhoucke</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andrew</forename><surname>Rabinovich</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2015.7298594</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2015 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2015-06">2015. 2015</date>
+			<biblScope unit="page" from="1" to="9" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed, Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, and Andrew Ra- binovich. Going deeper with convolutions. In 2015 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), pages 1-9, 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Circular Convolutional Neural Networks for Panoramic Images and Laser Data</title>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Schubert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peer</forename><surname>Neubert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Johannes</forename><surname>Pöschmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peter</forename><surname>Protzel</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/ivs.2019.8813862</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2019 IEEE Intelligent Vehicles Symposium (IV)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2019-06">2019. 2019</date>
+			<biblScope unit="volume">IV</biblScope>
+			<biblScope unit="page" from="653" to="660" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Stefan Schubert, Peer Neubert, Johannes Pöschmann, and Peter Protzel. Circular convolutional neural networks for panoramic images and laser data. In 2019 IEEE Intelligent Vehicles Symposium (IV), pages 653-660, 2019.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Polytopic attack on roundreduced simon32/64 using deep learning</title>
+		<author>
+			<persName><surname>Heng-Chuan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xuan-Yong</forename><surname>Su</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Duan</forename><surname>Zhu</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Ming</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information Security and Cryptology -16th International Conference, Inscrypt 2020</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Yongdong</forename><surname>Wu</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Moti</forename><surname>Yung</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Guangzhou, China</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2020">December 11-14, 2020. 2020</date>
+			<biblScope unit="volume">12612</biblScope>
+			<biblScope unit="page" from="3" to="20" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Heng-Chuan Su, Xuan-Yong Zhu, and Duan Ming. Polytopic attack on round- reduced simon32/64 using deep learning. In Yongdong Wu and Moti Yung, editors, Information Security and Cryptology -16th International Conference, Inscrypt 2020, Guangzhou, China, December 11-14, 2020, Revised Selected Papers, volume 12612 of Lecture Notes in Computer Science, pages 3-20. Springer, 2020.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Structural Evaluation by Generalized Integral Property</title>
+		<author>
+			<persName><forename type="first">Yosuke</forename><surname>Todo</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-46800-5_12</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Elisabeth</forename><surname>Oswald</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Marc</forename><surname>Fischlin</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2015-04">9056. April 2015</date>
+			<biblScope unit="page" from="287" to="314" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yosuke Todo. Structural evaluation by generalized integral property. In Elisabeth Oswald and Marc Fischlin, editors, EUROCRYPT 2015, Part I, volume 9056 of LNCS, pages 287-314. Springer, Heidelberg, April 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Applying MILP Method to Searching Integral Distinguishers Based on Division Property for 6 Lightweight Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Zejun</forename><surname>Xiang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wentao</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dongdai</forename><surname>Lin</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-53887-6_24</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Jung</forename><surname>Hee</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Cheon</forename></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Tsuyoshi</forename><surname>Takagi</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2016-12">December 2016</date>
+			<biblScope unit="volume">10031</biblScope>
+			<biblScope unit="page" from="648" to="678" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zejun Xiang, Wentao Zhang, Zhenzhen Bao, and Dongdai Lin. Applying MILP method to searching integral distinguishers based on division property for 6 lightweight block ciphers. In Jung Hee Cheon and Tsuyoshi Takagi, editors, ASIACRYPT 2016, Part I, volume 10031 of LNCS, pages 648-678. Springer, Heidelberg, December 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Improving Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0001-6106-3767</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-1525-3356</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Baocang</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-2554-4464</idno>
+		</author>
+		<idno type="DOI">10.62056/ay11wa3y6</idno>
+		<idno>Report 2022/457</idno>
+		<ptr target="https://eprint.iacr.org/2022/457" />
+	</analytic>
+	<monogr>
+		<title level="j">IACR Communications in Cryptology</title>
+		<title level="j" type="abbrev">IACR CiC</title>
+		<idno type="ISSNe">3006-5496</idno>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+			<publisher>International Association for Cryptologic Research</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Liu Zhang and Zilong Wang. Improving differential-neural distinguisher model for DES, chaskey and PRESENT. Cryptology ePrint Archive, Report 2022/457, 2022. https://eprint.iacr.org/2022/457.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Improving Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0001-6106-3767</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-1525-3356</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Baocang</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-2554-4464</idno>
+		</author>
+		<idno type="DOI">10.62056/ay11wa3y6</idno>
+		<idno>Report 2022/183</idno>
+		<ptr target="https://eprint.iacr.org/2022/183" />
+	</analytic>
+	<monogr>
+		<title level="j">IACR Communications in Cryptology</title>
+		<title level="j" type="abbrev">IACR CiC</title>
+		<idno type="ISSNe">3006-5496</idno>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+			<publisher>International Association for Cryptologic Research</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Liu Zhang, Zilong Wang, and Boyang Wang. Improving differential-neural cryptanalysis with inception blocks. Cryptology ePrint Archive, Report 2022/183, 2022. https://eprint.iacr.org/2022/183.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

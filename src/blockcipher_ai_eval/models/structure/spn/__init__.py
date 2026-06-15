@@ -3,6 +3,7 @@ from blockcipher_ai_eval.models.structure.spn.nibble_conv_pairset import SpnNibb
 from blockcipher_ai_eval.models.structure.spn.present_inception_mcnd import (
     PresentInceptionMCNDBlock,
     PresentInceptionMCNDDistinguisher,
+    PresentInceptionMCNDMatrixDistinguisher,
 )
 from blockcipher_ai_eval.models.structure.spn.token_mixer_pairset import (
     SpnTokenMixerBlock,
@@ -12,6 +13,7 @@ from blockcipher_ai_eval.models.structure.spn.token_mixer_pairset import (
 __all__ = [
     "PresentInceptionMCNDBlock",
     "PresentInceptionMCNDDistinguisher",
+    "PresentInceptionMCNDMatrixDistinguisher",
     "SpnCellPairSetDBitNetDistinguisher",
     "SpnNibbleConvPairSetDistinguisher",
     "SpnTokenMixerBlock",

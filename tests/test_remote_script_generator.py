@@ -112,6 +112,8 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "C:\\Users" not in launcher_text
     assert "set LAUNCH_LOG_DIR=%RUN_ROOT%\\launcher_logs" in launcher_text
     assert "start \"progress_innovation1-demo-gpu0-20260608\"" in launcher_text
+    assert "cmd.exe /c powershell" in launcher_text
+    assert "cmd.exe /k" not in launcher_text
     assert "innovation1-demo-gpu0-20260608_progress.jsonl" in launcher_text
     assert "scripts\\tail_progress.py" in launcher_text
     assert "--interval 5" in launcher_text

@@ -1,0 +1,1560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Output Prediction Attacks on Block Ciphers using Deep Learning *</title>
+				<funder ref="#_zakBYtA">
+					<orgName type="full">JSPS KAKENHI</orgName>
+				</funder>
+				<funder ref="#_BzA7Qdq #_eK9N5J4 #_rwwUn3V #_whx4bnn #_kAGD4ZU #_sGptpTy #_suBTYwH #_zwMzavR #_G3vX69b #_mWYEWEG #_ydpb4ea #_rnnPZ6n #_RmkWMjj #_m7P7njN #_UGY2zCP #_arMsbd5 #_H4sbHMu #_t5umGZE #_hVPPwnG #_tT2Wbsb #_RSYmzxX #_DGXHTUB #_bVsNtZA #_mP8rftc #_FpHqBxs #_HhHrRVc #_bfvz3f4 #_mEBcTkk #_pAFH49D #_xDU9CwN #_Eb8kp7m #_52FXPVX #_4tu2Jmb #_Q4vM5un #_c2APcDA #_7ZuwNvV #_bthbQb4 #_WxRV9Mk #_TDaZQjM #_5umszNe #_fjD7aj5 #_y3PycZn #_aEMQCw3 #_5Qzzg7T #_fRyRYwp #_yFfpmPm #_7Erk5n8 #_msNKB3k #_hyPhKnj #_EuuJ4wD #_Jf5WSB5 #_VGYn4nC #_UqdxCHD #_eVDhz8Z #_n5QHk22 #_Wam7bTD #_evHt9Dw #_SC2JZet">
+					<orgName type="full">unknown</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability  status="unknown">
+					<licence/>
+				</availability>
+				<date type="published" when="2022-12-26">December 26, 2022</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Hayato</forename><surname>Kimura</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>¶</label> Tokai University , Japan.</note>
+								<orgName type="institution">Tokai University</orgName>
+								<address>
+									<country key="JP">Japan</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>§</label> National Institute of Information and Communications Technology (NICT) , Japan.</note>
+								<orgName type="institution">National Institute of Information and Communications Technology (NICT)</orgName>
+								<address>
+									<country key="JP">Japan</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Keita</forename><surname>Emura</surname></persName>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>§</label> National Institute of Information and Communications Technology (NICT) , Japan.</note>
+								<orgName type="institution">National Institute of Information and Communications Technology (NICT)</orgName>
+								<address>
+									<country key="JP">Japan</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Takanori</forename><surname>Isobe</surname></persName>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>§</label> National Institute of Information and Communications Technology (NICT) , Japan.</note>
+								<orgName type="institution">National Institute of Information and Communications Technology (NICT)</orgName>
+								<address>
+									<country key="JP">Japan</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>†</label> University of Hyogo , Japan.</note>
+								<orgName type="institution">University of Hyogo</orgName>
+								<address>
+									<country key="JP">Japan</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Ryoma</forename><surname>Ito</surname></persName>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>§</label> National Institute of Information and Communications Technology (NICT) , Japan.</note>
+								<orgName type="institution">National Institute of Information and Communications Technology (NICT)</orgName>
+								<address>
+									<country key="JP">Japan</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Kazuto</forename><surname>Ogawa</surname></persName>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>§</label> National Institute of Information and Communications Technology (NICT) , Japan.</note>
+								<orgName type="institution">National Institute of Information and Communications Technology (NICT)</orgName>
+								<address>
+									<country key="JP">Japan</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Toshihiro</forename><surname>Ohigashi</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>¶</label> Tokai University , Japan.</note>
+								<orgName type="institution">Tokai University</orgName>
+								<address>
+									<country key="JP">Japan</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>§</label> National Institute of Information and Communications Technology (NICT) , Japan.</note>
+								<orgName type="institution">National Institute of Information and Communications Technology (NICT)</orgName>
+								<address>
+									<country key="JP">Japan</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Output Prediction Attacks on Block Ciphers using Deep Learning *</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date type="published" when="2022-12-26">December 26, 2022</date>
+						</imprint>
+					</monogr>
+					<idno type="MD5">9590C23EE89EBE89C60BB7D8A4721C8C</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T16:00+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Cryptanalysis of symmetric-key ciphers, e.g., linear/differential cryptanalysis, requires an adversary to know the internal structures of the target ciphers. On the other hand, deep learningbased cryptanalysis has attracted significant attention because the adversary is not assumed to have knowledge about the target ciphers with the exception of the algorithm interfaces. Such cryptanalysis in a blackbox setting is extremely strong; thus, we must design symmetric-key ciphers that are secure against deep learning-based cryptanalysis. However, almost previous attacks do not clarify what features or internal structures affect success probabilities. Although Benamira et al. (Eurocrypt 2021) and Chen et al. ( <ref type="formula">ePrint 2021</ref>) analyzed Gohr's results (CRYPTO 2019), they did not find any deep learning specific characteristic where it affects the success probabilities of deep learning-based attacks but does not affect those of linear/differential cryptanalysis. Therefore, it is difficult to employ the results of such cryptanalysis to design deep learning-resistant symmetric-key ciphers. In this paper, we propose deep learning-based output prediction attacks in a blackbox setting. As preliminary experiments, we first focus on two toy SPN block ciphers (small PRESENT-[4] and small AES-[4]) and one toy Feistel block cipher (small TWINE-[4]). Due to its small internal structures with a block size of 16 bits, we can construct deep learning models by employing the maximum number of plaintext/ciphertext pairs, and we can precisely calculate the rounds in which full diffusion occurs. Next, based on the preliminary experiments, we explore whether the evaluation results obtained by our attacks against three toy block ciphers can be applied to block ciphers with large block sizes, e.g., 32 and 64 bits. As a result, we demonstrate the following results, specifically for the SPN block ciphers: First, our attacks work against a similar number of rounds that the linear/differential attacks can be successful. Next, our attacks realize output predictions (precisely ciphertext prediction and plaintext recovery) that are much stronger than distinguishing attacks. Then, swapping or replacing the internal components of the target block ciphers affects the average success probabilities of the proposed attacks. It is particularly worth noting that this is a deep learning specific characteristic because swapping/replacing does not affect the average success probabilities of the linear/differential attacks. Finally, by analyzing the influence of the differences in the characteristics of three S-boxes (i.e., the original PRESENT S-box and two known weak S-boxes) on deep learning specific characteristics, we clarify that the resistance * An extended abstract appears in the 4th International Workshop on Artificial Intelligence and Industrial Internetof-Things Security (AIoTS 2022) <ref type="bibr" target="#b25">[26]</ref>. This work was done when the first author, Hayato Kimura, was a master student at the Tokai University, Japan, and was a research assistant at the National Institute of Information and Communications Technology (NICT), Japan.</p><p>of the target ciphers to differential/linear attacks can affect the success probability of deep learning-based attacks. We also confirm whether the proposed attacks work on the Feistel block cipher. We expect that our results will be an important stepping stone in the design of deep learning-resistant symmetric-key ciphers.</p><p>Reference</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>Unlike public-key cryptography, where security is reduced to mathematically difficult problems, the security of symmetric-key cryptography is evaluated based on resistance against classical attacks, e.g., differential, linear, and integral attacks. Specifically, the corresponding statistical characteristics, e.g., differential, linear, and integral characteristics, are searched using automatic evaluation programs and tools, e.g., SAT and MILP solvers. If there is a considerable security margin against these characteristics, the cipher can be considered to be secure against such attacks. Generally, these evaluations require extensive knowledge about the target algorithms and state-of-the-art cryptanalysis techniques because automatic evaluation programs and tools must be customized for different target algorithms and attacks.</p><p>Recently, deep learning-based cryptanalysis has received considerable attention in the symmetrickey cryptography field <ref type="bibr">[1, 5-8, 10-14, 17, 21, 22, 25, 35, 39-41]</ref>. Remarkably, such attacks do not require knowledge about the target ciphers, except for the algorithm interfaces, i.e., these attacks are feasible even if the adversary does not know the algorithm of the target ciphers. In a blackbox setting, such cryptanalysis is extremely strong, i.e., the adversary can mount an attack with minimum knowledge about the target ciphers and cryptanalysis techniques. Thus, we must consider deep learning-based cryptanalysis when designing symmetric-key ciphers. However, previous studies have not clarified the features or internal structures that affect the success probabilities. Recently, Benamira et al. <ref type="bibr" target="#b7">[8]</ref> and Chen et al. <ref type="bibr" target="#b11">[12]</ref> confirmed that the characteristics explored by Gohr <ref type="bibr" target="#b16">[17]</ref> can be employed in classical distinguishing attacks. These results may be used to design deep learning-resistant symmetric-key ciphers; however, this may be insufficient because they did not identify any deep learning specific characteristic in such a manner that it affects the success probabilities of deep learning-based attacks but does not affect those of classical attacks such as linear/differential attacks. Finding such a deep learning specific characteristic is important because exploiting such a characteristic can make the target cipher vulnerable to deep learning-based attacks. Thus, the usage of previous results of these attacks to design such deep learning-resistant symmetric-key ciphers is difficult.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1">Our Contribution</head><p>In this study, we present new deep learning-based attacks on block ciphers in a blackbox setting where the adversary does not know the algorithm of target ciphers with the exception of the algorithm interfaces, e.g., the key and block sizes. In a blackbox setting, deep learning-based cryptanalysis enables the use of pre-obtained input/output pairs to construct deep learning models for the proposed attacks, e.g., ciphertext prediction and plaintext recovery, and then we can use these models to evaluate the proposed attacks. The next step is to examine the correlations between the evaluation results obtained by deep learning-based cryptanalysis and the characteristics of the target block ciphers. Here, we use a whitebox analysis technique in the evaluation phase using deep learning models. The whitebox analysis explores the relationship between the ability of deep learning-based attacks and classical attacks, e.g., linear/differential attacks; therefore, it may be possible to clarify the correlations between evaluation results obtained by deep learning-based cryptanalysis and the characteristics of the target block ciphers.</p><p>To obtain highly accurate results from the whitebox analysis in a blackbox setting, we perform comprehensive analyses using all input/output pairs, i.e., it is not appropriate to target reducedround block ciphers because they have the same block size as the original block ciphers (e.g., 64 or 128 bits). For this reason, we first focus on toy block ciphers with a small block size (e.g., 16 bits) and perform the whitebox analysis against these toy block ciphers as preliminary experiments. Based on the preliminary experiments, we apply the proposed attacks to block ciphers with large block sizes (e.g., 32 and 64 bits) and consider the whitebox analysis against the target block ciphers. The details of our contributions in this study are given as follows.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1.1">New Deep Learning-based Output Prediction Attacks</head><p>To perform the whitebox analysis against block ciphers with large block sizes, we first focus on two toy SPN block ciphers (16-bit block variants of PRESENT <ref type="bibr" target="#b8">[9]</ref> called small PRESENT- <ref type="bibr" target="#b3">[4]</ref> and an AES-like cipher called small AES- <ref type="bibr" target="#b3">[4]</ref>) and one toy Feistel block cipher (a type-II generalized Feistel structure with 4 branches called small TWINE- <ref type="bibr" target="#b3">[4]</ref>). This allows us to accurately compare the effectiveness of the proposed deep learning-based attacks, which guess the ciphertext/plaintext from the corresponding plaintext/ciphertext without any knowledge of keys with that of classical attacks.</p><p>Because of its small internal structures with a block size of 16 bits, we can develop deep learning models by exploiting the maximum number of plaintext/ciphertext pairs, and we can precisely calculate linear/differential probability for each round. We demonstrate that the proposed attacks are effective against the similar number of rounds as linear/differential attacks. For small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, we successfully mount output prediction attacks on 4 rounds, while the number of rounds that the differential distinguisher can work is 5. For small AES- <ref type="bibr" target="#b3">[4]</ref> and small TWINE- <ref type="bibr" target="#b3">[4]</ref>, we can mount output prediction attacks on 1 and 3 rounds, while differential distinguishing attacks can reach 3 and 7 rounds, respectively. Note that our attacks realize output predictions (i.e., ciphertext prediction and plaintext recovery) that are considerably stronger than distinguishing attacks even without knowing the algorithm of the target ciphers. Nevertheless, for small TWINE- <ref type="bibr" target="#b3">[4]</ref>, the number of rounds that the proposed attacks can be successful is significantly less than that of linear/differential attacks. To clarify this cause, additional studies will be required in future.</p><p>Next, based on evaluation results for toy block ciphers, we apply the proposed attacks to the target block ciphers with a block size of 64 bits, i.e., PRESENT <ref type="bibr" target="#b8">[9]</ref>, AES-like, and TWINE-like ciphers. Consequently, we consider that by increasing the amount of training data, the whitebox analysis against block ciphers with large block sizes can be regarded as equal to or greater than the whitebox analysis against toy block ciphers with a block size of 16 bits; thus, the whitebox analysis against the target block ciphers with large block sizes can be summarized as follows:</p><p>• For PRESENT, the maximum number of rounds that the proposed attacks can be successful is at least equal to that of classical linear/differential attacks.</p><p>• For AES-like and TWINE-like ciphers, we conjecture that the maximum number of rounds that the proposed attacks can be successful also becomes equal to that of classical linear/differential attacks when the amount of training data increases more.</p><p>In addition, we conduct additional experiments with 10,000 trials (rather than 100 trials) to confirm the accuracy of the success probability calculated from the proposed attacks. Consequently, we demonstrate that the additional experiments with a small number of secret keys are sufficient to obtain the best success probability, and therefore the proposed attacks lead to reliable results.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1.2">Extended Whitebox Analysis on Small PRESENT-[4]</head><p>We swap or replace internal components on the toy SPN block cipher, particularly on the 4-round small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, to investigate the relationship between the internal components and success probability of our deep learning-based attacks, and evaluate the impact of these modifications on the success probability of the prediction attacks. The toy Feistel block cipher, i.e., small TWINE- <ref type="bibr" target="#b3">[4]</ref>, is excluded from this investigation because Feistel block ciphers generally use the same components for both encryption and decryption algorithms. Consequently, we find that swapping or replacing the internal components significantly affects the average success probabilities of the proposed attacks. It is particularly worth noting that this is a deep learning specific characteristic because component swapping and replacing that we did in this study did not affect success probabilities of linear/differential attacks. We expect that our results will be an important foundation in the design of deep learning-resistant symmetric-key ciphers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1.3">Deeper Look into Whitebox Analysis Using Weak S-boxes</head><p>We look deeper into deep learning specific characteristics and extend the whitebox analysis to explore clues to facilitate the design of symmetric-key cryptographic algorithms that are secure against deep learning-based attacks. To perform the extended whitebox analysis, we employ two weak variants of small PRESENT- <ref type="bibr" target="#b3">[4]</ref> by replacing the original S-box with known weak S-boxes. We select the weak S-box1 shown in Fig. <ref type="figure">6</ref>.1 in the literature <ref type="bibr" target="#b27">[28]</ref>. This is used in an example of differential cryptanalysis and is known to be vulnerable to differential attacks. We also select the weak S-box2 shown in Fig. <ref type="figure">7</ref>.1 in the literature <ref type="bibr" target="#b27">[28]</ref>, which is used in an example of linear cryptanalysis and is known to be vulnerable to linear attacks. Thus, we aim to analyze the influence of the differences in the characteristics of three S-boxes (i.e., the original PRESENT S-box and two weak S-boxes) on deep learning specific characteristics. As a result, the whitebox analysis against small PRESENT- <ref type="bibr" target="#b3">[4]</ref> with weak S-boxes can be summarized as follows:</p><p>• For the small PRESENT- <ref type="bibr" target="#b3">[4]</ref> with weak S-box1, we successfully mount output prediction attacks on 11 rounds, and the number of rounds that the differential and linear distinguishing attacks can work is 11 and 9, respectively.</p><p>• For the small PRESENT- <ref type="bibr" target="#b3">[4]</ref> with weak S-box2, we successfully mount output prediction attacks on 8 rounds, and the number of rounds that the differential and linear distinguishing attacks can work is 7 and 8, respectively.</p><p>From these results, we conclude that the resistance of the target ciphers to differential/linear attacks can affect the success probability of deep learning-based attacks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.2">Comparison with Existing Studies</head><p>Table 1 compares the proposed and existing deep learning-based attacks [1, 5-8, 10-14, 17, 21-23, 25, 35, 39-41]. For comparison, we particularly focused on whether these attacks correspond to a deep learning-based attack in a blackbox setting and a deep learning-based attack with the whitebox analysis. When an adversary performs a deep learning-based attack in a non-blackbox setting, the adversary must be familiar with the target ciphers as well as state-of-the-art cryptanalysis techniques. This degrades the original function of a deep learning-based attack in such a way that it does not require any knowledge of target ciphers and state-of-the-art cryptanalysis techniques, except algorithm interfaces. In addition, even if an adversary uses the whitebox analysis in a non-blackbox setting to perform a deep learning-based attack, this should not result in accurate Table 1: Comparison of deep learning-based cryptanalysis. OP:=Output Prediction, PR:=Plaintext Recovery, KR:=Key Recovery, DD:=Differential Distinguisher, LD:=Linear Distinguisher, and DLD:=Differential-Linear Distinguisher.</p><p>evaluations of the attack. In summary, it is important to perform a deep learning-based attack with the whitebox analysis in a blackbox setting. As shown in Table <ref type="table">1</ref>, the proposed attacks are the first deep learning-based output prediction attacks with whitebox analysis on both SPN and Feistel structures in a blackbox setting.</p><p>Regarding the whitebox analysis, Danziger et al. presented deep learning-based attacks that predict key bits of 2-round DES from a plaintext/ciphertext set, and analyze the relationship between these attacks and the differential probability <ref type="bibr" target="#b13">[14]</ref>. They compared variants employing several types of S-boxes with different properties for differential attacks, and they concluded that there is a nontrivial relationship between the differential characteristics and success probability of their deep learning-based attacks. However, their results are extremely limited because they targeted a two-round Feistel construction, which is quite insecure even if the component is ideal function. It is unclear how much the property of internal components affects the security of the whole construction. In addition to improve Gohr's deep learning-based attack <ref type="bibr" target="#b16">[17]</ref>, Benamira et al. <ref type="bibr" target="#b7">[8]</ref> and Chen et al. <ref type="bibr" target="#b11">[12]</ref> improved the success probability of traditional distinguishers using characteristics that are expected to be reacted by Gohr's attack. Their work confirms whether characteristics explored by Gohr can be employed in the traditional distinguishing attacks and they did not identify any deep learning specific characteristic. However, we compare the ability of classical attack with that of our deep learning-based attacks and investigate a relationship among them. Then, we identify deep learning specific characteristics of small PRESENT- <ref type="bibr" target="#b3">[4]</ref>. To summarize, to the best of our knowledge, our results are the first ones that perform the whitebox analysis.</p><p>Alani and Hu reported plaintext recovery attacks on DES, 3-DES, and AES <ref type="bibr" target="#b1">[2,</ref><ref type="bibr" target="#b23">24]</ref> that guess plaintexts from given ciphertexts. They claimed that attacks on DES, 3-DES, and AES are feasible with 2 11 , 2 11 and 1741 (≃ 2 10.76 ) plaintext/ciphertext pairs, respectively. However, Xiao et al. doubted the correctness of their results <ref type="bibr" target="#b1">[2,</ref><ref type="bibr" target="#b23">24]</ref> because they could not be reproduced. Baek et al. also pointed this out in the literature <ref type="bibr" target="#b3">[4]</ref>. Therefore, we exclude these results in Table <ref type="table">1</ref>. Mishra et al. reported that they mounted output prediction attacks on full-round PRESENT; however, it did not work well <ref type="bibr" target="#b15">[16]</ref>. In addition, certain results have yielded classical ciphers such as Caesar cipher, Vigenere, and Enigma ciphers <ref type="bibr" target="#b14">[15,</ref><ref type="bibr" target="#b17">18,</ref><ref type="bibr" target="#b18">19,</ref><ref type="bibr" target="#b31">32]</ref>.</p><p>Other machine learning-based analyses have also been reported, e.g., <ref type="bibr" target="#b29">[30,</ref><ref type="bibr" target="#b30">31]</ref>. Tan et al. demonstrated that deep learning can be used to distinguish ciphertexts encrypted by AES, Blowfish, DES, 3-DES, and RC5, respectively <ref type="bibr" target="#b36">[37]</ref>, for detecting the encryption algorithm that the malware utilizes. Alshammari et al. attempted to classify encrypted Skype and SSH traffic <ref type="bibr" target="#b2">[3]</ref>.</p><p>Organization. The remainder of this paper is organized as follows. Our target ciphers, i.e., two SPN block ciphers and one Feistel block cipher (and their toy ciphers), are introduced in Sect. 2. The proposed deep learning-based output prediction attacks in a blackbox setting are introduced in Sect. 3. Our whitebox analysis is presented in Sect. 4, which explores the evaluation results obtained by our attacks against three toy block ciphers can be applied to block ciphers with large block sizes. The extended whitebox analyses on small PRESENT- <ref type="bibr" target="#b3">[4]</ref> are discussed in Sects. 5 and 6. Finally, the paper is concluded in Sect. 7.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Preliminaries</head><p>In this section, we introduce two SPN block ciphers (PRESENT <ref type="bibr" target="#b8">[9]</ref> and AES-like cipher), one Feistel block cipher (TWINE-like cipher), and their toy ciphers (small PRESENT-[n] <ref type="bibr" target="#b28">[29]</ref>, small AES-[n], and small TWINE-[n]).</p><p>PRESENT and small PRESENT-[n]: PRESENT <ref type="bibr" target="#b8">[9]</ref> is a lightweight SPN block cipher with a 64-bit block size, 31 rounds, and a key size of either 80 or 128 bits. To analyze PRESENT, a Table 2: Original S-box for PRESENT and small PRESENT-[n]   <ref type="bibr" target="#b28">29]</ref> has been proposed. We show the round function of small PRESENT-[n] in Fig. <ref type="figure" target="#fig_0">1</ref>. Since the block size is 4n, small PRESENT- <ref type="bibr" target="#b15">[16]</ref> is equivalent to the original PRESENT. The variant n, which specifies the block size and round key length, allows us to control the round of full diffusion. The S-box has 4-bit input and output. We provide the correspondence table in Table <ref type="table">2</ref> that maps F 4 2 → F 4 2 . The pLayer is described as bit permutation P (i), which is defined as follows. Note that this is a generalization of that of PRESENT and is equivalent to that of PRESENT when n = 16. P (i) is used for encryption and P -1 (i) is used for decryption.</p><formula xml:id="formula_0">P (i) = { n × i mod (4n -1) (0 ≤ i &lt; 4n -1) 4n -1 (i = 4n -1) P -1 (i) = { 4 × i mod (4n -1) (0 ≤ i &lt; 4n -1) 4n -1 (i = 4n -1)</formula><p>For key scheduling, the key scheduling algorithm of PRESENT-80, which is a variant of PRESENT with a key length of 80, is executed; furthermore, the 4n rightmost bits are used as round keys rk i .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>AES-like and small AES-[n]: We design AES-like cipher with a 64-bit block size, called AESlike for short.</head><p>To analyze AES-like, we design its toy model called small AES-[n]. The round function of small AES is shown in Fig. <ref type="figure" target="#fig_0">1</ref>. As with the case of PRESENT, small AES- <ref type="bibr" target="#b15">[16]</ref> is equivalent to AES-like since the block size is 4n. The S-box and key scheduling are the same as those of PRESENT. The maximum distance separable (MDS) matrix (over GF (2 4 ) defined by the irreducible polynomial x 4 + x + 1) is the same as that of Piccolo <ref type="bibr" target="#b33">[34]</ref>, which is expressed as follows. Table 3: Weak S-box1 which is known to be vulnerable to differential attack. x 0 1 2 3 4 5 6 7 8 9 A B C D E F S[x] 6 4 C 5 0 7 2 E 1 F 3 D 8 A 9 B </p><formula xml:id="formula_1">M =     2 3 1 1 1 2 3 1 1 1 2 3 3 1 1 2    </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">7 8 9 A B C D E F S[x] F E B C D 7 8 0 3 9 A 4 2 1 5</head><p>When a 16-bit input X (16) is given, the output is computed as t (y 0(4) , y 1(4) , y 2(4) , y 3(4) ) ← M • t (x 0(4) , x 1(4) , x 2(4) , x 3(4) ).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>TWINE-like and small TWINE-[n]:</head><p>We design TWINE-like cipher with a 64-bit block size, called TWINE-like for short. To analyze TWINE-like, we design its toy model called small TWINE-[n]. For our design, we adopt the type-II generalized Feistel structure with n branches and similar F function as TWINE, which comprises round key operation and 4-bit S-box, as shown in Fig. <ref type="figure" target="#fig_3">2</ref>. As with the case of PRESENT, small TWINE- <ref type="bibr" target="#b15">[16]</ref> is equivalent to TWINE-like since the block size is 4n. The S-box and key scheduling are the same as those of PRESENT. The pLayer is described as round permutation RP , which is defined as follows: RP : (y 0 , y 1 , . . . , y n-2 , y n-1 ) ← (x 1 , x 2 , . . . , x n-1 , x 0 ). Two sub-round keys, rk s i for s ∈ {0, 1, . . . , n 2 -1}, are used in each round, which are generated from the round key rk i as follows: </p><formula xml:id="formula_2">rk s i = (rk i ≫ (4n -(4s + 4))) &amp;</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Weak S-boxes:</head><p>We provide additional S-boxes called weak S-box1 and weak S-box2 in Tables <ref type="table">3</ref> and <ref type="table" target="#tab_0">4</ref>, respectively. These S-boxes were introduced in the literature <ref type="bibr" target="#b27">[28]</ref>. The weak S-box1 is known to be vulnerable to differential attacks, whereas the weak S-box2 is known to be vulnerable to linear attacks. We construct two weak variants of small PRESENT- <ref type="bibr" target="#b3">[4]</ref> for our experiments by replacing the original S-box with these S-boxes.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">Methodology</head><p>In this section, we present the proposed deep learning-based output prediction attacks in a blackbox setting. To realize the proposed attacks, we construct deep learning models for ciphertext prediction and plaintext recovery, respectively. In the following, we first discuss the goals of these attacks and then explain the construction of deep learning models and their evaluation.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Goals of Attack</head><p>To date, the relationship between the abilities classical attacks and deep learning-based ones has not been clarified. Here, we focus on clarifying this relationship. We then revisit the common sense in previous works using deep learning-based attacks. The targets of this work are summarized as follows:</p><p>1. We clarify the difference in capabilities between the classical and deep learning-based attacks.</p><p>Specifically, we compare the success probabilities of deep learning-based attacks with those of classical attacks.</p><p>2. Swapping or replacing the internal components in the target block ciphers does not affect the success probability of linear/differential cryptanalysis. We clarify how such modifications to cipher's algorithms affect the success probability of deep learning-based attacks.</p><p>3. We clarify which vulnerabilities in the cryptographic components affect the accuracy of deep learning-based attacks. Specifically, we apply the classical and deep learning-based attacks to two weak variants of small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, as described in Sect. 2, and observe the differences in the capabilities of these attacks by comparing the success probabilities.</p><p>We evaluate the success probabilities of attacks using the following settings.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Known-plaintext attack setting:</head><p>In this setting, the adversary is given multiple plaintext/ciphertext pairs relating to a single secret key, and the pairs are used as training data to construct a deep learning model.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Blackbox setting:</head><p>In this setting, the adversary does not have knowledge about the target block ciphers, except algorithm interfaces such as key and block sizes.</p><p>In both of these settings, the adversary is a very weak cryptographic attacker. The blackbox setting assumes that the adversary does not know the internal structures of the cipher. In addition, the adversary does not know the cipher is a permutation. The blackbox setting also assumes that the adversary only knows the input-output format and possesses deep learning knowledge.</p><p>Regarding attack settings, a ciphertext-only attack setting, which allows the adversary to obtain only the ciphertext, is the weakest setting. However, information-theoretically no information is provided to the adversary in the setting except for several special cases, e.g., the broadcast setting of RC4 <ref type="bibr" target="#b32">[33]</ref>. In fact, the attack in this setting is practically impossible. The known-plaintext attack is the next weakest setting. In this setting, the adversary can obtain some information from the given plaintext/ciphertext pairs and use these pairs for the attacks. The other attack settings, e.g., chosen-plaintext attack setting, require the adversary to possess some knowledge about the ciphertext, and the adversary in this setting is stronger than the adversary in the known-plaintext attack setting. Thus, we employ the known-plaintext attack setting.</p><p>In these settings, we decide the adversary's goal to output predictions (i.e., ciphertext prediction and/or plaintext recovery), and we evaluate the success probabilities of these attacks. The ciphertext prediction and plaintext recovery attacks are summarized as follows:</p><p>Ciphertext prediction attack: In this attack, the adversary obtains multiple plaintext/ciphertext pairs regarding a secret key, where n is the block size. Then, the adversary predicts a ciphertext of a plaintext not included in the previously given pairs. Table <ref type="table">5</ref>: Hyperparameters Hyperparameters Search ranges Number of hidden nodes 100, 200, 300, 400, 500 Initial value of learning rates 0.0001, 0.001, 0.01 Number of hidden layers 1, 2, 3, 4, 5, 6, 7 Optimizers SGD, Adam <ref type="bibr" target="#b26">[27]</ref>, RMSprop <ref type="bibr" target="#b37">[38]</ref> Plaintext recovery attack: In this attack, the adversary obtains multiple plaintext/ciphertext pairs regarding a secret key, and then the adversary recovers a plaintext of a ciphertext that is not included in the pairs given previously.</p><p>If the ciphertext prediction attack is possible, forgery of the Cipher-based Message Authentication Code (CMAC) is possible. If the plaintext recovery attack is possible, the adversary can obtain the plaintext of any ciphertext without possessing the secret key used for encryption.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Neural Network and Hyperparameters</head><p>Deep learning allows us to automatically extract features unlike statistical machine learning techniques, e.g., Bayesian inference. Deep learning treats nonlinear separable problems; thus, it appears to work well for simulating cryptographic functions with nonlinearity. Hyperparameters such as the initial learning rate, number of hidden nodes (neurons), and optimizers, are defined prior to the learning phase and are used to construct models. These parameters affect model performance; thus, they are optimized using assessment metrics.</p><p>In this paper, we consider ciphertext prediction and plaintext recovery as regression problems with supervised learning where plaintext/ciphertext pairs are used as training data. To this end, we must extract numerous features from the plaintext/ciphertext pairs obtained under the knownplaintext attack; therefore, we employ long short-term memory (LSTM) which is a type of recurrent neural networks (RNN) <ref type="bibr" target="#b19">[20]</ref>. The LSTM, which is a general technique for mapping sequences to sequences with neural networks, is used in the field of machine translation <ref type="bibr" target="#b35">[36]</ref>. As the LSTM can realize the mapping between sequences in machine translation, we consider that it can also realize the mapping between sequences (i.e., between plaintexts and ciphertexts) in encryption/decryption of permutation-based block ciphers. In addition, we consider that numerous features can be extracted from plaintext/ciphertext pairs, i.e., the inputs to our deep learning models, by using the LSTM, which enables long-term memory of input sequences. In fact, we have confirmed that the use of the LSTM induces better experimental results than that of the convolutional neural network (CNN), as described in Appendix A for more details. We then optimize hyperparameters, e.g., number of hidden nodes, initial learning rates, number of hidden layers, and optimizers. Table <ref type="table">5</ref> shows the search range for each hyperparameter. During the hyperparameter optimization, we use different secret keys from those used in the construction of deep learning models because we strictly evaluate the success probabilities of ciphertext prediction and plaintext recovery without depending on secret keys. In the following, the procedure to optimize hyperparameters is similar to constructing deep learning models, with the exception of the number of secret keys.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Deep Learning Models and Their Evaluation</head><p>We construct and evaluate deep learning models for ciphertext prediction according to the following procedure. Note that we show the plaintext recovery case in parentheses.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Step 1.</head><p>The adversary obtains multiple plaintext/ciphertext pairs under the known-plaintext attack. In our experiments, we randomly select multiple plaintexts and generate ciphertexts corresponding to the selected plaintexts.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Step 2.</head><p>The adversary uses the obtained plaintext/ciphertext pairs as training data to construct deep learning models. Then, the adversary constructs a deep learning model for ciphertext prediction (plaintext recovery) using the plaintexts (ciphertexts) as inputs and the ciphertexts (plaintexts) as the correct outputs.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Step 3.</head><p>The adversary uses all or part of the remaining plaintexts (ciphertexts), which were not used as training data, to evaluate the constructed deep learning models. The adversary uses these plaintexts (ciphertexts) as the input to the constructed deep learning models. Then, the adversary predicts the unknown ciphertext (plaintext) corresponding to each plaintext (ciphertext).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Step 4.</head><p>The adversary calculates the percentage of exact match between the predicted ciphertext (plaintext) and the correct ciphertext (plaintext) as the predicted probability.</p><p>To evaluate the predicted probabilities, we use 2 x plaintext/ciphertext pairs as training data and 2 y plaintext/ciphertext of the remaining plaintext/ciphertext pairs as test data when applying the proposed attacks against the target block ciphers with a block size of 4n bits. It should be noted here that 2 x + 2 y ≤ 2 4n . In this case, if the predicted probability is greater than (2 4n -2 x ) -<ref type="foot" target="#foot_0">foot_0</ref> , we consider the proposed attacks to be successful. This means that an attacker without knowledge of the target algorithms can predict the output value with a higher probability than a random probability.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Whitebox Analysis</head><p>In this section, we perform the whitebox analysis to explore the relationship between the ability of deep learning-based attacks and the classical attacks such as linear/differential attacks against three block ciphers based on our methodology presented in Sect. 3. We first use three toy block ciphers with a block size of 16 bits as a testbed for the proposed attacks. Based on these preliminary experiments, we then apply the proposed attacks to block ciphers with large block sizes, such as 32 and 64 bits. Finally, we conduct additional experiments to ensure that our whitebox analysis is accurate.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Application to Toy Block Ciphers</head><p>In this subsection, we apply the proposed attacks to three toy block ciphers, i.e., small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, small AES- <ref type="bibr" target="#b3">[4]</ref>, and small TWINE- <ref type="bibr" target="#b3">[4]</ref>, as preliminary experiments. We first explain the experimental procedure for our whitebox analysis and then demonstrate experimental results to compare the number of rounds that the proposed attacks can be successful to that of existing classical attacks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1.1">Experimental Procedure</head><p>In our experiments, we implement the proposed attacks using Keras 1 , which is a deep learning library, and we employ TensorFlow as the backend. The following is our experimental environment: 8 Linux machines with 14 NVIDIA GPUs (RTX 2080 SUPER, GeForce GTX 1080 Ti,</p><p>Table 6: Experimental hyperparameters Hyperparameters Values Number of input layer nodes (i.e., block sizes) 16, 32, 64 Number of output layer nodes (i.e., block sizes) 16, 32, 64 Batch size 250 Number of epochs 100</p><p>TITAN Xp, Tesla K40m, and Quadro P600 Mobile). For developing LSTM models by Keras, e.g., model.add(LSTM(...)), we specify only units, input shape, and return sequences as its arguments<ref type="foot" target="#foot_1">foot_1</ref> . As an initial setting, we use common experimental hyperparameter values (see Table <ref type="table">6</ref>).</p><p>Our experiments involve the following two sub-experiments, i.e., Experiment 1 and Experiment 2.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experiment 1:</head><p>In each round, we optimize hyperparameters for the target block ciphers using the proposed attacks, as described in Sect. 3.2. For our hyperparameter optimization, we use Optuna<ref type="foot" target="#foot_2">foot_2</ref> , which is an automatic optimization tool, and use its default search algorithm. The indication for our hyperparameter optimization is the success probability of ciphertext prediction or plaintext recovery. In our hyperparameter optimization, we obtain 100 hyperparameter candidates from the plaintext/ciphertext pairs generated by 20 secret keys. From these candidates, we select the optimized hyperparameter with the highest average success probabilities of ciphertext prediction or plaintext recovery. To this end, we use 2 15 plaintext/ciphertext pairs as training data and remaining 2 15 plaintext or ciphertext as testing data; thus, each average success probability is calculated from 2 15 randomly generated plaintext/ciphertext pairs. If the average success probabilities of ciphertext prediction or plaintext recovery with the optimized hyperparameter is greater than 2 -15 , then the number of rounds for finding the optimized hyperparameter is incremented by one; otherwise, the second sub-experiment is executed using the optimized hyperparameter.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experiment 2:</head><p>We use randomly generated 100 secret keys and the optimized hyperparameters obtained in Experiment 1 to execute the proposed attacks for ciphertext prediction or plaintext recovery; then, we compute the average success probabilities of ciphertext prediction or plaintext recovery. The secret keys used in Experiment 2 are not the same as those used in Experiment 1.</p><p>After clarifying the number of attacked rounds for target block ciphers by Experiment 2, we use experimental results and linear/differential probability of the target block ciphers to compare the proposed attacks to the classical linear/differential attacks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1.2">Experimental Results</head><p>Table <ref type="table" target="#tab_1">7</ref> shows the experimental results of Experiment 2 using the optimized hyperparameter obtained in Experiment 1. Based on these experimental results, we discuss the whitebox analysis against three toy block ciphers, i.e., small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, small AES- <ref type="bibr" target="#b3">[4]</ref>, and small TWINE- <ref type="bibr" target="#b3">[4]</ref>. First, we compare the proposed and classical linear/differential attacks for small PRESENT- <ref type="bibr" target="#b3">[4]</ref>. From the experimental results, the proposed attacks succeed up to 5 rounds for ciphertext prediction and up to 4 rounds for plaintext recovery against small PRESENT- <ref type="bibr" target="#b3">[4]</ref>. Although the average success probability of ciphertext prediction for the 5-round small PRESENT-[4] is nearly 2 -15 , the average success probability of plaintext recovery for the 4-round small PRESENT- <ref type="bibr" target="#b3">[4]</ref> is sufficiently greater than 2 -15 . In other words, we consider that the proposed attacks can be successful for a maximum of 4 rounds. On the other hand, from the precisely calculated differential probability of small PRESENT- <ref type="bibr" target="#b3">[4]</ref> (see Table <ref type="table">8</ref>), the maximum number of rounds that the differential attack can be successful is 5. Similarly, based on the precisely calculated linear probability (see Table <ref type="table">9</ref>), the maximum number of rounds that a linear attack can be successful is 4. Therefore, for small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, the maximum number of rounds that the proposed attack can be successful is equivalent to that of classical linear/differential attacks. Next, we compare the proposed and classical linear/differential attacks for small AES- <ref type="bibr" target="#b3">[4]</ref>. From Table <ref type="table" target="#tab_1">7</ref>, we evaluate the maximum number of rounds that the proposed attacks can be successful is 1. From the precisely calculated linear/differential probabilities, the maximum number of rounds that the differential attack can be successful is 3 and that of the linear attack is also 3. Similarly, we compare the proposed attacks and classical linear/differential attacks for small TWINE- <ref type="bibr" target="#b3">[4]</ref>. We discovered that the proposed attack can be successful for a maximum of 3 rounds with the differential attack lasting 7 rounds and the linear attack lasting 7 rounds. In summary, for small AES- <ref type="bibr" target="#b3">[4]</ref> and Table <ref type="table">8</ref>: Maximum differential probabilities of small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, small AES- <ref type="bibr" target="#b3">[4]</ref>, and small TWINE- <ref type="bibr" target="#b3">[4]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Round</head><p>Maximum differential probability small PRESENT- <ref type="bibr" target="#b3">[4]</ref> small AES- <ref type="bibr" target="#b3">[4]</ref> small TWINE-[4] 1 2 -2 2 -2 2 0 2 2 -<ref type="foot" target="#foot_3">foot_3</ref> 2 -10 2 -2 3 2 -8 2 -14 2 -4 4 2 -12 2 -20 2 -6 5 2 -14 -2 -8 6 2 -16 -2 -12 7 --2 -14 8 --2 -16</p><p>9 --small TWINE- <ref type="bibr" target="#b3">[4]</ref>, the maximum number of rounds that the proposed attacks can be successful is less than that of the classical linear/differential attacks. It should be noted here that the proposed attacks realize much stronger ciphertext prediction and plaintext recovery than the distinguishing attacks of the classical linear/differential cryptanalysis. Nevertheless, for small TWINE- <ref type="bibr" target="#b3">[4]</ref>, the maximum number of rounds that the proposed attacks can be successful is significantly smaller than that of the classical linear/differential attacks. This cause will be clarified in a future study.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1.3">Whitebox Analysis with the Smaller Amount of Training Data</head><p>To perform the whitebox analysis with the smaller amount of training data against three toy block ciphers (i.e., 1-, 2-, 3-, 4-round small PRESENT-[4], 1-round small AES- <ref type="bibr" target="#b3">[4]</ref>, and 1-, 2-, 3-round small TWINE-[4]), we conduct additional experiments in the same procedure described above, but we vary the amount of training data in the range of from 2 2 to 2 14 and use all the remaining plaintexts or ciphertexts as testing data. In these additional experiments, we use the optimized hyperparameters obtained in Experiment 1 (see Table <ref type="table" target="#tab_1">7</ref>). Table <ref type="table" target="#tab_2">10</ref> shows the minimum amount of training data required for successful ciphertext prediction/plaintext recovery against three toy block ciphers. In addition, Table <ref type="table">B</ref>.1 in Appendix B shows more detailed results regarding the average success probabilities of ciphertext prediction/plaintext recovery by the proposed attacks against three toy block ciphers with a block size of 16 bits. If the predicted probability is greater than 2 -15 , we consider the proposed attacks to be successful 4 . Consequently, we demonstrate successful ciphertext prediction/plaintext recovery with a smaller amount of training data than 2 15 against three toy block ciphers, with the exception of the 4-round small PRESENT- <ref type="bibr" target="#b3">[4]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Application to Block Ciphers with Large Block Sizes</head><p>In this subsection, we apply the proposed attacks to three block ciphers with large block sizes based on the preliminary experiments as described in Sect. 4.1. To examine the evaluation results obtained by our whitebox analysis against three toy block ciphers can be applied to the target Table <ref type="table">9</ref>: Maximum linear probabilities of small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, small AES- <ref type="bibr" target="#b3">[4]</ref>, and small TWINE- <ref type="bibr" target="#b3">[4]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Round</head><p>Maximum linear probability small PRESENT- <ref type="bibr" target="#b3">[4]</ref> small AES- <ref type="bibr" target="#b3">[4]</ref>  block ciphers with large block sizes, we conduct Experiment 2 in the same procedure as described in Sect. 4.1.1, but we change the block sizes of the target block ciphers, e.g., 32 and 64 bits. In our experiments, we use the optimized hyperparameters obtained in Experiment 1 (see Table <ref type="table" target="#tab_1">7</ref>). Tables <ref type="table" target="#tab_3">11</ref> and <ref type="table">12</ref> show the minimum amount of training data required for successful ciphertext prediction/plaintext recovery against three block ciphers with block sizes of 32 and 64 bits, respectively. We vary the amount of training data in the range of from 2 8 to 2 17 or from 2 10 to 2 19 and use 2 16 of the remaining plaintexts or ciphertexts as testing data against three toy block ciphers with block sizes of 32 or 64 bits, respectively; thus, if the predicted probability is greater than the threshold derived by equation (2 4n -2 x ) -1 shown in Sect. 3.3, we consider the proposed attacks to be successful for both cases. In this case, those thresholds are (2 32 -2 8 ) -1 to (2 32 -2 17 ) -1 or from (2 64 -2 10 ) -1 to (2 64 -2 19 ) -1 . In addition, Tables C.1 and C.2 in Appendix C show more detailed results regarding the average success probabilities of ciphertext prediction/plaintext recovery by the proposed attacks against three block ciphers with block sizes of 32 and 64 bits. From Tables <ref type="table" target="#tab_3">11</ref> and <ref type="table">C</ref>.1, we report that the average success probabilities of ciphertext prediction/plaintext recovery by the proposed attacks against the target block ciphers with a block size of 32 bits are not zero, excluding the 4-round small PRESENT- <ref type="bibr" target="#b7">[8]</ref>. Expressed differently, this fact should indicate that the proposed attacks against the target block ciphers with large block sizes can be successful by simply increasing the amount of training data; thus, we consider that the proposed attack against the target block ciphers with additional rounds could be successful by using more training data than 2 17 .</p><p>From Tables <ref type="table">12</ref> and <ref type="table">C</ref>.2, we can confirm that except for the 4-round small PRESENT- <ref type="bibr" target="#b15">[16]</ref> and the 3-round small TWINE- <ref type="bibr" target="#b15">[16]</ref>, the average success probabilities of ciphertext prediction/plaintext recovery by the proposed attacks against the target block ciphers with a block size of 64 bits are</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Accuracy of Experimental Results</head><p>In Sect. 4.1, we have presented the experimental results of Experiment 1 with 20 secret keys and Experiment 2 with 100 secret keys. These experimental results may appear to be correct. However, because of the small number of secret keys used in these experiments, we should have an additional discussion to ensure that the experimental results are accurate. To this end, this subsection shows two additional experimental results on the 3-round small TWINE- <ref type="bibr" target="#b3">[4]</ref> with 100 secret keys for Experiment 1 and 10000 secret keys for Experiment 2, respectively. The following explains why we chose the 3-round small TWINE- <ref type="bibr" target="#b3">[4]</ref> for confirming the accuracy: If we choose a target with a probability of 1 or 2 -15 , it appears difficult to see how the number of secret keys affects the accuracy. As shown in Table <ref type="table" target="#tab_1">7</ref>, the average success probabilities of ciphertext prediction and plaintext recovery by the proposed attacks in the 3-round small TWINE-[4] are approximately 2 -10.46 and 2 -9.72 , respectively. We choose the 3-round small TWINE- <ref type="bibr" target="#b3">[4]</ref> as the best target for additional experiments because these probabilities possibly vary significantly if the number of keys affects the accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3.1">Experimental Procedure</head><p>We explain the following two additional experiments, i.e., Experiment 1' and Experiment 2'.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experiment 1':</head><p>We use the same procedures as in Experiment 1 to optimize the hyperparameters for the 3-round small TWINE- <ref type="bibr" target="#b3">[4]</ref>. Unlike Experiment 1, we use plaintext/ciphertext pairs generated by 100 secret keys rather than 20 secret keys in this experiment. In the hyperparameter optimization, we examine the impact of the number of secret keys used in Experiment 1' on the experimental results.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experiment 2':</head><p>We obtain the average success probabilities of ciphertext prediction/plaintext recovery for the 3-round small TWINE- <ref type="bibr" target="#b3">[4]</ref> in the same procedures of Experiment 2 using the hyperparameters optimized by Experiment 1 (see Table <ref type="table" target="#tab_1">7</ref>). Unlike Experiment 2, we use the plaintext/ciphertext pairs generated by 10000 secret keys rather than 100 secret keys. In the ciphertext prediction/plaintext recovery, we explore the influence of the number of secret keys used in Experiment 2' on the experimental results.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3.2">Experimental Results.</head><p>Table <ref type="table" target="#tab_4">13</ref> shows a comparison of the experimental results in Experiment 1 and Experiment 1' for the 3-round small TWINE- <ref type="bibr" target="#b3">[4]</ref>. From the table, in the hyperparameter optimization for ciphertext prediction, the highest average success probabilities obtained from Experiment 1 and Experiment 1' are nearly equal, such as 2 -11.42 and 2 -11.26 . Conversely, in the hyperparameter optimization for the plaintext recovery, the highest average success probability obtained from Experiment 1 is much higher than that obtained from Experiment 1', such as 2 -7.80 and 2 -12.82 . As per these experimental results, optimizing the hyperparameters with a small number of secret keys is sufficient to obtain hyperparameters with the best average success probability; therefore, we consider that the hyperparameter optimization presented in Sect. 4.1 has led to reliable results.</p><p>Table <ref type="table" target="#tab_5">14</ref> shows a comparison of experimental results in Experiment 2 and Experiment 2' for the 3-round small TWINE- <ref type="bibr" target="#b3">[4]</ref>. We can see from the table that in both ciphertext prediction and plaintext recoveries, the average success probabilities obtained from Experiment 2 and Experiment 2' are nearly equal , such as 2 -10.46 and 2 -10.64 in the ciphertext prediction and 2 -9.72 and 2 -9.22 in the plaintext recovery. According to these experimental results, the additional experiments with a small number of secret keys are sufficient to obtain the best average success probability; therefore, </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">Extended Whitebox Analysis on Small PRESENT-[4]</head><p>As shown in Table <ref type="table" target="#tab_1">7</ref>, the average success probability of ciphertext prediction by the proposed attack on the 4-round small PRESENT-[4] is approximately 2 9 times greater than that of plaintext recovery. However, the security of the encryption and decryption is thought to be equivalent in terms of the linear/differential probabilities on small PRESENT- <ref type="bibr" target="#b3">[4]</ref>; thus, the experimental result of the proposed attacks on the 4-round small PRESENT- <ref type="bibr" target="#b3">[4]</ref> seems contrary to intuition. We speculate that this can be a deep learning specific characteristic. In this section, we redesign the 4-round small PRESENT- <ref type="bibr" target="#b3">[4]</ref> by swapping or replacing the internal components, e.g., S-box and bit permutation, and execute Experiment 1 and Experiment 2 against the new designs of the 4-round small PRESENT- <ref type="bibr" target="#b3">[4]</ref> to reveal the relationship between the designs of block ciphers and average success probability of the proposed attacks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Experimental Procedure</head><p>We discuss two types of experiments to investigate the average success probabilities of ciphertext prediction and plaintext recovery by the proposed attacks under the conditions that (1) the substitution layer (sLayer) and its inverse function (sLayer-inv) are replaced, and (2) the order of the sLayer and permutation layer (pLayer) is swapped in the encryption and decryption algorithms. The target toy block ciphers are the 4-round small PRESENT-[4] and the 2-round small AES- <ref type="bibr" target="#b3">[4]</ref>, and small TWINE- <ref type="bibr" target="#b3">[4]</ref> is excluded from the target of these experiments. This is because the Feistel block ciphers generally use the same components for both encryption and decryption algorithms. The order of the sLayer and pLayer is the same in both the encryption and decryption algorithms, and sLayer-inv is not used in neither the encryption nor decryption algorithms. Rather than the experiments described in this section, we should compare the maximum number of rounds that the </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">Conclusion</head><p>In this study, we first presented deep learning-based output prediction attacks on three block ciphers with a block size of 64 bits in a blackbox setting. We clarified the following results by examining the relationship between the ability of deep learning-based attacks and classical attacks such as linear/differential attacks:</p><p>• For PRESENT, the maximum number of rounds that the proposed attack can be successful is at least equal to that of classical linear/differential attacks.</p><p>• For AES-like and TWINE-like ciphers, we conjecture that the maximum number of rounds that the proposed attacks can be successful also becomes equal to that of classical linear/differential attacks when the amount of training data is increased more.</p><p>Next, we redesigned the 4-round small PRESENT- <ref type="bibr" target="#b3">[4]</ref> by swapping or replacing the internal components, and we used the whitebox analysis technique to examine the relationship between the new target cipher designs and the success probability of the proposed attacks. Consequently, we clarified that swapping or replacing the internal components did not affect success probabilities of the classical linear/differential attacks, whereas it affects the average success probabilities of the proposed deep learning-based attacks; thus, we have obtained a deep learning specific characteristic. The obtained results are expected to be a foundation for designing deep learning-resistant symmetric-key ciphers.</p><p>Finally, to look deeper into deep learning specific characteristics, we employed two weak variants of small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, and we extended the whitebox analysis to explore clues to facilitate the design of symmetric-key cryptographic algorithms that are secure against deep learning-based attacks. We clarified the following results by examining the relationship between the ability of deep learning-based attacks and classical attacks, e.g., linear/differential attacks:</p><p>• Our deep learning-based whitebox analysis achieved the same attack capability as classical methods even when the S-box of the target cipher was changed to a weak one.</p><p>• We found that the success probability of our deep learning-based whitebox analysis tends to be affected by the success probability of classical cryptanalysis methods.</p><p>• We believe that output prediction attacks using deep learning will make it easier to estimate the resistance to differential and linear attacks, even without possessing knowledge about the target cryptographic algorithm or cryptanalysis methods.</p><p>We have the following future works:</p><p>• Clarify why the maximum number of rounds that the proposed attacks can be successful is significantly smaller than that of the linear/differential attacks for small TWINE- <ref type="bibr" target="#b3">[4]</ref>.</p><p>• Clarify why swapping or replacing internal components affects the average success probabilities of our deep learning-based attacks, although it does not affect those of linear/differential attacks.</p><p>• Compare the maximum number of rounds that the proposed attacks can be successful against TWINE-like cipher (a type-II generalized Feistel cipher) to that of the other types of the Feistel block ciphers, such as classical, unbalanced, alternating, type-I and type-III generalized Feistel ciphers.</p><p>• Clarify whether the maximum number of rounds that the proposed attacks can be successful against AES-like and TWINE-like ciphers is equal to that of classical linear/differential attacks by conducting additional experiments with a larger amount of training data than 2 19 .</p><p>• Clarify why differences are observed in the average success probabilities regarding the underlying optimizer.</p><p>• Clarify how to feedback our results for designing deep learning-resistant symmetric-key ciphers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A Experimental Results Using the CNN</head><p>To confirm that the use of the LSTM induces better experimental results than that of the CNN, we conducted experiments using the CNN in the same procedure described in Sect. 4.1.1. In our experiments, we optimize activation functions in addition to the hyperparameters shown in Table <ref type="table">5</ref>. The following is the search range for activation functions: Tanh, Sigmoid, and ReLU. For developing CNN models by Keras, e.g., model.add(Conv1D(...)), we specify only filters, kernel size, activation, and input shape as its arguments<ref type="foot" target="#foot_4">foot_4</ref> . Table <ref type="table">A</ref>.1 shows experimental results using the CNN. Consequently, we clarify the following facts by comparing the experimental results using the LSTM and CNN based on Tables <ref type="table" target="#tab_1">7</ref> and <ref type="table">A</ref>.1:</p><p>• For small PRESENT- <ref type="bibr" target="#b3">[4]</ref>, the maximum number of rounds that the proposed attacks using the LSTM and CNN can be successful is 4 and 3, respectively.</p><p>• For small AES- <ref type="bibr" target="#b3">[4]</ref>, the maximum number of rounds that the proposed attacks using the LSTM and CNN can be successful is 1 for each case. In addition, the average success probabilities of ciphertext prediction (plaintext recovery) by the proposed attacks against the 1-round small AES-[4] using the LSTM and CNN are 1 (1) and 2 -11.88 (2 -11.83 ), respectively.</p><p>• For small TWINE- <ref type="bibr" target="#b3">[4]</ref>, the maximum number of rounds that the proposed attacks using the LSTM and CNN can be successful is 3 and 1, respectively.</p><p>To summarize the foregoing facts, we conclude that the use of the LSTM induces better experimental results of all the target block ciphers compared to the use of the CNN.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>B More Detailed Results in Sect. 4.1.3</head><p>Table B.1 details the experimental results shown in Table <ref type="table" target="#tab_2">10</ref> (refer to Sect. 4.1.3 for more details). If the predicted probability is greater than 2 -15 , we consider the proposed attacks to be successful <ref type="foot" target="#foot_5">6</ref> .</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Figure 1 :</head><label>1</label><figDesc>Figure 1: (a) Round Functions of small PRESENT-[n] and small AES-[n], (b) Last Round Function of small AES-[n].</figDesc><graphic coords="7,81.02,77.54,439.25,145.30" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><figDesc>. x 0 1 2 3 4 5 6 7 8 9 A B C D E F S[x] C 5 6 B 9 0 A D 3 E F 8 4 7 1 2 toy model of PRESENT called small PRESENT-[n]</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><figDesc>[</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Figure 2 :</head><label>2</label><figDesc>Figure 2: Round Function of small TWINE-[n]</figDesc><graphic coords="8,175.21,75.46,254.88,100.83" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><figDesc>0xF,where ≫ and &amp; are bitwise right shift operation and bitwise AND operation, respectively.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 4 :</head><label>4</label><figDesc>Weak S-box2 which is known to be vulnerable to linear attack.</figDesc><table><row><cell>x</cell><cell>0 1 2 3 4 5</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 7 :</head><label>7</label><figDesc>Average success probabilities of ciphertext prediction/plaintext recovery using the proposed attacks against three toy block ciphers with a block size of 16 bits. We use 215 training data and the remaining 215 testing data. CP:=Ciphertext Prediction and PR:=Plaintext Recovery.</figDesc><table><row><cell>Cipher</cell><cell>Round</cell><cell cols="4">Category # nodes of of Attack hidden layer hidden layer learning rate # layers of Initial</cell><cell>Optimizer</cell><cell>Succ. prob.</cell></row><row><cell>small</cell><cell>1</cell><cell>CP</cell><cell>400</cell><cell>5</cell><cell>0.001</cell><cell>Adam</cell><cell>1</cell></row><row><cell>PRESENT-[4]</cell><cell></cell><cell>PR</cell><cell>100</cell><cell>2</cell><cell>0.001</cell><cell>RMSprop</cell><cell>1</cell></row><row><cell></cell><cell>2</cell><cell>CP</cell><cell>400</cell><cell>4</cell><cell>0.001</cell><cell>RMSprop</cell><cell>1</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>400</cell><cell>1</cell><cell>0.001</cell><cell>Adam</cell><cell>1</cell></row><row><cell></cell><cell>3</cell><cell>CP</cell><cell>300</cell><cell>6</cell><cell>0.001</cell><cell>RMSprop</cell><cell>1</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>300</cell><cell>5</cell><cell>0.001</cell><cell>RMSprop</cell><cell>1</cell></row><row><cell></cell><cell>4</cell><cell>CP</cell><cell>300</cell><cell>4</cell><cell>0.01</cell><cell>Adam</cell><cell>2 -5.63</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>300</cell><cell>1</cell><cell>0.01</cell><cell>Adam</cell><cell>2 -14.50</cell></row><row><cell></cell><cell>5</cell><cell>CP</cell><cell>200</cell><cell>7</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -14.08</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>300</cell><cell>6</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -15.73</cell></row><row><cell>small</cell><cell>1</cell><cell>CP</cell><cell>300</cell><cell>4</cell><cell>0.001</cell><cell>RMSprop</cell><cell>1</cell></row><row><cell>AES-[4]</cell><cell></cell><cell>PR</cell><cell>200</cell><cell>4</cell><cell>0.001</cell><cell>RMSprop</cell><cell>1</cell></row><row><cell></cell><cell>2</cell><cell>CP</cell><cell>300</cell><cell>1</cell><cell>0.01</cell><cell>Adam</cell><cell>2 -16.02</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>200</cell><cell>2</cell><cell>0.01</cell><cell>Adam</cell><cell>2 -15.00</cell></row><row><cell>small</cell><cell>1</cell><cell>CP</cell><cell>300</cell><cell>3</cell><cell>0.001</cell><cell>RMSprop</cell><cell>1</cell></row><row><cell>TWINE-[4]</cell><cell></cell><cell>PR</cell><cell>300</cell><cell>2</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -0.01</cell></row><row><cell></cell><cell>2</cell><cell>CP</cell><cell>400</cell><cell>4</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -0.01</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>500</cell><cell>3</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -0.01</cell></row><row><cell></cell><cell>3</cell><cell>CP</cell><cell>300</cell><cell>2</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -10.46</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>400</cell><cell>2</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -9.72</cell></row><row><cell></cell><cell>4</cell><cell>CP</cell><cell>200</cell><cell>4</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -14.61</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>100</cell><cell>1</cell><cell>0.01</cell><cell cols="2">RMSprop 2 -15.49</cell></row><row><cell></cell><cell>5</cell><cell>CP</cell><cell>300</cell><cell>5</cell><cell>0.01</cell><cell cols="2">RMSprop 2 -15.64</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>500</cell><cell>4</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -15.16</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 10 :</head><label>10</label><figDesc>Minimum amount of training data required for successful ciphertext prediction/plaintext recovery using the proposed attacks against three toy block ciphers with a block size of 16 bits. We use the optimized hyperparameters obtained in Experiment 1 (see Table7). CP:=Ciphertext Prediction and PR:=Plaintext Recovery.</figDesc><table><row><cell>small TWINE-[4]</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 11 :</head><label>11</label><figDesc>Minimum amount of training data required for successful ciphertext prediction/plaintext recovery using the proposed attacks against three block ciphers with a block size of 32 bits. We use the optimized hyperparameters obtained in Experiment 1 (see Table7). CP:=Ciphertext Prediction and PR:=Plaintext Recovery.</figDesc><table><row><cell>Cipher</cell><cell cols="4">Round Attack # training data Succ. prob.</cell></row><row><cell>small</cell><cell>1</cell><cell>CP</cell><cell>2 10</cell><cell>2 -19.47</cell></row><row><cell>PRESENT-[8]</cell><cell></cell><cell>PR</cell><cell>2 9</cell><cell>2 -22.64</cell></row><row><cell></cell><cell>2</cell><cell>CP</cell><cell>2 11</cell><cell>2 -21.64</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>2 14</cell><cell>2 -1.20</cell></row><row><cell></cell><cell>3</cell><cell>CP</cell><cell>2 15</cell><cell>2 -6.34</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>2 17</cell><cell>2 -2.24</cell></row><row><cell></cell><cell>4</cell><cell>CP</cell><cell>N/A</cell><cell>N/A</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>N/A</cell><cell>N/A</cell></row><row><cell>small</cell><cell>1</cell><cell>CP</cell><cell>2 12</cell><cell>2 -17.78</cell></row><row><cell>AES-[8]</cell><cell></cell><cell>PR</cell><cell>2 11</cell><cell>2 -22.64</cell></row><row><cell>small</cell><cell>1</cell><cell>CP</cell><cell>2 11</cell><cell>2 -20.32</cell></row><row><cell>TWINE-[8]</cell><cell></cell><cell>PR</cell><cell>2 10</cell><cell>2 -21.64</cell></row><row><cell></cell><cell>2</cell><cell>CP</cell><cell>2 14</cell><cell>2 -20.32</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>2 14</cell><cell>2 -14.49</cell></row><row><cell></cell><cell>3</cell><cell>CP</cell><cell>2 16</cell><cell>2 -22.64</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>2 17</cell><cell>2 -19.18</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>Table 13 :</head><label>13</label><figDesc>Comparison of the experimental results in Experiment 1 and Experiment 1' for the 3round small TWINE-<ref type="bibr" target="#b3">[4]</ref>.</figDesc><table><row><cell>Category of Attack</cell><cell cols="2"># keys # trials</cell><cell># nodes of hidden layer</cell><cell># layers of hidden layer</cell><cell>Initial learning rate</cell><cell>Optimizer</cell><cell>Succ. prob.</cell><cell>Ref.</cell></row><row><cell>Ciphertext</cell><cell>20</cell><cell>100</cell><cell>300</cell><cell>2</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -11.42</cell><cell>Experiment 1</cell></row><row><cell>Prediction</cell><cell>100</cell><cell>40</cell><cell>300</cell><cell>7</cell><cell>0.001</cell><cell cols="3">RMSprop 2 -11.26 Experiment 1'</cell></row><row><cell>Plaintext</cell><cell>20</cell><cell>100</cell><cell>400</cell><cell>2</cell><cell>0.001</cell><cell>RMSprop</cell><cell>2 -7.80</cell><cell>Experiment 1</cell></row><row><cell>Recovery</cell><cell>100</cell><cell>40</cell><cell>100</cell><cell>4</cell><cell>0.001</cell><cell cols="3">RMSprop 2 -12.82 Experiment 1'</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5"><head>Table 14 :</head><label>14</label><figDesc>Comparison of experimental results in Experiment 2 and Experiment 2' for the 3-round small TWINE-<ref type="bibr" target="#b3">[4]</ref>. We use the optimized hyperparameters obtained in Experiment 1 (see Table7).</figDesc><table><row><cell>Attack</cell><cell cols="2"># keys Succ. prob.</cell><cell>Ref.</cell></row><row><cell>Ciphertext</cell><cell>100</cell><cell>2 -10.46</cell><cell>Experiment 2</cell></row><row><cell cols="2">Prediction 10000</cell><cell>2 -10.64</cell><cell>Experiment 2'</cell></row><row><cell>Plaintext</cell><cell>100</cell><cell>2 -9.72</cell><cell>Experiment 2</cell></row><row><cell>Recovery</cell><cell>10000</cell><cell>2 -9.22</cell><cell>Experiment 2'</cell></row></table><note><p>we consider that the ciphertext prediction/plaintext recovery presented in Sects. 4.1 and 4.2 has led to reliable results.</p></note></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6"><head>Table 18 :</head><label>18</label><figDesc>Maximum differential probabilities of small PRESENT-<ref type="bibr" target="#b3">[4]</ref> with weak S-boxes.</figDesc><table><row><cell>Round</cell><cell cols="2">Maximum differential probability small PRESENT-[4] with weak S-box 1 small PRESENT-[4] with weak S-box 2</cell></row><row><cell>1</cell><cell>2 -0.6</cell><cell>2 -1</cell></row><row><cell>2</cell><cell>2 -2.8</cell><cell>2 -4</cell></row><row><cell>3</cell><cell>2 -4.2</cell><cell>2 -6</cell></row><row><cell>4</cell><cell>2 -5.6</cell><cell>2 -8</cell></row><row><cell>5</cell><cell>2 -7.0</cell><cell>2 -10</cell></row><row><cell>6</cell><cell>2 -8.4</cell><cell>2 -12</cell></row><row><cell>7</cell><cell>2 -9.8</cell><cell>2 -14</cell></row><row><cell>8</cell><cell>2 -11.2</cell><cell>2 -16</cell></row><row><cell>9</cell><cell>2 -12.6</cell><cell>-</cell></row><row><cell>10</cell><cell>2 -14.0</cell><cell>-</cell></row><row><cell>11</cell><cell>2 -15.4</cell><cell>-</cell></row><row><cell>12</cell><cell>2 -16.8</cell><cell>-</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_7"><head>Table 19 :</head><label>19</label><figDesc>Maximum linear probabilities of small PRESENT-<ref type="bibr" target="#b3">[4]</ref> with weak S-boxes.</figDesc><table><row><cell>Round</cell><cell cols="2">Maximum linear probability small PRESENT-[4] with weak S-box 1 small PRESENT-[4] with weak S-box 2</cell></row><row><cell>1</cell><cell>2 -0.8</cell><cell>2 -0.8</cell></row><row><cell>2</cell><cell>2 -3.2</cell><cell>2 -2.4</cell></row><row><cell>3</cell><cell>2 -4.8</cell><cell>2 -4.4</cell></row><row><cell>4</cell><cell>2 -6.4</cell><cell>2 -7.2</cell></row><row><cell>5</cell><cell>2 -8.0</cell><cell>2 -9.2</cell></row><row><cell>6</cell><cell>2 -9.6</cell><cell>2 -10.8</cell></row><row><cell>7</cell><cell>2 -11.2</cell><cell>2 -12.8</cell></row><row><cell>8</cell><cell>2 -12.8</cell><cell>2 -15.6</cell></row><row><cell>9</cell><cell>2 -14.4</cell><cell>2 -17.6</cell></row><row><cell>10</cell><cell>2 -16.0</cell><cell>-</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_8"><head>Table 20 :</head><label>20</label><figDesc>Maximum attackable round of small PRESENT-<ref type="bibr" target="#b3">[4]</ref> with weak/original S-boxes. CP:=Ciphertext Prediction and PR:=Plaintext Recovery.</figDesc><table><row><cell>Cipher</cell><cell cols="3">Maximum attackable round Proposed attack Differential attack Linear attack</cell></row><row><cell>small PRESENT-[4] with weak S-box 1</cell><cell>11 (CP, PR)</cell><cell>11</cell><cell>9</cell></row><row><cell>small PRESENT-[4] with weak S-box 2</cell><cell>8 (CP, PR)</cell><cell>7</cell><cell>8</cell></row><row><cell cols="2">small PRESENT-[4] with original S-box 5 (CP), 4 (PR)</cell><cell>5</cell><cell>4</cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="1" xml:id="foot_0"><p>https://github.com/keras-team/keras</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="2" xml:id="foot_1"><p>https://keras.io/ja/layers/recurrent/</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="3" xml:id="foot_2"><p>https://github.com/optuna/optuna</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="4" xml:id="foot_3"><p>This assumption is strictly incorrect, but we use it for simple discussion.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="5" xml:id="foot_4"><p>https://keras.io/ja/layers/convolutional/</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="6" xml:id="foot_5"><p>This assumption is strictly incorrect, but we use it for simple discussion.</p></note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><head>Acknowledgments</head><p>This work was supported in part by the <rs type="funder">JSPS KAKENHI</rs> Grant Number <rs type="grantNumber">19K11971</rs>.</p></div>
+			</div>
+			<div type="funding">
+<div><p><rs type="grantNumber">2</rs> ) No Gohr19 <ref type="bibr" target="#b16">[17]</ref> Speck32/64 (32 bits) <rs type="person">Feistel</rs> No 1 KR/DD 12 <ref type="bibr" target="#b21">(22)</ref> Yes XHY19 <ref type="bibr" target="#b39">[40]</ref> DES (64 bits) <rs type="projectName">Feistel</rs> Yes PR 2 <ref type="bibr" target="#b15">(16)</ref> No CY20 <ref type="bibr" target="#b9">[10]</ref> Speck32/64 (32 bits) <rs type="person">Feistel</rs> No KR/DD 13 (22) Yes CY20 <ref type="bibr" target="#b9">[10]</ref> DES (64 bits) <rs type="person">Feistel</rs> <rs type="grantNumber">No KR/DD 8 (16</rs>) Yes HLZW20 <ref type="bibr" target="#b20">[21]</ref> DES (64 bits) <rs type="person">Feistel</rs> <rs type="grantNumber">No KR/LD 5 (16</rs>) No So20 <ref type="bibr" target="#b34">[35]</ref> <rs type="projectName">Simplified DES</rs> (<rs type="grantNumber">8</rs> bits) <rs type="grantNumber">Feistel No KR/LD 8 (8</rs>) No So20 <ref type="bibr" target="#b34">[35]</ref> Speck32/64 (32 bits) <rs type="person">Feistel</rs> No KR/LD 22 <ref type="bibr" target="#b21">(22)</ref> No So20 <ref type="bibr" target="#b34">[35]</ref> Simon32/64 (32 bits) <rs type="projectName">Feistel</rs> No KR/LD 32 <ref type="bibr" target="#b31">(32)</ref> No BBDC21 <ref type="bibr" target="#b5">[6]</ref> Gimli-Perm. (384 bits) <rs type="grantNumber">SPN No DD 8 (48</rs>) No <rs type="grantNumber">BBDC21 [6] ASCON-Perm.</rs> (320 bits) <rs type="grantNumber">SPN No DD 3 (16</rs>) No <rs type="grantNumber">BBDC21 [6] KNOT-256 (256</rs> bits) <rs type="projectName">Feistel</rs> No <rs type="grantNumber">DD 10 (28</rs>) No <rs type="grantNumber">BBDC21 [6] KNOT-512 (512</rs> bits) <rs type="projectName">Feistel</rs> No <rs type="grantNumber">DD 12 (52</rs>) No <rs type="grantNumber">BBDC21 [6] CHASKEY-Perm.</rs> (<rs type="grantNumber">128</rs> bits) <rs type="grantNumber">ARX No DD 4 (12</rs>) No <rs type="grantNumber">BGMLT21 [7] Speck32/64 (32</rs> bits) <rs type="person">Feistel</rs> <rs type="grantNumber">No KR/DD 13 (22) Yes BGMLT21 [7] Simon32/64 (32</rs> bits) <rs type="person">Feistel</rs> <rs type="grantNumber">No KR/DD 16 (32) Yes BGPT21 [8] Speck32/64 (32</rs> bits) <rs type="projectName">Feistel</rs> <rs type="grantNumber">No DD 7 (22</rs>) No <rs type="grantNumber">BGPT21 [8] Simon32/64 (32</rs> bits) <rs type="projectName">Feistel</rs> <rs type="grantNumber">No DD 8 (32</rs>) No <rs type="grantNumber">CY21 [12] CHASKEY-Perm.</rs> (<rs type="grantNumber">128</rs> bits) <rs type="grantNumber">ARX No DLD 4 (12</rs>) <rs type="grantNumber">Yes CY21 [12] DES (64</rs> bits) <rs type="projectName">Feistel</rs> <rs type="grantNumber">No DLD 6 (16</rs>) <rs type="grantNumber">Yes CY21 [12] Speck32/64 (32</rs> bits) <rs type="projectName">Feistel</rs> <rs type="grantNumber">No DLD 7 (22</rs>) <rs type="grantNumber">Yes CY21 [13] Speck32/64 (32</rs> bits) <rs type="person">Feistel</rs> <rs type="grantNumber">No KR/DD 13 (22) Yes CY21 [13] Speck48/72 (48</rs> bits) <rs type="person">Feistel</rs> <rs type="grantNumber">No KR/DD 12 (22) Yes CY21 [13] Speck48/96 (48</rs> bits) <rs type="person">Feistel</rs> No KR/DD 12 (23) Yes CY21 <ref type="bibr" target="#b10">[11]</ref> DES (64 bits) <rs type="projectName">Feistel</rs> <rs type="grantNumber">No DD 6 (16</rs>) No CY21 <ref type="bibr" target="#b10">[11]</ref> Speck32/64 (32 bits) <rs type="person">Feistel</rs> No KR/DD 11 <ref type="bibr" target="#b21">(22)</ref> No CY21 <ref type="bibr" target="#b10">[11]</ref> PRESENT (64 bits) <rs type="grantNumber">SPN No DD 7 (31</rs>) No HRC21 <ref type="bibr" target="#b21">[22]</ref> Simon32/64 (32 bits) <rs type="person">Feistel</rs> No KR/DD 13 <ref type="bibr" target="#b31">(32)</ref> No HRC21 <ref type="bibr" target="#b22">[23]</ref> Simon32/64 (32 bits) <rs type="person">Feistel</rs> No KR/DD 13 (32) Yes HRC21 <ref type="bibr" target="#b22">[23]</ref> Simon48/96 (48 bits) <rs type="person">Feistel</rs> No KR/DD 14 (36) Yes HRC21 <ref type="bibr" target="#b22">[23]</ref> Simon64/128 (64 bits) <rs type="person">Feistel</rs> No KR/DD 13 (44) Yes HRC21 <ref type="bibr" target="#b22">[23]</ref> Speck32/64 (32 bits) <rs type="projectName">Feistel</rs> No DD 8 (22) Yes HRC21 <ref type="bibr" target="#b22">[23]</ref> Speck48/96 (48 bits) <rs type="projectName">Feistel</rs> No DD 7 (23) Yes HRC21 <ref type="bibr" target="#b22">[23]</ref> Speck64/128 (64 bits) <rs type="person">Feistel</rs></p></div>
+			</div>
+			<listOrg type="funding">
+				<org type="funding" xml:id="_zakBYtA">
+					<idno type="grant-number">19K11971</idno>
+				</org>
+				<org type="funding" xml:id="_BzA7Qdq">
+					<idno type="grant-number">2</idno>
+				</org>
+				<org type="funding" xml:id="_eK9N5J4">
+					<idno type="grant-number">Gohr19 [17] Speck32/64 (32</idno>
+				</org>
+				<org type="funding" xml:id="_rwwUn3V">
+					<idno type="grant-number">No 1 KR/DD 12 (22</idno>
+				</org>
+				<org type="funded-project" xml:id="_whx4bnn">
+					<idno type="grant-number">XHY19 [40] DES (64</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_kAGD4ZU">
+					<idno type="grant-number">Yes PR 2 (16</idno>
+				</org>
+				<org type="funding" xml:id="_sGptpTy">
+					<idno type="grant-number">CY20 [10] Speck32/64 (32</idno>
+				</org>
+				<org type="funding" xml:id="_suBTYwH">
+					<idno type="grant-number">No KR/DD 13 (22) Yes CY20 [10] DES (64</idno>
+				</org>
+				<org type="funding" xml:id="_zwMzavR">
+					<idno type="grant-number">No KR/DD 8 (16</idno>
+				</org>
+				<org type="funding" xml:id="_G3vX69b">
+					<idno type="grant-number">Yes HLZW20 [21] DES (64</idno>
+				</org>
+				<org type="funding" xml:id="_mWYEWEG">
+					<idno type="grant-number">No KR/LD 5 (16</idno>
+				</org>
+				<org type="funded-project" xml:id="_ydpb4ea">
+					<idno type="grant-number">So20 [35]</idno>
+					<orgName type="project" subtype="full">Simplified DES</orgName>
+				</org>
+				<org type="funding" xml:id="_rnnPZ6n">
+					<idno type="grant-number">8</idno>
+				</org>
+				<org type="funding" xml:id="_RmkWMjj">
+					<idno type="grant-number">Feistel No KR/LD 8 (8</idno>
+				</org>
+				<org type="funding" xml:id="_m7P7njN">
+					<idno type="grant-number">So20 [35] Speck32/64 (32</idno>
+				</org>
+				<org type="funding" xml:id="_UGY2zCP">
+					<idno type="grant-number">No KR/LD 22 (22</idno>
+				</org>
+				<org type="funded-project" xml:id="_arMsbd5">
+					<idno type="grant-number">So20 [35] Simon32/64 (32</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_H4sbHMu">
+					<idno type="grant-number">No KR/LD 32 (32</idno>
+				</org>
+				<org type="funding" xml:id="_t5umGZE">
+					<idno type="grant-number">BBDC21 [6] Gimli-Perm.</idno>
+				</org>
+				<org type="funding" xml:id="_hVPPwnG">
+					<idno type="grant-number">SPN No DD 8 (48</idno>
+				</org>
+				<org type="funding" xml:id="_tT2Wbsb">
+					<idno type="grant-number">BBDC21 [6] ASCON-Perm.</idno>
+				</org>
+				<org type="funding" xml:id="_RSYmzxX">
+					<idno type="grant-number">SPN No DD 3 (16</idno>
+				</org>
+				<org type="funded-project" xml:id="_DGXHTUB">
+					<idno type="grant-number">BBDC21 [6] KNOT-256 (256</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_bVsNtZA">
+					<idno type="grant-number">DD 10 (28</idno>
+				</org>
+				<org type="funded-project" xml:id="_mP8rftc">
+					<idno type="grant-number">BBDC21 [6] KNOT-512 (512</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_FpHqBxs">
+					<idno type="grant-number">DD 12 (52</idno>
+				</org>
+				<org type="funding" xml:id="_HhHrRVc">
+					<idno type="grant-number">BBDC21 [6] CHASKEY-Perm.</idno>
+				</org>
+				<org type="funding" xml:id="_bfvz3f4">
+					<idno type="grant-number">128</idno>
+				</org>
+				<org type="funding" xml:id="_mEBcTkk">
+					<idno type="grant-number">ARX No DD 4 (12</idno>
+				</org>
+				<org type="funding" xml:id="_pAFH49D">
+					<idno type="grant-number">BGMLT21 [7] Speck32/64 (32</idno>
+				</org>
+				<org type="funding" xml:id="_xDU9CwN">
+					<idno type="grant-number">No KR/DD 13 (22) Yes BGMLT21 [7] Simon32/64 (32</idno>
+				</org>
+				<org type="funded-project" xml:id="_Eb8kp7m">
+					<idno type="grant-number">No KR/DD 16 (32) Yes BGPT21 [8] Speck32/64 (32</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_52FXPVX">
+					<idno type="grant-number">No DD 7 (22</idno>
+				</org>
+				<org type="funded-project" xml:id="_4tu2Jmb">
+					<idno type="grant-number">BGPT21 [8] Simon32/64 (32</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_Q4vM5un">
+					<idno type="grant-number">No DD 8 (32</idno>
+				</org>
+				<org type="funding" xml:id="_c2APcDA">
+					<idno type="grant-number">CY21 [12] CHASKEY-Perm.</idno>
+				</org>
+				<org type="funding" xml:id="_7ZuwNvV">
+					<idno type="grant-number">128</idno>
+				</org>
+				<org type="funding" xml:id="_bthbQb4">
+					<idno type="grant-number">ARX No DLD 4 (12</idno>
+				</org>
+				<org type="funded-project" xml:id="_WxRV9Mk">
+					<idno type="grant-number">Yes CY21 [12] DES (64</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_TDaZQjM">
+					<idno type="grant-number">No DLD 6 (16</idno>
+				</org>
+				<org type="funded-project" xml:id="_5umszNe">
+					<idno type="grant-number">Yes CY21 [12] Speck32/64 (32</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_fjD7aj5">
+					<idno type="grant-number">No DLD 7 (22</idno>
+				</org>
+				<org type="funding" xml:id="_y3PycZn">
+					<idno type="grant-number">Yes CY21 [13] Speck32/64 (32</idno>
+				</org>
+				<org type="funding" xml:id="_aEMQCw3">
+					<idno type="grant-number">No KR/DD 13 (22) Yes CY21 [13] Speck48/72 (48</idno>
+				</org>
+				<org type="funding" xml:id="_5Qzzg7T">
+					<idno type="grant-number">No KR/DD 12 (22) Yes CY21 [13] Speck48/96 (48</idno>
+				</org>
+				<org type="funded-project" xml:id="_fRyRYwp">
+					<idno type="grant-number">No KR/DD 12 (23) Yes CY21 [11] DES (64</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_yFfpmPm">
+					<idno type="grant-number">No DD 6 (16</idno>
+				</org>
+				<org type="funding" xml:id="_7Erk5n8">
+					<idno type="grant-number">CY21 [11] Speck32/64 (32</idno>
+				</org>
+				<org type="funding" xml:id="_msNKB3k">
+					<idno type="grant-number">No KR/DD 11 (22</idno>
+				</org>
+				<org type="funding" xml:id="_hyPhKnj">
+					<idno type="grant-number">CY21 [11] PRESENT (64</idno>
+				</org>
+				<org type="funding" xml:id="_EuuJ4wD">
+					<idno type="grant-number">SPN No DD 7 (31</idno>
+				</org>
+				<org type="funding" xml:id="_Jf5WSB5">
+					<idno type="grant-number">HRC21 [22] Simon32/64 (32</idno>
+				</org>
+				<org type="funding" xml:id="_VGYn4nC">
+					<idno type="grant-number">No KR/DD 13 (32</idno>
+				</org>
+				<org type="funding" xml:id="_UqdxCHD">
+					<idno type="grant-number">HRC21 [23] Simon32/64 (32</idno>
+				</org>
+				<org type="funding" xml:id="_eVDhz8Z">
+					<idno type="grant-number">No KR/DD 13 (32) Yes HRC21 [23] Simon48/96 (48</idno>
+				</org>
+				<org type="funding" xml:id="_n5QHk22">
+					<idno type="grant-number">No KR/DD 14 (36) Yes HRC21 [23] Simon64/128 (64</idno>
+				</org>
+				<org type="funded-project" xml:id="_Wam7bTD">
+					<idno type="grant-number">No KR/DD 13 (44) Yes HRC21 [23] Speck32/64 (32</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funded-project" xml:id="_evHt9Dw">
+					<idno type="grant-number">No DD 8 (22) Yes HRC21 [23] Speck48/96 (48</idno>
+					<orgName type="project" subtype="full">Feistel</orgName>
+				</org>
+				<org type="funding" xml:id="_SC2JZet">
+					<idno type="grant-number">No DD 7 (23) Yes HRC21 [23] Speck64/128 (64</idno>
+				</org>
+			</listOrg>
+
+			<div type="availability">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Cipher (Block size)</head><p>Structures Blackbox Setting Target #Round (#Full) Whitebox Analysis BSS08 <ref type="bibr" target="#b4">[5]</ref> Serpent (128 bits) SPN No DD 7 (32) No AAAA12 <ref type="bibr" target="#b0">[1]</ref> Simplified DES (12 bits) Feistel Yes OP 2 (N/A 2 ) No DH14 <ref type="bibr" target="#b13">[14]</ref> Simplified DES (12 bits) Feistel Yes KR/DD 2 (N/A</p></div>
+			</div>
+
+
+			<div type="conflict">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>No DD 8 <ref type="bibr" target="#b26">(27)</ref> Yes ITYY21 <ref type="bibr" target="#b24">[25]</ref> TWINE (64 bits) Feistel No DD 8 <ref type="bibr" target="#b35">(36)</ref> No YK21 <ref type="bibr" target="#b40">[41]</ref> Speck32/64 (32 bits) Feistel No DD 9 (22) Yes YK21 <ref type="bibr" target="#b40">[41]</ref> Simon32/64 (32 bits) Feistel No DD 12 (32) Yes YK21 <ref type="bibr" target="#b40">[41]</ref> GIFT 64 (64 bits) SPN No DD 8 (28) Yes WW21 <ref type="bibr" target="#b38">[39]</ref> Speck32/64 (32 bits) Feistel No DD 12 (22) Yes WW21 <ref type="bibr" target="#b38">[39]</ref> Speck48/72 (48</p></div>
+			</div>
+
+
+			<div type="contribution">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>bits)</head><p>Feistel No DD 15</p></div>
+			</div>
+
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Table <ref type="table">12</ref>: Minimum amount of training data required for successful ciphertext prediction/plaintext recovery using the proposed attacks against three block ciphers with a block size of 64 bits. We use the optimized hyperparameters obtained in Experiment 1 (see Table <ref type="table">7</ref>). CP:=Ciphertext Prediction and PR:=Plaintext Recovery.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Cipher</head><p>Round Attack # training data Succ. prob. small 1 CP 2 13  2 -18.00 PRESENT- <ref type="bibr" target="#b15">[16]</ref> PR 2 14  2 -17.68 (PRESENT) 2 CP 2 14  2 -6.64 PR 2 16  2 -2.27 3 CP 2 17  2 -1.30 PR 2 19 2 -3.14 4 CP N/A N/A PR N/A N/A small AES-[16] 1 CP 2 15 2 -0.24 (AES-like) PR 2 15 2 -0.06 small 1 CP 2 15 2 -0.30 TWINE-[16] PR 2 14 2 -15.91 (TWINE-like) 2 CP 2 19 2 -12.50 PR 2 19 2 -7.05 3 CP N/A N/A PR N/A N/A</p><p>not zero. In these cases, we consider that the proposed attacks against the target block ciphers with additional rounds could be successful with more training data than 2 19 . As demonstrated by these results, the proposed attacks can be performed regardless of the block size of the target block ciphers by simply increasing the amount of training data. In addition, as the amount of training data increases, the larger the block size, the greater the rate of increase in the success probability (see Tables B.1, C.1, and C.2 for more details). Therefore, we consider that by increasing the amount of training data, the whitebox analysis against block ciphers with large block sizes can be regarded as equal to or greater than the whitebox analysis against toy block ciphers with a block size of 16 bits. As discussed in Sect. 4.1.2, the maximum number of rounds that the proposed attacks can be successful against small PRESENT- <ref type="bibr" target="#b3">[4]</ref> is equal to that of the classical linear/differential attacks, while the maximum number of rounds that the proposed attacks can be successful against small AES- <ref type="bibr" target="#b3">[4]</ref> and small TWINE- <ref type="bibr" target="#b3">[4]</ref> is less than that of the classical linear/differential attacks. Nevertheless, we consider that the whitebox analysis against the target block ciphers with large block sizes can be summarized as follows, based on the above consideration:</p><p>• For small PRESENT- <ref type="bibr" target="#b15">[16]</ref> (i.e., PRESENT), the maximum number of rounds that the proposed attacks can be successful is at least equal to that of the classical linear/differential attacks.</p><p>• For small AES- <ref type="bibr" target="#b15">[16]</ref> (i.e., AES-like) and small TWINE- <ref type="bibr" target="#b15">[16]</ref> (i.e., TWINE-like), we conjecture that the maximum number of rounds that the proposed attacks can be successful also becomes equal to that of classical linear/differential attacks. To clarify the correctness of this conjecture, we should conduct additional experiments with a larger amount of training data than 2 19 . This will be our future work. proposed attacks can be successful against small TWINE- <ref type="bibr" target="#b3">[4]</ref> (a type-II generalized Feistel cipher) to that on the other types of the Feistel block ciphers, such as classical, unbalanced, alternating, type-I and type-III generalized Feistel ciphers. This will be our future study.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Experimental Results</head><p>Table <ref type="table" target="#tab_10">15</ref> shows experimental results for new designs of the 4-round small PRESENT- <ref type="bibr" target="#b3">[4]</ref>. The average success probability of ciphertext prediction is greater than that of the original small PRESENT- <ref type="bibr" target="#b3">[4]</ref> when the sLayer is replaced with the sLayer-inv, as shown in the table. However, when the order of the sLayer and pLayer is swapped, the average success probability of ciphertext prediction is less than that of the original small PRESENT- <ref type="bibr" target="#b3">[4]</ref>. We believe that swapping the component order affects the average success probabilities of the proposed attacks because the difference in these average success probabilities is relatively large. Given that swapping or replacing components does not affect linear/differential probabilities, we expect that our results can be an important stepping stone for designing deep learning-resistant symmetric-key ciphers. Nevertheless, the average success probability of plaintext recovery for both cases is greater than that of the original small PRESENT- <ref type="bibr" target="#b3">[4]</ref>; this result tends to differ from ciphertext prediction. Because the probabilities are nearly 2 -15 , the results require more detailed analyses to increase reliability, which we leave as a future work.</p><p>In the experimental results of the 2-round small AES- <ref type="bibr" target="#b3">[4]</ref>, all average success probabilities for ciphertext prediction/plaintext recovery by the proposed attacks are less than 2 -15 . Therefore, these results do not show whether swapping or replacing the components has any effect on the average success probabilities of the proposed attacks in the 2-round small AES- <ref type="bibr" target="#b3">[4]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">Deeper Look into Whitebox Analysis Using Weak S-boxes</head><p>In this section, we look deeper into deep learning specific characteristics and extend the whitebox analysis to explore clues to facilitate the design of symmetric-key cryptographic algorithms that are secure against deep learning-based attacks. To this end, we construct two weak variants of small PRESENT- <ref type="bibr" target="#b3">[4]</ref> by replacing the original S-box with known weak S-boxes, as shown in Sect. 2, Table <ref type="table">16</ref>: Average success probabilities of ciphertext prediction/plaintext recovery using the proposed attacks against small PRESENT- <ref type="bibr" target="#b3">[4]</ref> with weak S-box1. We use 2 15 training data and the remaining 2 15 testing data. CP:=Ciphertext Prediction and PR:=Plaintext Recovery. Cipher Category # nodes of # layers of Initial Optimizer Succ. Round of Attack hidden layer hidden layer learning rate prob. small 1 CP 200 1 0.001 Adam 1 PRESENT-[4] PR 100 3 0.01 Adam 1 with 2 CP 500 7 0.001 RMSprop 1 weak S-box1 PR 200 4 0.001 RMSprop 1 3 CP 200 4 0.001 RMSprop 2 -0.01 PR 300 1 0.01 RMSprop 2 -0.01 4 CP 500 1 0.01 RMSprop 2 -0.01 PR 300 7 0.001 Adam 2 -0.97 5 CP 500 3 0.001 Adam 2 -5.01 PR 500 7 0.001 Adam 2 -4.52 6 CP 200 4 0.01 Adam 2 -7.15 PR 500 7 0.001 Adam 2 -7.00 7 CP 500 6 0.001 RMSprop 2 -9.34 PR 300 3 0.01 Adam 2 -9.75 8 CP 400 7 0.001 Adam 2 -11.04 PR 500 6 0.001 Adam 2 -10.90 9 CP 400 1 0.001 RMSprop 2 -12.51 PR 200 2 0.001 Adam 2 -12.84 10 CP 500 1 0.001 RMSprop 2 -13.90 PR 300 7 0.001 Adam 2 -13.54 11 CP 200 6 0.001 RMSprop 2 -14.36 PR 500 7 0.001 RMSprop 2 -14.66 12 CP 100 3 0.001 Adam 2 -15.40 PR 300 2 0.001 RMSprop 2 -14.99 13 CP 200 3 0.01 RMSprop 2 -15.82 PR 400 6 0.001 RMSprop 2 -15.69</p><p>and execute Experiment 1 and Experiment 2 against these variants to reveal the influence of the differences in the characteristics of three S-boxes (i.e., the original S-box and two weak S-boxes) on deep learning specific characteristics. Thus, the experimental results will provide more insight into the relationship between the classical and our deep learning-based attacks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experimental Results:</head><p>We have executed Experiment 1 and Experiment 2 against two weak variants of small PRESENT- <ref type="bibr" target="#b3">[4]</ref> according to the experimental procedure described in Sect. 4.1.1. Tables <ref type="table">16</ref> and <ref type="table" target="#tab_12">17</ref> shows the results of Experiment 2 using the optimized hyperparameters obtained in Experiment 1. As with the discussion in Sect. 4.1.2, we compare the ability of the precisely computed classical attacks with that of the proposed attacks. From these tables, the proposed attacks succeed up to 11 rounds for ciphertext prediction and plaintext recovery against small PRESENT- <ref type="bibr" target="#b3">[4]</ref> with weak S-box1 and its success probability is nearly 2 -14 . Thus, we consider that the proposed attacks can be successful for a maximum of 11 rounds on small PRESENT- <ref type="bibr" target="#b3">[4]</ref> with weak S-box1. Similarly, the proposed attacks succeed up to 8 rounds for ciphertext prediction and plaintext recovery against small PRESENT- <ref type="bibr" target="#b3">[4]</ref> with weak S-box2 and its success probability is nearly 2 -14 . Thus, we also consider that the proposed attacks can be successful for a maximum of 8 rounds on small PRESENT- <ref type="bibr" target="#b3">[4]</ref> with weak S-box2. On the other hand, by computing the exact differential and linear probabilities for small PRESENT- <ref type="bibr" target="#b3">[4]</ref> with weak S-box1, weak S-box2, and original S-box (see Tables <ref type="table">18</ref> and <ref type="table">19</ref>), we obtain the maximum number of attackable rounds for the classical attacks and then compare it with the number of attackable rounds for the deep learning-based attacks (see Table <ref type="table">20</ref>). This comparison shows that the number of attackable rounds for the deep learning-based attacks is equal to the higher of the maximum number of attackable rounds for the two classical attacks (differential and linear attacks). In other words, we consider that the deep learning-based attacks respond to the weaker characteristic when the target cipher is vulnerable to more than one classical attack.</p><p>From these experimental results, we consider that deep learning-based output prediction attacks will make it easier for anyone to estimate the resistance to differential and linear attacks, even if they have no knowledge of the target cryptographic algorithms or cryptanalysis methods.</p><p>Table A.1: Average success probabilities of ciphertext prediction/plaintext recovery using the proposed attacks against three toy block ciphers with a block size of 16 bits. We employ the CNN and use 2 15 training data as well as remaining 2 15 testing data. CP:=Ciphertext Prediction and PR:=Plaintext Recovery. Cipher Category # nodes of # layers of Initial Optimizer Succ. Round of Attack hidden layer hidden layer learning rate Activation prob. small 1 CP 100 5 0.001 Adam Tanh 1 PRESENT-[4] PR 300 3 0.0001 RMSprop Tanh 1 2 CP 200 1 0.01 SGD ReLU 2 -11.72 PR 400 3 0.001 Adam Sigmoid 2 -11.69 3 CP 200 2 0.01 RMSprop ReLU 2 -14.58 PR 300 2 0.0001 RMSprop Sigmoid 2 -14.57 4 CP 300 7 0.0001 Adam Tanh 2 -15.02 PR 200 1 0.01 SGD ReLU 2 -15.20 small 1 CP 100 4 0.0001 Adam ReLU 2 -11.88 AES-[4] PR 400 5 0.0001 Adam Tanh 2 -11.83 2 CP 100 4 0.01 SGD ReLU 2 -15.76 PR 100 7 0.001 RMSprop Sigmoid 2 -15.00 small 1 CP 300 2 0.001 RMSprop Sigmoid 2 -8.01 TWINE-[4] PR 500 5 0.01 RMSprop ReLU 2 -8.03 2 CP 100 4 0.0001 SGD Tanh 2 -15.86 PR 300 2 0.0001 RMSprop Tanh 2 -15.62 Table B.1: Average success probabilities of ciphertext prediction/plaintext recovery using the proposed attacks against three toy block ciphers with a block size of 16 bits. We vary the amount of training data in the range of from 2 2 to 2 14 and use all remaining plaintexts or ciphertexts as testing data. Moreover, we use the optimized hyperparameters obtained in Experiment 1 (see Table 7). CP:=Ciphertext Prediction and PR:=Plaintext Recovery. Cipher Round Attack Success probability for each amount of training data 2 2</p><p>14 small 1 CP 2 -16.57 2 -14.76 2 -14.46 2 -13.83 2 -13.78 2 -13.99 2 -12.90 2 -9.76 2 -6.08 2 -0.76 1 1 1 PRESENT-[4] PR 2 -15.44 2 -13.40 2 -12.28 2 -11.79 2 -11.65 2 -11.62 2 -10.56 2 -8.70 2 -5.65 2 -1.53 2 -0.01 1 1 2 CP -2 -15.63 2 -14.57 2 -14.81 2 -14.60 2 -14.94 2 -14.83 2 -12.80 2 -7.96 2 -2.49 2 -0.01 1 1 PR -2 -15.08 2 -14.56 2 -14.46 2 -14.46 2 -14.51 2 -14.32 2 -14.38</p><p>2 -13.81 2 -10.44 2 -2.46 1 1 3 CP --------2 -15.02 2 -12.11 2 -10.34 2 -7.80 2 -0.01 PR --------2 -15.54 2 -14.55 2 -14.43 2 -13.89 2 -12.86 4 CP -----------2 -15.16 2 -15.01 PR -----------2 -16.09 2 -15.42 small 1 CP -----2</p><p>-15.04 2 -15.24 2 -13.32 2 -9.22 2 -4.42 2 -0.29 2 -0.01 1 AES-[4] PR -----2 -15.17 2 -14.82 2 -13.67 2 -10.47 2 -7.58 2 -4.35 2 -0.05 2 -0.01 small 1 CP 2 -15.54 2 -15.09 2 -13.58 2 -13.48 2 -13.19 2 -13.24 2 -12.99 2 -11.05 2 -8.12 2 -4.97 2 -1.64 2 -0.01 1 TWINE-[4] PR 2 -16.99 2 -14.93 2 -13.28 2 -12.51 2 -11.87 2 -11.77 2 -12.06 2 -10.19 2 -7.28</p><p>2 -3.75 2 -1.93 1 2 -0.02 2 CP --------2 -15.86 2 -11.73 2 -7.62 2 -4.55 2 -0.58 PR --------2 -15.63 2 -13.18 2 -9.72 2 -5.03 2 -1.06 3 CP -----------2 -15.47 2 -13.54 PR -----------2 -15.40 2 -13.02 C More Detailed Results in Sect. 4.2</p><p>Tables C.1 and C.2 detail the experimental results shown in Tables <ref type="table">11</ref> and <ref type="table">12</ref>, respectively (refer to Sect. 4.2 for more details). We vary the amount of training data in the range of from 2 8 to 2 17 or from 2 10 to 2 19 and use 2 16 of the remaining plaintexts or ciphertexts as testing data against three toy block ciphers with block sizes of 32 or 64 bits, respectively; thus, if the predicted probability is greater than the threshold derived by equation ( <ref type="formula">2</ref>4n -2 x ) -1 shown in Sect. 3.3, we consider the proposed attacks to be successful for both cases. In this case, those thresholds are (2 32 -2 8 ) -1 to (2 32 -2 17 ) -1 or from (2 64 -2 10 ) -1 to (2 64 -2 19 ) -1 . Table C.1: Average success probabilities of ciphertext prediction/plaintext recovery using the proposed attacks against three block ciphers with a block size of 32 bits. We vary the amount of training data in the range of from 2 8 to 2 17 and use 2 16 of the remaining plaintexts or ciphertexts as testing data. Moreover, we use the optimized hyperparameters obtained in Experiment 1 (see Table 7). CP:=Ciphertext Prediction and PR:=Plaintext Recovery. Cipher Round Attack Success probability for each amount of training data 2 8 2 9 2 10 2 11 2 12 2 13 2 14 2 15 2 16 2 17 small 1 CP 0 0 2 -19.47 2 -13.47 2 -0.51 1 1 1 1 1 PRESENT-[8] PR 0 2 -22.64 2 -20.64 2 -13.76 2 -7.61 2 -1.80 2 -0.01 2 -0.01 2 -0.01 2 -0.01 2 CP 0 0 0 2 -21.64 2 -17.35 2 -6.22 2 -0.57 2 -0.54 2 -0.05 2 -0.02 PR 0 0 0 0 0 0 2 -1.20 2 -0.06 2 -0.13 2 -0.05 3 CP 0 0 0 0 0 0 0 2 -6.34 2 -3.32 2 -2.35 PR 0 0</p><formula xml:id="formula_3">0 0 0 0 0 0 0 2 -2.24 4 CP 0 0 0 0 0 0 0 0 0 0 PR 0 0 0 0 0 0 0 0 0 0 small 1 CP 0 0 0 0 2 -</formula><p>17.78 2 -8.25 2 -0.12 2 -0.01 2 -0.01 1 AES-[8] PR 0 0 0 2 -22.64 2 -20.64 2 -13.43 2 -0.01 2 -0.01 2 -0.01 2 -0.01 small 1 CP 0 0 0 2 -20.32 2 -17.47 2 -4.41 2 -0.01 2 -0.01 2 -0.01 2 -0.01 TWINE-[8] PR 0 0 2 -21.64 2 -16.45 2 -12.62 2 -3.86 2 -1.69 2 -0.76 2 -0.76 2 -0.27 2 CP 0 0 0 0 0 0 2 -20.32 2 -4.97 2 -4.84 2 -2.84 PR 0 0 0 0 0 0 2 -14.49 2 -16.62 2 -8.78 2 -12.68 3 CP 0 0 0 0 0 0 0 0 2 -22.64 2 -15.71 PR 0 0 0 0 0 0 0 0 0 2 -19.18</p><p>Table C.2: Average success probabilities of ciphertext prediction/plaintext recovery using the proposed attacks against three block ciphers with a block size of 64 bits. We vary the amount of training data in the range of from 2 10 to 2 19 and use 2 16 of the remaining plaintexts or ciphertexts as testing data. Moreover, we use the optimized hyperparameters obtained in Experiment 1 (see Table <ref type="table">7</ref>). CP:=Ciphertext Prediction and PR:=Plaintext Recovery.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Cipher Round Attack</head><p>Success probability for each amount of training data 2 10  2 11 2</p><p>small 1 CP 0 0 0 2 -18.00 2 -0.01 1 1 ---PRESENT-[16] PR 0 0 0 0 2 -17.68 2 -8.04 2 -0.37 2 -0.01 2 -0.01 -(PRESENT) 2 CP 0 0 0 0 2 -6.64 2 -2.64 2 -2.31 2 -1.68 2 -0.60 -PR 0 0 0 0 0 0 2 -2.27 2 -0.39 2 -0.08 -3 CP 0 0 0 0 0 0 0 2 -1.30 2 -1.68 2 -0.74 PR 0 0 0 0 0 0 0 0 0 2 -3.14 4 CP 0 0 0 0 0 0 0 0 0 0 PR 0 0 0 0 0 0 0 0 0 0 small AES-[16] 1 CP 0 0 0 0 0 2 -0.24 2 -0.06 2 -0.01 2 -0.01 -(AES-like) PR 0 0 0 0 0 2 -0.06 2 -0.01 2 -0.01 2 -0.01 small 1 CP 0 0 0 0 0 2 -0.30 2 -0.04 2 -0.01 2 -0.01 -TWINE-[16] PR 0 0 0 0 2 -15.91 2 -5.72 2 -5.16 2 -3.99 2 -2.45 2 -1.16 (TWINE-like) 2 CP 0 0 0</p><formula xml:id="formula_5">0 0 0 0 0 0 2 -12.50 PR 0 0 0 0 0 0 0 0 0 2 -7.05 3 CP 0 0 0 0 0 0 0 0 0 0 PR 0 0 0 0 0 0 0 0 0 0</formula></div><figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_10"><head>Table 15 :</head><label>15</label><figDesc>Average success probabilities when swapping or replacing components on the 4-round small PRESENT-<ref type="bibr" target="#b3">[4]</ref>. We use 215 training data and 215 testing data. CP:=Ciphertext Prediction and PR:=Plaintext Recovery.</figDesc><table><row><cell></cell><cell cols="4">Category # nodes of of Attack hidden layer hidden layer learning rate # layers of Initial</cell><cell>Optimizer</cell><cell>Succ. prob.</cell></row><row><cell>Original small PRESENT-[4]</cell><cell>CP</cell><cell>300</cell><cell>4</cell><cell>0.01</cell><cell>Adam</cell><cell>2 -5.63</cell></row><row><cell></cell><cell>PR</cell><cell>300</cell><cell>1</cell><cell>0.01</cell><cell>Adam</cell><cell>2 -14.50</cell></row><row><cell>Replacing the components (Enc: sLayer-inv → pLayer)</cell><cell>CP</cell><cell>200</cell><cell>4</cell><cell>0.01</cell><cell>Adam</cell><cell>2 -3.75</cell></row><row><cell>(Dec: pLayer → sLayer)</cell><cell>PR</cell><cell>500</cell><cell>1</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -12.13</cell></row><row><cell>Swapping the components (Enc: pLayer → sLayer)</cell><cell>CP</cell><cell>500</cell><cell>1</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -12.21</cell></row><row><cell>(Dec: sLayer-inv → pLayer)</cell><cell>PR</cell><cell>400</cell><cell>7</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -13.74</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_12"><head>Table 17 :</head><label>17</label><figDesc>Average success probabilities of ciphertext prediction/plaintext recovery using the proposed attacks against small PRESENT-<ref type="bibr" target="#b3">[4]</ref> with weak S-box2. We use 215 training data and the remaining 215 testing data. CP:=Ciphertext Prediction and PR:=Plaintext Recovery.</figDesc><table><row><cell>Cipher</cell><cell>Round</cell><cell cols="4">Category # nodes of of Attack hidden layer hidden layer learning rate # layers of Initial</cell><cell>Optimizer</cell><cell>Succ. prob.</cell></row><row><cell>small</cell><cell>1</cell><cell>CP</cell><cell>100</cell><cell>2</cell><cell>0.001</cell><cell>Adam</cell><cell>1</cell></row><row><cell>PRESENT-[4]</cell><cell></cell><cell>PR</cell><cell>400</cell><cell>1</cell><cell>0.001</cell><cell>Adam</cell><cell>1</cell></row><row><cell>with</cell><cell>2</cell><cell>CP</cell><cell>300</cell><cell>5</cell><cell>0.001</cell><cell>Adam</cell><cell>1</cell></row><row><cell>weak S-box2</cell><cell></cell><cell>PR</cell><cell>200</cell><cell>5</cell><cell>0.001</cell><cell>Adam</cell><cell>1</cell></row><row><cell></cell><cell>3</cell><cell>CP</cell><cell>300</cell><cell>4</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -0.01</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>500</cell><cell>4</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -0.01</cell></row><row><cell></cell><cell>4</cell><cell>CP</cell><cell>500</cell><cell>1</cell><cell>0.01</cell><cell cols="2">RMSprop 2 -0.03</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>200</cell><cell>4</cell><cell>0.01</cell><cell>Adam</cell><cell>2 -0.97</cell></row><row><cell></cell><cell>5</cell><cell>CP</cell><cell>300</cell><cell>3</cell><cell>0.01</cell><cell>Adam</cell><cell>2 -5.80</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>500</cell><cell>5</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -8.74</cell></row><row><cell></cell><cell>6</cell><cell>CP</cell><cell>500</cell><cell>7</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -10.72</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>500</cell><cell>7</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -11.16</cell></row><row><cell></cell><cell>7</cell><cell>CP</cell><cell>300</cell><cell>1</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -13.04</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>500</cell><cell>6</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -13.01</cell></row><row><cell></cell><cell>8</cell><cell>CP</cell><cell>500</cell><cell>6</cell><cell>0.001</cell><cell cols="2">RMSprop 2 -14.35</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>500</cell><cell>2</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -14.57</cell></row><row><cell></cell><cell>9</cell><cell>CP</cell><cell>100</cell><cell>4</cell><cell>0.001</cell><cell>Adam</cell><cell>2 -15.52</cell></row><row><cell></cell><cell></cell><cell>PR</cell><cell>500</cell><cell>7</cell><cell>0.0001</cell><cell>Adam</cell><cell>2 -15.92</cell></row></table></figure>
+			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="extracted" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Applying Neural Networks for Simplified Data Encryption Standard (SDES) Cipher System Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Khaled</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alaa</forename><forename type="middle">H</forename><surname>Alallayah</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Waiel</forename><surname>Alhamami</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mohamed</forename><surname>Abdelwahed</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Amin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Int. Arab J. Inf. Technol</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="163" to="169" />
+			<date type="published" when="2012">2012</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Khaled M. Alallayah, Alaa H. Alhamami, Waiel AbdElwahed, and Mohamed Amin. Applying Neural Networks for Simplified Data Encryption Standard (SDES) Cipher System Cryptanal- ysis. Int. Arab J. Inf. Technol., 9(2):163-169, 2012.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Neuro-Cryptanalysis of DES and Triple-DES</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Mohammed</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Alani</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ICONIP</title>
+		<imprint>
+			<date type="published" when="2012">2012</date>
+			<biblScope unit="page" from="637" to="646" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mohammed M. Alani. Neuro-Cryptanalysis of DES and Triple-DES. In ICONIP, pages 637- 646, 2012.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Machine learning based encrypted traffic classification: Identifying SSH and Skype</title>
+		<author>
+			<persName><forename type="first">Riyad</forename><surname>Alshammari</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">Nur</forename><surname>Zincir-Heywood</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cisda.2009.5356534</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2009 IEEE Symposium on Computational Intelligence for Security and Defense Applications</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009-07">2009</date>
+			<biblScope unit="page" from="1" to="8" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Riyad Alshammari and A. Nur Zincir-Heywood. Machine learning based encrypted traffic classification: Identifying SSH and Skype. In IEEE CISDA, pages 1-8, 2009.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Integral Attacks on Some Lightweight Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Seunggeun</forename><surname>Baek</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kwangjo</forename><surname>Kim</surname></persName>
+		</author>
+		<idno type="DOI">10.3837/tiis.2020.11.014</idno>
+		<ptr target="https://caislab.kaist.ac.kr/publication/paper_files/2020/scis2020_SG.pdf" />
+	</analytic>
+	<monogr>
+		<title level="j">KSII Transactions on Internet and Information Systems</title>
+		<title level="j" type="abbrev">KSII TIIS</title>
+		<idno type="ISSNe">1976-7277</idno>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">11</biblScope>
+			<date type="published" when="2020-11-30">2020</date>
+			<publisher>Korean Society for Internet Information (KSII)</publisher>
+		</imprint>
+		<respStmt>
+			<orgName>SCIS</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Seunggeun Baek and Kwangjo Kim. Recent Advances of Neural Attacks against Block Ciphers. SCIS, 2020. available at https://caislab.kaist.ac.kr/publication/paper_files/2020/ scis2020_SG.pdf.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Finding the differential characteristics of block ciphers with neural networks</title>
+		<author>
+			<persName><forename type="first">Abbas</forename><surname>Ghaemi Bafghi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Reza</forename><surname>Safabakhsh</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Babak</forename><surname>Sadeghiyan</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Sciences</title>
+		<imprint>
+			<biblScope unit="volume">178</biblScope>
+			<biblScope unit="issue">15</biblScope>
+			<biblScope unit="page" from="3118" to="3132" />
+			<date type="published" when="2008">2008</date>
+		</imprint>
+	</monogr>
+	<note>Nature Inspired Problem-Solving</note>
+	<note type="raw_reference">Abbas Ghaemi Bafghi, Reza Safabakhsh, and Babak Sadeghiyan. Finding the differential characteristics of block ciphers with neural networks. Information Sciences, 178(15):3118 - 3132, 2008. Nature Inspired Problem-Solving.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-02-01">2021</date>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Anubhab Baksi, Jakub Breier, Yi Chen, and Xiaoyang Dong. Machine learning assisted dif- ferential distinguishers for lightweight ciphers. In DATE, pages 176-181, 2021.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Conditional Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Guo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Meicheng</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Ma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IACR Cryptol</title>
+		<imprint>
+			<date type="published" when="2021">2021. 2021</date>
+			<biblScope unit="page">719</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhenzhen Bao, Jian Guo, Meicheng Liu, Li Ma, and Yi Tu. Conditional Differential-Neural Cryptanalysis. IACR Cryptol. ePrint Arch., 2021:719, 2021.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quan</forename><forename type="middle">Quan</forename><surname>Tan</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-77870-5_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Adrien Benamira, David Gérault, Thomas Peyrin, and Quan Quan Tan. A Deeper Look at Machine Learning-Based Cryptanalysis. In EUROCRYPT, pages 805-835, 2021.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">PRESENT: An Ultra-Lightweight Block Cipher</title>
+		<author>
+			<persName><forename type="first">Andrey</forename><surname>Bogdanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lars</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Christof</forename><surname>Paar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Axel</forename><surname>Poschmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">J B</forename><surname>Robshaw</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Seurin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Vikkelsoe</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-74735-2_31</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007">2007</date>
+			<biblScope unit="page" from="450" to="466" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Andrey Bogdanov, Lars R. Knudsen, Gregor Leander, Christof Paar, Axel Poschmann, Matthew J. B. Robshaw, Yannick Seurin, and C. Vikkelsoe. PRESENT: An Ultra-Lightweight Block Cipher. In CHES, pages 450-466, 2007.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Neural-Aided Statistical Attack for Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac099</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="2480" to="2498" />
+			<date type="published" when="2020">2020. 2020</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yi Chen and Hongbo Yu. Neural Aided Statistical Attack for Cryptanalysis. IACR Cryptol. ePrint Arch., 2020:1620, 2020.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">A New Neural Distinguisher Considering Features Derived From Multiple Ciphertext Pairs</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sitong</forename><surname>Yuan</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac019</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1419" to="1433" />
+			<date type="published" when="2021">2021. 2021</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yi Chen and Hongbo Yu. A New Neural Distinguisher Model Considering Derived Features from Multiple Ciphertext Pairs. IACR Cryptol. ePrint Arch., 2021:310, 2021.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Bridging Machine Learning and Cryptanalysis via EDLCT</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IACR Cryptol</title>
+		<imprint>
+			<date type="published" when="2021">2021. 2021</date>
+			<biblScope unit="page">705</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yi Chen and Hongbo Yu. Bridging Machine Learning and Cryptanalysis via EDLCT. IACR Cryptol. ePrint Arch., 2021:705, 2021.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Neural-Aided Statistical Attack for Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac099</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="2480" to="2498" />
+			<date type="published" when="2021">2021. 2021</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yi Chen and Hongbo Yu. Improved Neural Aided Statistical Attack for Cryptanalysis. IACR Cryptol. ePrint Arch., 2021:311, 2021.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Improved cryptanalysis combining differential and artificial neural network schemes</title>
+		<author>
+			<persName><forename type="first">Moises</forename><surname>Danziger</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Marco</forename><forename type="middle">Aurelio</forename><surname>Amaral Henriques</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/its.2014.6948008</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2014 International Telecommunications Symposium (ITS)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2014-08">2014</date>
+			<biblScope unit="page" from="1" to="5" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">M. Danziger and M. A. Amaral Henriques. Improved cryptanalysis combining differential and artificial neural network schemes. In ITS, pages 1-5, 2014.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Neural Cryptanalysis of Classical Ciphers</title>
+		<author>
+			<persName><forename type="first">Riccardo</forename><surname>Focardi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Flaminia</forename><forename type="middle">L</forename><surname>Luccio</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ICTCS</title>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+			<biblScope unit="page" from="104" to="115" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Riccardo Focardi and Flaminia L. Luccio. Neural Cryptanalysis of Classical Ciphers. In ICTCS, pages 104-115, 2018.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Neural Network Based Analysis of Lightweight Block Cipher PRESENT</title>
+		<author>
+			<persName><forename type="first">Girish</forename><surname>Sk Pal</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Mishra</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Krishna</forename><surname>Svssnvg</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Murthy</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Harmony Search and Nature Inspired Optimization Algorithms</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">SK Pal Girish Mishra, SVSSNVG Krishna Murthy. Neural Network Based Analysis of Lightweight Block Cipher PRESENT. In Harmony Search and Nature Inspired Optimiza- tion Algorithms, 2019.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Aron Gohr. Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning. In CRYPTO, pages 150-179, 2019.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b17">
+	<monogr>
+		<title level="m" type="main">Unsupervised Cipher Cracking Using Discrete GANs</title>
+		<author>
+			<persName><forename type="first">Aidan</forename><forename type="middle">N</forename><surname>Gomez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sicong</forename><surname>Huang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ivan</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><forename type="middle">M</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Muhammad</forename><surname>Osama</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lukasz</forename><surname>Kaiser</surname></persName>
+		</author>
+		<idno>CoRR, abs/1801.04883</idno>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Aidan N. Gomez, Sicong Huang, Ivan Zhang, Bryan M. Li, Muhammad Osama, and Lukasz Kaiser. Unsupervised Cipher Cracking Using Discrete GANs. CoRR, abs/1801.04883, 2018.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b18">
+	<monogr>
+		<title level="m" type="main">Learning the Enigma with Recurrent Neural Networks</title>
+		<author>
+			<persName><forename type="first">Sam</forename><surname>Greydanus</surname></persName>
+		</author>
+		<idno>CoRR, abs/1708.07576</idno>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Sam Greydanus. Learning the Enigma with Recurrent Neural Networks. CoRR, abs/1708.07576, 2017.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Long Short-Term Memory</title>
+		<author>
+			<persName><forename type="first">Sepp</forename><surname>Hochreiter</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jürgen</forename><surname>Schmidhuber</surname></persName>
+		</author>
+		<idno type="DOI">10.1162/neco.1997.9.8.1735</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Neural Computation</title>
+		<title level="j" type="abbrev">Neural Computation</title>
+		<idno type="ISSN">0899-7667</idno>
+		<idno type="ISSNe">1530-888X</idno>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="1735" to="1780" />
+			<date type="published" when="1997-11-01">1997</date>
+			<publisher>MIT Press</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Sepp Hochreiter and Jurgen Schmidhuber. LONG SHORT-TERM MEMORY. In Neural Computation Volume 9 Issue 8, pages 1735-1780, 1997.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Linear Attack on Round-Reduced DES Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Botao</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yongqiang</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Haoyue</forename><surname>Zhao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bin</forename><surname>Wu</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-59013-0_7</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">2020</date>
+			<biblScope unit="page" from="131" to="145" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Botao Hou, Yongqiang Li, Haoyue Zhao, and Bin Wu. Linear Attack on Round-Reduced DES Using Deep Learning. In ESORICS, pages 131-145, 2020.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Cryptanalysis of Round-Reduced SIMON32 Based on Deep Learning</title>
+		<author>
+			<persName><forename type="first">Zezhou</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IACR Cryptol. ePrint Arch</title>
+		<imprint>
+			<date type="published" when="2021">2021. 2021</date>
+			<biblScope unit="page">362</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zezhou Hou, Jiongjiong Ren, and Shaozhen Chen. Cryptanalysis of Round-Reduced SIMON32 Based on Deep Learning. IACR Cryptol. ePrint Arch., 2021:362, 2021.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Improve Neural Distinguishers of SIMON and SPECK</title>
+		<author>
+			<persName><forename type="first">Zezhou</forename><surname>Hou</surname></persName>
+			<idno type="ORCID">0000-0002-7764-9663</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+			<idno type="ORCID">0000-0003-2223-4329</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1155/2021/9288229</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Security and Communication Networks</title>
+		<title level="j" type="abbrev">Security and Communication Networks</title>
+		<idno type="ISSN">1939-0114</idno>
+		<idno type="ISSNe">1939-0122</idno>
+		<imprint>
+			<biblScope unit="volume">2021</biblScope>
+			<biblScope unit="page" from="1" to="11" />
+			<date type="published" when="2021-12-31">2021. 2021</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zezhou Hou, Jiongjiong Ren, and Shaozhen Chen. Improve Neural Distinguisher for Crypt- analysis. IACR Cryptol. ePrint Arch., 2021:1017, 2021.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Research on Plaintext Restoration of AES Based on Neural Network</title>
+		<author>
+			<persName><forename type="first">Xinyi</forename><surname>Hu</surname></persName>
+			<idno type="ORCID">0000-0002-5846-1454</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yaqun</forename><surname>Zhao</surname></persName>
+		</author>
+		<idno type="DOI">10.1155/2018/6868506</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Security and Communication Networks</title>
+		<title level="j" type="abbrev">Security and Communication Networks</title>
+		<idno type="ISSN">1939-0114</idno>
+		<idno type="ISSNe">1939-0122</idno>
+		<imprint>
+			<biblScope unit="volume">2018</biblScope>
+			<biblScope unit="page" from="1" to="9" />
+			<date type="published" when="2018-11-18">2018. 2018</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Xinyi Hu and Yaqun Zhao. Research on Plaintext Restoration of AES Based on Neural Network. Security and Communication Networks, 2018:6868506:1-6868506:9, 2018.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">A Deep Learning Approach for Active S-Box Prediction of Lightweight Generalized Feistel Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Mohamed</forename><surname>Fadl Idris</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Je</forename></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sen</forename><surname>Teh</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jasy</forename><surname>Liew</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Suet</forename><surname>Yan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wei-Zhu</forename><surname>Yeoh</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Access</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="page" from="104205" to="104216" />
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mohamed Fadl Idris, Je Sen Teh, Jasy Liew Suet Yan, and Wei-Zhu Yeoh. A Deep Learning Approach for Active S-Box Prediction of Lightweight Generalized Feistel Block Ciphers. IEEE Access, 9:104205-104216, 2021.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Applied Cryptography and Network Security Workshops</title>
+		<author>
+			<persName><forename type="first">Hayato</forename><surname>Kimura</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Keita</forename><surname>Emura</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Takanori</forename><surname>Isobe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ryoma</forename><surname>Ito</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kazuto</forename><surname>Ogawa</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Toshihiro</forename><surname>Ohigashi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">; Jianying</forename><surname>Zhou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sridhar</forename><surname>Adepu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Cristina</forename><surname>Alcaraz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lejla</forename><surname>Batina</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Emiliano</forename><surname>Casalicchio</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sudipta</forename><surname>Chattopadhyay</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chenglu</forename><surname>Jin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jingqiang</forename><surname>Lin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eleonora</forename><surname>Losiouk</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Suryadipta</forename><surname>Majumdar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Weizhi</forename><surname>Meng</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stjepan</forename><surname>Picek</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jun</forename><surname>Shao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chunhua</forename><surname>Su</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Cong</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yury</forename><surname>Zhauniarovich</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Saman</forename><forename type="middle">A</forename><surname>Zonouz</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-16815-4</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Applied Cryptography and Network Security Workshops -ACNS 2022 Satellite Workshops, AIBlock, AIHWS, AIoTS, CIMSS, Cloud S&amp;P, SCI, SecMT</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>SiMLA, Rome, Italy</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2022">June 20-23, 2022. 2022</date>
+			<biblScope unit="volume">13285</biblScope>
+			<biblScope unit="page" from="248" to="276" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hayato Kimura, Keita Emura, Takanori Isobe, Ryoma Ito, Kazuto Ogawa, and Toshihiro Ohi- gashi. Output prediction attacks on block ciphers using deep learning. In Jianying Zhou, Sridhar Adepu, Cristina Alcaraz, Lejla Batina, Emiliano Casalicchio, Sudipta Chattopadhyay, Chenglu Jin, Jingqiang Lin, Eleonora Losiouk, Suryadipta Majumdar, Weizhi Meng, Stjepan Picek, Jun Shao, Chunhua Su, Cong Wang, Yury Zhauniarovich, and Saman A. Zonouz, editors, Applied Cryptography and Network Security Workshops -ACNS 2022 Satellite Work- shops, AIBlock, AIHWS, AIoTS, CIMSS, Cloud S&amp;P, SCI, SecMT, SiMLA, Rome, Italy, June 20-23, 2022, Proceedings, volume 13285 of Lecture Notes in Computer Science, pages 248-276. Springer, 2022.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Zunz, Leopold</title>
+		<author>
+			<persName><forename type="first">P</forename><surname>Diederik</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jimmy</forename><surname>Kingma</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Ba</surname></persName>
+		</author>
+		<idno type="DOI">10.5117/9789462981188/ngfm4f56sgwxsqsaygobrmep</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Encyclopedia of Romantic Nationalism in Europe</title>
+		<imprint>
+			<publisher>Amsterdam University Press</publisher>
+			<date type="published" when="2015-04-15">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Diederik P. Kingma and Jimmy Ba. Adam: A Method for Stochastic Optimization. In ICLR, 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">The Block Cipher Companion</title>
+		<author>
+			<persName><forename type="first">Lars</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matthew</forename><forename type="middle">J B</forename><surname>Robshaw</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-17342-4</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Information Security and Cryptography</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2011">2011</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lars R. Knudsen and Matthew Robshaw. The Block Cipher Companion. Information Security and Cryptography. Springer, 2011.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Weak Tweak-Keys for the CRAFT Block Cipher</title>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shahram</forename><surname>Rasoolzadeh</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tosc.v2022.i1.38-63</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Symmetric Cryptology</title>
+		<title level="j" type="abbrev">ToSC</title>
+		<idno type="ISSNe">2519-173X</idno>
+		<imprint>
+			<biblScope unit="page" from="38" to="63" />
+			<date type="published" when="2010">2010. 2010</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gregor Leander. Small Scale Variants Of The Block Cipher PRESENT. IACR Cryptol. ePrint Arch., 2010:143, 2010.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Lightweight Block Cipher Security Evaluation Based on Machine Learning Classifiers and Active S-Boxes</title>
+		<author>
+			<persName><forename type="first">Ting</forename><forename type="middle">Rong</forename><surname>Lee</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Je</forename><forename type="middle">Sen</forename><surname>Teh</surname></persName>
+			<idno type="ORCID">0000-0001-5571-4148</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Norziana</forename><surname>Jamil</surname></persName>
+			<idno type="ORCID">0000-0002-7363-1466</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jasy</forename><forename type="middle">Liew Suet</forename><surname>Yan</surname></persName>
+			<idno type="ORCID">0000-0001-7362-7507</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jiageng</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/access.2021.3116468</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Access</title>
+		<title level="j" type="abbrev">IEEE Access</title>
+		<idno type="ISSNe">2169-3536</idno>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="page" from="134052" to="134064" />
+			<date type="published" when="2020">2020</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ting Lee, Je Sen Teh, Jasy Liew, Suet Yan, Norziana Jamil, and Wei-Zhu Yeoh. A Machine Learning Approach to Predicting Block Cipher Security. In CRYPTOLOGY, 2020.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Lightweight Block Cipher Security Evaluation Based on Machine Learning Classifiers and Active S-Boxes</title>
+		<author>
+			<persName><forename type="first">Je</forename><surname>Ting Rong Lee</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sen</forename><surname>Teh</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Norziana</forename><surname>Jamil</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jasy</forename><surname>Liew</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Suet</forename><surname>Yan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jiageng</forename><surname>Chen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Access</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="page" from="134052" to="134064" />
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ting Rong Lee, Je Sen Teh, Norziana Jamil, Jasy Liew Suet Yan, and Jiageng Chen. Lightweight Block Cipher Security Evaluation Based on Machine Learning Classifiers and Active S-Boxes. IEEE Access, 9:134052-134064, 2021.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Unsupervised Sequence Classification using Sequential Output Statistics</title>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jianshu</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Deng</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">NIPS</title>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+			<biblScope unit="page" from="3550" to="3559" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yu Liu, Jianshu Chen, and Li Deng. Unsupervised Sequence Classification using Sequential Output Statistics. In NIPS, pages 3550-3559, 2017.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b32">
+	<analytic>
+		<title level="a" type="main">A Practical Attack on Broadcast RC4</title>
+		<author>
+			<persName><forename type="first">Itsik</forename><surname>Mantin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-45473-x_13</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2001">2001</date>
+			<biblScope unit="page" from="152" to="164" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Itsik Mantin and Adi Shamir. A Practical Attack on Broadcast RC4. In Fast Software En- cryption, pages 152-164, 2001.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Piccolo: An Ultra-Lightweight Blockcipher</title>
+		<author>
+			<persName><forename type="first">Kyoji</forename><surname>Shibutani</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Takanori</forename><surname>Isobe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Harunaga</forename><surname>Hiwatari</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Atsushi</forename><surname>Mitsuda</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Toru</forename><surname>Akishita</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Taizo</forename><surname>Shirai</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-23951-9_23</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2011">2011</date>
+			<biblScope unit="page" from="342" to="357" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Kyoji Shibutani, Takanori Isobe, Harunaga Hiwatari, Atsushi Mitsuda, Toru Akishita, and Taizo Shirai. Piccolo: An Ultra-Lightweight Blockcipher. In CHES, pages 342-357, 2011.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Deep Learning-Based Cryptanalysis of Lightweight Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Jaewoo</forename><surname>So</surname></persName>
+			<idno type="ORCID">0000-0001-7868-7197</idno>
+		</author>
+		<idno type="DOI">10.1155/2020/3701067</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Security and Communication Networks</title>
+		<title level="j" type="abbrev">Security and Communication Networks</title>
+		<idno type="ISSN">1939-0114</idno>
+		<idno type="ISSNe">1939-0122</idno>
+		<imprint>
+			<biblScope unit="volume">2020</biblScope>
+			<biblScope unit="page" from="1" to="11" />
+			<date type="published" when="2020-07-13">2020. 2020</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jaewoo So. Deep Learning-Based Cryptanalysis of Lightweight Block Ciphers. Security and Communication Networks, 2020:3701067, 2020.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Sequence to Sequence Learning with Neural Networks</title>
+		<author>
+			<persName><forename type="first">Ilya</forename><surname>Sutskever</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Oriol</forename><surname>Vinyals</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Quoc</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Le</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">NIPS</title>
+		<imprint>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="3104" to="3112" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ilya Sutskever, Oriol Vinyals, and Quoc V. Le. Sequence to Sequence Learning with Neural Networks. In NIPS, pages 3104-3112, 2014.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b36">
+	<analytic>
+		<title level="a" type="main">An approach to identifying cryptographic algorithm from ciphertext</title>
+		<author>
+			<persName><forename type="first">Cheng</forename><surname>Tan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qingbing</forename><surname>Ji</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/iccsn.2016.7586649</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2016 8th IEEE International Conference on Communication Software and Networks (ICCSN)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2016-06">2016</date>
+			<biblScope unit="page" from="19" to="23" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">C. Tan and Q. Ji. An approach to identifying cryptographic algorithm from ciphertext. In ICCSN, pages 19-23, 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Geoffrey E. Hinton</title>
+		<author>
+			<persName><forename type="first">Tijmen</forename><surname>Tieleman</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Geoffrey</forename><surname>Hinton</surname></persName>
+		</author>
+		<idno type="DOI">10.7551/mitpress/6626.003.0017</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Talking Nets</title>
+		<imprint>
+			<publisher>The MIT Press</publisher>
+			<date type="published" when="2012">2012</date>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="page" from="26" to="31" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Tijmen Tieleman and Geoffrey Hinton. Lecture 6.5-RMSprop: Divide the gradient by a running average of its recent magnitude. COURSERA: Neural networks for machine learning, 4(2):26- 31, 2012.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Improved Differential-ML Distinguisher: Machine Learning Based Generic Extension for Differential Analysis</title>
+		<author>
+			<persName><forename type="first">Gao</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gaoli</forename><surname>Wang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-88052-1_2</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="page" from="21" to="38" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gao Wang and Gaoli Wang. Improved Differential-ML Distinguisher: Machine Learning Based Generic Extension for Differential Analysis. In ICICS 2021, pages 21-38, 2021.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Neural Cryptanalysis: Metrics, Methodology, and Applications in CPS Ciphers</title>
+		<author>
+			<persName><forename type="first">Ya</forename><surname>Xiao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qingying</forename><surname>Hao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Danfeng Daphne</forename><surname>Yao</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE DSC</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="1" to="8" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ya Xiao, Qingying Hao, and Danfeng Daphne Yao. Neural Cryptanalysis: Metrics, Method- ology, and Applications in CPS Ciphers. In IEEE DSC, pages 1-8, 2019.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Differential-ML Distinguisher: Machine Learning Based Generic Extension for Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Tarun</forename><surname>Yadav</surname></persName>
+			<idno type="ORCID">0000-0002-5462-8253</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Manoj</forename><surname>Kumar</surname></persName>
+			<idno type="ORCID">0000-0001-6900-4075</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-88238-9_10</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="page" from="191" to="212" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Tarun Yadav and Manoj Kumar. Differential-ML Distinguisher: Machine Learning Based Generic Extension for Differential Cryptanalysis. In LATINCRYPT 2021, pages 191-212, 2021.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

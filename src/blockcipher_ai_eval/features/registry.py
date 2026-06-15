@@ -7,6 +7,7 @@ from blockcipher_ai_eval.features.pair_features import (
 
 FEATURE_ENCODINGS = {
     "ciphertext_pair_bits",
+    "present_mcnd_cell_matrix_bits",
     "ciphertext_xor_bits",
     "ciphertext_xor_spn_aligned_bits",
     "ciphertext_xor_spn_paligned_bits",

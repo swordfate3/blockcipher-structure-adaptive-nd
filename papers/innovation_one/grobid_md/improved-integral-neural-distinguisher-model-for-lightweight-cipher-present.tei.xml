@@ -1,0 +1,1014 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Improved integral neural distinguisher model for lightweight cipher PRESENT</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Wanqing</forename><surname>Wu</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> School of Cyber Security and Computer , Hebei University , Baoding 071002 , Hebei Province , China</note>
+								<orgName type="department">School of Cyber Security and Computer</orgName>
+								<orgName type="institution">Hebei University</orgName>
+								<address>
+									<postCode>071002</postCode>
+									<settlement>Baoding</settlement>
+									<region>Hebei Province</region>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Key Laboratory on High Trusted Information System in Hebei Province , Baoding 071002 , Hebei Province , China</note>
+								<orgName type="department">Key Laboratory on High Trusted Information System</orgName>
+								<orgName type="institution">in Hebei Province</orgName>
+								<address>
+									<postCode>071002</postCode>
+									<settlement>Baoding Hebei</settlement>
+									<region>Province</region>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Mingyu</forename><surname>Guo</surname></persName>
+							<idno type="ORCID">0009-0008-7394-0761</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> School of Cyber Security and Computer , Hebei University , Baoding 071002 , Hebei Province , China</note>
+								<orgName type="department">School of Cyber Security and Computer</orgName>
+								<orgName type="institution">Hebei University</orgName>
+								<address>
+									<postCode>071002</postCode>
+									<settlement>Baoding</settlement>
+									<region>Hebei Province</region>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Key Laboratory on High Trusted Information System in Hebei Province , Baoding 071002 , Hebei Province , China</note>
+								<orgName type="department">Key Laboratory on High Trusted Information System</orgName>
+								<orgName type="institution">in Hebei Province</orgName>
+								<address>
+									<postCode>071002</postCode>
+									<settlement>Baoding Hebei</settlement>
+									<region>Province</region>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Improved integral neural distinguisher model for lightweight cipher PRESENT</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">4E26C8FF00A916A710A106C0F4754BBE</idno>
+					<idno type="DOI">10.1186/s42400-024-00258-0</idno>
+					<note type="submission">Received: 4 January 2024 Accepted: 22 May 2024</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-15T01:24+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Integral Attack</term>
+					<term>Neural Network</term>
+					<term>Key Recovery</term>
+					<term>SPN</term>
+					<term>PRESENT</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>PRESENT is a lightweight block cipher, which has attracted many scholars to research its security. In 2022, Zahednejad et al. proposed the integral neural distinguisher on round-reduced PRESENT. In this paper, a new integral neural distinguisher for PRESENT is constructed. In contrast to Zahednejad's works, the proposed integral neural distinguisher can improve the number of attack rounds in one round. This paper proposes a new data format ( invP n 0 , invP n 1 , . . . , invP n 15 , invS n 0 , invS n 1 , . . . , invS n 15 ), which can exposes more features of PRESENT previous round ciphertext. Simultaneously, this paper incorporates MBConv module into the convolutional layers of DenseNet, which enable the neural network to identify a greater variety of features in ciphertext. The data format of the paper is analysed. The results of the analysis show that the data format in this paper is able to identify more features compared to Zahednejad's data format. Further to this, experiments are performed on PRESENT using the integral neural distinguisher in this paper. The experimental results show that the changes make to the neural network and data format have improved the accuracy of distinguishers. Finally, key recovery attacks are conducted on the integral neural distinguishers of SmallPresent-(8) to demonstrate the efficacy of the distinguisher proposed in this paper. The results demonstrate that the key recovery success rates for 5-round and 6-round are 98% and 90%, considering error bits within a range of two bits.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Introduction</head><p>With the widely application of devices such as sensors and RFID, the Internet of Things (IoT) is increasingly becoming a part of daily life. However, the pursuit of enhanced productivity and convenience leads to the compression of storage and computing resources, which makes traditional ciphers (e.g. AES) ineffective in ensuring the data security and privacy of IoT devices. In order to ensure data security and privacy in resourceconstrained environments, PRESENT was proposed by <ref type="bibr" target="#b2">Bogdanov (2007)</ref>, which is designed to have low power consumption, low throughput and high efficiency. Since PRESENT was proposed, several cryptanalysis methods such as differential analysis, linear attacks, integral analysis, algebraic analysis, bypass cube analysis, have been employed to scrutinize its security <ref type="bibr" target="#b2">(Bogdanov 2007;</ref><ref type="bibr" target="#b26">Wu and Wang 2013;</ref><ref type="bibr" target="#b27">Xiang et al. 2016;</ref><ref type="bibr" target="#b30">Z'aba et al. 2008;</ref><ref type="bibr" target="#b13">Jain et al. 2020;</ref><ref type="bibr" target="#b18">Nakahara et al. 2009;</ref><ref type="bibr" target="#b29">Yang et al. 2009;</ref><ref type="bibr" target="#b4">Cho 2010;</ref><ref type="bibr" target="#b24">Wang 2008;</ref><ref type="bibr" target="#b6">Collard and Standaert 2009)</ref>.</p><p>Integral attack <ref type="bibr" target="#b15">(Knudsen and Wagner 2002)</ref> was proposed by <ref type="bibr">Knudsen et al., which</ref> borrows from square attack <ref type="bibr" target="#b7">(Daemen et al. 1997)</ref>, saturation attack <ref type="bibr" target="#b17">(Lucks 2001</ref>) and multiset attack <ref type="bibr" target="#b0">(Biryukov and Shamir 2001)</ref>. Initially, the integral attack was mainly applied to the byte-based ciphers. However, at FSE 2008, bit-based integral attack was proposed and applied to analyse Noekeon, Serpent and PRESENT by <ref type="bibr">Z'aba et al. (2008)</ref>. This improvement solve the problem that integral cryptanalysis cannot be applied to bit-based ciphers. In 2013, <ref type="bibr" target="#b26">Wu and Wang (2013)</ref> used the properties of PRE-SENT's Sbox to evaluate algebraic degrees and found a 7-round integral distinguisher. In 2016, both <ref type="bibr" target="#b27">Xiang et al. (2016)</ref> and <ref type="bibr" target="#b23">Todo and Morii (2016)</ref> found a 9-round integral distinguisher by bit-based division property <ref type="bibr" target="#b22">(Todo 2015)</ref>, and 12-round PRESENT-80 and 13-round PRE-SENT-128 were attacked by <ref type="bibr" target="#b23">Todo and Morii (2016)</ref> via using the 9-round integral distinguisher. In 2018, <ref type="bibr" target="#b25">Wang et al. (2018)</ref> proposed an algebraic method and used it to attack 10-round PRESENT-80 and 12-round PRE-SENT-80. At the same time, they proposed a key partition technique to attack 11-round PRESENT-80 and 13-round PRESENT-80.</p><p>In recent years, the widely application of deep learning has provided many new approaches to cryptanalysis. At CRYPTO 2019, the great potential of machine learning in cipher identification was demonstrated for the first time by <ref type="bibr" target="#b8">Gohr (2019)</ref>. Ghor designed a differential neural distinguisher for the SPECK using ResNet <ref type="bibr" target="#b9">(He et al. 2016)</ref> and performed key recovery experiments. This result has led many researchers to investigate neural network assisted cryptanalysis. In 2021, Chen and Yu (2021) improved Ghor's neural distinguisher using multiple ciphertext pairs as the neural network input. They improved the neural network accuracy using different output differences. Inspired by Ghor's work, in 2020, <ref type="bibr" target="#b13">Jain et al. (2020)</ref> developed a differential neural distinguisher and applied it to round-reduced PRESENT, which identified 3-5 rounds of PRESENT data from random data with a high probability. <ref type="bibr" target="#b10">Hou et al. (2020)</ref> proposed a combination of neural networks and linear cryptanalysis to identify 3-5 rounds of DES, which allow the neural networks gaining the ability to distinguish the linear expressions between the DES and random data. In 2022, <ref type="bibr" target="#b31">Zahednejad and Lyu (2022)</ref> firstly proposed combining integral attacks with neural networks. They proved that neural network can capture the integral features of ciphertexts, and their integral neural distinguisher can improve the number of identify rounds by 1-2 rounds compared to the classical integral distinguisher in a variety of cipher structures (e.g. SPN, Feistel, ARX, etc.). In the case of PRESENT, they achieve a 7-round integral neural distinguisher using a 5-round classic integral distinguisher. But as the number of rounds increases, the accuracy of the neural distinguisher decreases from 99% in 5 rounds to 58.1% in 7 rounds. Notably, the 8-round PRESENT integral neural distinguisher transitioned into a process of random guessing. In order to increase the number of rounds identified by the neural network, this paper designs a new data preprocessing method based on the characteristics of the PRESENT and the integral attack.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Our contributions</head><p>In this paper, according to the characteristics of PRE-SENT and integral attack, a new data preprocessing method is adopted. It not only ignores the effects of permutation and subkey addition, but also identifies more features of the previous round ciphertexts. Simultaneously, this paper improves the number of distinguish rounds to 8 rounds with accuracy of 57.32% via using multi-multiset data format, and the convolutional layer of DenseNet is modified by using the MBConv module, which reduces the training time successfully and improves the accuracy of the neural network. The accuracy for rounds 5-7 are 99.58%, 99.13% and 82.03%, respectively. Finally, key recovery attacks are performed on the integral neural distinguishers of SmallPresent-(8). The results demonstrate that the key recovery success rates of the 5-round and 6-round neural distinguishers are 98% and 90% respectively, considering error bits within a range of two bits.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Preliminaries</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Brief description of PRESENT and SmallPresent-(size) PRESENT</head><p>PRESENT <ref type="bibr" target="#b2">(Bogdanov 2007</ref>) is an SPN block cipher for the resource-constrained environments. It is a 31-round ultra-light block cipher with a block size of 64 bits. The underlying structure of PRESENT has three layers in every round: AddRoundKey layer, SBoxLayer and PLayer. In the AddRoundKey layer, the current state is XORed to the round key. Then, one 4-bit Sbox is applied by the SBoxLayer repeatedly. Finally, all bits are shifted in the PLayer. At the end of the last round, the current state is XORed to the round key to get the ciphertext. The encryption flow of the whole algorithm is shown in Fig. <ref type="figure" target="#fig_0">1</ref>.</p><p>According to Fig. <ref type="figure" target="#fig_0">1</ref>, if we take the result of the plaintext passing through the addRoundKey layer as the initial encryption state. Then, the order of the three layers can be changed from AddRoundKey layer, SBoxLayer, PLayer to SBoxLayer, PLayer, AddRoundKey layer. Let Y and Z denote the n th round input and output of the initial encryption state. Then the encryption and decryption process can be expressed in the equations:</p><p>(1) Z = P(S(Y ))⊕k n .</p><p>(2</p><formula xml:id="formula_0">) Y = S -1 (P -1 (Z⊕k n )).</formula><p>Where P, S denote the permutation and substitution in the encryption process. P -1 and S -1 denote the inverse- permutation and inverse-substitution in the decryption process. And k n denote the subkey of the n th round.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Key schedule</head><p>This paper uses PRESENT with a key of 80 bits. The key is represented as k 79 k 78 k 77 . . . k 0 and stored in the key register. The subkey for each round is consisted of the leftmost 64 bits of the key register. After each round of encryption, k 79 k 78 k 77 . . . k 0 in the key register is updated as follows:</p><p>Where round_counter represents the current encryption round.</p><p>Step 1: The key register is rotated by 61 bit positions to the left.</p><p>Step 2: The leftmost 4 bits of the key register are passed through the S-box.</p><p>Step 3: The value of round_counter is XORed to the k 19 k 18 k 17 k 16 k 15 .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>SmallPresent-(size)</head><p>In order to clearly describe the time complexity of attacking the PRESENT <ref type="bibr" target="#b4">(Cho 2010;</ref><ref type="bibr" target="#b6">Collard and Standaert 2009)</ref>, <ref type="bibr" target="#b16">Leander (2010)</ref> designed its general variant SmallPresent-(size)(0 &lt; size &lt;= 16 , indicates the size of the PRESENT variant used by the user) based on PRE-SENT-80. SmallPresent-(size) represents a PRESENT</p><formula xml:id="formula_1">Step 1. [k 79 k 78 . . . k 1 k 0 ] = [k 18 k 17 . . . k 20 k 19 ]. Step 2. [k 79 k 78 k 77 k 76 ] = S[k 79 k 78 k 77 k 76 ]. Step 3. [k 19 . . . k 15 ] = [k 19 . . . k 15 ]⊕round_counter.</formula><p>variant with a block size of 4 × size . The overall encryp- tion process of SmallPresent-(size) is the same as that of PRESENT. The differences are as follows:</p><p>Player The permutation utilized in SmallPresent-(size) is defined by the following function, which shifts the bit state of state to the bit position P(state).</p><p>Inverse permutation can be described as: Key schedule SmallPresent's key scheduling is similar to that of PRESENT-80, with the exception that the subkey consists of the 4 × size rightmost bits of PRESENT-80's subkey.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Classical intergral distinguisher</head><p>Integral analysis was proposed by <ref type="bibr">Daemen et al. when</ref> analysing the security of SQUARE <ref type="bibr" target="#b7">(Daemen et al. 1997)</ref>. Subsequently, <ref type="bibr">Knudsen et al.</ref> formalized it based on the Square attack <ref type="bibr" target="#b7">(Daemen et al. 1997)</ref>, Saturation attack <ref type="bibr" target="#b17">(Lucks 2001</ref>) and Multiset attack <ref type="bibr" target="#b0">(Biryukov and Shamir 2001)</ref>. It is a chosen-plaintext attack in which the adversary selects 2 N plaintexts (known as multiset) for a block cipher of size H bits. These plaintexts are binary strings consisting of active bits with different N (N ≤ H ) bit arrangements and constant bits with same H -N bit arrangements. Then the plaintexts are encrypted to obtain the corresponding ciphertexts. If the corresponding ciphertexts contains certain bits, whose XOR is always equal to 0, these bits are called balance bits. Further it claims that the integral distinguisher with 2 N selected plaintexts (or a data complexity of 2 N ) is found. The XOR of the bal- ance bits is the integral feature on which the integral attack relies.</p><p>Taking the PRESENT as an example, Xiang et al. (2016) proposed a 5-round integral distinguisher in which the rightmost 4 bits of the ciphertext are balance bits. The distinguisher fixes the rightmost 4 bits of the plaintext as active bits and the leftmost 60 bits of the plaintext as constant bits. The formats of plaintext and its associated ciphertext is shown in Fig. <ref type="figure" target="#fig_1">2</ref>. Encrypt the selected plaintexts for 5 rounds to obtain a multiset containing 16 ciphertexts. Then, apply XOR to the ciphertexts:</p><formula xml:id="formula_2">P(state) = size × state mod (4 × size -1), for 0 ≤ state &lt; 4 × size -1 4 × size -1, for state = 4 × size -1. P -1 (state) =      4 × state mod (4 × size -1), for 0 ≤ state &lt; 4 × size -1 4 × size -1, for state = 4 × size -1.</formula><p>The XOR of the balance bits in Eq. 3 is equal to 0. The adversary can decrypt the ciphertexts with their guess of the last-round key. If the XOR of the balance bits from the ciphertexts is equal to 0, the adversary has found the correct subkey.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>DenseNet</head><p>DenseNet <ref type="bibr" target="#b12">(Huang et al. 2017)</ref> was specially developed to improve accuracy caused by the vanishing gradient in neural networks. Unlike other networks (such as <ref type="bibr">ResNet He et al. 2016 and</ref><ref type="bibr">ResNeXt Xie et al. 2017</ref>) establish short-circuited connections among layers. DenseNet introduces the concept of dense connectivity, which directly connects all layers in the network.</p><p>Assume that the output equation of the neural network is:</p><p>Where y l represents the mapping output of the F l to the previous layer y l-1 . F l usually includes BN, RelU, Pooling, Conv and other operations.</p><p>For efficient communication among layers, DenseNet uses cross-channel connections to merge the outputs of previous layers into the current layer's mapping. The equation for each layer of DenseNet is as follows.</p><p>Where y l denotes the mapping output of the F l to all pre- vious layers. The network structure of DenseNet is shown in Fig. <ref type="figure">3</ref>.</p><p>(3)</p><formula xml:id="formula_3">C 5 0 ⊕C 5 1 ⊕C 5 2 ⊕C 5 3 ⊕ • • • ⊕C 5 15 .</formula><p>y l = F l (y l-1 ).</p><formula xml:id="formula_4">y l = F l ([y 0 , y 1 , y 2 , . . . , y l-1 ]).</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>MBConv</head><p>MBConv module is an inverted linear bottleneck layer with deeply separable convolution, which is commonly used for lightweight network structures(e.g., Efficientnet Tan and Le 2019, MobileNetV3 <ref type="bibr" target="#b11">Howard et al. 2019</ref><ref type="bibr">, Mnasnet Tan et al. 2019)</ref>. MBConv uses a lightweight depthwise separable convolution <ref type="bibr" target="#b5">(Chollet 2017)</ref> to divide the standard convolution into channel-by-channel convolution and point-by-point convolution, thereby reduces the convolutional parameters while maintaining the same input parameters.</p><p>Figure <ref type="figure" target="#fig_2">4</ref> shows the main operations of MBConv: Firstly, a 1 × 1 kernel-size convolution is employed to increase the number of input channels. Secondly, a 3 × 3 kernel- size depth-separated convolution is employed to conduct channel-by-channel and point-by-point convolutional operations. Subsequently, a 1 × 1 kernel-size convolution is utilized to adjust the number of channels to the specified filter size. Finally, the inputs and outputs are added together.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Build 8-round integral neural distinguisher</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Data format</head><p>Encrypting the plaintexts from Xiang et al. ( <ref type="formula">2016</ref>)'s 5-round integral distinguisher for n ( 5 ≤ n ≤ 8 ) rounds: Where C n j denotes the result of encrypt the j th plaintext for n rounds.</p><p>C n j is decrypted using Eq. 2, where the k n is C n 0 . The following result is:</p><p>(4) C n 0 , C n 1 , C n 2 , C n 3 , . . . , C n 12 , C n 13 , C n 14 , C n 15 . Fig. 3 DenseNet network structure Based on Eq. 2, split the decryption process of C n j into inverse permutation and inverse substitution:</p><p>Where invP n j denotes the inverse permutation result after applying XOR to C n j and C n 0 . invS n j represents the inverse of S-Box.</p><p>Finally, the data format of this paper is:</p><p>Figure <ref type="figure" target="#fig_3">5</ref> shows the data generation process. The specific data format generation process is as follows: Firstly, we generate the set M randomly, which includes r multisets conforming to the 5-round integral distinguisher.</p><formula xml:id="formula_5">S -1 (P -1 (C n 0 ⊕C n 0 )), S -1 (P -1 (C n 1 ⊕C n 0 )), . . . S -1 (P -1 (C n 14 ⊕C n 0 )), S -1 (P -1 (C n 15 ⊕C n 0 )).<label>(5)</label></formula><formula xml:id="formula_6">invP n j = P -1 (C n j ⊕C n 0 ) invS n j = S -1 (invP n j ). (<label>6</label></formula><formula xml:id="formula_7">)</formula><formula xml:id="formula_8">invP n 0 , invP n 1 , . . . , invP n 15 , invS n 0 , invS n 1 , . . . , invS n 15 .</formula><p>Where M r_i denotes the i th plaintext in the r th multiset. Secondly, The plaintext set M is encrypted for n rounds. We generate the master key K and binary sample label Y randomly. When Y = 1 , the M is encrypted with K. When Y = 0 , All plaintexts in the set M are replaced with unrestricted plaintexts. K is used to encrypt the replaced set M.</p><p>Where C n r_i denotes the result of encrypt the M r_i for n rounds.</p><p>Finally, Eq. 6 converts the ciphertexts into the data format required by the neural network:</p><formula xml:id="formula_9">(M 0_0 , M 0_1 , M 0_2 , . . . , M 0_13 , M 0_14 , M 0_15 ), (M 1_0 , M 1_1 , M 1_2 , . . . , M 1_13 , M 1_14 , M 1_15 ), . . . (M r_0 , M r_1 , M r_2 , . . . , M r_13 , M r_14 , M r_15 ). (C n 0_0 , C n 0_1 , C n 0_2 , . . . , C n 0_13 , C n 0_14 , C n 0_15 ), (C n 1_0 , C n 1_1 , C n 1_2 , . . . , C n 1_13 , C n 1_14 , C n 1_15 ), . . . (C n r_0 , C n r_1 , C n r_2 , . . . , C n r_13 , C n r_14 , C n r_15 )</formula><p>. Where invP n r_i denotes the inverse permutation result after applying XOR to C n r_i and C n r_0 . invS n r_i denotes the inverse S-Box result for invP n r_i .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Analysis of the data format</head><p>Zahednejad et al. used Eq. 4 as the input data format for the neural distinguisher. We propose a data format in "Data format" section based on Zahednejad's data format.</p><p>Here, we compare the data format proposed in "Data format" section with Zahednejad's data format. After analyzing the data format proposed in this paper, as well as the S-Boxes and the ciphertexts of the previous round, we find some underlying relations between them. These relations enable our method to improve the number of rounds and its accuracy compared to the work of Zahednejad and Lyu (2022). The reasons are as follows.</p><p>Proposition 1 5-round integral features can be obtained by invP 5 0 , invP 5 1 , . . . , invP 5 15 in Eq. 6.</p><p>Proof The invP 5 0 , invP 5 1 , . . . , invP 5 15 in round 5 is denoted by the ciphertexts: P -1 , P and C 5 0 are eliminated to obtain:</p><p>Apply XOR to the above results:</p><formula xml:id="formula_10">invP n 0_0 , invP n 0_1 , . . . , invP n 0_15 , invS n 0_0 , invS n 0_1 , . . . , invS n 0_15 , invP n 1_0 , invP n 1_1 , . . . , invP n 1_15 , invS n 1_0 , invS n 1_1 , . . . , invS n 1_15 , . . . invP n r_0 , invP n r_1 , . . . , invP n r_15 , invS n r_0 , invS n r_1 , . . . , invS n r_15 . P -1 (P(S(C 4 0 ))⊕C 5 0 ⊕P(S(C 4 0 ))⊕C 5 0 ) P -1 (P(S(C 4 0 ))⊕C 5 0 ⊕P(S(C 4 1 ))⊕C 5 0 ) . . . P -1 (P(S(C 4 0 ))⊕C 5 0 ⊕P(S(C 4 15 ))⊕C 5 0 ).<label>(7)</label></formula><p>S(C 4 0 )⊕S(C 4 0 ), S(C 4 0 )⊕S(C 4 1 ), . . . , S(C 4 0 )⊕S(C 4 15 ).</p><p>S(C 4 0 )⊕S(C 4 1 )⊕S(C 4 2 )⊕S(C 4 3 )⊕ • • • ⊕S(C 4 15 ).</p><p>The value of the bit is not changed by the operations of P or P -1 , so P -1 does not affect the extraction of integral features:</p><p>It follows that the 5-round PRESENT integral features extracted by invP 5 0 , invP 5 1 , . . . , invP 5 15 .</p><p>The 5-round PRESENT integral distinguisher is improved to 7 rounds by Zahednejad using a neural network. In order to improve the number of attack rounds, we use Eq. 6 as a new data format. Proposition 1 shows that in the case of 5 rounds, the features extracted by invP 5 0 , invP 5 1 , . . . , invP 5 15 in Eq. 6 are equivalent to C 5 0 , C 5 1 , C 5 2 , . . . , C 5 15 of Zahednejad. However, the number of identification rounds can be improved to 8 rounds by using Eq. 6 as a new data format, the reasons are given in Proposition 2 and Proposition 3. P -1 (C 5 0 ⊕C 5 1 ⊕ • • • ⊕C 5 15 ) = P -1 (P(S(C 4 0 ))⊕k 5 ⊕ • • • ⊕P(S(C 4 15 ))⊕k 5 ) = S(C 4 0 )⊕S(C 4 1 )⊕S(C 4 2 )⊕S(C 4 3 )⊕ • • • ⊕S(C 4 15 ).</p><formula xml:id="formula_11">S m_inv = S -1 (S(A)⊕S(B)). (<label>(8)</label></formula><formula xml:id="formula_12">)              x 3 = y 0 ⊕y 1 ⊕y 2 ⊕y 3 ⊕y 0 y 1 ⊕y 0 y 1 y 2 ⊕y 0 y 2 y 3 x2 = 1⊕y 3 ⊕y 0 y 1 ⊕y 0 y 2 ⊕y 0 y 3 ⊕y 1 y 2 ⊕y 1 y 3 ⊕y 0 y 1 y 2 ⊕y 0 y 1 y 3 ⊕y 0 y 2 y 3 x 1 = y 0 ⊕y 1 ⊕y 3 ⊕y 0 y 2 ⊕y 1 y 3 ⊕y 2 y 3 ⊕y 0 y 1 y 2 ⊕y 0 y 1 y 3 ⊕y 0 y 2 y 3 x 0 = 1⊕y 0 ⊕y 3 ⊕y 1 y 3 . s 3 m_inv = A 3 ⊕B 3 ⊕a 0 b 1 ⊕a 1 b 0 ⊕a 0 a 2 b 1 ⊕a 0 a 1 b 2 ⊕a 1 a 2 b 0 ⊕b 0 b 2 a 1 ⊕b 0 b 1 a 2 ⊕b 1 b 2 a 0 ⊕a 0 a 2 b 3 ⊕a 0 a 3 b 2 ⊕a 2 a 3 b 0 ⊕b 0 b 2 a 3 ⊕b 0 b 3 a 2 ⊕b 2 b 3 a 0 s 2 m_inv = A 2 ⊕B 2 ⊕1⊕a 0 b 1 ⊕a 1 b 0 ⊕a 0 b 2 ⊕a 2 b 0 ⊕ a 0 b 3 ⊕a 3 b 0 ⊕a 1 b 2 ⊕a 2 b 1 ⊕a 1 b 3 ⊕a 3 b 1 ⊕a 0 a 2 b 1 ⊕a 0 a 1 b 2 ⊕a 1 a 2 b 0 ⊕b 0 b 2 a 1 ⊕b 0 b 1 a 2 ⊕b 1 b 2 a 0 ⊕a 0 a 3 b 1 ⊕a 0 a 1 b 3 ⊕a 1 a 3 b 0 ⊕b 0 b 3 a 1 ⊕b 0 b 1 a 3 ⊕b 1 b 3 b 0 ⊕a 0 a 2 b 3 ⊕a 0 a 3 b 2 ⊕a 2 a 3 b 0 ⊕b 0 b 2 a 3 ⊕b 0 b 3 a 2 ⊕b 2 b 3 a 0 s 1 m_inv = A 1 ⊕B 1 ⊕a 0 b 2 ⊕a 2 b 0 ⊕a 1 b 3 ⊕a 3 b 1 ⊕a 2 b 3 ⊕a 3 b 2 ⊕a 0 a 2 b 1 ⊕a 0 a 1 b 2 ⊕a 1 a 2 b 0 ⊕b 0 b 2 a 1 ⊕b 0 b 1 a 2 ⊕b 1 b 2 a 0 ⊕a 0 a 3 b 1 ⊕a 0 a 1 b 3 ⊕a 1 a 3 b 0 ⊕b 0 b 3 a 1 ⊕b 0 b 1 a 3 ⊕b 1 b 3 a 0 ⊕a 0 a 2 b 3 ⊕a 0 a 3 b 2 ⊕a 2 a 3 b 0 ⊕b 0 b 2 a 3 ⊕b 0 b 3 a 2 ⊕b 2 b 3 a 0 s 0 m_inv = A 0 ⊕B 0 ⊕1⊕a 1 b 3 ⊕a 3 b 1 .<label>9</label></formula><p>Proof It is well-known that a secure cipher has strong randomness. PRESENT is a block cipher designed based on <ref type="bibr" target="#b19">Shannon's (1948)</ref> principles of diffusion, confusion, and product iteration. As a result, it possesses strong randomness. In order to facilitate a comparison of the differences between our data format and Zahednejad's data format, we impose a security assumption that each round of encryption for PRESENT exhibits strong randomness. In other words, the probability of the output value being equal to the input value is 0.5. Take PRESENT as an example and apply XOR to 7 rounds of ciphertexts in Zahednejad's data format: Eq. 12 is equal to: Meanwhile, C 7 j obtains information of C 6 j with a probability of 0.5, so each C 7 0 ⊕C 7 j in Eq. 13 obtains information about C 6 0 ⊕C 6 j with a probability of 0.5. The calculation is as follows:</p><p>Whereas the data format ( invS 7 0 , . . . , invS 7 15 ) for the 7 rounds in this paper:</p><formula xml:id="formula_13">invS 7</formula><p>j is defined by C 7 0 and the ciphertexts of the 6 rounds, eliminating P -1 , P and C 7 0 yields the following result:</p><p>Apply XOR to all invS 7 j :</p><p>(12)</p><formula xml:id="formula_14">C 7 0 ⊕C 7 1 ⊕C 7 2 ⊕C 7 3 ⊕ • • • ⊕C 7 15 .<label>(13)</label></formula><formula xml:id="formula_15">(C 7 0 ⊕C 7 1 )⊕(C 7 0 ⊕C 7 2 )⊕ • • • ⊕(C 7 0 ⊕C 7 15 ).</formula><p>p(C 7 0 ⊕C 7 j = C 6 0 ⊕C 6 j ) = p(C 7 0 = C 6 0 , C 7 j = C 6 j ) + p(C 7 0 � = C 6 0 , C 7 j � = C 6 j ) = 0.25 + 0.25 = 0.5.</p><formula xml:id="formula_16">S -1 (P -1 (C 7 0 ⊕C 7 0 )), S -1 (P -1 (C 7 0 ⊕C 7 1 )) , . . . , S -1 (P -1 (C 7 0 ⊕C 7 14 )), S -1 (P -1 (C 7 0 ⊕C 7 15 )). S -1 (P -1 (P(S(C 6 0 ))⊕C 7 0 ⊕P(S(C 6 j ))⊕C 7 0 )) = S -1 (P -1 (P(S(C 6 0 ))⊕P(S(C 6 j )))) = S -1 (S(C 6 0 )⊕S(C 6 j )).<label>(14)</label></formula><formula xml:id="formula_17">S -1 (S(C 6 0 )⊕S(C 6 0 ))⊕S -1 (S(C 6 0 )⊕S(C 6 1 )) ⊕ • • • ⊕ S -1 (S(C 6 0 )⊕S(C 6 14 ))⊕S -1 (S(C 6 0 )⊕S(C 6 15 )).</formula><p>Proposition 2 demonstrates that the probability of S -1 (S(C 6 0 )⊕S(C 6 j )) in Eq. 14 obtaining information about C 6 0 ⊕C 6 j is higher than 1/2 and cannot be neglected. In other words, the probability of S -1 (S(C 6 0 )⊕S(C 6 j )) in Eq. 14 obtaining information about C 6 0 ⊕C 6 j is 0.625 or 0.53125, where there are more data with a probability of 0.625, whereas the probability of Eq. 13 is close to 0.5. Therefore, Eq. 14 yields more information about C 6 0 ⊕C 6 j .</p><p>The above analysis clearly shows that the data format in this paper will have a higher opportunity to learn the XOR information of the previous round than Zahednejad's data format. Thus, the number of attack rounds can be increased at least one round using the data format in this paper. The experiments in "Comparison of different data formats" section further support this point.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Designing the network structure</head><p>Our network is built upon DenseNet and incorporates MBConv to modify the convolutional layers of DenseNet.</p><p>Compared to other modules, MBConv can reduce the convolution parameters with the same input parameters, which allows us to create deeper network models with the same amount of computation. Simultaneously, MBConv connects the input and output of the convolutional block through skip connections, which gives the network the opportunity to access the unmodified state in the convolutional block. Therefore, we modified the convolutional layers of DenseNet using the MBConv. This alteration is expected to decrease training time and attain a level of accuracy that is unattainable by other models.</p><p>The network is composed of four components: an input layer containing the multisets, an initial convolutional layer composed of a single convolution, a Dense layer modified by the MBConv, and finally, Multiple Fully Connected Layers make up the prediction header. Figure <ref type="figure" target="#fig_5">6</ref> shows the different layers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Input layer</head><p>We use the Reshape operation in Ten-sorFlow to transform the initial data from Eq. 6 into a three-dimensional [w, 2LM  sw , s] . [w, 2LM sw ] represents the characteristic information of each two-dimensional convolution channel operation, where s is the number of channels, w is the width of the channel, 2LM sw is the height of the channel, L is the size of the cipher, and M is the size of the multiset, and s = 8 , L = 64 , w = 16 , M = 16 for PRESENT.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Initial convolutional layer</head><p>The data inflow from the input layer is expanded into N f channels using convolu- tion with a kernel size of 1. Then, Batch normalization and rectifier nonlinearities are applied to the output of these convolutions. Finally, the result is passed to the Dense layer.</p><p>Dense layer Each convolutional block contains the MBConv module. In the MBConv module, N f is expanded to 2N f using a 1 × 1 convolutional layer. Sub- sequently, a 3 × 3 depth separable convolutional layer is executed, and a DropOut operation is employed to prevent overfitting. Further to this, a 1 × 1 convolutional layer adjusts the number of channels to the specified size, and the inputs of the MBConv are summed with the outputs. Finally, a 1 × 1 convolutional layer is applied, and the inputs of the Dense layer are connected to the final outputs.</p><p>Prediction header The prediction header comprises a Flatten layer, three Fully Connected Layers (FC), and a single output unit. Flatten operations are applied to spread out the inflow of data. Then the three Fully Connected Layers are utilized to process the data from the Flatten layer. Batch normalization and rectifier nonlinearities are performed on the output of the Fully Connected Layers. The final layer utilizes the Sigmoid activation function to output a single output unit. Figure <ref type="figure" target="#fig_6">7</ref> shows the details of the network structure.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Network training scheme</head><p>In this paper, a 2 21 sample training dataset and a 2 17 sample validation dataset are used. In order to test the accuracy, a test dataset with 2 17 samples is generated. The datasets are processed in batches of 2000. In order to optimise the results, we use a mean square error loss function with L2 weight regularization (regularization parameter reg_param = 10 -5 ) and the Adam algo- rithm. During the training process, this paper employs a decreasing learning rate schedule. The update algorithm for the decreasing learning rate is given by the Algorithm 1.</p><p>The training was conducted using Python 3.9 and Tensorflow 2.12.0 on Ubuntu 20.04 OS. Our device is a server with an Intel(R) Xeon(R) Platinum 8255C CPU at 2.50 GHz, 80GB of RAM,, and two RTXA4500 20GB GPUs. Each model was repeated 10 times with each training session taking 5 h approximately. Ultimately, the model with the highest accuracy was selected as the final distinguisher. Algorithm 1 Learning rate decline algorithm</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experimental results</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experiments on PRESENT</head><p>The encrypted data of PRESENT is processed by the method proposed in "Data format" section, and the number of multisets in M is 2. The processed data is fed into the neural network proposed by "Designing the network structure" section for training, and the data used for neural network training, validation and testing are randomly generated with sample sizes of 2 21 , 2 17 and 2 17 , respectively.</p><p>In Fig. <ref type="figure" target="#fig_7">8</ref>, the line chart shows the change in accuracy and loss rate for rounds 6-8. The horizontal axis represents the training batch, and the vertical axis represents the loss rate and accuracy of the neural network. From  Fig. <ref type="figure" target="#fig_7">8</ref>, it is easy to notice that for 6 rounds the accuracy is 99.13% and the loss rate is 0.84%, for 7-8 rounds the accuracy is 82.03%, 57.32% and the loss rate is 11.51% and 24.35%. Increasing the accuracy of 8 rounds to 57.32% has differentiated the process from random guess, which is unattainable by Zahednejad's distinguisher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Comparison of different data formats</head><p>Zahednejad used ciphertext (Eq. 4) as the input data format. The data format (Eq. 6) of this paper is given in "Data format" section.</p><p>In order to demonstrate the superiority of the data format in this paper, a comparison experiment is designed which fixes all other parameters and only changes the data format. The neural network is trained using the model in "Designing the network structure" section.</p><p>Table <ref type="table" target="#tab_0">1</ref> demonstrates that our data format (the number of multisets in M is 1) achieved an accuracy of 98.16% in 6 rounds. For the 7-round integral neural distinguisher, the accuracy of the data format proposed in this paper surpasses Zahednejad's data format by 14.18%. And to our surprise, it extends the number of identification rounds to 8 rounds when invS n 0 , invS n 1 , . . . , invS n 15 is included in the data format.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 2 Key recovery attack on SmallPresent-(8).</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Comparison of different neural network</head><p>Zahednejad trained the distinguishers of three different neural networks (ResNet, ResNeXt, DenseNet) and obtained similar results in terms of accuracy for the three networks.</p><p>By only changing the neural network model and using Eq. 6 as the data format (the number of multisets in M is 1). In order to ensure the fairness of the experiment, the same input data is used by different networks and the input data is generated randomly. A comparison is made between the neural network in this paper and that of Zahednejad.</p><p>In Table <ref type="table" target="#tab_1">2</ref>, the accuracy of our network for rounds 6, 7, and 8 are reported as 98.16%, 77.31%, and 53.23%, respectively. Among the four networks, our network improved accuracy by 1.90%, 4.40% and 1.31% in rounds 6-8, respectively. This indicates that the modifications in our network contribute to the effective identification of features. Due to the channel expansion in the MBConv module within our network for extracting additional features, the training time is longer compared to ResNet. Nevertheless, it still remains lower than the training times of DenseNet and ResNeXt. Therefore, when prioritizing accuracy, our neural network proves to be effective.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Key recovery attack on SmallPresent-(8)</head><p>Due to the limitations of the device, in 2011, <ref type="bibr" target="#b1">Blondeau and Gérard (2011)</ref>  perform key recovery on PRESENT. Consequently, we refer to their work for conducting key recovery attacks on SmallPresent-(8). We believe that the key recovery attacks on the 32-bit SmallPresent-(8) can be extended to higher bits. The active bits selection of SmallPresent-( <ref type="formula" target="#formula_11">8</ref>) is the same as that of the 5-round PRESENT integral distinguisher which is used to simplify the attack. The integral neural distinguishers for SmallPresent-(8) are trained for 5-7 rounds with accuracies of 99.32%, 72.13%, and 55.62%, respectively.</p><p>During the key recovery attacks, the ciphertexts are decrypted by all possible candidate subkeys. Then, the decrypted results are fed into integral neural distinguishers. The outputs of the integral neural distinguishers are used as the scores of the candidate subkeys. The topranked candidate subkey is regarded as the correct subkey suggested by the distinguisher. The specific operation procedure is shown in Algorithm 2.</p><p>(1) Generate r plaintexts randomly. Each plaintext is expanded to a mutilset based on active bits. Encrypt these mutilset to obtain the corresponding ciphertext multisets. (2) Decrypt the ciphertext multisets with candidate subkeys.</p><p>(3) The score x k i for each candidate subkey is obtained using the integral neural distinguisher. (4) For each subkey k, the scores x k i are merged into the score x k , x k is the score of k and sorts k in descend- ing order.</p><p>In this paper, we perform key recovery attacks on the integral neural distinguishers of SmallPresent-(8). Each integral neural distinguisher repeats the key recovery attack 50 times with different keys and each attack uses 8 random plaintexts. Among these attacks, the first suggested subkey of the 5-round integral distinguisher is the correct subkey 45 times. Consequently, the 5-round integral distinguisher achieved a key recovery success rate of 90%. Key recovery success rates for 6-round and 7-round are 62% and 8%. The rank of the candidate subkeys is shown in Table <ref type="table" target="#tab_2">3</ref>. According to Table <ref type="table" target="#tab_2">3</ref>, it is not difficult to see that as the accuracy of the distinguisher decreases, it becomes more and more difficult to recover the subkey. Even the 7-round distinguisher only had 4 successful attacks.</p><formula xml:id="formula_18">x k = n-1 0 log 2 (x k i /(1 -x k i ))</formula><p>.   Table 5 Percentage of correct guesses for subkey bits</p><p>Subkey bits 1 (%) 2 (%) 3 (%) 4 (%) 5 (%) 6 (%) 7 (%) 8 (%) 9 (%) 10 (%) 11 (%) 12 (%) Percentage of correct guesses 5r 100 100 100 100 100 100 100 100 100 100 100 100 6r 100 100 100 100 100 100 100 100 100 100 100 100 7r 100 100 100 100 100 100 100 100 100 100 98 98 Subkey bits 13 (%) 14 (%) 15 (%) 16 (%) 17 (%) 18 (%) 19 (%) 20 (%) 21 (%) 22 (%) 23 (%) 24 (%) Percentage of correct guesses 5r 100 100 100 100 98 100 96 100 100 100 96 96 6r 100 100 100 98 94 98 92 96 94 96 92 96 7r 96 92 90 81 66 56 68 60 56 60 64 64 Subkey bits 25 (%) 26 (%) 27 (%) 28 (%) 29 (%) 30 (%) 31 (%) 32 (%) Percentage of correct guesses 5r 94 94 96 100 100 100 100 100 6r 90 98 88 96 94 98 86 98 7r 58 66 50 60 56 58 68 52</p><p>Additionally, our aim is to ensure correctness for each bit during key recovery attacks. In this paper, a successful guess is defined as the scenario where the subkey guessed by the neural dstinguisher differs from the correct subkey within two bits. Then the incorrect bits can be eliminated by using the exhaustive method. The results of the experiments can be found in Tables <ref type="table" target="#tab_3">4</ref> and <ref type="table">5</ref>.</p><p>The success rate of the 5-round neural distinguisher for SmallPresent-(8) in Table <ref type="table" target="#tab_3">4</ref> is 98%, with 45 attacks having completely accurate subkey guesses. Among the experiments with incorrect guesses, 3 attacks have only 1 bit errors, and 1 attack have 2 bits guessed incorrectly. Only 1 attack fail to meet the criteria established, and none of them have more than 3 bits of incorrect guesses. Simultaneously, the success rate of the 6-round neural distinguisher for SmallPresent-( <ref type="formula" target="#formula_11">8</ref>) is 90%, which has 5 attacks with more than 2 bits of error bits. However, the key recovery accuracy of the 7-round distinguisher drops to 18% and there are 36 attacks with more than 4 incorrect bits.</p><p>Table <ref type="table">5</ref> statistics the success rate of recovery for each bit. Although the 5-round neural distinguisher incorrectly identifies the key bits, all of these key bits have a success rate of over 90%. For the 6-round distinguisher, only bits 27 and 31 have success rates of less than 90%. But it is still very successful to get such a high bit recovery success rate using the classical 5-round integral distinguisher. Surprisingly, although the neural distinguishers are different, the success rate of the top 10 bits are all 100%.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Conclusions</head><p>This paper improves the integral neural distinguisher of PRESENT and performs key recovery attacks on SmallPresent-(8). Firstly, this paper obtains more derived features by adopting the data format ( invP n 0 , invP n 1 , . . . , invP n 15 , invS n 0 , invS n 1 , . . . , invS n 15 ). Additionally, we implement the ideas from the MBConv module to enhance the convolutional layers of DenseNet. As a result, this paper improves the accuracy of the 6-round and 7-round PRESENT integral neural distinguisher to 99.13% and 82.03%, respectively. And this improvement result in an accuracy of 57.32% for PRESENT's 8-round integral neural distinguisher, which is unattainable by Zahednejad's distinguisher. In order to confirm the effectiveness of the modifications to the neural network, we perform experiments with 4 different neural networks, and the results show that there are some advantages of our network structure in pursuit of accuracy. Finally, we perform key recovery attacks on SmallPresent-(8). The results demonstrate that the key recovery success rates for 5-round and 6-round are 98% and 90%, considering error bits within a range of two bits.</p><p>In this paper, the modifications to the data format led to an improvement in accuracy. It shows that the derived features exposed by the data format have a significant effect on the neural network. Simultaneously, we observe subtle differences in the results among different neural networks. Therefore, in the future, we will explore the enhancement possibilities by combining Zahednejad's data format with the data format of this paper and try to find a better data format. Simultaneously, we will attempt to identify the reasons for variations in neural network results, aiming to design an integral neural distinguisher with higher accuracy. We will also attempt to extend the methods to other block ciphers.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 1</head><label>1</label><figDesc>Fig. 1 PRESENT encryption flowchart</figDesc><graphic coords="3,102.76,88.58,141.72,187.56" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Fig. 2</head><label>2</label><figDesc>Fig. 2 PRESENT's 5-round classic integral distinguisher</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 4</head><label>4</label><figDesc>Fig. 4 MBConv module</figDesc><graphic coords="4,350.79,88.58,141.72,166.56" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 5</head><label>5</label><figDesc>Fig. 5 Data generation process</figDesc><graphic coords="5,106.30,397.35,382.68,240.12" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>Definition 1</head><label>1</label><figDesc>Denote S m_inv as the S -1 of S(A)⊕S(B) ,where S(A), S(B) denote two S-Boxes. S m_inv has a form as: Proposition 2 The XOR of the two S-Boxes inputs is acquired by S m_inv with a non-negligible probability greater than 1/2. Proof Denote x, y as the input value and output value of the i th bit in the S-Box, respectively. The algebraic normal form (ANF) of PRESENT inverse S-Box: Assuming that there are two four-bit S-Boxes, A = [A 0 , A 1 , A 2 , A 3 ], B = [B 0 , B 1 , B 2 , B 3 ] as inputs to the two S-Boxes, a = [a 0 , a 1 , a 2 , a 3 ] and b = [b 0 , b 1 , b 2 , b 3 ] as the corresponding output to the two S-Boxes. Equation 9 is used to calculate S m_inv = S -1 (S(A)⊕S(B)) . Where S i m_inv represents the value of the i th bit of S m_inv .</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head>Fig. 6</head><label>6</label><figDesc>Fig. 6 Neural network architecture</figDesc><graphic coords="8,116.92,628.54,113.40,78.96" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6"><head>Fig. 7</head><label>7</label><figDesc>Fig. 7 Neural network structure</figDesc><graphic coords="9,106.30,88.58,382.68,221.76" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7"><head>Fig. 8</head><label>8</label><figDesc>Fig.8PRESENT's loss and accuracy</figDesc><graphic coords="9,62.38,560.13,470.52,141.12" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1</head><label>1</label><figDesc>Comparison of different data formats</figDesc><table><row><cell>employed SmallPresent-(size) instead</cell></row><row><cell>of PRESENT to analyze the complexity of data and time</cell></row><row><cell>in multiple differential cryptanalysis. In 2022, Kimura</cell></row><row><cell>(2022) also employed SmallPresent-(size) in a black-box</cell></row><row><cell>environment to conduct a deep learning-based output</cell></row><row><cell>prediction attack. Similarly, the devices are limited to</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 2</head><label>2</label><figDesc>Comparison of different neural network</figDesc><table><row><cell>Neural network</cell><cell>Results of 6-round</cell><cell></cell><cell>Results of 7-round</cell><cell></cell><cell>Results of 8-round</cell><cell></cell></row><row><cell></cell><cell>Accuracy (%)</cell><cell>Time (s)</cell><cell>Accuracy (%)</cell><cell>Time (s)</cell><cell>Accuracy (%)</cell><cell>Time (s)</cell></row><row><cell>ResNet</cell><cell>96.26</cell><cell>2787.49</cell><cell>72.91</cell><cell>2792.69</cell><cell>52.36</cell><cell>2802.45</cell></row><row><cell>ResNeXt</cell><cell>96.32</cell><cell>9668.35</cell><cell>73.25</cell><cell>9555.72</cell><cell>52.13</cell><cell>9655.31</cell></row><row><cell>DenseNet</cell><cell>96.31</cell><cell>8080.89</cell><cell>73.04</cell><cell>8072.19</cell><cell>51.92</cell><cell>8077.53</cell></row><row><cell>Our network</cell><cell>98.16</cell><cell>6645.56</cell><cell>77.31</cell><cell>6698.56</cell><cell>53.23</cell><cell>6735.56</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 3</head><label>3</label><figDesc>The rank of the candidate subkeys</figDesc><table><row><cell cols="2">Ranking of the Correct Subkeys</cell><cell>1</cell><cell>2</cell><cell>3-5</cell><cell>5-10</cell><cell>10-20</cell><cell>Others</cell></row><row><cell>Number of attacks</cell><cell>5r</cell><cell>45</cell><cell>2</cell><cell>2</cell><cell>1</cell><cell>0</cell><cell>0</cell></row><row><cell></cell><cell>6r</cell><cell>31</cell><cell>8</cell><cell>7</cell><cell>3</cell><cell>0</cell><cell>1</cell></row><row><cell></cell><cell>7r</cell><cell>4</cell><cell>1</cell><cell>4</cell><cell>4</cell><cell>5</cell><cell>32</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 4</head><label>4</label><figDesc>Total number of incorrect guesses for subkey bits</figDesc><table><row><cell cols="2">Total number of incorrect guesses</cell><cell>0</cell><cell>1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>Others</cell></row><row><cell>Number of attacks</cell><cell>5r</cell><cell>45</cell><cell>3</cell><cell>1</cell><cell>1</cell><cell>0</cell><cell>0</cell></row><row><cell></cell><cell>6r</cell><cell>31</cell><cell>9</cell><cell>5</cell><cell>0</cell><cell>3</cell><cell>2</cell></row><row><cell></cell><cell>7r</cell><cell>4</cell><cell>1</cell><cell>4</cell><cell>3</cell><cell>2</cell><cell>36</cell></row></table></figure>
+		</body>
+		<back>
+
+			
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Acknowledgements</head><p>Not applicable.</p></div>
+			</div>
+
+
+			
+			<div type="funding">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Funding</head><p>Not applicable.</p></div>
+			</div>
+
+
+			<div type="availability">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Availability of data and materials</head><p>With the exception of the data given in this paper, the code and other data can be accessed at the followinglink: <ref type="url" target="https://github.com/Gmy1232/Integral-Neural-Distinguisher-for-PRESENT">https:// github. com/ Gmy12 32/ Integ ral- Neural-Disti nguis her-for-PRESE NT</ref>.</p></div>
+			</div>
+
+
+			<div type="conflict">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Competing interests</head><p>The authors declare that they have no competing interests.</p></div>
+			</div>
+
+
+			<div type="contribution">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Author contributions</head><p>Wanqing Wu: Conceptualization, methodology, validation, writing review and editing. Mingyu Guo: Investigation, formal analysis, writing review and editing. All authors read and approved the final manuscript.</p></div>
+			</div>
+
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>s 0 m_inv is derived as follows:</p><p>Base on Eq. 9, 1⊕a 0 ⊕a 3 ⊕a 1 a 3 and 1⊕b 0 ⊕b 3 ⊕b 1 b 3 are replaced by A 0 and B 0 . We use the same derivation to obtain s i m_inv :</p><p>We enumerate the 4 bits of a 1 b 3 a 3 b 1 , where 0000, 0001, 0010, 0100, 0101, 0110, 1000, 1001, 1010, 1111 make a 1 b 3 ⊕a 3 b 1 = 0 , and 0011, 0111, 1011, 1100, 1101, 1110 make a 1 b 3 ⊕a 3 b 1 = 1 . Then there is a probability of 0.625 that a 1 b 3 ⊕a 3 b 1 = 0 , so s 0 m_inv has a probability of 0.625 to be the opposite value of A 0 ⊕B 0 . Using the same method, the final values of A 3 ⊕B 3 , A 2 ⊕B 2 , A 1 ⊕B 1 and A 0 ⊕B 0 are obtained from s 3 m_inv ,s 2 m_inv ,s 1 m_inv and s 0 m_inv with probabilities of 0.625, 0.53125, 0.625 and 0.625, respectively. These probabilities are greater than 1/2 and cannot be neglected.</p><p>Proposition 3 Compared with Zahednejad's data format, more XOR information for the previous round is captured by the data format in this paper.</p><p>(10)</p><formula xml:id="formula_19">s 0 m_inv = 1⊕(a 0 ⊕b 0 )⊕(a 3 ⊕b 3 )⊕(a 1 ⊕b 1 )(a 3 ⊕b 3 ) = 1⊕a 0 ⊕b 0 ⊕a 3 ⊕b 3 ⊕a 1 a 3 ⊕a 1 b 3 ⊕b 1 a 3 ⊕b 1 b 3 = 1⊕a 0 ⊕a 3 ⊕a 1 a 3 ⊕1⊕b 0 ⊕b 3 ⊕b 1 b 3 ⊕1⊕a 1 b 3 ⊕b 1 a 3 = A 0 ⊕B 0 ⊕1⊕a 1 b 3 ⊕a 3 b 1 . (<label>11</label></formula><formula xml:id="formula_20">)                                                           </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Declarations</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Publisher's Note</head><p>Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.</p></div>			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Structural Cryptanalysis of SASAS</title>
+		<author>
+			<persName><forename type="first">Alex</forename><surname>Biryukov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-44987-6_24</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2001">2001</date>
+			<biblScope unit="page" from="395" to="405" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biryukov A, Shamir A (2001) Structural cryptanalysis of SASAS. Springer, pp 395-405</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Multiple Differential Cryptanalysis: Theory and Practice</title>
+		<author>
+			<persName><forename type="first">Céline</forename><surname>Blondeau</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Benoît</forename><surname>Gérard</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-21702-9_3</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2011">2011</date>
+			<biblScope unit="page" from="35" to="54" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Blondeau C, Gérard B (2011) Multiple differential cryptanalysis: theory and practice. Springer, pp 35-54</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">PRESENT: An Ultra-Lightweight Block Cipher</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Bogdanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Paar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Poschmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">J B</forename><surname>Robshaw</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Seurin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Vikkelsoe</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-74735-2_31</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007">2007</date>
+			<biblScope unit="page" from="450" to="466" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bogdanov A et al (2007) Present: an ultra-lightweight block cipher. Springer, pp 450-466</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">A New Neural Distinguisher Considering Features Derived From Multiple Ciphertext Pairs</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sitong</forename><surname>Yuan</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac019</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1419" to="1433" />
+			<date type="published" when="2021">2021. 2021</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen Y, Yu H (2021) A new neural distinguisher model considering derived features from multiple ciphertext pairs. IACR Cryptol ePrint Arch 2021:310</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Linear Cryptanalysis of Reduced-Round PRESENT</title>
+		<author>
+			<persName><forename type="first">Joo</forename><forename type="middle">Y</forename><surname>Cho</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-11925-5_21</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2010">2010</date>
+			<biblScope unit="page" from="302" to="317" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Cho JY (2010) Linear cryptanalysis of reduced-round present. Springer, pp 302-317</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Xception: Deep Learning with Depthwise Separable Convolutions</title>
+		<author>
+			<persName><forename type="first">Francois</forename><surname>Chollet</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2017.195</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2017-07">2017</date>
+			<biblScope unit="page" from="1800" to="1807" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chollet F (2017) Xception: deep learning with depthwise separable convolu- tions, pp 1251-1258</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">A Statistical Saturation Attack against the Block Cipher PRESENT</title>
+		<author>
+			<persName><forename type="first">B</forename><surname>Collard</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">F-X</forename><surname>Standaert</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-00862-7_13</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2009">2009</date>
+			<biblScope unit="page" from="195" to="210" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Collard B, Standaert F-X (2009) A statistical saturation attack against the block cipher present. Springer, pp 195-210</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">The block cipher Square</title>
+		<author>
+			<persName><forename type="first">Joan</forename><surname>Daemen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lars</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vincent</forename><surname>Rijmen</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bfb0052343</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1997">1997</date>
+			<biblScope unit="page" from="149" to="165" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Daemen J, Knudsen L, Rijmen V (1997) The block cipher square. Springer, pp 149-165</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr A (2019) Improving attacks on round-reduced speck32/64 using deep learning. Springer, pp 150-179</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Deep Residual Learning for Image Recognition</title>
+		<author>
+			<persName><forename type="first">Kaiming</forename><surname>He</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiangyu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaoqing</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2016.90</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2016-06">2016</date>
+			<biblScope unit="page" from="770" to="778" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">He K, Zhang X, Ren S, Sun J (2016) Deep residual learning for image recogni- tion, pp 770-778</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Linear Attack on Round-Reduced DES Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Botao</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yongqiang</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Haoyue</forename><surname>Zhao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bin</forename><surname>Wu</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-59013-0_7</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">2020</date>
+			<biblScope unit="page" from="131" to="145" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou B, Li Y, Zhao H, Wu B (2020) Linear attack on round-reduced des using deep learning. Springer, pp 131-145</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Searching for MobileNetV3</title>
+		<author>
+			<persName><forename type="first">Andrew</forename><surname>Howard</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mark</forename><surname>Sandler</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bo</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Weijun</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Liang-Chieh</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mingxing</forename><surname>Tan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Grace</forename><surname>Chu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vijay</forename><surname>Vasudevan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yukun</forename><surname>Zhu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ruoming</forename><surname>Pang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hartwig</forename><surname>Adam</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quoc</forename><surname>Le</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/iccv.2019.00140</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2019 IEEE/CVF International Conference on Computer Vision (ICCV)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2019-10">2019</date>
+			<biblScope unit="page" from="1314" to="1324" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Howard A et al (2019) Searching for mobilenetv3, pp 1314-1324</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Densely Connected Convolutional Networks</title>
+		<author>
+			<persName><forename type="first">Gao</forename><surname>Huang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhuang</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Laurens</forename><surname>Van Der Maaten</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kilian</forename><forename type="middle">Q</forename><surname>Weinberger</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2017.243</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2017-07">2017</date>
+			<biblScope unit="page" from="2261" to="2269" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Huang G, Liu Z, Van Der Maaten L, Weinberger K Q (2017) Densely connected convolutional networks, pp 4700-4708</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Deep learning based differential distinguisher for lightweight cipher present</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Jain</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Kohli</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Mishra</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2020">2020</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jain A, Kohli V, Mishra G (2020) Deep learning based differential distinguisher for lightweight cipher present. Cryptology ePrint Archive</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Output Prediction Attacks on Block Ciphers Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Hayato</forename><surname>Kimura</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Keita</forename><surname>Emura</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Takanori</forename><surname>Isobe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ryoma</forename><surname>Ito</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kazuto</forename><surname>Ogawa</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Toshihiro</forename><surname>Ohigashi</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-16815-4_15</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="248" to="276" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Kimura H et al (2022) Output prediction attacks on block ciphers using deep learning. Springer, pp 248-276</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Integral Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Lars</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Wagner</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-45661-9_9</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2002">2002</date>
+			<biblScope unit="page" from="112" to="127" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Knudsen L, Wagner D (2002) Integral cryptanalysis. Springer, pp 112-127</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Weak Tweak-Keys for the CRAFT Block Cipher</title>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shahram</forename><surname>Rasoolzadeh</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tosc.v2022.i1.38-63</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Symmetric Cryptology</title>
+		<title level="j" type="abbrev">ToSC</title>
+		<idno type="ISSNe">2519-173X</idno>
+		<imprint>
+			<biblScope unit="page" from="38" to="63" />
+			<date type="published" when="2010">2010</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Leander G (2010) Small scale variants of the block cipher present. Cryptology ePrint Archive</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">The Saturation Attack — A Bait for Twofish</title>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Lucks</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-45473-x_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2001">2001</date>
+			<biblScope unit="page" from="1" to="15" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lucks S (2001) The saturation attack-a bait for twofish. Springer, pp 1-15</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Linear (Hull) and Algebraic Cryptanalysis of the Block Cipher PRESENT</title>
+		<author>
+			<persName><forename type="first">Jorge</forename><surname>Nakahara</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pouyan</forename><surname>Sepehrdad</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bingsheng</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-10433-6_5</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2009">2009</date>
+			<biblScope unit="page" from="58" to="75" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Nakahara J, Sepehrdad P, Zhang B, Wang M (2009) Linear (hull) and algebraic cryptanalysis of the block cipher present. Springer, pp 58-75</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">A Mathematical Theory of Communication</title>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">E</forename><surname>Shannon</surname></persName>
+		</author>
+		<idno type="DOI">10.1002/j.1538-7305.1948.tb01338.x</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Bell System Technical Journal</title>
+		<idno type="ISSN">0005-8580</idno>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="379" to="423" />
+			<date type="published" when="1948-07">1948</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Shannon CE (1948) A mathematical theory of communication. Bell Syst Tech J 27:379-423</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b20">
+	<monogr>
+		<title level="m" type="main">Efficientnet: rethinking model scaling for convolutional neural networks</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Tan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Q</forename><surname>Le</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="6105" to="6114" />
+		</imprint>
+		<respStmt>
+			<orgName>PMLR</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Tan M, Le Q (2019) Efficientnet: rethinking model scaling for convolutional neural networks, pp 6105-6114 (PMLR)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">MnasNet: Platform-Aware Neural Architecture Search for Mobile</title>
+		<author>
+			<persName><forename type="first">Mingxing</forename><surname>Tan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bo</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ruoming</forename><surname>Pang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vijay</forename><surname>Vasudevan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mark</forename><surname>Sandler</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andrew</forename><surname>Howard</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quoc</forename><forename type="middle">V</forename><surname>Le</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2019.00293</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2019-06">2019</date>
+			<biblScope unit="page" from="2815" to="2823" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Tan M et al (2019) Mnasnet: platform-aware neural architecture search for mobile, pp 2820-2828</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Structural Evaluation by Generalized Integral Property</title>
+		<author>
+			<persName><forename type="first">Yosuke</forename><surname>Todo</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-46800-5_12</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2015">2015</date>
+			<biblScope unit="page" from="287" to="314" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Todo Y (2015) Structural evaluation by generalized integral property. Springer, pp 287-314</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Compact Representation for Division Property</title>
+		<author>
+			<persName><forename type="first">Yosuke</forename><surname>Todo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Masakatu</forename><surname>Morii</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-48965-0_2</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="19" to="35" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Todo Y, Morii M (2016) Compact representation for division property. Springer, pp 19-35</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Reduced-Round PRESENT</title>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-68164-9_4</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2008">2008</date>
+			<biblScope unit="page" from="40" to="49" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang M (2008) Differential cryptanalysis of reduced-round present. Springer, pp 40-49</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Improved Integral Attacks on PRESENT-80</title>
+		<author>
+			<persName><forename type="first">Shi</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zejun</forename><surname>Xiang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiangyong</forename><surname>Zeng</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shasha</forename><surname>Zhang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-14234-6_9</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2018">2018</date>
+			<biblScope unit="page" from="163" to="182" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang S, Xiang Z, Zeng X, Zhang S (2018) Improved integral attacks on pre- sent-80. Springer, pp 163-182</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Integral Attacks on Reduced-Round PRESENT</title>
+		<author>
+			<persName><forename type="first">Shengbao</forename><surname>Wu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mingsheng</forename><surname>Wang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-02726-5_24</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2013">2013</date>
+			<biblScope unit="page" from="331" to="345" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wu S, Wang M (2013) Integral attacks on reduced-round present. Springer, pp 331-345</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Applying MILP Method to Searching Integral Distinguishers Based on Division Property for 6 Lightweight Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Zejun</forename><surname>Xiang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wentao</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dongdai</forename><surname>Lin</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-53887-6_24</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="648" to="678" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Xiang Z, Zhang W, Bao Z, Lin D (2016) Applying MILP method to searching integral distinguishers based on division property for 6 lightweight block ciphers. Springer, pp 648-678</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Aggregated Residual Transformations for Deep Neural Networks</title>
+		<author>
+			<persName><forename type="first">Saining</forename><surname>Xie</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ross</forename><surname>Girshick</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Piotr</forename><surname>Dollar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhuowen</forename><surname>Tu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kaiming</forename><surname>He</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2017.634</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2017-07">2017</date>
+			<biblScope unit="page" from="5987" to="5995" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Xie S, Girshick R, Dollár P, Tu Z, He K (2017) Aggregated residual transforma- tions for deep neural networks, pp 1492-1500</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Side Channel Cube Attack on PRESENT</title>
+		<author>
+			<persName><forename type="first">Lin</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siyuan</forename><surname>Qiao</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-10433-6_25</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2009">2009</date>
+			<biblScope unit="page" from="379" to="391" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yang L, Wang M, Qiao S (2009) Side channel cube attack on present. Springer, pp 379-391</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b30">
+	<monogr>
+		<title level="m" type="main">Bit-pattern based integral attack</title>
+		<author>
+			<persName><surname>Mr</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><surname>Raddum</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Henricksen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dawson</forename><forename type="middle">E</forename></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2008">2008</date>
+			<publisher>Springer</publisher>
+			<biblScope unit="page" from="363" to="381" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Z&apos;aba MR, Raddum H, Henricksen M, Dawson E (2008) Bit-pattern based inte- gral attack. Springer, pp 363-381</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">An improved integral distinguisher scheme based on neural networks</title>
+		<author>
+			<persName><forename type="first">Behnam</forename><surname>Zahednejad</surname></persName>
+			<idno type="ORCID">0000-0001-6802-1084</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Lijun</forename><surname>Lyu</surname></persName>
+		</author>
+		<idno type="DOI">10.1002/int.22895</idno>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Intelligent Systems</title>
+		<title level="j" type="abbrev">Int J of Intelligent Sys</title>
+		<idno type="ISSN">0884-8173</idno>
+		<idno type="ISSNe">1098-111X</idno>
+		<imprint>
+			<biblScope unit="volume">37</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="7584" to="7613" />
+			<date type="published" when="2022-05-09">2022</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zahednejad B, Lyu L (2022) An improved integral distinguisher scheme based on neural networks. Int J Intell Syst 37:7584-7613</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

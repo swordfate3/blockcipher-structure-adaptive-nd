@@ -1,0 +1,1706 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">NNBits: Bit Profiling with a Deep Learning Ensemble Based Distinguisher</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>Springer International Publishing</publisher>
+				<availability  status="unknown">
+					<licence/>
+				</availability>
+				<date type="published" when="2023">2023</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="consolidated" source="crossref">
+					<analytic>
+						<author>
+							<persName><forename type="first">Anna</forename><surname>Hambitzer</surname></persName>
+							<idno type="ORCID">0000-0002-5357-832X</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>]</label> Technology Innovation Institute , Cryptography Research Center , 9639 Abu Dhabi , UAE.</note>
+								<orgName type="department">Technology Innovation Institute</orgName>
+								<orgName type="institution">Cryptography Research Center</orgName>
+								<address>
+									<postCode>9639</postCode>
+									<settlement>Abu Dhabi</settlement>
+									<country key="AE">UAE</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+							<idno type="ORCID">0000-0001-8583-0668</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>]</label> Technology Innovation Institute , Cryptography Research Center , 9639 Abu Dhabi , UAE.</note>
+								<orgName type="department">Technology Innovation Institute</orgName>
+								<orgName type="institution">Cryptography Research Center</orgName>
+								<address>
+									<postCode>9639</postCode>
+									<settlement>Abu Dhabi</settlement>
+									<country key="AE">UAE</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Yun</forename><forename type="middle">Ju</forename><surname>Huang</surname></persName>
+							<idno type="ORCID">0000-0002-0820-1005</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>]</label> Technology Innovation Institute , Cryptography Research Center , 9639 Abu Dhabi , UAE.</note>
+								<orgName type="department">Technology Innovation Institute</orgName>
+								<orgName type="institution">Cryptography Research Center</orgName>
+								<address>
+									<postCode>9639</postCode>
+									<settlement>Abu Dhabi</settlement>
+									<country key="AE">UAE</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Najwa</forename><surname>Aaraj</surname></persName>
+							<idno type="ORCID">0000-0001-8782-5192</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>]</label> Technology Innovation Institute , Cryptography Research Center , 9639 Abu Dhabi , UAE.</note>
+								<orgName type="department">Technology Innovation Institute</orgName>
+								<orgName type="institution">Cryptography Research Center</orgName>
+								<address>
+									<postCode>9639</postCode>
+									<settlement>Abu Dhabi</settlement>
+									<country key="AE">UAE</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+							<idno type="ORCID">0000-0002-2349-0247</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>]</label> Technology Innovation Institute , Cryptography Research Center , 9639 Abu Dhabi , UAE.</note>
+								<orgName type="department">Technology Innovation Institute</orgName>
+								<orgName type="institution">Cryptography Research Center</orgName>
+								<address>
+									<postCode>9639</postCode>
+									<settlement>Abu Dhabi</settlement>
+									<country key="AE">UAE</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">NNBits: Bit Profiling with a Deep Learning Ensemble Based Distinguisher</title>
+					</analytic>
+					<monogr>
+						<title level="m">Lecture Notes in Computer Science</title>
+						<idno type="ISSN">0302-9743</idno>
+						<idno type="eISSN">1611-3349</idno>
+						<imprint>
+							<publisher>Springer International Publishing</publisher>
+							<biblScope unit="page" from="493" to="523"/>
+							<date type="published" when="2023" />
+						</imprint>
+					</monogr>
+					<idno type="MD5">40122A03B526AC78DEFC78044CAD1735</idno>
+					<idno type="DOI">10.1007/978-3-031-30872-7_19</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T16:20+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Cryptanalysis</term>
+					<term>Evaluation tools</term>
+					<term>Block cipher</term>
+					<term>Distinguisher</term>
+					<term>Avalanche dataset</term>
+					<term>Bit-profiling</term>
+					<term>Neural networks</term>
+					<term>Random number generator</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>We introduce a deep learning ensemble (NNBits) as a tool for bit-profiling and evaluation of cryptographic (pseudo) random bit sequences. On the one hand, we show how to use NNBits ensemble to explain parts of the seminal work of Gohr [16]: Gohr's depth-1 neural distinguisher reaches a test accuracy of 78.3% in round 6 for SPECK32/64 <ref type="bibr" target="#b2">[3]</ref>.</p><p>Using the bit-level information provided by NNBits we can partially explain the accuracy obtained by Gohr (78.1% vs. 78.3%). This is achieved by constructing a distinguisher which only uses the information about correct or incorrect predictions on the single bit level and which achieves 78.1% accuracy. We also generalize two heuristic aspects in the construction of Gohr's network: i) the particular input structure, which reflects expert knowledge of SPECK32/64, as well as ii) the cyclic learning rate. On the other hand, we extend Gohr's work as a statistical test on avalanche datasets of SPECK32/64, SPECK64/128, SPECK96/144, SPECK128/128, and AES-128. In combination with NNBits ensemble we use the extended version of Gohr's neural network to draw a comparison with the NIST Statistical Test Suite (NIST STS) on the previously mentioned avalanche datasets. We compare NNBits in conjunction with Gohr's generalized network to the NIST STS and conclude that the NNBits ensemble performs either as good as the NIST STS or better. Furthermore, we demonstrate cryptanalytic insights that result from bit-level profiling with NNBits, for example, we show how to infer the strong input difference (0x0040, 0x0000) for SPECK32/64 or infer a signature of the multiplication in the Galois field of AES-128.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>The security of cryptographic primitives is often expressed in terms of randomness: Does the primitive behave like a random function or permutation? While it is difficult to give a satisfactory answer to this question, there are two main approaches to estimate the answer. The first approach is cryptanalysis: cryptographers scrutinise the primitive, and attempt to break it, through classical attacks, or sometimes, new ones. On the other side, it is also possible to use automated randomness testing tools to obtain an assessment <ref type="bibr" target="#b9">[10,</ref><ref type="bibr" target="#b24">25,</ref><ref type="bibr" target="#b30">31]</ref>. Such automated methods are significantly less accurate than cryptanalysis, but they are significantly faster as well (a few hours, vs. continual scrutiny by academics for years or even decades). In this work, we investigate how a machine learning based approach can improve automatic randomness testing, while providing human cryptanalysts with an intuition on where to look to find more advanced attacks.</p><p>The choice of machine learning is motivated by its ability to detect complex patterns in many areas, such as image classification, e.g. <ref type="bibr" target="#b22">[23]</ref>, autonomous vehicle navigation, mastering games, and, recently, time series forecasting <ref type="bibr" target="#b26">[27]</ref>. In the game of Go, neural networks in combination with Monte Carlo tree search have achieved superhuman performance without any input of expert knowledge <ref type="bibr" target="#b31">[32]</ref>. Deep neural networks are universal in the sense that they can in principle <ref type="foot" target="#foot_0">1</ref>represent any function <ref type="bibr" target="#b20">[21]</ref>.</p><p>The idea of applying machine learning techniques to cryptographic tasks has been gaining traction recently. In particular, in his CRYPTO'19 article, Gohr showed for the first time that machine learning algorithms could outperform current state-of-the-art cryptanalysis <ref type="foot" target="#foot_1">2</ref> , by exhibiting improved attacks on the block cipher SPECK32/64 using a neural network <ref type="bibr" target="#b15">[16]</ref>. Benamira et al. <ref type="bibr" target="#b6">[7]</ref> further demonstrated that the properties learnt by Gohr's classifiers are not trivial, and it is not fully understood why they perform so well. Understanding what a machine learning algorithm bases its prediction on is a notoriously difficult problem that the explainable AI research community focuses on, for example in DARPA's explainable AI program <ref type="bibr" target="#b17">[18]</ref>. However, we believe that more explainable techniques are required for machine learning to become part of the standard toolkit of cryptographers.</p><p>We tackle the problem of explainability by creating bit profiles which may give relevant information to a cryptanalyst. The bit profiles are created through ensemble learning, a widely used technique in machine learning <ref type="bibr" target="#b16">[17,</ref><ref type="bibr" target="#b1">2]</ref>. An ensemble consists of a diverse set of predictors, such as neural networks. Neural network ensembles have recently demonstrated impressive results <ref type="bibr" target="#b28">[29]</ref> in the prestigious time series forecasting competition "Makrikadis", which was dominated by statistical methods until 2020 <ref type="bibr" target="#b26">[27]</ref>.</p><p>In this paper, we propose NNBits ensemble, a machine learning-based blackbox distinguisher that identifies whether a collection of X bit sequences of length n comes from a random distribution or a function f . In NNBits ensemble, an ensemble of N neural networks is trained to predict a certain subset of the n bits, given the remaining bits as input. If a particular bit can be predicted with a prediction accuracy significantly higher than that of a random guess, the bit is identified as a weak bit and the sequences at hand are identified as not random, i.e., coming from the function f . In particular, we focus on the block ciphers SPECK and AES, and our bit sequences are avalanche sequences, built using the difference between ciphertexts corresponding to the encryption of pairs of plaintexts having a single-bit difference. The bit-level granularity in the prediction provides information on which bits are easier to predict, as well as a convenient way for the cryptanalyst to observe dependencies between difference bits. The whole process is rather fast, due to a highly optimised implementation, as well as heavy parallelization of the neural network training across multiple GPUs. This implementation is available under <ref type="bibr" target="#b38">[39]</ref>, and an overview is given in Figure <ref type="figure" target="#fig_0">1</ref>.</p><p>Contributions. Our contributions are the following:</p><p>1. We present NNBits ensemble, a deep learning ensemble analysis tool for bit-profiling of cryptographic (pseudo) random bit sequences that includes dependencies between different bits (Fig. <ref type="figure" target="#fig_0">1</ref>). We provide publicly available source code for NNBits under <ref type="bibr" target="#b38">[39]</ref>. 2. Using the bit-level granularity of our tool, we provide a possible explanation for the accuracy of Gohr's neural distinguishers for SPECK. 3. We propose and implement a generalization of Gohr's classifiers (Generalized network) which can be applied to larger datasets, such as the avalanche dataset. 4. We compare NNBits ensemble to NIST STS on the avalanche datasets of SPECK32/64 up to SPECK128/128 and AES-128, and conclude that the NNBits ensemble performs either as good as the NIST STS or better. 5. We demonstrate cryptanalytic insights that result from bit-level profiling with NNBits.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1">Organization</head><p>The remainder of this paper is structured as follows. In our preliminaries, we introduce the families of symmetric block ciphers SPECK and AES (Section 2.1), statistical tests techniques for cryptographic primitives (Section 2.2) and Gohr's neural distinguisher (Section 2.3). In our methodology, we detail the generation of the avalanche dataset (Section 3.1), the setup of the NIST STS (Section 3.2), and the implementation of NNBits (Section 3.3). Based on the previously presented material we conduct a set of three experiments (Sections 4.1 to 4.3) and conclude our findings in Section 5. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Preliminaries</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Block ciphers</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>SPECK.</head><p>The block cipher SPECK is an ARX-based design proposed by the National Security Agency (NSA) <ref type="bibr" target="#b4">[5]</ref>, parametrised by a block size b and a key size k, and denoted by SPECKb/k. In this work, we focus on SPECK32/64, SPECK64/128, SPECK96/144, and SPECK128/128.</p><p>One round with the Feistel-like structure of SPECK is illustrated in Fig. <ref type="figure" target="#fig_1">2</ref>. In the first round, input L and input R would be the first and last half of the plaintext. For other rounds, input L and input R come from output L and output R in the previous round. The ciphertext is the concatenation of output L and output R of the final round. α and β are the rotation parameters stated in the SPECK specifications <ref type="bibr" target="#b4">[5]</ref>. The round keys are generated by the key schedule from the input key. This paper focused on the plaintext avalanche dataset, in which the key is fixed to zero. So we do not describe the cipher's key schedule here.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>AES-128.</head><p>The AES <ref type="bibr" target="#b12">[13]</ref> (Advanced Encryption Standard) is the most widely used block cipher in the world as of today. It operates on 128 bits blocks, and 128/196/256 bits keys.</p><p>The 128 bits input is divided into a 4x4 bytes matrix. The round function is iterated 10, 12 or 14 times (depending on the key size), and is composed of 4 operations: SubBytes, ShiftRows, MixColumns, and AddRoundKey, as illustrated in Fig. <ref type="figure" target="#fig_1">2</ref>. SubBytes substitutes each byte of the state according to a nonlinear SBox. ShiftRows shifts the second, third, and fourth row by one, two, and three positions to the left. MixColumns operates on each column separately, and performs a multiplication with the MixColumns matrix in the the Rijndael Galois field. AddRoundKey XORs each byte of the state with a byte of the round key rk ij , derived through the key schedule algorithm. This paper focused on AES with 128-bit key size and 10 rounds. We do not introduce the key schedule of AES, since, for the same reason as in SPECK, it is not relevant to our work.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Statistical analysis of cryptographic primitives</head><p>During the years preceding the AES standardization process, statistical tests started being used to measure the security of block ciphers under the blackbox approach <ref type="bibr" target="#b18">[19]</ref> and to evaluate their quality when used as random number generators <ref type="bibr" target="#b33">[34]</ref>. The battery of tests used by NIST <ref type="bibr" target="#b33">[34]</ref> had the goal to analyze properties such as the proportion of zeroes and ones within the bitstring being tested (frequency monobit test), or within sub-blocks of this bit string (frequency test within a block ). Such test suites constitute a distinguisher testing the null hypothesis H 0 , which asserts that the bitstring, or a sequence, being tested is random, against the alternative hypothesis H a , that the sequence is not random.</p><p>Statistical test results are to be interpreted with their significance level α, i.e., the probability of the test rejecting the null hypothesis, given that the null hypothesis is true. For a given test result, the P-value is calculated under the assumption of a certain reference distribution and corresponds to the probability for test result to be observed if H 0 is true. The null hypothesis H 0 is accepted for a sequence, if the P-value is greater than or equal to α.</p><p>Our bit-level analysis, shown on Figure <ref type="figure" target="#fig_0">1</ref>, studies whether a given bit can be predicted with an accuracy significantly better than a random guess. More specifically, we consider α = 0.01; in other words, among 100 random tested sequences, we expect at most one to be (falsely) classified as non-random. Figure <ref type="figure">3</ref> illustrates the minimum accuracy p i needed for our distinguisher to achieve a significance value of 0.01. Under the assumption H 0 of randomness, the number of successes S (i.e., correct predictions of a bit) over X test independent trials can be studied as a binomial reference distribution, with mean µ = p 0 • X test with p 0 = 0.5 and standard deviation σ = X test p 0 (1 -p 0 ) = √ 0.25 • X test . Given these parameters, the P-value corresponding to the accuracy of a given distinguisher can be derived, for instance using SciPy <ref type="bibr" target="#b39">[40]</ref>; intuitively, the higher X test is, the more significant a deviation from a 50% accuracy becomes. This is illustrated in Fig. <ref type="figure">3</ref>.</p><p>Fig. <ref type="figure">3</ref>: a) Binomial probability mass function (pmf) for p 0 = 50% and X test . b) Significance of an observation p in terms of the P-value considering a binomial reference distribution centered at p 0 = 50%.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Gohr's neural distinguisher</head><p>In our work, we combine avalanche-based techniques with deep learning. For a thorough introduction to deep learning and neural networks we recommend <ref type="bibr" target="#b16">[17,</ref><ref type="bibr" target="#b15">16]</ref>. In the following, we focus in particular on the construction of Gohr's neural distinguisher.</p><p>In his seminal paper, published at CRYPTO'19, Aron Gohr <ref type="bibr" target="#b15">[16]</ref> proposes to use a deep neural network to distinguish whether pairs of SPECK32/64 ciphertexts correspond to the encryption of pairs of messages with a fixed difference (0x0040, 0x0000), labeled as not random (1), or random messages, labeled as random (0). The resulting Neural Distinguisher, a residual neural network preceded by a size 1 1D-convolution, results in respectively 92.9, 78.8, 61.6 and 51.4 % accuracy for 5, 6, 7 and 8 rounds of SPECK32/64, and is used to mount practical key recovery attacks on 11 rounds. Subsequent research work focused on explaining what features neural distinguishers can learn and on extending their use to other ciphers, improving on the methodology. In the first category, at Eurocrypt'21, Benamira et al. propose an in-depth analysis of the distinguishing properties learned by the Gohr network, both through purely cryptanalytical means and through machine learning techniques <ref type="bibr" target="#b6">[7]</ref>. In the second category, Baksi et al. <ref type="bibr" target="#b3">[4]</ref> focus on applying neural distinguishers to GIMLI, ASCON, KNOT and CHASKEY, and propose a different classification task, where the neural distinguisher is asked to predict which of t classes a pair belongs, where a class is determined by an input difference. Yadav et al. proposed to extend neural distinguishers for more rounds, by prepending a longer differential trail before the neural distinguisher <ref type="bibr" target="#b41">[42]</ref>. In <ref type="bibr" target="#b21">[22]</ref>, the authors propose to use an SAT solver to look for better input differences and apply their results to various ciphers. At LNNS'21 <ref type="bibr" target="#b5">[6]</ref>, Bellini and Rossi compare neural and classical distinguishers for the ciphers TEA and RAIDEN. In a closer investigation of Gohr's results, <ref type="bibr" target="#b2">[3]</ref> show that an identical neural distinguisher with depth-1, which we will refer to as Gohr depth-1 network, reaches an almost identical accuracy of 78.3% (vs. 78.8% accuracy for depth-10) in round 6 of SPECK32/64, despite a much reduced parameter space and shorter training times.</p><p>Fig. <ref type="figure">4</ref>: Pseudo-code for the construction of Gohr's neural distinguisher of a certain depth and f = 32 filters in each convolutional layer. Underlined are design choices which are either heuristic or demonstrate expert knowledge, i.e., dedicated structures of SPECK.</p><p>Figure <ref type="figure">4</ref> illustrates the construction of Gohr's neural distinguisher. We first discuss the dataset used for neural network training, then provide a discussion of more conventional elements, and finally discuss the particular design choices highlighted underlined. The input to the network has 64-bit length for SPECK32/64 and is given as a ciphertext pair (C, C ′ ), which consists of four words: (L, R) = Enc k (P L , P R ) and (L ′ , R ′ ) = Enc k ((P L , P R )⊕(0x0040, 0x0000)) for the label not random (network output of 1). If the plaintext pair is randomly generated, the sample is labelled as random (network output of 0). The dataset consists of 10 7 training samples and 10 6 test samples. Approximately half of the samples are random. The neural network obtains ciphertext pairs (C, C ′ ) of the training dataset as input and is trained to predict the label. The output of the neural network is a single neuron Dense(1) with a sigmoid activation function. The sigmoid's 0 (1) value represents the random (not random) label prediction. The accuracy of the distinguisher corresponds to the percentage of correctly predicted labels in the test dataset. The network itself consists of input transformations, the convolutional blocks themselves, and a prediction head; this structure is reminiscent of the popular image recognition network ResNet <ref type="bibr" target="#b19">[20]</ref>, in which residual learning was introduced for deep neural networks. In residual learning, information can "skip" (or shortcut) several layers. This is implemented by adding the information of the shortcut to the output of a block. This enabled for the first time the training of networks with up to 152 layers depth. The residual connections still allow the information to propagate to subsequent layers to be trained, even if an earlier layer has stopped its learning progress. The combination of a convolutional layer Conv with a kernel size of k = 3, followed by batch normalization BN and a ReLU activation function is conventionally used, for example in ResNet <ref type="bibr" target="#b19">[20]</ref> or the batchnorm version of VGG networks <ref type="bibr" target="#b32">[33,</ref><ref type="bibr" target="#b36">37]</ref>. ResNet and VGG are image recognition networks. In contrast to Gohr's neural distinguisher, they use Conv2D layers that move the kernel over the input in two directions 2D to generate their output, called a feature map. In Gohr's network Conv1D layers are used, which are often encountered in time-series or text analysis <ref type="bibr" target="#b1">[2]</ref>. Conv1D only moves the kernel of width k in a single direction (1D) over the input to generate one feature map. The number of filters f of the convolutional layer defines how many kernel functions, i.e., weights w ij and biases b j are learned and how many feature maps j = 0, . . . , f -1 are generated. These kernel functions are linear; nonlinearity is added through the subsequent activation functions, here ReLU, which is popular due to its simplicity and fast computation.</p><p>ResNet and VGG are winners of the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) challenge. We note that Gohr's training dataset is about ten times larger in the total number of presented samples than, for example, ImageNet which has 1.3 million training images. Large training datasets can be necessary to avoid overfitting -learning the dataset by heart-for neural networks, which might also explain the heavy use of L2 regularization parameters in Gohr's network. We identify that expert knowledge of SPECK or heuristic choices in the construction of Gohr depth-1 network are reflected in: i) the input alterations of Reshape and Permute, since the "...choice of the input channels is motivated by a desire to make the word-oriented structure of the cipher known to the network." <ref type="bibr" target="#b15">[16]</ref> and the Conv1D(...k=1...) for "...learning of bit-sliced functions such as bitwise addition..." <ref type="bibr" target="#b15">[16]</ref>, ii) a particular choice of the L2 regularization parameter of 10 -5 used throughout the network and iii) a cyclic learning rate for the Adam optimizer which we will discuss in more detail in our experimental section.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">Methodology</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">The plaintext avalanche dataset generation</head><p>There are several types of datasets to perform a randomness test on a cipher. We focus on the task of distinguishing a given cipher from a random permutation, in particular, by observing a dataset that incorporates the avalanche effect of the cipher.</p><p>The avalanche effect, coined by Feistel <ref type="bibr" target="#b13">[14]</ref>, describes a desirable property of cryptographic encryption algorithms: that a slight change in the input (plaintext or key) creates a significant difference in the resulting ciphertext. The avalanche effect can be studied through avalanche datasets, in which the impact of a minimum input perturbation (flipping a single plaintext bit) on the encrypted output is investigated (e.g. <ref type="bibr" target="#b10">[11,</ref><ref type="bibr" target="#b4">5]</ref>). Plaintext avalanche dataset was one of nine datasets to assess the candidates for AES competition <ref type="bibr" target="#b33">[34]</ref>, as well as the five finalist candidates <ref type="bibr" target="#b34">[35]</ref>, and their randomness was assessed using statistical tests similar to NIST STS <ref type="bibr" target="#b33">[34]</ref>. The effect of small perturbations can also be studied through the Strict Avalanche Criterion (SAC) randomness test <ref type="bibr" target="#b10">[11]</ref>, which states that flipping a single bit in the input should result in a 50% probability of each output bit to be flipped.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Fig. 5: Illustration of the avalanche dataset generation.</head><p>A plaintext avalanche dataset is generated with the following steps as illustrated in Fig. <ref type="figure">5</ref>. Let Enc K be an encryption black box with key K: 1) Let K be the key with all zeros and P a random plaintext. Let C be the ciphertext corresponding to P , that is, C = Enc K (P ). We call one output of the encryption a block with n bits. 2) Define mask i as the bitstring with 1 at position i and zeros otherwise. Let P i = P ⊕ mask i , and C i = Enc K (P i ) be the corresponding ciphertext. 3) An avalanche unit from plaintext P is the concatenated bit string C ⊕ C 1 ||...||C ⊕ C n of a total of n blocks. The total bit length of an avalanche unit is n 2 . 4) An avalanche sequence is the concatenation of several avalanche units, one for each mask. The total bit length is ℓ. 5) In this work, we use avalanche datasets composed 300 avalanche sequences, each sequence being around 1M bits. This is in line with the parameters of NIST STS. The plaintext avalanche dataset generation was implemented using the NumPy library and a Python implementation of each cipher, which is available in our repository <ref type="bibr" target="#b38">[39]</ref>.</p><p>For example, in SPECK32/64, an avalanche unit contains 1,024 bits, corresponding to 32 blocks, with each block of bit length 32. We concatenate 1000 avalanche units into one avalanche sequence. That is, there are 1,024,000 bits in one avalanche sequence and 307,200,000 bits in this avalanche dataset. The parameters of the avalanche dataset of each cipher are shown in Table <ref type="table" target="#tab_0">1</ref>. </p><formula xml:id="formula_0">cipher</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">The NIST Statistical Test Suite</head><p>We use the current standard NIST SP 800-22 <ref type="bibr" target="#b30">[31]</ref>, also known as the NIST Statistical Test Suite (NIST STS), to perform the cryptographic randomness tests. In addition to this collection, other similar test suites are available, such as DieHarder <ref type="bibr" target="#b9">[10]</ref>, TestU01 <ref type="bibr" target="#b24">[25]</ref> or ENT <ref type="bibr" target="#b40">[41]</ref>. In fact, there are "an infinite number of possible statistical tests, each assessing the presence or absence of a pattern which, if detected, would indicate that the sequence is nonrandom" <ref type="bibr" target="#b30">[31]</ref>; Such statistical tests can be generated automatically, for example through evolutionary algorithms <ref type="bibr" target="#b35">[36]</ref>. The abundance of existing tests leads us to focus, in this work, on the widely accepted standard NIST STS. It is a collection of 15 core statistical tests as listed in Table <ref type="table">2</ref>, and with different parameters, a total of 188 statistical tests are conducted. To be noted, although the Lempel-Ziv Compression test is stated in <ref type="bibr" target="#b33">[34]</ref>, it is not implemented in NIST STS. Referring to the parameters used in <ref type="bibr" target="#b33">[34,</ref><ref type="bibr" target="#b34">35]</ref>, we generated 300 plaintext avalanche sequences with each ≈1M bits in the dataset, and used an α value of 0.01. The results are discussed in Section 4.3.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Technical implementation of NNBits</head><p>NNBits ensemble is a deep learning ensemble analysis tool for bit-profiling of cryptographic (pseudo) random bit sequences that includes dependencies between different bits (Fig. <ref type="figure" target="#fig_0">1</ref>). Here, we first give a quick introduction to ensembling methods in machine learning and then present the technical implementation of NNBits ensemble.</p><p>statistical test test ID statistical test test ID statistical test test ID Monobit 1 Rank 7 Approximate Entropy 159 Block Frequency 2 Spectral DFT 8 Random Excursions 160-167 Cusum 3-4 Aperiodic Templates 9-156 Random Excursions Variant 168-185 Runs 5 Periodic Template 157 Serial 186-187 Long Runs of Ones 6 Universal Statistical 158 Linear Complexity 188</p><p>Table <ref type="table">2</ref>: The 188 statistical tests in the NIST STS Ensembling or ensemble learning is a widely used technique in machine learning <ref type="bibr" target="#b16">[17,</ref><ref type="bibr" target="#b1">2]</ref>. An ensemble is a "group of predictors" <ref type="bibr" target="#b1">[2]</ref>. The core idea of ensemble methods is that this group of predictors is diverse. Diversity is achieved when single predictors make different kinds of errors. There are many methods to create diversity, for example on the data level : here, the same algorithm is used for every predictor, however they are trained on different random subsets of the training data. The best-known method is "bagging" (or bootstrap aggregating) by Breimann <ref type="bibr" target="#b8">[9]</ref>; the model level : here, completely different prediction algorithms are used in combination, e.g. a neural network, a random forest classifier and a logistic regression model in combination; or the hyperparameter level : if, for example, different loss functions are chosen during training. This approach is also taken in <ref type="bibr" target="#b28">[29]</ref>. Figure <ref type="figure" target="#fig_2">6</ref> illustrates the creation of our NNBits ensemble, consisting of a group of N neural networks which are diversified on the data level. Each member NN i of the group predicts a certain subset i of the n bits in the dataset. At the input side of the network, this subset of bits will be set to zero (Fig. <ref type="figure" target="#fig_2">6b</ref>)). The technical implementation uses state-of-the-art parallelization modules that allow for high performance. This allows us to tackle a demanding scenario in Section 4: for example, we identify weak bits in the avalanche dataset of AES-128 for which a single avalanche unit contains n = 16384 bits. The work we present in this manuscript uses Gohr's neural distinguisher (Section 2.3) and extended versions of it. However, NNBits in general allows the user to include any TensorFlow network of their choice.</p><p>Figure <ref type="figure" target="#fig_2">6c</ref>) shows the technical implementation of our NNBits ensemble. NNBits ensemble uses the Python packages Ray <ref type="bibr" target="#b37">[38,</ref><ref type="bibr" target="#b27">28]</ref> and TensorFlow <ref type="bibr" target="#b0">[1]</ref> on a multi-GPU server. Ray relies on stateful actors to parallelize machine learning tasks. These actors share access to the data, which only needs to be read from the disk once; this is significant, as loading millions of avalanche units for ciphers larger than SPECK32/64 can take several minutes. Since the initialization of neural networks and the manipulation of the data sets are computationally expensive, a reasonable total number N of neural networks in the ensemble is N ≈ 100.</p><p>The source code of NNBits ensemble, as well as a demonstration and instructions to adjust the parameters for different GPU settings, are available in our repository <ref type="bibr" target="#b38">[39]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Experimental results and analysis</head><p>We have conducted three experiments using the previously introduced methodologies.</p><p>1 Explanation of Gohr's accuracy 2 Generalization of Gohr's distinguisher 3 Comparison of NNBits and NIST STS (Section 4.1) (Section 4.2) (Section 4.3) cipher SPECK32/64 SPECK32/64 SPECK32/64 SPECK64/128 SPECK96/144 SPECK128/128 AES-128 inputs ciphertext pairs ciphertext pairs avalanche units labels random/not random random/not random S1 None S2 random/not random samples 10 7 training 10 6 validation 10 7 training 10 6 validation S1 ≤ 300 × 10 3 in total S2 ≤ 3.65 × 10 6 in total</p><p>Table 3: Overview over our experimental settings.</p><p>First, we provide a possible explanation for the accuracy of Gohr depth-1 network using a bit-by-bit analysis with our NNBits ensemble (Section 4.1). Then, we generalize aspects of Gohr depth-1 network to extend the range of applications and obtain the Generalized network (Section 4.2). We can then use Generalized network in combination with NNBits to analyze the avalanche datasets of SPECK32/64 up to SPECK128/128, as well as AES-128 in Section 4.3 and present bit profiles of SPECK32/64 up to round 7 (of 22) and of AES-128 up to round 2 (of 10) (Section 4.3). Table <ref type="table">3</ref> summarizes the experimental scenarios and highlights that the datasets of experiment 1 and 2 are similar to Gohr's original dataset (millions of available training inputs with labels), while the setting of the NIST STS comparison in 3-S1 is different and difficult from a machine learning perspective, due to the absence of a labeled dataset and a restricted number of samples.</p><p>Our neural network experiments are performed on an Nvidia DGX-A100 server equipped with four A100 Ampere microarchitecture GPUs. Each A100 GPU provides 40536 MiB computational memory.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Explanation of the accuracy of Gohr's neural distinguisher</head><p>In the following experiment, we show that 78.1% of the 78.3% [3, table 3] accuracy obtained by Gohr depth-1 network can be understood in terms of correct predictions of individual bits. We show this by first training one neural network per bit using an NNBits and then constructing a distinguisher from these single bit predictors. Based on the findings, we propose a strategy for future improvements of Gohr depth-1 network. Training procedure. We use NNBits to train N = 64 neural networks, one to predict each bit of (C, C ′ ) of Gohr's original dataset in round 6 of SPECK32/64. Owing to the parallelization provided by NNBits we can train 16 neural networks in parallel on our server, resulting in a total experimental runtime of 4.5 hours. Figure <ref type="figure" target="#fig_3">7a</ref>) illustrates that for the training of our neural network NN i , bit i is set to zero at the input. The task of the particular neural network NN i is to predict bit i. Therefore, the networks are trained on the not random ciphertext pairs (C, C ′ ) subset of Gohr's original dataset (presented in Section 2.3). We use X train = 5 × 10 6 not random training samples and train each network for 200 epochs. The neural networks NN i are Gohr depth-1 network with depth of 1 and 32 filters in each convolutional layer as provided in Gohr's GitHub repository <ref type="bibr" target="#b14">[15]</ref>.</p><p>Single bit results. Figure <ref type="figure" target="#fig_3">7b</ref>) shows the test accuracies of each network NN i . We use X test = 5 × 10 5 not random samples for testing. A higher test accuracy of NN i means that Gohr's network is able to predict the value of bit i, given the values of the remaining 63 bits. Accuracies around 50% mean that the network is not better at predicting bit i than a random guess. We observe a pattern of the test accuracies in the first 32 bits which repeats itself over the next 32 bits (small variations in the resulting accuracies are expected in neural network training). Within the first 32 bits, ten bits (0, 1, 2, 9, 11, 16, 17, 18, 24, 25) cannot be predicted by Gohr's network. The highest test accuracy is achieved on bit 4 with 86.6%.</p><p>In the following we address two questions: 1) Can we understand the overall distinguishing accuracy, that is 78.3%, of Gohr's network in terms of such single-bit predictions? In other words: Can we construct a distinguisher using the outcome of these single-bit predictions? 2) Given we could construct a distinguisher from single-bit predictions, what is a good strategy to improve the accuracy achieved by Gohr even further?</p><p>Construct a distinguisher E . First, we address question 1) by constructing a distinguisher from our already trained networks as follows: Our dataset is now identical to Gohr's original dataset, i.e., it contains ciphertext pairs (C, C ′ ) with both labels, random and not random. As in the previous experiment each of our already trained 64 neural networks NN i predicts one bit. The respective bit is set to zero at the input. Each bit prediction is evaluated in terms of its correctness: If the bit was correctly predicted, we save a 1, otherwise a 0. The information about the correctness of the predictions is then passed to an MLP -identical to Gohr's neural prediction head. This MLP is then trained to output the label random or not random for (C, C ′ ).</p><p>classical [16, Table 2] ensemble distinguisher E Depth-1 [3, Table 2] Depth-10 [16, Table 2] accuracy 75.8% 78.1% 78.3% 78.8% Improvement strategies for Gohr's distinguisher. Now, we address question 2).</p><p>We formulate an improvement strategy for Gohr's distinguisher, given that we can understand the largest part of the accuracy of Gohr's distinguisher in terms of the correctness of single-bit predictions. Using Fig. <ref type="figure" target="#fig_3">7b</ref>) we can focus on improving the bits with low accuracy, highlighted in grey.</p><p>As noted by <ref type="bibr" target="#b6">[7]</ref>, differential-linear cryptanalysis <ref type="bibr" target="#b23">[24]</ref> seems to be a good explanation for Gohr's classifiers' accuracy. It consists in studying linear relations between bits of the difference δ t and δ r , respectively at round t and final round round r. This is more formally expressed in terms of linear masks m t , m r : the bias of the bit b mt,mr = n-1 i=0 (δ t ∧ m t ) i ⊕ (δ r ∧ m r ) i is studied. With the input difference chosen by Gohr, the difference bits at rounds 1 to 5 are very biased, so it is expected that n-1 i=0 (δ r ∧ m r ) i would be biased as well for small values of r, allowing better predictions of the bits involved. To improve the accuracies on the bits in grey, two challenges must be overcome: finding potential relevant output masks m r which are not already used by the classifier, and injecting this additional information into our classifiers. Note that it is not sufficient to generally improve the accuracy of single bit predictions, but the improvements need to be aimed at the particular cases where the distinguisher decides wrongly.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Generalization of Gohr's neural distinguisher for avalanche datasets</head><p>The experiment in the previous section was aimed at gaining more understanding about Gohr depth-1 network. In the following experiments, we aim to extend the range of application of Gohr depth-1 network. Here, we eliminate two specific design choices in Gohr depth-1 network which either relate directly to SPECK or may only work for a specific dataset. The result is a Generalized network, which we apply to larger datasets in the following sections.</p><p>A neural network may perform extremely well in a given problem but completely fail at a seemingly similar one. To generalize a machine learning model it is essential to remove application specific choices. In Gohr depth-1 network we can identify the following application-specific neural network design choices, as discussed in more detail in Section 2.3: 1) input alterations, 2) cyclic learning rate- <ref type="bibr" target="#b15">[16]</ref> uses the Adam optimizer in combination with a cyclic learning rate that varies between 0.002 and 0.0001 over 10 epochs, and 3) kernel regularization-with a particular L2-regularization parameter. Figure <ref type="figure" target="#fig_4">8a</ref>) and b) illustrate the Generalized network which addresses 1) and 2) as follows: 1) input reshaping-We shape the input into a more generic square form, which allows i) an easy extension of the distinguisher onto e.g. the avalanche datasets (see Fig. <ref type="figure" target="#fig_4">8c</ref>)) and ii) a fairer potential comparison with stateof-the-art visual recognition neural networks. The reshaping of the input into a word-like 4x16 bit in Gohr depth-1 network corresponds to an information gain, so that it can start training with a lower number of possible filters. To learn the same information as Gohr depth-1 network the number of filters for the convolutional layers is increased by a factor of four in Generalized network <ref type="bibr">(32 vs 128)</ref>. The increased number of filters leads to longer training time per epoch (9 s vs 13 s). 2) AMSGrad algorithm instead of cyclic learning rate-while Adam is one of the most advanced optimizers, it has been observed that it fails to converge to an optimal solution <ref type="bibr" target="#b29">[30]</ref>. This can make it necessary to manually find an optimal learning rate setting to train the neural network. Such a manual choice has a higher likelihood to fail in a new setting. To mitigate the convergence issue, Reddi et al. introduce the AMSGrad algorithm in "On the Convergence of Adam and Beyond" <ref type="bibr" target="#b29">[30]</ref> at ICLR 2018.</p><p>We have trained both, Gohr depth-1 network and the Generalized network on Gohr's original dataset (Section 2.3) for round 6 of SPECK32/64 (Fig. <ref type="figure" target="#fig_4">8b</ref>)). The cyclic learning rate leads to the "dents" in the original graph of Gohr depth-1 network. If the cyclic learning rate is removed from the training of the Gohr depth-1 network (w/o cyclic in Fig. <ref type="figure" target="#fig_4">8b</ref>)) the training results in lower final accuracy. The Generalized network uses the Adam optimizer with its standard settings together with AMSGrad instead of the cyclic learning rate. After 200 epochs both networks converge to the same accuracy. Also in round 5 and round 7 the Generalized network reaches comparable accuracy to the Gohr depth-1 network one [3, Table <ref type="table">2</ref>] with 92.8% vs 92.7%, respectively 61.0% vs 60.8%. The shaping into a more generic square form, as well as the removal of the specific cyclic learning rate allow us to easily apply the Generalized network to avalanche datasets. For example, the avalanche unit of AES-128 contains 16,384 bits, which are now reshaped into a 128 × 128 "image", as illustrated in Fig. <ref type="figure" target="#fig_4">8c</ref>).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Comparison of NNBits with the NIST STS</head><p>Here, we compare the NNBits ensemble with the NIST STS. We further show that the NNBits ensemble analysis can provide additional insights: for example, Gohr's input difference (0x0040, 0x0000) is inferred from the bit-analysis of SPECK32/64, and the round 2 bit-analysis of the AES-128 avalanche dataset is explained by multiplication in the Galois field of AES. Settings S1 . The NIST STS operates in a setting which is difficult from a machine learning perspective: We are only given access to a limited number of bits and based on this bit-sequence only, we have to decide if it is generated from an RNG or not. Here, we assume that we may not use any information on the cipher which has potentially generated the sequence, therefore we have to train and test our neural network ensemble on this limited size dataset and without a labelled dataset. Even for the cipher SPECK32/64 with the smallest avalanche units of 1024 bits each, we only have around 300k avalanche units available for testing and training. Settings S2 . Gohr's original training dataset contains millions of training sequences. For completeness, we also train Generalized network in a setting which is simpler for machine learning, in short: On a labelled dataset and with a larger amount of data. The details are given in Appendix A. Here, we first provide a short overview over the results in the different settings, and then provide the detailed results of NIST STS with NNBits, as well as the bit-profiles obtained with NNBits.</p><p>random from round time spent per round dataset size cipher NIST STS S1 S2 NIST STS S1 S2 NIST STS &amp; S1 S2 SPECK32/64 6 8 8 ≤30 min ≤5 min ≤4 min ≈300 Mbits ≈4 Gbits SPECK64/128 7 8 8 ≤30 min ≤7 min ≤12 min ≈300 Mbits ≈15 Gbits SPECK96/144 8 8 9 ≤30 min ≤10 min ≤24 min ≈300 Mbits ≈34 Gbits SPECK128/128 9 10 10 ≤30 min ≤20 min ≤17 min ≈300 Mbits ≈27 Gbits AES-128 3 3 3 ≤30 min ≤20 min ≤17 min ≈300 Mbits ≈27 Gbits * : See Table <ref type="table">8</ref> for details. Please note that NIST STS and S1 use a limited, unlabeled dataset, whereas S2 uses an -in comparison-unlimited, labeled dataset. S1 provides bit-profiling while NIST STS and S2 do not. As described in Section 3.3 the NNBits ensemble relies on GPU parallelization on a server and the runtime will depend on the available resources. This runtimes apply to our particular server.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Table 5: Comparison of the NIST STS and our works.</head><p>Discussion. Table <ref type="table">5</ref> shows a summary of the randomness tests performed with the NIST STS and our NNBits S1 . The runtimes are given as an indication, even though they are not directly comparable, since NNBits and Generalized network use highly parallelized GPU implementations. The comparison Random from round shows that the deep learning based tests can gain advantages over the NIST STS in most SPECK-cases for S1 and all SPECK-cases for S2 . We conclude that even in a low data setting and without label, S1 , the NNBits ensemble can perform well, either as good as the NIST STS or better.</p><p>To gain an additional distinguisher comparison to the NIST STS, we have implemented the avalanche tests that were used to analyze Xoodoo <ref type="bibr" target="#b11">[12]</ref> for SPECK32/64. The avalanche dependence goes to 32, avalanche weight goes to ≈16, and avalanche entropy goes to ≈32 at round 6, which means all three avalanche criteria are met at round 6 and aligns with our NIST STS results.</p><p>In the following sections we will give details on the results obtained with the NIST STS (Section 4.3) and NNBits (Section 4.3). In particular, we will show the bit-profiles generated by the NNBits ensemble and provide a detailed analysis of the same.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Details for the NIST STS experiment</head><p>To make a fair comparison between NNBits and NIST STS, we use the same plaintext avalanche dataset as introduced in Section 3.1. For the target significance level of α = 0.01, at least 292 sequences among all the 300 sequences should successfully pass the examination to pass a particular test. We present a summary of the results of the tests in Table <ref type="table">5</ref>. In the table, when we say that an underlying primitive is random at round r, we mean the underlying primitive passes more than 186 of the 188 tests introduced in Section 3.2 and has no more significant variation when increasing the round number. Figure <ref type="figure" target="#fig_1">12</ref> shows the randomness evaluation in each round by NIST STS tools corresponding to SPECK32/64, SPECK64/128, SPECK96/144, SPECK128/128, and AES-128 respectively. The total time to execute all tests was approximately three days. All NIST STS experiments were carried out on a server with 112 Intel(R) Xeon(R) Platinum 8280 CPUs, each with 28-cores, 2.70GHz, 1152G RAM.</p><p>Details for the NNBits experiment Here, we first describe the experiment to produce the results shown in Table <ref type="table">5</ref>. Then we analyze the underlying data of SPECK32/64 and AES-128 in more detail and show that the NNBits ensemble experiments can provide useful cryptanalytic insights. The NIST STS uses a dataset of 300 Mbits. To make a fair comparison between NNBits and NIST STS, we use here the same plaintext avalanche dataset as introduced in Section 3.1. Therefore, there is only a very limited number of avalanche units for training and testing of the neural network ensemble. Also, we don't assume that we have access to any kind of random/not random labeled dataset. This results in the settings S1 , which are disadvantageous for machine learning. About half of the avalanche units contained in the 300 Mbits-long dataset are used for training. The detailed settings for the training as well as the detailed test results are shown in the appendix in Table <ref type="table" target="#tab_3">7</ref>. An NNBits ensemble with N = 100 neural networks of type Generalized network is constructed as explained in Section 3.3. To cover the whole range of bits in the avalanche units (see Table <ref type="table" target="#tab_3">7</ref>) each neural network predicts around 6% of the bits in an avalanche unit. For example, for SPECK32/64 the avalanche unit contains 1024 bits and a single neural network predicts 63 randomly chosen bits. In the following we present the detailed bit profiles of SPECK32/64, while we discuss the details of AES-128 in the appendix (Appendix D).</p><p>Bit profiles of SPECK32/64. Table <ref type="table">5</ref> shows that our NNBits ensemble can distinguish SPECK32/64 avalanche data up to round seven from randomly generated data. In the following we gain more insights from the analysis used for Table <ref type="table">5</ref>.</p><p>Figure <ref type="figure">9</ref> shows the bit-by-bit test accuracy for round 1 to round 7 of the avalanche dataset of SPECK32/64. We observe a region of weak bits around bit 715 through all rounds. This region is related to plaintext differences of (0x0040, 0x0000): in the avalanche sequence, bits 32i . . . 32(i + 1) -1 correspond to the XOR of the original ciphertext with the ciphertext where bit i has been perturbed. Consequently, the perturbation of bit i = 22 corresponds to bits 704 . . . 735 in the avalanche sequence. The perturbation of this bit in terms of a plaintext difference is (1 ≪ 22) = (0x0040, 0x0000). Note that (0x0040, 0x0000) is the chosen plaintext input difference used in Gohr <ref type="bibr" target="#b15">[16]</ref> for SPECK32/64.</p><p>Figure <ref type="figure" target="#fig_0">10</ref> provides a more detailed view for round 7 of SPECK32/64 from Fig. <ref type="figure">9</ref>. We observe that in round 7 two bits (716 and 732) remain weak, i.e., can be predicted with an accuracy significantly above a random guess.</p><p>0 1000 50% 60% 70% 80% 90% 100% test accuracy Round 1 0 1000 Round 2 0 1000 Round 3 0 1000 Round 4 0 1000 Round 5 0 1000 Round 6 0 1000 Round 7</p><p>bit index 0. . . 1023 Fig. <ref type="figure">9</ref>: Mean ensemble prediction accuracy for each bit in SPECK32/64 round 1 to round 7. A zoom into round 7 is provided in Fig. <ref type="figure" target="#fig_0">10</ref>.</p><p>Fig. <ref type="figure" target="#fig_0">10</ref>: Detailed view of round 7 of Fig. <ref type="figure">9</ref>, which demonstrates that bit 716 and 732 are weak and have accuracies significantly above the random guess limit.</p><p>To gain further understanding, we used NNBits to perform a targeted analysis on these two bits. In the targeted analysis, we force one or both of these bits to be predicted (instead of randomly choosing the predicted bits among the 1024 avalanche bits). To do so, we use an ensemble of N = 500 neural networks, each predicting bit 732; trained on n train = 20 × 1024 sequences and tested on n test = 500×1024 sequences. Then we analyze the Pearson correlation coefficient of the obtained accuracies with the presence of the remaining bits at the network input. This analysis shows a strong correlation of a high accuracy A 732 ≫ 50% with the presence of bit 716 at the input of the neural network. Doing the same analysis for bit 716 shows that bit 732 needs to be present at the input to predict bit 732 with an accuracy A 732 ≫ 50%. In conclusion, we find that bit 716 needs to be present at the input to predict bit 732 and vice versa. We can explain this strong correlation as follows.</p><p>Bits 704 to 735 correspond to Gohr's input difference (0x0040, 0x0000). With this input difference, we can observe empirically that in round 7, bits 12 and 28 of the output difference (i.e., bits 716 and 732 of the avalanche dataset) are Fig. <ref type="figure" target="#fig_0">11</ref>: Correlation analysis of bit 732. Left hand side: Histogram of the prediction accuracies of the single ensemble members. Right hand side: Same underlying data as on the left hand side, however, divided into two histograms. Grey -bit 716 is not present at the input of these neural networks. Green -bit 716 is present at the input of these neural networks. balanced (i.e., they follow a uniform distribution). On the other hand, at round 6, bit 30 of the output difference (i.e., bit 733 of the 6 rounds avalanche dataset) is biased: it is set to 1 with probability 0.544. By construction, this bit is the XOR of bits 716 and 732 of the 7 rounds avalanche dataset; it follows that the probability for bits 716 and 732 to be different is 0.544. Therefore, losing the information provided by either of these bits harms the ability to predict the other one, in agreement with our finding with the NNBits ensemble.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">Conclusion</head><p>In conclusion, in this work, we introduce a deep learning ensemble (NNBits) for bit-profiling of cryptographic (pseudo) random bit sequences with the following main results.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Neural network explainability (Section 4.1).</head><p>Improvements of the explainability of neural networks are fundamental not only to understand the additional knowledge which has been learned by the neural networks, but also for their future improvement. We demonstrate how to use NNBits to explain parts of the seminal work of Gohr <ref type="bibr" target="#b15">[16]</ref>: Gohr's depth-1 neural distinguisher reaches a test accuracy of 78.3% in round 6 for SPECK32/64 <ref type="bibr" target="#b2">[3]</ref>. Using the bit-level information provided by NNBits we can partially explain the accuracy obtained by Gohr (78.1% vs 78.3%). This is achieved by constructing a distinguisher which only uses the information about correct or incorrect predictions on the single bit level.</p><p>Deep-learning based statistical test (Sections 4.2 and 4.3). We also generalize two heuristic aspects in the construction of Gohr's network: i) the particular input structure, which reflects expert knowledge of SPECK32/64, as well</p><p>Explanation of Gohr's accuracy Generalization of Gohr's distinguisher Comparison of NNBits and NIST STS (Section 4.1) (Section 4.2) (Section 4.3) Explained 78.1% vs. 78.3% accuracy Generalized input reshaping and cyclic learning rate Random from round for NIST STS and NNBits ( S1 , S2 ): cipher NIST STS S1 S2 SPECK32/64 6 8 8 SPECK64/128 7 8 8 SPECK96/144 8 8 9 SPECK128/128 9 10 10 AES-128 3 3 3 and provided NNBits bit-profiling of SPECK32/64 and AES-128.</p><p>as ii) the cyclic learning rate (Section 4.2). In combination with NNBits the resulting Generalized network can be applied as a statistical test on the plaintext avalanche datasets of SPECK32/64, SPECK64/128, SPECK96/144, SPECK128/128, and AES-128. We conclude that the NNBits ensemble performs as well as the NIST STS or better (Section 4.3).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Bit-by-bit profiling (Section 4.3)</head><p>. We demonstrate cryptanalytic insights that result from bit-level profiling with NNBits, for example, we show how to infer the strong input difference (0x0040, 0x0000) for SPECK32/64 (Section 4.3) or infer a signature of the multiplication in the Galois field of AES-128 (Appendix D).</p><p>NNBits is available under <ref type="bibr" target="#b38">[39]</ref> and while we mainly focused on Gohr-like networks, it can be used with any TensorFlow network of interest. NNBits is mainly aimed at a server environment with GPU availability.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A Details for the Generalized network experiment</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>S2</head><p>We apply Generalized network as a distinguisher to the avalanche datasets of SPECK32/64, SPECK64/128, SPECK96/144, SPECK128/128 and AES-128 in the settings S2 , which are advantageous for machine learning. Table <ref type="table" target="#tab_2">6</ref> summarizes the experimental settings for each cipher. We generate X bit sequences of the length of avalanche units for the respective cipher. A randomly chosen half of the inputs X have the label Y = 0 and contains random data. The other half of the inputs has the label Y = 1 and contains avalanche units of a cipher, that is, not random data. A Generalized network, as presented in Section 4.2 is trained on a subset X train to predict the labels Y train for 10 epochs. Subsequently, previously unseen data X test is used to evaluate the accuracy A of the distinguisher. Table <ref type="table" target="#tab_2">6</ref> summarizes the avalanche unit bit sizes, the number of avalanche units for training X train and testing X test , as well as the distinguisher's accuracy A for relevant rounds. The accuracy is given as the mean and standard deviation over four runs of the previously described experiment.  Table 8: Detailed results for the NNBits analysis presented in Table 5. For each round r the training settings (number of epochs, number of training avalanche sequences, number of testing avalanche sequences, as well as the runtime in minutes), as well as the resulting test accuracy, p-value and randomness result is shown.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>D Bit profiles of AES-128.</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>D.1 AES round 1/10 bit pattern</head><p>The previous analysis of SPECK32/64 has shown a particular region of weak bits. In AES-128, however, we find repeating patterns of weak and strong bits in rounds 1 and 2 in the 128 bit sub-blocks of the avalanche unit. Figure <ref type="figure" target="#fig_0">13</ref> shows details of the patterns observed after one round of AES-128. The complete avalanche unit of AES-128 consists of 128 × 128 = 16, 384 bits. We analyze the complete avalanche unit in blocks of 128 bits (Fig. <ref type="figure" target="#fig_0">13a</ref>)) and can identify four recurring patterns P1 ... P4 of weak and strong bits that occur throughout the avalanche unit. For example, pattern P1 occurs in the avalanche blocks s = 0 to s = 7 (Fig. <ref type="figure" target="#fig_0">13b</ref>)). Exemplary sections for the distributions of weak and strong bit patterns are shown in Fig. <ref type="figure" target="#fig_0">13c</ref>).</p><p>After one round of AES-128 96 consecutive bits of the 128 bits in each subblock can be predicted with 100% accuracy. The remaining 32 bits (4 bytes) can be predicted with less than 100% accuracy, which can be understood as follows. The round function of the AES is such that changing one byte in the input results in differences in one column of the output after one round (with the other columns remaining undisturbed). This is a well-known fact about the AES, due in particular to the MDS property of the mixcolumns operation. For the avalanche dataset, this implies that for each subblock of 128 bits (corresponding to one input difference bit), 4 bytes (one column) are nonzero, while the rest of the bytes are all zeroes.</p><p>The distribution of patterns of Fig. <ref type="figure" target="#fig_0">13a</ref>) and Fig. <ref type="figure" target="#fig_0">13b</ref>) is still observable after two rounds of AES (we show the equivalent 2-round patterns in the appendix Fig. <ref type="figure" target="#fig_0">14c</ref>)). When encrypting for two rounds, each of the nonzero bytes of round 1 is sent to a different column through the shiftrows operation, and then propagated to a whole column through mixcolumns, so that after two rounds, all the bytes of the dataset are non-zero. Furthermore, there are relations between the bytes of each column: mixcolumns applies a linear transformation to a 4-byte column, and by construction, only one byte is non-zero in each column. Therefore, the resulting values are multiples (in the Galois field of AES) of a single variable, with the coefficients (2,3,1,1), in an order that depends on the position of the 128-bit block in the avalanche dataset. The bytes with coefficient 1 are consistently predicted, whereas only some bits of the bytes with coefficients 2 and 3 are reliably predicted. This explains the peculiar pattern observed in the prediction, where for each group of 4 bytes, there are peaks for 2 bytes, and for some of the bits among the remaining 2 bytes.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>D.2 AES round 2/10 bit pattern</head><p>Please see Appendix D for the context of the analysis shown in Fig. <ref type="figure" target="#fig_0">14</ref>. Fig. 14: NNBits ensemble analysis of the avalanche sequence of AES-128. a) The avalanche block s corresponds to bits 128 × s . . . 128 × (s + 1). b) Four patterns P1 ... P4 occur over the total of 16, 384 bits in one avalanche unit. c) Examples of the recurring patterns of weak (green) and strong (orange) bits. The pattern is actually the same, but shifted with a starting point indicated by the black arrow.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 1 :</head><label>1</label><figDesc>Fig. 1: The architecture of our proposed distinguisher NNBits ensemble.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Fig. 2 :</head><label>2</label><figDesc>Fig. 2: Illustration of (a) one round of SPECK and (b) the round elements in AES.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 6 :</head><label>6</label><figDesc>Fig. 6: Technical implementation of the deep learning ensemble distinguisher using the Python packages Ray and TensorFlow on a multi-GPU server.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 7 :</head><label>7</label><figDesc>Fig.7: Bit-by-bit accuracy for ciphertext pairs (C, C ′ ) with chosen plaintext difference (0x0040, 0x0000) of SPECK32/64. a) The neural network NN i is trained to predict bit i of (C, C ′ ). The dataset is generated by setting bit i of (C, C ′ ) to zero at the input. b) The test accuracies of NN 0 . . . NN 63 on 10 6 previously unseen ciphertext pairs (C, C ′ ).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>Fig. 8 :</head><label>8</label><figDesc>Fig. 8: a) Instead of a reshaping into a 4 × 16 structure, the generalized network shapes the input-bit sequence into a square shape. b) Training curve comparison of Gohr depth-1 network (4 × 16 reshape; cyclic learning rate) and Generalized network (square-shaped input; AMSGrad optimizer). c) Representation of the reshaping of different input bit sequences. E.g. the avalanche dataset of SPECK128/128 has 128 × 128 = 16384 input bits, which are reshaped into a 128 × 128-image by the generalized network.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head>5 × 5 ×</head><label>55</label><figDesc>10 6 150 × 10 3 1/22 (100.00±0.00)% . . . . . . 6/22 (82.70±0.22)% 7/22 (51.38±0.02)% 8/22 (50.01±0.16)% SPECK64/128 4096 3.5 × 10 6 150 × 10 3 1/27 (100.00±0.00)% . . . . . . 7/27 (61.27±0.18)% 8/27 (50.06±0.15)% SPECK96/144 9216 3.5 × 10 6 150 × 10 3 1/29 (100.00±0.00)% . . . . . . 8/29 (55.29±1.25)% 9/29 (49.99±0.03)% SPECK128/128 16384 1.5 × 10 6 150 × 10 3 1/32 (100.00±0.00)% 10 6 150 × 10 3 1/10 (100.00±0.00)% 2/10 (99.99±0.01)% 3/10 (49.98±0.07)%</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6"><head>Fig. 13 :Fig. 14 :</head><label>1314</label><figDesc>Fig. 13: NNBits ensemble analysis of the avalanche sequence of AES-128. a) The avalanche block s corresponds to bits 128 × s . . . 128 × (s + 1). b) Four patterns P1 ... P4 occur over the total of 16, 384 bits in one avalanche unit. c) Examples of the recurring byte patterns of weak and strong bits observed in round 1/10.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1 :</head><label>1</label><figDesc>Avalanche dataset parameters of different ciphers. All sizes are in bits.</figDesc><table><row><cell></cell><cell>rounds</cell><cell>block size</cell><cell>key size</cell><cell>avalanche unit size</cell><cell>avalanche units per avalanche sequence</cell><cell>avalanche sequence size</cell></row><row><cell>SPECK32/64</cell><cell>22</cell><cell>32</cell><cell>64</cell><cell>1024</cell><cell>1000</cell><cell>1024000</cell></row><row><cell>SPECK64/128</cell><cell>27</cell><cell>64</cell><cell cols="2">128 4096</cell><cell>250</cell><cell>1024000</cell></row><row><cell>SPECK96/144</cell><cell>29</cell><cell>96</cell><cell cols="2">144 9216</cell><cell>110</cell><cell>1013750</cell></row><row><cell cols="2">SPECK128/128 32</cell><cell>128</cell><cell cols="2">128 16384</cell><cell>64</cell><cell>1048576</cell></row><row><cell>AES-128</cell><cell>10</cell><cell>128</cell><cell cols="2">128 16384</cell><cell>64</cell><cell>1048576</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 4 :</head><label>4</label><figDesc>Comparison of the distinguisher accuracies for round 6 for SPECK32/64.Interpretation. Table4shows the resulting accuracies for the ensemble distinguisher E compared to Gohr networks and a classical differential distinguisher.Note that E does not even make use of the values of the bits, but only of the information about prediction correctness. This experiment shows that the largest part of the accuracy of Gohr's network can be understood in terms of the correctness of single bit predictions and combining them to a random/not random decision with an MLP prediction head (identical to the prediction head used in Gohr's distinguisher). This means that one possible way Gohr's network can be understood is as essentially learning the underlying Boolean functions to predict single bits, and then evaluating the number of correct predictions. While we have here discussed the results for round 6 of SPECK32/64 in detail, similar results are obtained when comparing the ensemble distinguisher E with Gohr's depth-1 network in [3, Table2] for round 5 (92.2% vs 92.7%) and round 7 (60.1% vs 60.8%).</figDesc><table><row><cell>E reaches 78.1% accuracy, only 0.3% below the accuracy of Gohr's original</cell></row><row><cell>depth-1 network [3].</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 6 :</head><label>6</label><figDesc>Accuracies A for distinguishing avalanche units of the respective cipher from random data. Bold is the first round for which the distinguisher offers no advantage over a random-guess.</figDesc><table><row><cell cols="6">B Details of NIST results</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell></cell><cell cols="5">SPECK family: plaintext avalanche</cell><cell></cell><cell cols="5">AES-128: plaintext avalanche</cell></row><row><cell>amounts of tests passed</cell><cell>50 100 150 186</cell><cell></cell><cell></cell><cell cols="2">SPECK32/64 SPECK64/128 SPECK96/144 SPECK128/128</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell></cell><cell>0</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell></cell><cell>0</cell><cell>5</cell><cell>rounds</cell><cell>10</cell><cell>15</cell><cell>0</cell><cell>2</cell><cell>4</cell><cell cols="2">6 rounds</cell><cell>8</cell><cell>10</cell></row><row><cell></cell><cell cols="10">Fig. 12: Randomness evaluation of rounds by NIST STS.</cell></row><row><cell cols="6">C Details of NNBits results</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell></cell><cell>cipher</cell><cell></cell><cell cols="2">single aval. unit (bits)</cell><cell cols="2">aval. units in 300 Mbits</cell><cell cols="3">aval. units for training</cell><cell cols="2">aval. units for testing</cell></row><row><cell></cell><cell cols="3">SPECK32/64 1024</cell><cell></cell><cell>292968</cell><cell></cell><cell>147456</cell><cell></cell><cell></cell><cell>145512</cell></row><row><cell></cell><cell cols="3">SPECK64/128 4096</cell><cell></cell><cell>73242</cell><cell></cell><cell>36864</cell><cell></cell><cell></cell><cell>36378</cell></row><row><cell></cell><cell cols="3">SPECK96/144 9216</cell><cell></cell><cell>32552</cell><cell></cell><cell>16384</cell><cell></cell><cell></cell><cell>16168</cell></row><row><cell></cell><cell cols="3">SPECK128/128 16384</cell><cell></cell><cell>18310</cell><cell></cell><cell>12288</cell><cell></cell><cell></cell><cell>6022</cell></row><row><cell></cell><cell>AES-128</cell><cell></cell><cell>16384</cell><cell></cell><cell>18310</cell><cell></cell><cell>12288</cell><cell></cell><cell></cell><cell>6022</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 7 :</head><label>7</label><figDesc>Summary of the number of training and testing avalanche units presented to the neural network ensemble for each cipher. The detailed training outcomes for each round are shown in Table8.</figDesc><table><row><cell></cell><cell cols="7">epochs #(training) #(testing) runtime acc (%) p value random</cell></row><row><cell>cipher</cell><cell>r</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell cols="2">speck32 1 10</cell><cell>147456</cell><cell>145512</cell><cell>1.0</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>2 10</cell><cell>147456</cell><cell>145512</cell><cell>1.0</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>3 10</cell><cell>147456</cell><cell>145512</cell><cell>1.3</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>4 10</cell><cell>147456</cell><cell>145512</cell><cell>1.3</cell><cell cols="2">99.15 0</cell><cell>not random</cell></row><row><cell></cell><cell>5 10</cell><cell>147456</cell><cell>145512</cell><cell>1.3</cell><cell cols="2">95.01 0</cell><cell>not random</cell></row><row><cell></cell><cell>6 10</cell><cell>147456</cell><cell>145512</cell><cell>1.3</cell><cell cols="2">79.17 0</cell><cell>not random</cell></row><row><cell></cell><cell>7 10</cell><cell>147456</cell><cell>145512</cell><cell>1.3</cell><cell cols="3">51.35 9.7e-25 not random</cell></row><row><cell></cell><cell>8 10</cell><cell>147456</cell><cell>145512</cell><cell>3.8</cell><cell cols="2">50.17 0.19</cell><cell>random</cell></row><row><cell></cell><cell>9 10</cell><cell>147456</cell><cell>145512</cell><cell>4.2</cell><cell cols="3">50.23 0.087 random</cell></row><row><cell></cell><cell>22 10</cell><cell>147456</cell><cell>145512</cell><cell>2.7</cell><cell cols="3">50.27 0.039 random</cell></row><row><cell cols="2">speck64 1 40</cell><cell>36864</cell><cell>145512</cell><cell>1.5</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>2 40</cell><cell>36864</cell><cell>145512</cell><cell>1.5</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>3 40</cell><cell>36864</cell><cell>145512</cell><cell>1.5</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>4 40</cell><cell>36864</cell><cell>145512</cell><cell>1.4</cell><cell cols="2">99.57 0</cell><cell>not random</cell></row><row><cell></cell><cell>5 40</cell><cell>36864</cell><cell>145512</cell><cell>1.1</cell><cell cols="2">95.54 0</cell><cell>not random</cell></row><row><cell></cell><cell>6 40</cell><cell>36864</cell><cell>145512</cell><cell>1.1</cell><cell cols="2">77.33 0</cell><cell>not random</cell></row><row><cell></cell><cell>7 40</cell><cell>36864</cell><cell>145512</cell><cell>3.8</cell><cell cols="3">50.96 3e-13 not random</cell></row><row><cell></cell><cell>8 40</cell><cell>36864</cell><cell>145512</cell><cell>6.4</cell><cell>50.2</cell><cell>0.12</cell><cell>random</cell></row><row><cell></cell><cell>9 40</cell><cell>36864</cell><cell>145512</cell><cell>6.2</cell><cell cols="2">50.18 0.17</cell><cell>random</cell></row><row><cell></cell><cell>10 40</cell><cell>36864</cell><cell>145512</cell><cell>6.2</cell><cell cols="2">50.18 0.17</cell><cell>random</cell></row><row><cell></cell><cell>27 40</cell><cell>36864</cell><cell>145512</cell><cell>6.0</cell><cell cols="3">50.26 0.051 random</cell></row><row><cell cols="2">speck96 1 90</cell><cell>16384</cell><cell>145512</cell><cell>1.8</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>2 90</cell><cell>16384</cell><cell>145512</cell><cell>1.8</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>3 90</cell><cell>16384</cell><cell>145512</cell><cell>1.2</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>4 90</cell><cell>16384</cell><cell>145512</cell><cell>1.2</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>5 90</cell><cell>16384</cell><cell>145512</cell><cell>1.8</cell><cell cols="2">99.62 0</cell><cell>not random</cell></row><row><cell></cell><cell>6 90</cell><cell>16384</cell><cell>145512</cell><cell>1.2</cell><cell cols="2">94.82 0</cell><cell>not random</cell></row><row><cell></cell><cell>7 90</cell><cell>16384</cell><cell>145512</cell><cell>1.7</cell><cell cols="2">73.47 0</cell><cell>not random</cell></row><row><cell></cell><cell>8 90</cell><cell>16384</cell><cell>145512</cell><cell>3.9</cell><cell cols="3">50.71 6e-08 not random</cell></row><row><cell></cell><cell>9 90</cell><cell>16384</cell><cell>145512</cell><cell>9.3</cell><cell cols="3">50.22 0.097 random</cell></row><row><cell></cell><cell>10 90</cell><cell>16384</cell><cell>145512</cell><cell>9.7</cell><cell cols="2">50.21 0.11</cell><cell>random</cell></row><row><cell></cell><cell>11 90</cell><cell>16384</cell><cell>145512</cell><cell>9.6</cell><cell cols="3">50.22 0.092 random</cell></row><row><cell></cell><cell>29 90</cell><cell>16384</cell><cell>145512</cell><cell>9.8</cell><cell>50.2</cell><cell>0.13</cell><cell>random</cell></row><row><cell cols="2">speck128 1 120</cell><cell>12288</cell><cell>145512</cell><cell>1.3</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>2 120</cell><cell>12288</cell><cell>145512</cell><cell>2.1</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>3 120</cell><cell>12288</cell><cell>145512</cell><cell>2.2</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>4 120</cell><cell>12288</cell><cell>145512</cell><cell>1.2</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>5 120</cell><cell>12288</cell><cell>145512</cell><cell>1.5</cell><cell cols="2">100.0 0</cell><cell>not random</cell></row><row><cell></cell><cell>6 120</cell><cell>12288</cell><cell>145512</cell><cell>1.3</cell><cell cols="2">99.91 0</cell><cell>not random</cell></row><row><cell></cell><cell>7 120</cell><cell>12288</cell><cell>145512</cell><cell>2.4</cell><cell cols="2">99.21 0</cell><cell>not random</cell></row><row><cell></cell><cell>8 120</cell><cell>12288</cell><cell>145512</cell><cell>2.2</cell><cell cols="2">90.43 0</cell><cell>not random</cell></row><row><cell></cell><cell>9 120</cell><cell>12288</cell><cell>145512</cell><cell>2.2</cell><cell cols="2">63.58 0</cell><cell>not random</cell></row><row><cell></cell><cell>10 120</cell><cell>12288</cell><cell>145512</cell><cell>16.3</cell><cell cols="3">50.25 0.057 random</cell></row><row><cell></cell><cell>11 120</cell><cell>12288</cell><cell>145512</cell><cell>16.3</cell><cell cols="3">50.25 0.055 random</cell></row><row><cell></cell><cell>32 120</cell><cell>12288</cell><cell>145512</cell><cell>16.0</cell><cell cols="3">50.28 0.033 random</cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="1" xml:id="foot_0"><p>Note that this statement has limited practical implications: even if enough data, representational power of the network, as well as sufficient computational resources to train the network are given, the training itself may be an NP-hard problem<ref type="bibr" target="#b25">[26]</ref>.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="2" xml:id="foot_1"><p>This limit has recently been overpassed by human cryptanalysis in<ref type="bibr" target="#b7">[8]</ref>, giving machine learning a new threshold to overcome.</p></note>
+		</body>
+		<back>
+
+			<div type="availability">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Code available under <ref type="url" target="https://github.com/Crypto-TII/nnbits">https://github</ref></p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="extracted" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Tensorflow: A system for large-scale machine learning</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Abadi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Barham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Davis</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Dean</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Devin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Ghemawat</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Irving</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Isard</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">12th {USENIX} Symposium on Operating Systems Design and Implementation</title>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page" from="265" to="283" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Abadi, M., Barham, P., Chen, J., Chen, Z., Davis, A., Dean, J., Devin, M., Ghe- mawat, S., Irving, G., Isard, M., et al.: Tensorflow: A system for large-scale machine learning. In: 12th {USENIX} Symposium on Operating Systems Design and Im- plementation ({OSDI} 16). pp. 265-283 (2016)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Hands-on machine learning with Scikit-Learn, Keras and Tensor-Flow: concepts, tools, and techniques to build intelligent systems</title>
+		<author>
+			<persName><forename type="first">Aurélien</forename><surname>Géron</surname></persName>
+		</author>
+		<ptr target="https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/" />
+	</analytic>
+	<monogr>
+		<title level="m">O&apos;Reilly Media</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Aurélien Géron: Hands-on machine learning with Scikit-Learn, Keras and Tensor- Flow: concepts, tools, and techniques to build intelligent systems. O&apos;Reilly Media (2019), https://www.oreilly.com/library/view/hands-on-machine-learning/ 9781492032632/</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Deep neural networks aiding cryptanalysis : A case study of the Speck distinguisher</title>
+		<author>
+			<persName><forename type="first">N</forename><forename type="middle">N</forename><surname>Bacuieti</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><surname>Batina</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Picek</surname></persName>
+		</author>
+		<ptr target="https://eprint.iacr.org/2022/341" />
+		<imprint>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="1" to="24" />
+		</imprint>
+	</monogr>
+	<note type="report_type">ePrint</note>
+	<note type="raw_reference">Bacuieti, N.N., Batina, L., Picek, S.: Deep neural networks aiding cryptanalysis : A case study of the Speck distinguisher. ePrint pp. 1-24 (2022), https://eprint. iacr.org/2022/341</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+		<ptr target="https://doi.org/10.23919/DATE51398.2021.9474092" />
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-02-01">2021</date>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note>2021 Design</note>
+	<note type="raw_reference">Baksi, A., Breier, J., Chen, Y., Dong, X.: Machine learning assisted differential distinguishers for lightweight ciphers. In: 2021 Design, Automation Test in Europe Conference Exhibition (DATE). pp. 176-181 (2021). https://doi.org/10.23919/ DATE51398.2021.9474092</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference<address><addrLine>Road, Fort Meade, MD 20755, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2013">9800. 2013</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+		<respStmt>
+			<orgName>National Security Agency</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Beaulieu, R., Shors, D., Smith, J., Treatman-Clark, S., Weeks, B., Wingers, L.: The SIMON and SPECK Families of Lightweight Block Ciphers. National Security Agency (NSA), 9800 Savage Road, Fort Meade, MD 20755, USA (2013)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Performance Comparison Between Deep Learning-Based and Conventional Cryptographic Distinguishers</title>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matteo</forename><surname>Rossi</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-80129-8_48</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Networks and Systems</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="page" from="681" to="701" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bellini, E., Rossi, M.: Performance comparison between deep learning-based and conventional cryptographic distinguishers. In: Intelligent Computing, pp. 681-701. Springer (2021)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quan</forename><forename type="middle">Quan</forename><surname>Tan</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-77870-5_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Benamira, A., Gerault, D., Peyrin, T., Tan, Q.Q.: A deeper look at machine learning-based cryptanalysis. In: Annual International Conference on the Theory and Applications of Cryptographic Techniques. pp. 805-835. Springer (2021)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Meet-in-the-Filter and Dynamic Counting with Applications to Speck</title>
+		<author>
+			<persName><forename type="first">Alex</forename><surname>Biryukov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Luan</forename><surname>Cardoso Dos Santos</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Je</forename><forename type="middle">Sen</forename><surname>Teh</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Aleksei</forename><surname>Udovenko</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vesselin</forename><surname>Velichkov</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-33488-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="149" to="177" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biryukov, A., dos Santos, L.C., Teh, J.S., Udovenko, A., Velichkov, V.: Meet-in-the- filter and dynamic counting with applications to speck. Cryptology ePrint Archive (2022)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Bagging Predictors</title>
+		<author>
+			<persName><forename type="first">Leo</forename><surname>Breiman</surname></persName>
+		</author>
+		<idno type="DOI">10.1023/a:1018054314350</idno>
+		<ptr target="https://doi.org/10.1023/A:1018054314350" />
+	</analytic>
+	<monogr>
+		<title level="j">Machine Learning</title>
+		<title level="j" type="abbrev">Machine Learning</title>
+		<idno type="ISSN">0885-6125</idno>
+		<idno type="ISSNe">1573-0565</idno>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="123" to="140" />
+			<date type="published" when="1996-08">1996</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Breiman, L.: Bagging predictors. Machine Learning 24(2), 123-140 (1996). https: //doi.org/10.1023/A:1018054314350</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Stanza-GLM: Calibrated Non-Gaussian State-Space Forecasting with Nonlinear Latent Dynamics</title>
+		<author>
+			<persName><forename type="first">Sayan</forename><surname>Mukherjee</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">George</forename><surname>Buckle</surname></persName>
+		</author>
+		<idno type="DOI">10.71448/bcds2232-2</idno>
+		<idno>27708-0305</idno>
+		<ptr target="http://www.phy.duke.edu/$\sim$rgb/General/dieharder.php" />
+	</analytic>
+	<monogr>
+		<title level="j">Bulletin of Computer and Data Sciences</title>
+		<title level="j" type="abbrev">Bull. Comput. Data Sci.</title>
+		<idno type="ISSNe">3072-2926</idno>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="13" to="21" />
+			<date type="published" when="2006">2006</date>
+			<publisher>TechForum Publishing Group</publisher>
+			<pubPlace>Durham, NC</pubPlace>
+		</imprint>
+		<respStmt>
+			<orgName>Duke University Physics Department</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Brown, R.G.: DieHarder: A Gnu Public License Random Number Tester. Duke University Physics Department, Durham, NC 27708-0305 (2006), http://www.phy. duke.edu/$\sim$rgb/General/dieharder.php</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">The strict avalanche criterion randomness test</title>
+		<author>
+			<persName><forename type="first">Julio</forename><forename type="middle">Cesar Hernandez</forename><surname>Castro</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">José</forename><forename type="middle">María</forename><surname>Sierra</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andre</forename><surname>Seznec</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Antonio</forename><surname>Izquierdo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Arturo</forename><surname>Ribagorda</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.matcom.2004.09.001</idno>
+		<ptr target="https://doi.org/10.1016/j.matcom.2004.09.001" />
+	</analytic>
+	<monogr>
+		<title level="j">Mathematics and Computers in Simulation</title>
+		<title level="j" type="abbrev">Mathematics and Computers in Simulation</title>
+		<idno type="ISSN">0378-4754</idno>
+		<imprint>
+			<biblScope unit="volume">68</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="1" to="7" />
+			<date type="published" when="2005-02">2005</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Castro, J.C.H., Sierra, J.M., Seznec, A., Izquierdo, A., Ribagorda, A.: The strict avalanche criterion randomness test. Mathematics and Computers in Simulation 68(1), 1-7 (2005). https://doi.org/10.1016/j.matcom.2004.09.001</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">The design of xoodoo and xoofff</title>
+		<author>
+			<persName><forename type="first">J</forename><surname>Daemen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Hoffert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Van Assche</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><surname>Van Keer</surname></persName>
+		</author>
+		<idno type="DOI">10.13154/tosc.v2018.i4.1-38</idno>
+		<ptr target="https://tosc.iacr.org/index.php/ToSC/article/view/7359" />
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Symmetric Cryptology</title>
+		<imprint>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="1" to="38" />
+			<date type="published" when="2018-12">2018. Dec 2018</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Daemen, J., Hoffert, S., Van Assche, G., Van Keer, R.: The design of xoodoo and xoofff. IACR Transactions on Symmetric Cryptology 2018(4), 1-38 (Dec 2018). https://doi.org/10.13154/tosc.v2018.i4.1-38, https://tosc.iacr. org/index.php/ToSC/article/view/7359</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b12">
+	<monogr>
+		<author>
+			<persName><forename type="first">J</forename><surname>Daor</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Daemen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Rijmen</surname></persName>
+		</author>
+		<ptr target="https://www.cs.miami.edu/home/burt/learning/Csc688.012/rijndael/rijndael_doc_V2.pdf" />
+		<title level="m">AES proposal: Rijndael (10 1999</title>
+		<imprint/>
+	</monogr>
+	<note type="raw_reference">Daor, J., Daemen, J., Rijmen, V.: AES proposal: Rijndael (10 1999), available at: https://www.cs.miami.edu/home/burt/learning/Csc688.012/rijndael/ rijndael_doc_V2.pdf</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Cryptography and Computer Privacy</title>
+		<author>
+			<persName><forename type="first">Horst</forename><surname>Feistel</surname></persName>
+		</author>
+		<idno type="DOI">10.1038/scientificamerican0573-15</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Scientific American</title>
+		<title level="j" type="abbrev">Sci Am</title>
+		<idno type="ISSN">0036-8733</idno>
+		<imprint>
+			<biblScope unit="volume">228</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="15" to="23" />
+			<date type="published" when="1973-05">1973</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Feistel, H.: Cryptography and computer privacy. Scientific american 228(5), 15-23 (1973)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Perils of the Deep</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.4324/9781315247847-14</idno>
+		<ptr target="https://github.com/agohr/deep_speck" />
+	</analytic>
+	<monogr>
+		<title level="m">Novum Millennium</title>
+		<imprint>
+			<publisher>Routledge</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="101" to="108" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr, A.: Deep speck. https://github.com/agohr/deep_speck (2019)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6.</idno>
+		<ptr target="https://doi.org/10.1007/978-3-030-26951-7_6" />
+	</analytic>
+	<monogr>
+		<title level="j">Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)</title>
+		<imprint>
+			<biblScope unit="volume">11693</biblScope>
+			<biblScope unit="page" from="150" to="179" />
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note>LNCS</note>
+	<note type="raw_reference">Gohr, A.: Improving Attacks on Round-Reduced Speck32/64 Using Deep Learn- ing. Lecture Notes in Computer Science (including subseries Lecture Notes in Ar- tificial Intelligence and Lecture Notes in Bioinformatics) 11693 LNCS, 150-179 (2019). https://doi.org/10.1007/978-3-030-26951-7_6, https://doi.org/10. 1007/978-3-030-26951-7_6.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b16">
+	<monogr>
+		<author>
+			<persName><forename type="first">I</forename><surname>Goodfellow</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Bengio</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Courville</surname></persName>
+		</author>
+		<title level="m">Deep learning</title>
+		<imprint>
+			<publisher>The MIT Press</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Goodfellow, I., Bengio, Y., Courville, A.: Deep learning: The MIT Press, vol.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">&lt;scp&gt;DARPA&lt;/scp&gt;&apos;s explainable&lt;scp&gt;AI&lt;/scp&gt;(&lt;scp&gt;XAI&lt;/scp&gt;) program: A retrospective</title>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gunning</surname></persName>
+			<idno type="ORCID">0000-0001-5435-796X</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Eric</forename><surname>Vorm</surname></persName>
+			<idno type="ORCID">0000-0003-2844-1994</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jennifer</forename><forename type="middle">Yunyan</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-9102-0482</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Matt</forename><surname>Turek</surname></persName>
+		</author>
+		<idno type="DOI">10.1002/ail2.61</idno>
+		<ptr target="https://doi.org/10.1002/AIL2.61" />
+	</analytic>
+	<monogr>
+		<title level="j">Applied AI Letters</title>
+		<title level="j" type="abbrev">Applied AI Letters</title>
+		<idno type="ISSN">2689-5595</idno>
+		<imprint>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<date type="published" when="2021-12">12 2021</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gunning, D., Vorm, E., Wang, J.Y., Turek, M.: Darpa&apos;s explainable ai (xai) pro- gram: A retrospective. Applied AI Letters 2, e61 (12 2021). https://doi.org/ 10.1002/AIL2.61</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Automated statistical methods for measuring the strength of block ciphers</title>
+		<author>
+			<persName><forename type="first">H</forename><forename type="middle">M</forename><surname>Gustafson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">E</forename><forename type="middle">P</forename><surname>Dawson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">Dj. </forename><surname>Golić</surname></persName>
+		</author>
+		<idno type="DOI">10.1023/a:1018521732085</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Statistics and Computing</title>
+		<title level="j" type="abbrev">Statistics and Computing</title>
+		<idno type="ISSN">0960-3174</idno>
+		<idno type="ISSNe">1573-1375</idno>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="125" to="135" />
+			<date type="published" when="1997-06">1997</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gustafson, H., Dawson, E., Golić, J.D.: Automated statistical methods for measur- ing the strength of block ciphers. Statistics and Computing 7(2), 125-135 (1997)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Deep Residual Learning for Image Recognition</title>
+		<author>
+			<persName><forename type="first">Kaiming</forename><surname>He</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiangyu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaoqing</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2016.90</idno>
+		<ptr target="http://image-net.org/challenges/LSVRC/2015/" />
+	</analytic>
+	<monogr>
+		<title level="m">2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2016-06">Decem. 2016</date>
+			<biblScope unit="volume">2016</biblScope>
+			<biblScope unit="page" from="770" to="778" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">He, K., Zhang, X., Ren, S., Sun, J.: Deep residual learning for image recognition. In: Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition. vol. 2016-Decem, pp. 770-778 (2016). https://doi.org/ 10.1109/CVPR.2016.90, http://image-net.org/challenges/LSVRC/2015/</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Approximation capabilities of multilayer feedforward networks</title>
+		<author>
+			<persName><forename type="first">Kurt</forename><surname>Hornik</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/0893-6080(91)90009-t</idno>
+		<ptr target="https://doi.org/10.1016/0893-6080(91)90009-T" />
+	</analytic>
+	<monogr>
+		<title level="j">Neural Networks</title>
+		<title level="j" type="abbrev">Neural Networks</title>
+		<idno type="ISSN">0893-6080</idno>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="251" to="257" />
+			<date type="published" when="1991">1991</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hornik, K.: Approximation capabilities of multilayer feedforward networks. Neural Networks (1991). https://doi.org/10.1016/0893-6080(91)90009-T</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Improve Neural Distinguishers of SIMON and SPECK</title>
+		<author>
+			<persName><forename type="first">Zezhou</forename><surname>Hou</surname></persName>
+			<idno type="ORCID">0000-0002-7764-9663</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+			<idno type="ORCID">0000-0003-2223-4329</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1155/2021/9288229</idno>
+		<ptr target="https://doi.org/10.1155/2021/9288229" />
+	</analytic>
+	<monogr>
+		<title level="j">Security and Communication Networks</title>
+		<title level="j" type="abbrev">Security and Communication Networks</title>
+		<idno type="ISSN">1939-0114</idno>
+		<idno type="ISSNe">1939-0122</idno>
+		<imprint>
+			<biblScope unit="volume">2021</biblScope>
+			<biblScope unit="page" from="1" to="11" />
+			<date type="published" when="2021-01">2021. jan 2021</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou, Z., Ren, J., Chen, S., Fu, A.: Improve neural distinguishers of simon and speck. Sec. and Commun. Netw. 2021 (jan 2021). https://doi.org/10.1155/ 2021/9288229</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Squeeze-and-Excitation Networks</title>
+		<author>
+			<persName><forename type="first">Jie</forename><surname>Hu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gang</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2018.00745</idno>
+		<ptr target="https://doi.org/10.1109/CVPR.2018.00745" />
+	</analytic>
+	<monogr>
+		<title level="m">2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2018-06">2018</date>
+			<biblScope unit="page" from="7132" to="7141" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hu, J., Shen, L., Sun, G.: Squeeze-and-excitation networks. In: 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition. pp. 7132-7141 (2018). https://doi.org/10.1109/CVPR.2018.00745</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Differential-Linear Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Susan</forename><forename type="middle">K</forename><surname>Langford</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Martin</forename><forename type="middle">E</forename><surname>Hellman</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-48658-5_3</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Y</forename><forename type="middle">G</forename><surname>Desmedt</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Berlin Heidelberg; Berlin, Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1994">1994</date>
+			<biblScope unit="page" from="17" to="25" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Langford, S.K., Hellman, M.E.: Differential-linear cryptanalysis. In: Desmedt, Y.G. (ed.) Advances in Cryptology -CRYPTO &apos;94. pp. 17-25. Springer Berlin Heidel- berg, Berlin, Heidelberg (1994)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Q&amp;A-LF : A French Question-Answering Benchmark for Measuring Fine-Grained Lexical Knowledge</title>
+		<author>
+			<persName><forename type="first">Alexander</forename><surname>Petrov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alessandra</forename><surname>Mancas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Viviane</forename><surname>Binet</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Antoine</forename><surname>Venant</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">François</forename><surname>Lareau</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yves</forename><surname>Lepage</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Philippe</forename><surname>Langlais</surname></persName>
+		</author>
+		<idno type="DOI">10.26615/978-954-452-098-4-110</idno>
+		<ptr target="http://www.iro.umontreal.ca/~simardr/TestU01.zip" />
+	</analytic>
+	<monogr>
+		<title level="m">International Conference Recent Advances in Natural Language Processing</title>
+		<meeting><address><addrLine>Montréal, Québec, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Incoma Ltd. Shoumen, BULGARIA</publisher>
+			<date type="published" when="2001">2001</date>
+			<biblScope unit="volume">2025</biblScope>
+			<biblScope unit="page" from="962" to="969" />
+		</imprint>
+		<respStmt>
+			<orgName>Département d&apos;Informatique et Recherche opérationnelle ; Université de Montréal</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">L&apos;Ecuyer, P., Simard, R.: TestU01: a Software Library in ANSI C for Empiri- cal Testing of Random Number Generators, Software User&apos;s Guide. Département d&apos;Informatique et Recherche opérationnelle, Université de Montréal, Montréal, Québec, Canada (2001), http://www.iro.umontreal.ca/~simardr/TestU01.zip</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">On the computational efficiency of symmetric neural networks</title>
+		<author>
+			<persName><forename type="first">R</forename><surname>Livni</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Shalev-Shwartz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">O</forename><surname>Shamir</surname></persName>
+		</author>
+		<ptr target="https://papers.nips.cc/paper/2014/hash/3a0772443a0739141292a5429b952fe6-Abstract.html" />
+	</analytic>
+	<monogr>
+		<title level="m">Advances in neural information processing systems</title>
+		<imprint>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="page" from="855" to="863" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Livni, R., Shalev-Shwartz, S., Shamir, O.: On the computational efficiency of symmetric neural networks. Advances in neural information process- ing systems 27, 855--863 (2014), https://papers.nips.cc/paper/2014/hash/ 3a0772443a0739141292a5429b952fe6-Abstract.html</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">The M4 Competition: 100,000 time series and 61 forecasting methods</title>
+		<author>
+			<persName><forename type="first">Spyros</forename><surname>Makridakis</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Evangelos</forename><surname>Spiliotis</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vassilios</forename><surname>Assimakopoulos</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.ijforecast.2019.04.014</idno>
+		<ptr target="https://doi.org/10.1016/j.ijforecast.2019.04.014" />
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Forecasting</title>
+		<title level="j" type="abbrev">International Journal of Forecasting</title>
+		<idno type="ISSN">0169-2070</idno>
+		<imprint>
+			<biblScope unit="volume">36</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="54" to="74" />
+			<date type="published" when="2020-01">2020</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Makridakis, S., Spiliotis, E., Assimakopoulos, V.: The M4 Competition: 100,000 time series and 61 forecasting methods. International Journal of Forecasting 36(1), 54-74 (2020). https://doi.org/10.1016/j.ijforecast.2019.04.014</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Ray: A distributed framework for emerging {AI} applications</title>
+		<author>
+			<persName><forename type="first">P</forename><surname>Moritz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><surname>Nishihara</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Tumanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><surname>Liaw</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">E</forename><surname>Liang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Elibol</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><surname>Paul</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">I</forename><surname>Jordan</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">13th USENIX Symposium on Operating Systems Design and Implementation (OSDI 18)</title>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+			<biblScope unit="page" from="561" to="577" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Moritz, P., Nishihara, R., Wang, S., Tumanov, A., Liaw, R., Liang, E., Elibol, M., Yang, Z., Paul, W., Jordan, M.I., et al.: Ray: A distributed framework for emerging {AI} applications. In: 13th USENIX Symposium on Operating Systems Design and Implementation (OSDI 18). pp. 561-577 (2018)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">N-BEATS: neural basis expansion analysis for interpretable time series forecasting</title>
+		<author>
+			<persName><forename type="first">B</forename><forename type="middle">N</forename><surname>Oreshkin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><surname>Carpov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">N</forename><surname>Chapados</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Bengio</surname></persName>
+		</author>
+		<ptr target="https://openreview.net/forum?id=r1ecqn4YwB" />
+	</analytic>
+	<monogr>
+		<title level="m">8th International Conference on Learning Representations, ICLR 2020</title>
+		<meeting><address><addrLine>Addis Ababa, Ethiopia</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2020">April 26-30, 2020. 2020</date>
+		</imprint>
+	</monogr>
+	<note>OpenReview.net</note>
+	<note type="raw_reference">Oreshkin, B.N., Carpov, D., Chapados, N., Bengio, Y.: N-BEATS: neural basis expansion analysis for interpretable time series forecasting. In: 8th International Conference on Learning Representations, ICLR 2020, Addis Ababa, Ethiopia, April 26-30, 2020. OpenReview.net (2020), https://openreview.net/forum?id= r1ecqn4YwB</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b29">
+	<monogr>
+		<title level="m" type="main">On the convergence of adam and beyond</title>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">J</forename><surname>Reddi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Kale</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Kumar</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1904.09237</idno>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Reddi, S.J., Kale, S., Kumar, S.: On the convergence of adam and beyond. arXiv preprint arXiv:1904.09237 (2019)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b30">
+	<monogr>
+		<title level="m" type="main">A statistical test suite for random and pseudorandom number generators for cryptographic applications</title>
+		<author>
+			<persName><forename type="first">Andrew</forename><surname>Rukhin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Juan</forename><surname>Sota</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">James</forename><surname>Nechvatal</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Miles</forename><surname>Smid</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Elaine</forename><surname>Barker</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Leigh</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mark</forename><surname>Levenson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mark</forename><surname>Vangel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Banks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alan</forename><surname>Heckert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">James</forename><surname>Dray</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">San</forename><surname>Vo</surname></persName>
+		</author>
+		<idno type="DOI">10.6028/nist.sp.800-22</idno>
+		<imprint>
+			<date type="published" when="2010">2010</date>
+			<publisher>National Institute of Standards and Technology</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Rukhin, A., Soto, J., Nechvatal, J., Smid, M., Barker, E., Leigh, S., Levenson, M., Vangel, M., Heckert, A., Dray, J., Vo, S.: A Statistical Test Suite for Random and Pseudorandom Number Generators for Cryptographic Applications. NIST (2010)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Mastering Atari, Go, chess and shogi by planning with a learned model</title>
+		<author>
+			<persName><forename type="first">Julian</forename><surname>Schrittwieser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ioannis</forename><surname>Antonoglou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Hubert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Karen</forename><surname>Simonyan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Laurent</forename><surname>Sifre</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Simon</forename><surname>Schmitt</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Arthur</forename><surname>Guez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Edward</forename><surname>Lockhart</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Demis</forename><surname>Hassabis</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thore</forename><surname>Graepel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Timothy</forename><surname>Lillicrap</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Silver</surname></persName>
+			<idno type="ORCID">0000-0002-5197-2892</idno>
+		</author>
+		<idno type="DOI">10.1038/s41586-020-03051-4</idno>
+		<ptr target="https://doi.org/10.1038/s41586-020-03051-4" />
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<title level="j" type="abbrev">Nature</title>
+		<idno type="ISSN">0028-0836</idno>
+		<idno type="ISSNe">1476-4687</idno>
+		<imprint>
+			<biblScope unit="volume">588</biblScope>
+			<biblScope unit="issue">7839</biblScope>
+			<biblScope unit="page" from="604" to="609" />
+			<date type="published" when="2020-12-23">2020</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Schrittwieser, J., Antonoglou, I., Hubert, T., Simonyan, K., Sifre, L., Schmitt, S., Guez, A., Lockhart, E., Hassabis, D., Graepel, T., Lillicrap, T., Silver, D.: Mastering Atari, Go, chess and shogi by planning with a learned model. Nature 588(7839), 604-609 (2020). https://doi.org/10.1038/s41586-020-03051-4</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Very deep convolutional networks for large-scale image recognition</title>
+		<author>
+			<persName><forename type="first">K</forename><surname>Simonyan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Zisserman</surname></persName>
+		</author>
+		<ptr target="http://www.robots.ox.ac.uk/" />
+	</analytic>
+	<monogr>
+		<title level="m">3rd International Conference on Learning Representations, ICLR 2015 -Conference Track Proceedings</title>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Simonyan, K., Zisserman, A.: Very deep convolutional networks for large-scale image recognition. In: 3rd International Conference on Learning Representations, ICLR 2015 -Conference Track Proceedings (2015), http://www.robots.ox.ac.uk/</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b33">
+	<monogr>
+		<title level="m" type="main">Randomness testing of the advanced encryption standard candidate algorithms</title>
+		<author>
+			<persName><forename type="first">Juan</forename><forename type="middle">Jr</forename><surname>Soto</surname></persName>
+		</author>
+		<idno type="DOI">10.6028/nist.ir.6390</idno>
+		<ptr target="http://www.nist.gov/customcf/get_pdf.cfm?pub_id=151193" />
+		<imprint>
+			<date type="published" when="1999">1999</date>
+			<publisher>National Institute of Standards and Technology</publisher>
+		</imprint>
+		<respStmt>
+			<orgName>NISTIR</orgName>
+		</respStmt>
+	</monogr>
+	<note type="report_type">NIST Interagency/Internal Report</note>
+	<note type="raw_reference">Soto, J.: Randomness testing of the advanced encryption standard candidate al- gorithms. NIST Interagency/Internal Report (NISTIR) (1999), http://www.nist. gov/customcf/get_pdf.cfm?pub_id=151193</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b34">
+	<monogr>
+		<title level="m" type="main">Randomness testing of the advanced encryption standard finalist candidates</title>
+		<author>
+			<persName><forename type="first">Juan</forename><surname>Soto</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lawrence</forename><surname>Bassham</surname></persName>
+		</author>
+		<idno type="DOI">10.6028/nist.ir.6483</idno>
+		<ptr target="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=151216" />
+		<imprint>
+			<date type="published" when="2000">2000</date>
+			<publisher>National Institute of Standards and Technology</publisher>
+		</imprint>
+		<respStmt>
+			<orgName>NISTIR</orgName>
+		</respStmt>
+	</monogr>
+	<note type="report_type">NIST Interagency/Internal Report</note>
+	<note type="raw_reference">Soto, J., Bassham, L.: Randomness Testing of the Advanced Encryption Standard Finalist Candidates . NIST Interagency/Internal Report (NISTIR) (2000), https: //tsapps.nist.gov/publication/get_pdf.cfm?pub_id=151216</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Determining Cryptographic Distinguishers for eStream and SHA-3 Candidate Functions with Evolutionary Circuits</title>
+		<author>
+			<persName><forename type="first">Petr</forename><surname>Švenda</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Martin</forename><surname>Ukrop</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vashek</forename><surname>Matyáš</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-44788-8_17</idno>
+		<ptr target="https://doi.org/10.1007/978-3-662-44788-8_17" />
+	</analytic>
+	<monogr>
+		<title level="m">Communications in Computer and Information Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="volume">456</biblScope>
+			<biblScope unit="page" from="290" to="305" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Švenda, P., Ukrop, M., Matyáš, V.: Determining cryptographic distinguishers for estream and sha-3 candidate functions with evolutionary circuits. Communications in Computer and Information Science 456, 290-305 (2014). https://doi.org/10. 1007/978-3-662-44788-8_17</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b36">
+	<monogr>
+		<author>
+			<persName><forename type="first">P</forename><surname>Team</surname></persName>
+		</author>
+		<ptr target="https://pytorch.org/hub/pytorch_vision_resnet/" />
+		<title level="m">PyTorch ResNet Implementation</title>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Team, P.: PyTorch ResNet Implementation. https://pytorch.org/hub/pytorch_ vision_resnet/ (2022)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b37">
+	<analytic>
+		<title level="a" type="main">X‐ray attenuation project</title>
+		<author>
+			<persName><forename type="first">R</forename><surname>Team</surname></persName>
+		</author>
+		<idno type="DOI">10.1002/xrs.1300110215</idno>
+		<ptr target="https://github.com/ray-project/ray" />
+	</analytic>
+	<monogr>
+		<title level="j">X-Ray Spectrometry</title>
+		<title level="j" type="abbrev">X-Ray Spectrometry</title>
+		<idno type="ISSN">0049-8246</idno>
+		<idno type="ISSNe">1097-4539</idno>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<date type="published" when="2022">2022</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Team, R.: Ray. https://github.com/ray-project/ray (2022)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Dedication</title>
+		<author>
+			<persName><forename type="first">T</forename><forename type="middle">I I</forename><surname>Tii)</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/b978-0-443-06867-6.50001-5</idno>
+		<ptr target="https://github.com/Crypto-TII/nnbits" />
+	</analytic>
+	<monogr>
+		<title level="m">Acupuncture</title>
+		<imprint>
+			<publisher>Elsevier</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="Tii" to="Tii" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">TII), T.I.I.: Crypto-tii nnbits. https://github.com/Crypto-TII/nnbits (2022)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b39">
+	<analytic>
+		<title level="a" type="main">SciPy 1.0: fundamental algorithms for scientific computing in Python</title>
+		<author>
+			<persName><forename type="first">Pauli</forename><surname>Virtanen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ralf</forename><surname>Gommers</surname></persName>
+			<idno type="ORCID">0000-0002-0300-3333</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Travis</forename><forename type="middle">E</forename><surname>Oliphant</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matt</forename><surname>Haberland</surname></persName>
+			<idno type="ORCID">0000-0003-4806-3601</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Tyler</forename><surname>Reddy</surname></persName>
+			<idno type="ORCID">0000-0003-2364-6157</idno>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Cournapeau</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Evgeni</forename><surname>Burovski</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pearu</forename><surname>Peterson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Warren</forename><surname>Weckesser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jonathan</forename><surname>Bright</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stéfan</forename><forename type="middle">J</forename><surname>Van Der Walt</surname></persName>
+			<idno type="ORCID">0000-0001-9276-1891</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Matthew</forename><surname>Brett</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Joshua</forename><surname>Wilson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><forename type="middle">Jarrod</forename><surname>Millman</surname></persName>
+			<idno type="ORCID">0000-0002-5263-5070</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Nikolay</forename><surname>Mayorov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andrew</forename><forename type="middle">R J</forename><surname>Nelson</surname></persName>
+			<idno type="ORCID">0000-0002-4548-3558</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Eric</forename><surname>Jones</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Robert</forename><surname>Kern</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eric</forename><surname>Larson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">J</forename><surname>Carey</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">İlhan</forename><surname>Polat</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Feng</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eric</forename><forename type="middle">W</forename><surname>Moore</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jake</forename><surname>Vanderplas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Denis</forename><surname>Laxalde</surname></persName>
+			<idno type="ORCID">0000-0002-5540-4825</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Josef</forename><surname>Perktold</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Robert</forename><surname>Cimrman</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ian</forename><surname>Henriksen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">E</forename><forename type="middle">A</forename><surname>Quintero</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Charles</forename><forename type="middle">R</forename><surname>Harris</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anne</forename><forename type="middle">M</forename><surname>Archibald</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Antônio</forename><forename type="middle">H</forename><surname>Ribeiro</surname></persName>
+			<idno type="ORCID">0000-0003-3632-8529</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Fabian</forename><surname>Pedregosa</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Paul</forename><surname>Van Mulbregt</surname></persName>
+			<idno type="ORCID">0000-0002-2382-8308</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Aditya</forename><surname>Vijaykumar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alessandro</forename><forename type="middle">Pietro</forename><surname>Bardelli</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alex</forename><surname>Rothberg</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andreas</forename><surname>Hilboll</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andreas</forename><surname>Kloeckner</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anthony</forename><surname>Scopatz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Antony</forename><surname>Lee</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ariel</forename><surname>Rokem</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">Nathan</forename><surname>Woods</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chad</forename><surname>Fulton</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Charles</forename><surname>Masson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Christian</forename><surname>Häggström</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Clark</forename><surname>Fitzgerald</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><forename type="middle">A</forename><surname>Nicholson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><forename type="middle">R</forename><surname>Hagen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dmitrii</forename><forename type="middle">V</forename><surname>Pasechnik</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Olivetti</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eric</forename><surname>Martin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eric</forename><surname>Wieser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Fabrice</forename><surname>Silva</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Felix</forename><surname>Lenders</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Florian</forename><surname>Wilhelm</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Young</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gavin</forename><forename type="middle">A</forename><surname>Price</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gert-Ludwig</forename><surname>Ingold</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregory</forename><forename type="middle">E</forename><surname>Allen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregory</forename><forename type="middle">R</forename><surname>Lee</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hervé</forename><surname>Audren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Irvin</forename><surname>Probst</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jörg</forename><forename type="middle">P</forename><surname>Dietrich</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jacob</forename><surname>Silterra</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">James</forename><forename type="middle">T</forename><surname>Webber</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Janko</forename><surname>Slavič</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Joel</forename><surname>Nothman</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Johannes</forename><surname>Buchner</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Johannes</forename><surname>Kulick</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Johannes</forename><forename type="middle">L</forename><surname>Schönberger</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">José</forename><forename type="middle">Vinícius</forename><surname>De Miranda Cardoso</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Joscha</forename><surname>Reimer</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Joseph</forename><surname>Harrington</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Juan</forename><forename type="middle">Luis Cano</forename><surname>Rodríguez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Juan</forename><surname>Nunez-Iglesias</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Justin</forename><surname>Kuczynski</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kevin</forename><surname>Tritz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Martin</forename><surname>Thoma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matthew</forename><surname>Newville</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matthias</forename><surname>Kümmerer</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Maximilian</forename><surname>Bolingbroke</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Michael</forename><surname>Tartre</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mikhail</forename><surname>Pak</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nathaniel</forename><forename type="middle">J</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nikolai</forename><surname>Nowaczyk</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nikolay</forename><surname>Shebanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Oleksandr</forename><surname>Pavlyk</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Per</forename><forename type="middle">A</forename><surname>Brodtkorb</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Perry</forename><surname>Lee</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Robert</forename><forename type="middle">T</forename><surname>Mcgibbon</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Roman</forename><surname>Feldbauer</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sam</forename><surname>Lewis</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sam</forename><surname>Tygier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Scott</forename><surname>Sievert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sebastiano</forename><surname>Vigna</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Peterson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Surhud</forename><surname>More</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tadeusz</forename><surname>Pudlik</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Takuya</forename><surname>Oshima</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><forename type="middle">J</forename><surname>Pingel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><forename type="middle">P</forename><surname>Robitaille</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Spura</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thouis</forename><forename type="middle">R</forename><surname>Jones</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tim</forename><surname>Cera</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tim</forename><surname>Leslie</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tiziano</forename><surname>Zito</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tom</forename><surname>Krauss</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Utkarsh</forename><surname>Upadhyay</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yaroslav</forename><forename type="middle">O</forename><surname>Halchenko</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yoshiki</forename><surname>Vázquez-Baeza</surname></persName>
+		</author>
+		<idno type="DOI">10.1038/s41592-019-0686-2</idno>
+		<ptr target="https://doi.org/10.1038/s41592-019-0686-2" />
+	</analytic>
+	<monogr>
+		<title level="j">Nature Methods</title>
+		<title level="j" type="abbrev">Nat Methods</title>
+		<idno type="ISSN">1548-7091</idno>
+		<idno type="ISSNe">1548-7105</idno>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="261" to="272" />
+			<date type="published" when="2020-02-03">2020</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Virtanen, P.e.a.: SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. Nature Methods 17, 261-272 (2020). https://doi.org/10.1038/ s41592-019-0686-2</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b40">
+	<analytic>
+		<title level="a" type="main">pseudorandom number sequence</title>
+		<author>
+			<persName><forename type="first">J</forename><surname>Walker</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/springerreference_22427</idno>
+		<ptr target="http://www.fourmilab.ch/random/" />
+	</analytic>
+	<monogr>
+		<title level="j">Web site</title>
+		<imprint>
+			<date type="published" when="2008-01">Jan 2008</date>
+			<publisher>Springer-Verlag</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Walker, J.: ENT: A pseudorandom number sequence test program. Web site (Jan 2008), http://www.fourmilab.ch/random/</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Differential-ML Distinguisher: Machine Learning Based Generic Extension for Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Tarun</forename><surname>Yadav</surname></persName>
+			<idno type="ORCID">0000-0002-5462-8253</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Manoj</forename><surname>Kumar</surname></persName>
+			<idno type="ORCID">0000-0001-6900-4075</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-88238-9_10</idno>
+		<ptr target="https://doi.org/10.1007/978-3-030-88238-9_10" />
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Bogotá, Colombia; Berlin, Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">October 6-8, 2021. 2021</date>
+			<biblScope unit="page" from="191" to="212" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yadav, T., Kumar, M.: Differential-ml distinguisher: Machine learning based generic extension for differential cryptanalysis. In: Progress in Cryptology -LAT- INCRYPT 2021: 7th International Conference on Cryptology and Information Se- curity in Latin America, Bogotá, Colombia, October 6-8, 2021, Proceedings. p. 191-212. Springer-Verlag, Berlin, Heidelberg (2021). https://doi.org/10.1007/ 978-3-030-88238-9_10</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

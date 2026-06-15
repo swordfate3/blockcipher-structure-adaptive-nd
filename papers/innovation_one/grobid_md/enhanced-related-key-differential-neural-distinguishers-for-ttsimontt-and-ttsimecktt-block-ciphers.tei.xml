@@ -1,0 +1,1479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Enhanced related-key differential neural distinguishers for &lt;tt&gt;SIMON&lt;/tt&gt; and &lt;tt&gt;SIMECK&lt;/tt&gt; block ciphers</title>
+				<funder ref="#_kESsfmh">
+					<orgName type="full">National Key Research and Development Program of China</orgName>
+				</funder>
+				<funder ref="#_PgPjeFD">
+					<orgName type="full">Open Fund of Advanced Cryptography and System Security Key Laboratory of Sichuan Province</orgName>
+				</funder>
+				<funder ref="#_ftP647z #_hHVzdzr">
+					<orgName type="full">National Natural Science Foundation of China</orgName>
+				</funder>
+				<funder>
+					<orgName type="full">Shanghai Trusted Industry Internet Software Collaborative Innovation Center</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>PeerJ</publisher>
+				<availability  status="unknown">
+					<licence/>
+				</availability>
+				<date type="published" when="2024-11-25">25 November 2024</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="consolidated" source="crossref">
+					<analytic>
+						<author>
+							<persName><forename type="first">Gao</forename><surname>Wang</surname></persName>
+						</author>
+						<author role="corresp">
+							<persName><forename type="first">Gaoli</forename><surname>Wang</surname></persName>
+							<email>glwang@sei.ecnu.edu.cn</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Shanghai Key Laboratory of Trustworthy Computing, Software Engineering Institute , East China Normal University , Shanghai , North Zhongshan Road , China</note>
+								<orgName type="department">Software Engineering Institute</orgName>
+								<orgName type="laboratory">Shanghai Key Laboratory of Trustworthy Computing</orgName>
+								<orgName type="institution">East China Normal University</orgName>
+								<address>
+									<settlement>Shanghai North Zhongshan Road</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Advanced Cryptography and System Security Key Laboratory of Sichuan Province , Sichuan Province , Chengdu , China</note>
+								<orgName type="department">of Sichuan Province</orgName>
+								<orgName type="laboratory">Advanced Cryptography and System Security Key Laboratory</orgName>
+								<orgName type="institution">Sichuan Province</orgName>
+								<address>
+									<settlement>Chengdu</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Shanghai Key Laboratory of Trustworthy Computing, Software Engineering Institute , East China Normal University , Shanghai , North Zhongshan Road , China</note>
+								<orgName type="department">Software Engineering Institute</orgName>
+								<orgName type="laboratory">Shanghai Key Laboratory of Trustworthy Computing</orgName>
+								<orgName type="institution">East China Normal University</orgName>
+								<address>
+									<settlement>Shanghai North Zhongshan Road</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Enhanced related-key differential neural distinguishers for &lt;tt&gt;SIMON&lt;/tt&gt; and &lt;tt&gt;SIMECK&lt;/tt&gt; block ciphers</title>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">PeerJ Computer Science</title>
+						<idno type="eISSN">2376-5992</idno>
+						<imprint>
+							<publisher>PeerJ</publisher>
+							<biblScope unit="volume">10</biblScope>
+							<biblScope unit="page">e2566</biblScope>
+							<date type="published" when="2024-11-25">25 November 2024</date>
+						</imprint>
+					</monogr>
+					<idno type="MD5">54A572C0A1455FB0764E6D992E471E8D</idno>
+					<idno type="DOI">10.7717/peerj-cs.2566</idno>
+					<note type="submission">Submitted 18 May 2024 Accepted 8 November 2024</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T16:24+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Artificial Intelligence</term>
+					<term>Cryptography</term>
+					<term>Security and Privacy Differential cryptanalysis</term>
+					<term>Neural distinguisher</term>
+					<term>Deep learning</term>
+					<term>SIMON</term>
+					<term>SIMECK</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>At CRYPTO 2019, Gohr pioneered the application of deep learning to differential cryptanalysis and successfully attacked the 11-round NSA block cipher Speck32/64 with a 7-round and an 8-round single-key differential neural distinguisher. Subsequently, Lu et al. (<ref type="url" target="https://doi.org/10.1093/comjnl/bxac195">DOI 10.1093/comjnl/bxac195</ref>) presented the improved related-key differential neural distinguishers against the SIMON and SIMECK. Following this work, we provide a framework to construct the enhanced related-key differential neural distinguisher for SIMON and SIMECK. In order to select input differences efficiently, we introduce a method that leverages weighted bias scores to approximate the suitability of various input differences. Building on the principles of the basic related-key differential neural distinguisher, we further propose an improved scheme to construct the enhanced related-key differential neural distinguisher by utilizing two input differences, and obtain superior accuracy than Lu et al. for both SIMON and SIMECK. Specifically, our meticulous selection of input differences yields significant accuracy improvements of 3% and 1.9% for the 12round and 13-round basic related-key differential neural distinguishers of SIMON32/ 64. Moreover, our enhanced related-key differential neural distinguishers surpass the basic related-key differential neural distinguishers. For 13-round SIMON32/64, 13round SIMON48/96, and 14-round SIMON64/128, the accuracy of their related-key differential neural distinguishers increases from 0.545, 0.650, and 0.580 to 0.567, 0.696, and 0.618, respectively. For 15-round SIMECK32/64, 19-round SIMECK48/96, and 22-round SIMECK64/128, the accuracy of their neural distinguishers is improved from 0.547, 0.516, and 0.519 to 0.568, 0.523, and 0.526, respectively.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>INTRODUCTION</head><p>In recent years, with the wide application of wireless sensor networks (WSN) and radio frequency identification (RFID) technology in various industries, the data security problem of these resource-constrained devices have become more and more prominent. As a cryptographic solution that can achieve a good balance between security and performance under limited resources, lightweight block ciphers are widely used to protect data security in various resource-constrained devices. The security of block ciphers is closely related to the security of data. In this context, evaluating the security properties of these ciphers has become a popular research topic in the field of computer science and cryptography. Among many cryptanalysis techniques, differential cryptanalysis, proposed by <ref type="bibr">Biham &amp; Shamir (1991b)</ref>, is one of the most commonly used methods for evaluating the security of block ciphers. This technique focuses on the propagation of plaintext differences during the encryption.</p><p>In traditional differential cryptanalysis, the core task of differential cryptanalysis is to find a differential characteristic with high probability. Initially, this task was achieved by manual derivation, which required a lot of effort and time. At <ref type="bibr">EUROCRYPT 1994</ref><ref type="bibr" target="#b29">, Matsui (1994)</ref> presented a branch-and-bound method for this task, which replaced manual derivation with automated search techniques for the first time. However, for the block ciphers with large sizes, this method is insufficient to provide useful differential characteristics. This prompts cryptographers to adopt more efficient automated search tools for searching the differential characteristic with high probability, including mixed integer linear programming (MILP) <ref type="bibr" target="#b35">(Sun et al., 2014;</ref><ref type="bibr">Bellini et al., 2023a;</ref><ref type="bibr" target="#b30">Mouha et al., 2012)</ref>, constraint programming (CP) <ref type="bibr" target="#b15">(Gerault, Minier &amp; Solnon, 2016;</ref><ref type="bibr" target="#b34">Sun et al., 2017)</ref>, and Boolean satisfiability problem or satisfiability modulo theories (SAT/SMT) <ref type="bibr" target="#b34">(Sun et al., 2017;</ref><ref type="bibr" target="#b24">Lafitte, 2018)</ref>.</p><p>In recent years, with the rapid development of deep learning, cryptanalysts have begun to explore how to harness its power for differential cryptanalysis. At CRYPTO 2019, <ref type="bibr" target="#b16">Gohr (2019)</ref> constructed an 8-round differential neural distinguishers by leveraging neural networks to learn the differential properties of block ciphers SPECK32/64 and successfully carried out an 11-round key recovery attack. This pioneering research significantly accelerated the integration of deep learning and differential cryptanalysis. Since this study, the differential neural distinguisher has been widely applied to various block ciphers in single-key and related-key scenarios, including but not limited to SIMON <ref type="bibr" target="#b0">(Bao et al., 2022;</ref><ref type="bibr" target="#b27">Lu et al., 2024;</ref><ref type="bibr">Bellini et al., 2023b)</ref>, SIMECK <ref type="bibr">(Zhang et al., 2023;</ref><ref type="bibr" target="#b27">Lu et al., 2024)</ref>, PRESENT <ref type="bibr" target="#b20">(Jain, Kohli &amp; Mishra, 2020;</ref><ref type="bibr">Bellini et al., 2023b;</ref><ref type="bibr" target="#b43">Zhang, Wang &amp; Chen, 2023)</ref>, GIFT <ref type="bibr" target="#b33">(Shen et al., 2024)</ref>, ASCON <ref type="bibr" target="#b33">(Shen et al., 2024)</ref>, and others. In most of these works, the focus is only on the single-key neural distinguishers, while SIMON and SIMECK also focus on the relatedkey differential neural distinguishers. In this article, we continue to optimize the relatedkey differential neural distinguishers for SIMON and SIMECK.</p><p>So far, there are many studies exploring the differential neural distinguishers for SIMON and SIMECK ciphers, such as <ref type="bibr" target="#b0">Bao et al. (2022)</ref>, <ref type="bibr">Zhang et al. (2023)</ref>, <ref type="bibr" target="#b38">Wang et al. (2022)</ref>, <ref type="bibr" target="#b32">Seong et al. (2022)</ref>, <ref type="bibr" target="#b17">Gohr, Leander &amp; Neumann (2022)</ref>, <ref type="bibr" target="#b28">Lyu, Tu &amp; Zhang (2022)</ref>, <ref type="bibr" target="#b27">Lu et al. (2024)</ref>. However, most of them focused on the single-key scenario, until the research of <ref type="bibr" target="#b27">Lu et al. (2024)</ref> broke this trend. They not only improved the accuracy of their single-key differential neural distinguishers by using the enhanced data format ðD r L ; D r R ; C l ; C r ; C 0 l ; C 0 r ; D rÀ1 R ; pD rÀ2 R Þ (defined in Eq. ( <ref type="formula" target="#formula_14">10</ref>)), but also constructed the related-key differential neural distinguishers for them. The experimental results show that the related-key differential neural distinguishers outperforms the single-key differential neural distinguishers in terms of the number of analyzed rounds and accuracy. In the single-key scenario, <ref type="bibr" target="#b27">Lu et al. (2024)</ref> exhaustively evaluated the input differences with Hamming weights of 1, 2, and 3 by training a differential neural distinguisher for each difference. However, for the related-key scenario, this task has not been explored in depth due to the huge number of input differences that need to be evaluated. Even for the smallest variants SIMON32/64 and SIMECK32/64, the number of input differences with Hamming weights of 1, 2, and 3 already reaches about 200 million. Therefore, it is impractical to train a neural distinguisher for each difference. In this article, we aim to further address this challenge.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Our contributions</head><p>In this article, we first present a framework to construct the basic related-key differential neural distinguishers for SIMON and SIMECK. This framework is comprised of five components: differences selection, sample generation, network architecture, distinguisher training, and distinguisher evaluation. For comparison with the baseline work of <ref type="bibr" target="#b27">Lu et al. (2024)</ref>, we keep sample generation, network architecture, distinguisher training, and distinguisher evaluation as in <ref type="bibr" target="#b27">Lu et al. (2024)</ref>. Our attention is mainly on differences selection. We provide a method for approximately assessing the suitability of different input differences with weighted bias scores instead of training a neural distinguisher for every input difference as <ref type="bibr" target="#b27">Lu et al. (2024)</ref>. This allows us to approximate the applicability of the different differences without training the model, which can significantly accelerates the process of differences selection. Our meticulous selection of the input difference can make the accuracy of the basic related-key differential neural distinguisher match or surpass previous results. In particular, the accuracy for the 12-round and 13-round distinguishers of SIMON32/64 is improved from 0.648 and 0.526 to 0.678 and 0.545, respectively, as shown in Table <ref type="table" target="#tab_0">1</ref>.</p><p>Furthermore, based on the principles of the basic related-key differential neural distinguishers, we propose an enhanced scheme that harnesses two distinct input differences to construct a more powerful related-key differential neural distinguisher for SIMON and SIMECK instead of using only one difference in the phase of sample generation.</p><p>Specifically, for the 13-round SIMON32/64, 13-round SIMON48/96, and 14-round SIMON64/128, their accuracy is raised from 0.545, 0.650, and 0.580 to 0.567, 0.696, and 0.618, respectively. Similarly, the neural distinguishers for 15-round SIMECK32/64, 19round SIMECK48/96, and 22-round SIMECK64/128 also showed significant improvements in accuracy, rising from 0.547, 0.516, and 0.519 to 0.568, 0.523, and 0.526, respectively. All these results illustrate the effectiveness and robustness of our scheme.</p><p>Organization "Preliminaries" commences by introducing the foundational knowledge about the relatedkey differential neural distinguisher. Following this, "The Framework for Developing Related-Key Differential Neural Distinguishers to SIMON and SIMECK" comprehensively explores the construction of basic and enhanced neural distinguishers for SIMON and SIMECK. Building upon this framework, "Related-Key Differential Neural Distinguishers for Round Reduced SIMON and SIMECK" constructs the improved related-key differential neural distinguishers for SIMON and SIMECK. Finally, "Conclusions and Future Work" concludes this article.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>PRELIMINARIES</head><p>In this section, we first present the pivotal notations in Table <ref type="table">2</ref>. Following this, we offer a succinct overview of the block ciphers SIMON and SIMECK, along with the basic concepts about related-key differential cryptanalysis and convolutional neural networks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Notations</head><p>Table <ref type="table">2</ref> illustrates the notations utilized in this article.</p><p>A brief description of SIMON and SIMECK ciphers <ref type="bibr">SIMON (Beaulieu et al., 2015)</ref> is a lightweight block cipher, designed by the National Security Agency (NSA) in 2013. It employs a Feistel structure, making it suitable for resource-constrained environments. In addition, it supports various block lengths and key Table 2 Notations. Notation Description &lt;&lt;&lt;; &gt;&gt;&gt; Circular left and right shift a; b; c Bits of cyclic shift C; Z j Predefined constants T Temporary variable È; Bit-wise XOR and AND operation jj Concatenation F 2 Binary field P; P 0 Plaintext C; C 0 Ciphertext K; K 0 Master key E, R Encryption algorithm and rounds P i ; K i ; C i Plaintext, key and ciphertext for round i t 2 ; t 1 ; t 0 ; k 0 Components of the K DP Plaintext difference DC Ciphertext difference DK Master key difference DP r The r-round input difference DC r The r-round ciphertext difference DK r The r-round key difference r Activation function x i Input of the i-th neuron w i Weight of the x i b Bias of the neuron F tr The transformation operation of SENet F sq ðÁÞ The squeeze operation of SENet F ex ðÁ; WÞ The excitation operation of SENet F scale ðÁ; ÁÞ The channel-wise multiplication of SENet b r Bias scores for r rounds bt r Approximate bias score calculated using t samples for r rounds S R R-rounds weighted bias score i i-th (1 i 8) ciphertext pair l i Cyclic learning rate for the i-th epoch a; b; n The parameter for calculating l i , defaulting to 0.0001, 0.003 and 29, respectively c The parameter for L2 regularization, default 0.00001 bl; kl block length and key length</p><formula xml:id="formula_0">L r ¼ ððL rÀ1 &lt;&lt;&lt; aÞ ðL rÀ1 &lt;&lt;&lt; bÞÞ È R rÀ1 È ðL rÀ1 &lt;&lt;&lt; cÞ È k rÀ1 ; R r ¼ L rÀ1 ; &amp; (<label>1</label></formula><formula xml:id="formula_1">)</formula><p>where a, b and c represent the fixed rotation constants that are utilized in the circular left shift operation. For SIMON, the values of these constants are set to 1, 8, and 2, respectively. Given a master key K that comprises four key words, denoted as K ¼ ðK 3 ; …; K 1 ; K 0 Þ, the round key K rÀ1 is generated through a linear key schedule. This process incorporates predefined constants C and a series of constants ðZ j Þ i , the generation follows the scheme outlined below:</p><formula xml:id="formula_2">T ¼ ðK iþ3 &gt;&gt;&gt; 3Þ È K iþ1 ; K iþ4 ¼ C È ðZ j Þ i È K i È T È ðT &gt;&gt;&gt; 1Þ: &amp;<label>(2)</label></formula><p>SIMON is designed to be highly efficient in terms of both hardware and software implementations. It processes the plaintext and ciphertext blocks in a symmetric manner. Its structure and the choice of operations contribute to its resistance against common attacks like differential cryptanalysis and linear cryptanalysis. Like many lightweight block ciphers, SIMON's simplicity may make it more susceptible to side-channel attacks, such as power analysis and timing attacks.</p><p>The SIMECK <ref type="bibr" target="#b40">(Yang et al., 2015)</ref> cipher, presented at CHES in 2015, is a variant of the SIMON. It retains the same Feistel structure and round function as SIMON, but distinguishes itself through the values of a, b, and c, which are set to 0, 5, and 1, respectively. In addition, SIMECK uses the round function to generate the round keys K r for a given master key K ¼ ðt 2 ; t 1 ; t 0 ; k 0 Þ, as explained below:</p><formula xml:id="formula_3">k iþ1 ¼ t i ; t iþ3 ¼ k i È t i ðt i &lt;&lt;&lt; 5Þ È ðt i &lt;&lt;&lt; 1Þ È C È ðZ j Þ i : &amp;</formula><p>(3) where C and ðZ j Þ i are the predefined constants. For more details, please refer to <ref type="bibr" target="#b40">Yang et al. (2015)</ref>. SIMECK is a lightweight block cipher designed specifically for constrained environments. It boasts compact hardware implementations and low power consumption, making it suitable for embedded systems and IoT devices. SIMECK has fixed block size and key length, which facilitate consistent and predictable performance. SIMECK stands out for its efficiency in terms of both area and energy, as well as its resistance to common cryptographic attacks. However, it is worth noting that careful implementation is crucial to mitigate potential side-channel attack.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Related-key differential cryptanalysis</head><p>In 1990, <ref type="bibr">Biham &amp; Shamir (1991b)</ref> introduced a groundbreaking attack strategy called differential cryptanalysis. This cryptanalysis technique can distinguish the block cipher from the random permutation by studying the propagation properties of the plaintext difference DP throughout the encryption. Due to its simple principle and excellent efficacy, this approach quickly attracted significant attention among the cryptography community <ref type="bibr">(Biham &amp; Shamir, 1991a</ref><ref type="bibr" target="#b11">, 1992;</ref><ref type="bibr" target="#b8">Biham &amp; Dunkelman, 2007)</ref>.</p><p>In lightweight block ciphers, the key schedule holds paramount importance, as it is responsible for generating and updating the round keys. To delve into the security of this vital component, <ref type="bibr" target="#b7">Biham (1994)</ref> proposed a pioneering related-key cryptanalysis method in 1994, which studies the security of block cipher under different keys. The related-key differential cryptanalysis method combines the principles of differential cryptanalysis and related-key cryptanalysis. It investigates differential propagation under different keys instead of the same key. The basic concepts related to block cipher and related-key differential cryptanalysis are summarized as follows.</p><p>Assuming E is the r-round encryption procedure employed by a block cipher with the block length bl and the key length kl, and the plaintext, ciphertext, and master key are denoted as P, C, and K, respectively. The formalized encryption process of this block cipher can be expressed as C ¼ E K ðPÞ, which indicates that the ciphertext C results from encrypting the plaintext P for r rounds using the master key K. For iterative block ciphers, their encryption process E K ðPÞ is derived by repeatedly applying the round function FðK i ; P i Þ, where K i represents the round key for the i-th iteration, whereas P i denotes the input to this iteration. Consequently, the encryption process of iterative block cipher is given in Eq. ( <ref type="formula" target="#formula_4">4</ref>).</p><formula xml:id="formula_4">E K ðPÞ ¼ F K r ðP r Þ Á F K rÀ1 ðP rÀ1 Þ Á … Á F K 2 ðP 2 Þ Á F K 1 ðP 1 Þ:<label>(4)</label></formula><p>Definition 1 (Plaintext Difference, Ciphertext Difference, and Key Difference. <ref type="bibr" target="#b29">Matsui (1994)</ref>) For a block cipher, the plaintext difference DP of the plaintext pair ðP;</p><formula xml:id="formula_5">P 0 Þ is P È P 0 .</formula><p>Similarly, the ciphertext difference DC of the ciphertext pair ðC; C 0 Þ is C È C 0 , and the key difference DK of the key pair ðK;</p><formula xml:id="formula_6">K 0 Þ is K È K 0 . Definition 2 (Related-key Differential Characteristic. Jakimoski &amp; Desmedt (2003))</formula><p>Given a plaintext pair (P; P 0 ) and a key pair (K; K 0 ) with the difference of DP and DK, let (C i ; C i 0 ) be the cipher pair obtained by encrypting the (P; P 0 ) with (K; K 0 ) for i rounds, the r-round related-key differential characteristic of the block cipher is (DP; DC 1 ; ……; DC rÀ1 ; DC r ), where</p><formula xml:id="formula_7">DC i ¼ C i È C i 0 .</formula><p>Definition 3 (Related-key Differential Probability. Jakimoski &amp; Desmedt ( <ref type="formula">2003</ref>)) The related-key differential probability DPðDP; DK; DCÞ of the block cipher with the plaintext difference DP, master key difference DK, and ciphertext difference DC is</p><formula xml:id="formula_8">DPðDP; DK; DCÞ ¼ #fE kÈDK ðx È DPÞ È E k ðxÞ ¼ DCg 2 P j jþ K j j ;<label>(5)</label></formula><p>where x 2 F P j j 2 and k 2 F</p><formula xml:id="formula_9">K j j 2 . Definition 4 (Hamming Weight. Wang, Wang &amp; He (2021)) Assuming X 2 F n</formula><p>2 , the hamming weight of is the number of non-zero bits within its binary representation. Mathematically, it can be formulated as P n i¼1 X i , where X i denotes the i-th bit in the binary of X.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Convolutional neural network</head><p>Convolutional Neural Network (CNN), as a feed-forward neural network with convolutional structure, has been widely applied in numerous domains, including but not limited to image recognition <ref type="bibr" target="#b13">(Chauhan, Ghanshala &amp; Joshi, 2018)</ref>, video analysis <ref type="bibr" target="#b37">(Ullah et al., 2017)</ref>, and natural language processing <ref type="bibr" target="#b41">(Yin et al., 2017)</ref>, and among others. A convolutional neural network usually consists of the input layer, convolutional layer, pooling layer, fully connected layer, and output layer. The convolutional layer is used to extract features, the pooling layer is used to achieve data dimensionality reduction through subsampling, the fully connected layer integrates the previously extracted features for tasks such as classification or regression, and the output layer is responsible for producing the final results.</p><p>LeNet-5 is a convolutional neural network designed by LeCun et al. (1998) for handwritten digit recognition, and it is one of the most representative results of the early convolutional neural network. It consists of one input layer, one output layer, two convolutional layers, two pooling layers, and two fully connected layers, as shown in Fig. <ref type="figure" target="#fig_1">2</ref>. Its input is a image of 32 Â 32. After two convolution and subsampling operations, this input becomes a feature map of 16 Â 5 Â 5. The convolution kernels are all 5 Â 5 with stride 1. The subsampling function used for the pooling layers is maxpooling. Then it passes through two fully connected layers with sizes of 120 and 64 to reach the output layer.</p><p>Later, based on LeNet-5, many improved convolutional neural networks have been proposed, such as AlexNet <ref type="bibr" target="#b23">(Krizhevsky, Sutskever &amp; Hinton, 2017)</ref>, GoogleLeNet <ref type="bibr" target="#b36">(Szegedy et al., 2015)</ref>, ResNet <ref type="bibr" target="#b18">(He et al., 2016)</ref>, and so on. The main components used in this article are convolutional layers, activation functions, fully connected layers, as well as the advanced architectures including the Residual Network (ResNet) <ref type="bibr" target="#b18">(He et al., 2016)</ref> and the Squeeze-and-Excitation Network (SENet) <ref type="bibr" target="#b19">(Hu, Shen &amp; Sun, 2018)</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Convolution layer</head><p>Convolutional layers are the core component of convolutional neural networks. It is responsible for extracting features from input data through convolution operations. In a convolution operations, a convolutional kernel (also known as a filter) continuously slides over the input feature map. At each step, it calculates the sum of the product of the values at each position and takes it as the value in the corresponding position on the output feature map.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Activation function</head><p>In neural networks and deep learning, the activation function plays a crucial role in introducing nonlinear properties that enable the neural network to learn complex patterns in the data. The activation functions Sigmoid <ref type="bibr" target="#b26">(Little, 1974)</ref> and rectified linear unit (ReLU) <ref type="bibr" target="#b31">(Nair &amp; Hinton, 2010)</ref> are used in this article. The Sigmoid function can map any real value to an output between 0 and 1. Therefore, it is a common choice for the output layer in binary classification problems. The ReLU function returns the input value itself for the positive inputs and zero for the negative inputs. It performs well in many deep learning tasks because of its effectiveness in mitigating the gradient vanishing problem. Their mathematical formulations are as follows:</p><formula xml:id="formula_10">Sigmoid : f ðxÞ ¼ 1 1 þ e Àx ; ReLU : f ðxÞ ¼ maxð0; xÞ:<label>(6)</label></formula><p>Fully connected layer</p><p>The fully connected layer (also known as dense layer) is a fundamental element of neural networks. In this layer, every neuron establishes a connection to each neuron in the preceding layer. This connection ensures that all the outputs from the previous layer are the inputs to every neuron in the current layer. This structure allows the fully connected layer to execute a weighted combination of input features, effectively capturing the intricate relationships between them. For a single neuron in the fully connected layer, its output can be represented as r P n i¼1 w i Á x i þ b À Á , where n is the total number of neurons, r represents the activation function, x i denotes the input of the i-th neuron, w i corresponds to the weight of the connection, and b is the bias of the neuron.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Residual network</head><p>Gradient vanishing and explosion are issues in deep neural networks where gradients become extremely small or large during back-propagation, respectively, hindering effective training. The residual neural network (ResNet) <ref type="bibr" target="#b18">(He et al., 2016)</ref> is an effective deep learning model that solves the problem of gradient vanishing and gradient explosion by introducing shortcut connections as shown in Fig. <ref type="figure" target="#fig_2">3</ref>. Shortcut connections can mitigate these problems by providing alternative paths for gradient flow, reducing the dependency on gradients passing through all intermediate layers and improving information flow through the network.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Squeeze-and-excitation network (SENet)</head><p>The Squeeze-and-Excitation (SE) block <ref type="bibr" target="#b19">(Hu, Shen &amp; Sun, 2018</ref>) is a plug-and-play channel attention mechanism that can be integrated into any network, as shown in Fig. <ref type="figure">4</ref>. It can <ref type="url" target="http://dx.doi.org/10.7717/peerj-cs.2566/fig-3">Full-size  DOI: 10.7717/peerj-cs.2566/fig-3</ref> </p><p>Figure <ref type="figure">4</ref> The squeeze-and-excitation block of SENet <ref type="bibr" target="#b19">(Hu, Shen &amp; Sun, 2018)</ref>.</p><p><ref type="url" target="http://dx.doi.org/10.7717/peerj-cs.2566/fig-4">Full-size  DOI: 10.7717/peerj-cs.2566/fig-</ref> <ref type="figure">4</ref> adjust the weights of each channel and improves the attention to important channels, which is particularly beneficial in deep residual architectures. In this article, the SE block is directly integrated with the residual network to form the SE-ResNet architecture. This integration allows SE-ResNet to achieve improved performance in differential cryptanalysis, by making the network more sensitive to informative features and more robust to variations in input data.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>THE FRAMEWORK FOR DEVELOPING RELATED-KEY DIFFERENTIAL NEURAL DISTINGUISHERS TO SIMON AND SIMECK</head><p>The development of related-key differential neural distinguisher consists of four steps: differences selection, sample generation, network architecture design, distinguisher training and distinguisher evaluation, as shown in Fig. <ref type="figure" target="#fig_3">5</ref>. In this section, we first introduce how to use a difference to construct the basic related-key differential neural distinguishers for SIMON and SIMECK from these steps. Subsequently, we introduce an advanced technique to construct the enhanced related-key differential neural distinguisher using a pair of distinct differences.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Basic related-key differential neural distinguishers</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Differences selection</head><p>Selecting an appropriate plaintext difference DP and a master key difference DK for sample generation is a crucial step in the development of basic related-key differential neural distinguishers, since it significantly influences the features embodied within the samples.</p><p>The study of <ref type="bibr" target="#b17">Gohr, Leander &amp; Neumann (2022)</ref>, <ref type="bibr">Bellini et al. (2023b)</ref> indicates that the differences that can yield the ciphertext differences with high bias scores b r may be more suitable for constructing neural distinguishers. In the related-key scenario, the r-round exact bias score of ciphertext difference is defined as follows.</p><p>Definition 5 (Exact bias score. <ref type="bibr" target="#b17">Gohr, Leander &amp; Neumann (2022)</ref>) For a cipher primitive E : F n 2 Â F k 2 ! F n 2 , the r-round bias score b r ðDP; DKÞ of the plaintext difference DP 2 F n 2 and master key difference DK 2 F k 2 is the sum of the biases of each bit position in the resulting ciphertext differences, i.e., b r ðDP;</p><formula xml:id="formula_11">DKÞ ¼ 1 n X nÀ1 j¼0 0:5 À P X2F n 2 ;K2F k 2 ðE K ðXÞ È E KÈDK ðX È DPÞÞ j 2 nþk :<label>(7)</label></formula><p>However, due to the immense computational demands posed by the exhaustive enumeration of all possible plaintexts and keys, computing the exact bias score is impractical. Therefore, we have to adopt more efficient methods to do this work. One promising approach is statistical sampling techniques, which is employed in <ref type="bibr" target="#b17">Gohr, Leander &amp; Neumann (2022)</ref>. By employing random sampling method, we could reduce the time and resources required for data collection and analysis while maintaining a high level of accuracy and reliability. By randomly selecting t samples from the plaintext and key space, we can obtain an approximate bias score e b t r ðDP; DKÞ as follow:</p><formula xml:id="formula_12">e b t r ðDP; DKÞ ¼ 1 n X nÀ1 j¼0 0:5 À 1 t X tÀ1 i¼0 ðE K i ðX i Þ È E K i ÈDK ðX i È DPÞÞ j :<label>(8)</label></formula><p>In addition, to mitigate the instance where certain differences have low bit bias in the initial few rounds but exhibit favorable bit bias in subsequent rounds, a practical strategy is to calculate the bias score from the initial round and adopt their weighted bias score as the final the final metric for evaluation. This approach can enhance the robustness of the differential evaluation. Specifically, the R-rounds weighted bias score S R ðDP; DKÞ for a given plaintext difference DP and master key difference DK is the sum of the product of the number of rounds and their bias score. The mathematical expression is as follows:</p><formula xml:id="formula_13">S R ðDP; DKÞ ¼ X R r¼1 r Â e b t r ðDP; DKÞ:<label>(9)</label></formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Sample generation</head><p>The related-key differential neural distinguisher is a supervised binary classifier. Thus, its dataset consists of positive and negative samples, labeled as 1 and 0, respectively. The positive samples are obtained by encrypting the plaintext pairs using the key pairs that exhibit the plaintext difference DP and key difference DK. In contrast, the negative samples are derived from encrypting the random plaintext pairs using the random key pairs. Following the work of <ref type="bibr" target="#b27">Lu et al. (2024)</ref>, we use eight ciphertext pairs with boosted data formats to train the related-key differential neural distinguishers for SIMON and SIMECK. Specifically, the i-th (1 i 8) r-round ciphertext pair ðC l ; C r ; C 0 l ; C 0 r Þ i , derived from the i-th plaintext pair ðP; P 0 Þ i and key pair ðK; K 0 Þ i , can be extended to ðD r L ; D r R ; C l ; C r ; C 0 l ; C 0 r ; D rÀ1 R ; pD rÀ2 R Þ i , denoted as i , where </p><formula xml:id="formula_14">D r L ¼ C l È C 0 l ; D r R ¼ C r È C 0 r ; f ðxÞ ¼ ðx &lt;&lt;&lt; aÞ ðx &lt;&lt;&lt; bÞ È ðx &lt;&lt;&lt; cÞ; D rÀ1 R ¼ f ðC r Þ È C l È f ðC 0 r Þ È C 0 l ; pD rÀ2 R ¼ f ðf ðC r Þ È C l Þ È C r È f ðf ðC 0 r Þ È C 0 l Þ È C 0 r : 8 &gt; &gt; &gt; &gt; &lt; &gt; &gt; &gt; &gt; : (<label>10</label></formula><formula xml:id="formula_15">)</formula><p>The label Y of the sample ð 1 k 2 k…k s Þ can be expressed as</p><formula xml:id="formula_16">Yð 1 k 2 k…k s Þ ¼ 1; if P i È P 0 i ¼ DP and K i È K 0 i ¼ DK; 0; else: &amp; (<label>11</label></formula><formula xml:id="formula_17">)</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Network architecture</head><p>We evaluate the various neural network architectures for the SIMON and SIMECK, such as neural network architectures <ref type="formula">used in Gohr (2019</ref> . Input Layer: For the SIMON and SIMECK with a block length of bl, the input of neural network is a tensor with a shape of ð8 Â bl Â 4; 1Þ.</p><p>. Reshape Layer: This layer transforms the input tensor into a new shape of ð8; bl Â 8Þ to enhance the feature extraction for subsequent convolutional layers.</p><p>. Conv-1: A convolutional layer with bl convolutional kernels of size 1, followed by a batch normalization layer and a ReLU activation function.</p><p>. Dense bl Â 2: Two dense layers implemented sequentially to process the features extracted from the Conv-1. Each dense layer consists of bl neurons followed by a batch normalization layer and a ReLU activation function. . SE-ResNet Â 5: A sequence of five SE-ResNet layers. Each SE-ResNet integrates the ResNet and SENet architectures and contains two convolutional layers with 3 × 3 kernels for feature extraction, followed by a batch normalization layer, a ReLU activation function, and a Squeeze-and-Excitation module. The features from different layers are merged by Multiply and Add operations.</p><p>. Flatten: This layer flattens the multi-dimensional output from the SE-ResNet layer into a one-dimensional tensor.</p><p>. Dense-128 Â 2: Two fully connected layers with 128 neurons are used to connect all the features and send the output to the Sigmoid classifier in the subsequent layer.</p><p>. Output: The final layer of the neural network is responsible for generating the final prediction result.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Training and evaluation</head><p>The training process of a related-key differential neural distinguisher can be divided into two phases: the offline phase and the online phase. During the offline phase, the attacker aims to train a neural network that can effectively distinguish between positive and negative samples. To achieve this, the attacker first generates training samples and validation samples using selected plaintext difference DP and master key difference DK.</p><p>The training samples are used to train the neural network, while the validation samples are used to evaluate the recognition ability of the neural network. Ultimately, we can determine whether we have successfully constructed an effective neural distinguisher based on whether its accuracy surpasses the threshold of 0.5. In the online phase, the neural distinguisher trained in the offline phase is employed to distinguish the ciphertext data generated by a block cipher or a random function. If the score of more than half of the samples exceeds 0.5, we consider the ciphertext data comes from the block cipher. Otherwise, these data are considered to originate from the random function.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Parameter setting</head><p>The number of training samples and validation samples used in this article is 2 Â 10 7 and 2 Â 10 6 . In addition, we set the number of epochs to 120, and each epoch contains multiple batches, each containing 30,000 samples. In order to adjust the learning rate more efficiently, we adopt the cyclic learning rate. Specifically, for the i-th epoch, its learning rate l i is dynamically calculated by l i ¼ a þ ðnÀiÞ mod ðnþ1Þ n Â ðb À aÞ; where a ¼ 0:0001, b ¼ 0:003, and n ¼ 29. Moreover, we choose Adam <ref type="bibr" target="#b22">(Kingma &amp; Ba, 2014)</ref> as the optimizer and Mean Squared Error (MSE) as the loss function. To prevent the model from overfitting, we use L2 regularization with the parameter c of 0.00001. <ref type="bibr" target="#b5">Benamira et al. (2021)</ref> found that Gohr's neural distinguisher showed a superior recognition ability for the ciphertext pairs exhibiting truncated differences with high probability in the last two rounds, suggesting a potential understanding and learning of differential-linear characteristics in the ciphertext pairs. Subsequently, <ref type="bibr" target="#b17">Gohr, Leander &amp; Neumann (2022)</ref> expanded their study to five different block, including SIMON, Speck <ref type="bibr" target="#b1">(Beaulieu et al., 2015)</ref>, Skinny <ref type="bibr" target="#b2">(Beierle et al., 2016)</ref>, <ref type="bibr">PRESENT Bogdanov et al. (2007)</ref>, Katan <ref type="bibr" target="#b14">(De Canniere, Dunkelman &amp; Knežević, 2009)</ref>, and ChaCha <ref type="bibr" target="#b6">(Bernstein, 2008)</ref>. Notably, their research highlights the close connection between the accuracy of the neural distinguisher and the mean absolute distance of the ciphertext differential distribution and the uniform distribution. In light of these investigations, we enhance the basic differential neural distinguisher by using two distinct non-zero plaintext differences and master key differences, symbolically represented as (DP; DP 0 ; DK; DK 0 ).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Enhanced related-key differential neural distinguishers</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Motivation</head><p>The primary rationale behind selecting two input differences instead of one or more stems from the objective of minimizing conflicts among the output differences arising from positive and negative samples. When an input difference is chosen, as the number of rounds increases, some output differences will tend to be uniformly distributed due to the inherent confusion and diffusion properties of the block cipher. This poses a great challenge for the neural network to distinguish them from the uniformly distributed negative samples. However, if the negative samples are generated from another good difference, the mean absolute distance between the positive and negative samples may become more significant, which can allow the neural network to distinguish them more effectively. There are two reasons for limiting the number of input differences to two rather than more: firstly, the input differences that can maintain their unique distribution across several rounds are rare; secondly, an increase in the variety of ciphertext data may heighten the likelihood of collisions.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Differences selection</head><p>To develop an efficient and enhanced neural distinguisher, (DP; DP 0 ; DK; DK 0 ) needs to satisfy two pivotal requirements. Firstly, they must exhibit a favorable weighted bias score after several rounds, ensuring that the resulting ciphertext data possess distinct and discernible features. This can be straightforwardly accomplished by adopting the differential evaluation scheme detailed in "Basic Related-Key Differential Neural Distinguishers". Second, the disparity between the ciphertext data derived from the input differences (DP; DK) and (DP 0 ; DK 0 ) should be maximized, thereby ensuring that there are sufficient features for the neural network to leverage during the learning process.</p><p>Inspired by the role of weighted bias scores, we try to directly utilize their relative weighted bias scores, denoted as S R ðDP; DP 0 ; DK; DK 0 Þ, as a rough metric to evaluate the suitability of ðDP; DP 0 ; DK; DK 0 Þ for building the enhanced neural distinguishers, where</p><formula xml:id="formula_18">e b t r ðDP; DP 0 ; DK; DK 0 Þ ¼ 1 n X nÀ1 j¼0 1 t X tÀ1 i¼0 ðE K i ÈDK ðX i È DPÞ À E K i ÈDK 0 ðX i È DP 0 ÞÞ j : (<label>12</label></formula><formula xml:id="formula_19">) S R ðDP; DP 0 ; DK; DK 0 Þ ¼ X R r¼1 r Â e b t r ðDP; DP 0 ; DK; DK 0 Þ:<label>(13)</label></formula><p>However, the outcomes are disappointing, primarily due to the fact that the relative weighted bias scores among all combinations derived from two input differences with weighted high bias scores have a high degree of similarity.</p><p>Fortunately, the differences that have high weighted bias scores are generally scarce. For a set of m input differences, the total number of potential combinations is m Â ðmÀ1Þ 2 . Consequently, when m is small, the exhaustive approach that compares all potential combinations to identify the optimal one is feasible. Nonetheless, as the value of m increases, the number of combinations grows rapidly. Specifically, when m is 32, it is a daunting task to train 496 neural distinguishers. Given that the training of a single neural distinguisher takes about an hour and a half, the aggregate time required for this task approximating 31 days, which is impractical and and unacceptable for most researchers. Therefore, the adoption of a more efficient and targeted strategy for selecting promising combinations becomes imperative.</p><p>An available greedy strategy is to fix ðDP; DKÞ as the optimal or top-ranked input difference that can be used to construct the most effective basic neural distinguisher. Subsequently, ðDP 0 ; DK 0 Þ is chosen from the remaining differences with good weighted bias score. This strategy can ensure that the ciphertext data generated with ðDP; DKÞ have discernible and distinctive features. In this article, we adopt the exhaustive approach for SIMON32/64 and SIMON32/64. For the remaining variants, we adopt this greedy strategy to speed up the process of differences selection.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Sample generation</head><p>The sample generation for enhanced neural distinguisher is different from method outlined for the basic neural distinguisher in "Basic Related-Key Differential Neural Distinguishers". For the enhanced neural distinguisher, the positive and negative samples are ciphertext data generated from the plaintext pairs and key pairs with the differences ðDP; ; DKÞ and ðDP 0 ; DK 0 Þ. The label of a sample ð 1 k 2 k…k s Þ is represented as</p><formula xml:id="formula_20">Yð 1 k 2 k…k s Þ ¼ 1; if P i È P 0 i ¼ DP and K i È K 0 i ¼ DK; 0; if P i È P 0 i ¼ DP 0 and K i È K 0 i ¼ DK 0 : &amp;<label>(14)</label></formula><p>The neural network architecture and the process of training and evaluation remain consistent with that in "Basic Related-Key Differential Neural Distinguishers".</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>RELATED-KEY DIFFERENTIAL NEURAL DISTINGUISHERS FOR ROUND-REDUCED SIMON AND SIMECK</head><p>In this section, we adopt the framework and strategies in "The Framework for Developing Related-Key Differential Neural Distinguishers to SIMON and SIMECK" to develop the basic and enhanced related-key differential neural distinguishers for SIMON and SIMECK.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Differences selection for SIMON</head><p>The differences with Hamming weights of 1 and 2 For a block cipher with block length bl and key length kl, the number of input differences we need to evaluate is 2 blþkl . Even for the smallest variants, i.e., SIMON32/64 and SIMECK32/64, the number of differences that need to be evaluated reaches 2 96 , which would take a lot of time. Therefore, we first evaluate the weighted bias scores for all the differences with Hamming weights of 1 and 2.</p><p>For the 8-round SIMON32/64, there are 16 input differences with weighted bias scores around 11.0, which are DP ¼ ð0Â0; 0Â1 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â1 &lt;&lt;&lt; iÞ; i 2 ½0; 15. This is followed by another 16 input differences with a weighted bias score of about 10.8, specified as DP ¼ ð0Â0; 0Â21 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â21 &lt;&lt;&lt; iÞ; i 2 ½0; 15. The score for all remaining input differences with Hamming weights of 1 and 2 is less than 10.00. For the 8-round SIMON48/96, there are 24 input differences with a Hamming weight of 1 that have a weighted bias score between 15.3 and 14.4: DP ¼ ð0Â0; 0Â1 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â1 &lt;&lt;&lt; iÞ; i 2 ½0; 23: For differences with a Hamming weight of 2, only 11 input differences yield weighted bias scores greater than 14.4. They are DP ¼ ð0Â0; 0Â41000 ( iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â41000 ( iÞ; i 2 ½0; 6, DP ¼ ð0Â0; 0Â21000 ( iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â21000 ( iÞ; i 2 ½0; 2, and DP ¼ ð0Â0; 0Â30000Þ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â30000Þ.</p><p>For the 8-round SIMON64/128, there are 32 differences with a Hamming weight of 1 that exhibit scores around 13.4. These differences are denoted as DP ¼ ð0Â0; 0Â1 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â1 &lt;&lt;&lt; iÞ; i 2 ½0; 31. After that, there are 32 differences with Hamming weight 2 that have scores close to 12.6 or 12.5, which are DP ¼ ð0Â0; 0Â21 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â21 &lt;&lt;&lt; iÞ; i 2 ½0; 31, and DP ¼ ð0Â0; 0 Â41 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â41 &lt;&lt;&lt; iÞ; i 2 ½0; 31, respectively. The scores for all remaining differences are below 12.2.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Structural features of SIMON</head><p>For SIMON32/64, SIMON48/96, and SIMON64/128, the input differences with high weighted bias scores are those with the structure DP ¼ ð0Â0; DXÞ and DK ¼ ð0Â0; 0Â0; 0Â0; DXÞ. By analyzing the propagation process of the difference in SIMON, we can find that the plaintext differences and key differences cancel each other out in the first round. In the next three rounds, both plaintext difference and key difference are zero. Only in the fifth round, the key difference DX is re-injected, and the plaintext difference is still zero. The detailed differential propagation process is given in Table <ref type="table" target="#tab_1">3</ref>. This is easily verified by analyzing the transformations of the plaintext difference and the key difference in the round function and the round key.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The differences with a Hamming weight greater than 2</head><p>Based on the structural feature of SIMON, for differences with a weight greater than 2, we only consider the differences with a structure of DP ¼ ð0Â0; DXÞ and DK ¼ ð0Â0; 0Â0; 0Â0; DXÞ. For 8-round SIMON32/64, there are only 32 differences with Hamming weights of 3 that have weighted bias scores greater than 10.0. Specifically, they are DP ¼ ð0Â0; 0Â43=0Â421 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â43=0Â421 &lt;&lt;&lt; iÞ; i 2 ½0; 15, with scores between 10.7 and 10.3. For the 8-round SIMON48/96 and SIMON64/128, the weighted bias scores for all differences with a Hamming weight greater than two are less than 14.4 and 12.2, respectively.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Differences selection for SIMECK</head><p>The differences with Hamming weights of 1 and 2</p><p>Following the experiments on SIMON, we first explore the applicability of the input differences with Hamming weights of 1 and 2 in constructing neural distinguishers for SIMECK. For 10-round SIMECK32/64, 16 differences with a Hamming weight of 1, denoted as DP ¼ ð0Â0; 0Â1 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â1 &lt;&lt;&lt; iÞ; i 2 ½0; 15, achieve the optimal weighted bias score around 16.3. Then there are 32 differences with Hamming weight of 2, DP ¼ ð0Â0; 0Â3=0Â11 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â3=0Â 11 &lt;&lt;&lt; iÞ; i 2 ½0; 15, with scores greater than 13.0. The rest of the differences are scored below 13.0.</p><p>For the 12-round SIMECK48/96, there are 24 differences with a Hamming weight of 1, DP ¼ ð0Â0; 0Â1 ( iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â1 ( iÞ; i 2 ½0; 23, that have a weighted bias score between 30.4 and 26.6. For differences with a Hamming weight of 2, there are 33 differences with scores greater than or equal to 26.6. They are DP ¼ ð0Â0; 0Â30 ( iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â30 ( iÞ; i 2 ½0; 12, DP ¼ ð0Â0; 0Â220 ( iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â220 ( iÞ; i 2 ½0; 8, DP ¼ ð0Â0; 0Â140 ( iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â140 ( iÞ; i 2 ½0; 6, and DP ¼ ð0Â0; 0Â480 ( iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â480 ( iÞ; i 2 ½0; 3. The scores of all remaining differences are all less than 26.5.</p><p>For the 15-round SIMECK64/128, the best weighted bias score around 30.1 is achieved by 32 differences with a Hamming weight of 1, which are DP ¼ ð0Â0; 0Â1 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â1 &lt;&lt;&lt; iÞ; i 2 ½0; 31. Then there are 32 differences, DP ¼ ð0Â0; 0Â3 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â3 &lt;&lt;&lt; iÞ; i in½0; 31, with scores close to 26.7. All the other differences have scores below 26.0.</p><p>Structural features of SIMECK Similar to SIMON, for all variants of SIMECK, the input differences that exhibit good weighted bias scores adhere to the format: DP ¼ ð0Â0; DXÞ and DK ¼ ð0Â0; 0Â0; 0Â0; DXÞ. This is also due to the fact, as shown in Table <ref type="table" target="#tab_2">4</ref>, that the plaintext difference and key difference cancel each other out in the first round, and in the subsequent three rounds, both the plaintext difference and key difference are zero. It is not until the fifth round that the key difference DX 0 , resulting from the operation of DK r &lt;&lt;&lt; a and DK r &lt;&lt;&lt; b, is reintroduced.</p><p>The differences with a Hamming weight greater than 2</p><p>For the 10-round SIMECK32/64 and 15-round SIMECK64/128, none of the differences with a Hamming weight of more than two yields a weighted bias score above 12.5 and 24.5, respectively. For 12-round SIMECK48/96, there are only three differences with a Hamming weight of three that have a score of 26.8, which are DP ¼ ð0Â0; 0Â700=0xe00=0Â2300Þ, DK ¼ ð0Â0; 0Â0; 0Â0; 0Â700=0xe00=0Â2300Þ. The scores for all remaining differences with a Hamming weight of three or higher are all below 26.6.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Basic related-key differential neural distinguishers</head><p>For the SIMON32/64, the 16 most effective 13-round related-key differential neural distinguishers are trained using the candidate differences DP ¼ ð0Â0; 0Â21 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â21 &lt;&lt;&lt; iÞ where i ranges from 0 to 15. Their accuracy is 0:543 AE 0:002, while it is 0:525 AE 0:005 for the distinguishers built from the candidate differences DP ¼ ð0Â0; 0Â1 &lt;&lt;&lt; iÞ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â1 &lt;&lt;&lt; iÞ; i 2 ½0; 15. The best 13-round neural distinguisher is constructed by DP ¼ ð0Â0; 0Â2004Þ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â2004Þ with an accuracy of 0.545. Its 12-round neural distinguisher achieves an accuracy of 0.678. Compared with the related-key differential neural distinguisher in <ref type="bibr" target="#b27">Lu et al. (2024)</ref>, our differential selection strategy enables us to yield the superior distinguisher, as shown in Table <ref type="table" target="#tab_0">1</ref>.</p><p>For SIMON48/96, the best 13-round related-key differential neural distinguisher with an accuracy of 0.650 is constructed with DP ¼ ð0Â0; 0Â200000Þ and DK ¼ ð0Â0; 0Â0; 0Â0; 0Â200000Þ. Its 12-round neural distinguisher can achieve an accuracy of 0.993. For the remaining 23 candidate differences with a Hamming weight of 1, the accuracy of their 13-round neural distinguishers is between 0.640 to 0.650. In contrast, when the candidate differences with Hamming weight 2 in "Differences Selection for SIMON" is adopted, the highest accuracy is only 0.593, which is lower than that of 24 candidate differences with a Hamming weight of 1. Moreover, the three candidate differences with a Hamming weight of three could not construct an effective neural distinguisher for 13 rounds.</p><p>For SIMON64/128, the optimal 14-round related-key differential neural distinguisher is constructed using DP ¼ ð0Â0; 0Â100000Þ and DK ¼ ð0Â0; 0Â0; 0Â0; 0Â100000Þ with an accuracy of 0.580. The accuracy of its 13-round neural distinguisher is 0.840. In addition, the neural distinguishers built from the other 31 candidate differences with a Hamming weight of one exhibit accuracy between 0.577 and 0.580. There are no valid 14round neural distinguishers achieved when using the candidate differences with a Hamming weight of two in "Differences Selection for SIMON".</p><p>For SIMECK, the maximum number of rounds that can be constructed for related-key differential neural distinguishers is 15 for SIMECK32/64, 19 for SIMECK48/96, and 22 for SIMECK64/128. Their optimal neural distinguishers are constructed using DP ¼ ð0Â0; 0Â10=0Â2=0Â200000Þ and DK ¼ ð0Â0; 0Â0; 0Â0; 0Â10=0Â2=0Â200000Þ with an accuracy of 0.547, 0.516, and 0.519, respectively. The accuracies of these neural distinguishers from the previous round are 0.668, 0.551, and 0.552, respectively. The neural distinguishers constructed from other candidate differences with a Hamming weight of one have an accuracy very close to the best neural distinguisher above, with a maximum deviation of only 0.002. The candidate differences with Hamming weights greater than two fail to construct effective neural distinguishers with the maximum number of rounds.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Enhanced related-key differential neural distinguishers</head><p>For the SIMON32/64 and SIMECK32/64, we use all possible combinations of the superior candidate differences DP ¼ ð0Â0; 0Â21=0Â1 &lt;&lt;&lt; iÞ and DK ¼ ð0Â0; 0Â0; 0Â0; 0Â21=0Â1 &lt;&lt;&lt; iÞ, i 2 ½0; 15, to construct the related-key differential neural distinguisher. For SIMON32/64, there are five different ðDP; DP 0 ; DK; DK 0 Þ that can yield the 13-round related-key differential neural distinguisher with an accuracy of 0.567. They are DP ¼ ð0Â0; 0Â801=0Â42=0Â2100=2004=2100Þ; DK ¼ ð0Â0; 0Â0; 0Â0; 0Â100000=0Â2=0Â200000Þ; DP 0 ¼ ð0Â0; 0Â1002=0Â84=0Â1080=1002=4200Þ; Dk 0 ¼ ð0Â0; 0Â0; 0Â0; 0Â400000=0Â80000=0Â200Þ: &amp; For the first two instances, the accuracy of their 12-round neural distinguisher is 0.740, while it is 0.738 for the remaining three instances.</p><p>For SIMON48/96, SIMON64/128, SIMECK48/96, and SIMECK64/128, we consider combinations of the best differences in Table <ref type="table" target="#tab_3">5</ref> and the remaining candidate differences of DP ¼ ð0Â0; 0Â1 &lt;&lt;&lt; iÞ and DK ¼ ð0Â0; 0Â0; 0Â0; 0Â1 &lt;&lt;&lt; iÞ, i 2 ½0; 15 to accelerate the construction of our enhanced neural distinguishers. Specifically, for SIMON48/96, there are three pairs of differences that can yield 12-round and 13-round related-key differential neural distinguishers with accuracies of 0.997 and 0.696, respectively. These pairs are DP ¼ ð0Â0; 0Â200000Þ and DK ¼ ð0Â0; 0Â0; 0Â0; 0Â2000Þ together with DP 0 ¼ ð0Â0; DÞ and DK 0 ¼ ð0Â0; 0Â0; 0Â0; DÞ, where D 2 ½0Â400000; 0Â100000; 0Â40. For SIMON64/128, SIMECK48/96, and SIMECK64/128, only one pair of differences can construct 14-round, 19-round, and 22-round related-key neural distinguishers with accuracies of 0.618, 0.523, and 0.526, respectively. They are DP ¼ ð0Â0; 0Â 100000=0Â2=0Â200000Þ, DK ¼ ð0Â0; 0Â0; 0Â0; 0Â100000=0Â2=0Â200000Þ, DP 0 ¼ ð0Â0; 0Â400000=0Â80000=0Â200Þ, and DK 0 ¼ ð0Â0; 0Â0; 0Â0; 0Â400000=0Â 80000=0Â200Þ. The accuracies of 13-round, 18-round, and 21-round neural distinguishers for these pairs are 0.916, 0.572, and 0.572, respectively, as shown in Table <ref type="table" target="#tab_4">6</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Comparison and discussion</head><p>In this section, we first evaluate the differences with Hamming weights of 1 and 2 for SIMON and SIMECK, using weight bias scores. Then, we further evaluate the differences with Hamming weights greater than two based on the structural features of SIMON and SIMECK. Compared with the exhaustive approach of training a neural distinguisher for each difference in <ref type="bibr" target="#b27">Lu et al. (2024)</ref>, our scheme is more efficient.</p><p>Using these differences, we can obtain 13-round basic related-key differential neural distinguishers, exhibiting superior accuracy than that in <ref type="bibr" target="#b27">Lu et al. (2024)</ref>, for SIMON32/64. The accuracy of this basic neural distinguisher can be improved from 0.526 to 0.545 due to the effectiveness of our difference selection strategy. For the remaining variants, we can also obtain the basic related-key differential neural distinguishers with the same accuracy as that in <ref type="bibr" target="#b27">Lu et al. (2024)</ref>, as shown in Table <ref type="table" target="#tab_0">1</ref>. In addition, we obtain multiple basic related-key differential neural distinguishers that have the same or similar accuracy as the best distinguisher. All these results illustrate the effectiveness and usability of our proposed strategy for difference selection.</p><p>When constructing the enhanced related-key differential neural distinguishers using our method, all the enhanced differential neural distinguishers achieve higher accuracy than the basic related-key differential neural distinguishers for both SIMON and SIMECK. Compared with the results in <ref type="bibr" target="#b27">Lu et al. (2024)</ref>, our neural distinguishers all achieve different degrees of improvement in accuracy, as shown in Table <ref type="table" target="#tab_0">1</ref>. Specifically, the accuracy of the 13-round SIMON32/64, 13-round SIMON48/96, and 14-round SIMON64/128 is increased from 0.545, 0.650, and 0.580 to 0.567, 0.696, and 0.618, respectively. Similarly, the neural distinguishers for the 15-round SIMECK32/64, 19-round SIMECK48/96, and 22-round SIMECK64/128 is also demonstrated notable improvements in accuracy, with increases from 0.547, 0.516, and 0.519 to 0.568, 0.523, and 0.526, respectively. These results collectively underscore the effectiveness and robustness of our proposed scheme for constructing the enhanced related-key differential neural distinguishers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>CONCLUSIONS AND FUTURE WORK</head><p>In this article, we first establish a comprehensive framework to construct basic related-key differential neural distinguishers for the SIMON and SIMECK. To choose an appropriate difference to construct this distinguisher, we utilize weighted bias scores to assess the applicability of various differences, which speeds up the process of difference selection and evaluation.</p><p>Moreover, we introduce an innovative method that incorporates two distinct differences into the neural distinguisher instead of a differences, which can result in the more robust and effective neural distinguishers. Compared with the distinguishers in <ref type="bibr" target="#b27">Lu et al. (2024)</ref>, we successfully improve the accuracy of the related-key differential neural distinguisher for both SIMON and SIMECK as shown in Table <ref type="table" target="#tab_0">1</ref>.</p><p>Furthermore, we envision several promising directions for future research. Firstly, our framework can be easily extended to other block ciphers, which assists in evaluating the security of other block ciphers. Secondly, the integration of advanced neural network architectures and training techniques could yield even more powerful neural distinguishers.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Figure 1</head><label>1</label><figDesc>Figure 1 The round function of SIMON and SIMECK. Full-size  DOI: 10.7717/peerj-cs.2566/fig-1</figDesc><graphic coords="6,186.86,87.70,216.17,211.07" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Figure 2</head><label>2</label><figDesc>Figure2The architecture of LeNet-5<ref type="bibr" target="#b25">(LeCun et al., 1998)</ref>.Full-size  DOI: 10.7717/peerj-cs.2566/fig-2</figDesc><graphic coords="9,33.85,87.70,533.31,152.45" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Figure 3</head><label>3</label><figDesc>Figure3The shortcut connections of ResNet<ref type="bibr" target="#b18">(He et al., 2016)</ref>.Full-size  DOI: 10.7717/peerj-cs.2566/fig-3</figDesc><graphic coords="10,186.86,87.70,181.13,156.36" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Figure 5</head><label>5</label><figDesc>Figure5The framework of basic and enhanced related-key differential neural distinguishers.Full-size  DOI: 10.7717/peerj-cs.2566/fig-5</figDesc><graphic coords="12,186.86,87.70,121.10,118.32" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><figDesc>),<ref type="bibr" target="#b0">Bao et al. (2022)</ref>,<ref type="bibr" target="#b27">Lu et al. (2024)</ref> and<ref type="bibr" target="#b43">Zhang, Wang &amp; Chen (2023)</ref>, the architecture shown in Fig.6can achieve best accuracy under the same conditions. It consists of the following components:</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head>Figure 6</head><label>6</label><figDesc>Figure 6 Overview of neural network architectures. BN, Batch Normalization; GAP, Global Average Pooling.Full-size  DOI: 10.7717/peerj-cs.2566/fig-6</figDesc><graphic coords="13,186.86,87.70,389.14,193.44" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1</head><label>1</label><figDesc>Summary of related-key neural distinguishers against SIMON32/64, SIMON48/96, SIMON64/128, SIMECK32/64, SIMECK48/96, and SIMECK64/128 using eight pairs of ciphertexts as a sample.</figDesc><table><row><cell>Cipher</cell><cell>Round</cell><cell>Model</cell><cell>Acc</cell><cell>TPR</cell><cell>TNR</cell><cell>Source</cell></row><row><cell>SIMON32/64</cell><cell>12</cell><cell>RKND</cell><cell>0.648</cell><cell>0.652</cell><cell>0.644</cell><cell>Lu et al. (2024)</cell></row><row><cell></cell><cell></cell><cell>RKND</cell><cell>0.678</cell><cell>0.685</cell><cell>0.671</cell><cell>"Basic Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.740</cell><cell>0.729</cell><cell>0.750</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell>13</cell><cell>RKND</cell><cell>0.526</cell><cell>0.544</cell><cell>0.508</cell><cell>Lu et al. (2024)</cell></row><row><cell></cell><cell></cell><cell>RKND</cell><cell>0.545</cell><cell>0.537</cell><cell>0.552</cell><cell>"Basic Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.567</cell><cell>0.564</cell><cell>0.570</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell>SIMON48/96</cell><cell>12</cell><cell>RKND</cell><cell>0.993</cell><cell>0.999</cell><cell>0.986</cell><cell>"Basic Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.997</cell><cell>0.998</cell><cell>0.996</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell>13</cell><cell>RKND</cell><cell>0.650</cell><cell>0.660</cell><cell>0.640</cell><cell>"Basic Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.696</cell><cell>0.698</cell><cell>0.695</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell>SIMON64/128</cell><cell>13</cell><cell>RKND</cell><cell>0.840</cell><cell>0.839</cell><cell>0.841</cell><cell>Lu et al. (2024)</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.916</cell><cell>0.910</cell><cell>0.922</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell>14</cell><cell>RKND</cell><cell>0.579</cell><cell>0.589</cell><cell>0.568</cell><cell>Lu et al. (2024)</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.618</cell><cell>0.596</cell><cell>0.639</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell>SIMECK32/64</cell><cell>14</cell><cell>RKND</cell><cell>0.668</cell><cell>0.643</cell><cell>0.693</cell><cell>Lu et al. (2024)</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.730</cell><cell>0.722</cell><cell>0.738</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell>15</cell><cell>RKND</cell><cell>0.547</cell><cell>0.517</cell><cell>0.576</cell><cell>Lu et al. (2024)</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.568</cell><cell>0.553</cell><cell>0.582</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell>SIMECK48/96</cell><cell>18</cell><cell>RKND</cell><cell>0.551</cell><cell>0.456</cell><cell>0.646</cell><cell>"Basic Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.572</cell><cell>0.572</cell><cell>0.572</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell>19</cell><cell>RKND</cell><cell>0.516</cell><cell>0.411</cell><cell>0.611</cell><cell>"Basic Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.523</cell><cell>0.527</cell><cell>0.518</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell>SIMECK64/128</cell><cell>21</cell><cell>RKND</cell><cell>0.552</cell><cell>0.425</cell><cell>0.679</cell><cell>Lu et al. (2024)</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.572</cell><cell>0.580</cell><cell>0.563</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell></cell><cell>22</cell><cell>RKND</cell><cell>0.518</cell><cell>0.391</cell><cell>0.646</cell><cell>Lu et al. (2024)</cell></row><row><cell></cell><cell></cell><cell>RKND 0</cell><cell>0.526</cell><cell>0.523</cell><cell>0.529</cell><cell>"Enhanced Related-Key Differential Neural Distinguishers"</cell></row><row><cell cols="7">Note: Acc, Accuracy; TPR, True positive rate; TNR, True negative rate. RKND: The basic related-key differential neural distinguisher trained with a difference. RKND 0 : The</cell></row><row><cell cols="6">enhanced related-key differential neural distinguisher trained using a pair of differences.</cell><cell></cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 3</head><label>3</label><figDesc>The related-key differential characteristic of SIMON with four key words.</figDesc><table><row><cell>Round</cell><cell>DP r</cell><cell>DK r</cell></row><row><cell>1</cell><cell>(0×0, DX)</cell><cell>DX</cell></row><row><cell>2</cell><cell>(0×0, 0×0)</cell><cell>0×0</cell></row><row><cell>3</cell><cell>(0×0, 0×0)</cell><cell>0×0</cell></row><row><cell>4</cell><cell>(0×0, 0×0)</cell><cell>0×0</cell></row><row><cell>5</cell><cell>(0×0, 0×0)</cell><cell>DX</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 4</head><label>4</label><figDesc>The related-key differential characteristic of SIMECK.</figDesc><table><row><cell>Round</cell><cell>DP r</cell><cell>DK r</cell></row><row><cell>1</cell><cell>(0×0, DX)</cell><cell>DX</cell></row><row><cell>2</cell><cell>(0×0, 0×0)</cell><cell>0×0</cell></row><row><cell>3</cell><cell>(0×0, 0×0)</cell><cell>0×0</cell></row><row><cell>4</cell><cell>(0×0, 0×0)</cell><cell>0×0</cell></row><row><cell>5</cell><cell>(0×0, 0×0)</cell><cell>DX 0</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 5</head><label>5</label><figDesc>The basic related-key differential neural distinguishers for SIMON and SIMECK.</figDesc><table><row><cell>Cipher</cell><cell>Round</cell><cell>DP</cell><cell>DK</cell><cell>Acc</cell><cell>TPR</cell><cell>TNR</cell></row><row><cell>SIMON32/64</cell><cell>12</cell><cell>(0×0, 0×2004)</cell><cell>(0×0, 0×0, 0×0, 0×2004)</cell><cell>0.678</cell><cell>0.685</cell><cell>0.671</cell></row><row><cell></cell><cell>13</cell><cell>(0×0, 0×2004)</cell><cell>(0×0, 0×0, 0×0, 0×2004)</cell><cell>0.545</cell><cell>0.537</cell><cell>0.552</cell></row><row><cell>SIMON48/96</cell><cell>12</cell><cell>(0×0, 0×200000)</cell><cell>(0×0, 0×0, 0×0, 0×200000)</cell><cell>0.993</cell><cell>0.999</cell><cell>0.986</cell></row><row><cell></cell><cell>13</cell><cell>(0×0, 0×200000)</cell><cell>(0×0, 0×0, 0×0, 0×200000)</cell><cell>0.650</cell><cell>0.660</cell><cell>0.640</cell></row><row><cell>SIMON64/128</cell><cell>13</cell><cell>(0×0, 0×100000)</cell><cell>(0×0, 0×0, 0×0, 0×100000)</cell><cell>0.840</cell><cell>0.834</cell><cell>0.845</cell></row><row><cell></cell><cell>14</cell><cell>(0×0, 0×100000)</cell><cell>(0×0, 0×0, 0×0, 0×100000)</cell><cell>0.580</cell><cell>0.575</cell><cell>0.585</cell></row><row><cell>SIMECK32/64</cell><cell>14</cell><cell>(0×0, 0×10)</cell><cell>(0×0, 0×0, 0×0, 0×10)</cell><cell>0.668</cell><cell>0.640</cell><cell>0.695</cell></row><row><cell></cell><cell>15</cell><cell>(0×0, 0×10)</cell><cell>(0×0, 0×0, 0×0, 0×10)</cell><cell>0.547</cell><cell>0.524</cell><cell>0.570</cell></row><row><cell>SIMECK48/96</cell><cell>18</cell><cell>(0×0, 0×2)</cell><cell>(0×0, 0×0, 0×0, 0×2)</cell><cell>0.551</cell><cell>0.456</cell><cell>0.646</cell></row><row><cell></cell><cell>19</cell><cell>(0×0, 0×2)</cell><cell>(0×0, 0×0, 0×0, 0×2)</cell><cell>0.516</cell><cell>0.411</cell><cell>0.611</cell></row><row><cell>SIMECK64/128</cell><cell>21</cell><cell>(0×0, 0×200000)</cell><cell>(0×0, 0×0, 0×0, 0×200000)</cell><cell>0.552</cell><cell>0.413</cell><cell>0.691</cell></row><row><cell></cell><cell>22</cell><cell>(0×0, 0×200000)</cell><cell>(0×0, 0×0, 0×0, 0×200000)</cell><cell>0.519</cell><cell>0.374</cell><cell>0.663</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>Table 6</head><label>6</label><figDesc>The enhanced related-key differential neural distinguishers for SIMON and SIMECK.</figDesc><table><row><cell>Cipher</cell><cell>DP/DP 0</cell><cell>DK/DK 0</cell><cell>Round</cell><cell>Acc</cell><cell>TPR</cell><cell>TNR</cell></row><row><cell>SIMON32/64</cell><cell>(0×0, 0×801)</cell><cell>(0×0, 0×0, 0×0, 0×801)</cell><cell>12</cell><cell>0.740</cell><cell>0.729</cell><cell>0.750</cell></row><row><cell></cell><cell>(0×0, 0×1002)</cell><cell>(0×0, 0×0, 0×0, 0×1002)</cell><cell>13</cell><cell>0.567</cell><cell>0.564</cell><cell>0.570</cell></row><row><cell>SIMON48/96</cell><cell>(0×0, 0×200000)</cell><cell>(0×0, 0×0, 0×0, 0×200000)</cell><cell>12</cell><cell>0.997</cell><cell>0.998</cell><cell>0.996</cell></row><row><cell></cell><cell>(0×0, 0×400000)</cell><cell>(0×0, 0×0, 0×0, 0×400000)</cell><cell>13</cell><cell>0.696</cell><cell>0.698</cell><cell>0.695</cell></row><row><cell>SIMON64/128</cell><cell>(0×0, 0×100000)</cell><cell>(0×0, 0×0, 0×0, 0×100000)</cell><cell>13</cell><cell>0.916</cell><cell>0.910</cell><cell>0.922</cell></row><row><cell></cell><cell>(0×0, 0×400000)</cell><cell>(0×0, 0×0, 0×0, 0×400000)</cell><cell>14</cell><cell>0.618</cell><cell>0.596</cell><cell>0.639</cell></row><row><cell>SIMECK32/64</cell><cell>(0×0, 0×80)</cell><cell>(0×0, 0×0, 0×0, 0×80)</cell><cell>14</cell><cell>0.730</cell><cell>0.722</cell><cell>0.738</cell></row><row><cell></cell><cell>(0×0, 0×2000)</cell><cell>(0×0, 0×0, 0×0, 0×2000)</cell><cell>15</cell><cell>0.568</cell><cell>0.553</cell><cell>0.582</cell></row><row><cell>SIMECK48/96</cell><cell>(0×0, 0×2)</cell><cell>(0×0, 0×0, 0×0, 0×2)</cell><cell>18</cell><cell>0.572</cell><cell>0.572</cell><cell>0.572</cell></row><row><cell></cell><cell>(0×0, 0×80000)</cell><cell>(0×0, 0×0, 0×0, 0×80000)</cell><cell>19</cell><cell>0.523</cell><cell>0.527</cell><cell>0.518</cell></row><row><cell>SIMECK64/128</cell><cell>(0×0, 0×200000)</cell><cell>(0×0, 0×0, 0×0, 0×200000)</cell><cell>21</cell><cell>0.572</cell><cell>0.580</cell><cell>0.563</cell></row><row><cell></cell><cell>(0×0, 0×200)</cell><cell>(0×0, 0×0, 0×0, 0×200)</cell><cell>22</cell><cell>0.526</cell><cell>0.523</cell><cell>0.529</cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" xml:id="foot_0"><p>Wang and Wang (2024), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.2566</p></note>
+		</body>
+		<back>
+
+			<div type="funding">
+<div><head>Funding</head><p>This work is supported by the <rs type="funder">National Key Research and Development Program of China</rs> (<rs type="grantNumber">2022YFB2701900</rs>), the <rs type="funder">National Natural Science Foundation of China</rs> (Nos. <rs type="grantNumber">62472172</rs>, <rs type="grantNumber">62072181</rs>), the <rs type="funder">Open Fund of Advanced Cryptography and System Security Key Laboratory of Sichuan Province</rs> (Grant No. <rs type="grantNumber">SKLACSS-202301</rs>), and the <rs type="funder">Shanghai Trusted Industry Internet Software Collaborative Innovation Center</rs>. The funders had no role in</p></div>
+			</div>
+			<listOrg type="funding">
+				<org type="funding" xml:id="_kESsfmh">
+					<idno type="grant-number">2022YFB2701900</idno>
+				</org>
+				<org type="funding" xml:id="_ftP647z">
+					<idno type="grant-number">62472172</idno>
+				</org>
+				<org type="funding" xml:id="_hHVzdzr">
+					<idno type="grant-number">62072181</idno>
+				</org>
+				<org type="funding" xml:id="_PgPjeFD">
+					<idno type="grant-number">SKLACSS-202301</idno>
+				</org>
+			</listOrg>
+
+			<div type="availability">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Data Availability</head><p>The following information was supplied regarding data availability:</p><p>The raw data and code are available at Zenodo: differentialdistinguisher. (2024). differentialdistinguisher/Enhanced-related-key-differential-neural-distinguishers-forsimon-and-simeck-block-ciphers: First release (v1.0.0). Zenodo. <ref type="url" target="https://doi.org/10.5281/zenodo.11178441">https://doi.org/10.5281/  zenodo.11178441</ref>.</p></div>
+			</div>
+
+
+			<div type="conflict">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Competing Interests</head><p>The authors declare that they have no competing interests.</p></div>
+			</div>
+
+
+			<div type="contribution">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>study design, data collection and analysis, decision to publish, or preparation of the manuscript.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Author Contributions</head><p>. Gao Wang conceived and designed the experiments, performed the experiments, analyzed the data, performed the computation work, prepared figures and/or tables, authored or reviewed drafts of the article, and approved the final draft. . Gaoli Wang conceived and designed the experiments, prepared figures and/or tables, authored or reviewed drafts of the article, and approved the final draft.</p></div>
+			</div>
+
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ADDITIONAL INFORMATION AND DECLARATIONS</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Grant Disclosures</head><p>The following grant information was disclosed by the authors: National Key Research and Development Program of China: 2022YFB2701900. National Natural Science Foundation of China: 62472172, 62072181. Open Fund of Advanced Cryptography and System Security Key Laboratory of Sichuan Province: SKLACSS-202301.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Supplemental Information</head><p>Supplemental information for this article can be found online at <ref type="url" target="http://dx.doi.org/10.7717/peerj-cs.2566#supplemental-information">http://dx.doi.org/10.7717/  peerj-cs.2566#supplemental-information</ref>.</p></div>			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Enhancing Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+			<idno type="ORCID">0000-0003-2839-6687</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Guo</surname></persName>
+			<idno type="ORCID">0000-0001-8847-6748</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Meicheng</forename><surname>Liu</surname></persName>
+			<idno type="ORCID">0000-0002-5259-1848</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Ma</surname></persName>
+			<idno type="ORCID">0000-0002-6192-7526</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+			<idno type="ORCID">0000-0002-2051-8806</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-22963-3_11</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="318" to="347" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bao Z, Guo J, Liu M, Ma L, Tu Y. 2022. Enhancing differential-neural cryptanalysis. In: International Conference on the Theory and Application of Cryptology and Information Security. Cham: Springer, 318-347.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015-06-07">2015</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beaulieu R, Shors D, Smith J, Treatman-Clark S, Weeks B, Wingers L. 2015. The Simon and Speck lightweight block ciphers. In: Proceedings of the 52nd Annual Design Automation Conference, 1-6.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">The SKINNY Family of Block Ciphers and Its Low-Latency Variant MANTIS</title>
+		<author>
+			<persName><forename type="first">Christof</forename><surname>Beierle</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jérémy</forename><surname>Jean</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Kölbl</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Amir</forename><surname>Moradi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Sasaki</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pascal</forename><surname>Sasdrich</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siang</forename><forename type="middle">Meng</forename><surname>Sim</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-53008-5_5</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Santa Barbara, CA, USA; Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2016-08-14">2016. August 14-18, 2016</date>
+			<biblScope unit="volume">36</biblScope>
+			<biblScope unit="page" from="123" to="153" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beierle C, Jean J, Kölbl S, Leander G, Moradi A, Peyrin T, Sasaki Y, Sasdrich P, Sim SM. 2016. The SKINNY family of block ciphers and its low-latency variant MANTIS. In: Advances in Cryptology-CRYPTO 2016: 36th Annual International Cryptology Conference, Santa Barbara, CA, USA, August 14-18, 2016, Proceedings, Part II 36. Cham: Springer, 123-153.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Boosting Differential-Linear Cryptanalysis of ChaCha7 with MILP</title>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Juan</forename><surname>Grados</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Rusydi</forename><forename type="middle">H</forename><surname>Makarim</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tosc.v2023.i2.189-223</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Symmetric Cryptology</title>
+		<title level="j" type="abbrev">ToSC</title>
+		<idno type="ISSNe">2519-173X</idno>
+		<imprint>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="189" to="223" />
+			<date type="published" when="2023-06-16">2023. 2023</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bellini E, Gerault D, Grados J, Makarim RH, Peyrin T. 2023a. Boosting differential-linear cryptanalysis of ChaCha7 with MILP. IACR Transactions on Symmetric Cryptology 2023(2):189-223 DOI 10.46586/tosc.v2023.i2.189-223.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">A Cipher-Agnostic Neural Training Pipeline with Automated Finding of Good Input Differences</title>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anna</forename><surname>Hambitzer</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matteo</forename><surname>Rossi</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tosc.v2023.i3.184-212</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Symmetric Cryptology</title>
+		<title level="j" type="abbrev">ToSC</title>
+		<idno type="ISSNe">2519-173X</idno>
+		<imprint>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="184" to="212" />
+			<date type="published" when="2023-09-19">2023. 2023</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bellini E, Gerault D, Hambitzer A, Rossi M. 2023b. A cipher-agnostic neural training pipeline with automated finding of good input differences. IACR Transactions on Symmetric Cryptology 2023(3):184-212 DOI 10.46586/tosc.v2023.i3.184-212.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quan</forename><forename type="middle">Quan</forename><surname>Tan</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-77870-5_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Benamira A, Gerault D, Peyrin T, Tan QQ. 2021. A deeper look at machine learning-based cryptanalysis. In: Annual International Conference on the Theory and Applications of Cryptographic Techniques. Cham: Springer, 805-835.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Chacha, a variant of salsa20</title>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">J</forename><surname>Bernstein</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Workshop Record of SASC</title>
+		<imprint>
+			<date type="published" when="2008">2008</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bernstein DJ. 2008. Chacha, a variant of salsa20. In: Workshop Record of SASC.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">New types of cryptanalytic attacks using related keys</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bf00203965</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="229" to="246" />
+			<date type="published" when="1994-12">1994</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E. 1994. New types of cryptanalytic attacks using related keys. Journal of Cryptology 7(4):229-246 DOI 10.1007/BF00203965.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis in stream ciphers</title>
+		<author>
+			<persName><forename type="first">E</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">O</forename><surname>Dunkelman</surname></persName>
+		</author>
+		<ptr target="http://eprint.iacr.org/2007/218" />
+	</analytic>
+	<monogr>
+		<title level="m">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2007">2007</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E, Dunkelman O. 2007. Differential cryptanalysis in stream ciphers. Cryptology ePrint Archive. Available at http://eprint.iacr.org/2007/218.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Snefru, Khafre, REDOC-II, LOKI and Lucifer</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-46766-1_11</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1991">1991</date>
+			<biblScope unit="page" from="156" to="171" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E, Shamir A. 1991a. Differential cryptanalysis of snefru, khafre, REDOC-II, LOKI and lucifer. In: Annual International Cryptology Conference. Cham: Springer, 156-171.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis of DES-like cryptosystems</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bf00630563</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="3" to="72" />
+			<date type="published" when="1991-01">1991</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E, Shamir A. 1991b. Differential cryptanalysis of DES-like cryptosystems. Journal of CRYPTOLOGY 4(1):3-72 DOI 10.1007/BF00630563.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of the Full 16-round DES</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-48071-4_34</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1992">1992</date>
+			<biblScope unit="page" from="487" to="496" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E, Shamir A. 1992. Differential cryptanalysis of the full 16-round DES. In: Annual International Cryptology Conference. Cham: Springer, 487-496.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">PRESENT: An Ultra-Lightweight Block Cipher</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Bogdanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Paar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Poschmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">J B</forename><surname>Robshaw</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Seurin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Vikkelsoe</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-74735-2_31</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Vienna, Austria; Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007-09-10">2007. September 10-13, 2007</date>
+			<biblScope unit="page" from="450" to="466" />
+		</imprint>
+	</monogr>
+	<note>Proceedings 9</note>
+	<note type="raw_reference">Bogdanov A, Knudsen LR, Leander G, Paar C, Poschmann A, Robshaw MJ, Seurin Y, Vikkelsoe C. 2007. Present: an ultra-lightweight block cipher. In: Cryptographic Hardware and Embedded Systems-CHES 2007: 9th International Workshop, Vienna, Austria, September 10-13, 2007. Proceedings 9. Cham: Springer, 450-466.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Convolutional Neural Network (CNN) for Image Detection and Recognition</title>
+		<author>
+			<persName><forename type="first">Rahul</forename><surname>Chauhan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kamal</forename><forename type="middle">Kumar</forename><surname>Ghanshala</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">C</forename><surname>Joshi</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/icsccc.2018.8703316</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2018 First International Conference on Secure Cyber Computing and Communication (ICSCCC)</title>
+		<meeting><address><addrLine>Piscataway</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2018-12">2018</date>
+			<biblScope unit="page" from="278" to="282" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chauhan R, Ghanshala KK, Joshi R. 2018. Convolutional neural network (CNN) for image detection and recognition. In: 2018 First International Conference on Secure Cyber Computing and Communication (ICSCCC). Piscataway: IEEE, 278-282.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">KATAN and KTANTAN — A Family of Small and Efficient Hardware-Oriented Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Christophe</forename><surname>De Cannière</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Orr</forename><surname>Dunkelman</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Miroslav</forename><surname>Knežević</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-04138-9_20</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2009">2009</date>
+			<biblScope unit="page" from="272" to="288" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">De Canniere C, Dunkelman O, Knežević M. 2009. Katan and ktantan-a family of small and efficient hardware-oriented block ciphers. In: International Workshop on Cryptographic Hardware and Embedded Systems. Cham: Springer, 272-288.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Constraint Programming Models for Chosen Key Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Marine</forename><surname>Minier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Christine</forename><surname>Solnon</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-44953-1_37</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="584" to="601" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gerault D, Minier M, Solnon C. 2016. Constraint programming models for chosen key differential cryptanalysis. In: International Conference on Principles and Practice of Constraint Programming. Cham: Springer, 584-601.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr A. 2019. Improving attacks on round-reduced Speck32/64 using deep learning. In: Annual International Cryptology Conference. Cham: Springer, 150-179.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">An assessment of differential-neural distinguishers</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Gohr</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Neumann</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.jisa.2024.103758</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr A, Leander G, Neumann P. 2022. An assessment of differential-neural distinguishers. Cryptology ePrint Archive. DOI 10.1016/j.jisa.2024.103758.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Deep Residual Learning for Image Recognition</title>
+		<author>
+			<persName><forename type="first">Kaiming</forename><surname>He</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiangyu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaoqing</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2016.90</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<meeting><address><addrLine>Piscataway</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2016-06">2016</date>
+			<biblScope unit="page" from="770" to="778" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">He K, Zhang X, Ren S, Sun J. 2016. Deep residual learning for image recognition. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. Piscataway: IEEE, 770-778.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Squeeze-and-Excitation Networks</title>
+		<author>
+			<persName><forename type="first">Jie</forename><surname>Hu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gang</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2018.00745</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2018-06">2018</date>
+			<biblScope unit="page" from="7132" to="7141" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hu J, Shen L, Sun G. 2018. Squeeze-and-excitation networks. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 7132-7141.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Deep learning based differential distinguisher for lightweight cipher present</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Jain</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Kohli</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Mishra</surname></persName>
+		</author>
+		<idno type="DOI">10.48550/arXiv.2112.05061</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2020">2020</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jain A, Kohli V, Mishra G. 2020. Deep learning based differential distinguisher for lightweight cipher present. Cryptology ePrint Archive DOI 10.48550/arXiv.2112.05061.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Related-Key Differential Cryptanalysis of 192-bit Key AES Variants</title>
+		<author>
+			<persName><forename type="first">Goce</forename><surname>Jakimoski</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yvo</forename><surname>Desmedt</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-24654-1_15</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2003">2003</date>
+			<biblScope unit="page" from="208" to="221" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jakimoski G, Desmedt Y. 2003. Related-key differential cryptanalysis of 192-bit key AES variants. In: International Workshop on Selected Areas in Cryptography. Cham: Springer, 208-221.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b22">
+	<monogr>
+		<title level="m" type="main">Adam: a method for stochastic optimization</title>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">P</forename><surname>Kingma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ba</surname></persName>
+		</author>
+		<idno type="DOI">10.48550/arXiv.1412.6980</idno>
+		<imprint>
+			<date type="published" when="2014">2014</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Kingma DP, Ba J. 2014. Adam: a method for stochastic optimization. ArXiv DOI 10.48550/arXiv.1412.6980.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">ImageNet classification with deep convolutional neural networks</title>
+		<author>
+			<persName><forename type="first">Alex</forename><surname>Krizhevsky</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ilya</forename><surname>Sutskever</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Geoffrey</forename><forename type="middle">E</forename><surname>Hinton</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/3065386</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Communications of the ACM</title>
+		<title level="j" type="abbrev">Commun. ACM</title>
+		<idno type="ISSN">0001-0782</idno>
+		<idno type="ISSNe">1557-7317</idno>
+		<imprint>
+			<biblScope unit="volume">60</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="84" to="90" />
+			<date type="published" when="2017-05-24">2017</date>
+			<publisher>Association for Computing Machinery (ACM)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Krizhevsky A, Sutskever I, Hinton GE. 2017. Imagenet classification with deep convolutional neural networks. Communications of the ACM 60(6):84-90 DOI 10.1145/3065386.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">CryptoSAT: a tool for SAT‐based cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Frédéric</forename><surname>Lafitte</surname></persName>
+			<idno type="ORCID">0000-0001-9748-3130</idno>
+		</author>
+		<idno type="DOI">10.1049/iet-ifs.2017.0176</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IET Information Security</title>
+		<title level="j" type="abbrev">IET Information Security</title>
+		<idno type="ISSN">1751-8709</idno>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="463" to="474" />
+			<date type="published" when="2018-11">2018</date>
+			<publisher>Institution of Engineering and Technology (IET)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lafitte F. 2018. Cryptosat: a tool for sat-based cryptanalysis. IET Information Security 12(6):463- 474 DOI 10.1049/iet-ifs.2017.0176.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Gradient-based learning applied to document recognition</title>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Lecun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><surname>Bottou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Bengio</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Haffner</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/5.726791</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Proceedings of the IEEE</title>
+		<title level="j" type="abbrev">Proc. IEEE</title>
+		<idno type="ISSN">0018-9219</idno>
+		<imprint>
+			<biblScope unit="volume">86</biblScope>
+			<biblScope unit="issue">11</biblScope>
+			<biblScope unit="page" from="2278" to="2324" />
+			<date type="published" when="1998">1998</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">LeCun Y, Bottou L, Bengio Y, Haffner P. 1998. Gradient-based learning applied to document recognition. Proceedings of the IEEE 86(11):2278-2324 DOI 10.1109/5.726791.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">The existence of persistent states in the brain</title>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">A</forename><surname>Little</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/0025-5564(74)90031-5</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Mathematical Biosciences</title>
+		<title level="j" type="abbrev">Mathematical Biosciences</title>
+		<idno type="ISSN">0025-5564</idno>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">1-2</biblScope>
+			<biblScope unit="page" from="101" to="120" />
+			<date type="published" when="1974-02">1974</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Little WA. 1974. The existence of persistent states in the brain. Mathematical Biosciences 19(1- 2):101-120 DOI 10.1016/0025-5564(74)90031-5.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Improved (Related-Key) Differential-Based Neural Distinguishers for SIMON and SIMECK Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guoqiang</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bing</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Liu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac195</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">67</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="537" to="547" />
+			<date type="published" when="2024">2024</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lu J, Liu G, Sun B, Li C, Liu L. 2024. Improved (related-key) differential-based neural distinguishers for SIMON and SIMECK block ciphers. The Computer Journal 67(2):537-547 DOI 10.1093/comjnl/bxac195.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Improving the Deep-Learning-Based Differential Distinguisher and Applications to Simeck</title>
+		<author>
+			<persName><forename type="first">Lijun</forename><surname>Lyu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yingjie</forename><surname>Zhang</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cscwd54268.2022.9776036</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2022 IEEE 25th International Conference on Computer Supported Cooperative Work in Design (CSCWD)</title>
+		<meeting><address><addrLine>Piscataway</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2022-05-04">2022. 2022</date>
+			<biblScope unit="page" from="465" to="470" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lyu L, Tu Y, Zhang Y. 2022. Improving the deep-learning-based differential distinguisher and applications to simeck. In: 2022 IEEE 25th International Conference on Computer Supported Cooperative Work in Design (CSCWD). Piscataway: IEEE, 465-470.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">On correlation between the order of S-boxes and the strength of DES</title>
+		<author>
+			<persName><forename type="first">Mitsuru</forename><surname>Matsui</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bfb0053451</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1994">1994</date>
+			<biblScope unit="page" from="366" to="375" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Matsui M. 1994. On correlation between the order of s-boxes and the strength of DES. In: Workshop on the Theory and Application of of Cryptographic Techniques. Cham: Springer, 366-375.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Differential and Linear Cryptanalysis Using Mixed-Integer Linear Programming</title>
+		<author>
+			<persName><forename type="first">Nicky</forename><surname>Mouha</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qingju</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dawu</forename><surname>Gu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Preneel</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-34704-7_5</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Beijing, China</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2011-12-03">2012. November 30-December 3, 2011</date>
+			<biblScope unit="page" from="57" to="76" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers 7. Cham</note>
+	<note type="raw_reference">Mouha N, Wang Q, Gu D, Preneel B. 2012. Differential and linear cryptanalysis using mixed- integer linear programming. In: Information Security and Cryptology: 7th International Conference, Inscrypt 2011, Beijing, China, November 30-December 3, 2011. Revised Selected Papers 7. Cham: Springer, 57-76.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Rectified linear units improve restricted Boltzmann machines</title>
+		<author>
+			<persName><forename type="first">V</forename><surname>Nair</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><forename type="middle">E</forename><surname>Hinton</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 27th International Conference on Machine Learning (ICML-10)</title>
+		<meeting>the 27th International Conference on Machine Learning (ICML-10)</meeting>
+		<imprint>
+			<date type="published" when="2010">2010</date>
+			<biblScope unit="page" from="807" to="814" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Nair V, Hinton GE. 2010. Rectified linear units improve restricted Boltzmann machines. In: Proceedings of the 27th International Conference on Machine Learning (ICML-10), 807-814.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Analysis of Gohr&apos;s neural distinguisher on Speck32/64 and its application to Simon32/64</title>
+		<author>
+			<persName><forename type="first">H</forename><surname>Seong</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><surname>Yoo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Yeom</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">S</forename><surname>Kang</surname></persName>
+		</author>
+		<idno type="DOI">10.13089/JKIISC.2022.32.2.391</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the Korea Institute of Information Security &amp; Cryptology</title>
+		<imprint>
+			<biblScope unit="volume">32</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="391" to="404" />
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Seong H, Yoo H, Yeom Y, Kang JS. 2022. Analysis of Gohr&apos;s neural distinguisher on Speck32/64 and its application to Simon32/64. Journal of the Korea Institute of Information Security &amp; Cryptology 32(2):391-404 DOI 10.13089/JKIISC.2022.32.2.391.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Neural differential distinguishers for GIFT-128 and ASCON</title>
+		<author>
+			<persName><forename type="first">Dongsu</forename><surname>Shen</surname></persName>
+			<idno type="ORCID">0009-0008-1973-8001</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yijian</forename><surname>Song</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yuan</forename><surname>Lu</surname></persName>
+			<idno type="ORCID">0000-0002-2765-1140</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Saiqin</forename><surname>Long</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shujuan</forename><surname>Tian</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.jisa.2024.103758</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Information Security and Applications</title>
+		<title level="j" type="abbrev">Journal of Information Security and Applications</title>
+		<idno type="ISSN">2214-2126</idno>
+		<imprint>
+			<biblScope unit="volume">82</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page">103758</biblScope>
+			<date type="published" when="2024-05">2024</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Shen D, Song Y, Lu Y, Long S, Tian S. 2024. Neural differential distinguishers for GIFT-128 and ASCON. Journal of Information Security and Applications 82(5):103758 DOI 10.1016/j.jisa.2024.103758.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Analysis of AES, SKINNY, and Others with Constraint Programming</title>
+		<author>
+			<persName><forename type="first">Siwei</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pascal</forename><surname>Lafourcade</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qianqian</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yosuke</forename><surname>Todo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kexin</forename><surname>Qiao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lei</forename><surname>Hu</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tosc.v2017.i1.281-306</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Symmetric Cryptology</title>
+		<title level="j" type="abbrev">ToSC</title>
+		<idno type="ISSNe">2519-173X</idno>
+		<imprint>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="281" to="306" />
+			<date type="published" when="2017-03-08">2017. 2017</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Sun S, Gerault D, Lafourcade P, Yang Q, Todo Y, Qiao K, Hu L. 2017. Analysis of AES, SKINNY, and others with constraint programming. IACR Transactions on Symmetric Cryptology 2017(1):281-306 DOI 10.46586/tosc.v2017.i1.281-306.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Automatic Security Evaluation and (Related-key) Differential Characteristic Search: Application to SIMON, PRESENT, LBlock, DES(L) and Other Bit-Oriented Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Siwei</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lei</forename><surname>Hu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peng</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kexin</forename><surname>Qiao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoshuang</forename><surname>Ma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ling</forename><surname>Song</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-45611-8_9</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="158" to="178" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Sun S, Hu L, Wang P, Qiao K, Ma X, Song L. 2014. Automatic security evaluation and (related- key) differential characteristic search: application to SIMON, PRESENT, LBlock, DES and other bit-oriented block ciphers. In: International Conference on the Theory and Application of Cryptology and Information Security. Cham: Springer, 158-178.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Going deeper with convolutions</title>
+		<author>
+			<persName><forename type="first">Christian</forename><surname>Szegedy</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Wei Liu</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Yangqing Jia</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pierre</forename><surname>Sermanet</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Scott</forename><surname>Reed</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dragomir</forename><surname>Anguelov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dumitru</forename><surname>Erhan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vincent</forename><surname>Vanhoucke</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andrew</forename><surname>Rabinovich</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2015.7298594</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2015 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<meeting><address><addrLine>Piscataway</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2015-06">2015</date>
+			<biblScope unit="page" from="1" to="9" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Szegedy C, Liu W, Jia Y, Sermanet P, Reed S, Anguelov D, Erhan D, Vanhoucke V, Rabinovich A. 2015. Going deeper with convolutions. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. Piscataway: IEEE, 1-9.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Action Recognition in Video Sequences using Deep Bi-Directional LSTM With CNN Features</title>
+		<author>
+			<persName><forename type="first">Amin</forename><surname>Ullah</surname></persName>
+			<idno type="ORCID">0000-0001-7538-2689</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jamil</forename><surname>Ahmad</surname></persName>
+			<idno type="ORCID">0000-0001-8407-5971</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Khan</forename><surname>Muhammad</surname></persName>
+			<idno type="ORCID">0000-0002-5302-1150</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Muhammad</forename><surname>Sajjad</surname></persName>
+			<idno type="ORCID">0000-0001-5646-0338</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Sung</forename><forename type="middle">Wook</forename><surname>Baik</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/access.2017.2778011</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Access</title>
+		<title level="j" type="abbrev">IEEE Access</title>
+		<idno type="ISSNe">2169-3536</idno>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="page" from="1155" to="1166" />
+			<date type="published" when="2017">2017</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ullah A, Ahmad J, Muhammad K, Sajjad M, Baik SW. 2017. Action recognition in video sequences using deep bi-directional LSTM with CNN features. IEEE Access 6:1155-1166 DOI 10.1109/ACCESS.2017.2778011.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Multiple Differential Distinguisher of SIMECK32/64 Based on Deep Learning</title>
+		<author>
+			<persName><forename type="first">Huijiao</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0001-8174-608X</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jiapeng</forename><surname>Tian</surname></persName>
+			<idno type="ORCID">0000-0003-1481-6150</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Xin</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0002-1837-6976</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yongzhuang</forename><surname>Wei</surname></persName>
+			<idno type="ORCID">0000-0002-3371-4865</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Hua</forename><surname>Jiang</surname></persName>
+			<idno type="ORCID">0000-0003-1101-622X</idno>
+		</author>
+		<idno type="DOI">10.1155/2022/7564678</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Security and Communication Networks</title>
+		<title level="j" type="abbrev">Security and Communication Networks</title>
+		<idno type="ISSN">1939-0114</idno>
+		<idno type="ISSNe">1939-0122</idno>
+		<imprint>
+			<biblScope unit="volume">2022</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="1" to="12" />
+			<date type="published" when="2022-09-14">2022. 2022</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang H, Tian J, Zhang X, Wei Y, Jiang H. 2022. Multiple differential distinguisher of simeck32/ 64 based on deep learning. Security and Communication Networks 2022(1):7564678 DOI 10.1155/2022/7564678.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Improved Machine Learning Assisted (Related-key) Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Gao</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gaoli</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>He</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/trustcom53373.2021.00039</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 IEEE 20th International Conference on Trust, Security and Privacy in Computing and Communications (TrustCom)</title>
+		<meeting><address><addrLine>Piscataway</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-10">2021</date>
+			<biblScope unit="page" from="164" to="171" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang G, Wang G, He Y. 2021. Improved machine learning assisted (related-key) differential distinguishers for lightweight ciphers. In: TrustCom 2021. Piscataway: IEEE, 164-171.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b40">
+	<analytic>
+		<title level="a" type="main">The Simeck Family of Lightweight Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Gangqiang</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bo</forename><surname>Zhu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Valentin</forename><surname>Suder</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mark</forename><forename type="middle">D</forename><surname>Aagaard</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guang</forename><surname>Gong</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-48324-4_16</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2015">2015</date>
+			<biblScope unit="page" from="307" to="329" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yang G, Zhu B, Suder V, Aagaard MD, Gong G. 2015. The simeck family of lightweight block ciphers. In: International Workshop on Cryptographic Hardware and Embedded Systems. Cham: Springer, 307-329.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b41">
+	<monogr>
+		<title level="m" type="main">Comparative study of CNN and RNN for natural language processing</title>
+		<author>
+			<persName><forename type="first">W</forename><surname>Yin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><surname>Kann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><surname>Schütze</surname></persName>
+		</author>
+		<idno type="DOI">10.48550/arXiv.1702.01923</idno>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yin W, Kann K, Yu M, Schütze H. 2017. Comparative study of CNN and RNN for natural language processing. ArXiv DOI 10.48550/arXiv.1702.01923.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b42">
+	<analytic>
+		<title level="a" type="main">Improved differential-neural cryptanalysis for round-reduced SIMECK32/64</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Li</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/s11704-023-3261-z</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Frontiers of Computer Science</title>
+		<title level="j" type="abbrev">Front. Comput. Sci.</title>
+		<idno type="ISSN">2095-2228</idno>
+		<idno type="ISSNe">2095-2236</idno>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page">176817</biblScope>
+			<date type="published" when="2023-12">2023</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhang L, Lu J, Wang Z, Li C. 2023. Improved differential-neural cryptanalysis for round-reduced simeck32/64. Frontiers of Computer Science 17(6):176817 DOI 10.1007/s11704-023-3261-z.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b43">
+	<analytic>
+		<title level="a" type="main">Improving the Accuracy of Differential-Neural Distinguisher for DES, Chaskey, and PRESENT</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yindong</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1587/transinf.2022edl8094</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEICE Transactions on Information and Systems</title>
+		<title level="j" type="abbrev">IEICE Trans. Inf. &amp; Syst.</title>
+		<idno type="ISSN">0916-8532</idno>
+		<idno type="ISSNe">1745-1361</idno>
+		<imprint>
+			<biblScope unit="volume">E106.D</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="1240" to="1243" />
+			<date type="published" when="2023-07-01">2023</date>
+			<publisher>Institute of Electronics, Information and Communications Engineers (IEICE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhang L, Wang Z, Chen Y. 2023. Improving the accuracy of differential-neural distinguisher for DES, chaskey, and PRESENT. IEICE Transactions on Information and Systems 106(7):1240- 1243 DOI 10.1587/transinf.2022EDL8094.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

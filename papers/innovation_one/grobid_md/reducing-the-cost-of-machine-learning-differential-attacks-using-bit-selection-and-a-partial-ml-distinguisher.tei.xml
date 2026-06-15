@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Reducing the Cost of Machine Learning Differential Attacks Using Bit Selection and a Partial ML-Distinguisher</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Amirhossein</forename><surname>Ebrahimi</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> School of Computer Science &amp; IT , University College Cork</note>
+								<orgName type="department">School of Computer Science &amp; IT</orgName>
+								<orgName type="institution">University College Cork</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Francesco</forename><surname>Regazzoni</surname></persName>
+							<email>f.regazzoni@uva.nl</email>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> University of Amsterdam , The Netherlands ,</note>
+								<orgName type="institution">University of Amsterdam</orgName>
+								<address>
+									<country key="NL">The Netherlands</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>3</label> Università della Svizzera italiana , Switzerland ,</note>
+								<orgName type="institution">Università della Svizzera italiana</orgName>
+								<address>
+									<country key="CH">Switzerland</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Paolo</forename><surname>Palmieri</surname></persName>
+							<email>p.palmieri@cs.ucc.ie</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> School of Computer Science &amp; IT , University College Cork</note>
+								<orgName type="department">School of Computer Science &amp; IT</orgName>
+								<orgName type="institution">University College Cork</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Reducing the Cost of Machine Learning Differential Attacks Using Bit Selection and a Partial ML-Distinguisher</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">FD4D49CB671A23E8D249C3B468F4D593</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T16:10+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Differential cryptanalysis</term>
+					<term>ML-based Differential cryptanalysis</term>
+					<term>Machine Learning</term>
+					<term>Partial ML-distinguisher</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>In a differential cryptanalysis attack, the attacker tries to observe a block cipher's behavior under an input difference: if the system's resulting output differences show any non-random behavior, a differential distinguisher is obtained. While differential cryptanlysis has been known for several decades, Gohr was the first to propose in 2019 the use of machine learning (ML) to build a distinguisher. In this paper, we present the first Partial Differential (PD) ML-distinguisher, and demonstrate its effectiveness on lightweight cipher SPECK32/64. As a PD-ML-distinguisher is based on a selection of bits rather than all bits in a block, we also study if different selections of bits have different impact in the accuracy of the distinguisher, and we find that to be the case. More importantly, we also establish that certain bits have reliably higher effectiveness than others, through a series of independent experiments on different datasets, and we propose an algorithm for assigning an effectiveness score to each bit in the block. By selecting the highest scoring bits, we are able to train a partial ML-distinguisher over 8-bits that is almost as accurate as an equivalent ML-distinguisher over the entire 32 bits (68.8% against 72%), for six rounds of SPECK32/64. The reduced input size implies a significant reduction in the complexity of achieving a distinguisher, and also leads to a reduction in the number of bits of possible subkeys to be guessed in a potential subsequent key recovery attack. These results may therefore open the way to the application of (partial) ML-based distinguishers to ciphers whose block size has so far been considered too large.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>Block ciphers are cryptographic algorithms that provide confidentiality by encrypting data using a symmetric key. Block ciphers operate on fixed-length groups of bits, called blocks; rather than encrypting one bit at a time as in stream ciphers. Block ciphers are fundamental components in the design of many cryptographic protocols and are widely used to encrypt large amounts of data, either locally or over network communication. Recently, the cryptographic community has focused on the design of lightweight cryptographic (LWC) schemes, which are suitable for resource-constrained devices that are commonplace in settings such as the Internet of Things, healthcare, and sensor networks. The need for dedicated ciphers rises from the fact that the majority of current cryptographic algorithms were designed having desktop and server environments in mind, and because of this many of these algorithms are too computationally heavy to operate onto constrained devices. The US National Institute of Standards and Technology, who has a prominent role in the standardization of cryptogrphic algorithms recognized worldwide, has recently launched an initiative to solicit, evaluate, and standardize lightweight cryptographic algorithms <ref type="bibr" target="#b3">[4]</ref>, with the objective to achieve a set of standards for lightweight cryptographic algorithms by 2022.</p><p>Given their pervasive use, it is vital to evaluate the security of block ciphers, and especially those in the LWC domain, who have appeared more recently and have therefore been less studied than standard block ciphers such as the Advanced Encryption Standard (AES) <ref type="bibr" target="#b9">[10]</ref>. In the research domain of cryptanalysis, which studies ciphers to find weaknesses and potential attacks, there are many generic and robust statistical techniques that can be used to attack algorithms and therefore help assess their security. The two most famous examples are differential <ref type="bibr" target="#b7">[8]</ref> and linear <ref type="bibr" target="#b16">[17]</ref> cryptanalysis. The main idea behind these attacks is to find a statistical pattern introduced by the cipher: this is achieved by looking at the ciphertexts produced by the algorithm, and by trying to distinguish between a random permutation and a block cipher. In a simple differential attack, which is usually a chosen plaintext attack, pairs of plaintext related by a constant difference (e.g. a logical XOR operation) are used. The attacker encrypts the plaintexts and computes the differences of the corresponding ciphertexts, in order to detect statistical patterns in their distribution. This pattern, whose statistical properties depend upon the nature of the S-boxes used for encryption, is called a differential. On the basis of the differential, the cipher can be distinguished from random, obtaining what is called a distinguisher.</p><p>Traditionally, the implementation of differential cryptanalysis techniques, however, requires a massive amount of data and memory, and the time complexity of finding a good distinguisher could be infeasible in most cases. Consequently, there is an active line of research aimed at automating these cryptanalysis methods. Until recently, the main focus was to transform the problem of finding a good distinguisher into an optimization problem <ref type="bibr" target="#b10">[11,</ref><ref type="bibr" target="#b17">18]</ref>, which can then be solved more efficiently with optimization solvers like Gurobi <ref type="bibr" target="#b12">[13]</ref>. Despite the more convenient approach for finding the best distinguisher, this process is still time-consuming, and the attacker still needs a good knowledge about the block cipher under attack.</p><p>For many years, it was believed that Machine Learning (ML) and cryptography could not work well together due to the random behavior of block ciphers and other cryptosystems <ref type="bibr" target="#b18">[19,</ref><ref type="bibr" target="#b0">1]</ref>. However, in a seminal paper in 2019 Gohr presented an ML-based cryptanalysis of the SPECK32/64 cipher that was better than previous attacks <ref type="bibr" target="#b11">[12]</ref>. In that paper, it was illustrated that by using deep learning, a differential distinguisher could be achieved in an automated way and with less data complexity than other attacks, to the point where the cryptanalysis process can be implemented on a personal computer.</p><p>Using artificial intelligence (AI) techniques such as machine learning for the cryptanalysis of block ciphers can open many exciting opportunities. For instance, with the help of AI, it is possible to extend the known differential distinguishers for block ciphers <ref type="bibr" target="#b19">[20]</ref>. In this paper, we focus on reducing the memory and computation costs of differential ML attacks by proposing the first partial differential ML-based distinguisher. In doing so, we also establish the first experimental differential evaluation of the role of each bit of the input and output of a cipher in its security.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1">Related work</head><p>In 2019, Aron Gohr introduced an 8-round differential distinguisher for SPECK32/64 cipher with the help of machine learning <ref type="bibr" target="#b11">[12]</ref>, and based on that, an 11-round attack was established, which was better than previous classic attacks. Gohr's central idea was using distinguishing attacks with the help of AI. He trained a neural classifier that can classify between a block cipher and a random permutation by looking at the output differences of the ciphertexts for a specific plaintext difference in SPECK32/64. He then compared this neural distinguisher with the traditional all-in-one differential distribution table of SPECK32/64, which was commutable due to cipher's small block size, and noticed ML-distinguishers could be a good model of it. Furthermore, he presented a method to find a good input difference for distinguishing attacks with the help of ML without any prior knowledge.</p><p>The comparison between all-in-one differential attack <ref type="bibr" target="#b1">[2]</ref> and ML-based attack was possible because SPECK32/64 is a Markov cipher with a small block size. Following Gohr's intuition, a subsequent study was published by Baksi et al. <ref type="bibr" target="#b2">[3]</ref> which used deep learning differential to train distinguishers for non-Markov ciphers, and on that basis could simulate non-Markov cipher's all-in-one differential distribution table. This was modeled successfully for ciphers with big state sizes such as Gimli. Moreover, the paper studied other architectures of deep learning networks, including Long Short-Term Memory (LSTM) and Multilayer Perceptron (MLP). Their results indicate that an MLP network with three hidden layers can be efficient enough to train a distinguisher.</p><p>Linear cryptanalysis has also been recently attempted using machine learning. Hou et al. applied machine learning on DES cipher to achieve a linear attack <ref type="bibr" target="#b13">[14]</ref>, using known plaintext and their corresponding ciphertexts. The results show that a neural network can recognize the XOR distribution of a linear expression in DES cipher. Other attacks such as integral have also been investigated in conjunction with machine learning <ref type="bibr" target="#b20">[21]</ref>.</p><p>Recent research in this direction is not limited to block ciphers: Liu et al. in <ref type="bibr" target="#b15">[16]</ref> analyze the security of variants of Xoodyak hash mode against preimage attack utilizing deep learning. They trained a model for one round of permutation to predict the message of a hash function and discover that the accuracy is high. However, as the number of rounds is increased, the deep learning preimage attack diminishes in effectiveness.</p><p>Benamira et al. contributed a more in-depth analysis of the functioning of ML-based distinguishers, and focused in particular on what information they use <ref type="bibr" target="#b6">[7]</ref>. Their results indicate that these machines not only use the differential distribution on ciphertext pairs, but the distinguisher depends on the penultimate or antepenultimate rounds. Based on these findings, they proposes a new pure cryptanalysis distinguisher with the same accuracy as Gohr's neural distinguisher.</p><p>An important limitation of current attacks relates to their complexity. To attack n+1 rounds of a block cipher using n-round of Gohr's neural distinguisher, we need to guess all the possible last-round subkeys. Although this approach works well on SPECK32/64, whose length of subkeys is 16 bits, it may not work efficiently for many other ciphers. For example, in AES-128 <ref type="bibr" target="#b9">[10]</ref> the size of subkeys (round keys) and the main secret key is equal to 128 bits, so the complexity of trying all last-round subkeys is equivalent to a brute force attack.</p><p>Furthermore, the block size of ciphers can affect the training phase of MLdistinguishers because each bit in the training stage acts as a feature for the machine. SPECK32/64 has a 32 bits block size, but usually, ciphers have a block size higher than that. As a result, training ML-distinguishers could be harder for other block ciphers, especially ones with a SPN structure.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.2">Contribution</head><p>In this paper, we present novel results that significantly advance the efficiency, and reduce the cost of ML-based distinguishers. In particular, we show experimentally that not all the bits in a block are necessary as features to have an adequate neural distinguisher. We also find that different selections of bits (features) in the ML-distinguisher lead to vastly different accuracy results, and that certain bits are consistently better than others for this purpose. On this basis, we propose a new feature selection method for partial differential ML-based distinguishers. We use the selection method to obtain a much more compact, hence easier to learn, partial differential ML-based distinguisher.</p><p>In particular, we first present a novel method aimed at training a neural distinguisher more efficiently than in current literature. We do so by introducing the first partial differential machine learning based distinguisher (PD-MLdistinguisher). The idea behind a partial differential ML distinguisher is that it is not necessary to train the ML model on all the bit differences of ciphertext pairs in order to achieve a distinguisher. Consequently, if we have an ML-distinguisher that can tell, without knowing all bits, whether some difference in ciphertext pairs δ = C 0 ⊕ C 1 is generated as random or as the result of the encryption of the plaintext pairs, then we do not need to guess all the subkeys in the last round to recover the secret key.</p><p>Secondly, we implement the PD-ML-distinguisher for SPECK32/64 and we measure the effectiveness of each bit of δ in the training of ML-distinguishers. Through an extensive series of experiments we find that different bits have a different impact in the training of the distinguisher. This characteristic can be reliably observed in separate, independent experiments. Based on our measurements, we assign a score to each bit with the help of the PD-ML-distinguishers. The bits with higher scores are more important for the training of the models, as they lead to machines that are significantly more effective (68.8% for 8 bits) than those trained on the lowest scoring bits (52% for 8 bits). On this basis, We can therefore select only the most effective bits when training PD-MLdistinguishers, achieving significant efficiencies in the time and space complexity of the distinguisher. This is evidenced by the training of a 6-round distinguisher for SPECK32/64 with just 8 bits achieving an accuracy of 68.8%, against an accuracy of 72% for an equivalent ML distinguisher trained on the full 32 bits.</p><p>These results open the way to efficient ML-based differential cryptanalysis of ciphers with larger block sizes, placing standard block ciphers potentially within reach. Additionally, our experimental results on the different impact of different bits can highlight potential weaknesses in block ciphers, and introduces a novel research direction and a new tool for cryptanalists, with implications that go beyond the scope of this work.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.3">Outline</head><p>The structure of this paper is as follows. Section 2 gives an overview of the SPECK32/64 block cipher, and a brief description of Gohr's neural distinguisher is explained. In section 3, PD-ML-distinguishers are introduced, and they are examined on the SPECK32/64 cipher. In section 4, an experiment is presented to measure effectiveness of each bit for training ML-distinguishers, and extensive experimental evidence is discussed.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Preliminaries</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">The SPECK cipher</head><p>A block cipher is a cryptographic algorithm that accepts a fixed-length plaintext, or block, as an input. Then, it applies a transformation function on it to produce a block of encrypted message (ciphertext). The secret key contributes to specifying the transformation function, and as such the security of the block cipher depends on it. A block cipher can be defined by encryption and decryption functions:</p><formula xml:id="formula_0">E(P, K) = C : {0, 1} k × {0, 1} n → {0, 1} n D(C, K) = P : {0, 1} k × {0, 1} n → {0, 1} n<label>(1)</label></formula><p>Where P, C, K, E, D are plaintext, ciphertext, secret key, encryption function and decryption function, respectively. SPECK is a family of lightweight block ciphers designed by NSA in 2013 <ref type="bibr" target="#b4">[5]</ref>. These ciphers have many different block sizes and key sizes, but in this paper, SPECK with 32 bits block size and 64 bits key size is evaluated, and it is specified by SPECK32/64. Like many other block ciphers, it is an iterative cipher, which means it has a function that iterates for many rounds until the ciphertext is generated. The number of rounds for SPECK32/64 is 22.</p><p>SPECK is a Feistel cipher. Accordingly, the plaintext is divided into two equal parts (R, L), and in the case of 32 bits block size R, L ∈ {0, 1} 16 , then the below function applies to inputs at each round:</p><formula xml:id="formula_1">SP ECK32/64 : L r+1 = ((L r &gt;&gt; 7) R r ) ⊕ k r R r+1 = (R r &lt;&lt; 2) ⊕ L r+1<label>(2)</label></formula><p>In equation ( <ref type="formula" target="#formula_1">2</ref>) &lt;&lt; and &gt;&gt; are cyclic left and right shift, respectively, is modular addition, and ⊕ is an exclusive OR (XOR).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">ML-based differential distinguishers</head><p>To analyze the security of a block cipher with block size of n against differential attack, cryptographers study the statistical behavior of a difference through a block cipher. For this, they choose an input difference and encrypt it for a specific number of rounds and, lastly, try to find non-randomness in corresponding output differences. Throughout this paper, the input difference is represented by ∆, and it is defined as a XOR of two plaintexts. The output difference is specified by δ = E(P 0 ) ⊕ E(P 1 = P 0 ⊕ ∆) and (∆ → δ) is called a differential.</p><p>The occurrence probability of a differential can be shown by P r(∆ → δ). In a random permutation with block size of n, the average probability of a differential is:</p><formula xml:id="formula_2">∀∆, δ : P r(∆ → δ) = 2 -n</formula><p>If an attacker can find a differential that P r(∆ → δ) &gt; 2 -n for a block cipher, a differential distinguisher is achieved. In Gohr's attack <ref type="bibr" target="#b11">[12]</ref>, an ML-based distinguisher is trained with the aid of ciphertext pairs. These pairs are generated in two ways: in the first group, they are real ciphertexts (C 0 , C 1 ) of a block cipher for a specific plaintext pairs (P 0 , P 1 ), where P 0 ⊕ P 1 = ∆; in the second group is selected randomly where C 0 , C 1 ∈ r {0, 1} n × {0, 1} n . Then, the accuracy of this distinguisher is evaluated, and if this accuracy is more than 50%, a distinguisher is obtained.</p><p>It is important to note that the power and efficacy of this ML-based differential attack compares positively with the All-in-One attack <ref type="bibr" target="#b1">[2]</ref> for SPECK32/64. The All-in-One attack is a powerful differential analysis that considers a set of all output differences for a fixed given input difference ∆ instead of one specific differential trail ∆ → δ.</p><formula xml:id="formula_3">All -in -one = {δ|δ = E(P 0 ) ⊕ E(P 0 ⊕ ∆)}</formula><p>The steps of finding an ML-based differential distinguisher for r round of SPECK32/64 cipher are as follows. Considering the feistel structure of SPECK32/64, every plaintext can be represented like P = (L, R) that L ∈ {0, 1} 16 and R ∈ {0, 1} 16 are left and right part of plaintext, respectively. 1. First, 10 7 plaintext pairs (P 0, P 1) are randomly generated in a way that ∆ = (L 0 ⊕ L 1 , R 0 ⊕ R 1 ) = (0x0040, 0x0000). Meanwhile, 10 7 labels Y ∈ r {0, 1} 1 are randomly generated and allocated to the pairs. 2. if Y = 0 the P 1 is randomly changed to P 1 ∈ r {0, 1} 32 then all these pairs is encrypted with r rounds of SPECK32/64, and all the ciphertext pairs (C0, C1) are stored with their corresponding labels in a dataset. 3. An AI machine is trained with the help of these ciphertext pairs. In this training phase, zero label Y = 0 means it is a data from a random permutation, while Y = 1 demonstrates a ciphertext for a fixed input difference ∆ = (0x0040, 0x0000). 4. In testing stage, steps (1) and ( <ref type="formula" target="#formula_1">2</ref>) are repeated for another 10 6 pairs, and the accuracy of the machine is measured. If accuracy is more than 50%, then the machine is a differential distinguisher.</p><p>As discussed in Section 1.1, following Gohr's seminal work several papers have investigated the use of ML in cryptanalysis <ref type="bibr" target="#b19">[20,</ref><ref type="bibr" target="#b5">6,</ref><ref type="bibr" target="#b2">3]</ref>. Some of these works changed certain steps of the original attack as mentioned above. For instance, in <ref type="bibr" target="#b2">[3]</ref> there are two major changes. Firstly, it is shown that using a multilayer perceptron (MLP) for training the ML-distinguisher can achieve better results than CNN network as used in <ref type="bibr" target="#b11">[12]</ref>; and secondly, the training dataset containing C0 ⊕ C1 instead of (C0, C1) is more useful for increasing the accuracy of MLdistinguisher.</p><p>The final goal of having a distinguisher is to attack the cipher. By having a r-round ML-based distinguisher, a trivial attack on r +1 rounds of SPECK32/64 cipher can be implemented as follows.</p><p>1. For a fixed input difference ∆ = (0x0040, 0000), n pairs of (P 0, P 1) is formed and their corresponding ciphertext (C0, C1) r+1 after r+1 rounds is obtained by asking from an oracle. 2. For all possible subkeys in round r + 1, (k r+1 ), ciphertexts are partially decrypted for one round and (C0, C1) r saved in a dataset. 3. given each (C0, C1) r to r round ML-based distinguisher in the test phase, a score is attained for every ciphertext pair. 4. Average all the scores to have a final score for each subkey k r+1 . 5. Rank the subkeys based on their score. The subkey with the highest score has the most probability to be the correct subkey.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">Partial Differential ML-distinguisher</head><p>In this section, we show that it is possible to train an adequate neural distinguisher based on a subset of bits in a block, rather than the entire block as in previous literature. As a result, we introduce the first Partial Differential MLdistinguisher.</p><p>To analyze the security of a cipher, the complexity of the attack algorithm should be less than brute force. The brute force attack complexity for a block cipher is 2 min(|k|,|n|) , where |k| and |n| are key and block size, respectively. As shown in Section 2.2, in order to find the key of a cipher with the help of a MLdistinguisher, all the subkeys in the last round need to be guessed. Therefore, to attack r rounds of SPECK32/64 cipher, the attacker has to guess all bits of subkey k r , which has 16 bits length. As a result, the complexity of the attack is 2 16 which is less than brute force attack 2 32 , and it is a successful cryptanalysis for SPECK32/64.</p><p>On the other hand, in many ciphers, especially those with SPN structures like AES, the complexity of guessing the last round subkey is equal to brute force attack. Hence, in this paper, we train partial differential distinguishers (PD-ML-distinguishers) and compare their accuracy to a full state differential distinguisher for 6-round SPECK32/64. It is shown that PD-ML-distinguishers can still distinguish output differences that are generated by SPECK32/64 from a random output. With the help of these new classifiers, there is no need to guess all the subkeys in the last round, and the complexity of cryptanalysis can be reduced.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Methodology</head><p>In order to show the feasibility of training a machine learning based distinguisher by using partial differences of (P 0 , P 1 ) and (C 0 , C 1 ), we set up an experiment where many PD-ML-distinguishers are trained for 6 rounds of SPECK32/64, and their accuracy is recorded. The number of rounds for encrypting plaintext pairs is set to six rounds. This is consistent with current literature, as in <ref type="bibr" target="#b11">[12]</ref>, which shows that reasonably strong distinguishers against up to six rounds of Speck can be trained by using ten-layer residual networks. On the other hand, for achieving 7 and 8-round distinguishers, more sophisticated algorithms like Key Averaging are required. As our objective is to prove the feasibility and efficiency of a partial differential ML-distinguisher attack compared to a simple ML-distinguisher, rather than increasing the number of rounds that can be attacked using a combination of different techniques, we argue that 6 rounds are sufficient for the scope of this work.</p><p>Each bit of the output difference acts as a feature for the machine learning based distinguishers. Consequently, to achieve a partial ML-distinguisher for SPECK32/64, the machine is trained by subset bits of the ciphertext difference, δ, rather than all 32 bits. To experimentally verify to what extent We can trim the output difference, δ, without significantly reducing the effectiveness and robustness of the PD-ML-distinguisher, we conduct an experiment as follows. We first train our distinguisher with just one feature, the least significant bit (LSB) of δ, and record its accuracy. Next, we again train another partial distinguisher, but this time we increase the number of features by one, where the feature is the  </p><formula xml:id="formula_4">j = j + 1 , i = i -1 9 end</formula><p>second least significant bit of δ. This process is repeated until we have 32 different distinguishers. Algorithm 1 gives details on the experiment. The plaintext difference ∆ to generate ciphertexts difference is ∆ = (0x0040, 0x0000), and the dataset is 32 bits differences δ = [δ 0 , . . . , δ 31 ].</p><p>In order to demonstrate the repeatability of the results, we repeat the above process 3 times, each time using a different pairs of (P 0 , C 0 ) and (P 1 , C 1 ) to create new δs, while maintaining P 0 ⊕ P 1 = ∆ = (0x0040, 0x0000).</p><p>Baski et al. showed in <ref type="bibr" target="#b2">[3]</ref> that the Multilayer Perceptron (MLP) architectures are more efficient than Convolutional neural networks (CNN), including Residual networks, or Long Short-Term Memory (LSTM) for training an ML-based differential distinguisher. As a result, in this paper, a Multilayer Perceptron (MLP) machine with three dense layers and a sigmoid activation function is used for training. The number of neurons for dense layers is 32, 64 and 32, respectively. For each number of input bits, a new machine was trained for ten epochs on 10 7 different C 0 ⊕ C 1 = δ. Also, another 10 6 sample was generated for validation. The loss function for optimization was binary cross-entropy plus L2 weights regularization with parameter c = 10 -5 using Adam algorithm <ref type="bibr" target="#b14">[15]</ref>. The learning schedule applied in these ML-distinguishers is the cyclic learning rate used in <ref type="bibr" target="#b11">[12]</ref>. All other parameters are the default parameters in Keras <ref type="bibr" target="#b8">[9]</ref>.</p><p>In each iteration of Algorithm 1, we concatenate difference bits based on their position. If we assume that the accuracy of the machines entirely depends on the number of bits, rather than which bits are selected, then a different selection method should produce comparable results, accounting for statistical differences. In order to verify this hypothesis, we repeat the above process using Algorithm 1; however, this time, instead of starting from the least significant bit δ 31 , we start from the most significant bit (MSB) δ 0 , and then we concatenate the next MSB to our feature space for the next iteration of the while loop and trained our machine.</p><p>The results of the experiment for SPECK32/64 are shown in Figures 1 (LSB→MSB) and 2 (MSB→LSB), and are discussed in the following. The results clearly indicate that a partial differential ML-distinguisher is effective, as a dis-  tinguisher can be obtained for a reduced number of bits. However, by looking at the figures, it is also immediately evident that the accuracy changes if we change the selection of bits. These initial experimental results indicate that different bits have a different impact on the machine accuracy, as discussed in the following. We build on these finding in Section 4, where we analyse in detail the impact each bit has in the effectiveness of the partial differential ML-distinguisher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Results and Discussion</head><p>By looking at Figures <ref type="figure" target="#fig_2">1</ref> and <ref type="figure" target="#fig_3">2</ref>, it can be seen that We can achieve a distinguisher without giving all bits of output difference to the machine. For instance, in Figure <ref type="figure" target="#fig_2">1</ref>, We can have a suitable machine with just the first 20 bits of output difference. However, in Figure <ref type="figure" target="#fig_3">2</ref>, we train the machines by concatenating the output differences from the opposite MSB to LSB direction. In that case, the number of bits that we need to achieve almost the same accuracy is 28, as shown in Figure <ref type="figure" target="#fig_3">2</ref>. From this, We can conclude that the bits position chosen for the PD-ML-distinguisher training can be effective in its accuracy.</p><p>We repeat this experiment three times for each direction (LSB to MSB and MSB to LSB) to see how the machines' behavior changes for different datasets. Each color in Figures <ref type="figure" target="#fig_2">1</ref> and <ref type="figure" target="#fig_3">2</ref> represents one run of Algorithm 1. By looking at the figures, it is clear that the results achieved in the experiment can be reliably repeated in different experimental instances. We also note that increasing the number of features (bits) makes the accuracy of PD-ML-distinguishers fluctuate slightly between experiments (for a number of bits &gt; 28). The reason for this is that the number of epochs is set to 10 due to reducing training time, so it is harder for machines to converge when the number of features is higher. Nevertheless, this is not true when the number of bits is lesser than 22 for both directions. Therefore, We can conclude that using PD-ML-distinguishers can cause the machines to converge faster.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Measuring bit effectiveness for ML-distinguishers</head><p>The results presented in Section 3 show that we do not need all bits of the δ to obtain a ML-based distinguisher. In fact, that We can obtain a partial differential ML distinguisher using a significantly reduced number of bits in the training stage with results comparable to the distinguisher obtained on all bits. In this section, we aim to identify the best strategy for finding the best machine, trained with the least number of bits. Since the desire of block cipher designers is that the output bits of the encrypted message have the most negligible correlation to each other, there is no trivial or pre-defined way to determine which bits are the best for training the partial distinguisher. Hence, we introduce a new experimental method to find the bits of output difference δ for 6-round of SPECK32/64, which have the most impact on the effectiveness of a partial differential MLdistinguisher. The main goal of this experiment is to assign a score to each bit of δ, so that with the help of these scores We can find the most effective bits for training a PD-ML-distinguisher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Methodology</head><p>The experiment setup is as follows. Given the set of bit positions in a block B = {b 0 , . . . , b 31 }, where 0 indicates the position of the most significant bit, we select a subset C 16 B = {C 0 , . . . , C 99 } of the all the possible 16-combinations of B (that is, the subsets of 16 distinct elements of B), in a way that the distribution of each b i ∈ B, in C i s be uniform, where 0 &lt;= i &lt;= 99. Each of these 100 16-combinations represents a selection of 16 bits out of the 32 total bits in a SPECK32/64 block to be used in the training of a PD-ML-distinguisher.</p><p>We use the following procedure in the experiment (Algorithm 2). For each combination, C i ∈ C 16  B we train a PD-ML-distinguisher, and we record its accuracy in an array A = [a 0 , . . . , a 99 ]. In the next step, we construct a matrix M 32×100 in which every row and column correspond to b i s and C j s, respectively. Equation 3 represents the M matrix, and how to construct it.</p><formula xml:id="formula_5">M 32×100 =    m 0,0 . . . m 0,99 . . . . . . . . . m 31,0 . . . m 31,99    m ij = 0 b j / ∈ C i 1 b j ∈ C i<label>(3)</label></formula><p>This matrix tells us which bits are chosen for every C i s. For example, if MSB bit is in combination set C 0 then m 00 = 0 otherwise, m 00 = 1. Then, considering the matrix M , We can compute a score for each bit, S = {s 0 , . . . , s 31 }, as follows:</p><formula xml:id="formula_6">s i = 99 j=0 m ij * a j 99 j=0 m ij .<label>(4)</label></formula><p>This score s i is calculated as the average accuracy of all the PD-ML-distinguishers built on combinations where the ith bit is included. A bit with a higher score means that the combinations with that bit in their set lead to a PD-MLdistinguisher with a higher accuracy on average. As a result, with the help of this score, We can select the most effective bits for training a PD-ML-distinguisher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Results and Discussion</head><p>By having all the scores, We can select the most effective bits for training a PD-ML-distinguisher with the minimum number of features. Figure <ref type="figure" target="#fig_4">3</ref> shows the scores of each bit for one combination set, C 16  B . If the scores shown in Figure <ref type="figure" target="#fig_4">3</ref> were almost similar for all the bits, then we could conclude that all the bits of δs have equal effect on training a PD-ML-distinguisher. However, it is immediately evident there are bits, like 12th, 14th and 29th, with higher scores. As a result, We can confirm this hypothesis that the position of δ bits used for training PD-ML distinguisher affects its accuracy.</p><p>In order to demonstrate the repeatability of these results, and since C 16 B is chosen randomly, we repeat the Algorithm 2 three more times and obtain 4 different scores for each bit. Then, we normalize all the scores based on the average for each experiment. Figure <ref type="figure" target="#fig_5">4</ref> shows the result. Also, Table <ref type="table" target="#tab_0">1</ref> indicates the average score and standard deviation for each bit of δ, considering all scores in the four experiments.</p><p>Algorithm 2: Scores of effectiveness Input: Sequence set of combinations: C 16 B = [C0, . . . , C99] Output: Sequence set of scores: S = [s0, . . . , s31] Training Data: differences of ciphertext pairs of 6-round SPECK32/64 : δ = [δ0, . . . , δ31] 1 Initialize Sequence set A with size 100 2 Initialize M32×100 Matrix 3 Initialize Sequence set S with size 32 4 for Ci ∈ C 16 B do /* Training PD-ML distinguishers */ 5 D ←-T rainM achine(Ci) 6 A[i] = AccuracyTest(D) /* Making M matrix */ 7 for δj in δ do 8 if δj ∈ Ci then 9 M [j][i] = 1 10 else 11 M [j][i] = 0 /* Computing the score */ 12 for 0 &lt;= i &lt;= 31 do 13 S[i] = 99 j=0 mij * aj  As can be seen, the scores for some bits are always above average. By looking at Figure <ref type="figure" target="#fig_5">4</ref> and Table <ref type="table" target="#tab_0">1</ref>, we choose 8 bits with the best score. We propose two selection of bits for 6-round PD-ML distinguisher of SPECK32/64: δ T = [δ 29 , δ 28 , δ 22 , δ 15 , δ 14 , δ 13 , δ 12 , δ 5 ] and δ T = [δ 29 , δ 28 , δ 21 , δ 15 , δ 14 , δ 13 , δ 12 , δ 5 ]. The rationale for choosing these bits is that except bit δ 22 ∈ δ T and δ 21 ∈ δ T other bits always have a score above average, zero. In the case of δ 22 , it has a very low standard deviation while its average score is near the total average (zero), while δ 21 has the next-highest average score across experiments, despite scoring lower than δ 22 in some instances. Finally, we train a new distinguisher with just these eight bits to verify if they are sufficient for training a neural distinguisher, and we obtain a PD-MLdistinguisher with an accuracy of 68.7% for δ T and 68.8% for δ T . For comparison, we train a comparable non-partial differential ML-distinguisher, using all 32 bits, and we obtain an accuracy of 72%. For further comparison and verification, we also train a PD-ML-distinguisher on the lowest scoring 8 bits. This time, we obtain an accuracy of 52%, only slightly above the 50% threshold, at  which the ML model is not able to distinguish from random, and therefore a distinguisher is not obtained. Figure <ref type="figure" target="#fig_7">5</ref> illustrates the process of the training PD-ML-distinguishers. The above results clearly indicate the validity and effectiveness of the novel partial differential ML-based distinguisher approach we propose for the first time in this paper. The proposed bit-selection mechanism further improves the results, and makes it possible to train a PD-ML-distinguisher using a fraction (25%) of the bits, and therefore leading to a significant reduction in the time and space complexity of training of the model, as well as a reduced size for the neural network. This reduced size means we will have a lesser number of neurons in the input layer. Therefore, it decreases the time complexity of the training phase because We can train the machine with a lower number of epochs compared to when we increase the feature space of the dataset. Moreover, we do not need to guess all the possible subkeys in the key recovery attack; instead, we need to guess just 8 bits of them. We achieve this, while maintaining an effectiveness that is comparable, and only slightly below that of a standard ML-distinguisher built on the full block size.</p><p>Although in Sections 3 and 4 we are using the same input difference as Gohr's paper, this bit selection can be used in a black-box method. In <ref type="bibr" target="#b11">[12]</ref>, a procedure was introduced to find the best input difference ∆ for the All-in-One differential attack without any prior knowledge by ML-based distinguishers. So, for having a black-box bit selection, We can use the ML-distinguisher for finding the best possible ∆ and then use the bit selection of this section.</p><p>The details of the ML models used are summarised in Table <ref type="table" target="#tab_1">2</ref>, showing that our Partial ML-distinguisher machine is significantly smaller in terms of depth, number of epochs and number of features than the comparable Gohr's machine <ref type="bibr" target="#b11">[12]</ref>. A marginal reduction in the accuracy (69% for 8-bit, against 78%) is compensated by the fact that the reduced number of features in the machine directly translate in a reduction in effort for key recovery attacks, in particular if the attack is based on the key ranking. This is because we only need to guess 8 bits of the subkey of the last round rather than the full state of the subkey. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">Conclusion</head><p>In this paper, we investigated the applicability of partial differences in training neural distinguishers, and we proposed the first partial differential Machine Learning (ML) distinguisher. As a partial differential ML-distinguisher is trained on a selection of bits rather than all bits in a block, we also studied the impact of the selection of bits in the accuracy of the distinguisher, and we established that certain bits have reliably higher effectiveness than others, through a series of independent experiments on different inputs. On this basis, we proposed an algorithm for assigning an effectiveness score to each bit in the block. In applying a differential attack, our goal was to find non-random behavior in a block cipher when we do not have all bits of difference in ciphertext pairs, δ. To achieve this purpose, we trained a ML-based differential distinguisher for 6-rounds of SPECK32/64 by using just some parts of δ, and we studied the effectiveness of such a partial ML-based differential distinguisher, which we call PD-ML-distinguisher. Our experiments indicate that it is possible to achieve PD-ML-distinguishers with high accuracy, that is comparable to that of a ML-distinguisher trained on the full 32-bits of the block. We also observe that increasing the number of bits does not necessarily lead to an increase in the accuracy of the machine; also, raising the number of bits can reduce the converging speed.</p><p>Based on these results, we then experimentally examined if all bits have an equal impact on the training stage by creating new PD-ML-distinguishers. We detect that the accuracy changes when we alter the bits. We conclude that some bits are more critical for ML-distinguishers.</p><p>To find the most effective bits in the training phase, we proposed an algorithm to allocate a score to each bit of δ for 6-round SPECK32/64. With the help of this score, we could select the eight most effective bits and construct a 6-round PD-ML-distinguisher for SPECK32/64 achieving an accuracy of 68.8%. This is comparable, and only slightly lower than the 72% accuracy of a ML-distinguisher trained on the full 32-bits, at a significantly higher cost in terms of computational and space complexity. The reduced input also leads to a significant reduction in the complexity of a potential subsequent key recovery attack, as we would not need to guess all the possible subkeys, but rather just 8 bits of them.</p><p>While our experiments are obtained using lightweight cipher SPECK32/64, the proposed techniques are generic and can be applied on other ciphers. These results are in fact likely to open the way to efficient ML-based differential cryptanalysis of ciphers with larger block sizes, placing standard block ciphers potentially within reach.</p><p>The bit effectiveness scores that are presented in this paper for the first time, provide a novel metric and additional information on the inner functioning of a cipher. The scores are potentially indicating a new path to discovery of nonrandom behavior and associated weaknesses in block ciphers, with applications well beyond the scope of this work.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Algorithm 1 : 6 D 7 A</head><label>167</label><figDesc>Training PD-ML differential distinguishers Input: Data set for training the machines: δ = [δ0, . . . , δ31] Output: Accuracy of machines: A 1 i = 31, j = 0 ; 2 Initialize an empty array Xtemp ; 3 Initialize array A with size 32; 4 while i ≥ 0 do 5 Xtemp = δ[i]||Xtemp; ←-T rainM achine(Xtemp) ;[j] = AccuracyTest(D);</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>8</head><label>8</label></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 1 .</head><label>1</label><figDesc>Fig. 1. Accuracy of ML-distinguishers according to number of bits in LSB→MSB direction for 6 round of SPECK32/64</figDesc><graphic coords="10,157.68,115.84,300.00,154.50" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 2 .</head><label>2</label><figDesc>Fig. 2. Accuracy of ML-distinguishers according to number of bits in MSB→LSB direction for 6 round of SPECK32/64</figDesc><graphic coords="10,157.68,314.67,300.00,154.20" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>Fig. 3 .</head><label>3</label><figDesc>Fig. 3. Bit Scores for one set of combinations C 16 B (experiment 1).</figDesc><graphic coords="13,157.68,470.37,300.00,157.50" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head>Fig. 4 .</head><label>4</label><figDesc>Fig. 4. Normalized Scores for 4 different combination sets. The bits with vertical lines are the ones that are chosen as the most effective bits for training a PD-MLdistinguisher for six rounds of SPECK32/64.</figDesc><graphic coords="14,157.68,115.84,300.00,158.70" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6"><figDesc>62 -0.19 -0.83 -0.12 -0.01 -0.53 1.99 2.45 -0.82 -0.62 -0.47 -0.10 -0.71 -0.59 2.29 -0.18 -0.48 -0.51 0.75 -0.20 -0.47 -0.40 1.25 0.94 -0.75 -0.22 0.15 -0.34 -0.36 -0.52 0.87 -0.59</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7"><head>Fig. 5 .</head><label>5</label><figDesc>Fig.5. The Training Process of PD-ML-distinguishers. Rank values are as per Table1. Plotted bars are approximation of the values (due to graphical constraints).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1 .</head><label>1</label><figDesc>The average score (si) and standard deviation (SDi) of each bit of δ in the experiments</figDesc><table><row><cell>i</cell><cell>0</cell><cell>1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>5</cell><cell>6</cell><cell>7</cell><cell>8</cell><cell>9</cell><cell>10</cell><cell>11</cell><cell>12 13</cell><cell>14</cell><cell>15</cell></row><row><cell cols="16">si -0.62 -0.48 -0.19 -0.51 -0.83 0.75 -0.12 -0.20 0.01 -0.47 -0.53 -0.40 1.99 1.25 2.45 0.94</cell></row><row><cell cols="16">SDi 0.38 0.16 0.66 0.41 0.36 0.11 0.66 0.35 0.68 0.46 0.53 0.30 0.38 0.69 0.18 0.43</cell></row><row><cell>i</cell><cell>16</cell><cell>17</cell><cell>18</cell><cell>19</cell><cell>20</cell><cell>21</cell><cell>22</cell><cell>23</cell><cell>24</cell><cell>25</cell><cell>26</cell><cell>27</cell><cell cols="2">28 29 30</cell><cell>31</cell></row><row><cell cols="16">si -0.82 -0.75 -0.62 -0.22 -0.47 0.15 -0.10 -0.34 -0.71 -0.36 -0.59 -0.52 2.29 0.87 -0.18 -0.59</cell></row><row><cell cols="16">SDi 0.22 0.29 0.19 0.36 0.37 0.39 0.16 0.50 0.55 0.38 0.20 0.39 0.39 0.96 0.78 0.41</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 2 .</head><label>2</label><figDesc>Comparison of different machine learning based differential distinguishers</figDesc><table><row><cell>Reference</cell><cell>Cipher</cell><cell cols="5">Rounds Network # of input features Depth Epochs</cell></row><row><cell>[12]</cell><cell>Speck32/64</cell><cell>6</cell><cell>CNN</cell><cell>32 (bits)</cell><cell>10</cell><cell>200</cell></row><row><cell cols="2">This paper Speck32/64</cell><cell>6</cell><cell>MLP</cell><cell>32 (bits)</cell><cell>3</cell><cell>10</cell></row><row><cell cols="2">This paper Speck32/64</cell><cell>6</cell><cell>MLP</cell><cell>8 (bits)</cell><cell>3</cell><cell>10</cell></row></table></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="extracted" xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Learning to protect communications with adversarial neural cryptography</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Abadi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">G</forename><surname>Andersen</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1610.06918</idno>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Abadi, M., Andersen, D.G.: Learning to protect communications with adversarial neural cryptography. arXiv preprint arXiv:1610.06918 (2016)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">An all-in-one approach to differential cryptanalysis for small block ciphers</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">R</forename><surname>Albrecht</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-35999-61</idno>
+		<ptr target="https://doi.org/10.1007/978-3-642-35999-61" />
+	</analytic>
+	<monogr>
+		<title level="m">Selected Areas in Cryptography, 19th International Conference, SAC 2012</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">L</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">H</forename><surname>Wu</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Windsor, ON, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2012">August 15-16, 2012. 2012</date>
+			<biblScope unit="volume">7707</biblScope>
+			<biblScope unit="page" from="1" to="15" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Albrecht, M.R., Leander, G.: An all-in-one approach to differential cryptanaly- sis for small block ciphers. In: Knudsen, L.R., Wu, H. (eds.) Selected Areas in Cryptography, 19th International Conference, SAC 2012, Windsor, ON, Canada, August 15-16, 2012, Revised Selected Papers. Lecture Notes in Computer Science, vol. 7707, pp. 1-15. Springer (2012). https://doi.org/10.1007/978-3-642-35999-6 1</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-02-01">2021</date>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi, A., Breier, J., Chen, Y., Dong, X.: Machine learning assisted differential dis- tinguishers for lightweight ciphers. In: 2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE). pp. 176-181. IEEE (2021)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Submission requirements and evaluation criteria for the lightweight cryptography standardization process</title>
+		<author>
+			<persName><forename type="first">L</forename><surname>Bassham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">¸</forename><surname>Mckay</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><surname>Turan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">S</forename></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+		</imprint>
+		<respStmt>
+			<orgName>US National Institute of Standards and Technology</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Bassham, L., C ¸alık, C ¸., McKay, K., Turan, M.S.: Submission requirements and evaluation criteria for the lightweight cryptography standardization process. US National Institute of Standards and Technology (2018)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015-06-07">2015</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beaulieu, R., Shors, D., Smith, J., Treatman-Clark, S., Weeks, B., Wingers, L.: The simon and speck lightweight block ciphers. In: Proceedings of the 52nd Annual Design Automation Conference. pp. 1-6 (2015)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Performance Comparison Between Deep Learning-Based and Conventional Cryptographic Distinguishers</title>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matteo</forename><surname>Rossi</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-80129-8_48</idno>
+		<ptr target="https://eprint.iacr.org/2020/953" />
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Networks and Systems</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">2020. 2020</date>
+			<biblScope unit="page" from="681" to="701" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bellini, E., Rossi, M.: Performance comparison between deep learning-based and conventional cryptographic distinguishers. IACR Cryptol. ePrint Arch. 2020, 953 (2020), https://eprint.iacr.org/2020/953</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quan</forename><forename type="middle">Quan</forename><surname>Tan</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-77870-5_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="volume">287</biblScope>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Benamira, A., Gerault, D., Peyrin, T., Tan, Q.Q.: A deeper look at machine learning-based cryptanalysis. IACR Cryptol. ePrint Arch 287, 2021 (2021)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of the Full 16-round DES</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-48071-4_34</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1992">1992</date>
+			<biblScope unit="page" from="487" to="496" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham, E., Shamir, A.: Differential cryptanalysis of the full 16-round des. In: An- nual International Cryptology Conference. pp. 487-496. Springer (1992)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b8">
+	<monogr>
+		<author>
+			<persName><forename type="first">F</forename><surname>Chollet</surname></persName>
+		</author>
+		<ptr target="https://github.com/fchollet/keras" />
+		<title level="m">Keras</title>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chollet, F., et al.: Keras. https://github.com/fchollet/keras (2015)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Rijndael/AES</title>
+		<author>
+			<persName><forename type="first">Joan</forename><surname>Daemen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vincent</forename><surname>Rijmen</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/0-387-23483-7_358</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Encyclopedia of Cryptography and Security</title>
+		<imprint>
+			<publisher>Springer US</publisher>
+			<date type="published" when="1999">1999</date>
+			<biblScope unit="page" from="520" to="524" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Daemen, J., Rijmen, V.: Aes proposal: Rijndael (1999)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">MILP-Based Automatic Search Algorithms for Differential and Linear Trails for Speck</title>
+		<author>
+			<persName><forename type="first">Kai</forename><surname>Fu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yinghua</forename><surname>Guo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siwei</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lei</forename><surname>Hu</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-52993-5_14</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="268" to="288" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Fu, K., Wang, M., Guo, Y., Sun, S., Hu, L.: Milp-based automatic search algorithms for differential and linear trails for speck. In: International Conference on Fast Software Encryption. pp. 268-288. Springer (2016)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr, A.: Improving attacks on round-reduced speck32/64 using deep learning. In: Annual International Cryptology Conference. pp. 150-179. Springer (2019)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Gurobi announces Gurobi Optimizer 3.0</title>
+		<author>
+			<persName><forename type="first">L</forename></persName>
+		</author>
+		<idno type="DOI">10.1287/orms.2010.03.09</idno>
+		<ptr target="http://www.gurobi.com" />
+	</analytic>
+	<monogr>
+		<title level="m">Gurobi optimizer reference manual</title>
+		<imprint>
+			<publisher>Institute for Operations Research and the Management Sciences (INFORMS)</publisher>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note>Gurobi Optimization</note>
+	<note type="raw_reference">Gurobi Optimization, L.: Gurobi optimizer reference manual (2021), http://www.gurobi.com</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Linear Attack on Round-Reduced DES Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Botao</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yongqiang</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Haoyue</forename><surname>Zhao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bin</forename><surname>Wu</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-59013-0_7</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">2020</date>
+			<biblScope unit="page" from="131" to="145" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou, B., Li, Y., Zhao, H., Wu, B.: Linear attack on round-reduced DES using deep learning. In: European Symposium on Research in Computer Security. pp. 131-145. Springer (2020)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Preprint repository arXiv achieves milestone million uploads</title>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">P</forename><surname>Kingma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ba</surname></persName>
+		</author>
+		<idno type="DOI">10.1063/pt.5.028530</idno>
+		<idno type="arXiv">arXiv:1412.6980</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Physics Today</title>
+		<title level="j" type="abbrev">Phys. Today</title>
+		<idno type="ISSNe">1945-0699</idno>
+		<imprint>
+			<biblScope unit="volume">2014</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<date type="published" when="2014-12-30">2014</date>
+			<publisher>AIP Publishing</publisher>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Kingma, D.P., Ba, J.: Adam: A method for stochastic optimization. arXiv preprint arXiv:1412.6980 (2014)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Preimage Attacks Against Lightweight Scheme Xoodyak Based on Deep Learning</title>
+		<author>
+			<persName><forename type="first">Guozhen</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jingwen</forename><surname>Lu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Huina</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peng</forename><surname>Tang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Weidong</forename><surname>Qiu</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-73103-8_45</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Advances in Intelligent Systems and Computing</title>
+		<editor>
+			<persName><forename type="first">K</forename><surname>Arai</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021. 2021</date>
+			<biblScope unit="volume">1364</biblScope>
+			<biblScope unit="page" from="637" to="648" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Liu, G., Lu, J., Li, H., Tang, P., Qiu, W.: Preimage attacks against lightweight scheme xoodyak based on deep learning. In: Arai, K. (ed.) Advances in Information and Communication, FICC 2021. vol. 1364, pp. 637-648. Springer International Publishing, Cham (2021)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Linear Cryptanalysis Method for DES Cipher</title>
+		<author>
+			<persName><forename type="first">Mitsuru</forename><surname>Matsui</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-48285-7_33</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1993">1993</date>
+			<biblScope unit="page" from="386" to="397" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Matsui, M.: Linear cryptanalysis method for des cipher. In: Workshop on the The- ory and Application of of Cryptographic Techniques. pp. 386-397. Springer (1993)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Applications of SAT Solvers to Cryptanalysis of Hash Functions</title>
+		<author>
+			<persName><forename type="first">Ilya</forename><surname>Mironov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lintao</forename><surname>Zhang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/11814948_13</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2006">2006</date>
+			<biblScope unit="page" from="102" to="115" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mironov, I., Zhang, L.: Applications of sat solvers to cryptanalysis of hash func- tions. In: International Conference on Theory and Applications of Satisfiability Testing. pp. 102-115. Springer (2006)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Special Algorithms for Protocols</title>
+		<author>
+			<persName><forename type="first">Bruce</forename><surname>Schneier</surname></persName>
+		</author>
+		<idno type="DOI">10.1002/9781119183471.ch23</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Applied Cryptography: Protocols, Algorithms, and Source Code in C</title>
+		<imprint>
+			<publisher>Wiley</publisher>
+			<date type="published" when="2015-10-06">2015</date>
+			<biblScope unit="volume">20</biblScope>
+			<biblScope unit="page" from="527" to="557" />
+		</imprint>
+	</monogr>
+	<note>th edition</note>
+	<note type="raw_reference">Schneier, B.: Applied Cryptography: Protocols, Algorithms, and Source Code in C. Wiley; 20th edition (2015)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Differential-ML Distinguisher: Machine Learning Based Generic Extension for Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Tarun</forename><surname>Yadav</surname></persName>
+			<idno type="ORCID">0000-0002-5462-8253</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Manoj</forename><surname>Kumar</surname></persName>
+			<idno type="ORCID">0000-0001-6900-4075</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-88238-9_10</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="page" from="191" to="212" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yadav, T., Kumar, M.: Differential-ml distinguisher: Machine learning based generic extension for differential cryptanalysis. In: International Conference on Cryptology and Information Security in Latin America. pp. 191-212. Springer (2021)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">An improved integral distinguisher scheme based on neural networks</title>
+		<author>
+			<persName><forename type="first">Behnam</forename><surname>Zahednejad</surname></persName>
+			<idno type="ORCID">0000-0001-6802-1084</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Lijun</forename><surname>Lyu</surname></persName>
+		</author>
+		<idno type="DOI">10.1002/int.22895</idno>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Intelligent Systems</title>
+		<title level="j" type="abbrev">Int J of Intelligent Sys</title>
+		<idno type="ISSN">0884-8173</idno>
+		<idno type="ISSNe">1098-111X</idno>
+		<imprint>
+			<biblScope unit="volume">37</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="7584" to="7613" />
+			<date type="published" when="2020">2020</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="report_type">Tech. rep</note>
+	<note type="raw_reference">Zahednejad, B., Li, J.: An improved integral distinguisher scheme based on deep learning. Tech. rep., EasyChair (2020)</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

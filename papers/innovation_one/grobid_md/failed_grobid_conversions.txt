@@ -1,0 +1,6 @@
+FAILED papers/innovation_one/pdf/2024_sok_neural_differential_cryptanalysis.pdf
+FAILED papers/innovation_one/pdf/2025_rx_neural_simon_simeck.pdf
+FAILED papers/innovation_one/pdf/2025_speck_simon_multi_pair_multiscale.pdf
+FAILED papers/innovation_one/pdf/2026_liu_spn_iot_friendly_neural_distinguisher_framework.pdf
+FAILED papers/innovation_one/pdf/2026_polytopic_pdnd_simon_simeck_speck.pdf
+FAILED papers/innovation_one/pdf/2026_present_entropy_nd.pdf

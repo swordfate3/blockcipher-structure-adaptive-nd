@@ -1301,3 +1301,39 @@ def test_zhang_wang2022_present_mcnd_plans_exist_and_target_r6_r7():
     assert {row["pairs_per_sample"] for row in rows} == {"16"}
     assert {row["feature_encoding"] for row in rows} == {"ciphertext_pair_bits"}
     assert {row["rounds"] for row in rows if row["samples_per_class"] == "8192"} == {"6", "7"}
+
+
+def test_plan_rows_can_override_training_protocol_fields(tmp_path):
+    import importlib.util
+
+    script_path = Path("experiments/run_innovation_one_matrix.py")
+    spec = importlib.util.spec_from_file_location("run_innovation_one_matrix", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+
+    plan = tmp_path / "plan.csv"
+    plan.write_text(
+        "cipher,model_key,network,architecture_rank,score,evidence,literature,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode,key_rotation_interval,sample_structure,loss,learning_rate,optimizer,weight_decay,lr_scheduler,max_learning_rate,checkpoint_metric,restore_best_checkpoint,early_stopping_patience,early_stopping_min_delta\n"
+        "PRESENT-80,present_inception_mcnd,Present-Inception,0,100,zw,lit,4,0,32,16,ciphertext_pair_bits,encrypted_random_plaintexts,1024,zhang_wang_case2_mcnd,mse,0.0001,adam,0.00001,cyclic,0.002,val_loss,true,0,0.0\n",
+        encoding="utf-8",
+    )
+
+    tasks = module._tasks_from_plan(
+        plan,
+        feature_encoding="ciphertext_xor_bits",
+        pairs_per_sample=1,
+        difference_profile="present_zhang_wang2022_mcnd",
+        difference_member=0,
+    )
+
+    task = tasks[0]
+    assert task["loss"] == "mse"
+    assert task["learning_rate"] == 0.0001
+    assert task["optimizer"] == "adam"
+    assert task["weight_decay"] == 0.00001
+    assert task["lr_scheduler"] == "cyclic"
+    assert task["max_learning_rate"] == 0.002
+    assert task["checkpoint_metric"] == "val_loss"
+    assert task["restore_best_checkpoint"] is True
+    assert task["early_stopping_patience"] == 0

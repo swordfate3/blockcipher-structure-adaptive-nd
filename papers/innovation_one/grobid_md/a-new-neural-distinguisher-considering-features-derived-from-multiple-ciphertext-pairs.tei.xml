@@ -1,0 +1,1079 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">A New Neural Distinguisher Considering Features Derived from Multiple Ciphertext Pairs</title>
+				<funder ref="#_xt7PVy2 #_A9Skmwj">
+					<orgName type="full">National Key Research and Development Program of China</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+							<email>chenyi19@mails.tsinghua.edu.cn</email>
+							<idno type="ORCID">0000-0002-4727-4530</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation">Department of Computer Science and Technology , Tsinghua University , Haidian District , Beijing , 100084 , P. R. China</note>
+								<orgName type="department">Department of Computer Science and Technology</orgName>
+								<orgName type="institution">Tsinghua University</orgName>
+								<address>
+									<addrLine>Haidian District</addrLine>
+									<postCode>100084</postCode>
+									<settlement>Beijing</settlement>
+									<country key="CN">P. R. China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+							<idno type="ORCID">0000-0001-7579-152X</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation">Department of Computer Science and Technology , Tsinghua University , Haidian District , Beijing , 100084 , P. R. China</note>
+								<orgName type="department">Department of Computer Science and Technology</orgName>
+								<orgName type="institution">Tsinghua University</orgName>
+								<address>
+									<addrLine>Haidian District</addrLine>
+									<postCode>100084</postCode>
+									<settlement>Beijing</settlement>
+									<country key="CN">P. R. China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+							<email>yuhongbo@mail.tsinghua.edu.cn</email>
+							<idno type="ORCID">0000-0001-8500-5991</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation">Department of Computer Science and Technology , Tsinghua University , Haidian District , Beijing , 100084 , P. R. China</note>
+								<orgName type="department">Department of Computer Science and Technology</orgName>
+								<orgName type="institution">Tsinghua University</orgName>
+								<address>
+									<addrLine>Haidian District</addrLine>
+									<postCode>100084</postCode>
+									<settlement>Beijing</settlement>
+									<country key="CN">P. R. China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Sitong</forename><surname>Yuan</surname></persName>
+							<idno type="ORCID">0000-0002-7260-4327</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation">Department of Computer Science and Technology , Tsinghua University , Haidian District , Beijing , 100084 , P. R. China</note>
+								<orgName type="department">Department of Computer Science and Technology</orgName>
+								<orgName type="institution">Tsinghua University</orgName>
+								<address>
+									<addrLine>Haidian District</addrLine>
+									<postCode>100084</postCode>
+									<settlement>Beijing</settlement>
+									<country key="CN">P. R. China</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">A New Neural Distinguisher Considering Features Derived from Multiple Ciphertext Pairs</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">5D45E866D211E3EFB415D2E81B91AF91</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T15:57+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Neural Distinguisher</term>
+					<term>Cryptanalysis</term>
+					<term>Multiple Ciphertext Pairs</term>
+					<term>Data Reuse</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Neural aided cryptanalysis is a challenging topic, in which the neural distinguisher (N D) is a core module. In this paper, we propose a new N D considering multiple ciphertext pairs simultaneously. Besides, multiple ciphertext pairs are constructed from different keys. The motivation is that the distinguishing accuracy can be improved by exploiting features derived from multiple ciphertext pairs. To verify this motivation, we have applied this new N D to five different ciphers. Experiments show that taking multiple ciphertext pairs as input indeed brings accuracy improvement. Then, we prove that our new N D applies to two different neural aided key recovery attacks. Moreover, the accuracy improvement is helpful for reducing the data complexity of the neural aided statistic attack. The code is available at <ref type="url" target="https://github.com/AI-Lab-Y/ND_mc">https://github.com/AI-Lab-Y/ND_mc</ref>.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.">INTRODUCTION</head><p>In CRYPTO'19, Gohr improved attacks on round reduced Speck32/64 using deep learning <ref type="bibr" target="#b0">[1]</ref>, which created a precedent for neural aided cryptanalysis. The neural distinguisher (N D) proposed by Gohr plays a core role in <ref type="bibr" target="#b0">[1]</ref>. Its target is to distinguish real ciphertext pairs (C 0 , C 1 ) corresponding to plaintext pairs with a specific difference from random ciphertext pairs. N D takes a ciphertext pair (C 0 , C 1 ) as input, and gives the classification result.</p><p>The performance of N D is important for neural aided cryptanalysis. For Gohr's key recovery attack <ref type="bibr" target="#b0">[1]</ref>, the most important step is identifying the right plaintext structure that passes the differential placed before N D. To attack 11-round Speck32/64, Gohr adopted a 6round N D and 7-round N D for identifying the right plaintext structure. The identification result is given by the 6-round N D instead of 7-round N D. Compared with the 7-round N D, the 6-round N D achieves higher distinguishing accuracy. This implies that a stronger ND is more helpful for Gohr's attacks. Recently, Chen et al proposed a generic neural aided statistical attack (NASA) for cryptanalysis <ref type="bibr" target="#b1">[2]</ref>. The data complexity of NASA is strongly related to the distinguishing accuracy of N D.</p><p>To improve the performance of N D, researchers have explored N D from different directions. The most popular direction is adopting different neural networks. In <ref type="bibr" target="#b2">[3]</ref>, Jain et al proposed a multi-layer perceptron network (MLP) to build N Ds against PRESENT reduced to 3, 4 rounds. In <ref type="bibr" target="#b3">[4]</ref>, Yadav et al also built an MLP-based 3-round N D against Speck32/64. In <ref type="bibr" target="#b4">[5]</ref>, Bellini et al compared MLP-based and Convolutional Neural Network-based distinguishers with classic distinguishers.</p><p>In <ref type="bibr" target="#b5">[6]</ref>, Pareek et al proposed fully-connected network-based distinguisher against the key scheduling algorithm of PRESENT. Another popular direction is changing the input of N D. In <ref type="bibr" target="#b6">[7]</ref>, Baksi et al used the ciphertext difference C 0 ⊕ C 1 as the input. In <ref type="bibr" target="#b1">[2]</ref>, Chen et al suggested that the ND can be built by flexibly taking some bits of a ciphertext pair as input. In <ref type="bibr" target="#b7">[8]</ref>, Hou et al investigate the influence of input difference pattern on the accuracy of N Ds against round reduced Simon32/64. These above N Ds can be viewed as the same type since only features hidden in a single ciphertext pair are exploited. Thus, another natural way is taking more ciphertexts as the input. In <ref type="bibr" target="#b8">[9]</ref>, Benamira et al initially tested this idea as follows. First, a group of B ciphertexts is constructed from the same key. Second, take a group of B ciphertexts as the input of N D. Finally, based on a large B, the accuracy of N Ds against 5-round and 6-round Speck32/64 is increased to 100%, which is a huge improvement.</p><p>Previous findings especially the work in <ref type="bibr" target="#b8">[9]</ref> inspired us to think about the deeper motivation of taking Y. Chen, Y. Shen, H. Yu, S. Yuan more ciphertexts as input. We believe that the deeper motivation stands for a generic method for improving N D. The N D processing a group of B ciphertexts has two important characteristics: (1) the input contains more ciphertexts, (2) all the ciphertexts in a group share the same key. Since Ankele and Kölbl <ref type="bibr" target="#b9">[10]</ref>, as well as Gohr <ref type="bibr" target="#b0">[1]</ref>, reported significant key-dependency in the output distribution in round reduced Speck, we wonder whether the same key is a core factor that brings significant improvement.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1.">Our Contributions</head><p>In this paper, our work contains five contributions:</p><p>• By introducing a clear deep motivation, we propose a new N D considering multiple ciphertext pairs simultaneously. The motivation is as follows.</p><p>When ciphertext pairs corresponding to plaintext pairs with a specific difference obey a non-uniform distribution, there are some derived features from multiple ciphertext pairs. Once neural networks capture these features, N D would obtain performance improvement.</p><p>• We prove that the same key is not the core factor that brings significant improvement in <ref type="bibr" target="#b8">[9]</ref>. We made the conclusion by testing the accuracy of N Ds against round reduced Speck32/64 under two different scenarios: one is that ciphertext pairs in a group share the same key, one is that ciphertext pairs in a group adopt different keys. In the first scenario, the key for generating a ciphertext group each time is randomly selected. Experiments show that the same key has small or no influence on N Ds.</p><p>• We design a verification framework for further directly checking that derived features from multiple ciphertext pairs are learned. This framework is composed of two tests: false-negative test (FNT), false-positive test (FPT).</p><p>• We build two types of N Ds for five round reduced ciphers: Speck32/64, Chaskey, PRESENT, DES, SHA3-256. The first one is the N D proposed by Gohr, and the other one is our new N D. These experiments further prove the advantage of taking multiple ciphertext pairs as input and support the presented deep motivation.</p><p>• We prove that the N D taking multiple ciphertext pairs as input applies to key recovery, which is not discussed in previous research. At the time of writing, there are only two key recovery attacks <ref type="bibr" target="#b0">[1,</ref><ref type="bibr" target="#b1">2]</ref> based on the N D proposed by Gohr. We show how to apply new N D to these two attacks. Due to the performance improvement, the data complexity of the attack <ref type="bibr" target="#b1">[2]</ref> can be reduced by using the new N D.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.2.">Outlines</head><p>This paper is organized as follows:</p><p>• Section 2 presents preliminaries, including some important notations and five related ciphers.</p><p>• In section 3, the N D proposed by Gohr and two key recovery attacks are briefly reviewed.</p><p>• Section 4 presents the new N D including the motivation, model, the neural network for implementing the new N D, and the training pipeline.</p><p>• Section 5 presents the verification framework.</p><p>• In section 6, we build N Ds for five ciphers and perform an analysis.</p><p>• In section 7, we show how to perform key recovery attacks using the new N D. A data reuse strategy is also proposed in this section.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.">PRELIMINARIES</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1.">Notations</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>P, C Plaintext, Ciphertext α</head><p>Plaintext difference N, M</p><p>The number of plaintext or ciphertext pairs N D k=?</p><p>N D with k ciphertext pairs as input Z</p><p>The output of an N D r</p><p>The number of reduced rounds</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2.">Five Ciphers</head><p>We choose five different ciphers for supporting our work.</p><p>• Speck32/64 <ref type="bibr" target="#b10">[11]</ref> is a lightweight block cipher whose block size is 32 bits. Its non-linear component is the modular addition.</p><p>• Chaskey <ref type="bibr" target="#b11">[12]</ref> is a Message Authentication Code (MAC) algorithm whose intermediate state size is 128 bits. Its non-linear component is the modular addition.</p><p>• Present64/80 <ref type="bibr" target="#b13">[13]</ref> is a block cipher whose block size is 64 bits. Its non-linear component is a 4×4 Sbox.</p><p>• DES <ref type="bibr" target="#b14">[14]</ref> is a block cipher whose block size is 64 bits. Its non-linear component is given by eight different 6 × 4 Sboxes.</p><p>• SHA3-256 <ref type="bibr" target="#b15">[15]</ref> is a hash function whose intermediate state size is 1600 bits. Its non-linear component can be seen as the application of a 5-bit Sbox applied in parallel 320 times.</p><p>We refer readers to <ref type="bibr" target="#b10">[11,</ref><ref type="bibr" target="#b11">12,</ref><ref type="bibr" target="#b13">13,</ref><ref type="bibr" target="#b14">14,</ref><ref type="bibr" target="#b15">15]</ref> for more details of these ciphers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3.">Computing Resources</head><p>In this paper, the available computing resources are: an Intel(R) Core(TM) i5-7500 CPU @ 3.40GHz, a graphics card (NVIDIA GeForce GTX 1060 6GB).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A New Neural Distinguisher Considering Features Derived from Multiple Ciphertext Pairs 3</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.">RELATED WORK</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1.">Gohr's Neural Distinguisher</head><p>In <ref type="bibr" target="#b0">[1]</ref>, Gohr built N Ds against round reduced Speck32/64. The N D proposed by Gohr is a generic distinguisher since it only requires a plaintext difference constraint.</p><p>Consider a cipher E and a plaintext difference α. Gohr's N D aims at distinguishing two classes of ciphertext pairs</p><formula xml:id="formula_0">Y (C 0 , C 1 ) = 1, if P 0 ⊕ P 1 = α 0, if P 0 ⊕ P 1 = α<label>(1)</label></formula><p>where (C 0 , C 1 ) is the ciphertext pair corresponding to the plaintext pair (P 0 , P 1 ), and Y is the label of (C 0 , C 1 ). We denote ciphertext pairs corresponding to plaintext pairs with the target difference α as positive samples, and denote ciphertext pairs corresponding to plaintext pairs with a random difference as negative samples.</p><p>If a neural network achieves a distinguishing accuracy higher than 0.5 over randomly selected ciphertext pairs, the neural network is a valid N D.</p><p>In <ref type="bibr" target="#b0">[1]</ref>, Gohr chose a residual network <ref type="bibr" target="#b16">[16]</ref> with one output neuron. Thus, the output Z of Gohr's N D is also used as the following posterior probability</p><formula xml:id="formula_1">P r (Y = 1 |(C 0 , C 1 ) ) = F 1 (f (C 0 , C 1 )) 0 P r (Y = 1 |(C 0 , C 1 ) ) 1 (<label>2</label></formula><formula xml:id="formula_2">)</formula><p>where f (C 0 , C 1 ) stands for features learned by the ND from (C 0 , C 1 ), F 1 (•) is the posterior probability estimation function learned by the N D. If P r(Y = 1|(C 0 , C 1 )) &gt; 0.5, the label of (C 0 , C 1 ) predicted by the N D is 1.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2.">Gohr's Key Recovery Attack</head><p>Given an N D, we denote the output of N D as Z. Positive samples are expected to obtain a higher posterior probability than negative samples, which is the core idea of Gohr's key recovery attack <ref type="bibr" target="#b0">[1]</ref>. Consider an (r + 1)-round cipher E and an r-round N D built over a plaintext difference α. Gohr's attack recovers the subkey of the (r + 1) -th round as follows:</p><p>1. Generate m positive samples with α randomly. 2. For each possible subkey guess kg: </p><formula xml:id="formula_3">V kg = m i=1 log 2 Z i 1 -Z i (<label>3</label></formula><formula xml:id="formula_4">) (d) If V kg exceeds a threshold c 1 , save kg as a subkey candidate.</formula><p>3. Return kg with the highest key rank score as the final subkey guess.</p><p>The value of c 1 and m is set experimentally.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>FIGURE 1.</head><p>The key recovery process. The prepended differential ∆P → α is satisfied with a probability p0. The intermediate state pair is (S0, S1).</p><p>A differential ∆P → α can be placed before the N D to extend the rounds covered by the attack (see Fig. <ref type="figure">1</ref>). With the help of neutral bits <ref type="bibr" target="#b17">[17]</ref>, ciphertext structures consisting of m positive samples or negative samples can be generated. Then a high rank score occurs only when the structure consisting of positive samples is decrypted by the true subkey. More details can refer to <ref type="bibr" target="#b0">[1]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3.">Neural Aided Statistical Attack</head><p>The neural aided statistical attack proposed by Chen et al <ref type="bibr" target="#b1">[2]</ref> is performed as follows:</p><p>1. Randomly generate N plaintext pairs with a difference ∆P . 2. Collect the ciphertext pairs. 3. For each possible subkey guess kg: </p><formula xml:id="formula_5">T = N i=1 φ (Z i ), φ (Z i ) = 1, if Z i &gt; c 2 0, if Z i c 2<label>(</label></formula><p>4) (d) If T exceeds a decision threshold t, save kg as a subkey candidate.</p><p>4. Return all the surviving subkey candidates.</p><p>Chen et al proposed a theoretical framework to estimate N and t. The value of c 2 is set in advance, which doesn't influence the estimation of N, t.</p><p>According to Fig. <ref type="figure">1</ref>, Chen et al summarized three types of probabilities:</p><formula xml:id="formula_6">P r(Z &gt; c 2 |S 0 ⊕ S 1 = α, kg = sk) = p 1 (<label>5</label></formula><formula xml:id="formula_7">) P r(Z &gt; c 2 |S 0 ⊕ S 1 = α, kg = sk) = p 2 (<label>6</label></formula><formula xml:id="formula_8">) P r(Z &gt; c 2 |S 0 ⊕ S 1 = α) = p 3 (<label>7</label></formula><formula xml:id="formula_9">)</formula><p>where sk is the true subkey. These three probabilities p 1 , p 2 , p 3 are related to the N D. NASA returns all the possible subkey candidates. Besides, NASA allows us to set two ratios β 0 , β 1 in advance. The ratio β 0 is the expected probability that the true subkey sk survives the attack. The ratio β 1 is the expected probability that wrong subkey guesses survive the attack.</p><p>Based on p 0 , p 1 , p 2 , p 3 , β 0 , β 1 , the required N is:</p><formula xml:id="formula_10">√ N = z 1-β0 × v 0 + z 1-β1 × v 1 (p 1 -p 2 ) × p 0 (<label>8</label></formula><formula xml:id="formula_11">)</formula><p>where</p><formula xml:id="formula_12">v 0 = p 0 × p 1 (1 -p 1 ) + (1 -p 0 )p 3 (1 -p 3 ) v 1 = p 0 × p 2 (1 -p 2 ) + (1 -p 0 )p 3 (1 -p 3 ),</formula><p>and z 1-β0 , z 1-β1 are the quantiles of the standard normal distribution. The decision threshold t is:</p><formula xml:id="formula_13">t = µ 0 -z 1-β0 × σ 0 (<label>9</label></formula><formula xml:id="formula_14">)</formula><p>where</p><formula xml:id="formula_15">µ 0 = N × (p 0 p 1 + (1 -p 0 ) p 3 ) σ 0 = N × p 0 × p 1 (1 -p 1 ) + N (1 -p 0 )p 3 (1 -p 3 )</formula><p>If c 2 = 0.5, the distinguishing accuracy of the ND is (p 1 + 1 -p 3 ) × 0.5. Thus the data complexity of NASA is strongly related to the N D. We refer readers to <ref type="bibr" target="#b1">[2]</ref> for more details of NASA.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.">NEW NEURAL DISTINGUISHER</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1.">Motivations</head><p>The motivations of our new neural distinguisher contain two aspects.</p><p>First, in the machine learning community, providing more features is a common method to improve the accuracy of neural networks. For example, depth map estimation <ref type="bibr" target="#b18">[18]</ref> and action recognition <ref type="bibr" target="#b19">[19]</ref> are both tackled by feeding various features (eg. stereo knowledge <ref type="bibr" target="#b20">[20]</ref>, depth maps <ref type="bibr" target="#b21">[21]</ref>) into neural networks simultaneously. Second, there are some useful features among multiple samples drawn from the same non-uniform distribution. Fig. <ref type="figure" target="#fig_2">2</ref> shows a simple example. If we randomly draw two samples (x 1  1 , x 1 2 )/(x 2 1 , x 2 2 ) from a Gaussian distribution or a uniform distribution, the average distance of two samples is d 1 /d 2 . Then it is expected that d 1 &lt; d 2 , which is useful for distinguishing the two distributions.</p><p>Based on the two common phenomena, we obtain the idea of building a new neural distinguisher by considering multiple ciphertext pairs.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2.">New Distinguisher Model</head><p>Our new N D needs to distinguish two types of ciphertext groups (C 1,1 , C 1,2 , • • • , C k,1 , C k,2 ):</p><formula xml:id="formula_16">Y = 1, if P j,1 ⊕ P j,2 = α, j ∈ [1, k] 0, if P j,1 ⊕ P j,2 = α, j ∈ [1, k] (<label>10</label></formula><formula xml:id="formula_17">)</formula><p>where Y is the label of ciphertext groups, and (C j,1 , C j,2 ) is the ciphertext pair corresponding to the plaintext pair (P j,1 , P j,2 ), j ∈ <ref type="bibr">[1, k]</ref>.</p><p>According to the introduced motivation, the requirement is that ciphertext pairs in a group are randomly sampled from the same distribution. To minimize influencing factors, we ask that a ciphertext group is constructed from k random keys if the cipher needs a key. This ensures that k ciphertext pairs do not have any same properties except for the same plaintext difference constraint.</p><p>Our new N D can be described as</p><formula xml:id="formula_18">P r (Y = 1 |X 1 , • • • , X k ) = F 2 (f (X 1 ) , • • • , f (X k ) , ϕ (f (X 1 ) , • • • , f (X k ))) X i = (C i,1 , C i,2 ) , i ∈ [1, k]<label>(11)</label></formula><p>where f (X i ) represents the basic features extracted from the ciphertext pair X i , ϕ (•) is the derived features, and F 2 (•) is the new posterior probability estimation function.</p><p>The motivation also puts forward some design guidelines for the neural network to be used. Since we hope more features ϕ(f (X 1 ), • • • , f (X k )) are extracted from the distribution of basic features f (X i ), i ∈ [1, k], N D should learn basic features from each ciphertext pair firstly.</p><p>From the perspective of neural networks, this requirement can be satisfied by placing one-dimensional convolutional layers before two-dimensional convolutional layers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3.">Residual Network</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3.1.">Network Architecture</head><p>The network architecture adopted by Gohr <ref type="bibr" target="#b0">[1]</ref> is also applied in this article. According to the requirement of the motivation, except for the first one-dimensional convolutional layer, the remaining one-dimensional convolutional layers are replaced by two-dimensional convolutional layers.</p><p>Figure <ref type="figure" target="#fig_3">3</ref> shows the neural network architecture. The input consisting of k ciphertext pairs is arranged in a  <ref type="bibr" target="#b16">[16]</ref>. FC is a fully connected layer that has d1 or d2 neurons. BN is batch normalization. Relu and Sigmoid are two different activation functions. The output of Sigmoid ranges from 0 to 1.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>k×w× 2L</head><p>w array. L represents the block size of the target cipher and w is the size of a basic unit. For example, L is 32 and w is 16 for Speck32/64.</p><p>The network architecture contains two core modules. The first one (Module 1) is a bit slice layer that contains convolution kernels with a size of 1 × 1. This layer can learn basic features from each input ciphertext pair that is arranged in a 1 × w × 2L w array. The second one (Module 2) is a residual block that is built over a twodimensional convolutional layer. The two-dimensional filters with a size of K s × K s can learn derived features from k ciphertext pairs. In this article, we use one residual block for building our new N Ds.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3.2.">Training Pipeline</head><p>New N Ds are obtained by following three processes: 1. Data Generation:</p><p>Consider a plaintext difference ∆P and a cipher E. Randomly generate k plaintext pairs with ∆P . If E needs a key, randomly generate k keys. Collect the k ciphertext pairs with E and k keys. Regard these k ciphertext pairs as a ciphertext group with a size of k, and the label is Y = 1. We denote a ciphertext group with Y = 1 as a positive sample. If the plaintext differences of k plaintext pairs are random, the label of the resulting ciphertext group is Y = 0. And we denote it as a negative sample. A training set is composed of N 2k positive samples and</p><formula xml:id="formula_19">N 2k negative samples. A testing set is composed of M 2k</formula><p>positive samples and M 2k negative samples. We need to generate a training set and a testing set. 2. Training: Train the neural network (Figure <ref type="figure" target="#fig_3">3</ref>) on the training dataset.</p><p>3. Testing: Test the distinguishing accuracy of the trained neural network on the testing dataset. If the test accuracy exceeds 0.5, return the neural network as a valid N D. Or choose a different α and start from the data generation process again.</p><p>In the training phase, the neural network is trained for E s epochs with a batch size of B s . The cyclic learning rate scheme in <ref type="bibr" target="#b0">[1]</ref> is adopted. Optimization is performed against the following loss function:</p><formula xml:id="formula_20">loss = N k i=1 (Z i,p -Y i ) 2 + λ × W<label>(12)</label></formula><p>where Z i,p is the output of the N D, Y i is the true label, W is the parameters of the neural network, and λ is the penalty factor. The Adam algorithm <ref type="bibr" target="#b22">[22]</ref> with default parameters in Keras <ref type="bibr" target="#b23">[23]</ref> is applied to the optimization.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.">THE VERIFICATION FRAMEWORK</head><p>Although the distinguishing accuracy of new N D k is the best evidence for supporting the motivation of taking k ciphertext pairs as input, we propose an auxiliary verification framework to further show that new N D k captures features derived from multiple ciphertext pairs. This framework is composed of two tests: False Negative Test (FNT), False Positive Test (FPT). The idea of FPT and FNT is as follows. When features f (X i ), i ∈ [1, k] hidden in a single ciphertext pair do not lead to the right classification, only derived features ϕ (f (X 1 ) , • • • , f (X k )) can provide useful clues for classification.</p><p>It is hard to directly select k ciphertext pairs that satisfy the above requirement based on the N D k itself. Thus, An N D that takes a single ciphertext pair as input is used to select k wrongly classified ciphertext pairs. This is an approximate but reasonable method that is based on the following reasons • When we build N D k , all the ciphertext pairs are constructed from different keys. This ensures that only two types of features are available: one is features hidden in a single ciphertext pair, the other one is features derived from multiple ciphertext pairs.</p><p>• When the N D that takes one ciphertext pair as input has high accuracy, it means that features hidden in the ciphertext pair provide strong clues leading to wrong classifications. If new N D k still correctly classifies such k ciphertext pairs with a high probability, we can believe that this is due to features derived from multiple ciphertext pairs.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.">False Negative Test (FNT)</head><p>If k ciphertext pairs with label 1 are all wrongly classified by the N D that takes a single ciphertext pair as input</p><formula xml:id="formula_21">p (Y = 1 |X 1 ) = F 1 (f (X 1 )) &lt; 0.5 . . . p (Y = 1 |X k ) = F 1 (f (X k )) &lt; 0.5, (<label>13</label></formula><formula xml:id="formula_22">)</formula><p>such ciphertext pairs are false negative samples. These k samples are combined into a ciphertext group and fed into N D k . Generate a large number of such ciphertext groups and feed them to N D k . What we care about is the following pass ratio</p><formula xml:id="formula_23">F 2 (f (X 1 ) , • • • , f (X k ) , ϕ (f (X 1 ) , • • • , f (X k ))) 0.5 (14) Now, the classification is determined by ϕ (f (X 1 ) , • • • , f (X k ))</formula><p>. The final pass ratio under such a setting can show whether derived features have been learned and their effects. If N D k can obtain a non-negligible pass ratio, then ϕ (f (X 1 ) , • • • , f (X k )) can offset the negative influence of f (X i ) , i ∈ <ref type="bibr">[1, k]</ref>. If the pass ratio is high, derived features from k ciphertext pairs play a vital role in classification for this kind of ciphertext pair.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.">False Positive Test (FPT)</head><p>Similarly, if k ciphertext pairs with label 0 are wrongly classified such ciphertext pairs are false positive samples. These k samples are combined into a ciphertext group and fed into N D k . Now what we care about is the following pass ratio</p><formula xml:id="formula_24">p (Y = 1 |X 1 ) = F 1 (f (X 1 )) 0.5 . . . p (Y = 1 |X k ) = F 1 (f (X k )) 0.5, (<label>15</label></formula><formula xml:id="formula_25">)</formula><formula xml:id="formula_26">F 2 (f (X 1 ) , • • • , f (X k ) , ϕ (f (X 1 ) , • • • , f (X k ))) &lt; 0.5 (<label>16</label></formula><formula xml:id="formula_27">)</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.">APPLICATIONS TO FIVE CIPHERS</head><p>We apply our new N D as well as Gohr's N D to five ciphers introduced in section 2.2. The training pipeline of Gohr's N D is presented in <ref type="bibr" target="#b0">[1]</ref>. Table <ref type="table" target="#tab_0">1</ref> summarizes the parameters that are related to the residual network and training pipeline that are introduced in section 4.3. Since Gohr provided N Ds against round reduced Speck32/64 in CRYPTO'19, we perform in-depth analysis by taking the application to Speck32/64 as an example. Applications to the remaining four ciphers are listed as supporting materials. For convenience, we denote Gohr's N D as N D k=1 .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.">Experiments on Speck32/64</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.1.">Neural Distinguishers</head><p>The plaintext difference is α = (0x0040, 0) introduced in <ref type="bibr" target="#b24">[24]</ref>.</p><p>We built N D k , k ∈ {2, 4, 8, 16} against Speck32/64 reduced to 5, 6, and 7 rounds respectively.</p><p>Table <ref type="table">2</ref> lists the accuracy of N Ds. Compared with N D k=1 , all the N D k , k &gt; 1 achieve accuracy improvement. Besides, we find that the overfitting phenomenon <ref type="bibr" target="#b25">[25]</ref> always appears in the training process of N D k=16 against 7-round Speck32/64. If this problem could be solved, it is possible to further improve the accuracy.</p><p>In the above setting, our distinguishers take k ciphertext pairs as input while Gohr's distinguishers take one ciphertext pair as input. To prove the positive influence of features derived from multiple ciphertext pairs, we compare the distinguishing accuracy under a fair setting.</p><p>The concrete process is as follows:</p><p>1. Generate n ciphertext pairs with the same sample label. It is worth noticing that n random keys are used. 2. For Gohr's distinguishers N D k=1 , feed n ciphertext pairs into N D k=1 , and use the median value of n outputs to give the prediction label of the n ciphertext pairs. 3. For our new distinguishers N D k&gt;1 , collect m ciphertext groups by uniformly sampling from the n ciphertext pairs, feed m ciphertext groups into N D k&gt;1 , and use the median value of n outputs to give the prediction label. 4. Repeat the above steps 10 6 times and count the distinguishing accuracy.</p><p>Such a setting ensures that our distinguishers do not use more prior knowledge. Taking N D k=2 , N D k=4 as examples, we have performed several experiments under the setting. Table <ref type="table" target="#tab_1">3</ref> summarizes our experiment results. Under the fair setting, our distinguishers achieve higher accuracy. This proves that some features derived from multiple ciphertext pairs have been captured by our distinguishers, and these features bring accuracy improvement.</p><p>Besides, we find that the distinguishing accuracy can be further improved, if we increase m by adopting the data reuse strategy that will be introduced in Section 7.1.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.2.">The Impact of the Same Key Setting</head><p>As introduced in section 1, Benamira et al also tested the idea of taking multiple ciphertext pairs as input <ref type="bibr" target="#b8">[9]</ref>. The difference with our N Ds is that ciphertext pairs belonging to a group are constructed from the same key in <ref type="bibr" target="#b8">[9]</ref>.</p><p>To prove that the same key setting is not the core factor that brings huge accuracy improvement in <ref type="bibr" target="#b8">[9]</ref>, we build N Ds by adopting the same key setting as follows</p><p>• we randomly generate a key for each ciphertext group.</p><p>• k ciphertext pairs belonging to a group are constructed from the same key.</p><p>Then we test the distinguishing accuracy of these N Ds over two kinds of testing sets • testing set 1: k ciphertext pairs of a group are constructed from k different keys. • testing set 2: k ciphertext pairs of a group are constructed from the same key.</p><p>Table <ref type="table" target="#tab_2">4</ref> summarizes the accuracy of N Ds over two kinds of testing sets. Based on the comparision with results as shown in Table <ref type="table">2</ref>, we find that the same key setting has small or no influence on the accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.3.">The comparison of Neural Network parameters</head><p>Since the neural network adopted in this paper is different from the neural network adopted by Gohr in <ref type="bibr" target="#b0">[1]</ref>, we also focus on the comparison of neural network parameters.</p><p>Table <ref type="table" target="#tab_3">5</ref> summarizes the comparison of neural network parameters as well as the accuracy of some N Ds. Gohr reported the best accuracy of 5-round and 6round N D k=1 by using 10 residual blocks. Besides, Gohr also provided N D k=1 by using 1 residual block. These two kinds of distinguishers almost achieve the same accuracy.</p><p>Compared with N D k=1 with 10 residual blocks, our new distinguishers N D k=2 achieve significant accuracy improvement but contains fewer parameters. This comparison proves that taking more ciphertext pairs as input is the reason that brings accuracy improvement. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.4.">The Results of FPT and FNT</head><p>We further perform the FPT and FNT. Corresponding pass ratios are presented in Table <ref type="table" target="#tab_4">6</ref>. For each N D k , there is at least one type of pass ratio higher than 0. This further proves that N D k captures derived features from k ciphertext pairs.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2.">Experiments on Chaskey</head><p>Based on the plaintext difference α = (0x8400, 0x0400, 0, 0) <ref type="bibr" target="#b11">[12]</ref>, we build N Ds against Chaskey reduced to 3, 4 rounds. The accuracies are presented in Table <ref type="table">7</ref>. Table <ref type="table" target="#tab_5">8</ref> summarizes the results of the FPT and FNT.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.3.">Experiments on Present64/80</head><p>Based on the plaintext difference α = (0, 0, 0, 0x9) provided in <ref type="bibr" target="#b26">[26]</ref>, we build N Ds against Present64/80 reduced up to 6, 7 rounds respectively. The penalty factor is 10 -4 and other related parameters are the same as Table <ref type="table" target="#tab_0">1</ref>. The distinguishing accuracies are presented in Table <ref type="table">9</ref>. Table <ref type="table" target="#tab_0">10</ref> summarizes the results of FPT and FNT.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.4.">Experiments on DES</head><p>Based on the analysis of DES in <ref type="bibr" target="#b27">[27]</ref>, the plaintext difference α = (0x40080000, 0x04000000) is adopted. We build N Ds against DES reduced to 5, 6 rounds. The batch size is adjusted to 5000. The penalty factor is increased to 8 × 10 -4 . Other related parameters are the same as Table <ref type="table" target="#tab_0">1</ref>. The distinguishing accuracies are presented in Table <ref type="table" target="#tab_6">11</ref>. The pass ratios of the FPT and FNT of N Ds are presented in Table <ref type="table" target="#tab_7">12</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.5.">Experiments on SHA3-256</head><p>SHA3-256 is a hash function. When one message block is fed into reduced SHA3-256, we collect the first 32 bytes of the output process after r-rounds permutation is applied to this message block. Given a message difference α = 1, we build N Ds against SHA3-256 reduced up to 3 rounds.</p><p>The number of ciphertext pairs is N = 2 × 10 6 . The batch size is 500, and the penalty factor is 10 -5 . The accuracies are presented in Table <ref type="table" target="#tab_1">13</ref>. The pass ratios of the FPT and FNT of N Ds are presented in Table <ref type="table" target="#tab_8">14</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.">KEY RECOVERY ATTACKS</head><p>In this section, we propose a data reuse strategy for reducing data complexity. Then we prove that our N D can be applied to the two key recovery attacks introduced in section 3. Since the data complexity of NASA is directly related to the performance of N Ds, NASA is first performed to highlight the extra superiority of our N Ds.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.1.">Data Reuse Strategy for Reducing Data Complexity</head><p>There is a potential problem when we directly apply our new N D to key recovery attacks. Assuming Gohr's distinguisher and our new N D k have the same performance, and a certain attack requires M random inputs. If we directly reshape M ×k ciphertext pairs into M ciphertext groups, the data complexity of our N D k is k times as much as the data complexity of Gohr's distinguisher.</p><p>Given M ciphertext pairs X i = (C i,0 , C i,1 ), i ∈ [1, M ], there are a total of M k options for composing a ciphertext group, which is much larger than M k . Thus we can randomly select M ciphertext groups from M k options. Such a strategy can help reduce data complexity. In fact, it is equivalent to attach more importance to derived features from k ciphertexts.</p><p>However, the subsequent key recovery attacks using this naive strategy do not obtain good results. The main reason is that the sampling randomness of M ciphertext groups is destroyed. Two new concepts are proposed for overcoming this problem.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Maximum Reuse Frequency:</head><p>During the generation of M ciphertext groups, a ciphertext pair is likely to be reused several times. We denote the reuse frequency of the i th ciphertext pair as RF i , i ∈ [1, M ]. Maximum Reuse Frequency (M RF ) is defined as the maximum value of RF i :</p><formula xml:id="formula_28">M RF = max RF i , i ∈ [1, M ] (<label>17</label></formula><formula xml:id="formula_29">)</formula><p>Sample Similarity Degree: For any two ciphertext groups G i , G j , the similarity of these two ciphertext groups is defined as the number of the same ciphertext pairs. As for M ciphertext groups, Sample Similarity Degree (SSD) is defined as the maximum of any two ciphertext groups' similarity:</p><formula xml:id="formula_30">SSD = max |G i G j | , i, j ∈ [1, M ] G i = {X i1 , • • • , X ik } G j = {X j1 , • • • , X jk } i1, • • • , ik, j1, • • • , jk ∈ [1, M ] (<label>18</label></formula><formula xml:id="formula_31">)</formula><p>M RF can ensure that the contribution of each ciphertext pair is similar. SSD can increase the distribution uniformity of M ciphertext groups as much as possible. Based on the above two concepts, we propose the following Data Reuse Strategy (see Algorithm 1) that can reduce data complexity and maintain sampling randomness.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 1 Data Reuse Strategy</head><p>Require: M RF ; SSD; k; M . Ensure: M ciphertext groups with a size of k.</p><p>1: Randomly select k ciphertext pairs from M ciphertext pairs to form a ciphertext group. 2: Repeat step 2 for M times to obtain M ciphertext groups. 3: Compute M RF and SSD. If two values are both smaller than the threshold we set, return the M ciphertext groups. Or start from step 1 again.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.2.">Application to NASA</head><p>When we replace Gohr's distinguisher with our new N D, the process of NASA does not change. The only difference is the data collection.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.2.1.">Data Collection</head><p>Consider the attack process as shown in Fig. <ref type="figure">1</ref>.</p><p>Assuming that our new N D is built with α. Now, we need to generate ciphertext groups. Generate k plaintext pairs (P i 0 , P i 1 ), i ∈ [1, k] with the difference ∆P . Collect corresponding ciphertexts</p><formula xml:id="formula_32">(C i 0 , C i 1 ), i ∈ [1, k].</formula><p>The intermediate states are</p><formula xml:id="formula_33">(S i 0 , S i 1 ), i ∈ [1, k].</formula><p>Y. Chen, Y. Shen, H. Yu, S. Yuan</p><p>According to the introduction in section 4.2, these k ciphertext pairs should satisfy</p><formula xml:id="formula_34">S i 0 ⊕ S i 1 = α, or S i 0 ⊕ S i 1 = α, i ∈ [1, k]</formula><p>simultaneously. We use neutral bits <ref type="bibr" target="#b17">[17]</ref> to generate such k ciphertext pairs. Here we briefly review the definition of neutral bits. Let E denote the encryption function. We focus on the following conforming pairs</p><formula xml:id="formula_35">P 0 ⊕ P 1 = ∆P, E(P 0 ) ⊕ E(P 1 ) = α. If the condition E(P 0 ⊕ e j ) ⊕ E(P 1 ⊕ e j ) = α always</formula><p>holds where e j = 1 &lt;&lt; j, the j-th bit is a neutral bit.</p><p>Thus, we can generate 2 m k ciphertext pairs using m neutral bits. The probability that these k ciphertext pairs satisfy the difference transition ∆P → α simultaneously is still p 0 . Then N ciphertext groups with a size of k can be generated as 1. Randomly generate N plaintext pairs with ∆P . 2. Generate N plaintext structures using m neutral bits. 3. Randomly pick k plaintext pairs from a structure and collect the ciphertext pairs.</p><p>The total data complexity is N × k.</p><p>It is worth noticing that the data reuse strategy is still applicable here. More precisely, the data collection is performed as 1. Randomly generate N M plaintext pairs with ∆P . 2. Generate N M plaintext structures using m neutral bits. 3. Randomly pick M plaintext pairs from a structure, and generate M ciphertext groups using the data reuse strategy (Algorithm 1).</p><p>The total data complexity is N now.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.2.2.">Experiments on Speck32/64</head><p>To prove that our N D applies to NASA, we perform experiments on Speck32/64. Our new N D achieves higher accuracy than the N D proposed by Gohr. Since the data complexity of NASA is related to the accuracy of N D, it is possible to reduce the data complexity of NASA by adopting our new N D.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experiment settings.</head><p>We adopt a 2-round differential ∆P = 0x211/0xa04 p0=2 -6</p><p>-----→ α = 0x40/0x0 as the prepended differential. Let β 0 = 0.005, β 1 = 2 -16 , c 2 = 0.5. The meaning of these parameters is defined in section 3.3. Since c 2 is set, the values of p 1 , p 3 are experimentally estimated based on N Ds.</p><p>The estimation of p 2 is complex. Let p 2|d denote the estimated value of p 2 where d is the Hamming distance between the correct key tk and wrong keys kg. According to the introduction in <ref type="bibr" target="#b1">[2]</ref>, when d increases, p 2|d will decrease. Moreover, when p 2 increases, the data complexity of NASA also increases. Thus, if we TABLE <ref type="table" target="#tab_3">15</ref>. Data complexity comparisons when p0 = 2 -6 , d = 2, β0 = 0.005, β1 = 2 -16 , c2 = 0.5. The prepended differential is a 3-round differential that is extended from 0x211/0xa04 p 0 -→ 0x40/0x0 without loss of transition probability.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Distinguisher</head><p>Data Complexity (log 2 N ) r = 5 r = 6 r = 7 hope the Hamming distance between tk and surviving kg does not exceed d, the value of p 2 is</p><formula xml:id="formula_36">N D k=1<label>14</label></formula><formula xml:id="formula_37">p 2 = max{p 2|i |i ∈ [d + 1, 16]}.<label>(19)</label></formula><p>In this paper, we choose two different settings:</p><formula xml:id="formula_38">d = 2, d = 1.</formula><p>Comparison of data complexity. Table <ref type="table" target="#tab_3">15</ref> and Table <ref type="table" target="#tab_9">16</ref> show the comparison of data complexity under two experiment settings respectively.</p><p>The second row corresponds to the data complexity when Gohr's N D is adopted. These results are also used as the baseline. When an r-round N D with a group size of k is adopted, the corresponding data complexity is displayed in bold if it is smaller than the baseline.</p><p>We test 12 new N Ds in total. Table <ref type="table" target="#tab_3">15</ref> and Table <ref type="table" target="#tab_9">16</ref> show that the data complexity is reduced in most cases. There is only one case in which the data complexity is not reduced.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Analysis of the data complexity.</head><p>There are two questions to be explained: (1) why does the accuracy improvement of N Ds bring the reduction of the data complexity? (2) why does the data complexity is not reduced in the only failed case shown in Table <ref type="table" target="#tab_9">16</ref>?</p><p>To answer the first question, we need to analyze how the data complexity is influenced by p 1 , p 3 . Based on Equation 8 in section 3.3, we get two following conclusions: • when p 1 |p 1 0.5 increases, the data complexity N decreases.</p><p>• when p 3 |p 3 0.5 decreases, the data complexity N decreases.</p><p>During the training of N Ds, the accuracy can be formulated as</p><formula xml:id="formula_39">acc = 0.5 × (T P R + T N R)</formula><p>where T P R is the true positive rate and T N R is the true negative rate.</p><p>If we set c 2 = 0.5, the following conclusions hold</p><formula xml:id="formula_40">T P R = p 1 , T N R = 1 -p 3 acc = 0.5 × (p 1 + 1 -p 3 ). (<label>20</label></formula><formula xml:id="formula_41">)</formula><p>Thus, when the accuracy acc of N Ds increases, there are three phenomena: p 1 increases, or p 3 decreases, or the former two phenomena both occur. No matter which phenomenon occurs, it is helpful for reducing the data complexity. This is why the data complexity is reduced in most cases shown in Table <ref type="table" target="#tab_3">15</ref> and Table <ref type="table" target="#tab_9">16</ref>.</p><p>To answer the second question, we need to consider the impact of p 2 . For convenience, we summarized the values of p 1 , p 2 , p 3 related to the 5-round N Ds in Table <ref type="table" target="#tab_10">17</ref>.</p><p>The value of p 2 also increases as shown in Table <ref type="table" target="#tab_10">17</ref>. Chen et al presented that the impact of p 1 , p 2 on N is O((p 1 -p 2 ) -2 ) <ref type="bibr" target="#b1">[2]</ref>. Therefore, the increase of p 2 has a negative impact on the data complexity. If p 2 is very close to p 1 , the positive impact of the accuracy improvement may be offset. This is why the data complexity is not reduced when the 5-round N D k=16 is adopted.</p><p>Actually, when p 0 becomes smaller, the reduction of data complexity is more significant. Table <ref type="table" target="#tab_11">18</ref> shows an example.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Practical experiments.</head><p>Based on the attack settings shown in Table <ref type="table" target="#tab_3">15</ref>, we perform NASA against 10-round Speck32/64 based on the N D k=1 and N D k=2 (r = 6) respectively. The target is to recover sk 10 . Since d = 2, the number of surviving subkey guesses should not exceed 137 × (1 -β 0 ) + (2 16 -137) × β 1 = 137.31.</p><p>Since the data complexity presented in Table <ref type="table" target="#tab_3">15</ref> is not low, the attack may take too much time. We adopt an optimization method proposed in <ref type="bibr" target="#b1">[2]</ref> to accelerate this attack. This method is building a student distinguisher to reduce the key space to be searched. The student distinguisher is built over 14 ciphertext bits {30 ∼ 23, 14 ∼ 7}. Then in the first stage, we guess 8 subkey bits sk 10 [8 ∼ 0]. In the second stage, we guess the complete sk 10 based on surviving guesses of sk 10 [8 ∼ 0]. To filter sk 10 [8 ∼ 0], the student distinguisher with k = 1 requires 2 18.888 plaintext pairs. In the second stage, we select N = 2 16.911 plaintext pairs from 2 18.888  plaintext pairs. When we perform NASA with Gohr's 6-round distinguishers 100 times, the results are 1. the true subkey sk 10 survives in 97 trails. 2. the average numbers of surviving subkey guesses in two stages are 14.98, 15.16 respectively. 3. in all the 100 trails, the number of surviving subkey guesses is lower than 137.31.</p><p>To filter sk 10 [8 ∼ 0], the student distinguisher with k = 2 requires 2 17.785 plaintext pairs. In the second stage, we select N = 2 15.821 plaintext pairs from 2 17.785  plaintext pairs. When we perform NASA with our 6round N D k=2 100 times, the results are 1. the true subkey sk 10 survives in 90 trails. 2. the average numbers of surviving subkey guesses in two stages are 11.82, 25.07 respectively. 3. In all the 100 trails, the number of surviving subkey guesses is lower than 137.31.</p><p>Figure <ref type="figure" target="#fig_4">4</ref> shows the runtime comparison of the 200 experiments. The practical experiments further prove that our new N Ds can be applied to NASA. Besides, with smaller data complexity, the NASA based on our N D achieves a competitive result.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.3.">Application to Gohr's Attack</head><p>Gohr's attack is not directly related to the distinguishing accuracy of N Ds. Thus, we mainly verify whether our new N D applies to Gohr's attack.</p><p>In <ref type="bibr" target="#b0">[1]</ref>, Gohr performed a key recovery attack on 11round Speck32/64. In this section, we first perform the same attack using our new N D k=2 . Then we present a deeper discussion. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.3.1.">Key Recovery Attack on 11-round Speck32/64</head><p>The target of this attack is to recover the last two subkeys (sk 11 , sk 10 ). This attack returns a pair of subkey guesses (kg 11 , kg 10 ). If kg 11 = sk 11 and kg 10 is different from sk 10 at most 2 bits, this attack is viewed as a success <ref type="bibr" target="#b0">[1]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experiment settings.</head><p>A 6-round and 7-round N D k=2 are built over α = (0x40, 0x0). A prepended 3round differential is extended from a 2-round differential ∆P = (0x211, 0xa04) p0=2 -6 -----→ α = (0x40, 0x0). Six neutral bits {14, 15, 20, 21, 22, 23} are used to generate plaintext structures consisting of 64 plaintext pairs. The data reuse strategy is also adopted by letting M RF = 2 and SSD = 1.</p><p>The whole attack is performed as 1. Randomly generate 100 plaintext pairs with a difference ∆P . 2. Generate 100 plaintext structures using 6 neutral bits above, and collect corresponding ciphertext structures. 3. For each ciphertext structure:</p><p>(a) collect possible kg 11 using the method introduced in section 3.2. (b) For each possible kg 11 :</p><p>i. Decrypt the current ciphertext structure with kg 11 . ii. Collect possible subkey guess pairs (kg 11 , kg 10 ) using the method introduced in section 3.2.</p><p>4. Return surviving (kg 11 , kg 10 ) with the highest rank score as the final subkey guess.</p><p>In section 3.2, we have reviewed how Gohr's attack recovers the subkey sk r+1 with an r-round N D. This method needs a rank score threshold. In steps 3a and 3(b)ii, we need a threshold c 3 , c 4 respectively. In this paper, let c 3 = 18 and c 4 = 150. Experiment results. Run 1000 experiments each time, and repeat 5 times. These experiments based on Gohr's distinguishers N D k=1 were also performed using the same ciphertexts. Table <ref type="table" target="#tab_12">19</ref> summarizes the success rates.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.3.2.">Posterior Probability Analysis</head><p>We have proved that our N D applies to Gohr's attack. Moreover, the attack based on our N Ds shows a minor advantage in terms of the success rate. This minor advantage is interesting since the success rate of Gohr's attack is not directly determined by the distinguishing accuracy. To better understand the influence of accuracy improvement on Gohr's attack, we perform a deeper analysis from the perspective of the key rank score.</p><p>Consider an (r + 1)-round cipher E. We first build a r-round N D based on a difference α. Then we collect numerous ciphertext pairs corresponding to plaintext pairs with a difference α. We decrypt these ciphertext pairs with a subkey guess kg and feed the partially decrypted ciphertext pairs into the N D.</p><p>Let tk denote the true subkey of the (r + 1)-round. Besides, the Hamming distance between tk and kg is d. We focus on the expectation of the following conditional posterior probability</p><formula xml:id="formula_42">Z = P r (Y = 1 |X, d ) = F (X) (<label>21</label></formula><formula xml:id="formula_43">)</formula><p>where X is the input of the N D, and F is N D. If the N D is Gohr's distinguisher, X is a decrypted ciphertext pair. If the N D is our distinguisher N D k , X is a ciphertext group consisting of k decrypted ciphertext pairs. Taking N D k=2 against Speck32/64 reduced to 6, 7 rounds as examples, we estimate the expectations of the above conditional posterior probability. As a comparison, we also estimate the expectations based on N D k=1 . The final estimation results are shown in Figure <ref type="figure">5</ref>, Figure <ref type="figure">6</ref>.</p><p>There are two important phenomena. First, compared with Gohr's distinguishers N D k=1 , our distinguishers N D k=2 bring higher expectations P r(Y = 1|X, d = 0). Second, the value of P r(Y = 1|X, d = 0) -P r(Y = 1|X, d = i), i ∈ <ref type="bibr" target="#b0">[1,</ref><ref type="bibr" target="#b16">16]</ref> increases.</p><p>The first phenomenon makes that a large key rank score threshold (eg. c 3 = 18, c 4 = 150) is applicable.  <ref type="formula" target="#formula_13">9 10 11 12 13 14 15 16</ref>Gohr's 6-round ND New 6-round ND with k=2 0.4 0.42 0.44 0.46 0.48 0.5 0.52 0.54 0.56 0.58 0.6 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 Gohr's 7-round ND New 7-round ND with k=2 FIGURE 6. The expectations of the conditional posterior probability (Equation 21) of 7-round N Ds against Speck32/64.</p><p>The second phenomenon makes the gap between the rank score of the true key and that of wrong keys increase. By setting a high key rank score threshold, wrong keys are less likely to obtain a key rank score higher than the threshold. Thus, a higher success rate is more likely to be obtained by replacing Gohr's NDs with our NDs.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8.">OPEN PROBLEMS</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Our work in this paper raises some open problems:</head><p>• What features derived from multiple ciphertext pairs are learned by our distinguishers? • The influence of features derived from multiple ciphertext pairs is rather complex. More exactly, except for its positive influence, we find that these features also have a negative influence. For example, when we compare the distinguishing accuracy of N Ds under a fair setting (see Section 6.1.1), if we give the prediction label based on the following metric:</p><formula xml:id="formula_44">v = log( Z 1 1 -Z 1 ) + • • • + log( Z m 1 -Z m ),<label>(22)</label></formula><p>where Z i , i ∈ [1, m] is the output of N Ds, our distinguishers have tiny or no advantage in terms of the distinguishing accuracy. Table <ref type="table" target="#tab_13">20</ref> shows our experiment results based on the above metric. Thus, an important problem is how to make full use of these features and bring more significant positive influence?</p><p>These problems are out of scope of this paper. We will explore in future research.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="9.">CONCLUSIONS</head><p>In this paper, we focus on the neural distinguisher which is the core module in neural aided cryptanalysis. By considering multiple ciphertext pairs simultaneously, we propose a new neural distinguisher and have performed a deep exploration of it. Compared with the neural distinguisher considering a single ciphertext pair, this new neural distinguisher achieves higher distinguishing accuracy, which is verified by applications to five different ciphers. Moreover, we prove that the accuracy improvement results from features derived from multiple ciphertext pairs.</p><p>Our new neural distinguisher also applies to key recovery attacks.</p><p>We show how to perform two different key recovery attacks based on our new neural distinguishers.</p><p>The first one is the neural aided statistical attack. Due to the accuracy improvement, the data complexity of neural aided statistical attack is reduced by adopting our new neural distinguisher. A data reuse strategy is proposed to strengthen this advantage. The second one is the key recovery attack proposed by Gohr at CRYPTO'19. Our new neural distinguisher applies to this attack but does not bring a significant positive influence, since this attack is not related to the distinguishing accuracy.</p><p>Our new neural distinguisher is full of potential. In the future, as long as neural aided key recovery attacks are related to the performance of neural distinguishers, our new neural distinguisher could be a priority choice. Besides, our neural distinguisher also introduces a novel cryptanalysis direction by considering multiple ciphertext pairs simultaneously.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><figDesc>(a) Decrypt m positive samples with kg. (b) Feed partially decrypted samples into the N D and collect the outputs Z i , i ∈ [1, m]. (c) Compute the rank score V kg of kg as:</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><figDesc>(a) Decrypt N ciphertext pairs with kg. (b) Feed partially decrypted ciphertext pairs into the ND and collect the outputs Z i , i ∈ [1, N ]. (c) Count the following statistic T :</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>FIGURE 2 .</head><label>2</label><figDesc>FIGURE 2. P1(x) : a Gaussian distribution. P2(x) : a uniform distribution.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>FIGURE 3 .</head><label>3</label><figDesc>FIGURE 3.The network architecture of our new ND. Conv stands for a convolution layer with N f filters. The size of each filter is Ks × Ks. Module 2 also adopts the skip connection<ref type="bibr" target="#b16">[16]</ref>. FC is a fully connected layer that has d1 or d2 neurons. BN is batch normalization. Relu and Sigmoid are two different activation functions. The output of Sigmoid ranges from 0 to 1.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>FIGURE 4 .</head><label>4</label><figDesc>FIGURE 4. The runtime of 100 experiments. When Gohr's 6-round distinguisher N D k=1 is used, the average runtime of NASA is 612 seconds. When our 6-round distinguisher N D k=2 is used, the average runtime of NASA is 492 seconds.</figDesc><graphic coords="12,47.57,66.08,248.74,186.56" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head>A</head><figDesc>New Neural Distinguisher Considering Features Derived from Multiple Ciphertext Pairs 13</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6"><head>FIGURE 5 .Gohr's 7 -FIGURE 6 .</head><label>576</label><figDesc>FIGURE 5.The expectations of the conditional posterior probability (Equation21) of 6-round N Ds against Speck32/64.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>TABLE 1 .</head><label>1</label><figDesc>Parameters for constructing our new N D</figDesc><table><row><cell></cell><cell>N f</cell><cell>d1</cell><cell>d2</cell><cell>Ks</cell><cell>Bs</cell></row><row><cell></cell><cell>32</cell><cell>64</cell><cell>64</cell><cell>3</cell><cell>1000</cell></row><row><cell></cell><cell>λ</cell><cell>Lr</cell><cell>Es</cell><cell>N</cell><cell>M</cell></row><row><cell></cell><cell cols="4">10 -5 0.002 → 0.0001 10 10 7</cell><cell>10 6</cell></row><row><cell cols="2">TABLE 2.</cell><cell cols="4">Distinguishing accuracy of N Ds against</cell></row><row><cell cols="2">Speck32/64.</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell cols="6">r N D k=1 N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell>5</cell><cell>0.926</cell><cell>0.9739</cell><cell>0.9914</cell><cell>0.9991</cell><cell>0.9999</cell></row><row><cell>6</cell><cell>0.784</cell><cell>0.8667</cell><cell>0.9358</cell><cell>0.9528</cell><cell>0.9786</cell></row><row><cell>7</cell><cell>0.607</cell><cell>0.6396</cell><cell>0.6847</cell><cell>0.7009</cell><cell>0.6493</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>TABLE 3 .</head><label>3</label><figDesc>Distinguishing accuracy of N Ds against Speck32/64 under the fair setting.</figDesc><table><row><cell>r / n</cell><cell cols="2">N D k=1 N D k=2 , m = n k</cell><cell>N D k=4 , m = n k</cell></row><row><cell>6 / 8</cell><cell>0.9573</cell><cell>0.9767</cell><cell>0.9823</cell></row><row><cell>7 / 8</cell><cell>0.7333</cell><cell>0.7421</cell><cell>0.7506</cell></row><row><cell>7 / 16</cell><cell>0.7859</cell><cell>0.8020</cell><cell>0.8090</cell></row><row><cell>7 / 32</cell><cell>0.8352</cell><cell>0.8682</cell><cell>0.8751</cell></row><row><cell>7 / 64</cell><cell>0.8757</cell><cell>0.9282</cell><cell>0.9387</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>TABLE 4 .</head><label>4</label><figDesc>Distinguishing accuracy of N Ds over two kinds of testing sets. These N Ds are built under the same key setting.</figDesc><table><row><cell>r</cell><cell cols="4">testing set 1 N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell cols="2">5 0.9744</cell><cell>0.9906</cell><cell>0.9989</cell><cell>0.9999</cell></row><row><cell cols="2">6 0.8663</cell><cell>0.9317</cell><cell>0.9561</cell><cell>0.9762</cell></row><row><cell>r</cell><cell cols="4">testing set 2 N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell cols="2">5 0.9745</cell><cell>0.9903</cell><cell>0.9990</cell><cell>0.9999</cell></row><row><cell cols="2">6 0.8662</cell><cell>0.9309</cell><cell>0.9557</cell><cell>0.9770</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>TABLE 5 .</head><label>5</label><figDesc>The comparison of neural network parameters as well as the accuracy of N D k , k ∈ {1, 2}.</figDesc><table><row><cell>r</cell><cell cols="2">N D k=1 , 1 residual blocks parameter accuracy</cell></row><row><cell cols="2">5 44321</cell><cell>0.926</cell></row><row><cell cols="2">6 44321</cell><cell>0.784</cell></row><row><cell>r</cell><cell cols="2">N D k=1 , 10 residual blocks parameter accuracy</cell></row><row><cell cols="2">5 102497</cell><cell>0.929</cell></row><row><cell cols="2">6 102497</cell><cell>0.788</cell></row><row><cell>r</cell><cell cols="2">N D k=2 parameter accuracy</cell></row><row><cell cols="2">5 89377</cell><cell>0.9738</cell></row><row><cell cols="2">6 89377</cell><cell>0.8613</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>TABLE 6 .</head><label>6</label><figDesc>Pass ratios of FPT and FNT of N D k against Speck32/64.</figDesc><table><row><cell></cell><cell>r</cell><cell cols="5">False Negative Test N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell></cell><cell cols="3">5 0.0112</cell><cell cols="2">0.0013</cell><cell>0.0001</cell><cell>0</cell></row><row><cell></cell><cell cols="3">6 0.0331</cell><cell cols="2">0.0143</cell><cell>0.0081</cell><cell>0.0048</cell></row><row><cell></cell><cell cols="3">7 0.0511</cell><cell cols="2">0.0212</cell><cell>0.0283</cell><cell>0.0917</cell></row><row><cell></cell><cell>r</cell><cell cols="5">False Positive Test N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell></cell><cell cols="3">5 0.3068</cell><cell cols="2">0.6268</cell><cell>0.6748</cell><cell>0.7228</cell></row><row><cell></cell><cell cols="3">6 0.1519</cell><cell cols="2">0.1432</cell><cell>0.3723</cell><cell>0.4375</cell></row><row><cell></cell><cell cols="3">7 0.0659</cell><cell cols="2">0.0233</cell><cell>0.0157</cell><cell>0.0691</cell></row><row><cell cols="3">TABLE 7.</cell><cell cols="4">Distinguishing accuracy of N Ds against</cell></row><row><cell cols="2">Chaskey</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell cols="7">r N D k=1 N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell>3</cell><cell cols="2">0.8608</cell><cell cols="2">0.8958</cell><cell cols="2">0.9583</cell><cell>0.9887</cell><cell>0.9986</cell></row><row><cell>4</cell><cell cols="2">0.6161</cell><cell cols="2">0.6589</cell><cell cols="2">0.6981</cell><cell>0.7603</cell><cell>0.7712</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5"><head>TABLE 8 .</head><label>8</label><figDesc>Pass ratios of FPT and FNT of N Ds against Chaskey.</figDesc><table><row><cell>r</cell><cell cols="4">False Negative Test N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell cols="2">3 0.1156</cell><cell>0.0635</cell><cell>0.0373</cell><cell>0.0087</cell></row><row><cell cols="2">4 0.1412</cell><cell>0.1749</cell><cell>0.1481</cell><cell>0.1675</cell></row><row><cell>r</cell><cell cols="4">False Positive Test N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell cols="2">3 0.4027</cell><cell>0.4032</cell><cell>0.3976</cell><cell>0.4705</cell></row><row><cell cols="2">4 0.8369</cell><cell>0.7439</cell><cell>0.7298</cell><cell>0.5591</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6"><head>TABLE 11 .</head><label>11</label><figDesc>Distinguishing accuracy of N Ds against DES.</figDesc><table><row><cell>5</cell><cell>0.6261</cell><cell>0.7209</cell><cell>0.8382</cell><cell>0.9318</cell><cell>0.9585</cell></row><row><cell>6</cell><cell>0.5493</cell><cell>0.5653</cell><cell>0.5568</cell><cell>0.5507</cell><cell>0.5532</cell></row></table><note><p>r N D k=1 N D k=2 N D k=4 N D k=8 N D k=16</p></note></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_7"><head>TABLE 12 .</head><label>12</label><figDesc>Pass ratios of FNT and FPT of N Ds against DES.</figDesc><table><row><cell></cell><cell>R</cell><cell cols="5">False Negative Test N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell></cell><cell>5</cell><cell cols="2">0.0046</cell><cell cols="2">0.0034</cell><cell>0.0132</cell><cell>0.0131</cell></row><row><cell></cell><cell>6</cell><cell cols="2">0.0802</cell><cell cols="2">0.2348</cell><cell>0.2526</cell><cell>0.3207</cell></row><row><cell></cell><cell>R</cell><cell cols="5">False Positive Test N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell></cell><cell>5</cell><cell cols="2">0.0594</cell><cell cols="2">0.0627</cell><cell>0.0566</cell><cell>0.0518</cell></row><row><cell></cell><cell>6</cell><cell cols="2">0.0462</cell><cell cols="2">0.0598</cell><cell>0.0921</cell><cell>0.0809</cell></row><row><cell cols="7">TABLE 13. Distinguishing accuracy of N Ds against</cell></row><row><cell cols="2">SHA3-256.</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell cols="7">r N D k=1 N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell>3</cell><cell cols="2">0.7228</cell><cell cols="2">0.8149</cell><cell cols="2">0.9241</cell><cell>0.971</cell><cell>0.9904</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_8"><head>TABLE 14 .</head><label>14</label><figDesc>Pass ratios of FNT and FPT of N Ds against SHA3-256.</figDesc><table><row><cell>r</cell><cell cols="4">False Negative Test N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell cols="2">3 0.2249</cell><cell>0.2347</cell><cell>0.3336</cell><cell>0.2711</cell></row><row><cell>r</cell><cell cols="4">False Positive Test N D k=2 N D k=4 N D k=8 N D k=16</cell></row><row><cell cols="2">3 0.1045</cell><cell>0.0961</cell><cell>0.0171</cell><cell>0.0088</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_9"><head>TABLE 16 .</head><label>16</label><figDesc>Data complexity comparisons when p0 = 2 -6 , d = 1, β0 = 0.005, β1 = 2 -16 , c2 = 0.5.</figDesc><table><row><cell></cell><cell>.212</cell><cell>16.911</cell><cell>20.509</cell></row><row><cell>N D k=2</cell><cell cols="3">13.165 15.821 19.761</cell></row><row><cell>N D k=4</cell><cell cols="3">12.901 14.764 18.886</cell></row><row><cell>N D k=8</cell><cell>12.19</cell><cell cols="2">14.681 18.744</cell></row><row><cell>N D k=16</cell><cell cols="3">13.107 14.720 20.215</cell></row><row><cell></cell><cell></cell><cell></cell><cell>The prepended</cell></row><row><cell cols="4">differential is a 3-round differential that is extended from 0x211/0xa04 p 0 -→ 0x40/0x0 without loss of transition</cell></row><row><cell>probability.</cell><cell></cell><cell></cell><cell></cell></row><row><cell>Distinguisher</cell><cell cols="3">Data Complexity (log 2 N ) r = 5 r = 6 r = 7</cell></row><row><cell>N D k=1</cell><cell>14.72</cell><cell>17.456</cell><cell>21.081</cell></row><row><cell>N D k=2</cell><cell cols="3">13.979 16.484 20.349</cell></row><row><cell>N D k=4</cell><cell cols="3">14.187 15.606 19.49</cell></row><row><cell>N D k=8</cell><cell cols="3">14.085 15.750 19.38</cell></row><row><cell>N D k=16</cell><cell>15.399</cell><cell cols="2">16.361 20.949</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_10"><head>TABLE 17 .</head><label>17</label><figDesc>The value of p1, p2, p3 related to the 5-round N Ds when c2 = 0.5, d = 1, r = 5. p0 = 2 -6 .</figDesc><table><row><cell cols="2">Distinguisher p1</cell><cell>p2</cell><cell>p3</cell><cell>log 2 N</cell></row><row><cell>N D k=1</cell><cell cols="3">0.8977 0.3335 0.0462</cell><cell>14.72</cell></row><row><cell>N D k=2</cell><cell cols="3">0.9665 0.4802 0.0185</cell><cell>13.979</cell></row><row><cell>N D k=4</cell><cell cols="3">0.9894 0.6927 0.0069</cell><cell>14.187</cell></row><row><cell>N D k=8</cell><cell cols="3">0.9988 0.8604 0.0007</cell><cell>14.085</cell></row><row><cell>N D k=16</cell><cell cols="4">0.9999 0.9672 1.92 × 10 -5 15.399</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_11"><head>TABLE 18 .</head><label>18</label><figDesc>The value of p1, p2, p3 related to the 5-round N Ds when c2 = 0.5, d = 1, r = 5. p0 = 2 -12 .</figDesc><table><row><cell cols="2">Distinguisher p1</cell><cell>p2</cell><cell>p3</cell><cell>log 2 N</cell></row><row><cell>N D k=1</cell><cell cols="3">0.8977 0.3335 0.0462</cell><cell>26.657</cell></row><row><cell>N D k=2</cell><cell cols="3">0.9665 0.4802 0.0185</cell><cell>25.811</cell></row><row><cell>N D k=4</cell><cell cols="3">0.9894 0.6927 0.0069</cell><cell>25.834</cell></row><row><cell>N D k=8</cell><cell cols="3">0.9988 0.8604 0.0007</cell><cell>24.888</cell></row><row><cell>N D k=16</cell><cell cols="4">0.9999 0.9672 1.92 × 10 -5 24.021</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_12"><head>TABLE 19 .</head><label>19</label><figDesc>Success rates of performing 1000 experiments (Gohr's attack). Repeat 5 times. The first row represents the success rate when Gohr's distinguishers are used. The second row represents the success rate when our new distinguishers with k = 2 are used.</figDesc><table><row><cell>1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>5</cell></row><row><cell cols="2">N D k=1 0.533 0.52</cell><cell cols="3">0.501 0.557 0.523</cell></row><row><cell cols="5">N D k=2 0.536 0.534 0.512 0.552 0.529</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_13"><head>TABLE 20 .</head><label>20</label><figDesc>Distinguishing accuracy of N Ds against Speck32/64 under the fair setting. If v &gt; 0 (see Formula 22), the prediction label is 1. r / n N D k=1 N D k=2 , m = n</figDesc><table><row><cell>2</cell><cell>N D k=4 , m = n 2</cell></row></table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><head>ACKNOWLEDGEMENTS</head><p>This work is supported by the <rs type="funder">National Key Research and Development Program of China</rs> (<rs type="grantNumber">2018YFB0803405</rs>, <rs type="grantNumber">2017YFA0303903</rs>).</p></div>
+			</div>
+			<listOrg type="funding">
+				<org type="funding" xml:id="_xt7PVy2">
+					<idno type="grant-number">2018YFB0803405</idno>
+				</org>
+				<org type="funding" xml:id="_A9Skmwj">
+					<idno type="grant-number">2017YFA0303903</idno>
+				</org>
+			</listOrg>
+
+			<div type="availability">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>DATA AVAILABILITY</head><p>The data underlying this article are available at <ref type="url" target="https://github.com/AI-Lab-Y/ND_mc">https:  //github.com/AI-Lab-Y/ND_mc</ref>.</p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">A</forename><surname>Boldyreva</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">D</forename><surname>Micciancio</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Santa Barbara, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019-08-18">2019. August 18-22, 2019</date>
+			<biblScope unit="volume">11693</biblScope>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note>Proceedings, Part II</note>
+	<note type="raw_reference">Gohr, A. (2019) Improving attacks on round-reduced speck32/64 using deep learning. In Boldyreva, A. and Micciancio, D. (eds.), Advances in Cryptology - CRYPTO 2019 -39th Annual International Cryptology Conference, Santa Barbara, CA, USA, August 18-22, 2019, Proceedings, Part II, Lecture Notes in Computer Science, 11693, pp. 150-179. Springer.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Neural-Aided Statistical Attack for Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac099</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="2480" to="2498" />
+			<date type="published" when="2020">2020. 2020</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen, Y. and Yu, H. (2020) Neural aided statistical attack for cryptanalysis. IACR Cryptol. ePrint Arch., 2020, 1620.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Deep learning based differential distinguisher for lightweight cipher PRESENT</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Jain</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Kohli</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Mishra</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IACR Cryptol</title>
+		<imprint>
+			<date type="published" when="2020">2020. 2020</date>
+			<biblScope unit="page">846</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jain, A., Kohli, V., and Mishra, G. (2020) Deep learning based differential distinguisher for lightweight cipher PRESENT. IACR Cryptol. ePrint Arch., 2020, 846.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Differential-ML Distinguisher: Machine Learning Based Generic Extension for Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Tarun</forename><surname>Yadav</surname></persName>
+			<idno type="ORCID">0000-0002-5462-8253</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Manoj</forename><surname>Kumar</surname></persName>
+			<idno type="ORCID">0000-0001-6900-4075</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-88238-9_10</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">2020. 2020</date>
+			<biblScope unit="page" from="191" to="212" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yadav, T. and Kumar, M. (2020) Differential- ml distinguisher: Machine learning based generic extension for differential cryptanalysis. IACR Cryptol. ePrint Arch., 2020, 913.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Performance Comparison Between Deep Learning-Based and Conventional Cryptographic Distinguishers</title>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matteo</forename><surname>Rossi</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-80129-8_48</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Networks and Systems</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">2020. 2020</date>
+			<biblScope unit="page" from="681" to="701" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bellini, E. and Rossi, M. (2020) Performance com- parison between deep learning-based and conventional cryptographic distinguishers. IACR Cryptol. ePrint Arch., 2020, 953.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Deep learning based analysis of key scheduling algorithm of PRESENT cipher</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Pareek</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Mishra</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Kohli</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IACR Cryptol</title>
+		<imprint>
+			<date type="published" when="2020">2020. 2020</date>
+			<biblScope unit="page">981</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Pareek, M., Mishra, G., and Kohli, V. (2020) Deep learning based analysis of key scheduling algorithm of PRESENT cipher. IACR Cryptol. ePrint Arch., 2020, 981.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<meeting><address><addrLine>DATE; Grenoble, France</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-02-01">2021. 2021. February 1-5, 2021</date>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi, A., Breier, J., Chen, Y., and Dong, X. (2021) Machine learning assisted differential distinguishers for lightweight ciphers. Design, Automation &amp; Test in Europe Conference &amp; Exhibition, DATE 2021, Grenoble, France, February 1-5, 2021, pp. 176-181. IEEE.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Cryptanalysis of round-reduced SIMON32 based on deep learning</title>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Chen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IACR Cryptol. ePrint Arch</title>
+		<imprint>
+			<date type="published" when="2021">2021. 2021</date>
+			<biblScope unit="page">362</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou, Z., Ren, J., and Chen, S. (2021) Cryptanalysis of round-reduced SIMON32 based on deep learning. IACR Cryptol. ePrint Arch., 2021, 362.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quan</forename><forename type="middle">Quan</forename><surname>Tan</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-77870-5_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">A</forename><surname>Canteaut</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">F</forename><surname>Standaert</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Zagreb, Croatia</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021-10-17">2021. October 17-21, 2021</date>
+			<biblScope unit="volume">12696</biblScope>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note>Proceedings, Part I</note>
+	<note type="raw_reference">Benamira, A., Gérault, D., Peyrin, T., and Tan, Q. Q. (2021) A deeper look at machine learning-based cryptanalysis. In Canteaut, A. and Standaert, F. (eds.), Advances in Cryptology -EUROCRYPT 2021 -40th Annual International Conference on the Theory and Applications of Cryptographic Techniques, Zagreb, Croatia, October 17-21, 2021, Proceedings, Part I, Lecture Notes in Computer Science, 12696, pp. 805- 835. Springer.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Mind the Gap - A Closer Look at the Security of Block Ciphers against Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Ralph</forename><surname>Ankele</surname></persName>
+			<idno type="ORCID">0000-0001-8751-9099</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Kölbl</surname></persName>
+			<idno type="ORCID">0000-0002-4281-6935</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-10970-7_8</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">C</forename><surname>Cid</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">M</forename><forename type="middle">J J</forename><surname>Jr</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Calgary, AB, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2018-08-15">2018. August 15-17, 2018</date>
+			<biblScope unit="volume">11349</biblScope>
+			<biblScope unit="page" from="163" to="190" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Ankele, R. and Kölbl, S. (2018) Mind the gap -A closer look at the security of block ciphers against differential cryptanalysis. In Cid, C. and Jr., M. J. J. (eds.), Selected Areas in Cryptography -SAC 2018 -25th International Conference, Calgary, AB, Canada, August 15-17, 2018, Revised Selected Papers, Lecture Notes in Computer Science, 11349, pp. 163- 190. Springer.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference<address><addrLine>San Francisco, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015-06-07">2015. June 7-11, 2015</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beaulieu, R., Shors, D., Smith, J., Treatman-Clark, S., Weeks, B., and Wingers, L. (2015) The SIMON and SPECK lightweight block ciphers. Proceedings of the 52nd Annual Design Automation Conference, San Francisco, CA, USA, June 7-11, 2015, pp. 175:1-175:6. ACM.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Chaskey: An Efficient MAC Algorithm for 32-bit Microcontrollers</title>
+		<author>
+			<persName><forename type="first">Nicky</forename><surname>Mouha</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Mennink</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anthony</forename><surname>Van Herrewege</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dai</forename><surname>Watanabe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Preneel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ingrid</forename><surname>Verbauwhede</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-13051-4_19</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="306" to="323" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mouha, N., Mennink, B., Herrewege, A. V., Watanabe, D., Preneel, B., and Verbauwhede, I. (2014) Chaskey: An efficient MAC algorithm for 32-bit microcontrollers.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Selected Areas in Cryptography – SAC 2024</title>
+		<idno type="DOI">10.1007/978-3-031-82841-6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Selected Areas in Cryptography -SAC 2014 -21st International Conference</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">A</forename><surname>Joux</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">A</forename><forename type="middle">M</forename><surname>Youssef</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Montreal, QC, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2014">August 14-15, 2014</date>
+			<biblScope unit="volume">8781</biblScope>
+			<biblScope unit="page" from="306" to="323" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">In Joux, A. and Youssef, A. M. (eds.), Selected Areas in Cryptography -SAC 2014 -21st International Conference, Montreal, QC, Canada, August 14-15, 2014, Revised Selected Papers, Lecture Notes in Computer Science, 8781, pp. 306-323. Springer.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">PRESENT: An Ultra-Lightweight Block Cipher</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Bogdanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Paar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Poschmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">J B</forename><surname>Robshaw</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Seurin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Vikkelsoe</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-74735-2_31</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">P</forename><surname>Paillier</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">I</forename><surname>Verbauwhede</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Vienna, Austria</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007-09-10">2007. September 10-13, 2007</date>
+			<biblScope unit="volume">4727</biblScope>
+			<biblScope unit="page" from="450" to="466" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bogdanov, A., Knudsen, L. R., Leander, G., Paar, C., Poschmann, A., Robshaw, M. J. B., Seurin, Y., and Vikkelsoe, C. (2007) PRESENT: an ultra-lightweight block cipher. In Paillier, P. and Verbauwhede, I. (eds.), Cryptographic Hardware and Embedded Systems -CHES 2007, 9th International Workshop, Vienna, Austria, September 10-13, 2007, Proceedings, Lecture Notes in Computer Science, 4727, pp. 450-466. Springer.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">The data encryption standard</title>
+		<author>
+			<persName><forename type="first">Don</forename><surname>Coppersmith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chris</forename><surname>Holloway</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stephen</forename><forename type="middle">M</forename><surname>Matyas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nev</forename><surname>Zunic</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/s1363-4127(97)81325-8</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Information Security Technical Report</title>
+		<title level="j" type="abbrev">Information Security Technical Report</title>
+		<idno type="ISSN">1363-4127</idno>
+		<imprint>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="22" to="24" />
+			<date type="published" when="1997-01">1997</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Coppersmith, D., Holloway, C. L., Matyas, S. M., and Zunic, N. (1997) The data encryption standard. Inf. Secur. Tech. Rep., 2, 22-24.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Conditional Cube Attack on Reduced-Round Keccak Sponge Function</title>
+		<author>
+			<persName><forename type="first">Senyang</forename><surname>Huang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyun</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guangwu</forename><surname>Xu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jingyuan</forename><surname>Zhao</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-56614-6_9</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">J</forename><surname>Coron</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">J</forename><forename type="middle">B</forename><surname>Nielsen</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Paris, France</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2017-04-30">2017. April 30 -May 4, 2017</date>
+			<biblScope unit="volume">10211</biblScope>
+			<biblScope unit="page" from="259" to="288" />
+		</imprint>
+	</monogr>
+	<note>Proceedings, Part II</note>
+	<note type="raw_reference">Huang, S., Wang, X., Xu, G., Wang, M., and Zhao, J. (2017) Conditional cube attack on reduced-round keccak sponge function. In Coron, J. and Nielsen, J. B. (eds.), Advances in Cryptology -EUROCRYPT 2017 -36th Annual International Conference on the Theory and Applications of Cryptographic Techniques, Paris, France, April 30 -May 4, 2017, Proceedings, Part II, Lecture Notes in Computer Science, 10211, pp. 259- 288.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Deep Residual Learning for Image Recognition</title>
+		<author>
+			<persName><forename type="first">Kaiming</forename><surname>He</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiangyu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaoqing</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2016.90</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<meeting><address><addrLine>Las Vegas, NV, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2016-06-27">2016. 2016. June 27-30, 2016</date>
+			<biblScope unit="page" from="770" to="778" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">He, K., Zhang, X., Ren, S., and Sun, J. (2016) Deep residual learning for image recognition. 2016 IEEE Conference on Computer Vision and Pattern Recognition, CVPR 2016, Las Vegas, NV, USA, June 27-30, 2016, pp. 770-778. IEEE Computer Society.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Advances in Cryptology – CRYPTO 2004</title>
+		<author>
+			<persName><forename type="first">E</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/b99099</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Advances in Cryptology -CRYPTO 2004, 24th Annual International Cryptolo-gyConference</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">M</forename><forename type="middle">K</forename><surname>Franklin</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Santa Barbara, California, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2004-08-15">2004. August 15-19, 2004</date>
+			<biblScope unit="volume">3152</biblScope>
+			<biblScope unit="page" from="290" to="305" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham, E. and Chen, R. (2004) Near-collisions of SHA- 0. In Franklin, M. K. (ed.), Advances in Cryptology -CRYPTO 2004, 24th Annual International Cryptolo- gyConference, Santa Barbara, California, USA, August 15-19, 2004, Proceedings, Lecture Notes in Computer Science, 3152, pp. 290-305. Springer.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Single-Image Depth Estimation Based on Fourier Domain Analysis</title>
+		<author>
+			<persName><forename type="first">Jae-Han</forename><surname>Lee</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Minhyeok</forename><surname>Heo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kyung-Rae</forename><surname>Kim</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chang-Su</forename><surname>Kim</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2018.00042</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition</title>
+		<meeting><address><addrLine>Salt Lake City, UT, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2018-06-18">2018. 2018. June 18-22, 2018</date>
+			<biblScope unit="page" from="330" to="339" />
+		</imprint>
+		<respStmt>
+			<orgName>Computer Vision Foundation / IEEE Computer Society</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Lee, J., Heo, M., Kim, K., and Kim, C. (2018) Single-image depth estimation based on fourier domain analysis. 2018 IEEE Conference on Computer Vision and Pattern Recognition, CVPR 2018, Salt Lake City, UT, USA, June 18-22, 2018, pp. 330-339. Computer Vision Foundation / IEEE Computer Society.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Recognizing human actions: a local SVM approach</title>
+		<author>
+			<persName><forename type="first">C</forename><surname>Schuldt</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">I</forename><surname>Laptev</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><surname>Caputo</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/icpr.2004.1334462</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 17th International Conference on Pattern Recognition, 2004. ICPR 2004.</title>
+		<meeting>the 17th International Conference on Pattern Recognition, 2004. ICPR 2004<address><addrLine>Cambridge, UK</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2004-08-23">2004. August 23-26, 2004</date>
+			<biblScope unit="page" from="32" to="36 Vol.3" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Schüldt, C., Laptev, I., and Caputo, B. (2004) Recognizing human actions: A local SVM approach. 17th International Conference on Pattern Recognition, ICPR 2004, Cambridge, UK, August 23-26, 2004, pp. 32-36. IEEE Computer Society.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Learning Monocular Depth Estimation Infusing Traditional Stereo Knowledge</title>
+		<author>
+			<persName><forename type="first">Fabio</forename><surname>Tosi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Filippo</forename><surname>Aleotti</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matteo</forename><surname>Poggi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefano</forename><surname>Mattoccia</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2019.01003</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<meeting><address><addrLine>Long Beach, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2019-06-16">2019. June 16-20, 2019</date>
+			<biblScope unit="page" from="9791" to="9801" />
+		</imprint>
+		<respStmt>
+			<orgName>Computer Vision Foundation / IEEE</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Tosi, F., Aleotti, F., Poggi, M., and Mattoccia, S. (2019) Learning monocular depth estimation infusing traditional stereo knowledge. IEEE Conference on Computer Vision and Pattern Recognition, CVPR 2019, Long Beach, CA, USA, June 16-20, 2019, pp. 9799-9809. Computer Vision Foundation / IEEE.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Hierarchical Posture Representation for Robust Action Recognition</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Yu</surname></persName>
+			<idno type="ORCID">0000-0002-5060-2558</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Kaoru</forename><surname>Ota</surname></persName>
+			<idno type="ORCID">0000-0002-3382-1652</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Mianxiong</forename><surname>Dong</surname></persName>
+			<idno type="ORCID">0000-0002-2788-3451</idno>
+		</author>
+		<idno type="DOI">10.1109/tcss.2019.2934639</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Computational Social Systems</title>
+		<title level="j" type="abbrev">IEEE Trans. Comput. Soc. Syst.</title>
+		<idno type="ISSNe">2373-7476</idno>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="1115" to="1125" />
+			<date type="published" when="2019-10">2019</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen, Y., Yu, L., Ota, K., and Dong, M. (2019) Hierarchical posture representation for robust action recognition. IEEE Trans. Comput. Soc. Syst., 6, 1115- 1125.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Information Processing in Cells and Tissues</title>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">P</forename><surname>Kingma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ba</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-23108-2</idno>
+	</analytic>
+	<monogr>
+		<title level="m">3rd International Conference on Learning Representations, ICLR 2015</title>
+		<editor>
+			<persName><forename type="first">Y</forename><surname>Bengio</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">Y</forename><surname>Lecun</surname></persName>
+		</editor>
+		<meeting><address><addrLine>San Diego, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2015-05-07">2015. May 7-9, 2015</date>
+		</imprint>
+	</monogr>
+	<note>Conference Track Proceedings</note>
+	<note type="raw_reference">Kingma, D. P. and Ba, J. (2015) Adam: A method for stochastic optimization. In Bengio, Y. and LeCun, Y. (eds.), 3rd International Conference on Learning Representations, ICLR 2015, San Diego, CA, USA, May 7-9, 2015, Conference Track Proceedings.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b23">
+	<monogr>
+		<author>
+			<persName><forename type="first">F</forename><surname>Chollet</surname></persName>
+		</author>
+		<ptr target="https://github.com/fchollet/keras" />
+		<title level="m">Keras</title>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chollet, F. et al. (2015). Keras. https://github.com/ fchollet/keras.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Round-Reduced Simon and Speck</title>
+		<author>
+			<persName><forename type="first">Farzaneh</forename><surname>Abed</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eik</forename><surname>List</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Lucks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakob</forename><surname>Wenzel</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-46706-0_27</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">C</forename><surname>Cid</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">C</forename><surname>Rechberger</surname></persName>
+		</editor>
+		<meeting><address><addrLine>London, UK</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2014-03-03">2014. March 3-5, 2014</date>
+			<biblScope unit="volume">8540</biblScope>
+			<biblScope unit="page" from="525" to="545" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Abed, F., List, E., Lucks, S., and Wenzel, J. (2014) Differential cryptanalysis of round-reduced simon and speck. In Cid, C. and Rechberger, C. (eds.), Fast Software Encryption -21st International Workshop, FSE 2014, London, UK, March 3-5, 2014. Revised Selected Papers, Lecture Notes in Computer Science, 8540, pp. 525-545. Springer.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">A metaanalysis of overfitting in machine learning</title>
+		<author>
+			<persName><forename type="first">R</forename><surname>Roelofs</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Shankar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><surname>Recht</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Fridovich-Keil</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Hardt</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><surname>Schmidt</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Advances in Neural Information Processing Systems 32: Annual Conference on Neural Information Processing Systems 2019, NeurIPS 2019</title>
+		<editor>
+			<persName><forename type="first">H</forename><forename type="middle">M</forename><surname>Wallach</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">H</forename><surname>Larochelle</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">A</forename><surname>Beygelzimer</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">F</forename><surname>Alché-Buc</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">E</forename><forename type="middle">B</forename><surname>Fox</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">R</forename><surname>Garnett</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Vancouver, BC, Canada</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2019-12-08">2019. December 8-14, 2019</date>
+			<biblScope unit="page" from="9175" to="9185" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Roelofs, R., Shankar, V., Recht, B., Fridovich-Keil, S., Hardt, M., Miller, J., and Schmidt, L. (2019) A meta- analysis of overfitting in machine learning. In Wallach, H. M., Larochelle, H., Beygelzimer, A., d&apos;Alché-Buc, F., Fox, E. B., and Garnett, R. (eds.), Advances in Neural Information Processing Systems 32: Annual Conference on Neural Information Processing Systems 2019, NeurIPS 2019, December 8-14, 2019, Vancouver, BC, Canada, pp. 9175-9185.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Progress in Cryptology – AFRICACRYPT 2008</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Wang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-68164-9</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Progress in Cryptology -AFRICACRYPT 2008, First International Conference on Cryptology in Africa</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">S</forename><surname>Vaudenay</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Casablanca, Morocco</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2008-06-11">2008. June 11-14, 2008</date>
+			<biblScope unit="volume">5023</biblScope>
+			<biblScope unit="page" from="40" to="49" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang, M. (2008) Differential cryptanalysis of reduced- round PRESENT. In Vaudenay, S. (ed.), Progress in Cryptology -AFRICACRYPT 2008, First Interna- tional Conference on Cryptology in Africa, Casablanca, Morocco, June 11-14, 2008. Proceedings, Lecture Notes in Computer Science, 5023, pp. 40-49. Springer.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis of DES-like cryptosystems</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bf00630563</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="3" to="72" />
+			<date type="published" when="1991-01">1991</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham, E. and Shamir, A. (1991) Differential cryptanalysis of des-like cryptosystems. J. Cryptol., 4, 3-72.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

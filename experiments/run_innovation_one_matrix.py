@@ -64,6 +64,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--weight-decay", type=float, default=0.0)
     parser.add_argument(
+        "--loss",
+        default="bce",
+        choices=["bce", "mse"],
+        help="Training loss. Use mse for Zhang/Wang-style probability regression.",
+    )
+    parser.add_argument(
         "--lr-scheduler",
         default="none",
         choices=["none", "cyclic", "cosine_warmup"],
@@ -103,6 +109,7 @@ def parse_args() -> argparse.Namespace:
         default="ciphertext_pair_bits",
         choices=[
             "ciphertext_pair_bits",
+            "present_mcnd_cell_matrix_bits",
             "ciphertext_xor_bits",
             "ciphertext_xor_spn_aligned_bits",
             "ciphertext_xor_spn_paligned_bits",
@@ -355,16 +362,17 @@ def _run_task(
         TrainingConfig(
             epochs=args.epochs,
             batch_size=args.batch_size,
-            learning_rate=args.learning_rate,
-            optimizer=args.optimizer,
+            learning_rate=float(task.get("learning_rate") or args.learning_rate),
+            optimizer=str(task.get("optimizer") or args.optimizer),
             amsgrad=args.amsgrad,
-            weight_decay=args.weight_decay,
-            lr_scheduler=args.lr_scheduler,
-            max_learning_rate=args.max_learning_rate,
-            checkpoint_metric=args.checkpoint_metric,
-            restore_best_checkpoint=args.restore_best_checkpoint,
-            early_stopping_patience=args.early_stopping_patience,
-            early_stopping_min_delta=args.early_stopping_min_delta,
+            weight_decay=float(task.get("weight_decay") if task.get("weight_decay") is not None else args.weight_decay),
+            lr_scheduler=str(task.get("lr_scheduler") or args.lr_scheduler),
+            max_learning_rate=task.get("max_learning_rate") if task.get("max_learning_rate") is not None else args.max_learning_rate,
+            checkpoint_metric=str(task.get("checkpoint_metric") or args.checkpoint_metric),
+            restore_best_checkpoint=bool(task.get("restore_best_checkpoint") if task.get("restore_best_checkpoint") is not None else args.restore_best_checkpoint),
+            early_stopping_patience=int(task.get("early_stopping_patience") if task.get("early_stopping_patience") is not None else args.early_stopping_patience),
+            early_stopping_min_delta=float(task.get("early_stopping_min_delta", args.early_stopping_min_delta)),
+            loss=str(task.get("loss", args.loss)),
             seed=task["seed"],
             device=args.device,
         ),
@@ -495,6 +503,7 @@ def _task_progress_payload(task: dict[str, Any]) -> dict[str, Any]:
         "difference_member": task.get("difference_member", ""),
         "sample_structure": task["sample_structure"],
         "integral_active_nibble": task["integral_active_nibble"],
+        "loss": task.get("loss", ""),
     }
 
 
@@ -589,6 +598,7 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
                             "key_rotation_interval": args.key_rotation_interval,
                             "sample_structure": args.sample_structure,
                             "integral_active_nibble": args.integral_active_nibble,
+                            "loss": args.loss,
                             "model_options": {},
                             "train_key": None,
                             "validation_key": None,
@@ -652,6 +662,16 @@ def _plan_task(
             "integral_active_nibble": _optional_int(row.get("integral_active_nibble"))
             if row.get("integral_active_nibble") not in {None, ""}
             else 0,
+            "loss": row.get("loss") or "bce",
+            "learning_rate": _optional_float(row.get("learning_rate")),
+            "optimizer": row.get("optimizer") or None,
+            "weight_decay": _optional_float(row.get("weight_decay")),
+            "lr_scheduler": row.get("lr_scheduler") or None,
+            "max_learning_rate": _optional_float(row.get("max_learning_rate")),
+            "checkpoint_metric": row.get("checkpoint_metric") or None,
+            "restore_best_checkpoint": _optional_bool(row.get("restore_best_checkpoint")),
+            "early_stopping_patience": _optional_int(row.get("early_stopping_patience")),
+            "early_stopping_min_delta": _optional_float(row.get("early_stopping_min_delta")),
             "model_options": _optional_json(row.get("model_options")),
             "train_key": _optional_int(row.get("train_key")),
             "validation_key": _optional_int(row.get("validation_key")),
@@ -738,6 +758,28 @@ def _optional_json(value: str | None) -> dict[str, Any]:
         raise ValueError("model_options must be a JSON object")
     return parsed
 
+
+
+def _optional_float(value: str | None) -> float | None:
+    if value is None:
+        return None
+    value = value.strip()
+    if not value:
+        return None
+    return float(value)
+
+
+def _optional_bool(value: str | None) -> bool | None:
+    if value is None:
+        return None
+    value = value.strip().lower()
+    if not value:
+        return None
+    if value in {"1", "true", "yes", "y"}:
+        return True
+    if value in {"0", "false", "no", "n"}:
+        return False
+    raise ValueError(f"unsupported boolean value: {value}")
 
 def _optional_int(value: str | None) -> int | None:
     if value is None:

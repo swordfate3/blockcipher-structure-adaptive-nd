@@ -258,3 +258,34 @@ def test_train_binary_classifier_supports_disk_backed_dataset_without_eager_tens
     assert result.metadata["train_dataset_storage"] == "disk"
     assert result.metadata["validation_dataset_storage"] == "disk"
     assert len(result.history) == 1
+
+
+def test_train_binary_classifier_supports_mse_probability_loss():
+    dataset = make_differential_dataset(
+        DifferentialDatasetConfig(
+            cipher=Speck32_64(rounds=2, key=0x1918111009080100),
+            input_difference=0x0040,
+            samples_per_class=32,
+            seed=6,
+        )
+    )
+    model = MlpDistinguisher(input_bits=dataset.features.shape[1], hidden_bits=16)
+    config = TrainingConfig(
+        epochs=2,
+        batch_size=16,
+        learning_rate=1e-4,
+        seed=99,
+        optimizer="adam",
+        weight_decay=1e-5,
+        lr_scheduler="cyclic",
+        max_learning_rate=2e-3,
+        loss="mse",
+    )
+
+    result = train_binary_classifier(model, dataset, dataset, config)
+
+    assert result.metadata["loss"] == "mse"
+    assert result.metadata["optimizer"] == "adam"
+    assert result.metadata["weight_decay"] == 1e-5
+    assert result.metadata["lr_scheduler"] == "cyclic"
+    assert len(result.history) == 2

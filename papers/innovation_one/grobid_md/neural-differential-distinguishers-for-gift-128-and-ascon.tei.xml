@@ -1,0 +1,1388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Neural differential distinguishers for GIFT-128 and ASCON</title>
+				<funder ref="#_RgAAsZJ">
+					<orgName type="full">Open Project of the State Key Laboratory of Computer Science, Institute of Software, Chinese Academy of Sciences</orgName>
+				</funder>
+				<funder ref="#_E3dy9QU">
+					<orgName type="full">National Key R&amp;D Program of China</orgName>
+				</funder>
+				<funder ref="#_Yu5Ez2k #_msJPBYQ">
+					<orgName type="full">National Natural Science Foundation of China</orgName>
+				</funder>
+				<funder ref="#_PzbhsdK">
+					<orgName type="full">National Natural Science Foundation of Hunan Province</orgName>
+				</funder>
+				<funder ref="#_fb7qHtv">
+					<orgName type="full">Research Foundation of Education Bureau of Hunan Province</orgName>
+				</funder>
+				<funder ref="#_7djKcYB">
+					<orgName type="full">Xiangtan University scientific research</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>Elsevier BV</publisher>
+				<availability  status="unknown">
+					<licence/>
+				</availability>
+				<date type="published" when="2024-05">8 April 2024 2214</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="consolidated" source="crossref">
+					<analytic>
+						<author>
+							<persName><forename type="first">Dongsu</forename><surname>Shen</surname></persName>
+							<email>dsshen@xtu.edu.cn</email>
+							<idno type="ORCID">0009-0008-1973-8001</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>a</label> School of Computer Science &amp; School of Cyberspace Security , Xiangtan University , Xiangtan , 411105 , China</note>
+								<orgName type="department" key="dep1">School of Computer Science</orgName>
+								<orgName type="department" key="dep2">School of Cyberspace Security</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>b</label> Hunan International Scientific and Technological Cooperation Base of Intelligent network , Xiangtan University , Xiangtan , 411105 , China</note>
+								<orgName type="department">Hunan International Scientific and Technological Cooperation Base of Intelligent network</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>c</label> Key Laboratory of Hunan Province for Internet of Things and Information Security , Xiangtan University , Xiangtan , Hunan , 411105 , China</note>
+								<orgName type="laboratory">Key Laboratory of Hunan Province for Internet of Things and Information Security</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan Hunan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Yijian</forename><surname>Song</surname></persName>
+							<email>songyijian33@163.com</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>a</label> School of Computer Science &amp; School of Cyberspace Security , Xiangtan University , Xiangtan , 411105 , China</note>
+								<orgName type="department" key="dep1">School of Computer Science</orgName>
+								<orgName type="department" key="dep2">School of Cyberspace Security</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>b</label> Hunan International Scientific and Technological Cooperation Base of Intelligent network , Xiangtan University , Xiangtan , 411105 , China</note>
+								<orgName type="department">Hunan International Scientific and Technological Cooperation Base of Intelligent network</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>c</label> Key Laboratory of Hunan Province for Internet of Things and Information Security , Xiangtan University , Xiangtan , Hunan , 411105 , China</note>
+								<orgName type="laboratory">Key Laboratory of Hunan Province for Internet of Things and Information Security</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan Hunan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Yuan</forename><surname>Lu</surname></persName>
+							<email>luyuan@iscas.ac.cn</email>
+							<idno type="ORCID">0000-0002-2765-1140</idno>
+							<affiliation key="aff3">
+								<note type="raw_affiliation"><label>d</label> Institute of Software , Chinese Academy of Sciences , Beijing , 100190 , China</note>
+								<orgName type="department">Institute of Software</orgName>
+								<orgName type="institution">Chinese Academy of Sciences</orgName>
+								<address>
+									<postCode>100190</postCode>
+									<settlement>Beijing</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Saiqin</forename><surname>Long</surname></persName>
+							<email>saiqinlong@jnu.edu.cn</email>
+							<affiliation key="aff4">
+								<note type="raw_affiliation"><label>e</label> College of Information Science and Technology , Jinan University , Guangzhou , 510632 , China</note>
+								<orgName type="department">College of Information Science and Technology</orgName>
+								<orgName type="institution">Jinan University</orgName>
+								<address>
+									<postCode>510632</postCode>
+									<settlement>Guangzhou</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Shujuan</forename><surname>Tian</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>a</label> School of Computer Science &amp; School of Cyberspace Security , Xiangtan University , Xiangtan , 411105 , China</note>
+								<orgName type="department" key="dep1">School of Computer Science</orgName>
+								<orgName type="department" key="dep2">School of Cyberspace Security</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>b</label> Hunan International Scientific and Technological Cooperation Base of Intelligent network , Xiangtan University , Xiangtan , 411105 , China</note>
+								<orgName type="department">Hunan International Scientific and Technological Cooperation Base of Intelligent network</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>c</label> Key Laboratory of Hunan Province for Internet of Things and Information Security , Xiangtan University , Xiangtan , Hunan , 411105 , China</note>
+								<orgName type="laboratory">Key Laboratory of Hunan Province for Internet of Things and Information Security</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan Hunan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<affiliation key="aff5">
+								<note type="raw_affiliation">School of Computer Science &amp; School of Cyberspace Security , Xiangtan University , Xiangtan , 411105 , China.</note>
+								<orgName type="department" key="dep1">School of Computer Science</orgName>
+								<orgName type="department" key="dep2">School of Cyberspace Security</orgName>
+								<orgName type="institution">Xiangtan University</orgName>
+								<address>
+									<postCode>411105</postCode>
+									<settlement>Xiangtan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Neural differential distinguishers for GIFT-128 and ASCON</title>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">Journal of Information Security and Applications</title>
+						<title level="j" type="abbrev">Journal of Information Security and Applications</title>
+						<idno type="ISSN">2214-2126</idno>
+						<imprint>
+							<publisher>Elsevier BV</publisher>
+							<biblScope unit="volume">82</biblScope>
+							<biblScope unit="page">103758</biblScope>
+							<date type="published" when="2024-05">8 April 2024 2214</date>
+						</imprint>
+					</monogr>
+					<idno type="MD5">7AB3A1F566E36792857EB4927D4816A7</idno>
+					<idno type="DOI">10.1016/j.jisa.2024.103758</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-15T00:46+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>Neural distinguisher Differential cryptanalysis GIFT-128 ASCON</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>In CRYPTO 2019, Gohr first introduced a neural differential distinguisher for round-reduced SPECK32/64 to distinguish ciphertext pairs with a specific input difference from random data, indicating a promising approach to the cryptanalysis of lightweight ciphers. This paper proposes a new neural differential distinguisher model for GIFT and ASCON, both of them are the finalists of the NIST Lightweight Cryptography Competition with ASCON being announced as the winner in February 2023. In our model, we utilize the score distribution of multiple ciphertext differences instead of a single ciphertext pair for classification, which is different from Gohr's model. First, we construct neural distinguishers to evaluate the scores for ciphertext differences. Then we train neural networks to classify the distribution of scores, which is more efficient than the traditional statistical tests such as the Kolmogorov-Smirnov test. Based on the proposed model, we improve the prediction accuracy from 55.42% to 99.36% and from 50.69% to 69.25% for 7-round GIFT-128 and 4-round ASCON-PERMUTATION respectively. Compared with the previous neural distinguisher for ASCON, our distinguisher covers an additional round and attains higher accuracy. The experimental results show that better results can be obtained with the lower hamming weight input difference, and the method presented in this paper can improve the effectiveness of cryptanalysis with neural networks.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.">Introduction</head><p>The Internet of Things (IoT) is rapidly developing and widely used in various fields. Since IoT devices are typically resource-constrained, such as sensors and RFIDs, the ciphers implemented on these devices must satisfy both security and performance requirements within this environment. This entails efficient design and implementation of ciphers <ref type="bibr" target="#b0">[1]</ref>. To fulfill these requirements, lightweight ciphers have been introduced <ref type="bibr" target="#b1">[2]</ref><ref type="bibr" target="#b2">[3]</ref><ref type="bibr" target="#b3">[4]</ref><ref type="bibr" target="#b4">[5]</ref> as a class of ciphers that have compact implementations for security. Due to their suitability for IoT devices, lightweight ciphers have gained prominence <ref type="bibr" target="#b5">[6]</ref>.</p><p>Compared with traditional ciphers such as the AES <ref type="bibr" target="#b6">[7]</ref>, lightweight ciphers are characterized by lower power consumption, smaller area requirement, less processing time, and cheaper cost <ref type="bibr" target="#b7">[8]</ref>. Lightweight cryptography is a subcategory of cryptography that aims to provide customized solutions for constrained devices <ref type="bibr" target="#b8">[9]</ref>. National Institute of Standards and Technology (NIST) <ref type="bibr" target="#b9">[10]</ref> announced the first and second-round candidates for the Lightweight Cryptography Competition in April 2019 and August 2019, respectively. In March 2021, Recent research has increasingly considered applying machine learning to differential cryptanalysis, particularly in the context of lightweight ciphers. Gohr <ref type="bibr" target="#b20">[21]</ref> proposed an 8-round distinguisher for 𝚂𝙿𝙴𝙲𝙺𝟹𝟸∕𝟼𝟺 constructed with a deep residual network at CRYPTO 2019, and performed efficient key recovery attacks with it. Subsequently, Benamira et al. <ref type="bibr" target="#b21">[22]</ref> analyzed the underlying mechanisms of Gohr's distinguishers in detail from the perspectives of cryptanalysis and machine learning at EUROCRYPT in 2021, they pointed out that the network constructed a highly accurate approximated Difference Distribution Table (DDT), and proposed a method for improving Gohr's distinguishers. In another study, Su et al. <ref type="bibr" target="#b22">[23]</ref> constructed a neural differential distinguisher for the 9-round lightweight cipher 𝚂𝚒𝚖𝚘𝚗𝟹𝟸∕𝟼𝟺 based on the polytopic differential attack and performed key recovery attacks on 11 rounds of 𝚂𝚒𝚖𝚘𝚗𝟹𝟸∕𝟼𝟺.</p><p>Baksi et al. proposed two training models for constructing machine learning-based differential distinguishers in <ref type="bibr" target="#b23">[24]</ref>. They constructed distinguishers for four lightweight ciphers, including one for 3-round 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 using 2 19 training data, and compared the training effects of different machine learning models. In a related study, Rajan et al. <ref type="bibr" target="#b24">[25]</ref> further developed Baksi's machine learning models of differential distinguisher and trained several distinguishers on 6-round 𝙶𝙸𝙵𝚃-𝙲𝙾𝙵𝙱 with Wang's input differences <ref type="bibr" target="#b25">[26]</ref>.</p><p>Chen et al. <ref type="bibr" target="#b26">[27]</ref> considered features derived from multiple ciphertext pairs to construct distinguishers and improved the accuracy of distinguishers for 𝚂𝙿𝙴𝙲𝙺𝟹𝟸∕𝟼𝟺 with their new model. Bao et al. <ref type="bibr" target="#b27">[28]</ref> provided explicit rules that can be used alongside DDTs to improve full DDT-based distinguishers, and conducted a 14-round key recovery attack on 𝚂𝙿𝙴𝙲𝙺𝟹𝟸∕𝟼𝟺 successfully by introducing related-key differences to neural distinguishers.</p><p>Liu et al. <ref type="bibr" target="#b28">[29]</ref> proposed two models of neural distinguishers utilizing a new input data generation method. With these new models, they constructed distinguishers for the Speck and Simon families, achieving enhanced performance compared to prior approaches. Teng et al. <ref type="bibr" target="#b29">[30]</ref> pointed out that the distinguishing probability of neural distinguishers is significantly influenced by the designs of round functions, and presented some variants of that to compare their resistance against neural distinguishers.</p><p>Motivations: Some previous neural distinguishers take a pair of ciphertexts or the difference between the two ciphertexts as input, and then output a real-valued score representing the probability that the ciphertext pair is real. The limitation of these distinguishers is that the features among ciphertext pairs are not exploited, their distinguishing only depends on the features derived from a single ciphertext pair, which are not robust. Based on this, we will utilize the score distribution of multiple ciphertext differences instead of a single ciphertext difference for classification.</p><p>In this paper, we propose a new model to improve the accuracy of neural distinguishers and demonstrate our model on round-reduced 𝙶𝙸𝙵𝚃 and 𝙰𝚂𝙲𝙾𝙽. Both 𝙶𝙸𝙵𝚃 and 𝙰𝚂𝙲𝙾𝙽 are the finalists in the NIST Lightweight Cryptography (LWC) Competition, with 𝙰𝚂𝙲𝙾𝙽 emerging as the winner in the final round. The main contributions are listed as follows:</p><p>• A new method is proposed to distinguish ciphertext differences, by considering multiple ciphertext differences as a single input. We first train a neural distinguisher for the round-reduced cipher, which can output a score representing the probability that the ciphertext difference is real. Then we train another neural network to classify the score distributions of real and random differences. Thus, ciphertext differences can be distinguished by identifying the distribution of scores evaluated by the neural distinguisher. This method improves the accuracy of neural distinguishers that distinguish one ciphertext difference each time.</p><p>• Neural distinguishers learn the distribution of ciphertext differences instead of following a single differential trail, therefore the differential transition with the highest probability may not necessarily provide the best learning result. We conduct some experiments to compare the differences with hamming weights of 1 to 5, and the results suggest that starting with an input difference with hamming weight 1 is more likely to yield high accuracy.</p><p>• We compare the accuracy of the existing distinguishers model with ours on 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽. Although the existing model takes multiple ciphertext pairs as input, our new model achieves higher accuracy. Because our distinguishers do not overfit severely like the existing model as the group size increases.</p><p>This paper will be structured as follows. Section 2 briefly introduces the preliminaries of differential cryptanalysis, 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽. We propose our model of neural distinguishers in Section 3 and provide a comparison with previous neural distinguishers. In Section 4, we present our neural distinguishers for 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽, and discuss the influence of input differences with different hamming weights. Then we perform some experiments to compare the existing model with ours. Finally, Section 5 gives a summary of our work.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.">Preliminaries</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1.">Specification of differential cryptanalysis</head><p>Biham and Shamir <ref type="bibr" target="#b11">[12]</ref> proposed differential cryptanalysis in 1991, which is a chosen-plaintext attack that studies the characteristics of the differential transition in the encryption process. It aims to recover part of the key bits by analyzing how the difference between plaintext pairs influences the difference between ciphertext pairs. Now let 𝐸 ∶ F 𝑛 {0,1} → F 𝑛 {0,1} be a cryptographic function and 𝑃 0 , 𝑃 1 are two inputs for 𝐸 with the input difference 𝛿 𝑎 = 𝑃 0 ⊕ 𝑃 1 . Let 𝐶 0 = 𝐸(𝑃 0 ), 𝐶 1 = 𝐸(𝑃 1 ) with the output difference 𝛿 𝑏 = 𝐶 0 ⊕𝐶 1 . We refer to 𝛿 𝑎 → 𝛿 𝑏 as the differential transition, and the differential transition probability Pr(𝛿 𝑎 → 𝛿 𝑏 ) is defined as</p><formula xml:id="formula_0">Pr(𝛿 𝑎 → 𝛿 𝑏 ) = Pr(𝐸(𝑚) ⊕ 𝐸(𝑚 ⊕ 𝛿 𝑎 ) = 𝛿 𝑏 ) = | | | { 𝑚 ∈ {0, 1} 𝑛 ∶ 𝐸(𝑚) ⊕ 𝐸 ( 𝑚 ⊕ 𝛿 𝑎 ) = 𝛿 𝑏 } | | | 2 𝑛</formula><p>For random permutation on {0, 1} 𝑛 , if the difference transition 𝛿 𝑎 → 𝛿 𝑏 is given arbitrarily, its average probability 𝑃 = 1  2 𝑛 -1 ≈ 1 2 𝑛 . The Differential Distribution Table (DDT) is constructed by analyzing the differential transition characteristics of the nonlinear component in the encryption, which are usually S-boxes. This is because storing the DDT of an entire cipher with a large state (e.g. 128-bit) is impractical. After that, a 𝑟-round differential distinguisher can be obtained by identifying a high-probability differential characteristic with the chosen input difference. The key recovery attack can then be performed on 𝑟 + 1 round ciphertexts, wherein the last round key is hypothesized and employed to decrypt the ciphertext pairs. The differential distinguisher is used to evaluate the authenticity of the guessed key, and the key with the highest authenticity is selected for further key recovery attacks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2.">Specification of 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾</head><p>𝙶𝙸𝙵𝚃 is a lightweight block cipher designed by Banik et al. <ref type="bibr" target="#b30">[31]</ref>, based on the Substitution-Permutation Network (SPN) structure. It has two versions, namely 𝙶𝙸𝙵𝚃-𝟼𝟺 and 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾. In this article, we exclusively focus on the 128-bit version, where both the block size and key length are 128 bits. The round function is performed 40 times in 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾. The round function comprises three steps: SubCells, PermBits, and AddRoundKey. Before performing the first step, The cipher state 𝑆 is initialized with the 128-bit plaintext, which is segmented into four 32bit segments. Likewise, the key state 𝐾𝑆 is initialized with the 128-bit key, which is divided into eight 16-bit words.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>SubCells. This step uses an invertible 4-bit S-box 𝑆(𝑥). Table 1 shows a lookup table of the S-box represented in hexadecimal notation.</head><p>PermBits. Each cipher state 𝑆 𝑖 applies different 32-bit permutations as shown in Table <ref type="table" target="#tab_1">2</ref>.</p><p>AddRoundKey. The addition of the round key and round constant is involved in this step. The round key is denoted as 𝑅𝐾 = 𝑈 ∥ 𝑉 , where 𝑈 , 𝑉 are extracted from the key state with 32 bits. More description about the key schedule can be found at <ref type="bibr" target="#b30">[31]</ref>.</p><p>To add the round key, U and V are XORed to the state 𝑆 as follows,</p><formula xml:id="formula_1">𝑆 2 ← 𝑆 2 ⊕ 𝑈 , 𝑆 1 ← 𝑆 1 ⊕ 𝑉 .</formula><p>To add the round constant, 𝑆 3 is updated as follows,</p><formula xml:id="formula_2">𝑆 3 ← 𝑆 3 ⊕ 0𝑥800000𝑋𝑌 ,</formula><p>where the byte XY = 00𝑐 5 𝑐 4 𝑐 3 𝑐 2 𝑐 1 𝑐 0 .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3.">Specification of 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽</head><p>𝙰𝚂𝙲𝙾𝙽, designed by Dobraunig et al. <ref type="bibr" target="#b31">[32]</ref>, is a permutation-based lightweight cipher. It is based on the monkeyDuplex <ref type="bibr" target="#b32">[33]</ref> construction which is a classical sponge construction. 𝙰𝚂𝙲𝙾𝙽 operates on a state size of 320-bit (consisting of five 64-bit words 𝑥 0 , … , 𝑥 4 ), and the main component is a 320-bit permutation instantiated with different constants and the number of rounds. 𝙰𝚂𝙲𝙾𝙽 is the winner of the CAESAR competition and NIST competition.</p><p>We only consider the 320-bit permutation for training our neural distinguishers, providing a brief overview of the 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽. For a complete description of the cipher, we refer to <ref type="bibr" target="#b31">[32]</ref>. Each round of the permutation consists of three steps: Addition of Constants, Substitution Layer, and Linear Diffusion Layer. These three are iteratively applied for 12 rounds in the 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 𝑝 12 .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Addition of Constants.</head><p>In this step 𝑝 𝐶 , a round constant 𝑐 𝑟 is added to register word 𝑥 2 of the state 𝑆(𝑆 = 𝑥 0 ‖𝑥 1 ‖𝑥 2 ‖𝑥 3 ‖𝑥 4 ) in each round. The round constants are stated in Table <ref type="table">3</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Substitution Layer.</head><p>In this layer 𝑝 𝑆 , a 5-bit S-box is applied 64 times in parallel to update the state. Each bit of the five 64-bit words (𝑥0, … , 𝑥4) contributes one bit to each of the 64 S-boxes, where 𝑥 0 is the most significant bit. The lookup table of the S-box is shown in Table <ref type="table">4</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Linear Diffusion Layer.</head><p>In this layer 𝑝 𝐿 , each 64-bit register word 𝑥 𝑖 is diffused by the linear function 𝛴 𝑖 ( 𝑥 𝑖 ) , 𝑥 𝑖 ← 𝛴 𝑖 ( 𝑥 𝑖 ) for 𝑖 = 0, … , 4:</p><formula xml:id="formula_3">𝑥 0 ← 𝛴 0 ( 𝑥 0 ) = 𝑥 0 ⊕ ( 𝑥 0 ⋙ 19 ) ⊕ ( 𝑥 0 ⋙ 28 ) 𝑥 1 ← 𝛴 1 ( 𝑥 1 ) = 𝑥 1 ⊕ ( 𝑥 1 ⋙ 61 ) ⊕ ( 𝑥 1 ⋙<label>39</label></formula><formula xml:id="formula_4">)</formula><formula xml:id="formula_5">𝑥 2 ← 𝛴 2 ( 𝑥 2 ) = 𝑥 2 ⊕ ( 𝑥 2 ⋙ 1 ) ⊕ ( 𝑥 2 ⋙ 6 ) 𝑥 3 ← 𝛴 3 ( 𝑥 3 ) = 𝑥 3 ⊕ ( 𝑥 3 ⋙ 10 ) ⊕ ( 𝑥 3 ⋙<label>17</label></formula><formula xml:id="formula_6">)</formula><formula xml:id="formula_7">𝑥 4 ← 𝛴 4 ( 𝑥 4 ) = 𝑥 4 ⊕ ( 𝑥 4 ⋙ 7 ) ⊕ ( 𝑥 4 ⋙<label>41</label></formula><formula xml:id="formula_8">)</formula><p>𝑥 ⋙ 𝑖 indicates right-rotation (circular shift) by 𝑖 bits of the 64-bit word 𝑥.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.">New model of neural distinguishers</head><p>Differential distinguisher is a crucial component in the key recovery attack of differential cryptanalysis. The traditional differential distinguisher works with a differential characteristic that provides the highest probability transition from a chosen input difference to a ciphertext difference. Therefore, constructing a traditional differential distinguisher typically involves high data complexity. Neural distinguishers are trained to distinguish ciphertext differences with a fixed input difference from random ciphertext differences. They do not rely on the optimal differential characteristic, which reduces the data complexity of construction.</p><p>The proposed new model of neural distinguishers consists of two components: construction of neural distinguishers and prediction with multiple ciphertext differences. Both parts are implemented based on Multi-Layer Perceptron (MLP). The overall architecture of our new model is shown in Fig. <ref type="figure" target="#fig_1">1</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1.">Construction of neural distinguishers</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1.1.">Data generation</head><p>The training and validation data for our neural distinguishers includes the differences between 𝑟-round ciphertext pairs encrypted from plaintext pairs with the chosen difference, as well as 𝑟-round ciphertext differences obtained from random plaintext pairs. The labels for these differences are binary, with values of 1 or 0. The generation of datasets can be found in Algorithm 1. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1.2.">Network architecture and training pipeline</head><p>Network Architecture: The MLP network takes ciphertext differences as input, with 128-bit for 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 320-bit for 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽. There are three hidden layers, with the same number of neurons as the input layer and ReLU activation function in each layer. The final layer outputs a real-valued score after a sigmoid activation function.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Training Pipeline:</head><p>We take Binary Cross-Entropy Loss as the loss function since distinguishing differences can be seen as a binary classification task. Adam with default parameters in Keras is used as the optimizer. The training and validation of our neural distinguishers use the labeled datasets as described above. For each input ciphertext difference, the score between 0 and 1 calculated by the neural distinguisher representing the probability that the ciphertext difference is real. The distinguisher is built as follows:   </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Table 3</head><p>The round constants 𝑐 𝑟 used in each round of 𝑝 12 .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>𝑝 12</head><p>Constant 𝑐 𝑟 𝑝 12  Constant 𝑐 𝑟</p><formula xml:id="formula_9">0 0𝑥f0 6 0𝑥96 1 0𝑥e1 7 0𝑥87 2 0𝑥d2 8 0𝑥78 3 0𝑥c3 9 0𝑥69 4 0𝑥b4<label>10</label></formula><p>0𝑥5a 5 0𝑥a5 11 0𝑥4b Step 3. If the validation accuracy is lower than or equal to 50%, the training has been overfitting. Return to Step 1 or refine the data generation process if necessary. Step 4. The neural network now is a valid neural distinguisher. Return the network with the lowest validation loss.</p><p>When testing the neural distinguisher with different sets, if the ciphertext differences in the set have the chosen input difference, the probability of classification as 1 (true positive rate) is expected to be lower than the validation accuracy. However, if the input differences of ciphertext differences are chosen randomly, the probability of classification as 0 (true negative rate) is likely to be higher than the validation accuracy. This is because the neural distinguisher can learn some significant features from the training data, but not all ciphertext differences have these features. Therefore, the neural distinguisher would classify ciphertext differences that do not conform to these features as random. In a word, distinguishing a specific input difference is generally more difficult than distinguishing random input differences.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2.">Prediction with multiple ciphertext differences 3.2.1. Motivations</head><p>When employing a neural distinguisher with validation accuracy slightly exceeding 50% for prediction, the classification accuracy for a set of real ciphertext differences will be equal to (or slightly lower than) 50%. It is hard to get convincing prediction results. However, we believe that this neural distinguisher has learned enough information to distinguish real differences from random differences.</p><p>We count the number of scores for ciphertext differences in each interval: [0, 0.1), [0.1, 0.2), …, [0.9, 1] for real and random sets. An example is shown in Fig. <ref type="figure" target="#fig_3">2</ref>. We chose the neural distinguisher of 6-round 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 with 77.06% validation accuracy to show the distribution of scores more clearly in the histogram. In fact, for all neural distinguishers with a validation accuracy higher than 50%, there exists a significant distinction in the score distribution of real and random sets. Classification can be done by identifying the distribution of scores. Neural networks learn features of ciphertext differences in the training data, and output highly similar scores for differences with identical features. In addition, the distribution of differences in different sets of the same size exhibits remarkable similarity. Therefore, the object of classification should be a set of differences rather than a single difference.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2.2.">Classification based on the score distribution</head><p>So we decide to classify multiple ciphertext differences at once based on the score distribution, and the accuracy in the training and validation is only seen as an indicator of whether the training is effective. On a theoretical level, a neural distinguisher with a validation accuracy higher than 50% can be improved to achieve higher prediction accuracy.</p><p>It can be implemented with statistical tests, such as the Kolmogorov-Smirnov (K-S) test, which quantifies the distance between the D. Shen et al.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Table 4</head><p>The 5-bit S-box of 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽.</p><p>x 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 𝑆(𝑥) 4 11 31 20 26 21 9 2 27 5 8 18 29 3 6 28 x 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 𝑆(𝑥) 30 19 7 14 0 13 17 24 16 12 1 25 22 10 15 23</p><p>empirical distribution functions of two samples to check whether the two data samples come from the same distribution. A test set with multiple ciphertext differences is classified as follows: first, we generate a set of real differences and evaluate the scores of these differences with the neural distinguisher. This set of scores is seen as the stand score distribution of real differences. Then we compute the K-S test statistic and its 𝑝-value for scores of the test set and the stand distribution. If the 𝑝-value exceeds 0.05, the test set will be classified as real and random otherwise. We need a large set of differences to improve the accuracy of neural distinguishers with the K-S test. However, it would increase the data complexity of prediction. In terms of this issue, we use MLP to learn the distribution of scores and then classify a test set with the information learned by the neural network. We refer to the method of checking the score distribution with MLP as the MLP test. This helps us to perform classification more efficiently.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2.3.">MLP test</head><p>Network Architecture: Let 𝑠 denote the number of ciphertext differences in a sample. The input layer consists of 𝑠 units and receives scores evaluated by the neural distinguisher. There are two hidden layers, the number of neurons in each layer is 64 if 𝑠 ≤ 64, and 𝑠 if 𝑠 &gt; 64. The activation function in hidden layers is ReLU. The final layer outputs a real-valued score after a sigmoid activation function.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Training Pipeline:</head><p>The loss function is Binary Cross-Entropy Loss and the optimizer is Adam with default parameters in Keras. We train the MLP test by following steps:</p><p>1. Generate ciphertext differences with the chosen input difference and obtain their scores. Divide these scores into groups, each containing 𝑠 scores, and then sort the 𝑠 scores in ascending order (or descending order). Sorting aims to remove the positional relations of scores. Similarly, generate groups of scores for random ciphertext differences. 2. Generate training and validation dataset: half the data comes from score groups of real differences with label 1, and the other half is from score groups of random differences with label 0. 3. Train the neural network with training and validation dataset obtained as described above. If the validation accuracy is greater than that of the neural distinguisher, the MLP test is valid. If not, generate datasets with larger 𝑠 and retrain.</p><p>We apply the MLP test and K-S test to our neural distinguishers for round-reduced 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 in Sections 4.1 and 4.2. The results demonstrate the improvement of prediction with multiple differences to our neural distinguishers, and the MLP test is more efficient than the K-S test.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3.">Comparison with previous neural distinguishers</head><p>Gohr's Distinguishers. Gohr <ref type="bibr" target="#b20">[21]</ref> proposed distinguishers for 𝚂𝙿𝙴𝙲𝙺𝟹𝟸∕𝟼𝟺 <ref type="bibr" target="#b33">[34]</ref> constructed with a deep residual network. In a further study of Gohr's work, Benamira <ref type="bibr" target="#b21">[22]</ref> pointed out that Gohr's neural distinguishers effectively approximated the Difference Distribution Table (DDT) by the training of neural networks, and classified ciphertext pairs with this information.</p><p>For the training of neural distinguishers, Gohr generated training and validation data with a single input difference of the highestprobability transition found by their model. Differently, our neural  <ref type="bibr" target="#b23">[24]</ref> chose 𝙶𝙸𝙼𝙻𝙸 <ref type="bibr" target="#b34">[35]</ref>, 𝙰𝚂𝙲𝙾𝙽 <ref type="bibr" target="#b31">[32]</ref>, 𝙺𝙽𝙾𝚃 <ref type="bibr" target="#b35">[36]</ref>, and 𝙲𝙷𝙰𝚂𝙺𝙴𝚈 <ref type="bibr" target="#b36">[37]</ref> with bigger state for differential cryptanalysis, all of which are non-Markov ciphers. They designed two models to construct neural distinguishers with different networks.</p><p>The first model uses multiple input differences, selecting 𝑡(𝑡 ≥ 2) input differences to generate the dataset, regardless of random differences. It uses the differences between the ciphertext pairs 𝐶 ⊕ 𝐶 ′ for training. The second model is similar to Gohr's distinguishers. We tried using the first model to train a neural distinguisher for 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾, but the results were inferior to those achieved with our single input difference neural distinguishers. As we discussed at the end of Section 3.1, the features of ciphertext differences with a fixed input difference that the neural distinguishers can learn are limited. The validation accuracy of a neural distinguisher with two given input differences will be lower than that with one given difference and random differences. Especially when the differential features from two given input differences have overlapping parts.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Chen et al.'s Distinguishers.</head><p>Chen et al. <ref type="bibr" target="#b26">[27]</ref> proposed a new distinguishers model considering features derived from multiple ciphertext pairs. Based on this model they improved the accuracy of distinguishers for 𝚂𝙿𝙴𝙲𝙺𝟹𝟸∕𝟼𝟺.</p><p>This new model can be seen as an improvement of Gohr's distinguishers, which take multiple ciphertext pairs as the input of the network. Their new distinguishers captured features derived from multiple ciphertext pairs, and similarly, our proposed model improves the accuracy of distinguishers with multiple ciphertext differences. In Section 4.4, we conduct some experiments to compare the results of Chen et al.'s model on 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 with ours.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.">Experiments and analysis 1</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1.">Neural distinguishers for round-reduced 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾</head><p>Using an improved MILP-based approach, Zhu et al. <ref type="bibr" target="#b37">[38]</ref> presented some differential characteristics for reduced round 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾. A 12round differential characteristic is shown in Table <ref type="table" target="#tab_2">5</ref>, and the data complexity of the 7-round classical differential distinguisher is 2 37 . We construct 7-round neural distinguishers with datasets of size 2 23.2  (10 7 ) in the training and validation based on the proposed model. Now, we present our neural distinguishers for 5 to 7 rounds of 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾.</p><p>Training: We assume that there is only one plaintext block for the data collection. Based on our data generation algorithm, we generate uniformly distributed 128-bit keys to compute 128-bit ciphertext differences with a difference of 1 in the 7th byte of plaintext pairs, along with 128-bit random differences. Training is run for 50 epochs.</p><p>The results on the validation data are given in Table <ref type="table" target="#tab_3">6</ref>. Note that the validation accuracy only indicates the results of training, not the prediction accuracy. Prediction: We use the proposed method to improve the prediction accuracy of neural distinguishers for 6 to 7 rounds of 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 because the accuracy of the neural distinguisher for 5 rounds is high enough. Both the MLP test and K-S test are used here respectively.</p><p>We denote 𝑠 as the group size of a differences sample. For the K-S test, we first generate 𝑠(for 𝑠 ≤ 128 the number is 128) real ciphertext differences and evaluate their scores by our distinguishers. Then we randomly generate 50 000 real samples and 50 000 random samples for the evaluation.</p><p>For the MLP test, we generate 10 7 ∕s real and random samples for the training and 10 6 ∕s real and random samples for the validation. Table <ref type="table" target="#tab_4">7</ref> shows the results of the experiment.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Analysis:</head><p>We achieve high prediction accuracy with small samples using the MLP test for 6 rounds of 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾. For the K-S test, we need a larger 𝑠 to obtain an accuracy close to the MLP test. MLP test can detect the score distribution in smaller samples because it learns features of both real and random differences scores for classification. While the K-S test just uses scores of real differences as the stand score distribution to evaluate samples. Therefore MLP test requires a larger dataset for training. For the K-S test, a large real sample is not necessary, it is better to take a real sample that is close in size to 𝑠.</p><p>For the neural distinguisher of 7 rounds 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 with a low validation accuracy, both the MLP test and K-S test require larger samples to improve the prediction accuracy. MLP test achieves better overall accuracy than the K-S test with the same size of 𝑠.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2.">Neural distinguishers for round-reduced 𝙰𝚂𝙲𝙾𝙽</head><p>Using heuristic search tools, the authors of 𝙰𝚂𝙲𝙾𝙽 <ref type="bibr" target="#b38">[39]</ref> presented an optimal differential transition with the differential probability of 2 -107 for 4-round 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽. Baksi et al. <ref type="bibr" target="#b23">[24]</ref> presented machine learning-based differential distinguishers with a data complexity of 2 19  for up to 3 rounds of 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 based on their first model (two input differences), which can be found in Table <ref type="figure">8(a)</ref>. Applying our new model, we obtain neural distinguishers for up to 4 rounds of 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 with a single input difference. The size of training and validation data is 2 19.9 (10 6 ) for 1 to 3 rounds, and 2 23.2 (10 7 ) for 4-round.</p><p>Training: Because the 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 does not require a key for computation, we only need to generate uniformly distributed 320bit states. The difference (0000 0001) is XOR to the last byte of the 64-bit register 𝑥 0 as the chosen input difference. Then we input 320bit differences to the MLP for training. Training is conducted for 20 epochs. Table <ref type="table" target="#tab_5">8</ref>(b) shows our results.</p><p>It can be found that our neural distinguishers achieve higher validation accuracy than Baksi's for 1 to 3 rounds of 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 and cover one additional round.</p><p>Prediction: In order to know whether our new method improves the prediction accuracy of the neural distinguisher for 4 rounds of 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 with a validation accuracy slightly higher than 50%, Table <ref type="table">9</ref> shows an experiment similar to that in Section 4.1. In addition to sorting the scores within the samples, we also perform Min-Max Normalization on the scores in each sample for the MLP test. We observe that the scores within the samples are densely distributed between 0.47 and 0.52. This normalization aids in better learning of the characteristics of the score distribution and ensures sufficient gradient for convergence.</p><p>Analysis: We need to generate differences samples with a minimum size of 2 8 to effectively improve the prediction accuracy using the MLP test, and for the K-S test the minimum size is 2 13 . The training for the MLP test with more than 2048 input units is hard to fit, so the highest accuracy is 69.25% with test sets of size 2048. But we can still achieve higher accuracy with the K-S test, despite the large size of 𝑠. The signal from this neural distinguisher is rather weak as the scores are densely distributed around 0.5. But the distinguisher has indeed learned certain features proved by the results of the K-S test.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3.">Discussion of the input differences</head><p>It can be determined that the accuracy of distinguishers is significantly influenced by the choice of input differences. (0𝑥0, 0𝑥0, 0𝑥0, 0𝑥0, 0𝑥0, 0𝑥0706, 0𝑥0, 0𝑥0) is the input difference of a high probability 14-round differential characteristic of 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 found in <ref type="bibr" target="#b37">[38]</ref>, D. Shen et al. from which we only obtain a 6-round distinguisher with an accuracy of 50.77%. And our most effective distinguishers for 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 are obtained by using input differences with hamming weight 1. Therefore, we design an experiment to compare the effect of input differences with different hamming weights on the accuracy of distinguishers. The task of this experiment is training distinguishers for 6-round 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾, as we can observe the distribution of accuracy over a larger interval. We use the input differences with hamming weight of 1 to 5 for the training. We first generate all the input differences with hamming weight 1, totaling 128 differences. Then, for the experiments of input differences with hamming weight of 2 to 5, we randomly generate 128 differences for each without repeating. After training distinguishers with these input differences, we count the number of distinguishers' accuracies distributed in each interval. The results are shown in Table <ref type="table" target="#tab_6">10</ref>. 2  It can be seen that as the hamming weight increases, more distinguishers achieve low accuracy. Hou et al. <ref type="bibr" target="#b39">[40]</ref> proposed that the higher the Hamming weight of the input difference, the weaker the non-random feature of the ciphertext pair. This is partially confirmed by our experimental results. Therefore when choosing input difference for the training of distinguishers, starting with an input difference with hamming weight 1 is more likely to achieve high accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4.">Comparison with Chen et al.'s distinguisher model</head><p>To compare with the distinguisher model proposed by Chen et al. <ref type="bibr" target="#b26">[27]</ref> with Residual Network, we train the distinguishers for 6 to 7 rounds of 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 4 rounds of 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 with their model. The code of network construction and training is from <ref type="bibr" target="#b26">[27]</ref>. For convenience, we denote the distinguishers trained with Chen et al.'s model as   Res and ours as   MLP .</p><p>The size of a training set is 𝑁 = 10 7 , and the size of a validation set is 𝑀 = 10 6 . Each sample consists of 𝑠 ciphertext differences for   MLP and 𝑠 ciphertext pairs for   Res . A training set is composed of 𝑁∕2𝑠 real samples and 𝑁∕2𝑠 random samples, and a validation set is composed of 𝑀∕2𝑠 real samples and 𝑀∕2𝑠 random samples. Training is conducted for 50 epochs, and the best validation accuracy is recorded. The results are shown in the Table <ref type="table" target="#tab_0">11</ref>.</p><p>For 6-round 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾: When 𝑠 = 1,   Res achieves a higher accuracy than   MLP due to the use of ciphertext pairs as input. As 2 The input differences we generate and the corresponding accuracy are given in our GitHub repository. 𝑠 increases to 2 and 4,   Res has an improved accuracy and   MLP brings a higher accuracy improvement. When 𝑠 = 8, the accuracy of   Res decreases because of the overfitting, whereas   MLP still can improve its accuracy.</p><p>For 7-round 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾:   Res achieves a similar accuracy to   MLP with 𝑠 = 1. When 𝑠 = 2,   Res is unable to improve the accuracy, and its accuracy decreases with 𝑠 ≥ 4 due to overfitting. Meanwhile,   MLP keeps improving the accuracy as 𝑠 increases.</p><p>For 4-round 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽:   MLP with 𝑠 = 1 performs similarly to   Res , 𝑠 = 1, 2. When 𝑠 ≥ 4,   Res cannot achieve a valid result because of the overfitting. We observe that with the increase in cipher state size,   Res overfits more severely when 𝑠 ≥ 2. This is also the reason why   MLP , which takes ciphertext differences as input, obtains higher accuracy than   Res on 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 when 𝑠 ≥ 2.</p><p>It is worth noticing that we do not perform Min-Max Normalization on the training and validation sets for our   MLP of 4-round 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 at 𝑠 = 2 to 𝑠 = 32, and instead achieve higher accuracy compared to the training with normalized sets. We initially suspect this might be an incidental occurrence on the current validation set, as the validation accuracy fluctuates between the highest accuracy and 0.5 during training. Therefore, we save the model with the highest accuracy for evaluation, and the obtained accuracy is very close to the previously observed one. What has the   MLP learned from these few scores closely distributed around 0.5? It is worth further investigation in future research.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.">Conclusion</head><p>In this paper, we proposed a new model for the construction of neural differential distinguishers for lightweight ciphers, including a new method called the MLP test for the classification of ciphertext differences. This work improves the performance of the previous neural distinguishers for 4-round 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽 and constructs the neural distinguishers of 7-round 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 for the first time. The object of classification is changed from a single ciphertext difference to multiple ciphertext differences. We trained neural networks to classify the distribution of scores, and the K-S test is also used for prediction to show the comparison with the MLP test. Predicting based on the score distribution of ciphertext differences greatly improves the accuracy of prediction, with our new method the MLP test proving more efficient than the K-S test. By comparing with the existing distinguishers model using multiple ciphertext pairs, our new model is found to be more suitable for large state ciphers such as 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 and 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽.</p><p>Neural distinguishers do not rely on the optimal differential characteristic and they can reduce the data complexity by learning the distribution of ciphertext differences. Compared with the input difference of a highprobability differential transition, an input difference with hamming weight 1 is more likely to help neural distinguishers achieve higher accuracy.</p><p>As future work, we will continue optimizing the proposed model to cover further rounds and improve the distinguishing accuracy. Accordingly, we can give a more powerful illustration of the feasibility of applying neural networks to cryptanalysis.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Algorithm 1 : 5 𝑃 2 = 7 𝐶 1 = 8 𝐶 2 = 9 Append 𝐷 with: 10 ( 11 (</head><label>152718291011</label><figDesc>Data generation for training and validationInput: Cipher 𝐸(⋅), Data Size 𝑁, Difference 𝛿 Output: Training or Validation Dataset 𝐷 1 𝐷 ← ∅; 2 𝐾 ← 𝑅𝑎𝑛𝑑𝑜𝑚; 3 for 𝑖 = 1 to 𝑁 do 4 𝑃 0 , 𝑃 1 ← 𝑅𝑎𝑛𝑑𝑜𝑚; 𝑃 1 ⊕ 𝛿; 6 𝐶 0 = 𝐸(𝑃 0 , 𝐾); 𝐸(𝑃 1 , 𝐾); 𝐸(𝑃 2 , 𝐾); 𝐶 0 ⊕ 𝐶 1 , 0) ; // class 0 𝐶 1 ⊕ 𝐶 2 , 1) ; // class 1 12 Return 𝐷</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Step 1 .</head><label>1</label><figDesc>Train the neural network with the training dataset. Classify the sample as 1 if the output score exceeds 0.5; otherwise, classify it as 0. Then calculate the training accuracy.Step 2. Start validation on the validation dataset if the training accu-racy is higher than 50%. Or retrain a new neural network.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 1 .</head><label>1</label><figDesc>Fig. 1. The overall pipeline for the proposed model of neural distinguishers.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 2 .</head><label>2</label><figDesc>Fig. 2. Score distribution of real set and random set.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1</head><label>1</label><figDesc>The 4-bit S-box of 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾 as a lookup table.</figDesc><table><row><cell>𝑥</cell><cell>0</cell><cell>1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>5</cell><cell>6</cell><cell>7</cell><cell>8</cell><cell>9</cell><cell>a</cell><cell>b</cell><cell>c</cell><cell>d</cell><cell>e</cell><cell>f</cell></row><row><cell>𝑆(𝑥)</cell><cell>1</cell><cell>a</cell><cell>4</cell><cell>c</cell><cell>6</cell><cell>f</cell><cell>3</cell><cell>9</cell><cell>2</cell><cell>d</cell><cell>b</cell><cell>7</cell><cell>5</cell><cell>0</cell><cell>8</cell><cell>e</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 2</head><label>2</label><figDesc>Bit permutation of 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾.</figDesc><table><row><cell>Index</cell><cell>31</cell><cell>30</cell><cell>29</cell><cell>28</cell><cell>27</cell><cell>26</cell><cell>25</cell><cell>24</cell><cell>23</cell><cell>22</cell><cell>21</cell><cell>20</cell><cell>19</cell><cell>18</cell><cell>17</cell><cell>16</cell></row><row><cell>𝑆 0</cell><cell>29</cell><cell>25</cell><cell>21</cell><cell>17</cell><cell>13</cell><cell>9</cell><cell>5</cell><cell>1</cell><cell>30</cell><cell>26</cell><cell>22</cell><cell>18</cell><cell>14</cell><cell>10</cell><cell>6</cell><cell>2</cell></row><row><cell>𝑆 1</cell><cell>30</cell><cell>26</cell><cell>22</cell><cell>18</cell><cell>14</cell><cell>10</cell><cell>6</cell><cell>2</cell><cell>31</cell><cell>27</cell><cell>23</cell><cell>19</cell><cell>15</cell><cell>11</cell><cell>7</cell><cell>3</cell></row><row><cell>𝑆 2</cell><cell>31</cell><cell>27</cell><cell>23</cell><cell>19</cell><cell>15</cell><cell>11</cell><cell>7</cell><cell>3</cell><cell>28</cell><cell>24</cell><cell>20</cell><cell>16</cell><cell>12</cell><cell>8</cell><cell>4</cell><cell>0</cell></row><row><cell>𝑆 3</cell><cell>28</cell><cell>24</cell><cell>20</cell><cell>16</cell><cell>12</cell><cell>8</cell><cell>4</cell><cell>0</cell><cell>29</cell><cell>25</cell><cell>21</cell><cell>17</cell><cell>13</cell><cell>9</cell><cell>5</cell><cell>1</cell></row><row><cell>Index</cell><cell>15</cell><cell>14</cell><cell>13</cell><cell>12</cell><cell>11</cell><cell>10</cell><cell>9</cell><cell>8</cell><cell>7</cell><cell>6</cell><cell>5</cell><cell>4</cell><cell>3</cell><cell>2</cell><cell>1</cell><cell>0</cell></row><row><cell>𝑆 0</cell><cell>31</cell><cell>27</cell><cell>23</cell><cell>19</cell><cell>15</cell><cell>11</cell><cell>7</cell><cell>3</cell><cell>28</cell><cell>24</cell><cell>20</cell><cell>16</cell><cell>12</cell><cell>8</cell><cell>4</cell><cell>0</cell></row><row><cell>𝑆 1</cell><cell>28</cell><cell>24</cell><cell>20</cell><cell>16</cell><cell>12</cell><cell>8</cell><cell>4</cell><cell>0</cell><cell>29</cell><cell>25</cell><cell>21</cell><cell>17</cell><cell>13</cell><cell>9</cell><cell>5</cell><cell>1</cell></row><row><cell>𝑆 2</cell><cell>29</cell><cell>25</cell><cell>21</cell><cell>17</cell><cell>13</cell><cell>9</cell><cell>5</cell><cell>1</cell><cell>30</cell><cell>26</cell><cell>22</cell><cell>18</cell><cell>14</cell><cell>10</cell><cell>6</cell><cell>2</cell></row><row><cell>𝑆 3</cell><cell>30</cell><cell>26</cell><cell>22</cell><cell>18</cell><cell>14</cell><cell>10</cell><cell>6</cell><cell>2</cell><cell>31</cell><cell>27</cell><cell>23</cell><cell>19</cell><cell>15</cell><cell>11</cell><cell>7</cell><cell>13</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 5</head><label>5</label><figDesc>Differential characteristic of 12-round 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾.′ while the input of Gohr's neural distinguishers takes a pair of ciphertext (𝐶, 𝐶 ′ ). The experiments with group size 𝑠 = 1 in Section 4.4 serve as a comparison with Gohr's distinguishers model.Baksi et al.'s Distinguishers.Baksi et al.</figDesc><table><row><cell>Round 1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>5</cell><cell>6</cell><cell>7</cell><cell>8</cell><cell>9</cell><cell>10</cell><cell>11</cell><cell>12</cell></row><row><cell cols="12">log 2 (𝑝) -5 -7 -10 -12 -17 -25 -37 -41 -47 -52 -57 -62.4125</cell></row><row><cell cols="12">distinguishers only use the difference between the ciphertext pairs</cell></row><row><cell>𝐶 ⊕ 𝐶</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 6</head><label>6</label><figDesc>Accuracy of neural distinguishers for round-reduced 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾.</figDesc><table><row><cell>Round</cell><cell>Validation accuracy</cell></row><row><cell>5</cell><cell>96.43%</cell></row><row><cell>6</cell><cell>77.06%</cell></row><row><cell>7</cell><cell>55.42%</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>Table 7</head><label>7</label><figDesc>Prediction accuracy of improved neural distinguishers for round-reduced 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾.</figDesc><table><row><cell>Round</cell><cell>Method</cell><cell>𝑠</cell><cell>Prediction accuracy</cell></row><row><cell></cell><cell></cell><cell>4</cell><cell>83.01%</cell></row><row><cell></cell><cell>K-S test</cell><cell>8</cell><cell>95.55%</cell></row><row><cell>6</cell><cell></cell><cell>16</cell><cell>98.14%</cell></row><row><cell></cell><cell></cell><cell>2</cell><cell>85.84%</cell></row><row><cell></cell><cell>MLP test</cell><cell>4</cell><cell>93.87%</cell></row><row><cell></cell><cell></cell><cell>8</cell><cell>98.59%</cell></row><row><cell></cell><cell></cell><cell>64</cell><cell>56.92%</cell></row><row><cell></cell><cell>K-S test</cell><cell>128 256</cell><cell>65.13% 86.59%</cell></row><row><cell></cell><cell></cell><cell>512</cell><cell>98.31%</cell></row><row><cell></cell><cell></cell><cell>4</cell><cell>61.73%</cell></row><row><cell>7</cell><cell></cell><cell>8</cell><cell>66.62%</cell></row><row><cell></cell><cell></cell><cell>16</cell><cell>73.24%</cell></row><row><cell></cell><cell>MLP test</cell><cell>32 64</cell><cell>81.06% 87.26%</cell></row><row><cell></cell><cell></cell><cell>128</cell><cell>91.56%</cell></row><row><cell></cell><cell></cell><cell>256</cell><cell>95.88%</cell></row><row><cell></cell><cell></cell><cell>512</cell><cell>99.36%</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5"><head>Table 8</head><label>8</label><figDesc>Accuracy of neural distinguishers for round-reduced 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽.</figDesc><table><row><cell>(a) Baksi's</cell><cell></cell><cell>(b) Ours</cell><cell></cell></row><row><cell>Round</cell><cell>Validation accuracy</cell><cell>Round</cell><cell>Validation accuracy</cell></row><row><cell>1</cell><cell>87.49%</cell><cell>1</cell><cell>100%</cell></row><row><cell>2</cell><cell>99.90%</cell><cell>2</cell><cell>100%</cell></row><row><cell>3</cell><cell>98.61%</cell><cell>3</cell><cell>99.99%</cell></row><row><cell>4</cell><cell>-</cell><cell>4</cell><cell>50.69%</cell></row><row><cell>Table 9</cell><cell></cell><cell></cell><cell></cell></row><row><cell cols="4">Prediction accuracy of the improved neural distinguisher for 4-round of</cell></row><row><cell cols="2">𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽.</cell><cell></cell><cell></cell></row><row><cell>Round</cell><cell>Method</cell><cell>𝑠</cell><cell>Prediction accuracy</cell></row><row><cell></cell><cell></cell><cell>1024</cell><cell>50.25%</cell></row><row><cell></cell><cell></cell><cell>2048</cell><cell>51.04%</cell></row><row><cell></cell><cell></cell><cell>4096</cell><cell>64.80%</cell></row><row><cell></cell><cell>K-S test</cell><cell>8192</cell><cell>67.58%</cell></row><row><cell></cell><cell></cell><cell>16 384</cell><cell>81.25%</cell></row><row><cell></cell><cell></cell><cell>32 768</cell><cell>97.52%</cell></row><row><cell>4</cell><cell></cell><cell>65 536</cell><cell>99.47%</cell></row><row><cell></cell><cell></cell><cell>64</cell><cell>53.76%</cell></row><row><cell></cell><cell></cell><cell>128</cell><cell>55.21%</cell></row><row><cell></cell><cell>MLP test</cell><cell>256 512</cell><cell>58.02% 61.61%</cell></row><row><cell></cell><cell></cell><cell>1024</cell><cell>65.61%</cell></row><row><cell></cell><cell></cell><cell>2048</cell><cell>69.25%</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6"><head>Table 10</head><label>10</label><figDesc>Experiment with Different Input Differences for 6-round 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾.</figDesc><table><row><cell cols="2">Hamming weight</cell><cell>[50%, 55%)</cell><cell cols="2">[55%, 60%)</cell><cell cols="2">[60%, 65%)</cell><cell>[65%, 70%)</cell><cell>[70%, 75%)</cell><cell>[75%, 80%)</cell></row><row><cell>1</cell><cell></cell><cell>0</cell><cell>0</cell><cell></cell><cell>0</cell><cell></cell><cell>32</cell><cell>72</cell><cell>24</cell></row><row><cell>2</cell><cell></cell><cell>67</cell><cell>48</cell><cell></cell><cell>5</cell><cell></cell><cell>4</cell><cell>2</cell><cell>2</cell></row><row><cell>3</cell><cell></cell><cell>122</cell><cell>5</cell><cell></cell><cell>1</cell><cell></cell><cell>0</cell><cell>0</cell><cell>0</cell></row><row><cell>4</cell><cell></cell><cell>127</cell><cell>1</cell><cell></cell><cell>0</cell><cell></cell><cell>0</cell><cell>0</cell><cell>0</cell></row><row><cell>5</cell><cell></cell><cell>128</cell><cell>0</cell><cell></cell><cell>0</cell><cell></cell><cell>0</cell><cell>0</cell><cell>0</cell></row><row><cell>Table 11</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell cols="4">Comparison of distinguishers trained with different models.</cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell cols="3">(a) 6 and 7 rounds 𝙶𝙸𝙵𝚃-𝟷𝟸𝟾</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>Round</cell><cell></cell><cell>Distinguisher</cell><cell cols="2">𝑠 = 1</cell><cell></cell><cell cols="2">𝑠 = 2</cell><cell>𝑠 = 4</cell><cell>𝑠 = 8</cell></row><row><cell>6</cell><cell></cell><cell>  Res   MLP</cell><cell cols="2">78.36% 77.06%</cell><cell></cell><cell cols="2">84.77% 85.84%</cell><cell>88.00% 93.87%</cell><cell>87.12% 98.59%</cell></row><row><cell>7</cell><cell></cell><cell>  Res   MLP</cell><cell cols="2">56.06% 55.42%</cell><cell></cell><cell cols="2">55.64% 58.04%</cell><cell>50.17% 61.73%</cell><cell>50.06% 66.62%</cell></row><row><cell cols="3">(b) 4-round 𝙰𝚂𝙲𝙾𝙽-𝙿𝙴𝚁𝙼𝚄𝚃𝙰𝚃𝙸𝙾𝙽</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>Round</cell><cell cols="2">Distinguisher</cell><cell>𝑠 = 1</cell><cell>𝑠 = 2</cell><cell></cell><cell>𝑠 = 4</cell><cell>𝑠 = 8</cell><cell>𝑠 = 16</cell><cell>𝑠 = 32</cell></row><row><cell>4</cell><cell>  Res   MLP</cell><cell></cell><cell>50.56% 50.69%</cell><cell cols="2">50.54% 50.91%</cell><cell>50.18% 51.21%</cell><cell>50.09% 51.56%</cell><cell>50.27% 52.12%</cell><cell>50.02% 52.63%</cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="1" xml:id="foot_0"><p>The code is available at https://github.com/yijSong/ND-GIFT-ASCON.</p></note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><p>Acknowledgments This work was supported in part by the <rs type="funder">National Key R&amp;D Program of China</rs> (Grant No. <rs type="grantNumber">2022YFB2701600</rs>); the <rs type="funder">Xiangtan University scientific research</rs> project (Grant No. <rs type="grantNumber">15XZX32</rs>); the <rs type="funder">National Natural Science Foundation of China</rs> (Grant No. <rs type="grantNumber">62172350</rs>); <rs type="funder">National Natural Science Foundation of China</rs> (Grant No. <rs type="grantNumber">62172349</rs>); <rs type="funder">National Natural Science Foundation of Hunan Province</rs> (Grant No. <rs type="grantNumber">2023JJ30597</rs>); the <rs type="funder">Research Foundation of Education Bureau of Hunan Province</rs> (Grant No. <rs type="grantNumber">21B0139</rs>); <rs type="funder">Open Project of the State Key Laboratory of Computer Science, Institute of Software, Chinese Academy of Sciences</rs> (Grant No. <rs type="grantNumber">SYSKF2101</rs>).</p></div>
+			</div>
+			<listOrg type="funding">
+				<org type="funding" xml:id="_E3dy9QU">
+					<idno type="grant-number">2022YFB2701600</idno>
+				</org>
+				<org type="funding" xml:id="_7djKcYB">
+					<idno type="grant-number">15XZX32</idno>
+				</org>
+				<org type="funding" xml:id="_Yu5Ez2k">
+					<idno type="grant-number">62172350</idno>
+				</org>
+				<org type="funding" xml:id="_msJPBYQ">
+					<idno type="grant-number">62172349</idno>
+				</org>
+				<org type="funding" xml:id="_PzbhsdK">
+					<idno type="grant-number">2023JJ30597</idno>
+				</org>
+				<org type="funding" xml:id="_fb7qHtv">
+					<idno type="grant-number">21B0139</idno>
+				</org>
+				<org type="funding" xml:id="_RgAAsZJ">
+					<idno type="grant-number">SYSKF2101</idno>
+				</org>
+			</listOrg>
+
+			<div type="availability">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Data availability</head><p>Data will be made available on request.</p></div>
+			</div>
+
+
+			<div type="conflict">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Declaration of competing interest</head><p>The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.</p></div>
+			</div>
+
+
+			<div type="contribution">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>CRediT authorship contribution statement Dongsu Shen: Conceptualization, Writing -review &amp; editing. Yijian Song: Methodology, Software, Writing -original draft. Yuan Lu: Validation, Visualization. Saiqin Long: Formal analysis. Shujuan Tian: Data curation, Project administration.</p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="extracted" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Triathlon of lightweight block ciphers for the internet of things</title>
+		<author>
+			<persName><forename type="first">Dinu</forename><surname>Daniel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Corre</forename><surname>Yann Le</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Khovratovich</forename><surname>Dmitry</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Perrin</forename><surname>Léo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Großschädl</forename><surname>Johann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alex</forename><surname>Biryukov</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J Cryptogr Eng</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="page" from="283" to="302" />
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Dinu Daniel, Corre Yann Le, Khovratovich Dmitry, Perrin Léo, Großschädl Jo- hann, Biryukov Alex. Triathlon of lightweight block ciphers for the internet of things. J Cryptogr Eng 2019;9:283-302.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Recent advances in lightweight stream ciphers</title>
+		<author>
+			<persName><forename type="first">Mishra</forename><surname>Bhasin Akshay</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Girish</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">CSI Trans ICT</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="page" from="173" to="176" />
+			<date type="published" when="2016">2016</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bhasin Akshay, Mishra Girish. Recent advances in lightweight stream ciphers. CSI Trans ICT 2016;4:173-6.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">An innovative lightweight cryptography system for Internet-of-Things ULP applications</title>
+		<author>
+			<persName><forename type="first">Duy-Hieu</forename><surname>Bui</surname></persName>
+			<idno type="ORCID">0000-0001-6114-5391</idno>
+		</author>
+		<idno type="DOI">10.70675/1f44f620zf576z4d79zb57az256b7df60d33</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Sony Corp</title>
+		<imprint>
+			<biblScope unit="page" from="7" to="10" />
+			<date type="published" when="2008">2008. 2008</date>
+			<publisher>Agence Bibliographique de l&apos;Enseignement Supérieur</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Katagi Masanobu, Moriai Shiho, et al. Lightweight cryptography for the internet of things. Sony Corp 2008;2008:7-10.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Hash-one: a lightweight cryptographic hash function</title>
+		<author>
+			<persName><forename type="first">Manayankath</forename><surname>Megha Mukundan Puliparambil</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Srinivasan</forename><surname>Sindhu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sethumadhavan</forename><surname>Chungath</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Madathil</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IET Inf Secur</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="225" to="231" />
+			<date type="published" when="2016">2016</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Megha Mukundan Puliparambil, Manayankath Sindhu, Srinivasan Chungath, Sethumadhavan Madathil. Hash-one: a lightweight cryptographic hash function. IET Inf Secur 2016;10(5):225-31.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Lightweight security framework for IoTs using identity based cryptography</title>
+		<author>
+			<persName><forename type="first">Sankaran</forename><surname>Sriram</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">2016 international conference on advances in computing, communications and informatics. ICACCI</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="880" to="886" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Sankaran Sriram. Lightweight security framework for IoTs using identity based cryptography. In: 2016 international conference on advances in computing, communications and informatics. ICACCI, IEEE; 2016, p. 880-6.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Advanced lightweight encryption algorithms for IoT devices: survey, challenges and solutions</title>
+		<author>
+			<persName><forename type="first">Singh</forename><surname>Saurabh</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pradip</forename><surname>Sharma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Moon</forename><surname>Kumar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Park</forename><forename type="middle">Jong</forename><surname>Seo Yeon</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Hyuk</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J Ambient Intell Humaniz Comput</title>
+		<imprint>
+			<biblScope unit="page" from="1" to="18" />
+			<date type="published" when="2017">2017</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Singh Saurabh, Sharma Pradip Kumar, Moon Seo Yeon, Park Jong Hyuk. Advanced lightweight encryption algorithms for IoT devices: survey, challenges and solutions. J Ambient Intell Humaniz Comput 2017;1-18.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b6">
+	<monogr>
+		<title level="m" type="main">The design of Rijndael</title>
+		<author>
+			<persName><forename type="first">Daemen</forename><surname>Joan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Rijmen</forename><surname>Vincent</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2002">2002</date>
+			<publisher>Springer</publisher>
+			<biblScope unit="volume">2</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Daemen Joan, Rijmen Vincent. The design of Rijndael. Vol. 2, Springer; 2002.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">A survey on lightweight ciphers for IoT devices</title>
+		<author>
+			<persName><forename type="first">Philip</forename><surname>Merly</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Annie</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">2017 international conference on technological advancements in power and energy (TAP energy)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2017">2017</date>
+			<biblScope unit="page" from="1" to="4" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Philip Merly Annie, et al. A survey on lightweight ciphers for IoT devices. In: 2017 international conference on technological advancements in power and energy (TAP energy). IEEE; 2017, p. 1-4.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b8">
+	<monogr>
+		<title level="m" type="main">Report on lightweight cryptography</title>
+		<author>
+			<persName><forename type="first">Mckay</forename><surname>Kerry</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bassham</forename><surname>Lawrence</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sönmez</forename><surname>Turan Meltem</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mouha</forename><surname>Nicky</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+		</imprint>
+		<respStmt>
+			<orgName>National Institute of Standards and Technology</orgName>
+		</respStmt>
+	</monogr>
+	<note type="report_type">Technical report</note>
+	<note type="raw_reference">McKay Kerry, Bassham Lawrence, Sönmez Turan Meltem, Mouha Nicky. Report on lightweight cryptography. Technical report, National Institute of Standards and Technology; 2016.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b9">
+	<monogr>
+		<title level="m" type="main">Status report on the first round of the NIST lightweight cryptography standardization process</title>
+		<author>
+			<persName><forename type="first">Turan</forename><surname>Meltem Sönmez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mckay</forename><surname>Kerry</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Çalik</forename><surname>Çagdas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chang</forename><surname>Donghoon</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bassham</forename><surname>Lawrence</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+			<publisher>NISTIR</publisher>
+			<biblScope unit="volume">108</biblScope>
+		</imprint>
+		<respStmt>
+			<orgName>National Institute of Standards and Technology, Gaithersburg, MD, NIST Interagency/Internal Rep</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Turan Meltem Sönmez, McKay Kerry A, Çalik Çagdas, Chang Donghoon, Bassham Lawrence, et al. Status report on the first round of the NIST lightweight cryptography standardization process. Vol. 108, National Institute of Standards and Technology, Gaithersburg, MD, NIST Interagency/Internal Rep.(NISTIR); 2019.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Status report on the second round of the NIST lightweight cryptography standardization process</title>
+		<author>
+			<persName><forename type="first">Turan</forename><surname>Meltem Sönmez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mckay</forename><surname>Kerry</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chang</forename><surname>Donghoon</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Calik</forename><surname>Cagdas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bassham</forename><surname>Lawrence</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kang</forename><surname>Jinkeon</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kelsey</forename><surname>John</surname></persName>
+		</author>
+		<idno>10.6028</idno>
+	</analytic>
+	<monogr>
+		<title level="j">and Technology Internal Report</title>
+		<imprint>
+			<biblScope unit="volume">8369</biblScope>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+		<respStmt>
+			<orgName>National Institute of Standards</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Turan Meltem Sönmez, McKay Kerry, Chang Donghoon, Calik Cagdas, Bassham Lawrence, Kang Jinkeon, Kelsey John, et al. Status report on the second round of the NIST lightweight cryptography standardization process. Vol. 8369, National Institute of Standards and Technology Internal Report; 2021, (10.6028).</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis of DES-like cryptosystems</title>
+		<author>
+			<persName><forename type="first">Biham</forename><surname>Eli</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J Cryptol</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="page" from="3" to="72" />
+			<date type="published" when="1991">1991</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham Eli, Shamir Adi. Differential cryptanalysis of DES-like cryptosystems. J Cryptol 1991;4:3-72.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Linear cryptanalysis method for DES cipher</title>
+		<author>
+			<persName><forename type="first">Matsui</forename><surname>Mitsuru</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Advances in cryptology-EUROCRyPT&apos;93: workshop on the theory and application of cryptographic techniques lofthus</title>
+		<meeting><address><addrLine>Norway</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="1993">May 23-27, 1993 proceedings 12. 1994</date>
+			<biblScope unit="page" from="386" to="397" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Matsui Mitsuru. Linear cryptanalysis method for DES cipher. In: Advances in cryptology-EUROCRyPT&apos;93: workshop on the theory and application of cryptographic techniques lofthus, Norway, May 23-27, 1993 proceedings 12. Springer; 1994, p. 386-97.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Differential and linear cryptanalysis using mixed-integer linear programming</title>
+		<author>
+			<persName><forename type="first">Mouha</forename><surname>Nicky</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wang</forename><surname>Qingju</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gu</forename><surname>Dawu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Preneel</forename><surname>Bart</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information security and cryptology: 7th international conference, inscrypt 2011</title>
+		<meeting><address><addrLine>Beijing, China</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2011-12-03">November 30-December 3, 2011. 2012</date>
+			<biblScope unit="page" from="57" to="76" />
+		</imprint>
+	</monogr>
+	<note>revised selected papers 7</note>
+	<note type="raw_reference">Mouha Nicky, Wang Qingju, Gu Dawu, Preneel Bart. Differential and linear cryptanalysis using mixed-integer linear programming. In: Information security and cryptology: 7th international conference, inscrypt 2011, Beijing, China, November 30-December 3, 2011. revised selected papers 7. Springer; 2012, p. 57-76.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Image-to-image translation with conditional adversarial networks</title>
+		<author>
+			<persName><forename type="first">Isola</forename><surname>Phillip</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhu</forename><surname>Jun-Yan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhou</forename><surname>Tinghui</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Efros</forename><surname>Alexei</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE conference on computer vision and pattern recognition</title>
+		<meeting>the IEEE conference on computer vision and pattern recognition</meeting>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+			<biblScope unit="page" from="1125" to="1134" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Isola Phillip, Zhu Jun-Yan, Zhou Tinghui, Efros Alexei A. Image-to-image translation with conditional adversarial networks. In: Proceedings of the IEEE conference on computer vision and pattern recognition. 2017, p. 1125-34.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b15">
+	<monogr>
+		<title level="m" type="main">Energy and policy considerations for deep learning in NLP</title>
+		<author>
+			<persName><forename type="first">Strubell</forename><surname>Emma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ganesh</forename><surname>Ananya</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mccallum</forename><surname>Andrew</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1906.02243</idno>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Strubell Emma, Ganesh Ananya, McCallum Andrew. Energy and policy con- siderations for deep learning in NLP. 2019, arXiv preprint arXiv:1906. 02243.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Multi-view 3d object detection network for autonomous driving</title>
+		<author>
+			<persName><forename type="first">Chen</forename><surname>Xiaozhi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ma</forename><surname>Huimin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wan</forename><surname>Ji</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Bo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xia</forename><surname>Tian</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE conference on computer vision and pattern recognition</title>
+		<meeting>the IEEE conference on computer vision and pattern recognition</meeting>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+			<biblScope unit="page" from="1907" to="1915" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen Xiaozhi, Ma Huimin, Wan Ji, Li Bo, Xia Tian. Multi-view 3d object detec- tion network for autonomous driving. In: Proceedings of the IEEE conference on computer vision and pattern recognition. 2017, p. 1907-15.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Cryptography and machine learning</title>
+		<author>
+			<persName><forename type="first">Rivest</forename><surname>Ronald</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ASIACRyPT</title>
+		<imprint>
+			<biblScope unit="page" from="427" to="439" />
+			<date type="published" when="1991">1991</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Rivest Ronald L, et al. Cryptography and machine learning. In: ASIACRyPT. 1991, p. 427-39.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Breaking cryptographic implementations using deep learning techniques</title>
+		<author>
+			<persName><forename type="first">Maghrebi</forename><surname>Houssem</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Portigliatti</forename><surname>Thibault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Prouff</forename><surname>Emmanuel</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Security, privacy, and applied cryptography engineering: 6th international conference, SPACE 2016</title>
+		<meeting><address><addrLine>hyderabad, India</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2016">December 14-18, 2016. 2016</date>
+			<biblScope unit="page" from="3" to="26" />
+		</imprint>
+	</monogr>
+	<note>proceedings 6</note>
+	<note type="raw_reference">Maghrebi Houssem, Portigliatti Thibault, Prouff Emmanuel. Breaking crypto- graphic implementations using deep learning techniques. In: Security, privacy, and applied cryptography engineering: 6th international conference, SPACE 2016, hyderabad, India, December 14-18, 2016, proceedings 6. Springer; 2016, p. 3-26.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Convolutional neural networks with data augmentation against jitter-based countermeasures: Profiling attacks without pre-processing</title>
+		<author>
+			<persName><forename type="first">Cagli</forename><surname>Eleonora</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dumas</forename><surname>Cécile</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Prouff</forename><surname>Emmanuel</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Cryptographic hardware and embedded systems-CHES 2017: 19th international conference</title>
+		<meeting><address><addrLine>taipei, Taiwan</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2017">September 25-28, 2017. 2017</date>
+			<biblScope unit="page" from="45" to="68" />
+		</imprint>
+	</monogr>
+	<note>proceedings</note>
+	<note type="raw_reference">Cagli Eleonora, Dumas Cécile, Prouff Emmanuel. Convolutional neural networks with data augmentation against jitter-based countermeasures: Profiling attacks without pre-processing. In: Cryptographic hardware and embedded systems- CHES 2017: 19th international conference, taipei, Taiwan, September 25-28, 2017, proceedings. Springer; 2017, p. 45-68.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>santa barbara, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">August 18-22, 2019. 2019</date>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note>proceedings, part II 39</note>
+	<note type="raw_reference">Gohr Aron. Improving attacks on round-reduced speck32/64 using deep learning. In: Advances in cryptology-CRYPTO 2019: 39th annual international cryptology conference, santa barbara, CA, USA, August 18-22, 2019, proceedings, part II 39. Springer; 2019, p. 150-79.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">A deeper look at machine learning-based cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Gerault</forename><surname>Benamira Adrien</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peyrin</forename><surname>David</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tan</forename><surname>Thomas</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Quan Quan</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Advances in cryptology-EUROCRyPT 2021: 40th annual international conference on the theory and applications of cryptographic techniques</title>
+		<meeting><address><addrLine>zagreb, Croatia</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2021">October 17-21, 2021. 2021</date>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note>proceedings, part i 40</note>
+	<note type="raw_reference">Benamira Adrien, Gerault David, Peyrin Thomas, Tan Quan Quan. A deeper look at machine learning-based cryptanalysis. In: Advances in cryptology-EUROCRyPT 2021: 40th annual international conference on the theory and applications of cryptographic techniques, zagreb, Croatia, October 17-21, 2021, proceedings, part i 40. Springer; 2021, p. 805-35.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Polytopic attack on round-reduced simon32/64 using deep learning</title>
+		<author>
+			<persName><forename type="first">Su</forename><surname>Heng-Chuan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhu</forename><surname>Xuan-Yong</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ming</forename><surname>Duan</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information security and cryptology: 16th international conference, inscrypt 2020</title>
+		<meeting><address><addrLine>guangzhou, China</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2020">December 11-14, 2020. 2021</date>
+			<biblScope unit="page" from="3" to="20" />
+		</imprint>
+	</monogr>
+	<note>revised selected papers</note>
+	<note type="raw_reference">Su Heng-Chuan, Zhu Xuan-Yong, Ming Duan. Polytopic attack on round-reduced simon32/64 using deep learning. In: Information security and cryptology: 16th international conference, inscrypt 2020, guangzhou, China, December 11-14, 2020, revised selected papers. Springer; 2021, p. 3-20.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Machine learning-assisted differential distinguishers for lightweight ciphers</title>
+		<author>
+			<persName><forename type="first">Baksi</forename><surname>Anubhab</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Baksi</forename><surname>Anubhab</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Class Phys Secur Symmetric Key Cryptogr Algorithms</title>
+		<imprint>
+			<biblScope unit="page" from="141" to="162" />
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi Anubhab, Baksi Anubhab. Machine learning-assisted differential distin- guishers for lightweight ciphers. Class Phys Secur Symmetric Key Cryptogr Algorithms 2022;141-62.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Deep learningbased differential distinguisher for lightweight cipher GIFT-cofb</title>
+		<author>
+			<persName><forename type="first">Rajan</forename><surname>Reshma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Roy</forename><forename type="middle">Rupam</forename><surname>Kumar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sen</forename><surname>Diptakshi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mishra</forename><surname>Girish</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Machine intelligence and smart systems: proceedings of MISS 2021</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="397" to="406" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Rajan Reshma, Roy Rupam Kumar, Sen Diptakshi, Mishra Girish. Deep learning- based differential distinguisher for lightweight cipher GIFT-cofb. In: Machine intelligence and smart systems: proceedings of MISS 2021. Springer; 2022, p. 397-406.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis of reduced-round PRESENT</title>
+		<author>
+			<persName><forename type="first">Wang</forename><surname>Meiqin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Lecture Notes in Comput Sci</title>
+		<imprint>
+			<biblScope unit="volume">5023</biblScope>
+			<biblScope unit="page" from="40" to="49" />
+			<date type="published" when="2008">2008</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang Meiqin. Differential cryptanalysis of reduced-round PRESENT. Lecture Notes in Comput Sci 2008;5023:40-9.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">A new neural distinguisher considering features derived from multiple ciphertext pairs</title>
+		<author>
+			<persName><forename type="first">Chen</forename><surname>Yi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shen</forename><surname>Yantian</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Hongbo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yuan</forename><surname>Sitong</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Comput J</title>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1419" to="1433" />
+			<date type="published" when="2023">2023</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen Yi, Shen Yantian, Yu Hongbo, Yuan Sitong. A new neural distin- guisher considering features derived from multiple ciphertext pairs. Comput J 2023;66(6):1419-33.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">More insight on deep learningaided cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Bao</forename><surname>Zhenzhen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lu</forename><surname>Jinyu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhang</forename><surname>Yao Yiran</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Liu</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International conference on the theory and application of cryptology and information security</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2023">2023</date>
+			<biblScope unit="page" from="436" to="467" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bao Zhenzhen, Lu Jinyu, Yao Yiran, Zhang Liu. More insight on deep learning- aided cryptanalysis. In: International conference on the theory and application of cryptology and information security. Springer; 2023, p. 436-67.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Improved neural distinguishers with multi-round and multi-splicing construction</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Jiashuo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ren</forename><surname>Jiongjiong</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chen</forename><surname>Shaozhen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Manman</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J Inf Secur Appl</title>
+		<imprint>
+			<biblScope unit="volume">74</biblScope>
+			<biblScope unit="page">103461</biblScope>
+			<date type="published" when="2023">2023</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Liu JiaShuo, Ren JiongJiong, Chen ShaoZhen, Li ManMan. Improved neural distinguishers with multi-round and multi-splicing construction. J Inf Secur Appl 2023;74:103461.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">On the security of lightweight block ciphers against neural distinguishers: Observations on LBC-IoT and SLIM</title>
+		<author>
+			<persName><forename type="first">Teng</forename><surname>Wei Jian</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Teh</forename><surname>Je Sen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jamil</forename><surname>Norziana</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J Inf Secur Appl</title>
+		<imprint>
+			<biblScope unit="volume">76</biblScope>
+			<biblScope unit="page">103531</biblScope>
+			<date type="published" when="2023">2023</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Teng Wei Jian, Teh Je Sen, Jamil Norziana. On the security of lightweight block ciphers against neural distinguishers: Observations on LBC-IoT and SLIM. J Inf Secur Appl 2023;76:103531.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Gift-cofb</title>
+		<author>
+			<persName><forename type="first">Chakraborti</forename><surname>Banik Subhadeep</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Inoue</forename><surname>Avik</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Iwata</forename><surname>Akiko</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Minematsu</forename><surname>Tetsu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nandi</forename><surname>Kazuhiko</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peyrin</forename><surname>Mridul</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sasaki</forename><surname>Thomas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sim</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Todo</forename><surname>Siang Meng</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Yosuke</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptol ePrint Arch</title>
+		<imprint>
+			<date type="published" when="2020">2020</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Banik Subhadeep, Chakraborti Avik, Inoue Akiko, Iwata Tetsu, Mine- matsu Kazuhiko, Nandi Mridul, Peyrin Thomas, Sasaki Yu, Sim Siang Meng, Todo Yosuke. Gift-cofb. Cryptol ePrint Arch 2020.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Ascon v1. 2: lightweight authenticated encryption and hashing</title>
+		<author>
+			<persName><forename type="first">Dobraunig</forename><surname>Christoph</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eichlseder</forename><surname>Maria</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mendel</forename><surname>Florian</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Schläffer</forename><surname>Martin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<imprint>
+			<biblScope unit="volume">34</biblScope>
+			<biblScope unit="page" from="1" to="42" />
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Dobraunig Christoph, Eichlseder Maria, Mendel Florian, Schläffer Martin. Ascon v1. 2: lightweight authenticated encryption and hashing. Journal of Cryptology 2021;34:1-42.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Duplexing the sponge: single-pass authenticated encryption and other applications</title>
+		<author>
+			<persName><forename type="first">Bertoni</forename><surname>Guido</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Daemen</forename><surname>Joan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peeters</forename><surname>Michaël</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Assche</forename><surname>Van</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Gilles</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Selected areas in cryptography: 18th international workshop, SAC 2011</title>
+		<meeting><address><addrLine>toronto, on, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2011">August 11-12, 2011. 2012</date>
+			<biblScope unit="page" from="320" to="337" />
+		</imprint>
+	</monogr>
+	<note>revised selected papers 18</note>
+	<note type="raw_reference">Bertoni Guido, Daemen Joan, Peeters Michaël, Van Assche Gilles. Duplexing the sponge: single-pass authenticated encryption and other applications. In: Selected areas in cryptography: 18th international workshop, SAC 2011, toronto, on, Canada, August 11-12, 2011, revised selected papers 18. Springer; 2012, p. 320-37.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Beaulieu</forename><surname>Ray</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shors</forename><surname>Douglas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Smith</forename><surname>Jason</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Treatman-Clark</forename><surname>Stefan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Weeks</forename><surname>Bryan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wingers</forename><surname>Louis</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd annual design automation conference</title>
+		<meeting>the 52nd annual design automation conference</meeting>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beaulieu Ray, Shors Douglas, Smith Jason, Treatman-Clark Stefan, Weeks Bryan, Wingers Louis. The SIMON and SPECK lightweight block ciphers. In: Proceedings of the 52nd annual design automation conference. 2015, p. 1-6.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Gimli: a cross-platform permutation</title>
+		<author>
+			<persName><forename type="first">Bernstein</forename><surname>Daniel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kölbl</forename><surname>Stefan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lucks</forename><surname>Stefan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pedro</forename><forename type="middle">Maat</forename><surname>Massolino</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mendel</forename><surname>Costa</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nawaz</forename><surname>Florian</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Schneider</forename><surname>Kashif</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Schwabe</forename><surname>Tobias</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Standaert</forename><surname>Peter</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Todo</forename><surname>François-Xavier</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Yosuke</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Cryptographic hardware and embedded systems-CHES 2017: 19th international conference</title>
+		<meeting><address><addrLine>taipei, Taiwan</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2017">September 25-28, 2017. 2017</date>
+			<biblScope unit="page" from="299" to="320" />
+		</imprint>
+	</monogr>
+	<note>proceedings</note>
+	<note type="raw_reference">Bernstein Daniel J, Kölbl Stefan, Lucks Stefan, Massolino Pedro Maat Costa, Mendel Florian, Nawaz Kashif, Schneider Tobias, Schwabe Peter, Stan- daert François-Xavier, Todo Yosuke, et al. Gimli: a cross-platform permutation. In: Cryptographic hardware and embedded systems-CHES 2017: 19th interna- tional conference, taipei, Taiwan, September 25-28, 2017, proceedings. Springer; 2017, p. 299-320.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b35">
+	<analytic>
+		<title level="a" type="main">KNOT: algorithm specifications and supporting document</title>
+		<author>
+			<persName><forename type="first">Zhang</forename><surname>Wentao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ding</forename><surname>Tianyou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yang</forename><surname>Bohan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bao</forename><surname>Zhenzhen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiang</forename><surname>Zejun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ji</forename><surname>Fulei</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhao</forename><surname>Xuefeng</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Submission to NIST lightweight cryptography project</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhang Wentao, Ding Tianyou, Yang Bohan, Bao Zhenzhen, Xiang Zejun, Ji Fulei, Zhao Xuefeng. KNOT: algorithm specifications and supporting document. Submission to NIST lightweight cryptography project 2019.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Chaskey: a MAC algorithm for microcontrollers-status update and proposal of chaskey-12</title>
+		<author>
+			<persName><forename type="first">Mouha</forename><surname>Nicky</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptol ePrint Arch</title>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mouha Nicky. Chaskey: a MAC algorithm for microcontrollers-status update and proposal of chaskey-12-. Cryptol ePrint Arch 2015.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b37">
+	<analytic>
+		<title level="a" type="main">MILP-based differential attack on roundreduced GIFT</title>
+		<author>
+			<persName><forename type="first">Zhu</forename><surname>Baoyu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dong</forename><surname>Xiaoyang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Hongbo</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Topics in cryptology-CT-RSA 2019: the cryptographers&apos; track at the RSA conference 2019, san francisco</title>
+		<meeting><address><addrLine>CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2019">March 4-8, 2019. 2019</date>
+			<biblScope unit="page" from="372" to="390" />
+		</imprint>
+	</monogr>
+	<note>proceedings</note>
+	<note type="raw_reference">Zhu Baoyu, Dong Xiaoyang, Yu Hongbo. MILP-based differential attack on round- reduced GIFT. In: Topics in cryptology-CT-RSA 2019: the cryptographers&apos; track at the RSA conference 2019, san francisco, CA, USA, March 4-8, 2019, proceedings. Springer; 2019, p. 372-90.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Cryptanalysis of ascon</title>
+		<author>
+			<persName><forename type="first">Dobraunig</forename><surname>Christoph</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eichlseder</forename><surname>Maria</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mendel</forename><surname>Florian</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Schläffer</forename><surname>Martin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Topics in cryptology-CT-RSA 2015: the cryptographer&apos;s track at the RSA conference 2015, san francisco</title>
+		<meeting><address><addrLine>CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2015">April 20-24, 2015. 2015</date>
+			<biblScope unit="page" from="371" to="387" />
+		</imprint>
+	</monogr>
+	<note>proceedings</note>
+	<note type="raw_reference">Dobraunig Christoph, Eichlseder Maria, Mendel Florian, Schläffer Martin. Crypt- analysis of ascon. In: Topics in cryptology-CT-RSA 2015: the cryptographer&apos;s track at the RSA conference 2015, san francisco, CA, USA, April 20-24, 2015. proceedings. Springer; 2015, p. 371-87.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Improve neural distinguisher for cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Hou</forename><surname>Zezhou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ren</forename><surname>Jiongjiong</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chen</forename><surname>Shaozhen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptol ePrint Arch</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou Zezhou, Ren Jiongjiong, Chen Shaozhen. Improve neural distinguisher for cryptanalysis. Cryptol ePrint Arch 2021.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

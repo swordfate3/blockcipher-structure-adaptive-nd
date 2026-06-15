@@ -1,0 +1,1449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Improved polytopic differential neural distinguishers for SIMON, SIMECK, and SPECK block ciphers</title>
+				<funder ref="#_Eqv97bK">
+					<orgName type="full">Shahid Rajaee Teacher Training University</orgName>
+				</funder>
+				<funder ref="#_mNkp8Uk">
+					<orgName type="full">Iran National Science Foundation</orgName>
+					<orgName type="abbreviated">INSF</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>Springer Science and Business Media LLC</publisher>
+				<availability  status="unknown">
+					<licence/>
+				</availability>
+				<date type="published" when="2026-05-19">2026-05-19</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="consolidated" source="crossref">
+					<analytic>
+						<author>
+							<persName><forename type="first">Iman</forename><surname>Mirzaali</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> CPS2 Lab , Department of Communication , Faculty of Electrical Engineering , Shahid Rajaee Teacher Training University , Lavizan , Tehran 16788-15811 , Iran</note>
+								<orgName type="department" key="dep1">Department of Communication</orgName>
+								<orgName type="department" key="dep2">Faculty of Electrical Engineering</orgName>
+								<orgName type="laboratory">CPS2 Lab</orgName>
+								<orgName type="institution">Shahid Rajaee Teacher Training University</orgName>
+								<address>
+									<postCode>16788-15811</postCode>
+									<settlement>Lavizan Tehran</settlement>
+									<country key="IR">Iran</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Sadegh</forename><surname>Sadeghi</surname></persName>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Department of Mathematics , Institute for Advanced Studies in Basic Sciences (IASBS) , Zanjan 45137-66731 , Iran</note>
+								<orgName type="department" key="dep1">Department of Mathematics</orgName>
+								<orgName type="department" key="dep2">Institute for Advanced Studies in Basic Sciences (IASBS)</orgName>
+								<address>
+									<postCode>45137-66731</postCode>
+									<settlement>Zanjan</settlement>
+									<country key="IR">Iran</country>
+								</address>
+							</affiliation>
+						</author>
+						<author role="corresp">
+							<persName><forename type="first">Nasour</forename><surname>Bagheri</surname></persName>
+							<email>nbagheri@sru.ac.ir</email>
+							<idno type="ORCID">0000-0002-6818-5342</idno>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> CPS2 Lab , Department of Communication , Faculty of Electrical Engineering , Shahid Rajaee Teacher Training University , Lavizan , Tehran 16788-15811 , Iran</note>
+								<orgName type="department" key="dep1">Department of Communication</orgName>
+								<orgName type="department" key="dep2">Faculty of Electrical Engineering</orgName>
+								<orgName type="laboratory">CPS2 Lab</orgName>
+								<orgName type="institution">Shahid Rajaee Teacher Training University</orgName>
+								<address>
+									<postCode>16788-15811</postCode>
+									<settlement>Lavizan Tehran</settlement>
+									<country key="IR">Iran</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>3</label> Electronics Research Institute , Sharif University of Technology , Tehran , Iran</note>
+								<orgName type="department">Electronics Research Institute</orgName>
+								<orgName type="institution">Sharif University of Technology</orgName>
+								<address>
+									<settlement>Tehran</settlement>
+									<country key="IR">Iran</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Improved polytopic differential neural distinguishers for SIMON, SIMECK, and SPECK block ciphers</title>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">Cybersecurity</title>
+						<title level="j" type="abbrev">Cybersecurity</title>
+						<idno type="eISSN">2523-3246</idno>
+						<imprint>
+							<publisher>Springer Science and Business Media LLC</publisher>
+							<biblScope unit="volume">9</biblScope>
+							<biblScope unit="issue">1</biblScope>
+							<date type="published" when="2026-05-19" />
+						</imprint>
+					</monogr>
+					<idno type="MD5">4E12383A6162BD71D69DF3B16BFE3859</idno>
+					<idno type="DOI">10.1186/s42400-025-00472-4</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-15T01:41+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Block cipher</term>
+					<term>Polytopic differential cryptanalysis</term>
+					<term>Deep learning</term>
+					<term>Neural distinguisher</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>In recent years, the application of deep learning in cryptanalysis has gained significant attention, particularly with the emergence of neural network-based distinguishers. At CRYPTO'19, Gohr demonstrated that neural networks could develop differential distinguishers capable of producing highly competitive attacks against existing methods. Building on this foundation, we propose multiple input polytopic differential neural distinguishers (PDNDs) for the lightweight block ciphers SIMON, SIMECK, and SPECK. Our approach incorporates a novel data generation method that utilizes two polytope differences, resulting in more precise training data and enhanced model accuracy. Through extensive experiments in single-key and related-key scenarios, we evaluate and validate the intrinsic performance of our neural distinguishers. Our results show that PDNDs significantly outperform the baseline, polytopic, multiple, and mixture differential neural distinguishers, utilizing a single input difference, in accuracy across various cipher rounds. Notably, our PDNDs achieved 100% accuracy for up to 7 rounds of SIMON32 and SIMECK32, and 99.39% accuracy for 5 rounds of SPECK32 in the single-key scenario. Additionally, for extended rounds, we achieved accuracy levels of up to 12 rounds for SIMON32, 13 for SIMECK32, and 8 for SPECK32 without requiring staged training. In the related-key scenario, our method further improved performance, introducing 13-round and 15-round RK-PDNDs for SIMON32 and SIMECK32, respectively, underscoring the enhanced capabilities of our approach. Furthermore, we demonstrate the effectiveness of our neural distinguishers through a key recovery test, where they successfully distinguish between correct and incorrect keys, confirming the practical applicability of our approach in cryptanalysis.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Introduction</head><p>The advancement of machine learning has profoundly impacted various aspects of people's lives. Among the various branches of machine learning, deep learning has excelled particularly in a wide range of tasks across numerous domains. Recently, deep learning has made significant contributions to challenging tasks, such as machine translation <ref type="bibr" target="#b0">Klimova et al. (2023)</ref> and autonomous driving <ref type="bibr" target="#b1">Lee and Liu (2023)</ref>. In cryptography, machine learning techniques have primarily been applied to practical works in side-channel analysis <ref type="bibr" target="#b2">Masure et al. (2020)</ref>.</p><p>Block ciphers are commonly used in various information systems to ensure confidentiality. One type of cipher that is rapidly gaining popularity is the lightweight block cipher, which is widely employed in Internet of Things (IoT) devices. Lightweight block ciphers are fundamental components of cryptosystems, playing a critical role in ensuring data confidentiality in resource-constrained devices. In this context, the primary methods used to attack block ciphers are differential cryptanalysis <ref type="bibr" target="#b3">Biham and Shamir (1991)</ref> and linear cryptanalysis <ref type="bibr" target="#b4">Matsui (1993)</ref>.</p><p>Recent advancements in machine learning, especially deep learning, have introduced new paradigms in cryptanalysis. Using neural networks to develop distinguishers has shown promising results in identifying weaknesses in block ciphers. For the first time, at CRYPTO'19, Gohr proposed better results by using a neural network in differential cryptanalysis <ref type="bibr" target="#b5">Gohr (2019)</ref>. That work focuses on applying deep learning techniques, such as ResNet <ref type="bibr" target="#b6">He et al. (2016)</ref>, to extend the widely used differential distinguisher model.</p><p>In this paper, we extend Gohr's work by introducing a new method for differential neural cryptanalysis based on multiple input polytope differences. Our approach involves using two polytope differences as inputs instead of one. This method allows for distinguishing between the ciphertexts produced by different polytope differences, eliminating the need for random inputs. Furthermore, we utilize a ResNet architecture with dilated convolutional layers and a training method that loads the previous round's model weights at each new round, improving the accuracy of the baseline neural distinguishers for SPECK32, SIMON32 <ref type="bibr" target="#b7">Beaulieu et al. (2015)</ref>, and <ref type="bibr">SIMECK32 Yang et al. (2015)</ref> block ciphers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Related work</head><p>The main results of Gohr's work <ref type="bibr" target="#b5">Gohr (2019)</ref> include training neural networks to use the differential features of the SPECK cipher with reduced rounds. For this purpose, neural networks were trained to distinguish SPECK ciphertexts with given input differences from random data. Neural networks have been developed to attack SPECK reduced to eight rounds, and it has been shown that key recovery attacks using neural distinguishers are more optimal than classical methods for nine and eleven rounds.</p><p>It is demonstrated that neural distinguishers exploit features of the distribution of ciphertext pairs that are hidden from all purely differential distinguishers, even with unlimited data. Different directions have been explored following the introduction of differential neural cryptanalysis. <ref type="bibr" target="#b9">Su et al. (2021)</ref> proposed a novel approach combining polytope differences with neural networks to improve differential cryptanalysis on reduced-round SIMON32 block cipher. They introduced the Polytope Differential Neural Network Distinguisher, which enhanced the success rate of neural distinguishers from 0.76 to 0.92 on eight rounds of SIMON32. Furthermore, they developed a key recovery attack leveraging the probability of differential paths alongside their polytope distinguisher, achieving a computational complexity of 2 33.4  for 11-round SIMON32. The Bayesian Key Research with Error was another contribution, reducing the complexity to 2 30.9 .  Benamira et al. (2021) investigated the superior performance of neural distinguishers in cryptanalysis, presenting their findings at Eurocrypt 2021. They analyzed Gohr's neural distinguishers and discovered their effectiveness stems from leveraging the differential distribution of ciphertext pairs and distributions in the penultimate and antepenultimate rounds. This dual reliance allows neural distinguishers to surpass traditional differential distinguishers in accuracy. Their study also showed that simplifying Gohr's neural network to basic machine learning tools can still achieve similar accuracy. This suggests that these neural distinguishers effectively approximate the Differential Distribution Table (DDT) during training to classify ciphertext pairs. This insight enhances the interpretability of deep neural networks in cryptanalysis. <ref type="bibr" target="#b11">Wang et al. (2021)</ref> proposed an extended machine learning framework to construct related-key differential distinguishers for lightweight ciphers, such as SPECK32 and PRESENT64. They introduced exhaustive and greedy algorithms for optimizing input and key differences, demonstrating that low Hamming weight differences yield higher accuracy. Using Bayesian optimization, they identified suitable machine learning models, such as CNNs, to improve distinguisher performance. Their methods reduced the data complexity significantly, achieving, for instance, a 7-round related-key distinguisher for SPECK32 with a complexity of 2 8 , compared to 2 13.2 in Gohr (2019). <ref type="bibr">Hou et al. (2021)</ref> proposed improvements to neural distinguishers for SIMON and SPECK by utilizing SATbased algorithms to optimize input differences and introducing a novel data format leveraging multiple output differences. Their approach significantly enhanced the accuracy and round coverage of neural distinguishers, achieving, for instance, effective 11-round distinguishers for SIMON64 and 8-round distinguishers for SPECK32. The study demonstrated that these advancements enable more efficient distinguishing attacks and reduce complexity in key recovery scenarios.</p><p>In <ref type="bibr" target="#b13">Wang et al. (2022)</ref>, Wang et al. introduce novel multiple differential distinguishers for the round-reduced SIMECK32 cipher based on deep learning. They design two types of distinguishers using neural networks to simulate the multiple input and output differences of differential cryptanalysis. The study presents the general models of these distinguishers and their neural network structures, utilizing random and associated multiple ciphertext pairs as inputs. Experimental results show that these new distinguishers achieve higher accuracy and can handle more rounds than traditional single-difference distinguishes. The study highlights the efficiency and reduced complexity of deep learning-based differential cryptanalysis. <ref type="bibr">Lyu et al. (2022a)</ref> improved deep-learning-based differential distinguishers by introducing repeated training and testing techniques, significantly enhancing the accuracy and round coverage of neural distinguishers applied to SIMECK32. They extended the NN-based distinguisher from 9 to 10 rounds and the differential-NN distinguisher to 15 rounds. Building on this work, <ref type="bibr">Lyu et al. (2022b)</ref> further advanced deep-learning-assisted key recovery attacks for SIMECK32 by focusing on selecting neural distinguishers optimized for Bayesian key search rather than solely prioritizing accuracy. Their approach incorporated precomputed wrong-key response profiles and classical differential transitions with high probabilities and neutral bits, enabling successful key recovery for 13, 14, and 15 rounds of SIMECK32 with reduced data and time complexity compared to prior methods, achieving a success rate of up to 88%. <ref type="bibr" target="#b16">Bao et al. (2022)</ref> enhanced differential-neural cryptanalysis by introducing advanced techniques to extend attacks on round-reduced ciphers like SPECK32 and SIMON32. Their study devised the first practical 13-round key-recovery attack on SPECK32 and improved 12-round attacks by leveraging generalized neutral bits and Bayesian optimization. Additionally, they introduced innovative approaches, including paired and switching differentials, which enabled efficient data reuse and reduced complexity. Experimental results demonstrated significant improvements in both time and data efficiency. <ref type="bibr" target="#b17">Hambitzer et al. (2023)</ref> introduced NNBits, a deep learning ensemble designed for bit-level profiling in cryptographic randomness tests. This tool generalizes neural distinguishers, such as Gohr's, and extends their application to datasets, including avalanche effects from ciphers like SPECK and AES. Their results demonstrate that NNBits match or surpass the performance of traditional statistical tools, such as NIST STS, while providing deeper cryptanalytic insights, including the identification of specific weak bits and an understanding of bias propagation. <ref type="bibr">Chen et al. (2023)</ref> proposed a new neural distinguisher model that leverages derived features from multiple ciphertext pairs for enhanced differential cryptanalysis. Unlike traditional models that rely on single ciphertext pairs, their approach processes groups of k &gt; 2 cipher- text pairs, capturing additional features that emerge from the non-uniform distribution of multiple samples. Experimental results demonstrated improved distinguishing accuracy across five reduced symmetric ciphers, including SPECK32, with significant performance gains over baseline models. Additionally, the proposed model reduced the time complexity of key recovery attacks. <ref type="bibr" target="#b19">Gohr et al. (2022)</ref> assessed various differential-neural distinguishers for multiple ciphers, including SIMON and SPECK, to evaluate their generality and optimization potential. They demonstrated that neural distinguishers can be automatically optimized for improved performance across six ciphers, highlighting a correlation between distinguisher accuracy and distribution skewness. Furthermore, the study rectified misconceptions regarding multi-pair ciphertext distinguishers, showing that claimed improvements were often marginal. Their findings reaffirm the utility of neural distinguishers in cryptanalysis, particularly for scenarios where classical methods are computationally infeasible. However, they emphasize their limitations in leveraging non-differential features.</p><p>In <ref type="bibr" target="#b20">Bellini et al. (2023)</ref>, Bellini et al. develop a general framework for neural cryptanalysis capable of automatically finding suitable input differences and providing general neural distinguishers without human adjustment. Their research comprises two main components: an evolutionary algorithm for searching suitable input differences and the DBitNet architecture, agnostic to the cipher structure. This fully automated pipeline has demonstrated competitive performance with specialized approaches, especially for SPECK32 and SIMON32, and introduced new neural distinguishers for various ciphers (e.g., XTEA, LEA, HIGHT, SIMON128, SPECK128). It also improves the state-of-the-art for PRESENT, KATAN, TEA, and GIMLI. This work lays the groundwork for future research, making it easier to apply neural cryptanalysis to a wider range of ciphers without manual tuning.</p><p>In <ref type="bibr" target="#b21">Baksi et al. (2023)</ref>, Baksi et al. present new advancements in machine learning-based distinguishers, focusing on round-reduced versions of ciphers such as SPECK32, SPECK128, ASCON, SIMECK32, SIMECK64, and SKINNY128. They explore the use of neural networks and support vector machines in various configurations, including different activation functions and multiple input difference tuples. Their results demonstrate the effectiveness of machine learning in cryptanalysis, achieving notable distinguishers for up to 8-round SPECK32 and improved performance for other ciphers. This research highlights the potential of machine learning to enhance classical differential methods, providing a foundation for future studies to further optimize and generalize neural cryptanalysis techniques. <ref type="bibr" target="#b22">Seok et al. (2024)</ref> proposed an innovative method for constructing high-quality differential datasets to enhance the performance of differential neural cryptanalysis. Utilizing Principal Component Analysis (PCA) and K-means clustering, the authors identified input differences that significantly improve the training accuracy of neural distinguishers. Their experiments on lightweight block ciphers SPECK and SIMON demonstrated that datasets optimized using their methodology achieved superior performance compared to traditional approaches, such as Gohr's neural difference search algorithm. The proposed algorithm reduced execution time by 30% while identify- ing more effective input differences. This study highlights the importance of dataset quality in cryptanalysis and proposes a scalable approach for generating optimized datasets within the context of machine learning-based cryptanalytic techniques.</p><p>In <ref type="bibr" target="#b23">Wu et al. (2024)</ref>, Wu et al. explore the properties of mixture differentials and propose a mixture differential neural network distinguisher using ResNet to improve accuracy in cryptanalysis. Their research focuses on the SIMON32 cipher, demonstrating that the 8-round mixture differential neural network distinguisher achieves an accuracy improvement of 74.7% to 92.3% compared to previous methods. The mixture differential distinguisher is shown to be less sensitive to input differences and offers greater robustness. Additionally, by combining probabilistic expansion and neutral bit techniques, they extend the distinguisher to 11 rounds and perform a successful 12-round key recovery attack on SIMON32 with a key recovery accuracy of 55% , outperforming traditional differential neural network distinguishers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Contributions</head><p>We aim to improve upon the results of <ref type="bibr" target="#b23">Wu et al. (2024)</ref>, <ref type="bibr" target="#b9">Su et al. (2021)</ref>, <ref type="bibr" target="#b13">Wang et al. (2022)</ref> as well as the baseline differential neural distinguishers. Results are described in Sect. 5, which can be summarized as follows:</p><p>• We introduce a data generation method based on multiple input polytope differences and polytopic differential analysis. This method reduces the sensitivity of distinguishers to input differences and eliminates the need for random differences for one of the labels.</p><p>• We enhance the accuracy of polytopic, mixture, and multiple differential neural distinguishers for the SIMON32 and introduce the first polytopic differential neural distinguishers for the 32-bit versions of the SIMECK and SPECK ciphers, both in the single-key and related-key scenarios. For SPECK32, our approach achieves 99.39% accuracy for 5 rounds, 91.22% for 6 rounds, 62.01% for 7 rounds, and 50.80% for 8 rounds. For SIMON32, our method improves the accuracy to 100% for 7 rounds, 98.47% for 8 rounds, and remains effective up to 12 rounds with an accuracy of 50.50%. For SIMECK32, we obtain 100% accuracy for 7 rounds, 98.97% for 8 rounds, and maintain effectiveness up to 12 rounds with an accuracy of 50.55%. These results are further improved in the related-key scenario for SIMON32 and SIMECK32, achieving up to 13 rounds with 50.59% accuracy and 15 rounds with 54.44% accuracy, respectively.</p><p>• We conduct a series of experiments to understand the intrinsic performance of neural distinguishers based on polytopic differential analysis. The results of these experiments indicate that the polytopic differential neural distinguisher learns and bases its distinctions on information beyond just the polytopic differential distribution and simple XOR operations. Additionally, ciphertexts provide more details to the distinguisher model than their differences. Furthermore, our distinguishers effectively differentiate between real polytopic differences and randomized differences.</p><p>We propose a framework for performing multiple-input polytopic differential neural cryptanalysis of several block ciphers. Our code and trained models are available on GitHub at <ref type="url" target="https://github.com/NeuralDistinguisher/Multiple-PDND.git">https:// github. com/ Neura lDist ingui sher/  Multi ple-PDND. git</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Organization</head><p>In Sect. 2, we discuss the necessary preliminary concepts, including the structure of the block ciphers under consideration, differential-neural distinguishers, and the idea of polytopic differential analysis. In Sect. 3, we describe our data generation method, which is based on the differences between multiple input polytopes. In Sect. 4, we describe the model architecture used for constructing the distinguishers, along with the training methodology and parameters. In Sect. 5, we present and compare the obtained results with previous works. Additionally, we describe the method for selecting input polytope differences. We also demonstrate the effectiveness of our method through a key recovery test. In Sect. 6, we present the experiments and additional findings. Finally, in Sect. 7, we summarize the paper.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Preliminaries</head><p>This section provides an overview of the fundamental terms used in this paper. It includes an introduction to the block ciphers SIMON, SPECK, and SIMECK examined in this work, an explanation of the use of neural networks in differential cryptanalysis, and an overview of polytopic differential analysis.</p><p>Short description of SIMON, SPECK, and SIMECK Lightweight block ciphers SIMON and SPECK, proposed by the U.S. National Security Agency in 2013 Beaulieu et al. (2015), support block sizes ranging from 32 to 128 bits and key sizes from 64 to 256 bits. SIMON employs a Feistel structure with the bitwise AND function as the non-linear operation, while SPECK uses a traditional ARX structure (Addition, Rotation, XOR). SIMON is notable for its simplicity and efficiency in hardware implementations, whereas SPECK, due to its ARX operations, is optimized for software performance on modern processors. SIMECK, introduced at CHES 2015 Yang et al. ( <ref type="formula">2015</ref>), is a family of lightweight block ciphers whose round function and key schedule were inspired by both SIMON and SPECK. Compared to these two ciphers, SIMECK achieves a more compact hardware implementation.</p><p>For the 32-bit versions of these ciphers, the round function takes as input two 16-bit words, (x i , y i ) , and a 16-bit round key, k i , derived from a 64-bit master key using a key schedule. The next-round state, (x i+1 , y i+1 ) , for SPECK, SIMON, and SIMECK, is computed using the following equations ( <ref type="formula">1</ref>), (2), and (3), respectively. Here, ⊕ represents the bitwise XOR operation, &amp; denotes the bitwise AND operation, ⊞ signifies modular addition, and the symbols ≫ and ≪ denote circular right and left shifts, respectively.</p><p>SIMON uses a linear key schedule, whereas SPECK and SIMECK employ their respective non-linear round functions to derive the round keys.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Differential-neural distinguishers</head><p>Gohr introduced a neural differential distinguisher for round-reduced SPECK to distinguish ciphertext pairs with a specific input difference from random data <ref type="bibr" target="#b5">Gohr (2019)</ref>. The model is trained using the following procedures:</p><p>• Collecting training data by generating N uniformly distributed keys and plaintext pairs given a fixed input difference and the binary labels Y i , where i ranges from 0 to N -1.</p><p>• If the binary label Y i = 1 , then the plaintext pairs are encrypted by r-round SPECK to produce the ciphertext pairs. Otherwise, random ciphertext pairs are generated.</p><p>(1)</p><formula xml:id="formula_0">x i+1 =((x i ≫ 7) ⊞ y i ) ⊕ k i , y i+1 = (y i ≪ 2) ⊕ x i+1 (2) x i+1 =(x i ≪ 1)&amp;(x i ≪ 8) ⊕ (x i ≪ 2) ⊕ k i , y i+1 = x i (3) x i+1 =(x i ≪ 5)&amp;x i ⊕ (x i ≪ 1) ⊕ k i , y i+1 = x i</formula><p>• Pre-process ciphertext pairs to fit the format required by the neural network and start training.</p><p>Gohr's work shows that neural networks can be effectively trained to capture the non-randomness of target ciphers.</p><p>Given a particular input difference in and a target cipher, the neural network is trained to distinguish ciphertext pairs using in from random differences. These ciphertext pairs using in are labeled by 1, and those using random differences are labeled by 0.</p><p>Given enough training samples, a deep residual network (ResNet) is trained to distinguish between ciphertext data and random data. The neural network, acting as a distinguisher, outputs a value v ranging from 0 to 1. If v &gt; 0.5 , the pair of ciphertexts is considered to use in ; otherwise, it is supposed to use a random difference. This trained neural network is referred to as a neural distinguisher (ND).</p><p>The effectiveness of neural distinguishers is further demonstrated by their ability to outperform classical differential cryptanalysis methods. For example, Gohr achieved better results than the best classical cryptanalysis on 11-round SPECK, showing the potential of machine learning in cryptanalysis.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Overview of (related-key) polytopic cryptanalysis</head><p>Differential cryptanalysis examines how round function iterations transfer plaintext differences to ciphertext differences. Polytopic cryptanalysis <ref type="bibr" target="#b24">Tiessen (2016)</ref> is a generalized framework extending traditional differential cryptanalysis by incorporating the interdependencies among larger sets of texts (polytopes) traversing through a cipher. Introduced formally in block cipher security analysis, this method evaluates the statistical relationships of multiple plaintext and ciphertext differences beyond pairwise dependencies. Polytopic transitions enable cryptanalysts to exploit higher-order differential structures and uncover subtle non-random features in cryptographic algorithms that traditional methods might overlook.</p><p>A transition involving a (d + 1)-polytope, denoted as (m 0 , m 1 , . . . , m d ) , is described as an s-tuple of values in F n 2 , where differences between texts in the polytope are analyzed relative to a reference text. These differences form the foundation of d-differences:</p><p>where m 0 is the anchor or reference text.</p><p>Similar to differential cryptanalysis, polytopic trails trace transitions over multiple rounds: with probabilities calculated over all possible intermediate transitions.</p><formula xml:id="formula_1">� = (m 0 ⊕ m 1 , m 0 ⊕ m 2 , . . . , m 0 ⊕ m d ), � 0 f 1 -→ � 1 f 2 -→ . . . f r -→ � r ,</formula><p>Related-key differential cryptanalysis, introduced by <ref type="bibr" target="#b3">Biham in 1991</ref><ref type="bibr" target="#b25">Biham (1994)</ref>, extends classical differential cryptanalysis by incorporating differences in the plaintexts and the master keys. In this approach, a pair of plaintexts P and P ′ is encrypted using a pair of related keys K and K ′ , respectively, where K ⊕ key = K ′ . The analysis focuses on exploiting differential propagation while encrypting these plaintexts with distinct keys, even if they are identical.</p><p>In polytopic differential analysis, this concept is extended to related-key settings by considering d + 1 polytopes in both the plaintext and key domains. A related-key polytopic distinguisher uses a (d + 1)-polytope (m 0 , m 1 , . . . , m d ) for the plaintexts and a corre- sponding (d + 1)-polytope for the keys (k 0 , k 1 , . . . , k d ) , where</p><formula xml:id="formula_2">k 0 ⊕ � 1 key = k 1 , . . . , k 0 ⊕ � d key = k d .</formula><p>The relative differences between these texts and keys form the foundation of d-differences:</p><p>This framework analyzes the propagation of polytopic differences through the cipher, represented as an r-round related-key polytopic differential transition. The formal representation of such a transition can be expressed as: where P and K denote the input plaintext and key differences, and ′ P and ′ K represent their corresponding output differences after r rounds.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Dataset generation</head><p>The dataset generation process is crucial in training neural network distinguishers for cryptanalysis. This process ensures the model learns to identify non-random characteristics in ciphertext distributions by leveraging structured input differences.</p><p>We adopt the multiple input differences method, first introduced by <ref type="bibr" target="#b26">Baksi and Baksi (2022)</ref>, to construct training data for single-key and related-key scenarios. This method generates plaintext and ciphertext quadruples with specific polytope differences, creating distinguishable patterns for the neural network.</p><p>In the single-key scenario, all plaintexts in a quadruple are encrypted with the same random key. In contrast, in the related-key scenario, the plaintexts are encrypted with related keys derived using predefined key differences. Both scenarios use distinct polytope differences for the positive (label 1) and negative (label 0) classes, ensuring structured output distributions that enhance</p><formula xml:id="formula_3">� P = (m 0 ⊕ m 1 , m 0 ⊕ m 2 , . . . , m 0 ⊕ m d ), � K = (k 0 ⊕ k 1 , k 0 ⊕ k 2 , . . . , k 0 ⊕ k d ). (� P , � K ) f -→ (� ′ P , � ′ K ),</formula><p>the neural network's distinguishing capabilities. The dataset generation process comprises the following steps:</p><p>1. Random selection of plaintexts and keys. 2. Application of polytope differences to create plaintext quadruples for both label classes. 3. Encryption of the plaintext quadruples using single or related keys to generate ciphertext quadruples. 4. Assignment of labels and storage of the generated data for training purposes.</p><p>The following subsections provide a detailed explanation of the dataset generation process for both single-key and related-key scenarios. Subsequently, a structured algorithm is presented to encapsulate the entire procedure.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Single-key scenario</head><p>In the single-key scenario, all plaintexts within a quadruple are encrypted using the same randomly selected key, ensuring that the differences in the ciphertext quadruples are determined solely by the differences in the plaintexts. The generated ciphertext quadruples (C 0 , C 1 , C 2 , C 3 ) and their respective labels Y serve as the input for training the neural network distinguisher.</p><p>To construct the dataset, we generate a random plaintext P 0 and apply predefined polytope differences. For label 0, the polytope differences � = (� 1 , � 2 , � 3 ) are applied to P 0 , resulting in the plaintext quadruple: Similarly, for label 1, the polytope differences δ = (δ 1 , δ 2 , δ 3 ) are applied to generate: Each plaintext quadruple is then encrypted using the same randomly selected key K to produce the corresponding ciphertext quadruple: where: and:</p><p>The ciphertext quadruples, alongside their labels, form the training dataset for the neural network. The network learns to distinguish between label 0 and label 1 by identifying the statistical differences in the ciphertext</p><formula xml:id="formula_4">(P 0 , P 0 ⊕ � 1 , P 0 ⊕ � 2 , P 0 ⊕ � 3 ). (P 0 , P 0 ⊕ δ 1 , P 0 ⊕ δ 2 , P 0 ⊕ δ 3 ). (C 0 , C 1 , C 2 , C 3 ), C 0 = encrypt(P 0 , K ), C j = encrypt(P 0 ⊕ � j , K ) for j = 1, 2, 3 (label 0), C 0 = encrypt(P 0 , K ), C j = encrypt(P 0 ⊕ δ j , K ) for j = 1, 2, 3 (label 1).</formula><p>distributions resulting from the input plaintext differences and δ.</p><p>The detailed steps for generating the dataset in the single-key scenario are summarized in Algorithm 1.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 1 Dataset Generation for Single-Key Scenario</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Related-key scenario</head><p>In the related-key scenario, the plaintext quadruples, and the corresponding encryption keys are structured using predefined polytope differences. This enables a more comprehensive examination of the cipher's behavior under related-key settings, where the encryption keys are not independent but are derived from a master key through specific differences.</p><p>Given the input polytope differences � = (� 1 , � 2 , � 3 ) for label 0 and δ = (δ 1 , δ 2 , δ 3 ) for label 1, along with key differences � key = (α 1 , α 2 , α 3 ) for label 0 and δ key = (β 1 , β 2 , β 3 ) for label 1, the ciphertext quadruples (C 0 , C 1 , C 2 , C 3 ) and their associated labels Y are gener- ated for training.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Key and Plaintext Generation</head><p>A random 32-bit plaintext P 0 and a random 64-bit key K are generated. The key K is then split into four parts: K = {l 0 , l 1 , l 2 , l 3 } . Related keys are derived as follows:</p><p>• For label 0:</p><formula xml:id="formula_5">K j 0 = {l 0 , l 1 , l 2 , l 3 ⊕ α j } (SIMON, SIMECK) {l 0 ⊕ α j , l 1 , l 2 , l 3 } (SPECK) , j = 1, 2, 3.</formula><p>• For label 1:</p><p>A plaintext quadruple is generated for each label:</p><p>• For label 0:</p><p>• For label 1:</p><p>Ciphertext Generation Each plaintext in the quadruple is encrypted using the corresponding related keys:</p><p>• For label 0:</p><formula xml:id="formula_6">K j 1 = {l 0 , l 1 , l 2 , l 3 ⊕ β j } (SIMON, SIMECK) {l 0 ⊕ β j , l 1 , l 2 , l 3 } (SPECK) , j = 1, 2, 3. (P 0 , P 0 ⊕ � 1 , P 0 ⊕ � 2 , P 0 ⊕ � 3 ). (P 0 , P 0 ⊕ δ 1 , P 0 ⊕ δ 2 , P 0 ⊕ δ 3 ).</formula><p>• For label 1:</p><p>The resulting ciphertext quadruples (C 0 , C 1 , C 2 , C 3 ) , along with their labels, are used as input for the neural network. This structured approach leverages plaintext and key differences to enhance the neural network's ability to identify distinguishing characteristics in ciphertext distributions.</p><p>Algorithm 2 Dataset Generation for Related-Key Scenario C 0 = encrypt(P 0 , K ), C j = encrypt(P j , K j 0 ), j = 1, 2, 3.</p><formula xml:id="formula_7">C 0 = encrypt(P 0 , K ), C j = encrypt(P j , K j 1 ), j = 1, 2, 3.</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Network architecture</head><p>To effectively capture the complex patterns in polytopic differential cryptanalysis, we employ a deep learning model based on the architecture proposed by <ref type="bibr" target="#b20">Bellini et al. (2023)</ref>. This section outlines the structure of the neural network, which utilizes dilated convolutional layers to enhance feature extraction and to improve model performance. The overall architecture of this model is illustrated in Fig. <ref type="figure" target="#fig_0">1</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Input and Normalization</head><p>The input to our model consists of N samples, where the format and structure of each sample is a quadruple of ciphertexts along with their corresponding label, represented as (C 0 , C 1 , C 2 , C 3 , Y ) . In the main model, each sample from the dataset has four features, each 32 bits in length, and the processing is performed on this input format. The model begins with an input layer where the data is normalized to a range of <ref type="bibr">[-1, 1]</ref>. This normalization step helps stabilize the training process and enhances the model's convergence. The input size is denoted by 4 × block size , which in this case is 128 bits (since the block size is 32 bits). Using dilated convolutional layers eliminates the need to reshape the input, allowing us to perform bit-oriented analysis directly. This is particularly beneficial for cryptographic analysis, where maintaining the data's bit-level structure is crucial.</p><p>Block 1 Block 1 consists of two dilated convolutional layers. The first convolutional layer uses a kernel size of 2, a stride of 1, 'valid' padding, and a dilation rate based on the input size. The second convolutional layer uses a kernel size of 2, a stride of 1, 'causal' padding, and a dilation rate of 1. Both convolutional layers are followed by batch normalization (BN) and ReLU activation functions. After each pair of convolutional layers, the number of filters is increased by 16. The dilation rates are calculated as follows:</p><p>where ⌊•⌋ represents the floor function, which returns the greatest integer less than or equal to the input value, dilation_rate(i) represents the dilation rate for the i-th layer, and 128 is the input size in bits. Dilated convolutions enable an exponential increase in the receptive field without compromising resolution or coverage, making them particularly useful for capturing long-range dependencies in data while maintaining computational efficiency.</p><p>Block 2 Block 2 consists of three fully connected (FC) layers, followed by batch normalization (BN) and ReLU activation functions. The first and second dense layers each have 256 neurons, while the third dense layer has 64 neurons. Additionally, an l 2 regularization with a param- eter of 10 -5 is applied to the dense layers to prevent overfitting.</p><formula xml:id="formula_8">dilation_rate(i) = 128 2 i -1 , for i = 0, 1, 2, . . . ,</formula><p>Prediction Head The prediction head's final layer is a fully connected layer followed by a sigmoid activation function. This layer produces a binary decision, indicating whether the input data conforms to the expected differential pattern.</p><p>Despite the inherently random nature of cryptographic algorithms, deep learning models can identify subtle features and patterns that are not directly observable through traditional methods. The model can learn complex representations of the input data by leveraging the power of dilated convolutions and dense layers. These representations capture the underlying relationships between the input differences and the resulting ciphertexts, enabling the model to act effectively. The combination of advanced feature extraction techniques and extensive training on large datasets allows the neural network to detect non-randomness and differentiate between conforming and non-conforming data with high accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Training distinguishers</head><p>The training strategy utilized in this paper adopts a progressive approach. First, a distinguisher for r rounds is trained. The trained weights are then used to initialize the model for the subsequent (r + 1) rounds. This incre- mental method enhances the model's capability to learn complex patterns effectively across different rounds.</p><p>The training continues until the validation accuracy falls below a specified threshold, ten times the standard deviation ( 10σ ) above the random baseline of 50% accuracy. The standard deviation for the accuracy is determined by the size of the dataset, N, and is given by: This criterion ensures that a distinguisher is deemed effective only if its performance exceeds random guessing by a statistically significant margin. During training, the accuracy is carefully monitored for both the training and testing datasets to ensure the reliability and generalization of the distinguisher. The detailed training process is described in Algorithm 3. The same method is used for training and evaluating RK-PDNDs in the related-key scenario.</p><p>The training process utilizes the Adam optimizer, which features a cyclic learning rate that ranges from 0.001 to 0.0002 over ten epochs. The model is trained for several epochs with early stopping based on validation accuracy. We chose a training set size of 10 7 sam- ples and a validation set size of 10 6 . We ran 120 epochs for each training, with a batch size of 10,000. The loss function used was Mean Squared Error (MSE). Additionally, each model was run 5 times, and the average accuracy of these five runs is reported.</p><p>The model training was performed using two Nvidia RTX 3060 Ti GPUs. The programming language used for data generation, model construction, and model training was Python 3.10. The training was executed on a machine with the following specifications: Intel i9-12900K CPU, 16 GB RAM, and Ubuntu LTS 22.04.4 operating system. The machine learning framework utilized was TensorFlow 2, with additional libraries such as NumPy and Pandas.</p><formula xml:id="formula_9">σ = 1 2 √ N .</formula><p>Algorithm 3 Training PDNDs</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Testing process</head><p>The trained model is evaluated by making predictions on unseen ciphertext quadruples. For each quadruple, the model outputs a prediction score v ∈ (0, 1) , which indicates the likelihood that the ciphertext quadruple is derived from a plaintext quadruple conforming to the input polytopic pattern. The testing process is conducted on a separate test dataset of 10 6 samples to measure the model's perfor- mance. The dataset is composed of ciphertext quadruples generated using two distinct polytopic differences:</p><p>• Polytopic Difference : Corresponding to label 0.</p><p>• Polytopic Difference δ : Corresponding to label 1.</p><p>For each input quadruple, the model determines whether it was generated using or δ . A higher value of v (closer to 1) indicates the model's confidence in distinguishing between the distributions associated with these two polytopic differences.</p><p>Additionally, the model can differentiate between genuine data-ciphertext quadruples generated by encrypting plaintexts using the target block cipher-and random data, which does not conform to any structured polytopic pattern. This demonstrates the model's robustness in identifying structured patterns within ciphertext distributions.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Results</head><p>This section presents the results obtained for our distinguishers on the SPECK32, SIMON32, and SIMECK32 ciphers in two scenarios: single-key and related-key. We analyze the performance and accuracy of the neural distinguishers in both settings to evaluate their effectiveness and robustness. In addition, we describe the method for selecting input polytope differences, which significantly improves the accuracy of our neural distinguishers. Furthermore, we demonstrate the applicability of our approach through a key recovery test, where the distinguishers effectively distinguish between correct and incorrect keys.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Single key polytopic differential neural distinguishers</head><p>This section compares the neural distinguishers obtained in this work and those from previous research. The results are shown in Table <ref type="table" target="#tab_0">1</ref>.</p><p>For our experiments, we used specific polytope differences for each cipher as follows:</p><p>For SPECK32, we used the polytope differences and � = ((0x40, 0x0), (0x0, 0x8000), (0x60, 0x0)) δ = ((0x20, 0x0), (0x40, 0x8000), (0x10, 0x2000)).</p><p>For SIMON32 and SIMECK32, we used the polytope differences and The neural distinguishers were trained using the method described in SubSect. 4.1. The Table <ref type="table" target="#tab_0">1</ref> summarizes the accuracy of the single key distinguishers for different rounds of SPECK32, SIMON32, and SIMECK32. The results show improvements in accuracy compared to previous works. For a fair comparison, we used papers with � = ((0x0, 0x1), (0x0, 0x4), (0x0, 0x8)) δ = ((0x0, 0x2), (0x0, 0x10), (0x0, 0x40)).</p><p>similar features, a comparable number of samples, and no staged training or advanced feature engineering. These results demonstrate that our method, which utilizes two polytope differences and a ResNet-based neural network architecture, significantly improves the accuracy of baseline neural distinguishers for multiple rounds of SPECK32, SIMON32, and SIMECK32 compared to previous methods. Polytope differences reduce the distinguisher model's sensitivity to the specific input difference, making it more robust. Additionally, employing two distinct sets of differences for the positive and negative classes (instead of random differences for the negative class) enhances the separability of the output distributions for both labels, thereby improving the model's ability to distinguish between them. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Related-key polytopic differential neural distinguishers</head><p>This subsection presents the results for the related-key polytopic differential neural distinguishers (RK-PDNDs) for SPECK32, SIMON32, and SIMECK32. The analysis was conducted similarly to the single-key scenario, using the same parameters but with related keys. The results are summarized in Table <ref type="table">2</ref>. For SPECK32, the input key differences used were For SIMON32, the input key differences were For SIMECK32, the input key differences were</p><p>The input polytope difference values and δ for the plaintexts are the same as the values mentioned in SubSect. 5.1.</p><p>The results in Table <ref type="table">2</ref> show that for SPECK32, the number of rounds distinguished by the RK-PDND is similar to that of the PDND. Still, the accuracy in the related-key scenario is generally lower. This indicates the resistance of SPECK's key schedule algorithm to this analysis, which does not provide additional features or information to the model in the related-key scenario. However, for SIMON32 and SIMECK32, the number of rounds distinguished by the RK-PDND is higher than that of the PDND, and the accuracy for all rounds in the related-key scenario is significantly better.</p><p>� key = (0x0040, 0x8000, 0x0060), δ key = (0x0020, 0x8000, 0x2000).</p><p>� key = (0x0, 0x8000, 0x0), δ key = (0x0, 0x8000, 0x2000).</p><p>� key = (0x1, 0x4, 0x8), δ key = (0x0020, 0x0010, 0x0040).</p><p>When the number of rounds distinguished for SIMON32 and SIMECK32 is compared, we observe that the number of rounds and accuracy in the single key scenario are almost similar. However, in the related-key scenario, SIMECK32 shows more distinguishable rounds and better accuracy than SIMON32. This suggests that SIMON32's linear key schedule provides more resistance against related-key polytope differential neural analysis compared to the non-linear key schedule of SIMECK32, which uses its round function for key distribution.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>On the choice of polytope input differences</head><p>The selection of polytope input differences plays a crucial role in the effectiveness of our neural distinguishers. A well-chosen polytope difference can significantly enhance the performance of the distinguisher by optimizing its ability to identify distinguishing features across cipher rounds. In this section, we discuss the importance of polytope input differences, the criteria for selecting suitable differences, the methodology used in this study, and the impact of these choices compared to previous work, particularly <ref type="bibr" target="#b26">Baksi and Baksi (2022)</ref>.</p><p>The primary factor influencing the selection of polytope input differences is minimizing the Hamming weight of the differences. Lower Hamming weight differences reduce the dispersion of the difference across the cipher rounds, making it easier for the neural distinguisher to identify and classify the distribution of differences. This is because differences with high Hamming weights tend to spread more widely, making them less predictable and more challenging to track through the rounds of the cipher. By keeping the Hamming weight SPECK32 6 ((0x40, 0x0), (0x0, 0x8000), (0x60, 0x0)) ((0x20, 0x0), (0x40, 0x8000), (0x10, 0x2000)) 91.33 ((0x40, 0x0), (0x8000, 0x0), (0x20, 0x0)) ((0x100, 0x0), (0x40, 0x0), (0x1, 0x0)) 91.00 ((0x0, 0x1), (0x0, 0x4), (0x0, 0x8)) ((0x0, 0x20), (0x0, 0x10), (0x0, 0x40)) 89.40 ((0x0, 0x10), (0x0, 0x8000), (0x0, 0x400)) ((0x100, 0x0), (0x40, 0x0), (0x2, 0x0)) 88.99 ((0x0, 0x10), (0x0, 0x6000), (0x0, 0x400)) ((0x100, 0x8), (0x40, 0x0), (0x2, 0x0)) 83.34 ((0x0, 0x10), (0x0, 0x8), (0x10, 0x0)) ((0x100, 0x40), (0x40, 0x8), (0x1, 0x2000)) 54.30 ((0x0, 0x40), (0x3000, 0x0), (0x0, 0x6)) ((0x100, 0x6), (0x40, 0x8), (0x2, 0x3)) 50.00 SIMON32 8 ((0x0, 0x1), (0x0, 0x4), (0x0, 0x8)) ((0x0, 0x2), (0x0, 0x10), (0x0, 0x40)) 98.47 ((0x0, 0x1), (0x0, 0x3), (0x0, 0x6)) ((0x0, 0x2), (0x8, 0x10), (0x1, 0x40)) 94.71 ((0x20, 0x1), (0x0, 0x4), (0x0, 0x100)) ((0x2, 0x0), (0x0, 0x80), (0x0, 0x10)) 93.80 ((0x0, 0x80), (0x0, 0x100), (0x0, 0x8)) ((0x0, 0x20), (0x0, 0x40), (0x0, 0x10)) 93.71 ((0x1, 0x0), (0x4, 0x0), (0x8, 0x0)) ((0x0, 0x2), (0x0, 0x10), (0x0, 0x40)) 86.80 ((0x0, 0x4002), (0x0, 0x4001), (0x0, 0x2001)) ((0x3, 0x0), (0x2, 0x0), (0x1, 0x0)) 60.99 ((0x1, 0x8000), (0x4000, 0x2), (0x200, 0x8)) ((0x40, 0x80), (0x200, 0x4), (0x1000, 0x20)) 59.61 low, the propagation of the difference across rounds is more concentrated, which leads to a more effective distinguisher. Moreover, the placement of the active bit in the input difference is also critical. For SIMON-like ciphers (SIMON and SIMECK), placing the active bit in the right word (i.e., in the form (0, e i ) ) was found to yield better results. For the SPECK cipher, the placement of the active bit in either of the two words can yield effective results; however, typically placing it in the left word produces better outcomes for the neural distinguisher. This strategic placement of active bits ensures that the differences propagate efficiently, optimizing the distinguisher's ability to detect them.</p><p>In this work, the polytope input differences were selected through an extensive experimental evaluation of various potential differences. We tested several polytope differences, adjusting their Hamming weights and the placement of active bits, and selected the differences that provided the best performance for each cipher. This process allowed us to identify the most effective polytope differences for SPECK32, SIMON32, and SIMECK32. It is essential to note that the differences chosen in this study differ from those used in previous work, particularly <ref type="bibr" target="#b26">Baksi and Baksi (2022)</ref>. While the method presented in <ref type="bibr" target="#b26">Baksi and Baksi (2022)</ref> relies on pure differential analysis, our approach employs polytopic differential analysis, which allows for greater flexibility in selecting input differences and thus enables better optimization of the neural distinguisher's performance. For example, the best neural distinguisher reported in <ref type="bibr" target="#b21">Baksi et al. (2023)</ref> as an extension of the work in <ref type="bibr" target="#b26">Baksi and Baksi (2022)</ref> for the SIMECK32 cipher was achieved for 9 rounds, whereas we extend the analysis to 13 and 15 rounds, demonstrating the robustness of our method in handling more complex cases.</p><p>In this study, various polytope input differences were evaluated to determine their impact on the performance of the neural distinguisher. Based on the findings and discussions provided in this section, Table <ref type="table" target="#tab_1">3</ref> presents a comparison of the performance and effect of several polytope input differences on the neural distinguishers for 6-round SPECK32 and 8-round SIMON32. The table highlights the influence of different input differences on the accuracy of the distinguisher.</p><p>In conclusion, the choice of polytope input differences is a critical factor in optimizing the performance of neural distinguishers. By minimizing the Hamming weight and carefully selecting the placement of active bits, we improved the effectiveness of the distinguisher for SIMON-like and SPECK ciphers. The flexibility in choosing polytope differences, combined with polytopic differential analysis, has enabled better performance compared to previous approaches, as demonstrated by our experiments and the results presented in this paper.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Key recovery test</head><p>This section presents a key recovery test to evaluate the ability of our neural distinguishers to distinguish between correct and incorrect subkeys. The primary goal is to assess the potential of our distinguishers in recovering the correct subkey through partial decryption and to demonstrate their applicability in cryptanalysis.</p><p>To show the effectiveness of the proposed neural distinguishers as research tools, we developed a partial key recovery attack utilizing the r-round distinguishers for the lightweight block ciphers SIMON32, SIMECK32, and SPECK32. In this approach, we focus on evaluating the performance of the neural network model trained using an r-round distinguisher for each of the target encryption algorithms. The model is tested to see how accurately it can predict the correct subkey as compared to incorrect ones when extended to r + 1 rounds.</p><p>The key recovery test is performed as follows:</p><p>1. After training the neural network model, we select 10 6 plaintext quadruple samples. A fixed key is applied to all these samples. 2. The corresponding ciphertext quadruples are generated using r + 1 rounds of the encryption algorithm. 3. These r + 1 round ciphertext quadruples are then partially decrypted using both the correct key and a set of random incorrect keys, with one round of decryption applied in each case. 4. For each resulting ciphertext quadruple, input features for the neural network model are generated as described in Sect. 3. 5. The accuracy of the model is then evaluated based on its ability to distinguish the correct key from incorrect ones.</p><p>This process is repeated across 100 different random keys, and the average accuracy is calculated. The expected result is that, for the correct key, the model's accuracy should closely match the accuracy achieved with the r-round distinguisher. For incorrect keys, the accuracy should be approximately 0.5, which is close to random guessing. For the single key experiments involving SIMON32, SIMECK32, and SPECK32, we applied the key recovery test for r + 1 rounds ranging from r = 5 to r = 8 for SPECK32 and r = 8 to r = 11 for SIMECK32 and SIMON32, based on the distinguishers and their accuracies presented in Table <ref type="table" target="#tab_0">1</ref>. Additionally, we extended this key recovery test to related-key scenarios for r + 1   rounds, using related-key distinguishers for SIMON32, SIMECK32, and SPECK32. Notably, these included distinguishers for up to 12 rounds of SIMON32, and up to 12 to 15 rounds of SIMECK32, as shown in Table <ref type="table">2</ref>. The results for distinguishers with accuracy below 51% were excluded due to their proximity to random guessing.</p><p>Figures <ref type="figure" target="#fig_1">2</ref>, <ref type="figure" target="#fig_2">3</ref>, and 4 present the model's accuracy in distinguishing between correct and incorrect subkeys for both single-key and related-key scenarios. The left columns of the figures show the accuracy when the correct keys are used, while the right columns illustrate the performance with random keys. Specifically, Fig. <ref type="figure" target="#fig_1">2</ref> focuses on the 6 to 9 rounds of SPECK32 in the singlekey scenario, Fig. <ref type="figure" target="#fig_2">3</ref> covers 10 to 13 rounds of SIMON32 for both single-key and related-key and Fig. <ref type="figure" target="#fig_3">4</ref> demonstrates the results for 13 to 16 rounds of SIMECK32 in the related-key scenario. As demonstrated in these figures, our proposed neural network model effectively distinguishes between correct and incorrect keys for r + 1 rounds, showcasing its capability in key recovery tasks. As illustrated in the corresponding figures, we observe that as the number of rounds increases, the accuracy of the distinguisher in differentiating between the correct key and incorrect keys tends to decrease. This trend is expected, since the cryptographic structure becomes more complex and the statistical differences between correct and incorrect keys become less pronounced in higher rounds. However, this reduction in accuracy can be partially compensated by increasing the number of samples and utilizing larger, more diverse datasets for both training and evaluation. Additionally, as the number of samples increases, the average score assigned by the distinguisher to the correct key becomes closer to the neural distinguisher's accuracy. In practical key recovery attacks as well, the lower accuracy of the distinguisher can generally be compensated by increasing the data complexity <ref type="bibr">Chen et al. (2023)</ref>. Conversely, reducing the number of dataset samples leads to a decrease in the distinguisher's accuracy, and consequently, a lower neural distinguisher score for the correct key.</p><p>In comparison to the key recovery results for 11-round and 12-round SIMON32 presented in <ref type="bibr" target="#b9">Su et al. (2021)</ref> and <ref type="bibr" target="#b23">Wu et al. (2024)</ref>, our distinguishers, without the complexity of adding additional rounds, have been extended to 12 rounds in the single-key scenario and 13 rounds in the related-key scenario, as explained above. Furthermore, the key recovery presented in <ref type="bibr" target="#b13">Wang et al. (2022)</ref> for SIMECK32 was for 11 rounds, but in this section, using our PDND distinguishers, it has been extended to 12 rounds in the single-key scenario and up to 16 rounds in the related-key scenario.</p><p>In addition, leveraging the first subkey addition after the initial nonlinearity application, all distinguishers discussed in this paper can be extended by one additional round at no extra cost. In a chosen-plaintext scenario, an adversary can easily introduce plaintext polytope differences into the output of the first round of SIMON, SIMECK, or SPECK, making it possible to apply the key recovery attack for 1 + r + 1 rounds with the PDNDs.</p><p>Based on this, Table <ref type="table" target="#tab_2">4</ref> provides a comparative analysis of deep learning-based attacks on SPECK32, SIMON32, and SIMECK32. Rows highlighted in Bold indicate distinguishers with higher data complexity, which are not directly comparable. Works that did not perform key recovery are marked with "-", and certain studies (e.g., <ref type="bibr" target="#b28">Lu et al. 2024;</ref><ref type="bibr" target="#b29">Ebrahimi et al. 2023;</ref><ref type="bibr" target="#b30">Wang et al. 2024</ref>) are excluded due to their incomparable complexity and lack of key recovery evaluation.</p><p>Table <ref type="table" target="#tab_2">4</ref> demonstrates that our proposed neural distinguishers not only achieve high accuracy in distinguishing correct and incorrect keys but also enable competitive or improved attacks compared to prior works. Additionally, by identifying a suitable s-round polytopic differential characteristic with a high probability (where its output difference matches the input difference of the r-round neural distinguisher) and leveraging neutral bits <ref type="bibr" target="#b16">Bao et al. (2022)</ref> to generate ciphertext structures, this characteristic can be prepended to the neural distinguisher. This extends the total attack rounds to 1 + s + r + 1 , fur- ther enhancing the cryptanalytic reach.</p><p>Computational complexity in key recovery attacks is typically measured by the number of required encryption (and decryption) operations. In contrast, data complexity refers to the number of plaintext samples utilized during the attack. In practical attacks, when the neural distinguisher achieves high accuracy, the correct key is often recovered rapidly, and not all theoretically required data is necessarily used <ref type="bibr" target="#b31">Zhang et al. (2024)</ref>. The success rate (SR) in key recovery experiments can be defined based on different criteria. For example, in <ref type="bibr" target="#b32">Zhang et al. (2023)</ref>, the success rate is defined as the ratio of successfully recovered subkeys to the total number of experiments. An experiment is considered successful when the overall SR reaches 99%, i.e., for an experiment count n e that sat- isfies 1 -(1 -SR) n e = 0.99.</p><p>In our key recovery tests, the SR can be defined as the fraction of times the neural distinguisher distinguishes the correct key from incorrect keys, or as the fraction of times the mean distinguisher score for the correct key matches the accuracy of the neural distinguisher. Using the first metric, we observed an SR of 100%; using the second metric, and with a standard deviation of 0.03, the SR remains at 100%. Moreover, as the difference between the mean output scores for the correct and incorrect keys increases, the SR also improves. In general, increasing computational complexity will further enhance the SR in practical attacks <ref type="bibr">Chen et al. (2023)</ref>. In contrast to traditional differential cryptanalysis, neural network-based methods require only the input difference, allowing them to capture a wider spectrum of output differences and thereby enabling more effective key recovery attacks <ref type="bibr">Hou et al. (2021)</ref>.</p><p>On another note, based on the findings in <ref type="bibr" target="#b34">Baksi et al. (2021)</ref>, it may also be feasible to recover (part of ) the round key using the linear inequality generated by the Support Vector Machine (SVM), instead of the neural network. In summary, this section highlights that our PDNDs are valuable tools for cipher designers to evaluate security margins and empower attackers to mount key recovery attacks. The results underscore the dual utility of neural distinguishers in both defensive and offensive cryptographic research.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experiments</head><p>In this section, we conduct experiments to evaluate the intrinsic performance and learning mechanisms of neural distinguishers based on polytopic differential analysis. Additionally, we explore methods to improve their accuracy. The experiments are conducted in a single-key scenario.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Training with output polytope differences</head><p>In the first set of experiments, we modify the training data to use output polytope differences instead of ciphertexts. Specifically, we calculate the polytope differences of the ciphertexts and use these differences as input to the neural distinguishers. The input data format for the model becomes (C 0 ⊕ C 1 , C 0 ⊕ C 2 , C 0 ⊕ C 3 ) along with their corresponding labels, where ⊕ denotes the XOR operation. This approach allows the model to focus on the polytopic differential properties of the ciphertexts.</p><p>For each sample, we generate four plaintexts (P 0 , P 1 , P 2 , P 3 ) and encrypt them to obtain the cipher- texts (C 0 , C 1 , C 2 , C 3 ) based on Algorithm 2. The input polytope differences are similar to those in SubSect. 5.1. The output polytope differences are then calculated as (C 0 ⊕ C 1 , C 0 ⊕ C 2 , C 0 ⊕ C 3 ).</p><p>The results of this experiment are summarized in Table <ref type="table" target="#tab_3">5</ref>. Based on the results in Table <ref type="table" target="#tab_0">1</ref> and the comparison with using ciphertext inputs, it is evident that the accuracy of neural distinguishers decreases when the input is limited to the output polytope differences rather than the full ciphertexts.</p><p>For the SPECK32 cipher, the accuracy of distinguishers trained on output polytope differences shows a significant decrease compared to those trained on ciphertexts. For instance, the 7-round accuracy drops from 62.01% to 61.02%. Similarly, for the SIMON32 cipher, the accuracy for nine rounds drops from 83.93% to 65.15%. For the SIMECK32 cipher, the 9-round accuracy drops from 86.13% to 67.51%.</p><p>This reduction in accuracy indicates that when the model is restricted to the polytope differences of the four ciphertexts and does not have access to the full ciphertexts, its ability to distinguish between samples decreases. The number of rounds that can be accurately distinguished also decreases by at least one round for SIMON32 and SIMECK32 ciphers.</p><p>These findings suggest that the ciphertext quadruples give the model more features and information than the output polytope differences. Similar to differential neural distinguishers, the PDND can extract more valuable features from the ciphertexts, which are not limited to the differential properties but also include relationships between the bits of the ciphertexts and linear approximations of them, as well as information from the penultimate and antepenultimate rounds of the encryption algorithm <ref type="bibr" target="#b10">Benamira et al. (2021)</ref>. This additional information allows the model to achieve higher accuracy and distinguish more rounds than using only the polytope differences.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Applying input differences from classical mixture differential characteristics</head><p>To investigate whether the neural distinguisher can achieve better accuracy using the input difference from the r-round mixture differential path, we compare its performance with classical mixture input differences used in previous research. Specifically, we utilize the characteristic from the paper <ref type="bibr" target="#b41">Qiao et al. (2024)</ref> for the SIMON32 cipher.</p><p>According to Table <ref type="table" target="#tab_0">10</ref> in <ref type="bibr" target="#b41">Qiao et al. (2024)</ref>, the input mixture difference determined for the 17-round distinguisher of SIMON32 is: In this experiment, we use this value as the input polytope difference for our neural distinguisher and generate the corresponding ciphertexts for label 1 using this input difference. The ciphertexts corresponding to label 0 will have random differences. Table <ref type="table" target="#tab_4">6</ref> compares the results obtained from this experiment with those from <ref type="bibr" target="#b23">Wu et al. (2024)</ref> and the single-key distinguishers obtained in our study. As shown in Table <ref type="table" target="#tab_4">6</ref>, the results for the neural distinguishers trained with the input difference from <ref type="bibr" target="#b41">Qiao et al. (2024)</ref> appear to be less satisfactory, with significantly lower accuracy and performance compared to the differential neural distinguishers trained with the input differences from <ref type="bibr" target="#b23">Wu et al. (2024)</ref> and our study.</p><p>Based on the test results, it seems that the polytope differential neural distinguisher does not perform as well using the input difference from the r-round mixture differential path. However, it is important to note that the classical characteristic may not be the most suitable for this task, and other factors might contribute to the observed performance.</p><p>Additionally, while one of the advantages of PDNDs is their lower sensitivity to input differences compared to differential neural distinguishers, it remains essential to choose appropriate differences. It appears that the selected differences, such as those in differential neural distinguishers, should have a Hamming weight of 1 to ensure effective results. Despite the inherent robustness of PDNDs, arbitrary differences may not yield satisfactory performance.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Real polytope differences experiment</head><p>Inspired by Aaron Gohr's experiments on neural differential distinguishers, we will perform a similar experiment to investigate how well our neural distinguishers can differentiate between real and randomized polytope differences.</p><p>Previous work has shown that neural distinguishers trained on differential properties can effectively recognize reduced-round versions of block ciphers. These experiments generated a set of ciphertext pairs, and half of them were randomized by applying a blinding value. � = ((0x0001, 0x1150), (0x0100, 0x0444), (0x0101, 0x4104)).</p><p>The neural distinguishers were then tasked with distinguishing between the real and randomized pairs. The results demonstrated that the neural distinguishers could identify real differences without explicit training for this task, leveraging inherent features within the data <ref type="bibr" target="#b5">Gohr (2019)</ref>. We aim to replicate and extend this experiment using our polytopic differential analysis approach. We will generate a set of ciphertext quadruples (C 0 , C 1 , C 2 , C 3 ) and then randomize half using a random blinding value R. The neural distinguishers will be tasked with classifying these quadruples as either real or random. This experiment will help us determine whether our polytopic differential neural distinguishers can extract additional information from the ciphertexts, achieving similar or better distinguishing accuracy compared to the baseline differential neural distinguishers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experimental steps</head><p>• Data Generation: Generate 10 6 samples of ciphertext quadruples (C 0 , C 1 , C 2 , C 3 ) using the polytopic dif- ferential method described earlier (Algorithm 1). The input polytope differences are aligned with those presented in SubSect. 5.1.</p><p>• Randomization: Apply a random blinding value R to half of the samples to produce randomized ciphertext quadruples (C 0 ⊕ R, C 1 ⊕ R, C 2 ⊕ R, C 3 ⊕ R).</p><p>• Classification: Use pre-trained neural distinguishers to classify the ciphertext quadruples as real or random based on the polytope differences.</p><p>• Evaluation: Measure the accuracy of the neural distinguishers in distinguishing between real and randomized samples.</p><p>By conducting this experiment, we aim to validate whether the neural distinguishers based on polytopic differential analysis can effectively identify real differences and leverage additional features from the ciphertexts, similar to the findings in <ref type="bibr" target="#b5">Gohr (2019)</ref>. Given the similar behavior of distinguishers for the SIMON and SIMECK ciphers, we will conduct this experiment on the 5-round SPECK and 7-round SIMON ciphers. The results of this experiment indicate that, despite not being specifically trained for this task, the polytopic differential neural distinguishers can effectively distinguish between the generated samples. This demonstrates that the distinguishers can learn information beyond a simple XOR and identify more complex patterns. The results of this experiment are also shown in Table <ref type="table" target="#tab_5">7</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Discussion on utilizing advanced methods for further enhancing PDNDs</head><p>This subsection discusses various methods for transforming our basic neural distinguishers into advanced models with improved performance and accuracy. These methods are primarily based on selecting an optimal neural network, optimizing its parameters, and feature engineering.</p><p>The first method for enhancing the performance of distinguishers involves selecting and employing a better, often more complex, neural network. The most crucial aspect of this task is optimizing the hyperparameters of the network according to the specific task assigned to the model. In addition, choosing a more sophisticated training method, such as staged training <ref type="bibr" target="#b5">Gohr (2019)</ref>, can also lead to higher accuracy for the neural distinguishers.</p><p>The second category of methods for improving the performance of neural distinguishers is related to data generation and feature engineering techniques. Among these, the most critical aspect is the input data format to the model and its features. The more these features include information about the structure of the target cipher algorithm, the better the performance of the neural distinguisher. These features can include, for instance, information from the penultimate rounds of the cipher algorithm, which can be added to the input samples. For example, one can compute the right-branch input differences of the last round of the SPECK cipher without involving the subkey and provide this to the model.</p><p>Multiple ciphertexts per sample can further enrich the input data and improve model performance. In Chen et al. (2023), Chen and Yu developed neural distinguisher models for cryptanalysis that utilize features derived from multiple pairs of ciphertexts. This new model utilizes non-uniform distributions to generate derived features that are absent in single ciphertext pairs. The neural distinguishers achieve higher distinguishing accuracy by incorporating these derived features than baseline models. Experiments demonstrate that this approach significantly enhances distinguishing capability and improves key recovery attacks.</p><p>Therefore, the performance of basic neural distinguishers can generally be significantly improved by employing different models and optimizing their parameters following cryptanalysis and feature engineering, considering the structure of the cipher algorithm and the analysis method.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Conclusion</head><p>In this paper, we introduced Multiple Input Polytopic Differential Neural Distinguishers (PDNDs) for the SIMON, SIMECK, and SPECK block ciphers, leveraging deep learning techniques and the ResNet architecture to enhance the effectiveness of neural distinguishers. By utilizing multiple polytope differences for data generation, our approach significantly improved the ability of the distinguishers to detect specific differential patterns in ciphertexts. Experimental results in both single-key and related-key scenarios demonstrated that PDNDs consistently outperformed baseline differential neural distinguishers in terms of accuracy.</p><p>Furthermore, through extensive experimentation, we examined the intrinsic behaviors and performance characteristics of our neural distinguishers. These investigations allowed us to address various aspects, including enhancing previous results, extending the attack to previously untested ciphers, and analyzing the underlying mechanisms of the distinguishers.</p><p>Our findings underscore the potential of advanced neural network architectures combined with multiple input polytope differences as powerful tools in cryptanalysis. Future research could explore the application of these techniques to other cryptographic primitives, develop more sophisticated models, automate the search for optimal polytope differences, and extend the use of deep learning to classical cryptanalytic attacks, thereby unlocking further opportunities in this domain.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 1</head><label>1</label><figDesc>Fig. 1 Architecture of the model</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Fig. 2</head><label>2</label><figDesc>Fig.2PDND scores for single-key key recovery tests across 6 to 9 rounds of SPECK32</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 3</head><label>3</label><figDesc>Fig.3PDND scores for single-key key recovery tests across 10 to 12 rounds of SIMON32 and 13 rounds for related-key</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 4</head><label>4</label><figDesc>Fig.4PDND scores for related-key key recovery tests across 13 to 16 rounds of SIMECK32</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1</head><label>1</label><figDesc>Comparison of our single-key polytopic differential neural distinguishers for SPECK32, SIMON32 and SIMECK32 with previous research</figDesc><table><row><cell>PDND, polytopic differential neural distinguisher; MDND, mixture differential</cell></row><row><cell>neural distinguisher; MDND*, multiple differential neural distinguisher</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 3</head><label>3</label><figDesc>Comparison of the performance of different polytope input differences for 6-round SPECK32 and 8-round SIMON32</figDesc><table><row><cell>Cipher</cell><cell>#R</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 4</head><label>4</label><figDesc>Summary of deep learning-based attacks on target algorithms† Reported values are obtained from the execution of the key recovery test presented in SubSect. 5.4. ⋆ The staged training method is used to train the ND model (higher data complexity).N, training data complexity; N ′ , testing data complexity; SR, success rate for key recovery; Time, time (computational) complexity; Data, data complexity; DND, differential neural distinguisher; NASA, neural-aided statistical attack; PDND, polytopic differential neural distinguisher; RK-PDND, related-key polytopic differential neural distinguisher; MDND, mixture differential neural distinguisher; MDND*, multiple differential neural distinguisher; -, key recovery not attempted or not reported</figDesc><table><row><cell>Cipher</cell><cell>Attack model</cell><cell>#R</cell><cell>Acc. (%)</cell><cell>N</cell><cell>N ′</cell><cell>Key recovery</cell><cell>SR (%)</cell><cell>Time</cell><cell>Data</cell><cell>References</cell></row><row><cell>SPECK32 -</cell><cell>DND</cell><cell>3</cell><cell>79</cell><cell>2 25</cell><cell>2 21</cell><cell>6+3+1</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Yadav and Kumar</cell></row><row><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell>(2021)</cell></row><row><cell></cell><cell>DND</cell><cell>6</cell><cell>68.8</cell><cell>10 7</cell><cell>10 6</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Ebrahimi et al. (2022)</cell></row><row><cell></cell><cell>DND</cell><cell>7</cell><cell>59.10</cell><cell>10 7</cell><cell>10 6</cell><cell>7+1</cell><cell>92</cell><cell>2 16</cell><cell>2 8</cell><cell>Yue and Wu (2023)</cell></row><row><cell></cell><cell>DND</cell><cell>7</cell><cell>61.6</cell><cell>10 7</cell><cell>10 6</cell><cell>1+7+1</cell><cell>70</cell><cell>2 16</cell><cell>2 8</cell><cell>Gohr (2019)</cell></row><row><cell></cell><cell>DND</cell><cell>7</cell><cell>61.6</cell><cell>10 7</cell><cell>10 6</cell><cell>1+2+7+1</cell><cell>52.10</cell><cell>2 38</cell><cell>2 14.5</cell><cell>Gohr (2019)</cell></row><row><cell></cell><cell>DND</cell><cell>7</cell><cell>66.94</cell><cell>16×10 7</cell><cell>16×10 6</cell><cell>1+2+7+1</cell><cell>59.5</cell><cell>2 36</cell><cell>2 14.12</cell><cell>Chen et al. (2023)</cell></row><row><cell></cell><cell>DND</cell><cell>8</cell><cell>57.74</cell><cell>32×10 7</cell><cell>32×10 6</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Liu et al. (2023)</cell></row><row><cell></cell><cell>PDND</cell><cell>8</cell><cell>51.10</cell><cell>10 7</cell><cell>10 6</cell><cell>1+8+1</cell><cell>100  †</cell><cell>-</cell><cell>-</cell><cell>Sect. 5.4</cell></row><row><cell></cell><cell>NASA</cell><cell>8</cell><cell>51.83</cell><cell>10 7</cell><cell>10 7</cell><cell>2+8</cell><cell>75.51</cell><cell>2 16</cell><cell>2 14.65</cell><cell>Chen et al. (2023)</cell></row><row><cell>SIMON32</cell><cell>DND</cell><cell>5</cell><cell>57</cell><cell>2 25</cell><cell>2 22</cell><cell>7+5+1</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Yadav and Kumar</cell></row><row><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell>(2021)</cell></row><row><cell></cell><cell>MDND</cell><cell>8</cell><cell>92.30</cell><cell>10 7</cell><cell>10 6</cell><cell>1+2+8+1</cell><cell>55</cell><cell>2 31.19</cell><cell>2 18</cell><cell>Wu et al. (2024)</cell></row><row><cell></cell><cell>DND</cell><cell>9</cell><cell>60</cell><cell>10 7</cell><cell>10 6</cell><cell>1+9+1</cell><cell>92</cell><cell>2 18.5</cell><cell>2 9</cell><cell>Hou et al. (2021)</cell></row><row><cell></cell><cell>PDND</cell><cell>9</cell><cell>63.73</cell><cell>10 7</cell><cell>10 6</cell><cell>1+9+1</cell><cell>100</cell><cell>2 30.9</cell><cell>2 14</cell><cell>Su et al. (2021)</cell></row><row><cell></cell><cell>DND</cell><cell>9</cell><cell>60</cell><cell>10 7</cell><cell>10 6</cell><cell>1+2+9+1</cell><cell>90</cell><cell>2 18.5</cell><cell>2 12.5</cell><cell>Hou et al. (2021)</cell></row><row><cell></cell><cell>DND</cell><cell>9</cell><cell>63.20</cell><cell>10 7</cell><cell>10 6</cell><cell>1+4+9+1</cell><cell>23</cell><cell>2 20.1</cell><cell>2 8</cell><cell>Tian and Hu (2021)</cell></row><row><cell></cell><cell>DND</cell><cell>11</cell><cell>56.16</cell><cell>32×10 7</cell><cell>32×10 6</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Liu et al. (2023)</cell></row><row><cell></cell><cell>PDND</cell><cell>11</cell><cell>53.13</cell><cell>10 7</cell><cell>10 6</cell><cell>1+11+1</cell><cell>100  †</cell><cell>-</cell><cell>-</cell><cell>Sect. 5.4</cell></row><row><cell></cell><cell>DND</cell><cell>11</cell><cell>51.74 ⋆</cell><cell>2 30</cell><cell>2 28</cell><cell>1+3+11+1</cell><cell>49.99</cell><cell>2 44.2</cell><cell>2 21</cell><cell>Bao et al. (2022)</cell></row><row><cell></cell><cell>DND</cell><cell>11</cell><cell>58.71</cell><cell>16×10 7</cell><cell>16×10 6</cell><cell>1+4+11+1</cell><cell>9</cell><cell>2 54.01</cell><cell>2 28</cell><cell>Zhang et al. (2024)</cell></row><row><cell></cell><cell>RK-PDND</cell><cell>12</cell><cell>53.75</cell><cell>10 7</cell><cell>10 6</cell><cell>1+12+1</cell><cell>100  †</cell><cell>-</cell><cell>-</cell><cell>Sect. 5.4</cell></row><row><cell>SIMECK32</cell><cell>DND</cell><cell>7</cell><cell>28.0</cell><cell>10 4</cell><cell>10 4</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Jain et al. (2021)</cell></row><row><cell></cell><cell>DND</cell><cell>9</cell><cell>52.60</cell><cell>2 15</cell><cell>2 15</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Baksi et al. (2021)</cell></row><row><cell></cell><cell>DND</cell><cell>9</cell><cell>52.60</cell><cell>2 15</cell><cell>2 15</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Baksi et al. (2023)</cell></row><row><cell></cell><cell>MDND*</cell><cell>9</cell><cell>72.48</cell><cell>2 24</cell><cell>2 18</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Wang et al. (2022)</cell></row><row><cell></cell><cell>DND</cell><cell>10</cell><cell>54.07</cell><cell>10 7</cell><cell>10 6</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>Lyu et al. (2022a)</cell></row><row><cell></cell><cell>DND</cell><cell>10</cell><cell>54.21</cell><cell>10 7</cell><cell>10 6</cell><cell>1+3+10+1</cell><cell>88</cell><cell>2 33.90</cell><cell>2 24</cell><cell>Lyu et al. (2022b)</cell></row><row><cell></cell><cell>PDND</cell><cell>11</cell><cell>53.18</cell><cell>10 7</cell><cell>10 6</cell><cell>1+11+1</cell><cell>100  †</cell><cell>-</cell><cell>-</cell><cell>Sect. 5.4</cell></row><row><cell></cell><cell>DND</cell><cell>12</cell><cell>51.61 ⋆</cell><cell>16×10 7</cell><cell>16×10 6</cell><cell>1+3+12+1</cell><cell>30</cell><cell>2 45.04</cell><cell>2 26</cell><cell>Zhang et al. (2023)</cell></row><row><cell></cell><cell>RK-PDND</cell><cell>15</cell><cell>54.44</cell><cell>10 7</cell><cell>10 6</cell><cell>1+15+1</cell><cell>100  †</cell><cell>-</cell><cell>-</cell><cell>Sect. 5.4</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 5</head><label>5</label><figDesc>Accuracy of neural distinguishers trained with output polytope differences (C 0 ⊕ C 1 , C 0 ⊕ C 2 , C 0 ⊕ C 3 )</figDesc><table><row><cell>Cipher</cell><cell>#R</cell><cell>Acc. (%)</cell></row><row><cell>SPECK32</cell><cell>5</cell><cell>99.46</cell></row><row><cell></cell><cell>6</cell><cell>89.96</cell></row><row><cell></cell><cell>7</cell><cell>61.02</cell></row><row><cell></cell><cell>8</cell><cell>51.02</cell></row><row><cell>SIMON32</cell><cell>7</cell><cell>99.66</cell></row><row><cell></cell><cell>8</cell><cell>86.04</cell></row><row><cell></cell><cell>9</cell><cell>65.15</cell></row><row><cell></cell><cell>10</cell><cell>54.52</cell></row><row><cell></cell><cell>11</cell><cell>50.73</cell></row><row><cell></cell><cell>12</cell><cell>50.24</cell></row><row><cell>SIMECK32</cell><cell>7</cell><cell>99.91</cell></row><row><cell></cell><cell>8</cell><cell>92.27</cell></row><row><cell></cell><cell>9</cell><cell>67.51</cell></row><row><cell></cell><cell>10</cell><cell>54.83</cell></row><row><cell></cell><cell>11</cell><cell>51.04</cell></row><row><cell></cell><cell>12</cell><cell>50.33</cell></row><row><cell></cell><cell>13</cell><cell>50</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>Table 6</head><label>6</label><figDesc>Comparison of neural distinguishers' performance with different input differences</figDesc><table><row><cell>Cipher</cell><cell>#R</cell><cell>Acc. (%)</cell><cell>Input difference source</cell></row><row><cell>SIMON32</cell><cell>7</cell><cell>66.89</cell><cell>Classical MD Qiao et al. (2024)</cell></row><row><cell></cell><cell>7</cell><cell>99.6</cell><cell>MDND Wu et al. (2024)</cell></row><row><cell></cell><cell>7</cell><cell>100</cell><cell>PDND (Sect. 5)</cell></row><row><cell></cell><cell>8</cell><cell>54.81</cell><cell>Classical MD Qiao et al. (2024)</cell></row><row><cell></cell><cell>8</cell><cell>92.3</cell><cell>MDND Wu et al. (2024)</cell></row><row><cell></cell><cell>8</cell><cell>98.47</cell><cell>PDND (Sect. 5)</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5"><head>Table 7</head><label>7</label><figDesc>Results of neural distinguishers on real polytope differences for 5-round SPECK and 7-round SIMON</figDesc><table><row><cell>Cipher</cell><cell>#R</cell><cell>Accuracy (%)</cell></row><row><cell>SPECK32</cell><cell>5</cell><cell>96.38</cell></row><row><cell>SIMON32</cell><cell>7</cell><cell>98.45</cell></row></table></figure>
+		</body>
+		<back>
+
+			
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Acknowledgements</head><p>We would like to thank the anonymous reviewers for their valuable comments and suggestions, which have greatly improved the content and presentation of this paper.</p></div>
+			</div>
+
+
+			<div type="funding">
+<div><head>Funding</head><p>This work is based upon research funded by <rs type="funder">Iran National Science Foundation (INSF)</rs> under project No. <rs type="grantNumber">4026806</rs>. <rs type="person">Nasour Bagheri</rs> acknowledges the financial support received from <rs type="funder">Shahid Rajaee Teacher Training University</rs> under grant number <rs type="grantNumber">1404/385248</rs>.</p></div>
+			</div>
+			<listOrg type="funding">
+				<org type="funding" xml:id="_mNkp8Uk">
+					<idno type="grant-number">4026806</idno>
+				</org>
+				<org type="funding" xml:id="_Eqv97bK">
+					<idno type="grant-number">1404/385248</idno>
+				</org>
+			</listOrg>
+
+			<div type="availability">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Data availability</head><p>The developed codes and trained models are available on GitHub: <ref type="url" target="https://github.com/NeuralDistinguisher/Multiple-PDND.git">https://  github. com/ Neura lDist ingui sher/ Multi ple-PDND. git</ref>.</p></div>
+			</div>
+
+
+			<div type="conflict">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Declarations</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Competing interests</head><p>The authors declare no conflict of interest. The founding sponsors had no role in the design of the study; in the collection, analysis, or interpretation of data; in the writing of the manuscript, and in the decision to publish the results.</p></div>
+			</div>
+
+
+			<div type="contribution">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Author contributions</head><p>The paper was the result of collaborative efforts between Iman Mirzaali, Sadegh Sadeghi , and Nasour Bagheri. I.M., as the primary student contributor, handled most of the simulations and data analysis. S.S. and N.B. provided essential guidance on the theoretical aspects of the project and validated the results. All authors contributed to the initial manuscript draft and proofread the final version before submission.</p></div>
+			</div>
+
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Received: 19 December 2024 Accepted: 1 September 2025</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Publisher's Note</head><p>Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.</p></div>			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Neural machine translation in foreign language teaching and learning: a systematic review</title>
+		<author>
+			<persName><forename type="first">Blanka</forename><surname>Klimova</surname></persName>
+			<idno type="ORCID">0000-0001-8000-9766</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Marcel</forename><surname>Pikhart</surname></persName>
+			<idno type="ORCID">0000-0002-5633-9332</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Alice</forename><forename type="middle">Delorme</forename><surname>Benites</surname></persName>
+			<idno type="ORCID">0000-0002-5254-4988</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Caroline</forename><surname>Lehr</surname></persName>
+			<idno type="ORCID">0000-0002-1690-5117</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Christina</forename><surname>Sanchez-Stockhammer</surname></persName>
+			<idno type="ORCID">0000-0002-6294-3579</idno>
+		</author>
+		<idno type="DOI">10.1007/s10639-022-11194-2</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Education and Information Technologies</title>
+		<title level="j" type="abbrev">Educ Inf Technol</title>
+		<idno type="ISSN">1360-2357</idno>
+		<idno type="ISSNe">1573-7608</idno>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="663" to="682" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Klimova B, Pikhart M, Benites AD, Lehr C, Sanchez-Stockhammer C (2023) Neural machine translation in foreign language teaching and learning: a systematic review. Educ Inf Technol 28(1):663-682</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">End-to-end deep learning of lane detection and path prediction for real-time autonomous driving</title>
+		<author>
+			<persName><forename type="first">Der-Hau</forename><surname>Lee</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jinn-Liang</forename><surname>Liu</surname></persName>
+			<idno type="ORCID">0000-0001-9192-7335</idno>
+		</author>
+		<idno type="DOI">10.1007/s11760-022-02222-2</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Signal, Image and Video Processing</title>
+		<title level="j" type="abbrev">SIViP</title>
+		<idno type="ISSN">1863-1703</idno>
+		<idno type="ISSNe">1863-1711</idno>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="199" to="205" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lee D-H, Liu J-L (2023) End-to-end deep learning of lane detection and path prediction for real-time autonomous driving. SIViP 17(1):199-205</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">A Comprehensive Study of Deep Learning for Side-Channel Analysis</title>
+		<author>
+			<persName><forename type="first">Loïc</forename><surname>Masure</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Cécile</forename><surname>Dumas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Emmanuel</forename><surname>Prouff</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tches.v2020.i1.348-375</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Cryptographic Hardware and Embedded Systems</title>
+		<title level="j" type="abbrev">TCHES</title>
+		<idno type="ISSNe">2569-2925</idno>
+		<imprint>
+			<biblScope unit="page" from="348" to="375" />
+			<date type="published" when="2020">2020. 2020</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Masure L, Dumas C, Prouff E (2020) A comprehensive study of deep learning for side-channel analysis. IACR Trans Cryptograph Hardw Embedded Systd 2020:348-375</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis of DES-like cryptosystems</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bf00630563</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="3" to="72" />
+			<date type="published" when="1991-01">1991</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E, Shamir A (1991) Differential cryptanalysis of des-like cryptosystems. J Cryptol 4:3-72</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Linear Cryptanalysis Method for DES Cipher</title>
+		<author>
+			<persName><forename type="first">Mitsuru</forename><surname>Matsui</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-48285-7_33</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1993">1993</date>
+			<biblScope unit="page" from="386" to="397" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Matsui M (1993) Linear cryptanalysis method for des cipher. In: Workshop on the Theory and Application of of Cryptographic Techniques, Springer, pp. 386-397</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Santa Barbara, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019-08-18">2019. August 18-22, 2019</date>
+			<biblScope unit="volume">39</biblScope>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note>Proceedings, Part II</note>
+	<note type="raw_reference">Gohr A (2019) Improving attacks on round-reduced speck32/64 using deep learning. Springer International Publishing-In Advances in Cryptology- CRYPTO 2019: 39th Annual International Cryptology Conference, Santa Barbara, CA, USA, August 18-22, 2019, Proceedings, Part II, vol. 39, pp. 150-179</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Deep Residual Learning for Image Recognition</title>
+		<author>
+			<persName><forename type="first">Kaiming</forename><surname>He</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiangyu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaoqing</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2016.90</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2016-06">2016</date>
+			<biblScope unit="page" from="770" to="778" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">He K, Zhang X, Ren S, Sun J (2016) Deep residual learning for image recogni- tion. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 770-778</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015-06-07">2015</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beaulieu R, Shors D, Smith J, Treatman-Clark S, Weeks B, Wingers L (2015) The simon and speck lightweight block ciphers. In: Proceedings of the 52nd Annual Design Automation Conference, pp. 1-6</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">The Simeck Family of Lightweight Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Gangqiang</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bo</forename><surname>Zhu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Valentin</forename><surname>Suder</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mark</forename><forename type="middle">D</forename><surname>Aagaard</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guang</forename><surname>Gong</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-48324-4_16</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2015">2015</date>
+			<biblScope unit="page" from="307" to="329" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yang G, Zhu B, Suder V, Aagaard MD, Gong G (2015) The simeck family of lightweight block ciphers. In: International Workshop on Cryptographic Hardware and Embedded Systems, Springer, pp. 307-329</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Polytopic Attack on Round-Reduced Simon32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Heng-Chuan</forename><surname>Su</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xuan-Yong</forename><surname>Zhu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Duan</forename><surname>Ming</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-71852-7_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Guangzhou, China</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">2021. December 11-14, 2020</date>
+			<biblScope unit="page" from="3" to="20" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Su H-C, Zhu X-Y, Ming D (2021) Polytopic attack on round-reduced simon32/64 using deep learning. In: Information Security and Cryptol- ogy: 16th International Conference, Inscrypt 2020, Guangzhou, China, December 11-14, 2020, Revised Selected Papers, Springer, pp. 3-20</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quan</forename><forename type="middle">Quan</forename><surname>Tan</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-77870-5_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Zagreb, Croatia</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021-10-17">2021. October 17-21, 2021</date>
+			<biblScope unit="volume">40</biblScope>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Benamira A, Gerault D, Peyrin T, Tan QQ (2021) A deeper look at machine learning-based cryptanalysis. In: Advances in Cryptology-EUROCRYPT 2021: 40th Annual International Conference on the Theory and Applica- tions of Cryptographic Techniques, Zagreb, Croatia, October 17-21, 2021, Proceedings, Part I 40, Springer, pp. 805-835</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Improved Machine Learning Assisted (Related-key) Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Gao</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gaoli</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>He</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/trustcom53373.2021.00039</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 IEEE 20th International Conference on Trust, Security and Privacy in Computing and Communications (TrustCom)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-10">2021. 2021</date>
+			<biblScope unit="page" from="164" to="171" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang G, Wang G, He Y (2021) Improved machine learning assisted (related- key) differential distinguishers for lightweight ciphers. In: 2021 IEEE 20th International Conference on Trust, Security and Privacy in Computing and Communications (TrustCom), IEEE, pp. 164-171</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Improve Neural Distinguishers of SIMON and SPECK</title>
+		<author>
+			<persName><forename type="first">Zezhou</forename><surname>Hou</surname></persName>
+			<idno type="ORCID">0000-0002-7764-9663</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+			<idno type="ORCID">0000-0003-2223-4329</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1155/2021/9288229</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Security and Communication Networks</title>
+		<title level="j" type="abbrev">Security and Communication Networks</title>
+		<idno type="ISSN">1939-0114</idno>
+		<idno type="ISSNe">1939-0122</idno>
+		<imprint>
+			<biblScope unit="volume">2021</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="1" to="11" />
+			<date type="published" when="2021-12-31">2021. 2021</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou Z, Ren J, Chen S (2021) Improve neural distinguishers of Simon and speck. Secur Commun Netw 2021(1):9288229</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Multiple Differential Distinguisher of SIMECK32/64 Based on Deep Learning</title>
+		<author>
+			<persName><forename type="first">Huijiao</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0001-8174-608X</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jiapeng</forename><surname>Tian</surname></persName>
+			<idno type="ORCID">0000-0003-1481-6150</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Xin</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0002-1837-6976</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yongzhuang</forename><surname>Wei</surname></persName>
+			<idno type="ORCID">0000-0002-3371-4865</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Hua</forename><surname>Jiang</surname></persName>
+			<idno type="ORCID">0000-0003-1101-622X</idno>
+		</author>
+		<idno type="DOI">10.1155/2022/7564678</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Security and Communication Networks</title>
+		<title level="j" type="abbrev">Security and Communication Networks</title>
+		<idno type="ISSN">1939-0114</idno>
+		<idno type="ISSNe">1939-0122</idno>
+		<imprint>
+			<biblScope unit="volume">2022</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="1" to="12" />
+			<date type="published" when="2022-09-14">2022. 2022</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang H, Tian J, Zhang X, Wei Y, Jiang H (2022) Multiple differential distin- guisher of simeck32/64 based on deep learning. Secur Commun Netw 2022(1):7564678</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Improving the Deep-Learning-Based Differential Distinguisher and Applications to Simeck</title>
+		<author>
+			<persName><forename type="first">Lijun</forename><surname>Lyu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yingjie</forename><surname>Zhang</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cscwd54268.2022.9776036</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2022 IEEE 25th International Conference on Computer Supported Cooperative Work in Design (CSCWD)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2022-05-04">2022. 2022</date>
+			<biblScope unit="page" from="465" to="470" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lyu L, Tu Y, Zhang Y (2022) Improving the deep-learning-based differential distinguisher and applications to simeck. In: 2022 IEEE 25th Interna- tional Conference on Computer Supported Cooperative Work in Design (CSCWD), IEEE, pp. 465-470</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Deep Learning Assisted Key Recovery Attack for Round-Reduced Simeck32/64</title>
+		<author>
+			<persName><forename type="first">Lijun</forename><surname>Lyu</surname></persName>
+			<idno type="ORCID">0000-0003-3113-2463</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+			<idno type="ORCID">0000-0002-2051-8806</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yingjie</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0001-9745-0558</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-22390-7_26</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="443" to="463" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lyu L, Tu Y, Zhang Y (2022) Deep learning assisted key recovery attack for round-reduced simeck32/64. In: International Conference on Information Security, Springer, pp. 443-463</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Enhancing Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+			<idno type="ORCID">0000-0003-2839-6687</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Guo</surname></persName>
+			<idno type="ORCID">0000-0001-8847-6748</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Meicheng</forename><surname>Liu</surname></persName>
+			<idno type="ORCID">0000-0002-5259-1848</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Ma</surname></persName>
+			<idno type="ORCID">0000-0002-6192-7526</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+			<idno type="ORCID">0000-0002-2051-8806</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-22963-3_11</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="318" to="347" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bao Z, Guo J, Liu M, Ma L, Tu Y (2022) Enhancing differential-neural crypta- nalysis. In: International Conference on the Theory and Application of Cryptology and Information Security, Springer, pp. 318-347</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">NNBits: Bit Profiling with a Deep Learning Ensemble Based Distinguisher</title>
+		<author>
+			<persName><forename type="first">Anna</forename><surname>Hambitzer</surname></persName>
+			<idno type="ORCID">0000-0002-5357-832X</idno>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+			<idno type="ORCID">0000-0001-8583-0668</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yun</forename><forename type="middle">Ju</forename><surname>Huang</surname></persName>
+			<idno type="ORCID">0000-0002-0820-1005</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Najwa</forename><surname>Aaraj</surname></persName>
+			<idno type="ORCID">0000-0001-8782-5192</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+			<idno type="ORCID">0000-0002-2349-0247</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-30872-7_19</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2023">2023</date>
+			<biblScope unit="page" from="493" to="523" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hambitzer A, Gerault D, Huang YJ, Aaraj N, Bellini E (2023) Nnbits: Bit profiling with a deep learning ensemble based distinguisher. In: Cryptographers&apos; Track at the RSA Conference, Springer, pp. 493-523</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">A New Neural Distinguisher Considering Features Derived From Multiple Ciphertext Pairs</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sitong</forename><surname>Yuan</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac019</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1419" to="1433" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen Y, Shen Y, Yu H, Yuan S (2023) A new neural distinguisher considering fea- tures derived from multiple ciphertext pairs. Comput J 66(6):1419-1433</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Figure 5: The framework of basic and enhanced related-key differential neural distinguishers.</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Gohr</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Neumann</surname></persName>
+		</author>
+		<idno type="DOI">10.7717/peerj-cs.2566/fig-5</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+			<publisher>PeerJ</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr A, Leander G, Neumann P (2022) An assessment of differential-neural distinguishers. Cryptology ePrint Archive</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">A Cipher-Agnostic Neural Training Pipeline with Automated Finding of Good Input Differences</title>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anna</forename><surname>Hambitzer</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matteo</forename><surname>Rossi</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tosc.v2023.i3.184-212</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Symmetric Cryptology</title>
+		<title level="j" type="abbrev">ToSC</title>
+		<idno type="ISSNe">2519-173X</idno>
+		<imprint>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="184" to="212" />
+			<date type="published" when="2023-09-19">2023. 2023</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bellini E, Gerault D, Hambitzer A, Rossi M (2023) A cipher-agnostic neural training pipeline with automated finding of good input differences. IACR Trans Symmetric Cryptol 2023(3):184-212</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">New Results on Machine Learning-Based Distinguishers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+			<idno type="ORCID">0000-0002-5639-7372</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+			<idno type="ORCID">0000-0002-7844-5267</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Vishnu</forename><forename type="middle">Asutosh</forename><surname>Dasu</surname></persName>
+			<idno type="ORCID">0000-0002-1849-1288</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaolu</forename><surname>Hou</surname></persName>
+			<idno type="ORCID">0000-0002-4512-6921</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Hyunji</forename><surname>Kim</surname></persName>
+			<idno type="ORCID">0000-0001-9828-3894</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Hwajeong</forename><surname>Seo</surname></persName>
+			<idno type="ORCID">0000-0003-0069-9061</idno>
+		</author>
+		<idno type="DOI">10.1109/access.2023.3270396</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Access</title>
+		<title level="j" type="abbrev">IEEE Access</title>
+		<idno type="ISSNe">2169-3536</idno>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="page" from="54175" to="54187" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi A, Breier J, Dasu VA, Hou X, Kim H, Seo H (2023) New results on machine learning-based distinguishers. IEEE Access 11:54175-54187</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">A Novel Approach to Construct a Good Dataset for Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Byoungjin</forename><surname>Seok</surname></persName>
+			<idno type="ORCID">0000-0002-8130-5011</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Changhoon</forename><surname>Lee</surname></persName>
+			<idno type="ORCID">0000-0003-4292-5792</idno>
+		</author>
+		<idno type="DOI">10.1109/tdsc.2024.3387662</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Dependable and Secure Computing</title>
+		<title level="j" type="abbrev">IEEE Trans. Dependable and Secure Comput.</title>
+		<idno type="ISSN">1545-5971</idno>
+		<idno type="ISSNe">2160-9209</idno>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="246" to="262" />
+			<date type="published" when="2024">2024</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Seok B, Chang D, Lee C (2024) A novel approach to construct a good dataset for differential-neural cryptanalysis. IEEE Trans Depend Secur Comput 22(1):246-262</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Mixture Differential Cryptanalysis on Round-Reduced SIMON32/64 Using Machine Learning</title>
+		<author>
+			<persName><forename type="first">Zehan</forename><surname>Wu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kexin</forename><surname>Qiao</surname></persName>
+			<idno type="ORCID">0000-0002-3624-9364</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Zhaoyang</forename><surname>Wang </surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Junjie</forename><surname>Cheng </surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Liehuang</forename><surname>Zhu </surname></persName>
+		</author>
+		<idno type="DOI">10.3390/math12091401</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Mathematics</title>
+		<title level="j" type="abbrev">Mathematics</title>
+		<idno type="ISSNe">2227-7390</idno>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page">1401</biblScope>
+			<date type="published" when="2024-05-03">2024</date>
+			<publisher>MDPI AG</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wu Z, Qiao K, Wang Z, Cheng J, Zhu L (2024) Mixture differential cryptanalysis on round-reduced simon32/64 using machine learning. Mathematics 12(9):1401</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Polytopic Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Tyge</forename><surname>Tiessen</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-49890-3_9</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Vienna, Austria</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2016-05-08">2016. May 8-12, 2016</date>
+			<biblScope unit="volume">35</biblScope>
+			<biblScope unit="page" from="214" to="239" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Tiessen T (2016) Polytopic cryptanalysis. In: Advances in Cryptology-EURO- CRYPT 2016: 35th Annual International Conference on the Theory and Applications of Cryptographic Techniques, Vienna, Austria, May 8-12, 2016, Proceedings, Part I 35, Springer, pp. 214-239</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">New types of cryptanalytic attacks using related keys</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bf00203965</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="229" to="246" />
+			<date type="published" when="1994-12">1994</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E (1994) New types of cryptanalytic attacks using related keys. J Cryptol 7:229-246</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Machine Learning-Assisted Differential Distinguishers for Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-981-16-6522-6_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Computer Architecture and Design Methodologies</title>
+		<imprint>
+			<publisher>Springer Singapore</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="141" to="162" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi A, Baksi A (2022) Machine learning-assisted differential distinguishers for lightweight ciphers. Classical and Physical Security of Symmetric Key Cryptographic Algorithms, 141-162</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Neural-Aided Statistical Attack for Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac099</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="2480" to="2498" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen Y, Shen Y, Yu H (2023) Neural-aided statistical attack for cryptanalysis. Comput J 66(10):2480-2498</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Improved (Related-Key) Differential-Based Neural Distinguishers for SIMON and SIMECK Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guoqiang</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bing</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Liu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac195</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">67</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="537" to="547" />
+			<date type="published" when="2024">2024</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lu J, Liu G, Sun B, Li C, Liu L (2024) Improved (related-key) differential-based neural distinguishers for simon and simeck block ciphers. Comput J 67(2):537-547</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Deep Learning-Based Rotational-XOR Distinguishers for AND-RX Block Ciphers: Evaluations on Simeck and Simon</title>
+		<author>
+			<persName><forename type="first">Amirhossein</forename><surname>Ebrahimi</surname></persName>
+			<idno type="ORCID">0000-0001-8296-2729</idno>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+			<idno type="ORCID">0000-0001-8583-0668</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Paolo</forename><surname>Palmieri</surname></persName>
+			<idno type="ORCID">0000-0002-9819-4880</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-53368-6_21</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2023">2023</date>
+			<biblScope unit="page" from="429" to="450" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ebrahimi A, Gerault D, Palmieri P (2023) Deep learning-based rotational-xor distinguishers for and-rx block ciphers: Evaluations on simeck and simon. In: International Conference on Selected Areas in Cryptography, Springer, pp. 429-450</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Investigating and Enhancing the Neural Distinguisher for Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Gao</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gaoli</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siwei</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1587/transinf.2024edp7011</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEICE Transactions on Information and Systems</title>
+		<title level="j" type="abbrev">IEICE Trans. Inf. &amp; Syst.</title>
+		<idno type="ISSN">0916-8532</idno>
+		<idno type="ISSNe">1745-1361</idno>
+		<imprint>
+			<biblScope unit="volume">E107.D</biblScope>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="1016" to="1028" />
+			<date type="published" when="2024-08-01">2024</date>
+			<publisher>Institute of Electronics, Information and Communications Engineers (IEICE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang G, Wang G, Sun S (2024) Investigating and enhancing the neural distin- guisher for differential cryptanalysis. IEICE Trans Inf Syst 107(8):1016-1028</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Improving Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0001-6106-3767</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-1525-3356</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Baocang</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-2554-4464</idno>
+		</author>
+		<idno type="DOI">10.62056/ay11wa3y6</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Communications in Cryptology</title>
+		<title level="j" type="abbrev">IACR CiC</title>
+		<idno type="ISSNe">3006-5496</idno>
+		<imprint>
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<date type="published" when="2024-10-07">2024</date>
+			<publisher>International Association for Cryptologic Research</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhang L, Wang Z, Wang B (2024) Improving differential-neural cryptanalysis. IACR Commun Cryptol 1(3)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Improved differential-neural cryptanalysis for round-reduced SIMECK32/64</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Li</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/s11704-023-3261-z</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Frontiers of Computer Science</title>
+		<title level="j" type="abbrev">Front. Comput. Sci.</title>
+		<idno type="ISSN">2095-2228</idno>
+		<idno type="ISSNe">2095-2236</idno>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page">176817</biblScope>
+			<date type="published" when="2023-12">2023</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhang L, Lu J, Wang Z, Li C (2023) Improved differential-neural cryptanalysis for round-reduced simeck32/64. Front Comp Sci 17(6):176817</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Cryptanalysis of round-reduced simon32 based on deep learning</title>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Chen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou Z, Ren J, Chen S (2021) Cryptanalysis of round-reduced simon32 based on deep learning. Cryptology ePrint Archive</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-02-01">2021</date>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi A, Breier J, Dasu VA, Dong X, Yi C (2021) Following-up on machine learn- ing assisted differential distinguishers. In: SILC Workshop-Security and Implementation of Lightweight Cryptography, vol. 3, p. 12</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Differential-ML Distinguisher: Machine Learning Based Generic Extension for Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Tarun</forename><surname>Yadav</surname></persName>
+			<idno type="ORCID">0000-0002-5462-8253</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Manoj</forename><surname>Kumar</surname></persName>
+			<idno type="ORCID">0000-0001-6900-4075</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-88238-9_10</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="page" from="191" to="212" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yadav T, Kumar M (2021) Differential-ml distinguisher: Machine learning based generic extension for differential cryptanalysis. In: International Confer- ence on Cryptology and Information Security in Latin America, Springer, pp. 191-212</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Reducing the Cost of Machine Learning Differential Attacks Using Bit Selection and a Partial ML-Distinguisher</title>
+		<author>
+			<persName><forename type="first">Amirhossein</forename><surname>Ebrahimi</surname></persName>
+			<idno type="ORCID">0000-0001-8296-2729</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Francesco</forename><surname>Regazzoni</surname></persName>
+			<idno type="ORCID">0000-0001-6385-0780</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Paolo</forename><surname>Palmieri</surname></persName>
+			<idno type="ORCID">0000-0002-9819-4880</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-30122-3_8</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="123" to="141" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ebrahimi A, Regazzoni F, Palmieri P (2022) Reducing the cost of machine learn- ing differential attacks using bit selection and a partial ml-distinguisher. In: International Symposium on Foundations and Practice of Security, Springer, pp. 123-141</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Improved Neural Differential Distinguisher Model for Lightweight Cipher Speck</title>
+		<author>
+			<persName><forename type="first">Xiaoteng</forename><surname>Yue</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wanqing</forename><surname>Wu</surname></persName>
+		</author>
+		<idno type="DOI">10.3390/app13126994</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Applied Sciences</title>
+		<title level="j" type="abbrev">Applied Sciences</title>
+		<idno type="ISSNe">2076-3417</idno>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page">6994</biblScope>
+			<date type="published" when="2023-06-09">2023</date>
+			<publisher>MDPI AG</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yue X, Wu W (2023) Improved neural differential distinguisher model for light- weight cipher speck. Appl Sci 13(12):6994</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Improved neural distinguishers with multi-round and multi-splicing construction</title>
+		<author>
+			<persName><forename type="first">Jiashuo</forename><surname>Liu</surname></persName>
+			<idno type="ORCID">0000-0002-9415-5972</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+			<idno type="ORCID">0000-0003-2223-4329</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Manman</forename><surname>Li</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.jisa.2023.103461</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Information Security and Applications</title>
+		<title level="j" type="abbrev">Journal of Information Security and Applications</title>
+		<idno type="ISSN">2214-2126</idno>
+		<imprint>
+			<biblScope unit="volume">74</biblScope>
+			<biblScope unit="page">103461</biblScope>
+			<date type="published" when="2023-05">2023</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Liu J, Ren J, Chen S, Li M (2023) Improved neural distinguishers with multi- round and multi-splicing construction. J Inf Secur Appl 74:103461</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Deep Learning Assisted Differential Cryptanalysis for the Lightweight Cipher SIMON</title>
+		<author>
+			<persName><forename type="first">W</forename><surname>Tian</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><surname>Hu</surname></persName>
+		</author>
+		<idno type="DOI">10.3837/tiis.2021.02.012</idno>
+	</analytic>
+	<monogr>
+		<title level="j">KSII Transactions on Internet and Information Systems</title>
+		<title level="j" type="abbrev">KSII TIIS</title>
+		<idno type="ISSNe">1976-7277</idno>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="600" to="616" />
+			<date type="published" when="2021-02-28">2021</date>
+			<publisher>Korean Society for Internet Information (KSII)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Tian W, Hu B (2021) Deep learning assisted differential cryptanalysis for the lightweight cipher simon. KSII Trans Internet Inf Syst (TIIS) 15(2):600-616</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b40">
+	<monogr>
+		<title level="m" type="main">Deep learning based differential distinguisher for lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Jain</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Kohli</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Mishra</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:2112.05061</idno>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Jain A, Kohli V, Mishra G (2021) Deep learning based differential distinguisher for lightweight block ciphers. arXiv preprint arXiv: 2112. 05061</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Bitwise Mixture Differential Cryptanalysis and Its Application to SIMON</title>
+		<author>
+			<persName><forename type="first">Kexin</forename><surname>Qiao</surname></persName>
+			<idno type="ORCID">0000-0002-3624-9364</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Zehan</forename><surname>Wu</surname></persName>
+			<idno type="ORCID">0009-0009-9285-6255</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Junjie</forename><surname>Cheng</surname></persName>
+			<idno type="ORCID">0000-0001-6072-2521</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Changhai</forename><surname>Ou</surname></persName>
+			<idno type="ORCID">0000-0002-2845-6232</idno>
+		</author>
+		<author>
+			<persName><forename type="first">An</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-9873-1308</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Liehuang</forename><surname>Zhu</surname></persName>
+			<idno type="ORCID">0000-0003-3277-3887</idno>
+		</author>
+		<idno type="DOI">10.1109/jiot.2024.3384668</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Internet of Things Journal</title>
+		<title level="j" type="abbrev">IEEE Internet Things J.</title>
+		<idno type="ISSNe">2372-2541</idno>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">13</biblScope>
+			<biblScope unit="page" from="23398" to="23409" />
+			<date type="published" when="2024-07-01">2024</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Qiao K, Wu Z, Cheng J, Ou C, Wang A, Zhu L (2024) Bit-wise mixture differ- ential cryptanalysis and its application to Simon. IEEE Internet Things J 11(13):23398-23409</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

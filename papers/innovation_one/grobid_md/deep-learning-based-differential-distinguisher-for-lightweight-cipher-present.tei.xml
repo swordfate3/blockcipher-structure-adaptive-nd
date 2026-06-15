@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Deep Learning based Differential Distinguisher for Lightweight Cipher PRESENT</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Aayush</forename><surname>Jain</surname></persName>
+							<email>aayushjain0829@gmail.com</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Cluster Innovation Centre , University of Delhi , Delhi , India</note>
+								<orgName type="department">Cluster Innovation Centre</orgName>
+								<orgName type="institution">University of Delhi</orgName>
+								<address>
+									<settlement>Delhi</settlement>
+									<country key="IN">India</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Varun</forename><surname>Kohli</surname></persName>
+							<email>varunkohli2013@gmail.com</email>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Department of Electrical and Electronics Engineering , BITS-Pilani , Pilani Campus , India</note>
+								<orgName type="department">Department of Electrical and Electronics Engineering</orgName>
+								<orgName type="institution">BITS-Pilani</orgName>
+								<address>
+									<settlement>Pilani Campus</settlement>
+									<country key="IN">India</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Girish</forename><surname>Mishra</surname></persName>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>3</label> Scientific Analysis Group , Defence R&amp;D Organisation , Delhi , India</note>
+								<orgName type="laboratory">Scientific Analysis Group</orgName>
+								<orgName type="institution">Defence R&amp;D Organisation</orgName>
+								<address>
+									<settlement>Delhi</settlement>
+									<country key="IN">India</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Deep Learning based Differential Distinguisher for Lightweight Cipher PRESENT</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">C6604D001A0F2EA156B4803FA08DC6EB</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T15:50+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Block Ciphers</term>
+					<term>Cryptanalysis</term>
+					<term>Deep Learning</term>
+					<term>Differential Distinguisher</term>
+					<term>PRESENT</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Recent years have seen a major involvement of deep learning architecture in the cryptanalysis of various lightweight ciphers. The present study is inspired by the work of Gohr and Baksi et al. in the field to develop a deep neural network-based differential distinguisher for round reduced PRESENT lightweight block cipher. We present a multi-layer perceptron network which can distinguish between 3-6 rounds of PRESENT cipher data and a randomly generated data with a significantly high probability. We also discuss the possible improvements in the original approach of the differential distinguisher presented by Baksi et al.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.">INTRODUCTION</head><p>Differential Cryptanalysis is a general cryptanalysis technique primarily used on block ciphers <ref type="bibr" target="#b0">[1]</ref>, with some applications in stream ciphers <ref type="bibr" target="#b1">[2]</ref> and hash functions <ref type="bibr" target="#b2">[3]</ref>. It is the study of how input differences affect the differences in the output. In the case of block ciphers, the technique follows the transformations of the input through the cipher network, detecting areas of non-random behavior. Such properties are exploited to recover the secret cryptographic key of the cipher. Work in differential cryptanalysis started in the late 1980s when Eli et. al. presented a novel cryptanalysis method that could be applied to various DES-like substitution and permutation cryptosystems <ref type="bibr" target="#b3">[4]</ref>. Later in 1994, Don Coppersmith, a member of the original IBM-DES team discussed the efforts made by IBM to make DES immune to differential attacks <ref type="bibr" target="#b0">[1]</ref> since its inception in 1974. This technique was kept a secret by IBM and the NSA until later discussed in <ref type="bibr" target="#b3">[4]</ref>. While DES was immune to them, differential attacks proved to be useful against other contemporary block ciphers at the time, such as FEAL-4 <ref type="bibr" target="#b4">[5]</ref>.</p><p>The classical differential attack follows the exhaustive approach of creating a difference distribution table. In the recent work by Aron Gohr, a novel neural network-based distinguisher was proposed <ref type="bibr" target="#b5">[6]</ref>, wherein a low-data, chosen-plaintext attack on round reduced Speck 32/64 gave better results than any past work done on Speck <ref type="bibr" target="#b6">[7]</ref>. Their proposed attack is an all-inone approach with Markov assumption which considers all output differences for a given input difference. He also presents a key recovery attack against 11 rounds of Speck32/64, to recover the last two subkeys after 2 14.5 chosen-plaintext queries with a computational complexity of 2 38 encryptions of Speck, compared to past work that achieved the complexity of 2 46 for 11 rounds <ref type="bibr" target="#b6">[7]</ref>.</p><p>In the line of Gohr's work on the deep learning (DL) based cryptanalysis of round reduced Speck, Baksi et al. discuss a deep learning-based approach for differential attacks on non-Markov 8-round Gimli-Hash and Gimli-Cipher <ref type="bibr" target="#b7">[8]</ref>. They used multiple models including multilayer perceptron (MLP), Convolutional Neural Networks (CNN), and Long Short Term Memory (LSTM) with varied width and number of neurons. We discuss their method in-depth in a later section. This paper mounts a similar attack on the PRESENT. Developed in 2007 by Bogdanov et al. <ref type="bibr" target="#b8">[9]</ref> at Orange Labs, France, PRESENT is a block cipher that has become the criteria to measure the security of modern lightweight ciphers. PRESENT used the S/P network and key scheduling for the 31 round encryption process. The S-box of PRESENT is a 4-bit to 4-bit mapping designed with hardware optimization in mind. Wang <ref type="bibr" target="#b9">[10]</ref> in 2008, presented his differential cryptanalysis of 16-round reduced PRESENT. His proposed differential characteristics for 14-round encryption had a probability of 2 -62 and that for 15-round encryption was 2 -66 . Wang also searched for iterative characteristics from 2nd to 7th round which he claims to be more effective than 2-round iterative characteristics. In our research, we have used the same differentials proposed by Wang for the round reduced PRESENT for high probability differences in Baksi's differential attack algorithm on 3-6 rounds of PRESENT encryption. This gives significantly better results compared to when random input differences are selected. We also propose a multi-layer perceptron with a lesser number of hidden layers, which gives better results with lower training time.</p><p>We will discuss the lightweight cipher PRESENT, giving an overview of its encryption algorithm in Section 2 of this paper. This is followed by the discussion of the differential distinguisher algorithm including the addition of Wang's differentials in Section 3. We will then explain our deep learning model followed by the results obtained during experimentation in Section 4 and 5 respectively. Finally, We will conclude the study, giving direction for future work based on our research in Section 6.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.">PRESENT LIGHTWEIGHT BLOCK CIPHER</head><p>PRESENT uses the S/P network and key scheduling algorithm for the 31 round encryption process <ref type="bibr" target="#b8">[9]</ref>. Fig- <ref type="figure">1</ref> illustrates the general working of the PRESENT cipher. It uses a 64-bit block as plain text input and 80-bit or 128-bit work as a key input. For the current study, we are only considering the 80-bit key variant.</p><p>The non-linearity in PRESENT is introduced via 4×4 S-box, which is applied 16 times in parallel. This non-linear Substitution layer is followed by a Permutation layer and the addition of round key i.e. addRoundKey to complete one iteration of PRESENT round function.</p><p>The round keys to be used in addRoundKey step is generated using the key scheduling algorithm of PRESENT which takes 80-bit key denoted as K = k 79 k 78 k 77 ...k 0 and stores it in the register. Then this register is updated for each round using the following equations.</p><formula xml:id="formula_0">[k 79 k 78 ...k 1 k 0 ] = [k 18 k 17 ...k 20 k 19 ] [k 79 k 78 k 77 k 76 ] = S[k 79 k 78 k 77 k 76 ] [k 19 k 18 k 17 k 16 k 15 ] = [k 19 k 18 k 17 k 16 k 15 ]</formula><p>roundCounter</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.">DIFFERENTIAL DISTINGUISHER</head><p>Following the work done by Baksi et. al. <ref type="bibr" target="#b7">[8]</ref> on Machine Learning (ML) based distinguishers, we developed our own DL model based on their differential distinguisher algorithm. This section</p><p>TABLE I: Differences taken from Wang's study Input differential class Input differentials 1 0x7000000000007000 2 0x0700000000000700 3 0x0070000000000070 4 0x0007000000000007</p><p>discusses the in-depth approach of their algorithm followed by the changes we made in the Deep Neural Network (DNN).</p><p>The algorithm for the deep learning based differential distinguisher is shown in Algorithm-I. In this differential method, the attacker chooses (t ≥ 2) input differentials. The differences are selected from Wang's study <ref type="bibr" target="#b9">[10]</ref> to avoid using ones that have low probability and may give worse results. They are provided in Table-I. This is followed by two phases, offline and online. The offline or the training phase is for making the output-input differential pairs of the train set, followed by training the DL model to learn the relationship between input and output differentials, whereas the online or testing phase involves the creation of the test and then deciphering whether the given ORACLE is the CIPHER or RANDOM. For t input differentials, if the training accuracy during the offline phase comes out to be ≥ 1 t , we proceed to the online phase. A testing accuracy ≥ 1 t in the online phase implies the ORACLE is the CIPHER, and otherwise, RANDOM.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.">DEEP LEARNING MODEL</head><p>We have implemented 4 differential distinguisher models which will, from here onwards, be denoted by M i (1 ≤ i ≤ 4). Model 1 (M 1 ) and Model 2 (M 2 ) are Baksi's recommended deep learning architecture for differential distinguisher TABLE II: List of Hyper-parameters used in training of differential distinguisher models Hyper-Parameters Values Batch Size 200 Epochs 25 Encryption Rounds 3-6 Sample size 10000 Optimizer Adam Loss function MSE Loss Validation Split 0.3 Learning rate 0.001</p><p>results in less time and better chances of avoiding data over-fitting. We have also observed that our model gives slightly better validation accuracies than the Baksi's recommended model. In M 3 we are selecting the input differentials randomly and in M 4 , we are using the input differentials suggested by Wang <ref type="bibr" target="#b9">[10]</ref> in his work on differential cryptanalysis of PRESENT.</p><p>Dataset Collection: For 10,000 different key-plaintext pairs, we have selected 4 input different classes. These input differentials were either selected randomly (for M 1 and M 3 ) or were taken from Wang's work (for M 2 and M 4 ) on the differential attack on PRESENT. For every key-plaintext pair, the plaintext, and its corresponding difference pair, calculated for each input difference class, is encrypted for r-round reduced PRESENT. The obtained ciphertext pairs are operated over a XOR operation to get the output difference. This output difference, along with the input difference class, is stored in a training-dataset. The training and validation processes are based on Baksi's study. We have changed some hyper-parameters for the training and testing of the model. The details of the hyper-parameters used are given in Table-II.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.">RESULTS</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The results of the study are presented in</head><p>Table-III in a very concise format. It is indicated by the table that the proposed improvement in Baksi's model is giving better validation accuracies for all Algorithm 1 ML based differential distinguisher 1: procedure TRAINING PHASE (OFFLINE) 2: δ t ← Wang's differentials 3: P, K ← Random 4: C ← CIPHER(P,K) 5: loop: 6: C i ← CIPHER(P δ i ,K) 7: dataset(i) ← (C C i ,i) 8: goto loop. 9: model: 10: α ← train(dataset) 11: if α &gt; 1 t then 12: goto ONLINE PHASE. 13: else 14: Repeat from Step 3 1: procedure TESTING PHASE (ONLINE) 2: δ t ← Wang's differentials 3: P, K ← Random 4: C ← ORACLE(P,K) 5: loop: 6: C i ← ORACLE(P δ i ,K) 7: dataset(i) ← (C C i ,i) 8: goto loop. 9: model: 10: α ← test(dataset) 11: if α = α then 12: ORACLE = CIPHER 13: else 14: ORACLE = RANDOM 15: Repeat from Step 3 if required</p><p>TABLE III: Comparison of different distinguishers based on the accuracy Rounds Model 1 (M 1 ) Model 2 (M 2 ) Model 3 (M 3 ) Model 4 (M 4 ) Training Validation Training Validation Training Validation Training Validation 3 0.94 0.44 0.91 0.85 0.82 0.42 0.91 0.93 4 0.94 0.3 0.95 0.68 0.69 0.28 0.95 0.75 5 0.89 0.27 0.94 0.39 0.67 0.24 0.80 0.40 6 0.94 0.26 0.94 0.2 0.76 0.21 0.77 0.26 (a) 3 Rounds (b) 4 Rounds (c) 5 Rounds (d) 6 Rounds the round-reduced encryptions that were in the domain. M 1 and M 3 didn't show any significant validation accuracies as expected. Both the models, when provided with Wang's differentials (M 2 and M 4 ) performed significantly better than their random differentials counterparts. This study is better illustrated in Fig- In addition to Baksi's suggested model, we developed our own MLP with one less hidden layer and parameters as mentioned in the Deep Learning Model section. M 4 gives better validation accuracies than M 1 and M 2 , and its training and validation accuracy graphs for 3-6 rounds of PRESENT encryption are shown in Fig- <ref type="figure" target="#fig_3">3</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.">CONCLUSION</head><p>In this paper, we used Baksi et al's differential distinguisher algorithm as the base of our research. We used Wang's differentials instead of random differences and obtained significantly better results. We also used a simpler deep learning model with a lower number of hidden layers to obtain better results on round reduced PRESENT with lower training time. This differential attack works well up to 5-rounds of the PRESENT cipher. However, the complete round PRESENT cipher is immune to our proposed attack. Using regularisation techniques in the deep learning model can help overcome the observed overfitting of the deep neural networks on training data. In addition to this, our attack does not include a key retrieval method which can be developed in the future.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>[ 8 ]Fig. 1 :</head><label>81</label><figDesc>Fig. 1: Abstract View of PRESENT Cipher</figDesc><graphic coords="3,214.26,463.88,198.43,200.90" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Fig. 2 :</head><label>2</label><figDesc>Fig. 2: Comparative study of validation accuracy between M 1 and M 2</figDesc><graphic coords="5,100.84,345.41,212.60,141.73" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>2 .</head><label>2</label><figDesc>It shows the comparison of accuracies obtained for random input differences and Wang's differences while using Baksi's deep learning model for 3-6 rounds of PRESENT encryption. While Fig-2a, Fig-2b, and Fig-2cclearly shows the better accuracies for Wang's differentials, Fig-2dshows little difference between the two. This indicates that our proposed differential distinguisher model was only successful until the 5th-round encryption of PRESENT.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 3 :</head><label>3</label><figDesc>Fig. 3: Training and Validation accuracies of M 4 for 3-6 rounds of PRESENT encryption.</figDesc><graphic coords="6,100.86,223.03,212.60,141.90" type="bitmap" /></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><head>Acknowledgements</head><p>The Authors thank the <rs type="institution">Scientific Analysis Group, DRDO, India</rs> for providing them with the opportunity to work in the field. The authors would also like to show their gratitude towards <rs type="institution">CIC, DU, India and</rs> <rs type="institution">BITS-Pilani, India</rs> for their constant encouragement.</p></div>
+			</div>			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">The Data Encryption Standard (DES) and its strength against attacks</title>
+		<author>
+			<persName><forename type="first">D</forename><surname>Coppersmith</surname></persName>
+		</author>
+		<idno type="DOI">10.1147/rd.383.0243</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IBM Journal of Research and Development</title>
+		<title level="j" type="abbrev">IBM J. Res. &amp; Dev.</title>
+		<idno type="ISSN">0018-8646</idno>
+		<imprint>
+			<biblScope unit="volume">38</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="243" to="250" />
+			<date type="published" when="1994-05">1994</date>
+			<publisher>IBM</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">D. Coppersmith, &quot;The data encryption standard (des) and its strength against attacks,&quot; IBM journal of research and development, vol. 38, no. 3, pp. 243-250, 1994.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Cryptanalysis of the A5/1 GSM Stream Cipher</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Orr</forename><surname>Dunkelman</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-44495-5_5</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007">2007</date>
+			<biblScope unit="page" from="43" to="51" />
+		</imprint>
+		<respStmt>
+			<orgName>Computer Science Department, Technion, Tech. Rep</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">E. Biham and O. Dunkelman, &quot;Differential cryptanalysis of stream ciphers,&quot; Computer Science Department, Technion, Tech. Rep., 2007.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Hash Functions</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-1-4613-9314-6_8</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Differential Cryptanalysis of the Data Encryption Standard</title>
+		<imprint>
+			<publisher>Springer New York</publisher>
+			<date type="published" when="1993">1993</date>
+			<biblScope unit="page" from="133" to="148" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">E. Biham and A. Shamir, &quot;Differential cryptanalysis of hash functions,&quot; in Differential Cryptanalysis of The Data Encryption Standard. Springer, 1993, pp. 133-148.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis of DES-like cryptosystems</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bf00630563</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="3" to="72" />
+			<date type="published" when="1991-01">1991</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">--, &quot;Differential cryptanalysis of des-like cryptosystems,&quot; Journal of CRYPTOLOGY, vol. 4, no. 1, pp. 3-72, 1991.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Differential-linear cryptanalysis of feal-8</title>
+		<author>
+			<persName><forename type="first">K</forename><surname>Aoki</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><surname>Ohta</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEICE Transactions on Fundamentals of Electronics, Communications and Computer Sciences</title>
+		<imprint>
+			<biblScope unit="volume">79</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="20" to="27" />
+			<date type="published" when="1996">1996</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">K. Aoki and K. Ohta, &quot;Differential-linear cryptanalysis of feal-8,&quot; IEICE Transactions on Fundamentals of Electronics, Communications and Computer Sciences, vol. 79, no. 1, pp. 20-27, 1996.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">A. Gohr, &quot;Improving attacks on round-reduced speck32/64 using deep learning,&quot; in Annual International Cryptology Conference. Springer, 2019, pp. 150-179.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Improved Differential Cryptanalysis of Round-Reduced Speck</title>
+		<author>
+			<persName><forename type="first">Itai</forename><surname>Dinur</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-13051-4_9</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="147" to="164" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">I. Dinur, &quot;Improved differential cryptanalysis of round-reduced speck,&quot; in International Conference on Selected Areas in Cryptography. Springer, 2014, pp. 147-164.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2020">2020. 2020</date>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">A. Baksi, J. Breier, X. Dong, and C. Yi, &quot;Machine learning assisted differential distinguishers for lightweight ciphers.&quot; IACR Cryptol. ePrint Arch., vol. 2020, p. 571, 2020.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">PRESENT: An Ultra-Lightweight Block Cipher</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Bogdanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Paar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Poschmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">J B</forename><surname>Robshaw</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Seurin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Vikkelsoe</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-74735-2_31</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007">2007</date>
+			<biblScope unit="page" from="450" to="466" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">A. Bogdanov, L. R. Knudsen, G. Leander, C. Paar, A. Poschmann, M. J. Robshaw, Y. Seurin, and C. Vikkelsoe, &quot;Present: An ultra-lightweight block cipher,&quot; in International workshop on cryptographic hardware and embedded systems. Springer, 2007, pp. 450-466.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Reduced-Round PRESENT</title>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-68164-9_4</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2008">2008</date>
+			<biblScope unit="page" from="40" to="49" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">M. Wang, &quot;Differential cryptanalysis of reduced-round present,&quot; in International Conference on Cryptology in Africa. Springer, 2008, pp. 40-49.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

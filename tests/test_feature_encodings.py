@@ -1,6 +1,7 @@
 from blockcipher_ai_eval.ciphers import Present80, Speck32_64
 from blockcipher_ai_eval.ciphers.base import rol, ror
 from blockcipher_ai_eval.ciphers.spn.gift import Gift64
+from blockcipher_ai_eval.features import is_supported_feature_encoding
 from blockcipher_ai_eval.features.pair_features import (
     encode_ciphertext_pair,
     int_to_bits,
@@ -189,3 +190,28 @@ def test_pair_features_module_encodes_speck_arx_partial_inverse_rx_pair_features
     assert encoded[256:288] == int_to_bits(rx_beta, 32)
     assert encoded[288:320] == int_to_bits(carry_proxy, 32)
     assert encoded[320:352] == int_to_bits(carry_right << 16 | carry_delta, 32)
+
+
+def test_present_mcnd_cell_matrix_encoding_orders_pair_bits_as_four_bit_planes():
+    cipher = Present80(rounds=1, key=0x00000000000000000000)
+    left = 0x0123456789ABCDEF
+    right = 0xFEDCBA9876543210
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding="present_mcnd_cell_matrix_bits",
+        cipher=cipher,
+    )
+
+    pair_bits = int_to_bits(left, 64) + int_to_bits(right, 64)
+    nibbles = [pair_bits[index : index + 4] for index in range(0, 128, 4)]
+    expected = [nibble[bit_index] for bit_index in range(4) for nibble in nibbles]
+    assert pair_bits_for_encoding(64, "present_mcnd_cell_matrix_bits") == 128
+    assert encoded == expected
+    assert len(encoded) == 4 * 32
+
+
+def test_present_mcnd_cell_matrix_encoding_is_registered():
+    assert is_supported_feature_encoding("present_mcnd_cell_matrix_bits")

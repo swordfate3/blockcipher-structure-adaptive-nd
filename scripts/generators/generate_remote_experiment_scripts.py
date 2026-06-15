@@ -323,7 +323,7 @@ def render_launch_script(run_script_name: str, run_id: str, spec: dict[str, Any]
         "set LAUNCH_LOG_DIR=%RUN_ROOT%\\launcher_logs\n"
         "if not exist %RUN_ROOT% mkdir %RUN_ROOT%\n"
         "if not exist %LAUNCH_LOG_DIR% mkdir %LAUNCH_LOG_DIR%\n"
-        f"start \"progress_{run_id}\" cmd.exe /k powershell -NoProfile -ExecutionPolicy Bypass -Command \"{progress_command}\"\n"
+        f"start \"progress_{run_id}\" cmd.exe /c powershell -NoProfile -ExecutionPolicy Bypass -Command \"{progress_command}\"\n"
         f"call {run_script_path} > "
         f"%LAUNCH_LOG_DIR%\\%RUN_ID%_launcher_stdout.txt 2> "
         f"%LAUNCH_LOG_DIR%\\%RUN_ID%_launcher_stderr.txt\n"

@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Deep Learning based Differential Distinguisher for Lightweight Block Ciphers</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Aayush</forename><surname>Jain</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> National Institute of Technology , Tiruchirappalli , India -620015</note>
+								<orgName type="institution">National Institute of Technology</orgName>
+								<address>
+									<postCode>-620015</postCode>
+									<settlement>Tiruchirappalli</settlement>
+									<country key="IN">India</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Varun</forename><surname>Kohli</surname></persName>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Birla Institute of Technology and Science Pilani , India -333031</note>
+								<orgName type="institution">Birla Institute of Technology and Science Pilani</orgName>
+								<address>
+									<postCode>-333031</postCode>
+									<country key="IN">India</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Girish</forename><surname>Mishra</surname></persName>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>3</label> Scientific Analysis Group DRDO , India -110054</note>
+								<orgName type="institution">Scientific Analysis Group DRDO</orgName>
+								<address>
+									<postCode>-110054</postCode>
+									<country key="IN">India</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Deep Learning based Differential Distinguisher for Lightweight Block Ciphers</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">571C20CE6E2213C9DA384C7411C9DAD3</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T15:58+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Internet of Things</term>
+					<term>Differential Cryptanalysis</term>
+					<term>Deep Learning</term>
+					<term>Block Ciphers</term>
+					<term>PRESENT</term>
+					<term>Simeck</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Recent years have seen an increasing involvement of Deep Learning in the cryptanalysis of various ciphers. The present study is inspired by past works on differential distinguishers, to develop a Deep Neural Network-based differential distinguisher for round reduced lightweight block ciphers PRESENT and Simeck. We make improvements in the state-of-the-art approach and extend its use to the two structurally different block ciphers, PRESENT-80 and Simeck64/128. The obtained results suggest the universality of our cryptanalysis method. The proposed method can distinguish random data from the cipher data obtained until 6 rounds of PRESENT and 7 rounds of Simeck encryption with high accuracy. In addition to this, we explore a new approach to select good input differentials, which to the best of our knowledge has not been explored in the past. We also provide a minimum-security requirement for the discussed ciphers against our differential attack.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>In the era of Internet of Things (IoT), security is one of the deciding factors for the viability of IoT systems <ref type="bibr" target="#b0">[1]</ref>. These include smart homes <ref type="bibr" target="#b1">[2]</ref>, medical and healthcare services <ref type="bibr" target="#b2">[3,</ref><ref type="bibr" target="#b3">4]</ref>, environment monitoring <ref type="bibr" target="#b4">[5]</ref>, transportation <ref type="bibr" target="#b5">[6]</ref>, vehicular networks <ref type="bibr" target="#b6">[7]</ref>, and UAVs <ref type="bibr" target="#b7">[8]</ref> to name a few. An IoT system comprises of four layers, namely application, middleware, network and sensing <ref type="bibr" target="#b0">[1]</ref>, each of which may show vulnerability to a wide range of security threats <ref type="bibr" target="#b8">[9]</ref>. Even seemingly secure systems have inherent flaws that can be exploited by attackers without the need of high computational resources <ref type="bibr" target="#b9">[10]</ref>. One such flaw for example, may be biased encryption algorithms.</p><p>Various methods have been developed to exploit such flaws. Differential Cryptanalysis is a general cryptanalysis technique primarily used on block ciphers <ref type="bibr" target="#b10">[11]</ref>, with some applications in stream ciphers <ref type="bibr" target="#b11">[12]</ref> and hash functions <ref type="bibr" target="#b12">[13]</ref>. It is the study of how input differences affect the differences in the output. In the case of block ciphers, the technique follows the transformation of the input through the cipher network, detecting areas of non-random behavior <ref type="bibr" target="#b1">[2]</ref>. Such properties are exploited to recover the secret cryptographic key of the cipher. Biham and Shamir presented a novel differential cryptanalysis method <ref type="bibr" target="#b13">[14]</ref> that could be applied to various DES-like substitution and permutation cryptosystems, such as FEAL-4 <ref type="bibr" target="#b14">[15]</ref>. A classical differential attack follows the exhaustive approach of creating a difference distribution table. Aron Gohr proposed a novel neural network-based distinguisher in his recent work <ref type="bibr" target="#b15">[16]</ref>, wherein a low-data, chosen-plaintext attack on round reduced SPECK 32/64 gave better results than past work by Dinur on SPECK <ref type="bibr" target="#b16">[17]</ref>. Their proposed attack is an all-in-one approach with the Markov assumption which considers all output differences for a given input difference. He also presented a key recovery attack on 11 rounds of SPECK32/64 to recover the last two subkeys after 2 14.5 chosen-plaintext queries with a computational requirement of 2 38 SPECK encryptions, compared to past work by Dinur that achieved the complexity of 2 46 for 11 rounds. Following Gohr's work, Baksi et al proposed a deep learning-based approach for differential attacks on the non-Markov 8-round Gimli-Hash and Gimli-Cipher <ref type="bibr" target="#b17">[18]</ref>. They used multiple models including multilayer perceptron (MLP), Long Short-Term Memory (LSTM) <ref type="bibr" target="#b18">[19]</ref>, and Convolutional Neural Networks (CNN) <ref type="bibr" target="#b19">[20]</ref> with varied width and number of neurons. We discuss their method in more detail in a later section.</p><p>PRESENT was developed in 2007 <ref type="bibr" target="#b20">[21]</ref> at Orange Labs, France. It has become the criteria to measure the security of modern lightweight ciphers <ref type="bibr">[22]</ref>. The Simeck family of lightweight block ciphers was developed in 2015 <ref type="bibr" target="#b21">[23]</ref> and is a combination of the SIMON and SPECK block cipher families <ref type="bibr" target="#b22">[24]</ref>, which are the smallest hardware and software block ciphers respectively. It has a smaller hardware footprint and software implementation than its parent families. An overview of the PRESENT and Simeck ciphers is discussed in a later section. These ciphers find practical application in IoT devices such as RFID tags <ref type="bibr" target="#b23">[25]</ref> and sensors. Wang <ref type="bibr" target="#b24">[26]</ref> in 2008, presented her differential cryptanalysis of 16-round reduced PRESENT. Her proposed differential characteristics for 14 and 15 rounds of encryption had a probability of 2 -62 and 2 -66 respectively. Wang also searched for iterative characteristics from the 2 nd to 7 th rounds which she claims to be more effective than the 2-round iterative characteristics. Wang's study proved the effectiveness of using select input differentials which have a higher probability over differentials with lower probability.</p><p>This study extends the work by Baksi and Wang for use in two structurally different lightweight block ciphers, PRESENT and Simeck. Our major contributions are as follows:</p><p>1. We improve the differential distinguisher algorithm proposed by Baksi et al by using Wang's high probability input differentials for PRESENT and Simeck. 2. We generate three good input differentials from one of Wang's high probability input differences by using left and right shift operators. 3. We propose a simpler deep learning architecture with a lower number of parameters as compared to Baksi's recommended architecture. 4. Our results provide a minimum-security requirement for the discussed ciphers to ensure safety against deep learning-based differential attacks.</p><p>Section-2 gives an overview of the lightweight block ciphers PRESENT and Simeck. This is followed by a discussion on the differential distinguisher algorithm in Section-3. We will then discuss our deep learning model followed by the results obtained during experimentation in Sections-4 and 5 respectively. Finally, we conclude the study in Section-6 and provide direction for future work based on our research.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Lightweight Block Ciphers</head><p>Block ciphers are symmetric key ciphers employing deterministic algorithms to encrypt blocks of plaintext. Lightweight block ciphers are a subset of these, as they use algorithms that require less computing power. The following subsections discuss the two lightweight block ciphers used in our study, PRESENT and Simeck.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">PRESENT</head><p>The PRESENT cipher was developed by Bogdanov et al in 2007 <ref type="bibr" target="#b20">[21]</ref>. It was included in the new international standard for lightweight cryptographic methods by the International Organization for Standardization (ISO) and the International Electrotechnical Commission (IEC) in 2019 <ref type="bibr">[22]</ref>. Due to its bit-oriented permutations, PRESENT is a hardware cipher which can be implemented with simple wiring. It supports a block-length of 64 bits and key-lengths of 80 bits and 128 bits, which suffice the requirements of moderate-level security applications such as tag-based systems. The scope of this study is limited to the 80-bit key variant of PRESENT. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>2.1.1</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Round Function</head><p>A complete-round PRESENT implementation consists of 31 rounds of encryption and each round includes the following layers:</p><p>Substitution Layer: The substitution layer contains 4×4 S-Boxes. These S-Boxes are used 16 times in parallel each round. The hexadecimal S-Box mapping is shown in Table <ref type="table" target="#tab_0">-1</ref>  Where 1 ≤ 𝑖 ≤ 32, and 𝐾 𝑖 , 𝐵 𝑖 are the 𝑖 𝑡ℎ round key and block state respectively. Fig- <ref type="figure" target="#fig_0">1</ref> illustrates the general working of the PRESENT cipher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1.2">Key Scheduling Algorithm</head><p>The round keys to be used</p><p>in the addRoundKey step are generated using the Key Scheduling Algorithm (KSA) which takes the 80-bit key denoted as 𝐾 = 𝑘 79 𝑘 78 𝑘 77 … 𝑘 0 and stores it in the shift register. The key is rotated to the left by 61 bits positions. The most significant 4 bits are passed through the 4 × 4 PRESENT Sbox. Bits 15-19 of K are then XORed with the least significant bit of roundCounter on the right. The equations for the process are as follows: [𝑘 79 𝑘 78 … 𝑘 1 𝑘 0 ] = [𝑘 18 𝑘 17 … 𝑘 20 𝑘 19 ] [𝑘 79 𝑘 78 𝑘 77 𝑘 76 ] = 𝑆[𝑘 79 𝑘 78 𝑘 77 𝑘 76 ] [𝑘 19 𝑘 78 𝑘 17 𝑘 16 𝑘 15 ] = [𝑘 19 𝑘 18 𝑘 17 𝑘 16 𝑘 15 ]⨁ 𝑟𝑜𝑢𝑛𝑑𝐶𝑜𝑢𝑛𝑡𝑒𝑟 2.2 Simeck The Simeck lightweight block cipher was proposed by Yang et al in 2015 [23]. It is designed to be compact and moderately secure for resource constrained applications such as passive RFID tags and Wireless Sensor Network (WSN) nodes. It is a combination of the SIMON and SPECK cipher families which are a set of hardware and software lightweight block ciphers respectively. Simeck is smaller than SIMON due to the reduced size of the Round Function and KSA. It combines the best features of its parent cipher families, that are: a. A modified and compact version of SIMON's round function. b. A round function for key scheduling, similar to SPECK. c. A Linear Feedback Shift Register (LSFR)-based constant for simpler key schedule, in line with SIMON.</p><p>The Simeck family of ciphers is represented as Simeck2n/mn. Here n is the word size, equal to 16, 24 or 32 based on the family, and mn denotes the key size which may be 64, 96 or 128 bits long. Thus, the resulting ciphers are Simeck 32/64, 48/96, and 64/128. These size choices aim to fit various applications such as tag-based systems and are included in the specification of the SIMON and SPECK. The round function and key scheduling algorithm have a Feistel structure as shown in Fig- <ref type="figure" target="#fig_2">2</ref> and 3.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2.1">Round Function</head><p>Fig- <ref type="figure" target="#fig_2">2</ref>    </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2.2">Key Scheduling Algorithm</head><p>The 𝑖 𝑡ℎ round key 𝑘 𝑖 is generated by dividing the master key 𝐾 into four words and loading them as the inital states (𝑡 2 , 𝑡 1 , 𝑡 0 , 𝑘 0 ). Here, 𝑡 2 is the most significant 𝑛 bits of 𝑘, and the least significant n bits are denoted by 𝑘 0 . These initial states are loaded into the LFSR. The FSR of the key scheduling algorithm are shown in Fig- <ref type="figure" target="#fig_3">3</ref>. The update of states is done as per the following equations: 𝑘 𝑖+1 = 𝑡 𝑖 , 𝑡 𝑖+3 = 𝑘 𝑖 ⨁𝑓(𝑡 𝑖 )⨁𝐶⨁(𝑧 𝑗 ) 𝑖 Where 𝑖 is the round number, 𝐶 = 2 𝑛 -4 (𝑛 is the word size) and (𝑧 𝑗 ) 𝑖 is the 𝑖 𝑡ℎ bit of sequence 𝑧 𝑗 in which 𝑗 = 0 for Simeck32/64 and Simeck48/96, and 𝑧 0 has period of 31. Similarly, for Simeck64/128, 𝑗 = 1 and 𝑧 1 has a period of 63.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>3</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Differential Distinguisher</head><p>Following the work done by Baksi et. al. 18 on Machine Learning (ML) based differential distinguishers, we improve their differential method. This section discusses the in-depth approach of their algorithm and our suggested improvements. The algorithm for the deep learning based differential distinguisher is shown in Algorithm-1. In this differential method, the attacker chooses (𝑡 ≥ 2) input differentials. The four selected differentials are provided in Table-3, where the first differential is selected from Wang's study <ref type="bibr" target="#b24">[26]</ref> for PRESENT. The remaining three differentials (numbered 2-4) are generated using left and right shifts. The same differences are used for Simeck64/128 as well. This selection is followed by two phases, OFFLINE and ONLINE. The OFFLINE or the Training Phase is for making the training-dataset of input-output differential pairs, and then training the DL model to learn the relationship between these input and output differences. The ONLINE or Testing Phase involves the creation of the test-dataset and then deciphering whether the given ORACLE is the CIPHER or RANDOM. For 𝑡 input differentials, if the training accuracy during the Offline phase comes out to be ≥</p><p>1 𝑡 , we proceed to the online phase. A testing accuracy ≥ 1 𝑡 in the online phase implies the ORACLE is the CIPHER, and otherwise, RANDOM.  </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Dataset Collection:</head><p>For 10,000 different key-plaintext pairs, we have selected four input differential classes. These input differentials were either selected randomly (for 𝑀 1 and 𝑀 2 ) or were taken from Table-3 (for 𝑀 3 and 𝑀 4 ). For every key-plaintext pair, the plaintext, and its corresponding difference pair, calculated for each input difference class, is encrypted for r-round reduced PRESENT (3 ≤ 𝑟 ≤ 6) and Simeck (3 ≤ 𝑟 ≤ 7). The obtained ciphertext pairs XORed to get the output difference. This output difference, along with the input difference class, is stored in a training-dataset. The hyper-parameters for the training and testing of the models are given in Table <ref type="figure" target="#fig_4">-4</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Results</head><p>The previously discussed differential distinguisher models were trained and tested on random data, and data from PRESENT and Simeck. The minimum and maximum validation results of the study are presented in Table-5 in a very concise format. performed significantly better for both PRESENT and Simeck. This is because the selected input differentials have a high probability for differential cryptanalysis and remove the possibility of using low probability differentials, that would give poor results as seen for 𝑀 1 and 𝑀 2 . Although the selected differentials are for PRESENT, they give good results for Simeck as well as shown in the table. Fig- <ref type="figure" target="#fig_5">5</ref> and Fig- <ref type="figure" target="#fig_6">6</ref> show the average validation accuracies for PRESENT and Simeck respectively, round and model wise.  It can be seen that 𝑀 3 and 𝑀 4 perform exceptionally well, with obtained average accuracies following a decreasing trend from lower to higher rounds.</p><p>Whereas the average accuracies for 𝑀 1 and 𝑀 2 are significantly lower in comparison, for reasons discussed earlier, with nearly constant values obtained after the third round. All four models reach the limiting average accuracies of nearly 25% by the 6 6 𝑡ℎ round for PRESENT, and the 7 𝑡ℎ round for Simeck. In addition to the above, our proposed MLP (used in 𝑀 2 and 𝑀 4 ) performs better than Baksi's recommended MLP (used in 𝑀 1 and 𝑀 3 ) for use on PRESENT and Simeck.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">Conclusion</head><p>In this study, we improved Baksi et al's differential distinguisher method by using one high probability input differential from Wang's study for PRESENT and generated three more differentials from it by shifting it left and right. This improvised method was extended to two structurally different lightweight block ciphers PRESENT and Simeck. The results obtained were significantly better than when randomly selected input differentials were used, and slightly better for our proposed deep learning architecture over the one recommended in the past work. The proposed method can differentiate random data from cipher data until 6 rounds of PRESENT and 7 rounds of Simeck encryption. This shows that using a higher number of encryption rounds for these ciphers can provide the necessary security for IoT devices against a deep learning based differential attack. Based on our study, future work in this area of research can be done on the suggestive universality of the method and input differences across structurally different ciphers. The suggested method for selecting input differentials by shifting an already established high probability input differential can also be explored. In addition to this, our approach does not include a key retrieval method, which can be developed in the future.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 1 .</head><label>1</label><figDesc>Fig. 1. Abstract view of PRESENT cipher.</figDesc><graphic coords="3,191.18,460.38,212.98,214.55" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><figDesc>Fig-2shows the round function for Simeck. It involves the division of the plaintext into left and right words 𝑙 0 and 𝑟 0 respectively, where 𝑙 0 consists of the most significant 𝑛 bits, and 𝑟 0 contains the least significant 𝑛 bits. The round function processes these two words, followed by the concatenation of 𝑙 𝑇 and 𝑟 𝑇 , where 𝑇 is the total number of encryption rounds. The round function is as follows:𝑅 𝑘 𝑖 (𝑙 𝑖 , 𝑟 𝑖 ) = (𝑟 𝑖 ⨁𝑓(𝑙 𝑖 )⨁𝑘 𝑖 , 𝑙 𝑖 ) Where 𝑙 𝑖 and 𝑟 𝑖 are as discussed above and 𝑘 𝑖 is the 𝑖 𝑡ℎ round key. The function 𝑓(𝑧) is as follows:𝑓(𝑧) = (((𝑧)𝐴𝑁𝐷(𝑧 ⋘ 5))⨁(𝑧 ⋘ 1)) In the above equations, ⊕, ⋘ and 𝐴𝑁𝐷 represent the Exclusive OR, left rotation and bitwise AND operations respectively.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 2 .</head><label>2</label><figDesc>Fig. 2. Round function of Simeck.</figDesc><graphic coords="6,132.68,151.10,150.57,153.90" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 3 .</head><label>3</label><figDesc>Fig. 3. KSA of Simeck.</figDesc><graphic coords="6,312.68,147.40,149.96,158.20" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>Fig. 4 .</head><label>4</label><figDesc>Fig. 4. Proposed DL Architecture.</figDesc><graphic coords="8,136.10,147.40,296.37,263.25" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head>Fig. 5 .</head><label>5</label><figDesc>Fig. 5. Average validation accuracies for PRESENT.</figDesc><graphic coords="9,184.43,534.16,226.18,148.55" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6"><head>Fig. 6 .</head><label>6</label><figDesc>Fig. 6. Average validation accuracies for Simeck.</figDesc><graphic coords="10,175.63,147.40,232.69,153.60" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1 .</head><label>1</label><figDesc>.Hexadecimal S-Box Mapping.Permutation Layer: Bit-wise permutation is performed on the data block in this layer. The permutation layer mapping is shown in Table-2.</figDesc><table><row><cell>X</cell><cell>0 1 2 3 4 5 6 7 8 9 A B C D E F</cell></row><row><cell cols="2">S(x) C 5 6 B 9 0 A D 3 E F 8 4 7 1 2</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 2 .</head><label>2</label><figDesc>Permutation Layer Mapping.</figDesc><table><row><cell>i</cell><cell>0</cell><cell>1 2 3 4 5 6 7</cell><cell>8 9 10 11 12 13 14 15</cell></row><row><cell cols="2">P(i) 0</cell><cell cols="2">16 32 48 1 17 33 49 2 18 34 50 3 19 35 51</cell></row><row><cell>i</cell><cell>0</cell><cell>1 2 3 4 5 6 7</cell><cell>8 9 10 11 12 13 14 15</cell></row><row><cell cols="2">P(i) 0</cell><cell cols="2">16 32 48 1 17 33 49 2 18 34 50 3 19 35 51</cell></row><row><cell>i</cell><cell>0</cell><cell>1 2 3 4 5 6 7</cell><cell>8 9 10 11 12 13 14 15</cell></row><row><cell cols="2">P(i) 0</cell><cell cols="2">16 32 48 1 17 33 49 2 18 34 50 3 19 35 51</cell></row><row><cell>i</cell><cell>0</cell><cell>1 2 3 4 5 6 7</cell><cell>8 9 10 11 12 13 14 15</cell></row><row><cell cols="2">P(i) 0</cell><cell cols="2">16 32 48 1 17 33 49 2 18 34 50 3 19 35 51</cell></row></table><note><p>addRoundKey:</p><p>The round key is XORed to the current block state in accordance with the following equations.</p></note></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 3 .</head><label>3</label><figDesc>Differentials used in this study.</figDesc><table><row><cell></cell><cell cols="2">Input differential class Input differentials</cell></row><row><cell></cell><cell>1</cell><cell>0x0700000000000700</cell></row><row><cell></cell><cell>2</cell><cell>0x7000000000007000</cell></row><row><cell></cell><cell>3</cell><cell>0x0070000000000070</cell></row><row><cell></cell><cell>4</cell><cell>0x0007000000000007</cell></row><row><cell>4</cell><cell>Deep Learning Model</cell></row><row><cell cols="3">Algorithm 1 Improved differential distinguisher algorithm.</cell></row><row><cell cols="2">1: procedure TRAINING PHASE (OFFLINE) 2: 𝛿 𝑡 ← 𝑆𝑒𝑙𝑒𝑐𝑡𝑒𝑑 𝑑𝑖𝑓𝑓𝑒𝑟𝑒𝑛𝑡𝑖𝑎𝑙𝑠 3: 𝑃, 𝐾 ← Random 4: 𝐶 ← CIPHER (P, K) 5: 𝒇𝒐𝒓 0 ≤ 𝑖 &lt; 𝑡 do 6: 𝐶 𝑖 ← CIPHER (𝑃⨁𝛿 𝑖 , K) 7: 𝑑𝑎𝑡𝑎𝑠𝑒𝑡(𝑖) ← (C⨁𝐶 𝑖 , 𝑖) 8: end 𝒇𝒐𝒓 9: 𝒇𝒐𝒓 each 𝑑𝑎𝑡𝑎 in 𝑑𝑎𝑡𝑎𝑠𝑒𝑡 do 10: 𝛼 ← 𝑡𝑟𝑎𝑖𝑛(𝑑𝑎𝑡𝑎) 11: if 𝛼 &gt; 1 𝑡 then 12: goto ONLINE PHASE 13: else 14: Repeat from Step 3 15: end if 16: end 𝒇𝒐𝒓 17: end procedure</cell><cell>1: procedure TESTING PHASE (ONLINE) 2: 𝛿 𝑡 ← 𝑆𝑒𝑙𝑒𝑐𝑡𝑒𝑑 𝑑𝑖𝑓𝑓𝑒𝑟𝑒𝑛𝑡𝑖𝑎𝑙𝑠 3: 𝑃, 𝐾 ← Random 4: 𝐶 ← ORACLE (P, K) 5: 𝒇𝒐𝒓 0 ≤ 𝑖 &lt; 𝑡 do 6: 𝐶 𝑖 ← ORACLE (𝑃⨁𝛿 𝑖 , K) 7: 𝑑𝑎𝑡𝑎𝑠𝑒𝑡(𝑖) ← (C⨁𝐶 𝑖 , 𝑖) 8: end 𝒇𝒐𝒓 9: 𝒇𝒐𝒓 each 𝑑𝑎𝑡𝑎 in 𝑑𝑎𝑡𝑎𝑠𝑒𝑡 do 10: 𝛼 ′ ← 𝑡𝑟𝑎𝑖𝑛(𝑑𝑎𝑡𝑎) 11: if 𝛼 ′ = 𝛼 then 12: ORACLE = CIPHER 13: else 14: ORACLE = RANDOM 15: end if 16: Repeat from Step 3 if required 17: end 𝒇𝒐𝒓 18: end procedure</cell></row></table><note><p>We have implemented four Differential Distinguisher Models denoted by 𝑀 𝑖 (1 ≤ 𝑖 ≤ 4). Model 1 (𝑀 1 ) and Model 2 (𝑀 2 ) use Baksi's recommended deep learning architecture and our proposed architecture respectively, with randomly selected input differentials. Model 3 (𝑀 3 ) and Model 4 (𝑀 4 ) have the same deep learning architectures of 𝑀 1 and 𝑀 2 respectively, but with selected differentials. Baksi et al recommend a 4-layer MLP (128, 1024, 1024, 𝑡). In contrast, our proposed deep learning architecture consists of three layers (128, 1024, 𝑡), where 𝑡 is the number of output layer neurons given by the number of differential classes. Fig-4</p><p>shows our proposed architecture.</p></note></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 4 .</head><label>4</label><figDesc>Hyper-parameters.</figDesc><table><row><cell>Hyper-Parameters</cell><cell>Values</cell></row><row><cell>Learning rate</cell><cell>0.001</cell></row><row><cell>Optimizer</cell><cell>Adam</cell></row><row><cell>Loss function</cell><cell>BCE Loss</cell></row><row><cell>Epochs</cell><cell>25</cell></row><row><cell>Sample size</cell><cell>10000</cell></row><row><cell>Batch size</cell><cell>100</cell></row><row><cell>Validation Split</cell><cell>0.3</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>Table 5 .</head><label>5</label><figDesc>Comparison of Differential Distinguisher Models based on Validation Accuracy.</figDesc><table><row><cell>PRESENT</cell><cell cols="5">Model 1 (𝑴 𝟏 ) Model 2 (𝑴 𝟐 ) Model 3 (𝑴 𝟑 ) Model 4 (𝑴 𝟒 )</cell></row><row><cell>Rounds</cell><cell>Min</cell><cell>Max</cell><cell>Min Max</cell><cell>Min Max</cell><cell>Min Max</cell></row><row><cell>3</cell><cell cols="2">0.36 0.55</cell><cell>0.45 0.78</cell><cell>0.7 0.92</cell><cell>0.73 0.92</cell></row><row><cell>4</cell><cell cols="2">0.17 0.34</cell><cell>0.18 0.33</cell><cell>0.58 0.82</cell><cell>0.67 0.85</cell></row><row><cell>5</cell><cell cols="2">0.16 0.34</cell><cell>0.21 0.33</cell><cell>0.28 0.45</cell><cell>0.31 0.44</cell></row><row><cell>6</cell><cell cols="2">0.16 0.36</cell><cell>0.13 0.31</cell><cell>0.18 0.34</cell><cell>0.18 0.36</cell></row><row><cell>SIMECK</cell><cell cols="5">Model 1 (𝑴 𝟏 ) Model 2 (𝑴 𝟐 ) Model 3 (𝑴 𝟑 ) Model 4 (𝑴 𝟒 )</cell></row><row><cell>Rounds</cell><cell>Min</cell><cell>Max</cell><cell>Min Max</cell><cell>Min Max</cell><cell>Min Max</cell></row><row><cell>2</cell><cell cols="2">0.55 0.79</cell><cell>0.52 0.79</cell><cell>1.00 1.00</cell><cell>1.00 1.00</cell></row><row><cell>3</cell><cell cols="2">0.21 0.31</cell><cell>0.22 0.36</cell><cell>0.99 1.00</cell><cell>0.97 1.00</cell></row><row><cell>4</cell><cell cols="2">0.17 0.32</cell><cell>0.2 0.32</cell><cell>0.74 0.88</cell><cell>0.74 0.9</cell></row><row><cell>5</cell><cell cols="2">0.21 0.33</cell><cell>0.19 0.33</cell><cell>0.37 0.56</cell><cell>0.42 0.57</cell></row><row><cell>6</cell><cell cols="2">0.15 0.35</cell><cell>0.16 0.36</cell><cell>0.16 0.37</cell><cell>0.19 0.38</cell></row><row><cell>𝑀</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row></table><note><p>1 and 𝑀 2 did not show any significant validation accuracies as expected due to the random nature of the differentials selected for them. On the other hand, 𝑀 3 and 𝑀 4</p></note></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">A Survey on IoT Security: Application Areas, Security Threats, and Solution Architectures</title>
+		<author>
+			<persName><forename type="first">Vikas</forename><surname>Hassija</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vinay</forename><surname>Chamola</surname></persName>
+			<idno type="ORCID">0000-0002-6730-3060</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Vikas</forename><surname>Saxena</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Divyansh</forename><surname>Jain</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pranav</forename><surname>Goyal</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Biplab</forename><surname>Sikdar</surname></persName>
+			<idno type="ORCID">0000-0002-0084-4647</idno>
+		</author>
+		<idno type="DOI">10.1109/access.2019.2924045</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Access</title>
+		<title level="j" type="abbrev">IEEE Access</title>
+		<idno type="ISSNe">2169-3536</idno>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="page" from="82721" to="82743" />
+			<date type="published" when="2019">2019</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hassija V, Chamola V, Saxena V, Jain D, Goyal P, Sikdar B. A survey on IoT security: application areas, security threats, and solution architectures. IEEE Access 2019; 7: 82721-82743.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">An IoT-based Automated Shower System for Smart Homes</title>
+		<author>
+			<persName><forename type="first">Rodolfo</forename><forename type="middle">R</forename><surname>Rodrigues</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Joel</forename><forename type="middle">J P C</forename><surname>Rodrigues</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mauro</forename><forename type="middle">A A</forename><surname>Da Cruz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ashish</forename><surname>Khanna</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Deepak</forename><surname>Gupta</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/icacci.2018.8554793</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2018 International Conference on Advances in Computing, Communications and Informatics (ICACCI)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2018-09">2018</date>
+			<biblScope unit="page" from="254" to="258" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Rodrigues RR, Rodrigues JJ, Cruz dMA, Khanna A, Gupta D. An IoT-based automated shower system for smart homes. In: IEEE.; 2018: 254-258.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">An Effective Training Scheme for Deep Neural Network in Edge Computing Enabled Internet of Medical Things (IoMT) Systems</title>
+		<author>
+			<persName><forename type="first">Irina</forename><forename type="middle">Valeryevna</forename><surname>Pustokhina</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Denis</forename><forename type="middle">Alexandrovich</forename><surname>Pustokhin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Deepak</forename><surname>Gupta</surname></persName>
+			<idno type="ORCID">0000-0002-3019-7161</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Ashish</forename><surname>Khanna</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><surname>Shankar</surname></persName>
+			<idno type="ORCID">0000-0002-2803-3846</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Gia</forename><forename type="middle">Nhu</forename><surname>Nguyen</surname></persName>
+			<idno type="ORCID">0000-0003-4267-3900</idno>
+		</author>
+		<idno type="DOI">10.1109/access.2020.3000322</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Access</title>
+		<title level="j" type="abbrev">IEEE Access</title>
+		<idno type="ISSNe">2169-3536</idno>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="page" from="107112" to="107123" />
+			<date type="published" when="2020">2020</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Pustokhina IV, Pustokhin DA, Gupta D, Khanna A, Shankar K, Nguyen GN. An effective training scheme for deep neural network in edge computing enabled Internet of medical things (IoMT) systems. IEEE Access 2020; 8: 107112-107123.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">An Automated Remote Cloud-Based Heart Rate Variability Monitoring System</title>
+		<author>
+			<persName><forename type="first">Ahmed</forename><forename type="middle">Faeq</forename><surname>Hussein</surname></persName>
+			<idno type="ORCID">0000-0003-2483-0028</idno>
+		</author>
+		<author>
+			<persName><forename type="first">N</forename><forename type="middle">Arun</forename><surname>Kumar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Marlon</forename><surname>Burbano-Fernandez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gustavo</forename><surname>Ramírez-González</surname></persName>
+			<idno type="ORCID">0000-0002-1338-8820</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Enas</forename><surname>Abdulhay</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Victor</forename><forename type="middle">Hugo C</forename><surname>De Albuquerque</surname></persName>
+			<idno type="ORCID">0000-0003-3886-4309</idno>
+		</author>
+		<idno type="DOI">10.1109/access.2018.2831209</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Access</title>
+		<title level="j" type="abbrev">IEEE Access</title>
+		<idno type="ISSNe">2169-3536</idno>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="page" from="77055" to="77064" />
+			<date type="published" when="2018">2018</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hussein AF, Burbano-Fernandez M, Ramírez-González G, Abdulhay E, De Albuquerque VHC, others. An automated remote cloud-based heart rate variability monitoring system. IEEE Access 2018; 6: 77055-77064.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Energy-Efficient Deep CNN for Smoke Detection in Foggy IoT Environment</title>
+		<author>
+			<persName><forename type="first">Salman</forename><surname>Khan</surname></persName>
+			<idno type="ORCID">0000-0002-9706-4005</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Khan</forename><surname>Muhammad</surname></persName>
+			<idno type="ORCID">0000-0002-5302-1150</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Shahid</forename><surname>Mumtaz</surname></persName>
+			<idno type="ORCID">0000-0001-6364-6149</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Sung</forename><forename type="middle">Wook</forename><surname>Baik</surname></persName>
+			<idno type="ORCID">0000-0002-6678-7788</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Victor</forename><forename type="middle">Hugo C</forename><surname>De Albuquerque</surname></persName>
+			<idno type="ORCID">0000-0003-3886-4309</idno>
+		</author>
+		<idno type="DOI">10.1109/jiot.2019.2896120</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Internet of Things Journal</title>
+		<title level="j" type="abbrev">IEEE Internet Things J.</title>
+		<idno type="ISSNe">2372-2541</idno>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="9237" to="9245" />
+			<date type="published" when="2019-12">2019</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Khan S, Muhammad K, Mumtaz S, Baik SW, Albuquerque dVHC. Energy-efficient deep CNN for smoke detection in foggy IoT environment. IEEE Internet of Things Journal 2019; 6(6): 9237-9245.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">IoT-Based Context-Aware Intelligent Public Transport System in a Metropolitan Area</title>
+		<author>
+			<persName><forename type="first">Suresh</forename><surname>Chavhan</surname></persName>
+			<idno type="ORCID">0000-0001-6423-0217</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Deepak</forename><surname>Gupta</surname></persName>
+			<idno type="ORCID">0000-0002-3019-7161</idno>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><forename type="middle">N</forename><surname>Chandana</surname></persName>
+			<idno type="ORCID">0000-0003-2273-6732</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Ashish</forename><surname>Khanna</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Joel</forename><forename type="middle">J P C</forename><surname>Rodrigues</surname></persName>
+			<idno type="ORCID">0000-0001-8657-3800</idno>
+		</author>
+		<idno type="DOI">10.1109/jiot.2019.2955102</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Internet of Things Journal</title>
+		<title level="j" type="abbrev">IEEE Internet Things J.</title>
+		<idno type="ISSNe">2372-2541</idno>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="6023" to="6034" />
+			<date type="published" when="2019">2019</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chavhan S, Gupta D, Chandana B, Khanna A, Rodrigues JJ. IoT-based Context-Aware Intelligent Public Transport System in a metropolitan area. IEEE Internet of Things Journal 2019.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Lightweight Mutual Authentication Protocol for V2G Using Physical Unclonable Function</title>
+		<author>
+			<persName><forename type="first">Gaurang</forename><surname>Bansal</surname></persName>
+			<idno type="ORCID">0000-0003-2272-0941</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Naren</forename><surname>Naren</surname></persName>
+			<idno type="ORCID">0000-0002-2844-707X</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Vinay</forename><surname>Chamola</surname></persName>
+			<idno type="ORCID">0000-0002-6730-3060</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Biplab</forename><surname>Sikdar</surname></persName>
+			<idno type="ORCID">0000-0002-0084-4647</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Neeraj</forename><surname>Kumar</surname></persName>
+			<idno type="ORCID">0000-0002-3020-3947</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Mohsen</forename><surname>Guizani</surname></persName>
+			<idno type="ORCID">0000-0002-8972-8094</idno>
+		</author>
+		<idno type="DOI">10.1109/tvt.2020.2976960</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Vehicular Technology</title>
+		<title level="j" type="abbrev">IEEE Trans. Veh. Technol.</title>
+		<idno type="ISSN">0018-9545</idno>
+		<idno type="ISSNe">1939-9359</idno>
+		<imprint>
+			<biblScope unit="volume">69</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="7234" to="7246" />
+			<date type="published" when="2020-07">2020</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bansal G, Naren N, Chamola V, Sikdar B, Kumar N, Guizani M. Lightweight mutual authentication protocol for V2G using physical unclonable function. IEEE Transactions on Vehicular Technology 2020.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Local Mutual Exclusion algorithm using fuzzy logic for Flying Ad hoc Networks</title>
+		<author>
+			<persName><forename type="first">Ashish</forename><surname>Khanna</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Joel</forename><forename type="middle">J P C</forename><surname>Rodrigues</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Naman</forename><surname>Gupta</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Abhishek</forename><surname>Swaroop</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Deepak</forename><surname>Gupta</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.comcom.2020.03.036</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Communications</title>
+		<title level="j" type="abbrev">Computer Communications</title>
+		<idno type="ISSN">0140-3664</idno>
+		<imprint>
+			<biblScope unit="volume">156</biblScope>
+			<biblScope unit="page" from="101" to="111" />
+			<date type="published" when="2020-04">2020</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Khanna A, Rodrigues JJ, Gupta N, Swaroop A, Gupta D. Local mutual exclusion algorithm using fuzzy logic for Flying Ad hoc Networks. Computer Communications 2020.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Consumer IoT: Security Vulnerability Case Studies and Solutions</title>
+		<author>
+			<persName><forename type="first">Tejasvi</forename><surname>Alladi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vinay</forename><surname>Chamola</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Biplab</forename><surname>Sikdar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kim-Kwang Raymond</forename><surname>Choo</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/mce.2019.2953740</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Consumer Electronics Magazine</title>
+		<title level="j" type="abbrev">IEEE Consumer Electron. Mag.</title>
+		<idno type="ISSN">2162-2248</idno>
+		<idno type="ISSNe">2162-2256</idno>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="17" to="25" />
+			<date type="published" when="2020-03-01">2020</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Alladi T, Chamola V, Sikdar B, Choo KKR. Consumer IoT: Security vulnerability case studies and solutions. IEEE Consumer Electronics Magazine 2020; 9(2): 17-25.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Industrial Control Systems: Cyberattack trends and countermeasures</title>
+		<author>
+			<persName><forename type="first">Tejasvi</forename><surname>Alladi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vinay</forename><surname>Chamola</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sherali</forename><surname>Zeadally</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.comcom.2020.03.007</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Communications</title>
+		<title level="j" type="abbrev">Computer Communications</title>
+		<idno type="ISSN">0140-3664</idno>
+		<imprint>
+			<biblScope unit="volume">155</biblScope>
+			<biblScope unit="page" from="1" to="8" />
+			<date type="published" when="2020-04">2020</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Alladi T, Chamola V, Zeadally S. Industrial Control Systems: Cyberattack trends and countermeasures. Computer Communications 2020.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">The Data Encryption Standard (DES) and its strength against attacks</title>
+		<author>
+			<persName><forename type="first">D</forename><surname>Coppersmith</surname></persName>
+		</author>
+		<idno type="DOI">10.1147/rd.383.0243</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IBM Journal of Research and Development</title>
+		<title level="j" type="abbrev">IBM J. Res. &amp; Dev.</title>
+		<idno type="ISSN">0018-8646</idno>
+		<imprint>
+			<biblScope unit="volume">38</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="243" to="250" />
+			<date type="published" when="1994-05">1994</date>
+			<publisher>IBM</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Coppersmith D. The Data Encryption Standard (DES) and its strength against attacks. IBM journal of research and development 1994; 38(3): 243-250.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Cryptanalysis of the A5/1 GSM Stream Cipher</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Orr</forename><surname>Dunkelman</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-44495-5_5</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Haifa, Israel</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007">2007</date>
+			<biblScope unit="page" from="43" to="51" />
+		</imprint>
+		<respStmt>
+			<orgName>Computer Science Department, Technion</orgName>
+		</respStmt>
+	</monogr>
+	<note type="report_type">tech. rep.</note>
+	<note type="raw_reference">Biham E, Dunkelman O. Differential cryptanalysis of stream ciphers. tech. rep., Computer Science Department, Technion; Haifa, Israel: 2007.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Hash Functions</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-1-4613-9314-6_8</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Differential Cryptanalysis of the Data Encryption Standard</title>
+		<imprint>
+			<publisher>Springer New York</publisher>
+			<date type="published" when="1993">1993</date>
+			<biblScope unit="page" from="133" to="148" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E, Shamir A. Differential Cryptanalysis of Hash Functions. In: Springer. 1993 (pp. 133-148).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis of DES-like cryptosystems</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bf00630563</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="3" to="72" />
+			<date type="published" when="1991-01">1991</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E, Shamir A. Differential cryptanalysis of DES-like cryptosystems. Journal of CRYPTOLOGY 1991; 4(1): 3-72.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Differential-linear cryptanalysis of FEAL-8</title>
+		<author>
+			<persName><forename type="first">K</forename><surname>Aoki</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><surname>Ohta</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEICE Transactions on Fundamentals of Electronics, Communications and Computer Sciences</title>
+		<imprint>
+			<biblScope unit="volume">79</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="20" to="27" />
+			<date type="published" when="1996">1996</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Aoki K, Ohta K. Differential-linear cryptanalysis of FEAL-8. IEICE Transactions on Fundamentals of Electronics, Communications and Computer Sciences 1996; 79(1): 20- 27.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr A. Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning. In: Springer. ; 2019: 150-179.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Improved Differential Cryptanalysis of Round-Reduced Speck</title>
+		<author>
+			<persName><forename type="first">Itai</forename><surname>Dinur</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-13051-4_9</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="147" to="164" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Dinur I. Improved differential cryptanalysis of round-reduced speck. In: Springer. ; 2014: 147-164.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2020">2020. 2020</date>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi A, Breier J, Dong X, Yi C. Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers. IACR Cryptol. ePrint Arch. 2020; 2020: 571.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Activity Recognition Using Temporal Optical Flow Convolutional Features and Multilayer LSTM</title>
+		<author>
+			<persName><forename type="first">Amin</forename><surname>Ullah</surname></persName>
+			<idno type="ORCID">0000-0001-7538-2689</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Khan</forename><surname>Muhammad</surname></persName>
+			<idno type="ORCID">0000-0002-5302-1150</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Javier</forename><surname>Del Ser</surname></persName>
+			<idno type="ORCID">0000-0002-1260-9775</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Sung</forename><forename type="middle">Wook</forename><surname>Baik</surname></persName>
+			<idno type="ORCID">0000-0002-6678-7788</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Victor</forename><forename type="middle">Hugo C</forename><surname>De Albuquerque</surname></persName>
+			<idno type="ORCID">0000-0003-3886-4309</idno>
+		</author>
+		<idno type="DOI">10.1109/tie.2018.2881943</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Industrial Electronics</title>
+		<title level="j" type="abbrev">IEEE Trans. Ind. Electron.</title>
+		<idno type="ISSN">0278-0046</idno>
+		<idno type="ISSNe">1557-9948</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="9692" to="9702" />
+			<date type="published" when="2018">2018</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ullah A, Muhammad K, Del Ser J, Baik SW, Albuquerque dVHC. Activity recognition using temporal optical flow convolutional features and multilayer LSTM. IEEE Transactions on Industrial Electronics 2018; 66(12): 9692-9702.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Cloud-Assisted Multiview Video Summarization Using CNN and Bidirectional LSTM</title>
+		<author>
+			<persName><forename type="first">Tanveer</forename><surname>Hussain</surname></persName>
+			<idno type="ORCID">0000-0003-4861-8347</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Khan</forename><surname>Muhammad</surname></persName>
+			<idno type="ORCID">0000-0002-5302-1150</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Amin</forename><surname>Ullah</surname></persName>
+			<idno type="ORCID">0000-0001-7538-2689</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Zehong</forename><surname>Cao</surname></persName>
+			<idno type="ORCID">0000-0003-3656-0328</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Sung</forename><forename type="middle">Wook</forename><surname>Baik</surname></persName>
+			<idno type="ORCID">0000-0002-6678-7788</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Victor</forename><forename type="middle">Hugo C</forename><surname>De Albuquerque</surname></persName>
+			<idno type="ORCID">0000-0003-3886-4309</idno>
+		</author>
+		<idno type="DOI">10.1109/tii.2019.2929228</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Industrial Informatics</title>
+		<title level="j" type="abbrev">IEEE Trans. Ind. Inf.</title>
+		<idno type="ISSN">1551-3203</idno>
+		<idno type="ISSNe">1941-0050</idno>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="77" to="86" />
+			<date type="published" when="2019">2019</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hussain T, Muhammad K, Ullah A, Cao Z, Baik SW, Albuquerque dVHC. Cloud-assisted multiview video summarization using CNN and bidirectional LSTM. IEEE Transactions on Industrial Informatics 2019; 16(1): 77-86.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">PRESENT: An Ultra-Lightweight Block Cipher</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Bogdanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Paar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Poschmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">J B</forename><surname>Robshaw</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Seurin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Vikkelsoe</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-74735-2_31</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007">2007</date>
+			<biblScope unit="page" from="450" to="466" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bogdanov A, Knudsen LR, Leander G, et al. PRESENT: An ultra-lightweight block cipher. In: Springer. ; 2007: 450-466.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">The Simeck Family of Lightweight Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Gangqiang</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bo</forename><surname>Zhu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Valentin</forename><surname>Suder</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mark</forename><forename type="middle">D</forename><surname>Aagaard</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guang</forename><surname>Gong</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-48324-4_16</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2015">2015</date>
+			<biblScope unit="page" from="307" to="329" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yang G, Zhu B, Suder V, Aagaard MD, Gong G. The simeck family of lightweight block ciphers. In: Springer. ; 2015: 307-329.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2013">2013. 2013</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beaulieu R, Shors D, Smith J, Treatman-Clark S, Weeks B, Wingers L. The SIMON and SPECK Families of Lightweight Block Ciphers.. IACR Cryptol. ePrint Arch. 2013; 2013: 404. 10.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">RFID: a technical overview and its application to the enterprise</title>
+		<author>
+			<persName><forename type="first">R</forename><surname>Weinstein</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/mitp.2005.69</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IT Professional</title>
+		<title level="j" type="abbrev">IT Prof.</title>
+		<idno type="ISSN">1520-9202</idno>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="27" to="33" />
+			<date type="published" when="2005-05">2005</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Weinstein R. RFID: a technical overview and its application to the enterprise. IT professional 2005; 7(3): 27-33.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Reduced-Round PRESENT</title>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-68164-9_4</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2008">2008</date>
+			<biblScope unit="page" from="40" to="49" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang M. Differential cryptanalysis of reduced-round PRESENT. In: Springer. ; 2008: 40- 49.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

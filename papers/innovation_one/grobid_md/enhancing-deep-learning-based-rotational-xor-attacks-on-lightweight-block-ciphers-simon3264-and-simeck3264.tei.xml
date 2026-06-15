@@ -1,0 +1,1088 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Enhancing Deep Learning-Based Rotational-XOR Attacks on Lightweight Block Ciphers Simon32/64 and Simeck32/64</title>
+				<funder ref="#_uWcGKj5">
+					<orgName type="full">Innovation Group Project of the Natural Science Foundation of Hubei Province of China</orgName>
+				</funder>
+				<funder ref="#_zE4MQQP #_4hJveg8 #_ZbSHCuw #_gWrV7y7">
+					<orgName type="full">National Natural Science Foundation of China</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Chengcai</forename><surname>Liu</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Siwei</forename><surname>Chen</surname></persName>
+							<idno type="ORCID">0000-0003-3428-7647</idno>
+						</author>
+						<author>
+							<persName><forename type="first">Zejun</forename><surname>Xiang</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Shasha</forename><surname>Zhang</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Xiangyong</forename><surname>Zeng</surname></persName>
+						</author>
+						<title level="a" type="main">Enhancing Deep Learning-Based Rotational-XOR Attacks on Lightweight Block Ciphers Simon32/64 and Simeck32/64</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">6077A978AC99E637E1E658AEE4FE2066</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-15T01:34+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Deep Learning</term>
+					<term>Neural Distinguisher</term>
+					<term>Rotational-XOR Attacks</term>
+					<term>Simon</term>
+					<term>Simeck</term>
+					<term>Key-recovery Attack</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>At CRYPTO 2019, Gohr pioneered neural cryptanalysis by introducing differential-based neural distinguishers to attack Speck32/64, establishing a novel paradigm combining deep learning with differential cryptanalysis. Since then, constructing neural distinguishers has become a significant approach to achieving the deep learning-based cryptanalysis for block ciphers. This paper advances rotational-XOR (RX) attacks through neural networks, focusing on optimizing distinguishers and presenting key-recovery attacks for the lightweight block ciphers Simon32/64 and Simeck32/64. In particular, we first construct the fundamental data formats specially designed for training RX-neural distinguishers by refining the existing data formats for differential-neural distinguishers. Based on these data formats, we systematically identify optimal RX-differences with Hamming weights 1 and 2 that develop high-accuracy RX-neural distinguishers. Then, through innovative application of the bit sensitivity test, we achieve significant compression of data format without sacrificing the distinguisher accuracy. This optimization enables us to add more multi-ciphertext pairs into the data formats, further strengthening the performance of RX-neural distinguishers. As an application, we obtain 14-and 17-round RX-neural distinguishers for Simon32/64 and Simeck32/64, which improves the previous ones by 3 and 2 rounds, respectively. In addition, we propose two novel techniques, key bit sensitivity test and the joint wrong key response, to tackle the challenge of applying Bayesian's key-recovery strategy to the target cipher that adopts nonlinear key schedule in the related-key setting without considering of weak-key space. By this, we can straightforwardly mount a 17-round key-recovery attack on Simeck32/64 based on the improved 16-round RX-nerual distinguisher. To the best of our knowledge, the presented RX-neural distinguishers outperform the state-of-the-art neural-based distinguishers for both Simon32/64 and Simeck32/64, and this is the first successful neural-based key-recovery attack for Simeck32/64 under the related-key setting.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>I. INTRODUCTION</head><p>W ITH the development of information technology, deep learning has become a key technology driving the intelligence of various industries. For example, deep learning is used for diagnosing diseases and analyzing medical images in the medical field and perceiving driving environments and planning driving paths in the automotive industry. Moreover, deep learning also plays an important role in strengthening information security. For example, deep learning is an effective technique frequently applied to the side-channel attacks <ref type="bibr" target="#b0">[1]</ref>- <ref type="bibr" target="#b3">[4]</ref> in cryptography. In theory, cryptography and machine learning are naturally linked fields <ref type="bibr" target="#b4">[5]</ref> because many cryptography tasks can be naturally framed as learning tasks. Therefore, combining deep learning with classical cryptanalysis technology has great potential. However, deep learning based cryptanalysis, like differential cryptanalysis <ref type="bibr" target="#b5">[6]</ref>, linear cryptanalysis <ref type="bibr" target="#b6">[7]</ref>, rotational-XOR (RX) cryptanalysis <ref type="bibr" target="#b7">[8]</ref> and so on, is not much.</p><p>At CRYPTO 2019, Gohr <ref type="bibr" target="#b8">[9]</ref> combined deep learning and differential cryptanalysis to attack Speck32/64. He trained a model with training datasets of ciphertext pairs and labels. The model, called the differential-neural distinguisher, can return a confidence level between 0 and 1 for a given ciphertext pair, indicating whether the ciphertext pair is a real ciphertext pair or a random ciphertext pair. Moreover, to mount keyrecovery attacks using neural distinguishers, this work applies a variant of Bayesian optimization to recovering information of key bits, known as the Bayesian key-recovery strategy. As a result, Gohr carried out the 11-round attacks on Speck32/64 based on an 8-round differential-neural distinguisher. Since then, studies on combining classical cryptanalysis methods with deep learning techniques have emerged, like linearneural cryptanalysis <ref type="bibr" target="#b9">[10]</ref>, integral-neural cryptanalysis <ref type="bibr" target="#b10">[11]</ref>, RX-neural cryptanalysis <ref type="bibr" target="#b11">[12]</ref>, etc. The common idea of these works is to construct the corresponding neural distinguishers according to the concrete attacking types. Similar to classical cryptanalysis, good distinguishers can lead to good attacks. That is to say, the higher the accuracy of the neural distinguishers are, the longer the attacking rounds or the higher the attacking success rates will be. Therefore, how to optimize the accuracy of neural distinguishers is extremely necessary in the deep learning based attacks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A. Related Works</head><p>In 2023, Chen et al. <ref type="bibr" target="#b12">[13]</ref> used multi-ciphertext to improve the accuracy of differential-neural distinguishers. In the same year, Gohr et al. <ref type="bibr" target="#b13">[14]</ref> proposed a fair comparison scheme between multi-ciphertext and other neural distinguishers. They indicated that it is feasible to improve neural distinguishers using multi-ciphertext because of the dependence between ciphertext pairs. Taking 10-round Simon32/64 as an example, the accuracy of the differential-neural distinguisher trained with 64 ciphertext pairs is 0.36 higher than that of the case without multi-ciphertext.</p><p>At SAC 2023, Ebrahimi et al. <ref type="bibr" target="#b11">[12]</ref> first introduced the RX-neural distinguisher. They utilized an evolutionary algorithm framework and obtained 11-and 15-round RX-neural distinguishers for Simon32/64 and Simeck32/64, respectively. This study marks the first attempt to construct an RX-neural distinguisher, but key-recovery attacks based on neural distinguishers were not discussed. We guess, the reason is that RX cryptanalysis is a related-key attack method, while the Bayesian key-recovery strategy is only applicable to single-key <ref type="url" target="https://arxiv.org/abs/2511.06336v1">arXiv:2511.06336v1 [cs.CR] 9 Nov 2025</ref> attacks. This is because the crucial step in the Bayesian keyrecovery strategy involves performing the wrong key response (WKR), which is used to update the single guessed key. However, how to perform WKR in a related-key setting remains unsolved.</p><p>At ASIACRYPT 2023, Bao et al. <ref type="bibr" target="#b14">[15]</ref> successfully applied related-key attacks using the Bayesian key-recovery strategy within the weak-key space to Speck32/64. This work provides new insights into the application of the Bayesian key-recovery strategy in a related-key setting. However, the weak-key space, which requires the key to satisfy certain special conditions, significantly reduces the key space. In other words, the requirements for this attack scenario are quite strict.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>B. Motivation of This Work</head><p>Indeed, the application of multi-ciphertext can significantly improve the accuracy of neural distinguishers, but the platform is required to have extremely powerful computational resources. In order to enhance the accuracy under the limited computing resources, the data format needs to be cut down as short as possible. In addition, to our best knowledge, there is no related work about deep learning based RX attacks besides Ebrahimi et al.'s work (SAC 2023). Moreover, Ebrahimi et al. presented the RX-neural distinguishers in a rather simple way, without optimizing them or mounting any key-recovery attacks. Furthermore, with regard to related-key attacks on ciphers with nonlinear key schedules, Bao et al.'s method effectively addresses the challenges posed by key propagation probabilities in the Bayesian key-recovery strategy. However, it also reduces the key space, which in turn impacts the success rate of the final key-recovery attack. Therefore, expanding the key space or entirely avoiding the introduction of weak keys is worth further investigation in the context of related-key settings.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>C. Our Contributions</head><p>Motivated by the existing problems as mentioned above, we in this paper focus on improving deep learning based RX attacks on Simon32/64 and Simeck32/64, and give the following contributions:</p><p>Exploring the better RX-differences and fundamental data formats for training RX-neural distinguishers. To train an RX-neural distinguisher, the first step is to collect ciphertext pairs using a fixed RX-difference and construct training dataset based on a given data format. Thus, it is quite crucial for training high-accuracy distinguisher to find good RXdifferences as well as appropriate data formats. Investigated from the previous works about the classical as well as deep learning based RX-cryptanalysis, the RX-difference with lower Hamming weight is more likely to derive the better results. Besides, we adjust the existing data formats, which are proved to be effective for training differential-neural distinguishers, to fit RX-neural distinguishers training. Through exhaustively evaluating the RX-nerual distinguishers trained using all possible RX-differences with Hamming weights of 1 and 2, we respectively retain six good RX-differences for Simon32/64 and Simeck32/64. Among these, the highest accuracy for 11round Simon32/64 and 13-round Simeck32/64 are 0.9215 and 0.6990 whereas the presented ones in <ref type="bibr" target="#b11">[12]</ref> are 0.5445 and 0.7057, respectively. Notably, our results are obtained without employing any optimization training strategy but the authors in <ref type="bibr" target="#b11">[12]</ref> leveraged the multi-cipher technique, demonstrating that our strategy for good RX-differences selection is indeed effective.</p><p>Presenting currently best neural distinguishers by leveraging the multi-ciphertext and staged strategies. A critical strategy for enhancing neural distinguisher accuracy involves expanding data formats with multi-ciphertext. While incorporating additional ciphertext pairs improves model discriminative power, this approach proportionally escalates computational demands. To make training feasible within limited computational resources, we need to first cut down the fundamental data format as short as possible by identifying and eliminating the redundant components, then add into ciphertext pairs. For this purpose, we utilize the bit sensitivity test (BST) technique, introduced by Chen et al. <ref type="bibr" target="#b15">[16]</ref>, to analyze the influence of each ciphertext bit on RX-neural distinguishers. Surprisingly, we find that the left branch of the ciphertext has negligible effect on the performance of distinguishers. In other words, the components related to the left branch of ciphertext are redundant. Thus, the number of components in the fundamental data can be optimized from 8 to 5. Moreover, for the remaining components, we use the method of controlling variables to gradually identify and eliminate those with minimal impact on accuracy. Consequently, we obtain two shortened data formats only with 2 and 3 components, respectively. Combining with the multi-ciphertext technique, we develop two multi-ciphertext data formats, successfully yielding 13and 16-round distinguishers for Simon32/64 and Simeck32/64, respectively. Furthermore, by leveraging the staged training strategy, both the 13-and 16-round distinguishers are further improved by one round, which extend the state-of-art neuralbased distinguishers from 13 to 14 for Simon32/64 and from 15 to 17 rounds for Simeck32/64. Our results, along with the various types of neural distinguishers are listed in Table <ref type="table">I</ref>.</p><p>Mounting the first neural-based key-recovery attacks under related-key setting. For Simon32/64, we can directly use Bayesian key-recovery strategy (BKS) as Simon adopts a linear key schedule. As a result, we achieve 14-and 15round key-recovery attacks based on the presented RX-neural distinguishers, with success rates 100% and 75% respectively. To mount key-recovery attacks for Simeck32/64 without considering weak-key space, we introduce two novel techniques: the key bit sensitivity test (KBST) and the joint wrong key response (JWKR). Using KBST, we identify the key bits that have a significant impact on neural distinguishers, which are called sensitive key bits. Then, we only need to construct JWKR for the sensitive key bits instead of all key bits, which makes the key-guessing process practical. Combining with BKS, the key-recovery attacks can be achieved under the full key space in related-key setting. Based on the explored RX-nerual distinguishers, we conduct 16-and 17-round keyrecovery attacks for Simeck32/64, with success rates 98% and 40%. Compared to the existing neural-based key-recovery attacks (see Table <ref type="table">II</ref>), our results indeed seem weak as they make full use of the generic techniques of conventional attacks, which are not applicable to our attacks. Therefore, we can only consider to extend one round backward the distinguisher and directly utilize BKS. However, to our best knowledge, this is the first time to present key-recovery attacks based on neural distinguishers under related-key setting for Simon and Simeck. Also, the proposed KBST and JWKR are potential to neuralbased related-key attacks for other block cipher like Speck.</p><p>TABLE I: Comparison of our work with other studies on neural distinguishers for Simon32/64 and Simeck32/64 Cipher Round Accuracy TNR TPR Type † Ref. Simon32/64 11 0.5445 --RX [12] 11 1.0000 1.0000 1.0000 RX Sect. IV-B 12 0.6477 0.6518 0.6435 RKD [17] 12 0.5225 --SKD [18] 13 0.5262 0.5437 0.5081 RKD [17] 13 0.5810 0.5730 0.5890 RKD [19] 13 0.7120 0.7075 0.7165 RX Sect. IV-B 14 0.5241 0.5634 0.4848 RX Sect. IV-B Simeck32/64 12 0.5161 0.4807 0.5504 SKD [20] 12 1.0000 1.0000 1.0000 RX Sect. IV-B 15 0.5467 0.5173 0.5762 RKD [17] 15 0.5475 --RX [12] 15 0.5930 0.5950 0.5900 RX [19] 15 0.6042 0.5330 0.6750 RX Sect. IV-B 16 0.5130 0.5255 0.5000 RX Sect. IV-B 17 0.5040 0.5950 0.4130 RX Sect. IV-B † RX: rotational-XOR; RKD: related-key differential; SKD: single-key differential; TABLE II: Comparison of our and previous deep learningbased key-recovery attacks Cipher Round † Time Data Success rate Type Ref. Simon32/64 14(13+1) 2 32 2 15.81 100% RX Sect. V 15(14+1) 2 32 2 15.81 75% RX Sect. V 16(4+11+1) 2 42.79 2 22 80% SKD [18] 17(5+11+1) 2 54.01 2 28 9% SKD [18] Simeck32/64 15(3+10+2) 2 33.9 2 24 88% SKD [21] 16(4+11+1) 2 24 2 38.19 100% SKD [20] 16(15+1) 2 51 2 16.17 98% RX Sect. VI 17(4+12+1) 2 26 2 45.04 30% SKD [20] 17(16+1) 2 54 2 16.17 40% RX Sect. VI † The total attack rounds comprise the neural distinguisher rounds plus any prepended or appended rounds. For example, the 17-round attack on Simon32/64 prepends 5 rounds and appends 1 round to the 11-round neural distinguisher, denoted as 5+11+1.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>D. Organization</head><p>Sect. II starts by giving some concepts and notations throughout this paper, then introduces Simon32/64, Simeck32/64 and conventional RX cryptanalysis in brief. We demonstrate how to identify good RX-differences in Sect. III and optimize the prepared RX-nerual distinguishers from Sect. IV-A in Sect. IV. In Sect. V and Sect. VI, we present the key-recovery attacks for Simon32/64 and Simeck32/64, repsectively. Finally, we conclude this paper in Sect. VII.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>II. PRELIMINARY A. Notations and Concepts</head><p>Simon and Simeck both adopt the Feistel structure, so we use C L and C R throughout this paper to denote the left and right branches of the ciphertext for ease. Also, some primary notations are given in Table <ref type="table">III</ref>.</p><p>TABLE III: Notations of this paper Notations Descriptions F 2 A finite field only contains 2 elements, i.e. 0 and 1 F n 2 An n-dimensional vectorial space defined over F 2 ⊙ Bitwise AND ⊕ Bitwise XOR || Concatenation of two bit-strings x ≪ λ Circular left shift of x by λ bits x ≫ λ Circular right shift of x by λ bits C r L , C r R Left and right branches of r-round ciphertext ∆ r L , ∆ r R Left and right branches of r-round RX-difference</p><p>In addition, there are two key concepts, data format and multi-ciphertext, that will be frequently used in this paper. These concepts were mentioned in previous works but have not been formally defined. To ensure a clearer understanding, we provide their formal definitions. Besides, note that Simon and Simeck both adopt the Feistel structure, we use C L and C R throughout this paper to denote the left and right branches of the ciphertext for ease. Definition 1 (Data Format). The data format is a data tuple formed by N (N ≥ 1) elements D 0 , D 1 , ..., D N -1 used to generate the neural network training dataset, and denoted by D = (D 0 , D 1 , ..., D N -1 ), where each D i ∈ F n 2 for 0 ≤ i ≤ N -1 corresponding to an n-bit data is called a component.</p><p>For example, D = (C L , C R , C L ⊕ C ′ L ) is a data format that consists of three components where the corresponding plaintexts (P, P ′ ) of (C L , C ′ L ) satisfies a deterministic relation. Specifically, the first and second components are the left and right branches of a ciphertext with size 2n, respectively. The third component is the difference on the left branch of a pair of ciphertexts. Therefore, if a dataset is generated using D, then each element in dataset has the same form as (C L , C R , C L ⊕C ′ L ) and is generated by one pair of ciphertexts. In order to improve the accuracy of neural distinguishers, in general, more pairs of ciphertexts can be appended into data format.</p><p>Definition 2 (Multi-ciphertext Data Format). Given a data format D = (D 0 , ..., D N -1 ). If there are 2k (2k ≤ N ) different components D ki (0 ≤ i ≤ 2k -1) among {D 0 , ..., D N -1 }, and (D k2i , D k2i+1 ) for all 0 ≤ i ≤ k -1 corresponds to a pair of ciphertexts, then we call D a k-multi-ciphertext data format and specially denote it by D k .</p><p>For example, D 3 = (C 0 , C 1 , C 2 , C 3 , C ′ 0 , C ′ 1 , C ′ 2 ) is a 3multi-ciphertext data format. In particular, the pair of components (C i , C ′ i ) for i ∈ {0, 1, 2} represents a pair of ciphertexts, where the corresponding pair of plaintexts (P i , P ′ i ) satisfies a deterministic relation.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>B. Description of Simon and Simeck</head><p>Simon <ref type="bibr" target="#b21">[22]</ref> is a family of lightweight block ciphers published by the National Security Agency based on the Feistel structure. A member of the family is denoted by Simon2n/mn, where n is the branch size, 2n is the block size, and mn is the key length, n ∈ {16, 24, 32, 48, 64}, m ∈ {2, 3, 4}. The round function consists of cyclic rotation (≪), bitwise AND (⊙), and bitwise XOR (⊕). The key schedule is recursive and divided into 3 types based on the value of m. This paper only focuses on the key schedule when m = 4 and its formula is defined as</p><formula xml:id="formula_0">k i = k i-4 ⊕ ((k i-3 ⊕ (k i-1 ≫ 3)) ⊕ ((k i-3 ⊕ (k i-1 ≫ 3))) ≫<label>1</label></formula><p>)) ⊕ c, where c i is a round constant. In 2015, Yang et al. <ref type="bibr" target="#b22">[23]</ref> proposed the Simeck family. They chose the different rotation offsets in round function, and reuse the round function as its key schedule which leads to better implementation in hareware than Simon. Because we devote attention to Simon32/64 and Simeck32/64, so we only list their round functions and key schedule in Fig. <ref type="figure" target="#fig_0">1</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>C. Rotational-XOR Cryptanalysis</head><p>Rotational-XOR (RX) cryptanalysis, originally proposed by Ashur and Liu <ref type="bibr" target="#b7">[8]</ref> at FSE 2016, is an improvement over rotational cryptanalysis aiming to address the problem that the rotational-invariant property of internal state cannot hold if round constants are injected into key schedule.</p><p>Definition 3 (RX-difference <ref type="bibr" target="#b23">[24]</ref>). The RX-difference of x and</p><formula xml:id="formula_1">x ′ = (x ≪ λ) ⊕ α is denoted by ∆ λ (x, x ′ ) = (x ≪ λ) ⊕ x ′ = α where α ∈ F n</formula><p>2 is a constant and λ is a rotational offset with 0 &lt; λ &lt; n, and (x, x ′ ) is called an RX pair.</p><p>In this paper, our target ciphers are Simon and Simeck, both of which are with Feistel structure. Also, we only focus the initial RX-difference with zero left branch and non-zero right branch. For the sake of convenience, we define this special initial RX-difference as half RX-difference that is clarified as follows.</p><p>Definition 4 (Half RX-difference). For a Feistel based block cipher with size of 2n, the half RX-difference [λ, ∆ R ] is defined as the input RX-difference, in which the left (resp. right) branch ∆ L ∈ F n 2 (∆ R ∈ F n 2 ) is inactive (resp. active) and the rotational offset is λ.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>III. FINDING GOOD RX-DIFFERENCES AND FUNDAMENTAL DATA FORMATS</head><p>For constructing the better RX-neural distinguishers, it is of great significance to prepare better half RX-differences firstly. In this section, we will explain how to experimentally finding the better half RX-differences. First, we will introduce two new fundamental data formats. Next, we exhaust all the possible half RX-differences with Hamming weights of 1 and 2. Based on the half RX-differences and new data formats, we then construct datasets and train the RX-neural distinguishers. Finally, according to the accuracy of obtained RX-neural distinguishers, we determine the half RX-differences.</p><p>We first provide a detailed explanation of two data formats used in our experiments. The first one is inspired by Lu et al.'s data format proposed in <ref type="bibr" target="#b16">[17]</ref>. In particular, their data format is represented as</p><formula xml:id="formula_2">(δ r L , δ r R , C r L , C r R , C ′ r L , C ′ r R , δ (r-1) R , δ (r-2) R</formula><p>) where δ denotes the traditional difference. Specially, the rround ciphertexts (C r , C ′r ) are generated by a pair of plaintexts that satisfy a given difference, and δ (r-2) R that represents the left branch of (r -2)-round difference is derived by decrypting (C r , C ′r ) for two rounds with the zero roundkeys. The novelty of this data format is that it makes use of the decrypted (r -2)-round information. Note that this data format is applied to differential-neural cryptanalysis. Therefore, to fit RX cryptanalysis, we adjust this data format by imposing rotation on C r and replacing traditional difference δ by RX-difference ∆. Consequently, the first data format is</p><formula xml:id="formula_3">(∆ r L , ∆ r R , C r L ≪ λ, C r R ≪ λ, C ′ r L , C ′ r R , ∆ (r-1) R , ∆ (r-2) R</formula><p>), where ∆ (r-2) R is derived by decrypting (C r , C ′r ) for two rounds with the zero roundkeys. We denote it by D 1 . The second one is based on Gohr's data format <ref type="bibr" target="#b8">[9]</ref>, which is also proposed for differential-neural cryptanalysis and only consists of a pair of r-round ciphertexts. This data format is (C r L , C r R , C ′r L , C ′r R ). Similar to the adjustment on Lu et al.'s data format, we impose rotation on C r and get our second data format as (C r L ≪ λ, C r R ≪ λ, C ′ r L , C ′ r R ). We denote it by D 2 .</p><p>By investigating the previous good traditional RX distinguishers in <ref type="bibr" target="#b23">[24]</ref> as well as the RX-neural distinguishers in <ref type="bibr" target="#b11">[12]</ref>, we found that the Hamming weight of initial RX-differences are generally small, in particular, they are 1 or 2. Therefore, we select all half RX-differences with the Hamming weight of 1 and 2 under the rotation offsets from 1 to 15 as candidates. In total, there are 15 × 16  1 + 16 2 = 2040 candidates of half RX-difference for Simon32/64 and Simeck32/64. For each candidate, we first randomly choose 2 23 pairs of plaintexts satisfying the half RX-difference and encrypt them to generate the pairs of ciphertexts, respectively for 11-round Simon32/64 and 13-round Simeck32/64. Then we use the prepared data format D 1 and D 2 to construct the training datasets. Moreover, the hyper-paramter of our experiments<ref type="foot" target="#foot_0">foot_0</ref> is set as:</p><p>• the size of validation dataset is 2 18 ; • the size of batch is 2 15 ;</p><p>• the number of iterations is 10;</p><p>• the number of learning rates is 10, which vary from 0.0001 to 0.1 with the gap of 0.0111. Utilizing the distributed training strategy of Keras 2 , each iteration takes 25 (resp. 20) seconds in average for D 1 (resp. D 2 ), and training one RX-neural network need to take about four minutes. As a result, it took about 23 days to accomplish the whole 2040 × 2 × 2 = 8160 experiments for Simon and Simeck.</p><p>In general, if the accuracy of a neural distinguisher is more than 0.5, then we regard it as a valid distinguisher for mounting attacks. Taking an accuracy of 0.51 as the standard, we consequently retain 1496 and 151 valid RXneural distinguishers 3 for 11-round Simon32/64 and 13-round Simeck32/64, respectively. In particular,</p><p>• As for the 11-round Simon32/64, a total of 1496 valid distinguishers are identified. When the Hamming weight of the RX-difference is fixed to 1, the number of valid distinguishers is 208. Among these, there are 143, 54 and 9 distinguishers with the accuracy distributed at 0.51-0.55, 0.55-0.60 and 0.60-0.65. The remaining two have the accuracy of 0.6550 and 0.6543, corresponding to the half RX-differences [13, 0x4000] and [3, 0x2], respectively. Surprisingly, when the Hamming weight is 2, the number of valid distinguishers is 1288. Additionally, there are a total of 6 distinguishers with an accuracy greater than 0.80, as shown in Table <ref type="table">IV</ref>.</p><p>• As for the 13-round Simeck32/64, when the Hamming weight of RX-difference is fixed to 1, the distribution of valid distinguishers exhibits a relatively concentrated pattern. For rotation offsets {1, 4, 5, 11, 12, 15} and {2, 3, 6, 10, 13, 14}, there are 6 and 5 distinguishers, respectively. The remaining offsets {7, 8, 9} have no valid distinguisher. When the Hamming weight is 2, the number of valid distinguishers becomes more widely distributed. For rotation offsets {1, 15}, there are 18 valid distinguishers. For offsets {11} and {4, 5, 12}, there are 13 and 10 distinguishers, respectively. But for {2}, {14, 6, 10}, {3, 13}, {7}, and {9}, there are only 6, 5, 3, 2, and 1 distinguishers, respectively. The offset {8} has no valid distinguisher. Among these results, the best accuracy is closed to 0.7, with half RX-differences of [1, 0x4] and [15, 0x2]. For more details, please refer to Sect. I of the online Supplemental Material 4 . By sorting these in descending order of accuracy, we here only list the top six candidates in IV. Also, we compare the accuracy of these RX-neural distinguishers with the previous results <ref type="bibr" target="#b11">[12]</ref>, all of ours are better than or consistent to that of <ref type="bibr" target="#b11">[12]</ref>, which demonstrates that our proposed data formats and the method to construct half RXdifferences are indeed effective. It is worth noting that the results of <ref type="bibr" target="#b11">[12]</ref> listed in Table <ref type="table">IV</ref> are the optimized one by exploiting multi-ciphertext data format but ours do not. Hence, we are sure that the accuracy of our presented RX-neural distinguisher can be further improved, which will be detailed in the next section.</p><p>TABLE IV: The six half RX-differences for 11-round Si-mon32/64 and 13-round Simeck32/64 RX-neural distinguishers using D 1 Simon Accuracy Simeck Accuracy Ref. [3, 0x2] 0.5445 [1, 0x2] 0.7057 [12] [15, 0x3] 0.9215 [1, 0x4] 0.6990 Ours [1, 0x6] 0.9203 [15, 0x2] 0.6989 Ours [12, 0x2002] 0.8823 [15, 0x3] 0.6202 Ours [4, 0x22] 0.8802 [1, 0x6] 0.6212 Ours [3, 0x12] 0.8115 [6, 0x82] 0.6184 Ours [13, 0x4002] 0.8097 [10, 0x802] 0.6168 Ours IV. EXPLORING BETTER RX-NEURAL DISTINGUISHERS</p><p>As illustrated in the last section, we find some good half RX-differences that can derive the high-accuracy RX-neural distinguishers even if we do not exploit the multi-ciphertext data formats. To obtain higher-accuracy or longer-round ones, it is of great significance to add multi-ciphertext into the components of the two data formats. On the one hand, according to the previous studies <ref type="bibr" target="#b12">[13]</ref>, <ref type="bibr" target="#b13">[14]</ref>, <ref type="bibr" target="#b16">[17]</ref>, <ref type="bibr" target="#b24">[25]</ref>, <ref type="bibr" target="#b25">[26]</ref>, we know that the more the number of multi-ciphertext components contained in a data format, the higher the accuracy of the trained neural distinguisher. On the another hand, the number of components of a data format has a directly influence on the required memory space (it is GPU memory in general) for training the neural network. If the required memory approaches or exceeds the total memory of the machine, the training process will be terminated. Therefore, we must strike a balance between the accuracy of the neural distinguishers and the memory requirements of the training process, under a limited computational resources. In other words, we need to control the number of total components as much as possible while adding the multi-ciphertext into data formats.</p><p>Regard D 1 as the basic data format, we first remove some redundant components, which will be detailed in Sect. IV-A. Then in Sect. IV-B, we add multi-ciphertext into the simplified data formats, and train distinguishers using multi-ciphertext data formats. To explore RX-neural distinguishers that cover more rounds, we in Sect. IV-C exploit the staged training method to extend the trained ones from Sect. IV-B.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A. Removing Redundant Components from Data Format D 1</head><p>To remove components from D 1 , we need to detect the impact of ciphertexts on the accuracy of neural disinguishers and then determine the redundant components. Here we utilize the bit sensitivity test (BST) method proposed in <ref type="bibr" target="#b15">[16]</ref>. The main idea of this method is to randomly modify the value of a fixed bit position in the ciphertexts of each sample in the validation dataset by XORing with a random mask, and then analyze the impact on the accuracy of neural distinguisher. We apply BST method to the six neural distinguishers in Table <ref type="table">IV</ref> for Simon32/64 and Simeck32/64. Consequently, we conclude that ∆ r L , C r L ≪ λ and C ′r L are the redundant components of D 1 . Next, we will give a detailed illustration about the process of BST.</p><p>As an example, we focus the 11-round neural distinguisher for Simon32/64 with the half RX-difference of <ref type="bibr">[15, 0x3]</ref> and the accuracy of 0.9215. To detect the redundant components of D 1 , we first randomly choose 2 18 pairs of plaintexts satisfying the half RX-difference of <ref type="bibr">[15, 0x3]</ref> to generate an original set that contains 2 18 pairs of ciphertexts. Taking BST on the least significant bit (the bit position is 0) as an instance, we randomly choose 2 18 32-bit masks, where the value of the bit position 0 varies, and the values of other bit positions are all 0s. Then, we XOR these masks with the elements in the original pair-of-ciphertexts set one by one to generate a modified set. Here, we define three XORing types according to the objective pair of ciphertexts (C, C ′ ) as XORing with the single ciphertext (C or C ′ ) or pair of ciphertexts might lead to different effects. The first type, denoted as TYPE1, involves XORing the mask only with C, which corresponds to (C r L , C r R ) of the data format D 1 . On the contrary, the second type, denoted as TYPE2, XORs the mask only with C ′ , corresponding to (C ′r L , C ′r R ) of D 1 . The third type, denoted as TYPE3, involves XORing the mask with both C and C ′ . For each of these types, a modified pair-of-ciphertexts set is generated by applying the corresponding XOR operation to the original one. Based on the data format D 1 , three types of validation dataset can be generated from the modified pair-ofciphertexts sets. Moreover, the validation dataset of each type is put into the 11-round neural distinguisher of Simon32/64 to obtain a verified accuracy. Finally, the difference between the original accuracy (i.e., 0.9215) and the verified accuracy can be calculated, which is regarded as the bit sensitivity. By the way, the smaller the value of bit sensitivity, the smaller the influence of the corresponding bit on the accuracy. By repeating the above process for the remaining 31 bit positions, we can obtain the sensitivities for each ciphertext bit across the three types. For a more intuitive comparison, we present the results in Fig. <ref type="figure" target="#fig_1">2</ref>, from which it can be observed that all bits on the left branch of the ciphertext (note that 31 represents the most significant bit position) have the negligible influcence on the accuracy of the neural distinguisher, as the bit sensitivities are close to or equal to 0s. In other words, the components related to the left branch of ciphertext in D 1 , i.e. ∆ r L , C r L ≪ λ and C ′r L are redundant. Similarly, we apply BST method to the 13-round neural disitinguisher of Simeck32/64 with the half RX-difference [1, 0x4] and the accuracy of 0.7 and exhibit the bit sensitivities in Fig. <ref type="figure" target="#fig_1">2b</ref>. Note that there are only five bits on the left branch of cipher can effect the accuracy. Besides, the corresponding bit sensitivities are quite small. Therefore, we can also regard ∆ r L , C r L ≪ λ and C ′r L as the redundant components of D 1 . Thus, by removing the redundant components from D 1 as mentioned above, we obtained the simplified data format</p><formula xml:id="formula_4">(∆ r R , C r L ≪ λ, C r R , ∆ (r-1) R , ∆ (r-2) R</formula><p>), denoted by D 3 . Moreover, we wonder whether the data format D 3 could be further simplified. Note that D 3 contains two types of components: ciphertexts and RX-differences. We try to remove the two types of components from D 3 to respectively obtain the simplified data formats D 4 and D 5 . As shown in Table <ref type="table">V</ref>, the accuracy of distinguisher trained using D 4 has a significant decrease compared to D 3 (from 0.9221 to 0.5013). Nevertheless, D 5 has the nearly same accuracy as D 3 . Therefore, the ciphertexts i.e., C r R ≪ λ and C ′r R , are the redundant components of D 3 . Similarly, regard D 5 as a basic data format, we try to remove each one of the three components respectively to obtain D 6 , D 7 , and D 8 , and the corresponding trained accuracies are 0.7641, 0.9211, and 0.5912 as shown in Table <ref type="table">V</ref>. This indicates that ∆ r R and ∆ (r-1) R are the necessary components, while ∆ (r-2) R is a redundant component in D 5 .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>B. Training Distinguishers using Multi-ciphertext Data Formats</head><p>As mentioned earlier, the more multi-ciphertext a data format contains, the higher the corresponding accuracy will</p><p>0 1 2 3 4 5 6 7 8 9 1 0 1 1 1 2 1 3 1 4 1 5 1 6 1 7 1 8 1 9 2 0 2 1 2 2 2 3 2 4 2 5 2 6 2 7 2 8 2 9 3 0 3 1 Bit position 0.00 0.02 0.04 0.06 0.08 0.10 0.12 Bit sensitivity TYPE1 TYPE2 TYPE3 (a) Training using [15, 0x3] 0 1 2 3 4 5 6 7 8 9 1 0 1 1 1 2 1 3 1 4 1 5 1 6 1 7 1 8 1 9 2 0 2 1 2 2 2 3 2 4 2 5 2 6 2 7 2 8 2 9 3 0 3 1 Bit position 0.00 0.02 0.04 0.06 0.08 0.10 0.12 0.14 Bit sensitivity TYPE1 TYPE2 TYPE3 (b) Training using [1, 0x4] TABLE V: Data formats (written as DF in short) and the corresponding accuracy of RX-neural distinguishers for 11-round Simon32/64. Note the half RX-difference is [15, 0x3], thus the value of λ is 15 DF Specification Accuracy</p><formula xml:id="formula_5">D 1 (∆ r L , ∆ r R , C r L ≪ λ, C r R ≪ λ, C ′r L , C ′r R , ∆ (r-1) R , ∆ (r-2) R ) 0.9215 D 3 (∆ r R , C r R ≪ λ, C ′r R , ∆ (r-1) R , ∆ (r-2) R ) 0.9221 D 4 (C r R ≪ λ, C ′r R ) 0.5013 D 5 (∆ r R , ∆ (r-1) R , ∆ (r-2) R ) 0.9204 D 6 (∆ r-1 R , ∆ (r-2) R ) 0.7641 D 7 (∆ r R , ∆ (r-1) R ) 0.9211 D 8 (∆ r R , ∆ (r-2) R ) 0.5912</formula><p>be. Due to the limitation of GPU memory of our platform, the maximal number of multi-ciphertext that can be accommodated in D 5 and D 7 , determined by a series of experimentally tests, are 28 and 36 respectively. Consequently, we derive the longest extended data formats from D 5 and D 7 , denoted by D 28 5 and D 36 7 , which adopt 28 and 36 pairs of ciphertexts. Applying the two data formats as well as D 5 to 11-round Simon32/64 under the six half RX-differences (listed in Table IV), we have the trained results as presented in Table <ref type="table">VI</ref>.</p><p>TABLE VI: Comparison on the accuracy of trained RX-neural distinguishers for Simon32/64 using different data format. Note DF means data format.The underlined items are used for key-recovery attacks in Sect. V #R DF [15, 0x3] [1, 0x6] [12, 0x2002] [4, 0x22] [13, 0x4002] [3, 0x12] 11r D 5 0.9204 0.9204 0.8869 0.8905 0.8165 0.8170 D 28 5 0.9999 0.9999 0.9997 0.9996 0.9999 0.9997 D 36 7 1.0000 1.0000 0.9999 0.9998 0.9999 0.9999 12r D 5 0.5921 0.5946 0.6482 0.6437 0.5798 0.5750 D 28 5 0.9236 0.9336 0.9744 0.9713 0.8991 0.8827 D 36 7 0.9176 0.9065 0.9821 0.9832 0.9075 0.9063 13r D 5 0.5100 0.5115 0.5249 0.5227 0.5091 0.5080 D 28 5 0.6300 0.6301 0.7120 0.7105 0.6837 0.6848 D 36 7 0.6086 0.5962 0.6893 0.6872 0.5889 0.6062 14r D 28 5 0.5006 0.5008 0.5009 0.5005 0.5004 0.5000 D 36 7 0.5002 0.5001 0.5002 0.5003 0.5006 0.5004</p><p>It can be seen that the accuracy corresponding to D 5 under each half RX-difference is actually identical to D 1 (see in Table <ref type="table">IV</ref>). Additionally, either D 28 5 or D 36 7 can achieve an exceptionally high accuracy, nearly reaching 100%. Apparently, this appears that it is potential to leverage D 28 5 or D 36 7 to train neural distinguishers covering longer rounds. Thus, we train the neural distinguishers for 12 to 14 rounds of Simon32/64, and give the corresponding accuracy in Table <ref type="table">VI</ref>. The accuracies of 14-round trained distinguishers shown in this table are more than 0.5, but in fact, they are not distinguishable. This is because the accuracy recorded in the table is the maximum value among all epochs. Besides, we conducted prediction experiments on the trained distinguishers, and the actual accuracies are unstable at 0.5 within the allowable range of statistical error, indicating that these distinguishers are invalid. As a consequence, the longest valid RX-neural distinguisher for Simon32/64 trained using multi-ciphertext can reach up to 13 rounds, with the best accuracy of 0.7120. Compared to the previouly best RX-neural distinguisher presented in <ref type="bibr" target="#b11">[12]</ref>, our result not only extends the round (from 11 to 13) but also improves the accuracy (from 0.5445 to 0.7120).</p><p>Similarly for Simeck32/64 (from 13 to 16 rounds), we trained a series of RX-neural distinguishers using the three data formats (D 5 , D 28 5 and D 36 7 ) and the six half RXdifferences. We list the accuracy in Table <ref type="table">VII</ref>. It can be seen that training with the two multi-ciphertext data formats can actually derive the 16-round distinguishers with a stable accuracy more than 0.51. Note that the currently best RXneural distinguisher, presented in <ref type="bibr" target="#b11">[12]</ref>, covers 15 rounds and has the accuracy of 0.5475. Our trained results improve the accuracy of 15-round one to 0.6022, notably extend the number of round to 16.</p><p>TABLE VII: Comparison on the accuracy of trained RX-neural distinguishers for Simeck32/64 using different data format. Note DF means data format. The underlined items are used for key-recovery attacks in Sect. VI #R DF [1, 0x4] [15, 0x2] [15, 0x3] [1, 0x6] [6, 0x82] [10, 0x802] 13r D 5 0.6988 0.6997 0.6202 0.6214 0.6215 0.6198 D 28 5 0.9962 0.9999 0.9997 0.9997 0.9996 0.9997 D 36 7 0.9996 0.9995 0.9970 0.9967 0.9966 0.9968 14r D 5 0.5774 0.5789 0.5250 0.5262 0.5009 0.5014 D 28 5 0.9204 0.9136 0.7317 0.7326 0.5000 0.5000 D 36 7 0.8982 0.8982 0.7095 0.7097 0.5019 0.5013 15r D 5 0.5120 0.5136 0.5026 0.5016 0.5023 0.5016 D 28 5 0.5905 0.5923 0.5191 0.5189 0.5000 0.5000 D 36 7 0.6042 0.6022 0.5206 0.5250 0.5025 0.5000 16r D 28 5 0.5066 0.5127 0.5004 0.5006 0.5005 0.5008 D 36 7 0.5130 0.5057 0.5007 0.5008 0.5010 0.5009</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>C. Extending Distinguishers with Staged Training Method</head><p>By leveraging the multi-ciphertext data format, either the round or the accuracy of RX-neural distinguishers for Si-mon32/64 and Simeck32/64 are indeed improved. However, if we only use the basic training scheme when training the neural distinguisher, it is difficult to break through 14 and 16 rounds for Simon32/64 and Simeck32/64, respectively. Therefore, we apply the staged training scheme to enhancing the training process and hope to explore valid neural disinguishers covering more rounds. The concept of staged training was originally introduced by Gohr <ref type="bibr" target="#b8">[9]</ref> at CRYPTO 2019 based on the idea of reinforcement learning, and later has become a crucial approach to enhance the neural-based distinguishers <ref type="bibr" target="#b16">[17]</ref>, <ref type="bibr" target="#b26">[27]</ref>. It turns an already trained (r-1)-round distinguisher into an rround distinguisher in several stages. In addition, the accuracy of derived r-round distinguisher relies on that of the (r -1)round one.</p><p>The application of staged training to Simon32/64 can be divided into three stages. In the first stage, we use the 13round disinguisher, which was already trained using D 28  5 and [4, 0x22] (resp. <ref type="bibr">[12, 0x2002]</ref>) with accuracy 0.7105 (resp. 0.7120), to recognize the 12-round encryption with the same data format and half RX-difference, i.e., D 28 5 and [4, 0x22] (resp. <ref type="bibr">[12, 0x2002]</ref>). This stage was done on 2 23 training samples and 2 20 testing samples for 10 epochs. Note that all the samples are derived from the 12-round multi-ciphertext. The batch size is 2 18 and learning rate is ranged from 0.0001 to 0.00001. In the second stage, we adopt the updated network from the first stage to recognize the 14-round dataset using the same data format and half RX-difference. In this stage, the hyper-parameter remain consistent with those from the first stage, except that the samples are generated by the 14round multi-ciphertext and the number of training samples is increased to 2 24 . In the third stage, we fresh the 2 24 training samples and fed them to the network from the second stage. The number of epoch is set to 40 or more, and the learning rate is fixed to 0.00001. Finally, by this staged training strategy, we retain two valid RX-neural distinguishers covering 14 rounds with the respective accuracies of 0.5190 and 0.5240, as listed in Table <ref type="table">VIII</ref>.</p><p>However, for Simeck32/64, the staged training method successfully applied to Simon32/64 failed. No valid 17-round RX-neural distinguisher could be explored. Thus, we skipped the first stage and straightforwardly used the two 16-round distinguishers with the accuracies of 0.5130 and 0.5057 to recognize the corresponding 17-round datasets in the second stage. After using a lower learning rate of 10 -5 in the third stage, we obtained a 17-round distinguisher with an accuracy of 0.5040, correspongding to the half RX-difference <ref type="bibr">[1, 0x4]</ref> (shown in Table <ref type="table">VIII</ref>). This accuracy seems a little weak, but in fact, it is very stable and effective in the model prediction experiments.</p><p>TABLE VIII: Enhanced RX-neural distinguishers for Si-mon32/64 and Simeck32/64 by staged training. DF: data format. HRXD: half RX-difference.The underlined items are used for attacks.The underlined items are used for key-recovery attacks in Sect. V and VI Cipher DF HRXD #R Accuracy TPR TNR Validity Simon32/64 D 28 5 [12, 0x2002] 14 0.5190 0.5176 0.5204 ✓ [4, 0x22] 14 0.5241 0.5634 0.4848 ✓ Simeck32/64 D 36 7 [1, 0x4] 17 0.5040 0.5950 0.4130 ✓ [15, 0x2] 17 0.5000 --✗</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>V. KEY-RECOVERY ATTACKS ON SIMON32/64</head><p>In this section, we will give the details of recovering key bits of the round-reduced Simon32/64 based on the trained RXneural distinguishers. Different from the attacks based on conventional distinguishers, the neural-based key-recovery attacks need to use the Bayesian key-recovery strategy (BKS) to guess key bits. Previous works also combine with the techinque used in conventional distinguisher based key-recovery attacks, like extending round forward or backward on distinguishers, to mount attacks covering more rounds <ref type="bibr" target="#b8">[9]</ref>, <ref type="bibr" target="#b17">[18]</ref>, <ref type="bibr" target="#b19">[20]</ref>, <ref type="bibr" target="#b26">[27]</ref>. In this paper, we consider to extend the RX-neural distinguisher backward by only one round, and straightforwardly use BKS to achieve practical key-recovery attacks.</p><p>Algorithm 1 BayesianKeySearch: find a list of subkey candidates Input: Ciphertext structure C = C 0 , ..., C m×k-1 , RX-neural distinguisher N D, set S := {rk 0 , ..., rk n-1 } composed of n candidates of guessed subkey, number of key search iteration l. Output: A List that contains l × n guessed candidates of subkey. 1 S := {k 0 , k 1 , . . . , k n-1 } ← choose at random without replacement from the set of all subkey candidates. 2 L ← {}; 3 for j ∈ {0, 1, . . . , m -1} do 4 P i,k ← Decrypt(C i , k) for all i ∈ {0, 1, . . . , m -1}, k ∈ S.</p><formula xml:id="formula_6">5 v i,k ← N (P i,k ) for all i, k 6 w i,k ← log 2 (v i,k /(1 -v i,k )) for all i ∈ {0, . . . , m - 1}, k ∈ S 7 w k ← n i=1 v i,k for all k ∈ S 8 L ← L ∪ {(k, w k ) for k ∈ S} 9 m k ← n-1 i=0 v i,k /n for k ∈ {k 0 , . . . , k n-1 } 10 λ k ← n-1 i=0 (m ki -µ ki⊕k ) 2 /σ 2 ki⊕k for k ∈ {0, 1, . . . , 2 16 -1}; 11 S ← argsort k (λ)[0 : n -1] 12 end 13 return L</formula><p>We first describe the framework of BKS, which is used to recover (r + 1)-round subkeys (we denote it by rk (r+1) ) for Simon32/64 based on an r-round RX-neural disinguisher trained using k-multi-ciphertext data format and a half RXdifference [λ, ∆ R ], as follows:</p><p>1) Randomly choose m×k pairs of plaintexts satisfying the half RX-difference [λ, ∆ R ], query for the corresponding (r + 1)-round pairs of ciphertexts. A ciphertext structure composed of m × k elements is generated.</p><p>2) Select n (n &lt; 2 16 ) guessed candidates of rk (r+1) (there are in total 2 16 candidates as the subkey is size of 16), then use BayesianKeySearch algorithm, as depicted in Algorithm 1, to generate l × n guessed candidates for rk (r+1) where l is the number of key search iteration. Note that each candidate has a score.</p><p>3) Set the filtering threshold for rk (r+1) to c 1 , retain the candidates whose scores are greater than c 1 . If there is no candidate left, then go back the step 2 and re-select n guessed candidates for rk (r+1) . Otherwise, go to the step 4.</p><p>4) For each of the n 1 left candidates of rk (r+1) , generate m × n guessed candidates for rk r like doing in the step 2. There are in total m × n × n 1 guessed candidate pairs of (rk r , rk (r+1) ), each one corresponds to a score.</p><p>5) Set the filtering threshold for (rk r , rk (r+1) ) to c 2 , retain the pairs whose scores are greater than c 2 . If there are n 2 candidates left, rank them by their scores and the pair corresponding to the highest score is regarded as the correct value of (rk r , rk (r+1) ). Otherwise, go back to the step 2 and repeat the process till a pair of (rk r , rk (r+1) ) is retained.</p><p>In the above mentioned (r + 1)-round key-recovery framework based on BKS, BayesianKeySearch plays an important role. The values of µ and σ in Line 9 of Algorithm 1 depend on the wrong key response (WKR) of the targeting subkey. As the core step of BKS, the concept of WKR was introduced by Gohr at CRYPTO 2019, to optimize the candidates of guessed subkey such that the candidates that we generate cover the correct subkey with a high probability. One can refer to <ref type="bibr" target="#b8">[9]</ref> for more detail, we will omit the WKR process and only exhibit the WKR profile in the concrete attack on Simon32/64. It is worth noting that the success rate and runtime of our attacks depend on the values of c 1 and c 2 . In particular, if c 1 and c 2 is too large, the success rate will be high but the attack will take much more time. On the contrary, if c 1 and c 2 are small, the runtime will be less but the success rate will decrease. Therefore, to ensure that key-recovery attacks can be achieved in a reasonable time with a high success rate, we need to set c 1 and c 2 to the appropriate values by conducting a pre-attack process before starting attacks. The process involves setting the correct key of the last 2 rounds as the initial guessed candidate, then observing the pre-attack score and finally determining threshold ranges through repeated experiments.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Key-recovery attacks on 14-and 15-round Simon32/64.</head><p>Based on the explored RX-neural distinguishers and the key-recovery framework, we can straightforwardly achieve a 14and 15-round key-recovery attacks on Simon32/64. Note that in the attacking framework, we expect to find a pair of guessed subkeys (rk r , rk (r+1) ) as the correct one by repeating the process from step 2. In theory, it can actually return a pair as long as repeating for plenty of times. But it is not easy to evaluate the runtime in practice. Therefore, we need to set an upper bound on the repeating times when applying the framework to practical attacks, we denote it by t. If there is still no surviving candidate after t times of repeating, then we just regard the candidate pair, which has the highest score among all t times of repeating, as the correct subkeys.</p><p>• To mount 14-round attack, we choose the 13-round RX-neural distinguisher with accuracy 0.7105, which is trained using half RX-difference [4, 0x22] and data format D 28 5 . Under the same half RX-difference and data format, the accuracy of 12-round one is 0.9713. The attack parameters are set as: m = 2 10  k = 28 c 1 = 500 c 2 = 1000 t = 2 10 l = 6 n = 32.</p><p>The WKR profile for 14-round subkey is exhibited in Fig. <ref type="figure">3a</ref>. The results demonstrate that the mean response of correct subkey is significantly different from the wrong ones. Notably, the correct subkey displays a mean response value exceeding 0.61, while the majority of wrong candidates remain below the 0.40 threshold. Namely, the recovered one possesses a high probability of matching the correct subkey. In fact, based on the high-accuracy RX-neural distinguisher, we can obtain a recovered pair of (rk 13 , rk 14 ) within four minutes using the keyrecovery framework. To verify the effectiveness of our attack, we then mount 100 key-recovery attacks under 100 random master keys and get the 100% attacking success rate. The remaining 32-bit information of mask key can be recovered by brute-force attacks. Consequently, the time complexity of this 14-round key-recovery attack is 2 32 and the data complexity is 2 10 × 28 × 2 = 2 15.81 chosen plaintexts.</p><p>• For 15-round key-recovery attack, we use the 14-round</p><formula xml:id="formula_7">0</formula><p>4096 8192 12288 16384 20480 24576 28672 32768 36864 40960 45056 49152 53248 57344 61440 65536 Difference to real key 0.35 0.40 0.45 0.50 0.55 0.60 Mean response 0.50 (a) For 14-round subkey 0 4096 8192 12288 16384 20480 24576 28672 32768 36864 40960 45056 49152 53248 57344 61440 65536 Difference to real key 0.498 0.499 0.500 0.501 0.502 0.503 0.504 Mean response 0.50 (b) For 15-round subkey Fig. 3: The WKS profiles for 14-and 15-round Simon32/64. For more WKS for other rounds, one can refer to Sect. III of Supplemental Material RX-neural distinguisher as shown in Table VIII. It is trained using half RX-difference [4, 0x22] and data format D 28 5 , with a accuracy of 0.5141. The corresponding 13-round one has the acuracy of 0.7105. The parameters of this attack are set as m = 2 10 k = 28 c 1 = 16 c 2 = 500</p><p>t = 2 10 l = 6 n = 32. Fig. <ref type="figure">3b</ref> shows the WKR profile of the 15-round subkey. The analysis reveals that the correct key exhibits a mean response value of 0.504, closely aligning with the accuracy of 14-round RX-neural distinguisher. However, this differentiation is not as statistically significant as observed in the 14-round WKS, therefore theoretically yielding lower success rates compared to the 14-round attack. Empirical verification via 100 key-recovery attacks demonstrate an achievable success rate of 75%. The time and data complexities are the same as the 14-round attack.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>VI. KEY-RECOVERY ATTACKS ON SIMECK32/64</head><p>In related-key setting, Simon's RX-difference of subkey pair for each round is uniquely determined as its key schedule is linear. If one subkey of the pair is guessed, then another one can be directly obtained using the deterministic RX-difference. However, Simeck's RX-difference is probabilistic due to its nonlinear key schedule, requiring simultaneous guessing both of the two subkeys when mounting key-recovery attacks under related-key setting. Therefore, BKS is not suitable for Simeck as BKS only supports single-key guessing.</p><p>The joint wrong key response. In <ref type="bibr" target="#b14">[15]</ref>, Bao et al. used fixed key differences in related-key differential attacks against Speck, known as weak-key attacks. It makes sense but can only success under a fixed key space (weak-key space) instead of the full key space. To ensure that key-recovery attacks can be achievable for the full key space under related-key setting, we combine the idea of joint distribution to construct the wrong key response for key pairs, called the joint wrong key response (JWKR). When attacking Simon32/64, the WKR profile is constructed by systematically enumerating all possible values of the target subkey (comprising 2 16 candidates) and computing their corresponding mean and standard deviation responses. This process requires approximately 25 minutes. Extending this methodology to JWKR profile construction, which involves applying the same exhaustive approach to the full 2 32 subkey pair space, yields a mathematically projected runtime of 25 × 2 16 ≈ 2 20.<ref type="foot" target="#foot_3">foot_3</ref> minutes (equivalent to three years). Obviously, it is unfeasible. To tackle this problem, we introduce key bits sensitivity test (KBST) method aiming to reduce the subkey pair space of JWKR.</p><p>Key bits sensitivity test. Inspired by the application of BST to detecting the redundant bits of ciphertext (as illustrated in Sect. IV-A), we can use BST to detect the influence of each bit of subkey on the accuracy of trained RX-neural distinguisher. If the key bits have a negligible influence on the accuracy, then we call these bits as insensitive key bits, otherwise as sensitive key bits. To distinguish from BST for ciphertext, we call this key bits sensitivity test (KBST). We take the bit position 0 of 16-round subkey of Simeck32/64 as an instance to illustrate the process of KBST. To launch KBST for 16-round subkey, we need to prepare a 15-round RX-neural distinguisher. We choose the one with accuracy 0.6042 trained using half RX-difference <ref type="bibr">[1, 0x4]</ref> and data format D 36  7 . Firstly, we randomly choose 10 6 × 36 pairs of plaintext satisfing the half RX-difference [1, 0x4] and generate a set composed of 10 6 × 36 pairs of ciphertext, denoted by C. Then we choose 10 6 masks where the value corresponding to the bit position 0 varies randomly, and the values of other bit positions are all 0s. We XOR these masks one by one on the fixed 16round subkey pair simultaneously to generate 10 6 modified subkey pairs. Decrypt all elements in C using the modified subkey pairs and combine with data format D 36  7 , we obtain a validation dataset composed of 10 6 samples<ref type="foot" target="#foot_2">foot_2</ref> . Send this dataset to the prepared 15-round neural distinguisher, a validation accuracy is returned. The difference of this validation accuracy and the original accuracy of 15-round neural distinguisher is regarded as the KTYPE1 sensitivity of the 0-th bit of 16-round subkey. As for the another type of bit sensitivity, denoted by KTYPE2, is derived using the constant mask where the value corresponding to 0-th bit is 1 and others are 0s. Considering the other 15 bit positions, KBST of the 16-round subkey can be accomplished and the result is exhibited in Fig. <ref type="figure" target="#fig_2">4</ref>. It appears that only five sensitive key bits in 16-round subkey, namely, it is sufficient to construct JWKR for these five bits. The KBST for more rounds and data formats can be found in Sect. IV of Supplemental Material. It is worth noting that KBST of 18round subkey is similar to that of other rounds subkeys at the positions [4, 5, 8, 9, 10, 13, 14, 15] bits, confirming that our 17round RX-neural distinguisher for Simeck32/64 is valid, even though it is very weak. Key-recovery attacks on 16-and 17-round Simeck32/64. Key-recovery attacks for Simeck can also make use of the attack framework as described in Sect. V, but need to perform JWKR instead of WKR in BayesianKeySearch algorithm. Therefore, we here reuse some notations denoted in Simon's key-recovery attacks. All the RX-neural distinguishers utilized in 16-and 17-round key-recovery attacks are trained using half RX-difference <ref type="bibr">[1, 0x4]</ref> and data format D 36  7 . The details of attacks are illustrated as follows:</p><p>• For 16-round attack, we utilize the 14-and 15-round distinguishers with respective accuracies of 0.8982 and 0.6042. The KBSTs for 15-and 16-round subkeys are shown in Fig. <ref type="figure" target="#fig_2">4</ref>. It indicates that we need to construct JWKRs for bit positions [4, 5, 8, 9, 10, 13, 14, 15] of rk 15 and [5, 9, 10, 14, 15] of rk 16 , which are illustrated by three-dimensional images in Fig <ref type="figure">5</ref>. The JWKS for more rounds can be found in Sect. V of Supplemental Material. By setting the attack parameter as 0 1 2 3 4 5 6 7 8 9 <ref type="table">1 0  1 1  1 2  1 3  1 4  1</ref>  K0 0 50 100 150 200 250 K1 0 50 100 150 200 250 Mean 0.2000 0.4000 0.6000 0.8000 (a) For 15-round subkey K0 0 5 10 15 20 25 30 K1 0 5 10 15 20 25 30 Mean 0.4400 0.4500 0.4600 0.4700 0.4800 0.4900 0.5000 0.5100 (b) For 16-round subkey 0 1 2 3 4 5 6 7 8 9 1 0 1 1 1 2 1 3 1 4 1 5 Bit positon 0.000 0.002 0.004 0.006 0.008 Bit sensitivity KTYPE1 KTYPE2 (a) KBST K0 0 5 10 15 20 25 30 K1 0 5 10 15 20 25 30 Mean 0.4992 0.4995 0.4998 0.5000 0.5002 0.5005 0.5008 (b) JWKS Fig. 6: The KBST and JWKS for 17-round Simeck32/64 m = 2 10 k = 36 c 1 = 150 c 2 = 1000</p><p>t = 2 10 l = 4 n = 32, we can straightforwardly recover the 13 bits of (rk 15 , rk 16 ) within seven minutes and 2 16.17 chosen plaintexts, and the success rate is 98%. The remaining 51-bit information can be recovered by brute-force attack.</p><p>Thus the time complexity is 2 51 .</p><p>• For 17-round attack, we use the 15-and 16-round neural distinguisher with the accuracies of 0.6042 and 0.5130, repsectively. According to KBST of rk 17 as shown in Fig. <ref type="figure">6a</ref>, there are also five sensitive bits: <ref type="bibr" target="#b4">[5,</ref><ref type="bibr" target="#b8">9,</ref><ref type="bibr" target="#b9">10,</ref><ref type="bibr" target="#b13">14,</ref><ref type="bibr" target="#b14">15]</ref>, and the corresponding JWKS is exhibited in Fig <ref type="figure">6b</ref>.</p><p>The attack parameters are set as: m = 2 10 k = 36 c 1 = 4 c 2 = 100 t = 2 10 l = 4 n = 32.</p><p>As a consequence, 10 bits of (rk 16 , rk 17 ) can be recovered with data complexity 2 16.17 . The whole process takes about four hours, and the success rate is about 40%. The total time complexity to recover 64-bit key is 2 54 .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>VII. CONCLUSION</head><p>In this paper, we conducted a comprehensive study on the deep learning-based rotational-XOR cryptanalysis for Si-mon32/64 and Simeck32/64. Specifically, inspired by previous work about the differential-neural attack, we proposed two fundamental data formats specially designed for training RXneural distinguishers. Through systematic exploration of initial RX-differences with Hamming weight ≤ 2, we identified some good input patterns that enable the development of highaccuracy RX-neural distinguishers. In addition, we further enhanced the performance of the trained neural distinguishers using multi-ciphertext data formats and staged training techniques. Finally, to verify effectiveness of the proposed RX-neural distinguishers, some round-reduced key-recovery attacks were presented.</p><p>Regarding the neural-based distinguishers, our results extend the state-of-the-art from 13 to 14 rounds for Simon32/64 and from 15 to 17 rounds for Simeck32/64. Our key-recovery attacks under the related-key setting do not surpass existing single-key differential-neural attacks <ref type="bibr" target="#b17">[18]</ref> and <ref type="bibr" target="#b19">[20]</ref> as we cannot prepend additional rounds in front of related-key neural distinguisher, but this work establishes two notable contributions: 1) present the first key-recovery attacks for both cipher in related-key setting. 2) develop two novel techniques, named key bits sensitivity test and joint wrong key response, effectively addressing challenges in applying neural distinguishers to related-key attacks without considering weakkey space. These advancements provide new insights into RXneural cryptanalysis, particularly in related-key attacks based on neural distinguishers, and it is also potential to explore better attacks by combining with other types of related-key neural attacks like related-key differential-neural attack.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 1 :</head><label>1</label><figDesc>Fig. 1: The round functions and key schedules of Simon and Simeck</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Fig. 2 :</head><label>2</label><figDesc>Fig.2: The bit sensitivity for 11-round Simon32/64 (left) and 13-round Simeck32/64 (right), both of which use the data format D 1 . For more bit sensitivity test, refer to Sect. II of Supplemental Material.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 4 :</head><label>4</label><figDesc>Fig. 4: The key bits sensitivity test for Simeck32/64</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 5 :Fig. 6 :</head><label>56</label><figDesc>Fig. 5: The joint wrong key response for sensitive bits of Simeck32/64</figDesc></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="1" xml:id="foot_0"><p>In this work, all experiments are conducted on a platform with four Intel (R) Xeon (R) E5-2698 v4 @</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" xml:id="foot_1"><p>2.20GHz CPUs, four Tesla V100 DGXS 32GB GPUs, and the Ubuntu 20.04 system.<ref type="bibr" target="#b1">2</ref> The Keras Documentation is available via the link https://keras.io.<ref type="bibr" target="#b2">3</ref> Our experiments indicate that D 1 is better than D 2 . 4 https://maipdf.cn/file/dt68808759e74d4/pdf or https://gitee.com/ anonymous ieee/anonymous ieee.git</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="5" xml:id="foot_2"><p>Note that C contains 10</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="6" xml:id="foot_3"><p>× 36 pairs of ciphertext but there are only 10 6 modified pairs of subkey, we have to divide C into 10 6 groups. Each group containing 36 pairs of ciphertext is decrypted using one modified subkey pair, and the corresponding decrypted group forms one sample using the 36-multiciphertext data format D36  </p></note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><head>ACKNOWLEDGEMENT</head><p>This work was supported by the <rs type="funder">National Natural Science Foundation of China</rs> (No. <rs type="grantNumber">62272147</rs>, <rs type="grantNumber">12471492</rs>, <rs type="grantNumber">62072161</rs>, <rs type="grantNumber">12401687</rs>) and the <rs type="funder">Innovation Group Project of the Natural Science Foundation of Hubei Province of China</rs> (No. <rs type="grantNumber">2023AFA021</rs>).</p></div>
+			</div>
+			<listOrg type="funding">
+				<org type="funding" xml:id="_zE4MQQP">
+					<idno type="grant-number">62272147</idno>
+				</org>
+				<org type="funding" xml:id="_4hJveg8">
+					<idno type="grant-number">12471492</idno>
+				</org>
+				<org type="funding" xml:id="_ZbSHCuw">
+					<idno type="grant-number">62072161</idno>
+				</org>
+				<org type="funding" xml:id="_gWrV7y7">
+					<idno type="grant-number">12401687</idno>
+				</org>
+				<org type="funding" xml:id="_uWcGKj5">
+					<idno type="grant-number">2023AFA021</idno>
+				</org>
+			</listOrg>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Non-Profiled Deep Learning-based Side-Channel attacks with Sensitivity Analysis</title>
+		<author>
+			<persName><forename type="first">Benjamin</forename><surname>Timon</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tches.v2019.i2.107-131</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Cryptographic Hardware and Embedded Systems</title>
+		<title level="j" type="abbrev">TCHES</title>
+		<idno type="ISSNe">2569-2925</idno>
+		<imprint>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="107" to="131" />
+			<date type="published" when="2019-02-28">2019. 2019</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">B. Timon, &quot;Non-profiled deep learning-based side-channel attacks with sensitivity analysis,&quot; IACR Trans. Cryptogr. Hardw. Embed. Syst., vol. 2019, no. 2, pp. 107-131, 2019.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Make Some Noise. Unleashing the Power of Convolutional Neural Networks for Profiled Side-channel Analysis</title>
+		<author>
+			<persName><forename type="first">Jaehun</forename><surname>Kim</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stjepan</forename><surname>Picek</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Annelie</forename><surname>Heuser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shivam</forename><surname>Bhasin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alan</forename><surname>Hanjalic</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tches.v2019.i3.148-179</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Cryptographic Hardware and Embedded Systems</title>
+		<title level="j" type="abbrev">TCHES</title>
+		<idno type="ISSNe">2569-2925</idno>
+		<imprint>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="148" to="179" />
+			<date type="published" when="2019-05-09">2019. 2019</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">J. Kim, S. Picek, A. Heuser, S. Bhasin, and A. Hanjalic, &quot;Make some noise. unleashing the power of convolutional neural networks for profiled side-channel analysis,&quot; IACR Trans. Cryptogr. Hardw. Embed. Syst., vol. 2019, no. 3, pp. 148-179, 2019.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Label Correlation in Deep Learning-Based Side-Channel Analysis</title>
+		<author>
+			<persName><forename type="first">Lichao</forename><surname>Wu</surname></persName>
+			<idno type="ORCID">0000-0002-7139-732X</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Léo</forename><surname>Weissbart</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Marina</forename><surname>Krček</surname></persName>
+			<idno type="ORCID">0000-0001-8475-1853</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Huimin</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guilherme</forename><surname>Perin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lejla</forename><surname>Batina</surname></persName>
+			<idno type="ORCID">0000-0003-0727-3573</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Stjepan</forename><surname>Picek</surname></persName>
+			<idno type="ORCID">0000-0001-7509-4337</idno>
+		</author>
+		<idno type="DOI">10.1109/tifs.2023.3287728</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Information Forensics and Security</title>
+		<title level="j" type="abbrev">IEEE Trans.Inform.Forensic Secur.</title>
+		<idno type="ISSN">1556-6013</idno>
+		<idno type="ISSNe">1556-6021</idno>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="page" from="3849" to="3861" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">L. Wu, L. Weissbart, M. Krcek, H. Li, G. Perin, L. Batina, and S. Picek, &quot;Label correlation in deep learning-based side-channel analysis,&quot; IEEE Trans. Inf. Forensics Secur., vol. 18, pp. 3849-3861, 2023.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Deep learningbased detection for multiple cache side-channel attacks</title>
+		<author>
+			<persName><forename type="first">H</forename><surname>Kim</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Hahn</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><forename type="middle">J</forename><surname>Kim</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Shin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Hur</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Inf. Forensics Secur</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="page" from="1672" to="1686" />
+			<date type="published" when="2024">2024</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">H. Kim, C. Hahn, H. J. Kim, Y. Shin, and J. Hur, &quot;Deep learning- based detection for multiple cache side-channel attacks,&quot; IEEE Trans. Inf. Forensics Secur., vol. 19, pp. 1672-1686, 2024.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Cryptography and machine learning</title>
+		<author>
+			<persName><forename type="first">Ronald</forename><forename type="middle">L</forename><surname>Rivest</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-57332-1_36</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Fujiyoshida, Japan</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1991">November 11-14, 1991. 1991</date>
+			<biblScope unit="page" from="427" to="439" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">R. L. Rivest, &quot;Cryptography and machine learning,&quot; in Advances in Cryptology -ASIACRYPT &apos;91, International Conference on the Theory and Applications of Cryptology, Fujiyoshida, Japan, November 11-14, 1991, Proceedings. Springer, 1991, pp. 427-439.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis of DES-like cryptosystems</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bf00630563</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="3" to="72" />
+			<date type="published" when="1991-01">1991</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">E. Biham and A. Shamir, &quot;Differential cryptanalysis of des-like cryp- tosystems,&quot; J. Cryptol., vol. 4, no. 1, pp. 3-72, 1991.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Linear Cryptanalysis Method for DES Cipher</title>
+		<author>
+			<persName><forename type="first">Mitsuru</forename><surname>Matsui</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-48285-7_33</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Lofthus, Norway</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1993">May 23-27, 1993. 1993</date>
+			<biblScope unit="page" from="386" to="397" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">M. Matsui, &quot;Linear cryptanalysis method for DES cipher,&quot; in Advances in Cryptology -EUROCRYPT &apos;93, Workshop on the Theory and Ap- plication of of Cryptographic Techniques, Lofthus, Norway, May 23-27, 1993, Proceedings. Springer, 1993, pp. 386-397.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Rotational Cryptanalysis in the Presence of Constants</title>
+		<author>
+			<persName><forename type="first">Tomer</forename><surname>Ashur</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yunwen</forename><surname>Liu</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tosc.v2016.i1.57-70</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Symmetric Cryptology</title>
+		<title level="j" type="abbrev">ToSC</title>
+		<idno type="ISSNe">2519-173X</idno>
+		<imprint>
+			<biblScope unit="volume">2016</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="57" to="70" />
+			<date type="published" when="2016-12-01">2016</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">T. Ashur and Y. Liu, &quot;Rotational cryptanalysis in the presence of constants,&quot; IACR Trans. Symmetric Cryptol., vol. 2016, no. 1, pp. 57-70, 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Santa Barbara, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">August 18-22, 2019. 2019</date>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note>Proceedings, Part II</note>
+	<note type="raw_reference">A. Gohr, &quot;Improving attacks on round-reduced speck32/64 using deep learning,&quot; in Advances in Cryptology -CRYPTO 2019 -39th Annual International Cryptology Conference, Santa Barbara, CA, USA, August 18-22, 2019, Proceedings, Part II. Springer, 2019, pp. 150-179.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Linear Attack on Round-Reduced DES Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Botao</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yongqiang</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Haoyue</forename><surname>Zhao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bin</forename><surname>Wu</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-59013-0_7</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Guildford, UK</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">September 14-18, 2020. 2020</date>
+			<biblScope unit="page" from="131" to="145" />
+		</imprint>
+	</monogr>
+	<note>Proceedings, Part II</note>
+	<note type="raw_reference">B. Hou, Y. Li, H. Zhao, and B. Wu, &quot;Linear attack on round-reduced DES using deep learning,&quot; in Computer Security -ESORICS 2020 - 25th European Symposium on Research in Computer Security, ESORICS 2020, Guildford, UK, September 14-18, 2020, Proceedings, Part II. Springer, 2020, pp. 131-145.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">An improved integral distinguisher scheme based on neural networks</title>
+		<author>
+			<persName><forename type="first">Behnam</forename><surname>Zahednejad</surname></persName>
+			<idno type="ORCID">0000-0001-6802-1084</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Lijun</forename><surname>Lyu</surname></persName>
+		</author>
+		<idno type="DOI">10.1002/int.22895</idno>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Intelligent Systems</title>
+		<title level="j" type="abbrev">Int J of Intelligent Sys</title>
+		<idno type="ISSN">0884-8173</idno>
+		<idno type="ISSNe">1098-111X</idno>
+		<imprint>
+			<biblScope unit="volume">37</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="7584" to="7613" />
+			<date type="published" when="2022-05-09">2022</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">B. Zahednejad and L. Lyu, &quot;An improved integral distinguisher scheme based on neural networks,&quot; Int. J. Intell. Syst., vol. 37, no. 10, pp. 7584- 7613, 2022.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Deep Learning-Based Rotational-XOR Distinguishers for AND-RX Block Ciphers: Evaluations on Simeck and Simon</title>
+		<author>
+			<persName><forename type="first">Amirhossein</forename><surname>Ebrahimi</surname></persName>
+			<idno type="ORCID">0000-0001-8296-2729</idno>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+			<idno type="ORCID">0000-0001-8583-0668</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Paolo</forename><surname>Palmieri</surname></persName>
+			<idno type="ORCID">0000-0002-9819-4880</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-53368-6_21</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Fredericton, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2023">August 14-18, 2023. 2023</date>
+			<biblScope unit="page" from="429" to="450" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">A. Ebrahimi, D. Gérault, and P. Palmieri, &quot;Deep learning-based rotational-xor distinguishers for AND-RX block ciphers: Evaluations on simeck and simon,&quot; in Selected Areas in Cryptography -SAC 2023 -30th International Conference, Fredericton, Canada, August 14-18, 2023, Revised Selected Papers. Springer, 2023, pp. 429-450.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">A New Neural Distinguisher Considering Features Derived From Multiple Ciphertext Pairs</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sitong</forename><surname>Yuan</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac019</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1419" to="1433" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Y. Chen, Y. Shen, H. Yu, and S. Yuan, &quot;A new neural distinguisher considering features derived from multiple ciphertext pairs,&quot; Comput. J., vol. 66, no. 6, pp. 1419-1433, 2023.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">An assessment of differentialneural distinguishers</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Gohr</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Neumann</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IACR Cryptol. ePrint Arch</title>
+		<imprint>
+			<biblScope unit="page">1521</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">A. Gohr, G. Leander, and P. Neumann, &quot;An assessment of differential- neural distinguishers,&quot; IACR Cryptol. ePrint Arch., p. 1521.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">More Insight on Deep Learning-Aided Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+			<idno type="ORCID">0000-0003-2839-6687</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+			<idno type="ORCID">0000-0002-7299-0934</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yiran</forename><surname>Yao</surname></persName>
+			<idno type="ORCID">0009-0009-0347-8230</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0001-6106-3767</idno>
+		</author>
+		<idno type="DOI">10.1007/978-981-99-8727-6_15</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Guangzhou, China</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Singapore</publisher>
+			<date type="published" when="2023">December 4-8, 2023. 2023</date>
+			<biblScope unit="page" from="436" to="467" />
+		</imprint>
+	</monogr>
+	<note>Proceedings, Part III</note>
+	<note type="raw_reference">Z. Bao, J. Lu, Y. Yao, and L. Zhang, &quot;More insight on deep learning- aided cryptanalysis,&quot; in Advances in Cryptology -ASIACRYPT 2023 -29th International Conference on the Theory and Application of Cryptology and Information Security, Guangzhou, China, December 4-8, 2023, Proceedings, Part III. Springer, 2023, pp. 436-467.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Neural-aided statistical attack for cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><surname>Yu</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Comput. J</title>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="2480" to="2498" />
+			<date type="published" when="2023">2023</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Y. Chen, Y. Shen, and H. Yu, &quot;Neural-aided statistical attack for cryptanalysis,&quot; Comput. J., vol. 66, no. 10, pp. 2480-2498, 2023.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Improved (Related-Key) Differential-Based Neural Distinguishers for SIMON and SIMECK Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guoqiang</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bing</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Liu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac195</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">67</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="537" to="547" />
+			<date type="published" when="2024">2024</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">J. Lu, G. Liu, B. Sun, C. Li, and L. Liu, &quot;Improved (related-key) differential-based neural distinguishers for SIMON and SIMECK block ciphers,&quot; Comput. J., vol. 67, no. 2, pp. 537-547, 2024.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Improving Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0001-6106-3767</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-1525-3356</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Baocang</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-2554-4464</idno>
+		</author>
+		<idno type="DOI">10.62056/ay11wa3y6</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Communications in Cryptology</title>
+		<title level="j" type="abbrev">IACR CiC</title>
+		<idno type="ISSNe">3006-5496</idno>
+		<imprint>
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page">13</biblScope>
+			<date type="published" when="2024-10-07">2024</date>
+			<publisher>International Association for Cryptologic Research</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">L. Zhang, Z. Wang, and B. Wang, &quot;Improving differential-neural crypt- analysis,&quot; IACR Commun. Cryptol., vol. 1, no. 3, p. 13, 2024.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">A multi-differential approach to enhance related-key neural distinguishers</title>
+		<author>
+			<persName><forename type="first">X</forename><surname>Yuan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Q</forename><surname>Wang</surname></persName>
+		</author>
+		<idno>Paper 2025/697</idno>
+		<ptr target="https://eprint.iacr.org/2025/697" />
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2025">2025</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">X. Yuan and Q. Wang, &quot;A multi-differential approach to enhance related-key neural distinguishers,&quot; Cryptology ePrint Archive, Paper 2025/697, 2025. [Online]. Available: https://eprint.iacr.org/2025/697</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Improved differential-neural cryptanalysis for round-reduced SIMECK32/64</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Li</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/s11704-023-3261-z</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Frontiers of Computer Science</title>
+		<title level="j" type="abbrev">Front. Comput. Sci.</title>
+		<idno type="ISSN">2095-2228</idno>
+		<idno type="ISSNe">2095-2236</idno>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page">176817</biblScope>
+			<date type="published" when="2023-12">2023</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">L. Zhang, J. Lu, Z. Wang, and C. Li, &quot;Improved differential-neural cryptanalysis for round-reduced SIMECK32/64,&quot; Frontiers Comput. Sci., vol. 17, no. 6, p. 176817, 2023.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Deep Learning Assisted Key Recovery Attack for Round-Reduced Simeck32/64</title>
+		<author>
+			<persName><forename type="first">Lijun</forename><surname>Lyu</surname></persName>
+			<idno type="ORCID">0000-0003-3113-2463</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+			<idno type="ORCID">0000-0002-2051-8806</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yingjie</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0001-9745-0558</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-22390-7_26</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Bali, Indonesia</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2022">December 18-22, 2022. 2022</date>
+			<biblScope unit="page" from="443" to="463" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">L. Lyu, Y. Tu, and Y. Zhang, &quot;Deep learning assisted key recovery attack for round-reduced simeck32/64,&quot; in Information Security -25th International Conference, ISC 2022, Bali, Indonesia, December 18-22, 2022, Proceedings. Springer, 2022, pp. 443-463.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015-06-07" />
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">R. Beaulieu, D. Shors, J. Smith, S. Treatman-Clark, B. Weeks, and L. Wingers, &quot;The SIMON and SPECK families of lightweight block ciphers,&quot; IACR Cryptol. ePrint Arch., p. 404.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">The Simeck Family of Lightweight Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Gangqiang</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bo</forename><surname>Zhu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Valentin</forename><surname>Suder</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mark</forename><forename type="middle">D</forename><surname>Aagaard</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guang</forename><surname>Gong</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-48324-4_16</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Saint-Malo, France</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2015">September 13-16, 2015. 2015</date>
+			<biblScope unit="page" from="307" to="329" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">G. Yang, B. Zhu, V. Suder, M. D. Aagaard, and G. Gong, &quot;The simeck family of lightweight block ciphers,&quot; in Cryptographic Hardware and Embedded Systems -CHES 2015 -17th International Workshop, Saint- Malo, France, September 13-16, 2015, Proceedings. Springer, 2015, pp. 307-329.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Improved rotational‐XOR cryptanalysis of Simon‐like block ciphers</title>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+			<idno type="ORCID">0000-0002-7299-0934</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yunwen</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tomer</forename><surname>Ashur</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bing</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Li</surname></persName>
+		</author>
+		<idno type="DOI">10.1049/ise2.12061</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IET Information Security</title>
+		<title level="j" type="abbrev">IET Information Security</title>
+		<idno type="ISSN">1751-8709</idno>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="282" to="300" />
+			<date type="published" when="2022-03-29">2022</date>
+			<publisher>Institution of Engineering and Technology (IET)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">J. Lu, Y. Liu, T. Ashur, B. Sun, and C. Li, &quot;Improved rotational-xor cryptanalysis of simon-like block ciphers,&quot; IET Inf. Secur., vol. 16, no. 4, pp. 282-300, 2022.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Improve Neural Distinguishers of SIMON and SPECK</title>
+		<author>
+			<persName><forename type="first">Zezhou</forename><surname>Hou</surname></persName>
+			<idno type="ORCID">0000-0002-7764-9663</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+			<idno type="ORCID">0000-0003-2223-4329</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1155/2021/9288229</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Security and Communication Networks</title>
+		<title level="j" type="abbrev">Security and Communication Networks</title>
+		<idno type="ISSN">1939-0114</idno>
+		<idno type="ISSNe">1939-0122</idno>
+		<imprint>
+			<biblScope unit="volume">2021</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="1" to="11" />
+			<date type="published" when="2021-12-31" />
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Z. Hou, J. Ren, and S. Chen, &quot;Improve neural distinguishers of simon and speck,&quot; Security and Communication Networks, vol. 2021, no. 1, p. 9288229.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quan</forename><forename type="middle">Quan</forename><surname>Tan</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-77870-5_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Zagreb, Croatia</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">October 17-21, 2021. 2021</date>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note>Proceedings, Part I</note>
+	<note type="raw_reference">A. Benamira, D. Gérault, T. Peyrin, and Q. Q. Tan, &quot;A deeper look at machine learning-based cryptanalysis,&quot; in Advances in Cryptology -EUROCRYPT 2021 -40th Annual International Conference on the Theory and Applications of Cryptographic Techniques, Zagreb, Croatia, October 17-21, 2021, Proceedings, Part I. Springer, 2021, pp. 805-835.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Enhancing Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+			<idno type="ORCID">0000-0003-2839-6687</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Guo</surname></persName>
+			<idno type="ORCID">0000-0001-8847-6748</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Meicheng</forename><surname>Liu</surname></persName>
+			<idno type="ORCID">0000-0002-5259-1848</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Ma</surname></persName>
+			<idno type="ORCID">0000-0002-6192-7526</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+			<idno type="ORCID">0000-0002-2051-8806</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-22963-3_11</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Taipei, Taiwan</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2022">December 5-9, 2022. 2022</date>
+			<biblScope unit="page" from="318" to="347" />
+		</imprint>
+	</monogr>
+	<note>Proceedings, Part I</note>
+	<note type="raw_reference">Z. Bao, J. Guo, M. Liu, L. Ma, and Y. Tu, &quot;Enhancing differential- neural cryptanalysis,&quot; in Advances in Cryptology -ASIACRYPT 2022 -28th International Conference on the Theory and Application of Cryptology and Information Security, Taipei, Taiwan, December 5-9, 2022, Proceedings, Part I. Springer, 2022, pp. 318-347.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">A Ghost and Attention Mechanism-Based Deep Learning Approach for SAR Small Target Image Detection</title>
+		<author>
+			<persName><forename type="first">Wenjun</forename><surname>Xiang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Pan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jin</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yueheng</forename><surname>Liu</surname></persName>
+		</author>
+		<idno type="DOI">10.12982/cmjs.2024.076</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Chiang Mai Journal of Science</title>
+		<title level="j" type="abbrev">CMJS</title>
+		<idno type="ISSN">0125-2526</idno>
+		<idno type="ISSNe">2465-3845</idno>
+		<imprint>
+			<biblScope unit="volume">51</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="1" to="15" />
+			<date type="published" when="2024-09-30" />
+			<publisher>Chiang Mai University</publisher>
+		</imprint>
+		<respStmt>
+			<orgName>School of Cyber Science and Technology in Hubei University, Wuhan, China</orgName>
+		</respStmt>
+	</monogr>
+	<note>His research interest includes cryptanalysis of block ciphers</note>
+	<note type="raw_reference">Chengcai Liu received the M.E. degree with School of Cyber Science and Technology in Hubei University, Wuhan, China. His research interest includes cryptanalysis of block ciphers.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b28">
+	<monogr>
+		<title/>
+		<author>
+			<persName><forename type="first">Siwei</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Ph</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+		</imprint>
+		<respStmt>
+			<orgName>D. degree from Hubei University ; Lecturer with School of Cyber Science and Technology in Hubei University, Wuhan, China</orgName>
+		</respStmt>
+	</monogr>
+	<note>His current research interests include design and cryptanalysis of symmetric ciphers</note>
+	<note type="raw_reference">Siwei Chen received the Ph.D. degree from Hubei University in 2022. He is currently a Lecturer with School of Cyber Science and Technology in Hubei University, Wuhan, China. His current research interests include design and cryptanalysis of symmetric ciphers.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b29">
+	<monogr>
+		<title level="m" type="main">classical and quantum implementation of symmetric ciphers</title>
+		<author>
+			<persName><forename type="first">Zejun</forename><surname>Xiang</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Ph</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+			<pubPlace>Beijing, China</pubPlace>
+		</imprint>
+		<respStmt>
+			<orgName>D. degree from University of Chinese Academy of Sciences ; Cyber Science and Technology in Hubei University, Wuhan, China</orgName>
+		</respStmt>
+	</monogr>
+	<note>He is currently an Associate Professor with School of His current research interests include design, cryptanalysis</note>
+	<note type="raw_reference">Zejun Xiang received the Ph.D. degree from University of Chinese Academy of Sciences, Beijing, China, in 2018. He is currently an Associate Professor with School of Cyber Science and Technology in Hubei University, Wuhan, China. His current research interests include design, cryptanalysis, classical and quantum implementation of symmetric ciphers.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Navigational decision-making method for wide inland waterways with traffic separation scheme navigation system</title>
+		<author>
+			<persName><forename type="first">Liwen</forename><surname>Huang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xingya</forename><surname>Zhao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jinlai</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jiahao</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kun</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yixiong</forename><surname>He</surname></persName>
+		</author>
+		<idno type="DOI">10.21278/brod76201</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Brodogradnja</title>
+		<title level="j" type="abbrev">Brodogradnja</title>
+		<idno type="ISSN">0007-215X</idno>
+		<idno type="ISSNe">1845-5859</idno>
+		<imprint>
+			<biblScope unit="volume">76</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="1" to="23" />
+			<date type="published" when="2009">2009</date>
+			<publisher>Faculty of Mechanical Engineering and Naval Architecture, Univ. of Zagreb</publisher>
+			<pubPlace>Wuhan, China</pubPlace>
+		</imprint>
+		<respStmt>
+			<orgName>D. degree from Wuhan University ; School of Cyber Science and Technology in Hubei University, Wuhan, China</orgName>
+		</respStmt>
+	</monogr>
+	<note>She is currently an Associate Professor with</note>
+	<note type="raw_reference">Shasha Zhang received the Ph.D. degree from Wuhan University, Wuhan, China, in 2009. She is currently an Associate Professor with School of Cyber Science and Technology in Hubei University, Wuhan, China. Her current research interests include cryptanalysis, classical and quantum implementation of symmetric ciphers and blockchain.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Prescribed Weingarten curvature equations in warped product manifolds</title>
+		<author>
+			<persName><forename type="first">Ya</forename><surname>Gao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chenyang</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jing</forename><surname>Mao</surname></persName>
+		</author>
+		<idno type="DOI">10.3336/gm.60.2.08</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Glasnik Matematicki</title>
+		<title level="j" type="abbrev">Glas. Mat. Ser. III</title>
+		<idno type="ISSN">0017-095X</idno>
+		<imprint>
+			<biblScope unit="volume">60</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="327" to="352" />
+			<date type="published" when="2002">2002</date>
+			<publisher>University of Zagreb, Faculty of Science, Department of Mathematics</publisher>
+			<pubPlace>Beijing, China</pubPlace>
+		</imprint>
+		<respStmt>
+			<orgName>Xiangyong Zeng received the Ph.D. degree from Beijing Normal University ; Wuhan University, Wuhan, China ; Professor with Faculty of Mathematics and Statistics in Hubei University, Wuhan, China</orgName>
+		</respStmt>
+	</monogr>
+	<note>then did the post-doctoral work from 2002 to 2004 in</note>
+	<note type="raw_reference">Xiangyong Zeng received the Ph.D. degree from Beijing Normal University, Beijing, China, in 2002, then did the post-doctoral work from 2002 to 2004 in Wuhan University, Wuhan, China. He is currently a Professor with Faculty of Mathematics and Statistics in Hubei University, Wuhan, China. His current research interests include coding theory, cryptology, and blockchain.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

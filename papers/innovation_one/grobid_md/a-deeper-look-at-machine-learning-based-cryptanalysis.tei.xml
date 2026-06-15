@@ -1,0 +1,1005 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+				<funder ref="#_ZrTDpsN">
+					<orgName type="full">Temasek Laboratories NTU</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+							<email>adrien002@e.ntu.edu.sg</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Nanyang Technological University , Singapore</note>
+								<orgName type="institution">Nanyang Technological University</orgName>
+								<address>
+									<country key="SG">Singapore</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+							<email>dagerault@gmail.com</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Nanyang Technological University , Singapore</note>
+								<orgName type="institution">Nanyang Technological University</orgName>
+								<address>
+									<country key="SG">Singapore</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> University of Surrey , UK</note>
+								<orgName type="institution">University of Surrey</orgName>
+								<address>
+									<country key="GB">UK</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+							<email>thomas.peyrin@ntu.edu.sg</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Nanyang Technological University , Singapore</note>
+								<orgName type="institution">Nanyang Technological University</orgName>
+								<address>
+									<country key="SG">Singapore</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Quan</forename><surname>Quan</surname></persName>
+							<email>quanquan001@e.ntu.edu.sg</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Nanyang Technological University , Singapore</note>
+								<orgName type="institution">Nanyang Technological University</orgName>
+								<address>
+									<country key="SG">Singapore</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">7C77A038A3D47AB85C6E4109B234FB0F</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T15:55+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Differential Cryptanalysis</term>
+					<term>SPECK</term>
+					<term>Machine Learning</term>
+					<term>Deep Neural Networks</term>
+					<term>Interpretability</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>At CRYPTO'19, Gohr proposed a new cryptanalysis strategy based on the utilisation of machine learning algorithms. Using deep neural networks, he managed to build a neural based distinguisher that surprisingly surpassed state-of-the-art cryptanalysis efforts on one of the versions of the well studied NSA block cipher SPECK (this distinguisher could in turn be placed in a larger key recovery attack). While this work opens new possibilities for machine learning-aided cryptanalysis, it remains unclear how this distinguisher actually works and what information is the machine learning algorithm deducing. The attacker is left with a black-box that does not tell much about the nature of the possible weaknesses of the algorithm tested, while hope is thin as interpretability of deep neural networks is a well-known difficult task. In this article, we propose a detailed analysis and thorough explanations of the inherent workings of this new neural distinguisher. First, we studied the classified sets and tried to find some patterns that could guide us to better understand Gohr's results. We show with experiments that the neural distinguisher generally relies on the differential distribution on the ciphertext pairs, but also on the differential distribution in penultimate and antepenultimate rounds. In order to validate our findings, we construct a distinguisher for SPECK cipher based on pure cryptanalysis, without using any neural network, that achieves basically the same accuracy as Gohr's neural distinguisher and with the same efficiency (therefore improving over previous non-neural based distinguishers). Moreover, as another approach, we provide a machine learning-based distinguisher that strips down Gohr's deep neural network to a bare minimum. We are able to remain very close to Gohr's distinguishers' accuracy using simple standard machine learning tools. In particular, we show that Gohr's neural distinguisher is in fact inherently building a very good approximation of the Differential Distribution Table (DDT) of the cipher during the learning phase, and using that information to directly classify ciphertext pairs. This result allows a full interpretability of the distinguisher and represents on its own an interesting contribution towards interpretability of deep neural networks. Finally, we propose some method to improve over Gohr's work and possible new neural distinguishers settings. All our results are confirmed with experiments we have been conducted on SPECK block cipher (source code available online).</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>While modern symmetric-key cryptography designs are heavily relying on security by construction with strong security arguments (resistance against simple differential/linear attacks, study of algebraic properties, etc.), cryptanalysis remains a crucial part of a cipher's validation process. Only a primitive that went through active and thorough scrutiny of third-party cryptanalysts should gain enough trust by the community to be considered as secure. However, there has been more and more cipher proposals in the past decade (especially with the recent rise of lightweight cryptography) and cryptanalysis effort could not really keep up the pace: conducting cryptanalysis remains a very tough and low-rewarding task.</p><p>In order to partially overcome this shortage in cryptanalysts manpower, a recent trend arose of automating as much as possible the various tasks of an attacker. Typically, searching for differential and linear characteristics can now be modeled as Satisfiability/Satisfiability Modulo Theories <ref type="bibr" target="#b16">[17]</ref> (SAT/SMT), Mixed Linear Integer Programming <ref type="bibr" target="#b17">[18]</ref> (MILP) or Constraint Programming <ref type="bibr" target="#b24">[25]</ref> (CP) problems, which can in turn simply be handled by an appropriate solver. The task of the cryptanalyst is therefore reduced to only providing an efficient modeling of the problem to be studied. Due to the impressive results considering the simplicity of the process, a lot of advances have been made in the past decade in this very active research field and this even improved the ciphers designs themselves (how to choose better cryptographic bricks and how to assemble them has been made much easier thanks to these new automated tools). One is then naturally tempted to push this idea further by even getting rid of the modeling part. More generally, can a tool recognize possible weaknesses/patterns in a cipher by just interacting with it, with as little input as possible from the cryptanalysts? One does not expect such a tool to replace a cryptanalyst's job, but it might come in handy for easily pre-checking a cipher (or reduced versions of it) for possible weaknesses.</p><p>Machine learning and particularly deep learning have recently attracted a lot of attention, due to impressive advances in important research areas such as computer vision, speech recognition, etc. Some possible connections between cryptography and machine learning were already identified in <ref type="bibr" target="#b20">[21]</ref> and we have seen many applications of machine learning for side-channels analysis <ref type="bibr" target="#b15">[16]</ref>. However, machine learning for black-box cryptanalysis remained mostly unexplored until Gohr's article presented at CRYPTO'19 <ref type="bibr" target="#b10">[11]</ref>.</p><p>In his work, Gohr trained a deep neural network on labeled data composed of ciphertext pairs: half the data coming from ciphering plaintexts pairs with a fixed input difference with the cipher studied, half from random values. He then checks if the trained neural network is able to classify accurately random from real ciphertext pairs. Quite surprisingly, when applying his framework to the block cipher SPECK-32/64 (the 32-bit block 64-bit key version of SPECK <ref type="bibr" target="#b1">[2]</ref>), he managed to obtain a good accuracy for a non-negligible number of rounds. He even managed to mount a key recovery process on top of his neural distinguisher, eventually leading to the current best known key recovery attack for this number of rounds (improving over works on SPECK-32/64 such as <ref type="bibr" target="#b5">[6,</ref><ref type="bibr" target="#b23">24]</ref>). Even if his distinguisher/key recovery attack had not been improving over the state-of-the-art, the prospect of a generic tool that could pre-scan for vulnerabilities in a cryptographic primitive (while reaching an accuracy close to exiting cryptanalysis) would have been very attractive anyway.</p><p>Yet, Gohr's paper actually opened many questions. The most important, listed by the author as an open problem, is the interpretability of the distinguisher. An obvious issue with a neural distinguisher is that its black-box nature is not really telling us much about the actual weakness of the cipher analyzed. More generally, interpretability for deep neural networks has been known to be a very complex problem and represents a key challenge for the machine learning community. At first sight, it seems therefore very difficult to make any advances in this direction.</p><p>Another interesting aspect to explore is to try to match Gohr's neural distinguisher/key recovery attack with classical cryptanalysis tools. It remains very surprising that a trained deep neural network can perform better than the scrutiny of experienced cryptanalysts. As remarked by Gohr, his neural distinguisher is mostly differential in nature (on the ciphertext pairs), but some unknown extra property is exploited. Indeed, as demonstrated by one of his experiments, the neural distinguisher can still distinguish between a real and a random set that have the exact same differential distribution on the ciphertext pairs. Since we know there is some property that researchers have not seen or exploited, what is it?</p><p>Finally, a last natural question is: can we do better? Are there some better settings that could improve the accuracy of Gohr's distinguishers?</p><p>Our Contributions. In this article, we analyze the behavior of Gohr's neural distinguishers when working on SPECK-32/64 cipher. We first study in detail the classified sets of real/random ciphertext pairs in order to get some hints on what criterion the neural network is actually basing its decisions on. Looking for patterns, we observe that the neural distinguisher is very probably deducing some differential conditions not on the ciphertext pairs directly, but on the penultimate or antepenultimate rounds. We then conduct some experiments to validate our hypothesis.</p><p>In order to further confirm our findings, we construct for 5, 6 and 7-round reduced SPECK-32/64 a new distinguisher purely based on cryptanalysis, without any neural network or machine learning algorithm, that matches Gohr's neural distinguisher's accuracy while actually being faster and using the same amount of precomputation/training data. In short, our distinguisher relies on selective partial decryption: in order to attack nr rounds, some hypothesis is made on some bits of the last round subkey and partial decryption is performed, eventually filtered by a precomputed approximated DDT on nr -1 rounds.</p><p>We then take a different approach by tackling the problem not from the cryptanalysis side, but the machine learning side. More precisely, as a deep learning model learns high-level features by itself, in order to reach full interpretability we need to discover what these features are. By analyzing the components of Gohr's neural network, we managed to identify a procedure to model these features, while retaining almost the same accuracy as Gohr's neural distinguishers. Moreover, we also show that our method performs similarly on other primitives by applying it on the SIMON block cipher. This result is interesting from a cryptography perspective, but also from a machine learning perspective, showing an example of interpretability by transformation of a deep neural network.</p><p>Finally, we explore possible improvements over Gohr's neural distinguishers. By using batches of ciphertexts instead of pairs, we are able to significantly improve the accuracy of the distinguisher, while maintaining identical experimental conditions.</p><p>Outline. In Section 2, we introduce notations as well as basic cryptanalysis and machine learning concepts that will be used in the rest of the paper. In Section 3, we describe in more detail the various experiments conducted by Gohr and the corresponding results. We provide in Section 4 an explanation of his neural distinguishers as well as the description of an actual cryptanalysis-only distinguisher that matches Gohr's accuracy. We propose in Section 5 a machine learning approach to enable interpretability of the neural distinguishers. Finally, we studied possible improvements in Section 6.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Preliminaries</head><p>Basic notations. In the rest of this article, ⊕, ∧ and will denote the eXclusive-OR operation, the bitwise AND operation and the modular addition<ref type="foot" target="#foot_0">foot_0</ref> respectively. A right/left bit rotation will be denoted as ≫ and ≪ respectively, while a||b will represent the concatenation of two bit strings a and b.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">A Brief Description of SPECK</head><p>The lightweight family of ARX block ciphers SPECK was proposed by the US National Security Agency (NSA) <ref type="bibr" target="#b1">[2]</ref> in 2013, targeting mainly good performances on micro-controllers. Several versions of the cipher have been proposed within its family, but in this article (and in Gohr's work <ref type="bibr" target="#b10">[11]</ref>) we will focus mainly on SPECK-32/64, the 32-bit block 64-bit key version of SPECK, which is composed of 22 rounds (for simplicity, SPECK-32/64 will be referred to as SPECK in the rest of the article).</p><p>The 32-bit internal state is divided into a 16-bit left and a 16-bit right part, that we will generally denote l i and r i at round i respectively, and is initialised with the plaintext (l 0 ||r 0 ) ← P . The round function of the cipher is then a very simple Feistel structure combining bitwise XOR operation and 16-bit modular addition. See Figure <ref type="figure">1</ref> where k i represents the 16-bit subkey at round i and where α = 7, β = 2. The final ciphertext C is then obtained as C ← (l 22 ||r 22 ). The subkeys are generated with a key schedule that is very similar to the round function (we refer to <ref type="bibr" target="#b1">[2]</ref> for a complete description, as we do not make use of the details of the key schedule in this article).</p><formula xml:id="formula_0">li+1 = ((li ≫ α) ri) ⊕ ki ri+1 = (ri ≪ β) ⊕ li+1 li ri ≫ α ≪ β li+1 ri+1 ki</formula><p>Fig. <ref type="figure">1</ref>: The SPECK-32/64 round function.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Differential Cryptanalysis</head><p>Differential cryptanalysis studies the propagation of a difference through a cipher. Let a function f : F b 2 → F b 2 and x, x be two different inputs for f with a difference ∆x = x⊕x . Let y = f (x) and y = f (x ) and a difference ∆y = y ⊕y .</p><p>Then, we are interested in the transition probability from ∆x to ∆y (∆x f -→ ∆y):</p><formula xml:id="formula_1">P(∆x f -→ ∆y) := #{x|f (x) ⊕ f (x ⊕ ∆x) = ∆y} 2 b</formula><p>One classical tool for differential cryptanalysis is the Difference Distribution Table (DDT), which simply lists the differential transition probabilities for each possible input/output difference pairs (∆x, ∆y). The studied function f is usually some Sbox, or some small cipher sub-component, as the DDT of an entire 64-bit or 128-bit cipher would obviously be too large to store.</p><p>Since SPECK is internally composed of a left and right part, for a ciphertext C we will denote by C l and C r its 16-bit left and right parts respectively. Then, for two ciphertexts C and C , we will denote ∆L the XOR difference C l ⊕ C l between the left parts of the two ciphertexts (respectively ∆R = C r ⊕ C r for the right parts). Moreover, for a round i, we will denote by V i the difference between the two parts of the internal state</p><formula xml:id="formula_2">V i = l i ⊕ r i .</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Deep Neural Networks</head><p>Deep Neural Networks (DNN) are a family of non-linear machine learning classifiers that have gained popularity since their success in addressing a variety of data-driven tasks, such as computer vision, speech recognition, etc.</p><p>The main problem tackled by DNN is, given a dataset D = {(x 0 , y 0 )...(x n , y n )}, with x i ∈ X being samples and y i ∈ [0, . . . , l] being labels, to find the optimal parameters θ * for the DN N θ model, with the parameters θ such that:</p><formula xml:id="formula_3">θ * = argmin θ n i=0 L(y i , DN N θ (x i ))<label>(1)</label></formula><p>with L being the loss function. As there is no literal expression of θ * , the approximate solution will depend on the chosen optimization algorithm such as the stochastic gradient descent. Moreover, hyper-parameters of the problem (parameters whose value is used to control the learning process) need to be adjusted as they play an important role in the final quality of the solution. DNN are powerful enough to derive accurate non-linear features from the training data, but these features are not robust. Indeed, adding a small amount of noise at the input can cause these features to deviate and confuse the model. In other words, the DNN is a very unbiased classifier, but has a high variance.</p><p>Different blocks can be used to implement these complex models. However, in this paper, we will be using four types of blocks: the linear neural network, the one-dimensional convolutional neural network, the activation functions (ReLU and sigmoid) and the batch normalization.</p><p>Linear neural network. Linear neural networks applies a linear transformation to the incoming data: out = in.A T + b. Here we have θ = (A, b). The linear neural network is also commonly named perceptron layer or dense layer.</p><p>One-dimensional convolutional neural network. The 1D-CNN applies a convolution over a fixed (multi-)temporal input signal. The 1D-CNN operation can be seen as multiple linear neural networks (one per filter) where each one is applied to a sub-part of the input. This sub-part is sliding, its size is kernel size, its pitch is the stride and its start and end points depend on the padding.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Activation functions.</head><p>The three activation functions that we discuss here are the Rectified Linear Unit (ReLU), defined as ReLU(x) = max(0, x), the sigmoid, defined as Sigmoid(x) = σ(x) = 1 1+exp(-x) and the Heaviside step function, defined as H(x) = 1 2 + sgn(x) 2 . This block, added between each layer of the DNN, introduces the non-linear part of the model.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Batch normalization.</head><p>Training samples are typically randomly collected in batches to speed up the training process. It is thus usual to normalize the overall tensor according to the batch dimension.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">A First Look at Gohr's CRYPTO 2019 Results</head><p>Since its release, the lightweight block cipher SPECK attracted a lot of external cryptanalysis, together with its sibling SIMON (this was amplified by the fact that no cryptanalysis was reported in the original specifications document <ref type="bibr" target="#b1">[2]</ref>). Many different aspects of SPECK have been covered by these efforts, but the works from Dinur <ref type="bibr" target="#b5">[6]</ref> and Song et al. <ref type="bibr" target="#b23">[24]</ref> are the most successful advances on its differential cryptanalysis aspect so far. Dinur <ref type="bibr" target="#b5">[6]</ref> studied all versions of SPECK, improving the best known differential characteristics (from <ref type="bibr" target="#b0">[1,</ref><ref type="bibr" target="#b2">3]</ref>) as well as describing a new key recovery strategy for this cipher. In particular, he devised a 4-round attack for 11 rounds of SPECK-32/64 using a 7 round differential characteristic, that has a time complexity of 2 46 and data complexity of 2 22 (chosen plaintexts).</p><p>Later, at CRYPTO'19, Gohr published a cryptanalysis work on SPECK-32/64 that is based on deep learning <ref type="bibr" target="#b10">[11]</ref>. Gohr proposed a key-recovery attack on 11round SPECK-32/64 with estimated time complexity 2 38 , improving the previous best attack <ref type="bibr" target="#b5">[6]</ref> in 2 46 , albeit with a slightly higher data complexity: 2 14.5 ciphertext pairs required. In this section, we will briefly review Gohr's results <ref type="bibr" target="#b10">[11]</ref>.</p><p>Overview. In his article, Gohr proposes multiple differential cryptanalysis of SPECK, focusing on the input difference ∆ in = 0x0040/0000. In this setting, the aim is to distinguish real pairs, i.e., encryptions of plaintext pairs P, P such that P ⊕ P = ∆ in , from random pairs, which are the encryptions of random pairs of plaintext with no fixed input difference. Gohr compares a traditional (pure) differential distinguisher with a distinguisher based on a DNN for 5 to 8 rounds of SPECK-32/64 and showed that the DNN performs better.</p><p>Pure differential distinguishers. Gohr computed the full DDT for the input difference ∆ in , using the Markov assumption. Then, to classify a ciphertext pair (C, C ), the probability p of the output difference C ⊕ C is read from the DDT and compared to the uniform probability. Let ∆ out = C ⊕ C , then</p><formula xml:id="formula_4">Classification = Real if DDT (∆ in → ∆ out ) &gt; 1 2 32 -1</formula><p>Random otherwise</p><p>These distinguishers for reduced-round SPECK-32/64 are denoted D nr , where nr ∈ {5, 6, 7, 8} represents the number of rounds. The neural distinguishers are denoted as N nr .</p><p>Gohr's neural distinguisher. We provide in Figure <ref type="figure">2</ref> a representation of Gohr's neural distinguisher. It is a deep neural network, whose main components are:</p><p>1. Block 1: a 1D-CNN with kernel size of 1, a batch normalization and a ReLU activation function 2. Blocks 2-i: one to ten layers with each layer consisting of two 1D-CNN with kernel size of 3, each followed by batch normalization and a ReLU activation function. 3. Block 3: a non-linear final classification block, composed of three perceptron layers separated by two batch normalization and ReLU functions, and finished with a sigmoid function.</p><p>Input: 64 × 1 Reshape to 4 × 16 BLOCK 1 BLOCK 2-1 + BLOCK 2-2 + + . . . BLOCK 2-10 + BLOCK 3 Output: 1 × 1 Fig. 2: The whole pipeline of Gohr's deep neural network. Block 1 refers to the initial convolution block, Block 2-1 to 2-10 refer to the residual block and Block 3 refers to the classification block.</p><p>The input to the initial convolution block (Block 1) is a 4 × 16 matrix, where each row corresponds to each 16-bit value in this order: C l , C r , C l , C r , a convolution layer with 32 filters is then applied. The kernel size of this 1D-CNN is 1, thus, it maps (C l , C r , C l , C r ) to (f ilter 1 , f ilter 2 , ..., f ilter 32 ). Each f ilter is a non-linear combination of the features (C l , C r , C l , C r ) after the ReLU activation function depending on the value of the inputs and weights learned by the 1D-CNN. The output of the first block is connected to the input and added to the output of the subsequent layer in the residual block (see Figure <ref type="figure" target="#fig_0">3</ref>).</p><p>In the residual blocks (Blocks 2-i), both 1D-CNNs have a kernel of size 3, a padding of size 1 and a stride of size 1 which make the temporal dimension invariant across layers. At the end of each layer, the output is connected to the input and added to the output of the subsequent layer to prevent the relevant input signal from being wiped out across layers. The output of a residual block is a (32 × 16) feature tensor (see Figure <ref type="figure" target="#fig_1">4</ref>).</p><p>Conv1D Kernel size: 1 Filters: 32 Batch N. ReLU Shortcut 32 × 16 Shortcut OR Intermediate 32 × 16 Conv1D Kernel size: 3 Filters: 32 Padding: 1 Batch N. ReLU Conv1D Kernel size: 3 Filters: 32 Padding: 1 Batch N. ReLU Intermediate 32 × 16 The final classification block takes as input the flattened output tensor of the residual block. This 512 × 1 vector is passed into three perceptron layers (Multi-Layer Perceptron or MLP) with batch normalization and ReLU activation functions for the first two layers and a final sigmoid activation function performs the binary classification (see Figure <ref type="figure" target="#fig_2">5</ref>).</p><p>Intermediate 32 × 16 Reshape to 512 × 1 Perceptron 512 to 64 Batch N. ReLU Perceptron 64 to 64 Batch N. ReLU Perceptron 64 to 1 Sigmoid Accuracy and efficiency of the neural distinguishers. For each pair, the neural distinguishers outputs a real-valued score between 0 and 1. If this score is greater than or equal to 0.5, the sample is classified as a real pair, and as a random pair otherwise. The results given by Gohr are presented in Table <ref type="table">1</ref>. Note that N 7 and N 8 are trained using some sophisticated methods (we refer to <ref type="bibr" target="#b10">[11]</ref> for more details on the training). We remark that Gohr's neural distinguisher has about 100,000 floating parameters, which is size efficient considering the accuracies obtained.</p><p>Table <ref type="table">1</ref>: Accuracies of neural distinguishers for 5, 6, 7 and 8 rounds (taken from Table <ref type="table" target="#tab_0">2</ref> of <ref type="bibr" target="#b10">[11]</ref>). TPR and TNR denote true positive and true negative rates respectively.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Rds</head><p>Distinguisher Accuracy TPR TNR 5 D5 0.911 0.877 0.947 N5 0.929 ± 5.13 × 10 -4 0.904 ± 8.33 × 10 -4 0.954 ± 5.91 × 10 -4 6 D6 0.758 0.680 0.837 N6 0.788 ± 8.17 × 10 -4 0.724 ± 1.26 × 10 -3 0.853 ± 1.00 × 10 -3 7 D7 0.591 0.543 0.640 N7 0.616 ± 9.7 × 10 -4 0.533 ± 1.41 × 10 -3 0.699 ± 1.30 × 10 -3 8 D8 0.512 0.496 0.527 N8 0.514 ± 1.00 × 10 -3 0.519 ± 1.41 × 10 -3 0.508 ± 1.42 × 10 -3</p><p>Real differences experiment. The neural distinguishers performed better than the distinguishers using the full DDT, indicating that the neural distinguishers may learn something more than pure differential cryptanalysis. Gohr explores this effect with the real differences experiment. In this experiment, instead of distinguishing a real pair from a random pair, the challenge is to distinguish real pairs from masked real pairs, computed as (C ⊕ M, C ⊕ M ), where M is a random 32-bit value. These experiments use the N nr distinguishers directly, without retraining them for this new task. Table <ref type="table" target="#tab_0">2</ref> shows the accuracies of these distinguishers. Notice that this operation does not affect ∆ out = C ⊕ C = (C ⊕ M ) ⊕ (C ⊕ M ) and thus the output difference distribution. However, the neural distinguishers are still able to distinguish real pairs from masked pairs even without re-training for this particular purpose, which shows that they do not just rely on the difference distribution. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Interpretation of Gohr's Neural Network: a Cryptanalysis Perspective</head><p>Interpretability of neural networks remains a highly researched area in machine learning, but the focus has always been on improving the model and computational efficiency. We will discuss more about the interpretability in a machine learning sense in Section 5. In this section, we want to find out why and how the neural distinguishers work in a cryptanalysis sense. In essence, we want to answer the following question:</p><p>What type of cryptanalysis is Gohr's neural distinguisher learning?</p><p>If the neural distinguisher is learning some currently-unknown form of cryptanalysis, then we would like to extrapolate the additional statistics that it exploits.</p><p>If not, then we want to find out what causes Gohr's neural distinguishers to perform better than pure differential attacks, and even improve state-of-the-art attacks. With this question in mind, we perform a series of experiments and analyses in order to come up with a reasonable guess, later validated by the creation of a pure cryptanalysis-based distinguisher that matches the accuracy of Gohr's one. Gohr's neural distinguishers are able to correctly identify approximately 90.4%, 68.0% and 54.3% of the real ciphertext pairs (given by the true positive rates) for 5, 6 and 7 rounds of SPECK-32/64 respectively (see Table <ref type="table">1</ref>). We will try to find out what these ciphertext pairs are if there are any common patterns and see whether we are able to identify and isolate them.</p><p>Choice of input difference. As a start, we looked into Gohr's choice of input difference: 0x0040/0000. This difference is part of a 9-round differential characteristics from Table <ref type="table" target="#tab_3">7</ref> of <ref type="bibr" target="#b0">[1]</ref>. The reason given by Gohr is that this difference deterministically transits to a difference with low Hamming weight after one round. Using constraint programming and techniques similar to <ref type="bibr" target="#b9">[10]</ref>, we found that the best differential characteristics with a fixed input difference of 0x0040/0000 for 5 rounds is 0x0040/0000 → 0x802a/d4a8, with probability of 2 -13 . In contrast, when we do not restrict the input difference, the best differential characteristics for 5 rounds is 0x2800/0010 → 0x850a/9520, with probability of 2 -9 . However, when we trained the neural distinguishers to recognize ciphertext pairs with the input difference of 0x2800/0010, the neural distinguishers performed worse (an accuracy of 75.85% for 5 rounds). This is surprising as it is generally natural for a cryptanalyst to maximize the differential probability when choosing a differential characteristic. We believe this is explained by the fact that 0x0040/0000 is the input difference maximizing the differential probability for 3 or 4 rounds of SPECK-32/64 (verified with constraint programming), which has the most chances to provide a biased distribution one or two rounds later. Generally, we believe that when using such neural distinguisher, a good method to choose an input difference is to simply use the input difference leading to the highest differential probability for nr -1 or nr -2 rounds.</p><p>Changing the inputs to the neural network. Gohr's neural distinguishers are trained using the actual ciphertext pairs (C, C ) whereas the pure differential distinguishers are only using the difference between the two ciphertexts C ⊕ C . Thus, it is unfair to compare both as they are not exploiting the same amount of information. To have a fair comparison of the capability of neural distinguishers and pure differential distinguishers, we trained new neural distinguishers using C ⊕ C , instead of (C, C ). The results are an accuracy of 90.6% for 5 rounds, 75.4% for 6 rounds and 58.3% for 7 rounds. This shows us that when the neural distinguishers are restricted to only have access to the difference distribution, they do not perform as well as their respective N nr , and similarly to D nr <ref type="foot" target="#foot_1">4</ref> as can be seen in Table <ref type="table">1</ref>. Therefore, this is another confirmation (on top of the real differences experiment conducted in <ref type="bibr" target="#b10">[11]</ref>), that Gohr's neural distinguishers are learning more than just the distribution of the differences on the ciphertext. With that information, we therefore naturally looked beyond just the difference distribution at round nr.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Analyzing Ciphertext Pairs</head><p>In this section, we limit and focus the discussions and results mostly to 5 rounds of SPECK-32/64. We recall that the last layer of the neural distinguisher is a sigmoid activation function. Thus, its output is a value between 0 and 1. When the score is 0.5 or more, the neural distinguisher predicts it as a real pair or otherwise, random pair.</p><p>The closer a score is to 0.5, the least certain the neural distinguisher is on the classification. In order to know what are the traits that the neural distinguisher is looking for, we segregate the ciphertext pairs that yield extreme scores, i.e. scores that are either less than 0.1 (bad score) or more than 0.9 (good score). For the rest of this section, we label the ciphertext pairs as "bad" and "good" ciphertext pairs and refer to the sets as B and G respectively. As we were experimenting with them, we kept the keys (unique to each pair) that are used to generate the ciphertext pairs. The goal now is to find similarities and differences in these two groups separately.</p><p>As we believe that most of the features the neural distinguishers learned is differential in nature, we focus on the differentials of these ciphertext pairs. To start, we did the following experiment (Experiment A):</p><p>1. Using 10 5 real 5-round SPECK-32/64 ciphertext pairs, extract the set G. 2. Obtain the differences of the ciphertext pairs and sort them by frequency 3. For each of the differences δ:</p><p>(a) Generate 10 4 random 32-bit numbers and apply the difference, δ to get 10 4 different ciphertext pairs. (b) Feed the pairs to the neural distinguisher N 5 to obtain the scores. (c) Note down the number of pairs that yield a score ≥ 0.5</p><p>In Table <ref type="table">3</ref>, we show the top 25 differences for 5 rounds of SPECK-32/64 with their respective score from the above experiment. Out of the first 1000 differences, each records about 75% of the pairs scoring more than 0.5. Also, there exist multiple pairs of differences such that one is more probable than the other, and yet, it has a lower number of pairs classifying as real (e.g. No. 21 in Table <ref type="table">3</ref>). Thus, there is little evidence showing that if a difference is more probable, then the neural distinguisher is necessarily more likely to recognize it.</p><p>Table <ref type="table">3</ref>: The top 25 differences (5 rounds of SPECK-32/64) in G with their respective results for Experiment A as a percentage of how many pairs having a score of ≥ 0.5 out of 10 4 pairs. Cnt refers to the number of differences obtained in G.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>No. Difference Cnt</head><p>Percent.</p><p>1 0x802a/d4a8 116 75 2 0x802e/d4ac 81 76 3 0x803a/d4b8 73 74 4 0x8e2a/daa8 73 75 5 0x822a/d6a8 72 75 6 0xb82a/eca8 67 75 7 0x882a/dca8 65 75 8 0x801a/d498 62 75 9 0xa02a/f4a8 62 75 10 0xbe2a/eaa8 62 75 11 0x806a/d4e8 59 74 12 0x8e26/daa4 47 75 13 0x8026/d4a4 46 74 No. Difference Cnt Percent. 14 0x883a/dcb8 45 75 15 0x801e/d49c 45 75 16 0xa026/f4a4 42 75 17 0xbe1a/ea98 41 75 18 0x821a/d698 41 76 19 0xbe26/eaa4 41 75 20 0x83ea/d768 40 75 21 0x8626/caa4 40 38 22 0x886a/dce8 40 75 23 0xa06a/f4e8 40 75 24 0x8e1a/da98 39 75 25 0x8226/cea4 38 37</p><p>Since the neural distinguishers outperform the ones with just the XOR input, we started to look beyond just the differences at 5 rounds. We decided to partially decrypt the ciphertext pairs from G for a few rounds and re-run Experiment A on these partially decrypted pairs: for each pair, we compute the difference and for each difference, we created 10 4 random plaintext pairs with these differences and encrypted them to round nr using random keys. The results are very intriguing, as compared to that of Table <ref type="table">3</ref>: almost all of the (top 1000) unique differences obtained in this experiment achieved 99% or 100% of ciphertext pairs having a score of ≥ 0.5.</p><p>We can see that the differences at rounds 3 and 4 (after decrypting 2 and 1 round respectively) start to show some strong biases. In fact, for all of the top 1000 differences at rounds 3 and 4, all 10 4 pairs × 1000 differences returned a score of ≥ 0.5 <ref type="foot" target="#foot_2">5</ref> . With that, we conduct yet another experiment (Experiment B):</p><p>1. For all the ciphertext pairs in G, decrypt i rounds with their respective keys and compute the corresponding difference. Denote the set of differences as Diff 5-i . 2. Generate 10 5 plaintext pairs with a difference of 0x0040/0000 with random keys, encrypt to 4 rounds 3. If the pair's difference is in Diff 5-i , keep the pair. Otherwise, discard. 4. Encrypt the remaining pairs to 5 rounds and evaluate them using N 5 .</p><p>When i = 2, we obtain 1669 unique differences with a dataset size of 89,969. 97.86% of these ciphertext pairs yielded a score ≥ 0.5 (i.e. by this method, we can isolate 88.04% of the true positive ciphertexts pair). Using i = 1, we have 128,039 unique differences and the size of the dataset is 74,077. While we could get a cleaner set with 99.98% of these ciphertext pairs obtaining a score of ≥ 0.5, we only managed to isolate 74.06% of the true positive pairs. Comparing with the true positive rate of N 5 from Table <ref type="table">1</ref>, which is 0.904 ± 8.33 × 10 -4 , the case when i = 2 seems to be closer.</p><p>We also looked into the bias of the difference bits (the j th difference bit refers to the j th bit index of C 5-2 ⊕ C 5-2 where C nr-i refers to the nr round ciphertext decrypted by i rounds. Table <ref type="table" target="#tab_1">4</ref> shows the difference bit biases of the first 1000 (most common) unique differences of ciphertext pairs in G and B after decrypting two rounds. We assume that the neural distinguisher is able to identify some bits at these rounds because they are significantly more biased, though both the set B and G are from the real distribution. Now, we state the assumption required for our conjecture, which we will verify experimentally in Section 4.3.</p><p>Assumption 1 Given a 5-round SPECK-32/64 ciphertext pair, N 5 is able to determine the difference of certain bits at rounds 3 and 4 with high accuracy. Conjecture 1. Given a 5-round SPECK-32/64 ciphertext pair, N 5 finds the difference of certain bits at round 3 and decides if the ciphertext pair is real or random.</p><p>Interestingly, the difference bit biases after decrypting 1 and 2 rounds are very similar (in their positions). We will provide an explanation in Section 4.2. The exact truncated differentials are ( * denotes no specific constraint, while 0 or 1 denotes the expected bit difference): We refer to these particular truncated differential masks as T D 3 and T D 4 for the following discussion. Using constraint programming, we evaluate that the probabilities for these truncated differentials are 87.86% and 49.87% respectively.</p><p>In order to verify how much the neural distinguisher is relying on these bits, we perform the following experiment (Experiment C):</p><p>1. Generate 10 6 plaintext pairs with initial difference 0x0040/0000 and 10 6 random keys. 2. Encrypt all 10 6 plaintext pairs to 5 -i rounds. If a plaintext pair satisfies the T D 5-i , then we keep it. Otherwise, it will be discarded. 3. Encrypt the remaining pairs to 5 rounds and evaluate them using N 5 . Table <ref type="table" target="#tab_2">5</ref> shows the statistics of the above experiment with 5 rounds of SPECK-32/64. The true positive rates for ciphertext pairs that follow these are closer to that of Gohr's neural distinguisher. Now, there remains about 3% of the ciphertext pairs yet to be explained (comparing the results of T D 5-2 with N 5 ). The important point to note here is that the pairs we have identified are exactly the ones verified by the neural distinguisher as well, by the nature of these experiments. In other words, we managed to find what the neural distinguisher is looking for and not just another distinguisher that would achieve a good accuracy by identifying a different set of ciphertext pairs.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Deriving T D 3 and T D 4</head><p>With an input difference of 0x0040/0000, which has a deterministic transition to 0x8000/8000 in round 1, the difference will only start to spread after round 1 due to the modular addition in the SPECK-32/64 round function. The inputs to the modular addition at round 2 are 0x0100 and 0x8000 (cf. Figure <ref type="figure">6</ref>). While there are two active bits, only one of them will propagate the carry (as the other is the MSB), resulting in multiple differences. Assuming a uniform distribution, the carry has a probability 1  2 of propagating to the left. This causes the probability of the various differentials to reduce by 1  2 as the carry bit propagates until b 31 (bit position 31) is reached and any further carry will be removed by the modular addition.</p><p>Fig. <ref type="figure">6</ref>: The distribution of the possible output differences after passing through the modular addition operation. 0x0100 0x8000 0x8100,0x8300,0x8700,0x8f00 0x9f00,0xbf00,0xff00,0x7f00</p><formula xml:id="formula_5">+ Out. Diff. Prob. 0x8100 2 -1 0x8300 2 -2 0x8700 2 -3 0x8f00 2 -4 0x9f00 2 -5 0xbf00 2 -6 0xff00 2 -7 0x7f00 2 -7</formula><p>In Figure <ref type="figure">7</ref> and Figure <ref type="figure">8</ref>, we show how the bits evolve along the most probable differential path from round 1 (0x8000/8000) to round 4 (0x850a/9520). As it passes through the modular addition operation, we highlight the bits that have a relatively higher probability of being different from the most probable differential. The darker the color, the higher the probability of the difference being toggled.</p><p>Figure <ref type="figure">7</ref> and Figure <ref type="figure">8</ref> show us why T D 3 is important at round 3, and how the active bits shift in SPECK-32/64 when we start with the input difference of 0x0040/0000. In every round, b 31 , (the leftmost bit) has a high probability of staying active. This bit is then rotated to b 24 before it goes into the modular addition operation. In each round, b 26 has a 1  2 chance of switching from 1 → 0 or the other way round. b 27 and b 28 have a 1  4 and 1 8 chance respectively of switching. This makes them highly volatile and therefore, unreliable. On the other hand, the right part of SPECK-32/64 rotates by 2 to the left at the end of each round. Because of the high rotation value in the left part of SPECK-32/64, low rotation value of the right part of SPECK-32/64, and the fact that the left part is added into the right part after the rotation, it takes about 3 to 4 rounds for the volatile and unreliable bits to spread.</p><formula xml:id="formula_6">1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 &gt;&gt; 7 &lt;&lt; 2 ⊕ ⊕ K 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 &gt;&gt; 7 &lt;&lt; 2 ⊕ ⊕ K</formula><p>Fig. <ref type="figure">7</ref>: The left (resp. right) part shows how the active bit from difference 0x8000/8000 (resp. 0x8100/8102) propagates to difference 0x8100/8102 (0x8000/820a). The darker the color, the higher the probability (≥ 1 4 ) that it has a carry propagated to.</p><formula xml:id="formula_7">1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 1 0 0 0 0 1 0 1 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 1 0 1 0 0 0 0 1 0 1 0 0 0 0 1 0 1 0 1 0 0 1 0 1 0 1 0 0 1 0 0 0 0 0 &gt;&gt; 7 &lt;&lt; 2 ⊕ ⊕ K</formula><p>Fig. <ref type="figure">8</ref>: Showing how the active bit from difference 0x8000/820a propagates to difference 0x850a/9520. The darker the color, the higher the probability (≥ 1 4 ) that it has a carry propagated to.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Verifying Assumption 1</head><p>To verify if Gohr's neural distinguisher is able to recognize the truncated differential, we retrain the neural distinguisher with a slight difference (Experiment D):</p><p>1. Generate 10 7 plaintext pairs such that about 1  2 of the pairs satisfy T D 3 (these are the positive pairs) 2. Encrypt the plaintext pairs for two rounds 3. Train the neural network to distinguish the two distributions, and validate with the same hyper-parameters as in <ref type="bibr" target="#b10">[11]</ref>, with a depth of 1 in the residual block.</p><p>After retraining, the neural distinguisher has an accuracy of 96.57% (TPR: 99.95%, TNR: 93.19%) This shows that the neural distinguisher has the capabilities to actually recognize the truncated differential with an outstanding accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">SPECK-32/64 Reduced to 6 Rounds</head><p>We perform Experiments C for 6 rounds of SPECK-32/64 as well. Table <ref type="table">6</ref> shows the comparison of the true positive results of rounds 5 and 6. While the results are not as obvious as for the case of 5 rounds, we can still observe a similar trend for 6 rounds.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>6-i rds Truncated Differential</head><p>Size of dataset Accuracy Proport.</p><p>4 10*****10*****10 10*****10*****00 49902 99.41% 49.6% 5 10*****00*****10 11*****01*****00 6884 99.927% 6.88%</p><p>Table 6: Results of SPECK-32/64 reduced to six rounds for Experiment C. Proportion refers to the number of true positive ciphertext pairs captured by the experiment.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Average Key Rank Differential Distinguisher</head><p>Taking into consideration the observations we presented in this section, we introduce a new average key rank distinguisher that is not based on machine learning and almost matches the accuracy as Gohr's neural network for 5, 6 and 7 rounds of SPECK-32/64. Here are the key considerations used in our distinguisher:</p><p>-The training set of Gohr's neural network consists of 10 7 ciphertext pairs. Thus, we restrict our distinguisher to only use 10 7 ciphertext pairs as well.</p><p>-If we do an exhaustive key search for two rounds, the time complexity will be extremely high. Instead, we may need to limit ourselves to only one round to match the complexity of the neural distinguishers.</p><p>-If we know the difference at round i, the i -1 round difference for the right part is known as well, since r i-1 = (l i ⊕ r i ) ≫ 2</p><p>With those pointers in mind, we created a distinguisher that uses an approximated DDT (aDDT); that is, a truncated DDT that is experimentally constructed based on n ciphertext pairs. In this distinguisher, we use n = 10 7 to ensure that both our distinguisher and the neural distinguishers have the same amount of information. The idea of the distinguisher is to decrypt the last round, nr, using all possible subkey bits that are relevant to the bits we are interested in. Then, we compute the average of the probabilities of all partial decryptions for a given pair, read from aDDT (nr -1), to get a score. If the score is greater than that of the random distribution, the distinguisher will return 1 (Real) and 0 (Random) otherwise. The bits we are interested in can be represented as an AND mask, that is, a mask that has '1' in the bit positions that we want to consider the bit and '0' for those we want to ignore. The mask value we have chosen is 0xff8f/ff8f rather than the expected 0xc183/c183 as we believe the truncated differential they are detecting is at nr -2 rounds. Thus, other than the bits that are identified earlier in this section, we decided to include more bits to improve the accuracy. With the look-up table to the aDDT, we do not just only match the data complexity (of the offline training) of the Gohr's neural distinguishers, but at the same time, include the correlations between bits as well.</p><p>The pseudocodes for creating the aDDT and the average key rank distinguisher can be found in Algorithm 1 and Algorithm 2 given in Supplementary Materials. We applied the distinguisher for 5, 6 and 7 rounds of SPECK-32/64 and the results are given in Table <ref type="table" target="#tab_3">7</ref>. It shows that our distinguisher closely matches the accuracies of Gohr's neural distinguishers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Degree of closeness.</head><p>We now study the similarity between our distinguishers and Gohr's neural distinguishers. In particular, we are interested in whether the classifications of the ciphertext pairs are the same for both distinguishers. To verify this, we gave a set of 10 5 5-round ciphertext pairs (approx. 50,000 from real and random distribution each) to both our average key rank distinguisher and N 5 , and measured how many times did they have the same output. The results for nr = 5 are shown in Table <ref type="table" target="#tab_4">8</ref>. We can see that about 97.6% of the ciphertext pairs tested have the same classification in both distinguishers. For nr = 6, we achieved 94.98% of the pairs with the same classification.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Complexity comparison.</head><p>In our average key rank distinguisher, for each pair, we perform the partial decryption of two ciphertexts, and a table lookup in aDDT. In the partial decryption, we enumerate the 2 12 keys affecting the rightmost 13 bits of δl nr-1 covered by our mask. Therefore, the complexity of our distinguisher is 2 13 one-round SPECK-32/64 decryptions, and 2 13 table lookups. Comparing its complexity with Gohr's distinguishers is not trivial, as the operations involved are different. Gohr evaluates the complexity of his neural key recovery by their runtime and an estimation of the number of speck encryptions that could be performed at the same time on a GPU implementation. We propose to use the number of floating point multiplications performed by the neural network instead. Let I and O respectively denote the number of inputs and out-puts to one layer. The computational cost of going through a dense layer is I • O multiplications. For 1D-CNN with kernel size ks = 1, a null padding, a stride equal to 1 and F filters, with input size (I, T ) the cost is computed as I • F • T multiplications. With the same input but with kernel size ks = 3, a padding equal to 1, the cost is I • ks • F • T Applying these formulas to Gohr's neural network, we obtain a total of 137280 ≈ 2 17.07 multiplications. Note that we do not account for batch normalizations and additions, which are dominated by the cost of the multiplications. Using this estimation, it seems that our distinguisher is slightly better in terms of complexity.  </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.6">Discussion</head><p>Even though Gohr trained a neural distinguisher with a fixed input difference, it is unfair to compare the accuracy of neural distinguisher to that of a pure differential cryptanalysis (with the use of DDT), since there are alternative cryptanalysis methods that the neural distinguisher may have learned. The experiments performed indicate that while Gohr's neural distinguishers did not rely much on difference at the nr round, they rely strongly on the differences at round nr -1 and even more strongly at round nr -2. These results support the hypothesis that the neural distinguisher may learn differential-linear cryptanalysis <ref type="bibr" target="#b12">[13]</ref> in the case of SPECK. While we did not present any attacks here, using the MILP model shown in <ref type="bibr" target="#b8">[9]</ref>, we verified that there are indeed many linear relations with large biases for 2 to 3 rounds. Unlike traditional linear cryptanalysis, which usually use independent characteristics or linear hull involving the same plaintext and ciphertext bits, a welltrained neural network is able to learn and exploit several linear characteristics while taking into account their dependencies and correlations.</p><p>We believe that neural networks find the easiest way to achieve the best accuracy. In the case of SPECK, it seems that differential-linear cryptanalysis would be a good fit since it requires less data and the truncated differential has a very high probability. Thus, we think that neural networks have the ability to efficiently learn short but strong differential, linear or differential-linear characteristics for small block ciphers for a small number of rounds.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.7">Application to AES-2-2-4 [7]</head><p>We are also interested in the capabilities of the neural distinguishers on a Substitution-Permutation Network (SPN) cipher. We chose a small scale variant of AES from <ref type="bibr" target="#b6">[7]</ref> with the parameters: r = 2, c = 2, e = 4. We chose this cipher as it has a small state size, which could be exhaustively searched through. AES-2-2-8 would be a good choice as it also has a state size of 32-bit, however, our distinguishers are not able to learn anything significant. We trained AES-2-2-4 with 2 15 pairs, starting with an input difference of (1, 0, 0, 1). This input difference was chosen such that only after two rounds, all S-boxes will be active. We trained them for 3 rounds and obtained an accuracy of 61.0%. In contrast, we use the same number of pairs, we trained an aDDT distinguisher and we obtained an accuracy of 62.3%.</p><p>To show the possibilities of relying purely on differences, we perform an experiment similar to Experiment A. With the trained neural distinguisher, we exhaust all possible 16-bit differences and we generate 100 random pairs for each difference. Next, we feed the pairs to the neural distinguisher and count the number of pairs in each basket of score: [0.0 -0.1), [0.1 -0.2), ..., [0.9 -1.0]. Our result shows that for each differential, the 100 random pairs form a cluster about a center similar to a Gaussian distribution. These results seem to suggest the nature of the neural distinguisher for AES-2-2-4 is one that relies fully on differential: giving a confidence interval based on just the difference.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">Interpretation of Gohr's Neural Network: a Machine Learning Perspective</head><p>In this section, we are exploring the following practical question: Can Gohr's neural network be replaced by a strategy inspired by both differential cryptanalysis and machine learning?</p><p>We will demonstrate here that this is possible. First of all, it should be emphasized that DNNs often outperform mathematical modeling or standard machine learning approaches in supervised data-driven settings, especially on highdimensional data. It seems to be the case because correlations found between input and output pairs during DNN training lead to more relevant characteristics than those found by experts. In other words, Gohr's neural distinguisher seems to be capable of finding a property P currently unknown by cryptanalysts. One may ask if we could experimentally approach this unknown property P that encodes the neural distinguisher behavior, using both machine learning and cryptanalysis expertise. With this question in mind, we propose our best estimate with a focus on 5 and 6 SPECK-32/64 rounds where the DNN achieves accuracies of 92.9% and 78.8% in a real/random distinction setting and where the full DDT approach can achieve accuracies of 91.1% and 75.8%. In our best setting, we reach accuracy values of 92.3% and 77.9%.</p><p>Section 3 discusses in detail how Gohr's neural distinguisher is modeled in three blocks. Our objective here is to replace each of these individual blocks by a more interpretable one, coming either from machine learning or from the cryptanalysts' point of view. This work is thus the result of the collaboration between two worlds addressing the open question of deep learning interpretability. In the course of the study, we set forth and challenged four conjectures to estimate the property P learned by the DNN as detailed below.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Four Conjectures</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Conjectures 2 &amp; 3 aim to uncover Block 3 behavior. Conjecture 4 tackles Block 1 while Conjecture 5 concerns Block 2-i.</head><p>The DNN can not be entirely replaced by another machine learning model. Ensemble-based machine learning models such as random forests <ref type="bibr" target="#b3">[4]</ref> and gradient boosting decision trees <ref type="bibr" target="#b7">[8]</ref> are accurate and easier to interpret than DNNs <ref type="bibr" target="#b13">[14]</ref>. Nevertheless, DNNs outperform ensemble-based machine learning models for most tasks on high-dimensional data such as images. However, with only 64 bits of input, we could legitimately wonder whether the DNN could be replaced by another ensemble-based machine learning model. Despite our small size problem, our experiments reveal that other models significantly decrease the accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Conjecture 2. Gohr's neural network outperforms other non-neuronal network machine learning models.</head><p>Experiment. To challenge this conjecture, we tested multiple machine learning models, such as Random Forest (RF), Light Gradient Boosting Machine (LGBM), Multi-Layer Perceptron (MLP), Support Vector Machine (SVM) and Linear Regression (LR). They all performed equally. For the rest of this paper, we will only consider LGBM <ref type="bibr" target="#b11">[12]</ref> as an alternative ensemble classifier for DNN and MLP.</p><p>LGBM is an extension of Gradient Boosting Decision Tree (GBDT) <ref type="bibr" target="#b7">[8]</ref> and we fixed our choice on it because it is accurate, interpretable and faster to train than RF or GBDT. In support of our conjecture, we established that the accuracy for the LGBM model is significantly lower than the one of the DNN when the inputs are (C l , C r , C l , C r ), see third column of Table <ref type="table">9</ref>.</p><p>Table <ref type="table">9</ref>: A comparison of the neural distinguisher and LGBM model for 5 round, for 10 6 samples generated of type (C l , C r , C l , C r ).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>N5 D5</head><p>LGBM as classifier for the original input</p><p>LGBM as classifier for the 512-feature</p><p>LGBM as classifier for the 64-feature 92.9% 91.1% 76.34% ± 2.62 91.49% ± 0.09 92.36% ± 0.07</p><p>The final MLP block is not essential. As described above, we can not replace the entire DNN with another non-neuronal machine learning model that is easier to interpret. However, we may be able to replace the last block (Block 3) of the neural distinguisher performing the final classification, by an ensemble model.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Conjecture 3. The MLP block of Gohr's neural network can be replaced by another ensemble classifier.</head><p>Experiment. We successfully exchanged the final MLP block for a LGBM model. The reasons for choosing LGBM as a non-linear classifier were detailed in the previous experiment paragraph. The first attempt is a complete substitution of Block 3, taking the 512-dimension output of Block 2-10 as input. In the fourth column of Table <ref type="table">9</ref>, we observe that this experiment leads to much better results than the one from Conjecture 2, and even better results than the classical DDT method D 5 (+0.39%). To further improve the accuracy, we implemented a partial substitution, taking only the 64-dimension output of the first layer of the MLP as input. As can be seen in the fifth column from Table <ref type="table">9</ref>, the accuracy with those inputs is now much closer to the DNN accuracy. In both cases, the accuracy is close to the neural distinguisher, supporting our conjecture. At this point, in order to grasp the unknown property P, one needs to understand the feature vector at the residuals' output.</p><p>The linear transformation on the inputs. We saw in Section 3 that Block 1 performs a linear transformation on the input. By looking at the weights of the DNN first convolution, we observe that it contains many opposite values. This indicates that the DNN is looking for differences between the input features.</p><p>Consequently, we propose the following conjecture.</p><p>Conjecture 4. The first convolution layer of Gohr's neural network transforms the input (C l , C r , C l , C r ) into (∆L, ∆V, V 0 , V 1 ) and a linear combination of those terms.</p><p>Experiments. As the inputs of the first convolution are binary, we could formally verify our conjecture. By forcing to one all non-zero values of the output of this layer, we calculated the truth-table of the first convolution. We thus obtained the boolean expression of the first layer for the 32 filters. We observed that eight filters were empty and the remaining twenty-four filters were simple. The filter expressions are provided in Table <ref type="table" target="#tab_1">14</ref> in the Supplementary Materials. However, one may argue that setting all non-zero values to one is an oversimplified approach. Therefore, we replaced the first ReLU activation function by the Heaviside activation function, and then we retrained the DNN. Since the Heaviside function binarizes the intermediate value (as in <ref type="bibr" target="#b27">[28]</ref>), we can establish the formal expression of the first layer of the retrained DNN. This second DNN had the same accuracy as the first one and almost the same filter boolean expression.</p><p>Finally, we trained the same DNN with the following entries (∆L, ∆V, V 0 , V 1 ). Using the same method as before, we established the filters' boolean expressions. This time, we obtained twenty five null filters and seven non-null filters, with the following expressions:</p><formula xml:id="formula_8">∆L, V 0 ∧ V 1 , ∆L, ∆L, V 0 ∧ V 1 , ∆L ∧ ∆V , ∆L ∧ ∆V .</formula><p>These observations support conjecture 4. Therefore, we kept only (∆L, ∆V, V 0 , V 1 ) as inputs for our pipeline.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The masked output distribution table.</head><p>With regards to the remaining residual block replacement, our first assumption is that the DNN calculates a shape close to the DDT in that residual block. However, two major properties of the neural distinguisher prevent us from assuming that it is a DDT in the classical sense of the term. The first property, as explained in Section 3, is that the neural distinguisher does not only rely on the difference distribution to distinguish real pairs as presented in Table <ref type="table" target="#tab_0">2</ref>. The second specificity is that the DNN has only approximately 100,000 floating parameters to perform classification, which can be considered as size efficient. Our second assumption is therefore that the DNN is able to compress the distribution table. We introduce the following definitions.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Output Distribution Table (ODT).</head><p>We propose to compute a distribution table on the values (∆L, ∆V, V 0 , V 1 ) directly, instead of doing so on the difference of the ciphertext pair (C l ⊕ C l , C r ⊕ C r ). We call this new table an Output Distribution Table (ODT) and it can be seen as a generalization of the DDT. The entries of the ODT are 64 bits, which is not tractable for 10 7 samples. Also, the DNN has only 100,000 parameters. The DNN is therefore able to compress the ODT.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Masked Output Distribution Table (M-ODT).</head><p>A compressed ODT means that the input is not 64 bits, but instead hw bits, where hw represents the Hamming weight of the mask. Let us consider a mask M ∈ M hw with M hw the ensemble of 64-bits masks with Hamming weight hw and M = (M 1 , M 2 , M 3 , M 4 ), with M i a 16-bit mask. Compressing the ODT therefore means applying the M mask to all inputs. In our case, with I = (∆L, ∆V, V 0 , V 1 ), we get I M = (∆L ∧ M 1 , ∆V ∧ M 2 , V 0 ∧ M 3 , V 1 ∧ M 4 ) = I ∧ M , before computing the ODT. By calculating that way, the number of ODT entries per mask decreases. It becomes a function that depends only on hw and on the bit positions in the masks. It is therefore a more compact representation of the complete ODT. However, it turns out that if we consider only one mask, we get only one value per sample to perform the classification: P (Real|I M ), while the DNN has a final vector size of 512. We considered several masks. Thus, by defining the ensemble R M ∈ M hw , the set of relevant masks of M hw , we can calculate for a specific input I = (∆L, ∆V, V 0 , V 1 ) the probability P (Real|I M ), ∀M ∈ R M . Then, we concatenate all the probabilities into a feature vector of size m = |R M |. We get the feature F for the input I:</p><formula xml:id="formula_9">F = P (Real|I M 1 ) P (Real|I M 2 ) ••• P (Real|I M m )</formula><p>T . We are now able to propose the final conjecture.</p><p>Conjecture 5. The neural distinguisher internal data processing of Block 2-i can be approached by:</p><p>1. Computing a distribution table for input (∆L, ∆V, V 0 , V 1 ).</p><p>2. Finding several relevant masks and applying them to the input in order to compress the output distribution table.</p><p>We abbreviate M-ODT this Masked-Output Distribution Table . Thus, the feature vector of the DNN can be replaced by a vector where each value represents the probability stored in the M-ODT for each mask.</p><p>This approach enables us to replace Block 2-i of the DNN. Though, we still need to clarify how to get the R M ensemble.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Extracting masks.</head><p>Based on local interpretation methods, we can extract these masks from the DNN. Indeed, these methods consist of highlighting the most important bits of the entries for classification. Thus, by sorting the entries according to their score and by applying these local interpretation methods, we can obtain the relevant masks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Approximating the Expression of the Property P</head><p>From our conjectures, we hypothesized that we can approximate the unknown property P that encodes the neural distinguisher behavior by the following:</p><p>-Changing (C, C ) into I = (∆L, ∆V, V 0 , V 1 ).</p><p>-Changing the 512-feature vector of the DNN by the feature vector of probabilities</p><formula xml:id="formula_10">F = P (Real|I M 1 ) P (Real|I M 2 ) ••• P (Real|I M m )</formula><p>T .</p><p>-Changing the final MLP block by the ensemble machine learning model LGBM.</p><p>These points stand respectively for Block 1, Block 2-i and Block 3.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Implementation</head><p>In this section and based on the verified conjectures, we are describing the stepwise implementation of our method. We consider that we have a DNN formed with 10 7 data of type (∆L, ∆V, V 0 , V 1 ) for 5 and 6 rounds of SPECK-32/64. We developed a three-step approach:</p><p>1. Extraction of the masks from the DNN with a first dataset. 2. Construction of the M-ODT with a second dataset. 3. Training of the final classifier from the probabilities stored in the M-ODT with a third dataset.</p><p>Mask extraction from the DNN. We first ranked 10 4 real samples according to DNN score, as described in Section 4.1, in order to estimate the masks from these entries. We used multiple local interpretation methods: Integrated Gradients <ref type="bibr" target="#b25">[26]</ref>, DeepLift <ref type="bibr" target="#b21">[22]</ref>, Gradient Shap <ref type="bibr" target="#b14">[15]</ref>, Saliency maps <ref type="bibr" target="#b22">[23]</ref>, Shapley Value <ref type="bibr" target="#b4">[5]</ref>, and Occlusion <ref type="bibr" target="#b26">[27]</ref>. These methods score each bit according to their importance for the classification. Following averaging by batch and by method, there were two possible ways to move forward. We could either assign a Hamming weight or else set a threshold above which all bits would be set to one. After a wide range of experiments, we chose the first option and set the Hamming weight to sixteen and eighteen (which turned out to be the best values in our testing). This approach allowed us to build the ensemble R M of the relevant masks.</p><p>Implementation details. We used the captum library <ref type="foot" target="#foot_3">6</ref> which brings together multiple methods on local interpretation. The dataset is divided into batches of size about 2,500 and grouped by scores. The categories we used were: scores from 1 to 0.9 (about 2,000 samples), scores from 0.9 to 0.5 (about 500 samples), scores from 1 to 0.8 (about 2,100 samples) and scores from 1 to 0.5 (about 2,500 samples). This way, one score per method could be derived for each bit of each sample. We then proposed several methods to average these importance scores by bit of category: the sum of absolute values, the median of absolute values and the average of absolute values. Then, we took the sixteen and eighteen best values and we obtained a mask. There is one mask per score, one per local interpretation method and one per averaging method. On average, for 5,000 samples we generate about 100 relevant masks. Finally, with the methods available in scikit-learn <ref type="bibr" target="#b19">[20]</ref>, we ranked the features and so the masks according to their performance. After multiple repetitions of mask generation and selection at every time, we obtained 50 masks that are effective: they are provided in Table <ref type="table" target="#tab_2">15</ref> in the Supplementary Materials. The final ensemble of masks is the addition of those 50 effective masks and the generated relevant masks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Constructing the M-ODT.</head><p>Once the ensemble R M of relevant masks is determined, we compute the M-ODT. Algorithm D (in Supplementary Materials) describes our construction method which is similar to that of the DDT. The inputs of the algorithm include a second dataset composed of n = 10 7 real samples of type I = (∆L, ∆V, V 0 , V 1 ), and the set of relevant masks R M . The output is the M-ODT dictionary with the mask as first key, the masked input as second key, and P (Real|I ∧ M ) = P (Real|I M ) as value. The M-ODT dictionary is constructed as follow: first, for each mask M in R M , we compute the corresponding masked-dataset D M which is simply the operation I M = I ∧ M for all I in D. Secondly we compute a dictionary U with key the element of D M and with value the occurrences number of that element in D M . Then, we compute for all element I M in D M the probability: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Training the classifier on probabilities.</head><p>Upon building the M-ODT, we can start training the classifier. Given a third dataset D = {(input 0 , y 0 )... (input n , y n )}, with input j a sample of type (C, C ), transformed into (∆L, ∆V, V 0 , V 1 ) and the label y j ∈ [0, 1], with n = 10 6 , we first compute the feature vector</p><formula xml:id="formula_11">F j = P (Real|Ij ∧M 1) P (Real|Ij ∧M 2) ••• P (Real|Ij ∧M m)</formula><p>T for all inputs and for m = |R M |. Next, we determined the optimal θ parameters for the g θ model according to Equation 1, with L being the square loss. Here, the g θ classifier is Light Gradient Boosting Machine (LGBM) <ref type="bibr" target="#b11">[12]</ref>.</p><p>Implementation details. Feature vectors are standardized. Model hyper-parameters fine-tuning has been achieved by grid search. Results were obtained by crossvalidation on 20% of the train set and the test set had 10 5 samples. Finally, results are obtained on the complete pipeline for three different seeds, five times for every seed.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">Results</head><p>The M-ODT pipeline was implemented with numpy, scikit-learn <ref type="bibr" target="#b19">[20]</ref> and pytorch <ref type="bibr" target="#b18">[19]</ref>. The project code can be found at this URL address <ref type="foot" target="#foot_4">7</ref> . Our work station is constituted of a GPU Nvidia GeForce GTX 970 with 4043 MiB memory and four Intel core i5-4460 processors clocked at 3.20GHz.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>General results.</head><p>Table <ref type="table">10</ref> shows accuracies of the DDT, the DNN and our M-ODT pipeline on 5 and 6-round reduced SPECK-32/64 for 1.1 × 10 7 generated samples. When compared to DNN and DDT, our M-ODT pipeline reached an intermediate performance right below DNN. The main difference is the true positive rate which is higher in our pipeline (this can be explained by the fact that our M-ODT preprocessing only considers real samples). All in all, our M-ODT pipeline successfully models the property P.</p><p>Matching. Table <ref type="table" target="#tab_5">11</ref> summarizes the results of the quantitative correspondence studies for the prediction between the two models. We compared the DNN trained on samples type (∆L, ∆V, V 0 , V 1 ) to our M-ODT pipeline. On 5 rounds, we obtained a rate of 97.5% identical predictions. In addition, 91.3% were both identical and equal to the label. On 6 rounds, matching prediction reduces down to 93.1%. We thus demonstrated that our method advantageously approximates the performance of the neural distinguisher. With an initial linear transformation Table <ref type="table">10</ref>: A comparison of Gohr's neural network, the DDT and our M-ODT pipeline accuracies for around 150 masks generated each time, with input (∆L, ∆V, V 0 , V 1 ), LGBM as classifier and 1.1 × 10 7 samples generated in total. TPR and TNR refers to true positive and true negative rate respectively.</p><p>Rd Distinguisher Accuracy TPR TNR 5 D5 91.1% 87.7% 94.7% N5 92.9% ± 0.05 90.4% ± 0.08 95.4% ± 0.06 M-ODT (Ours) 92.3% ± 0.08 95.5% ± 0.09 89.1% ± 0.2 6 D6 75.8% 68.0% 83.7% N6 78.8% ± 0.08 72.4% ± 0.01 85.3% ± 0.1 M-ODT (Ours) 77.9% ± 0.1 85.2% ± 0.1 70.6% ± 0.2</p><p>on the inputs, computing a M-ODT for a set of masks extracted from the DNN and then classifying the resulting feature vector with LGBM, we achieved an efficient yet more easily interpretable approach than Gohr distinguishers. Indeed, DNN obscure features are simply approached in our pipeline by F =</p><formula xml:id="formula_12">P (Real|I M 1 ) P (Real|I M 2 ) ••• P (Real|I M m )</formula><p>T . Finally, we interpret the performance of the classifier globally (i.e. retrieving the decision tree) and locally (i.e. deducing which feature played the greatest role in the classification for each sample) as in <ref type="bibr" target="#b13">[14]</ref>. Those results are not displayed as they are beyond the scope of the present work, but they can be found in the <ref type="url" target="https://github.com/AnonymousSubmissionEuroCrypt2021/A-Deeper-Look-at-Machine-Learning-Based-Cryptanalysis">project code</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.5">Application to SIMON Cipher</head><p>In order to check whether our approach could be generalized to other cryptographic primitives, we evaluated our M-ODT method on 8 rounds of SIMON-32/64 block cipher. Implementing the same pipeline, we enjoyed a 82.2% accuracy for the classification, whereas the neural distinguisher achieves 83.4% accuracy. In addition, the matching rate between the two models was up to Considering these encouraging outcomes, we extended the method to 7 rounds. As the 7-round training is more sophisticated and the two previous methods are equivalent, we decided to only apply the first method (the averaging one), because it requires to train only one neural distinguisher. Results given in Table <ref type="table" target="#tab_7">13</ref> confirm our previous findings: with a batch size of 100, we obtain 99.7% accuracy on 7 rounds. This remarkable outcome demonstrates the major improvement of our batch strategy over those from earlier Gohr's work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Conclusion</head><p>In this article, we proposed a thorough analysis of Gohr's deep neural network distinguishers of SPECK-32/64 from CRYPTO'19. By carefully studying the classified sets, we managed to uncover that these distinguishers are not only basing their decisions on the ciphertext pair difference, but also the internal state difference in penultimate and antepenultimate rounds. We confirmed our findings by proposing pure cryptanalysis-based distinguishers on SPECK-32/64 that match Gohr's accuracy. Moreover, we also proposed a new simplified pipeline for Gohr's distinguishers, that could reach the same accuracy while allowing a complete interpretability of the decision process. We finally gave possible directions to even improve over Gohr's accuracy.</p><p>Our results indicate that Gohr's neural distinguishers are not really producing novel cryptanalysis attacks, but more like optimizing the information extraction with the low-data constraints. Many more distinguisher settings, machine learning pipelines, types of ciphers should be studied to have a better understanding of what machine learning-based cryptanalysis might be capable of. Yet, we foresee that such tools could become of interest for cryptanalysts and designers to easily and generically pre-test a primitive for simple weaknesses.</p><p>Our work also opens interesting directions with regards to interpretability of deep neural networks and we believe our simplified pipeline might lead to better interpretability in other areas than cryptography.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Supplementary Materials</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A Pseudocode for aDDT and Average Key Rank Distinguisher</head><p>Algorithm 1 Function used to build the approximated DDT from a given number of random samples and a bitmask.</p><p>1: function BuildApproxDDT(nr, np, m) where nr -Number of rounds, np -No. of pairs, m -bitmask 2: aDDT ← ZEROS(2 32 ) 3: for i = 1 to np do 4: p ← rand(0, 2 32 -1) 5: p ← p ⊕ 0x0040/0000 6: key ← rand(0, 2 64 -1) 7: lnr, rnr ← EN C key (p, nr); 8: l nr , r nr ← EN C key (p , nr) 9: δ l ← lnr ⊕ l nr ; 10: δv ← lnr ⊕ rnr ⊕ l nr ⊕ r nr 11: aDDT [(δ l ||δv) ∧ m] = aDDT [(δ l ||δv) ∧ m] + 1 n 12: end for 13: return aDDT 14: end function Algorithm 2 Pseudocode for the average key rank differential distinguisher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>1: function AKRDD(nr, C, C , m)</head><p>where nr -Number of rounds, C, C -two ciphertexts, m -bitmask 2:</p><p>aDDT ← BuildApproxDDT (nr -1, 10 7 , m) 3:</p><p>score ← 0 4:</p><p>for key = 0 to 2 12 -1 do 5:</p><p>lnr-1, rnr-1 ← DEC key (C, 1); Decrypt the last round with the subkey key 6: l nr-1 , r nr-1 ← DEC key (C , 1) 7:</p><formula xml:id="formula_13">δ l ← lnr-1 ⊕ l nr-1 ; 8: δv ← lnr-1 ⊕ rnr-1 ⊕ l nr-1 ⊕ r nr</formula><p>-1 9: score+ = aDDT [δ l ||δv] 10: end for 11: return ( score 2 12 &gt; 2 -HW (m) ) HW(x) refers to the Hamming weight of x 12: end function</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>B Expression of the Filter After First 1D-CNN According to Methods from Section 5.1</head><p>Table <ref type="table" target="#tab_1">14</ref>: Expression of the filter after first 1D-CNN for type input (C l , C r , C l , C r ).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Filter number</head><p>Boolean expression </p><formula xml:id="formula_14">1 (C l ∧ C l ) OR (C r ∧ C l ∧ C r ) OR (C r ∧ C l ∧ C r ) 2 C l ∧ C r ∧ C l 3 (C r ∧ C l ∧ C r ) OR (C l ∧ C l ∧ C r ) 4 (C l ∧ C r ∧ C l ) OR (C l ∧ C r ∧ C r ) OR (C l ∧ C l ∧ C r ) OR (C r ∧ C l ∧ C r ) 5 Null 6 (C l ∧ C l ∧ C r ) OR (C l ∧ C r ∧ C r ) 7 (C r ∧ C l ∧ C l ) OR (C l ∧ C r ∧ C l ) 8 (C l ∧ C r ∧ C l ) OR (C l ∧ C l ∧ C r ) OR (C r ∧ C l ∧ C r</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>D Algorithm for Computing the M-ODT</head><p>Algorithm 3 Function used to construct the masked-output distribution table (M-ODT) from a dataset and a set of relevant masks.</p><p>1: function Build M-ODT(D, RM ) 2: M-ODT = {} 3: n = |D| 4: P (Real) = 0.5 5: P (Random) = 0.5 6:</p><p>for all M in RM do 7:</p><p>N h (M ) = number of 1 in M 8: DM = D ∧ M ∀I ∈ D, IM = I ∧ M 9: U = Unique(DM ) Return a dictionary with key the element of DM and with value the number occurrence of that element in DM 10:</p><p>for all IM in DM do 11:</p><formula xml:id="formula_15">P (IM |Random) = 2 -N h (M</formula><p>) 12: P (IM |Real) = 1 n × U [IM ] 13: P (Real|IM ) = P (Real)P (I M |Real) P (I M |Real)P (Real)+P (I M |Random)P (Random) 14: M-ODT[M ][IM ] = P (Real|IM ) 15: end for 16: end for 17: return M-ODT 18: end function</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 3 :</head><label>3</label><figDesc>Fig. 3: Initial convolution block (Block 1).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Fig. 4 :</head><label>4</label><figDesc>Fig. 4: The residual block (Blocks 2-i).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 5 :</head><label>5</label><figDesc>Fig. 5: The classification block (Block 3).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>3 rounds: 10</head><label>10</label><figDesc>* * * * * 00 * * * * * 00 10 * * * * * 00 * * * * * 10 4 rounds: 10 * * * * * 10 * * * * * 10 10 * * * * * 10 * * * * * 00</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>P</head><figDesc>(Real|I M ) = P (I M |Real)P (Real) P (I M |Real)P (Real) + P (I M |Random)P (Random) with P (Real) = P (Random) = 0.5, P (I M |Random) = 2 -HW (M ) , HW (M ) being the Hamming weight of M and P (I M |Real) = 1 n × U [I M ]. Finally we update M-ODT as follow: M-ODT[M ][I M ] = P (Real|I M ).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head>) 9 (</head><label>9</label><figDesc>C l ∧ C r ) OR (C l ∧ C l ) OR (C r ∧ C r ∧ C l ) 10 Null 11 (C l ∧ C r ∧ C l ) OR (C l ∧ C r ∧ C r ) OR (C l ∧ C l ∧ C r ) 12 Null 13 (C l ∧ C l ) OR (C l ∧ C r ∧ C r ) OR (C r ∧ C l ∧ C r ) 14 (C l ∧ C r ∧ C l ) OR (C l ∧ C r ∧ C r ) OR (C l ∧ C l ∧ C r ) OR (C r ∧ C l ∧ C r ) 15 (C l ∧ C l ) OR (C l ∧ C r ∧ C r ) OR (C r ∧ C r ∧ C l ) 16 Null 17 C l ∧ C r ∧ C l 18 (C l ∧ C l ) OR (C l ∧ C r ) OR (C l ∧ C r ∧ C r ) 19 C l ∧ C l ∧ C r 20 (C r ∧ C l ∧ C l ) OR (C r ∧ C l ∧ C r ) OR (C r ∧ C l ∧ C r ) OR (C l ∧ C l ∧ C r ) 21 Null 22 (C l ∧ C l ∧ C r ) OR (C l ∧ C l ∧ C r ) OR (C l ∧ C r ∧ C r ) 23 C l ∧ C l 24 C l ∧ C r ∧ C l 25 Null 26 C l ∧ C l 27 (C r ∧ C l ) OR (C l ∧ C l ) OR (C r ∧ C r ∧ C l ) 28 (C r ∧ C l ∧ C l ) OR (C r ∧ C l ∧ C r ) OR (C r ∧ C l ∧ C r ) OR (C l ∧ C l ∧ C r ) 29 C l ∧ C l 30 Null 31 C l ∧ C r 32Null</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 2 :</head><label>2</label><figDesc>Accuracies of various neural distinguishers in the real differences experiment.</figDesc><table><row><cell cols="2">Rds Distinguisher</cell><cell>Accuracy</cell></row><row><cell>5</cell><cell>N5</cell><cell>0.707 ± 9.10 × 10 -4</cell></row><row><cell>6</cell><cell>N6</cell><cell>0.606 ± 9.77 × 10 -4</cell></row><row><cell>7</cell><cell>N7</cell><cell>0.551 ± 9.95 × 10 -4</cell></row><row><cell>8</cell><cell>N8</cell><cell>0.507 ± 1.00 × 10 -3</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 4 :</head><label>4</label><figDesc>Difference bit bias of ciphertext pairs in G and B after decrypting 2 rounds. A negative (resp. positive) value indicates a bias towards '0' (resp. '1').</figDesc><table><row><cell cols="2">bit position 31</cell><cell>30</cell><cell>29</cell><cell>28</cell><cell>27</cell><cell>26</cell><cell>25</cell><cell>24</cell><cell>23</cell><cell>22</cell><cell>21</cell><cell>20</cell><cell>19</cell><cell>18</cell><cell>17</cell><cell>16</cell></row><row><cell>G</cell><cell cols="16">0.476 -0.454 -0.355 -0.135 0.045 0.084 -0.009 0.487 -0.473 -0.426 -0.300 -0.050 0.006 0.019 0.500 -0.500</cell></row><row><cell>B</cell><cell cols="16">-0.002 0.018 0.008 -0.011 0.044 0.002 0.023 -0.022 0.010 -0.002 0.013 -0.004 0.006 -0.005 0.103 0.072</cell></row><row><cell cols="2">bit position 15</cell><cell>14</cell><cell>13</cell><cell>12</cell><cell>11</cell><cell>10</cell><cell>9</cell><cell>8</cell><cell>7</cell><cell>6</cell><cell>5</cell><cell>4</cell><cell>3</cell><cell>2</cell><cell>1</cell><cell>0</cell></row><row><cell>G</cell><cell cols="16">0.476 -0.454 -0.142 -0.006 0.025 0.084 -0.009 0.487 -0.473 -0.426 0.165 0.094 -0.006 0.019 -0.500 -0.500</cell></row><row><cell>B</cell><cell cols="16">0.031 -0.009 -0.015 -0.007 -0.014 -0.024 0.025 0.026 0.034 -0.005 -0.018 -0.021 0.006 0.009 0.079 -0.065</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 5 :</head><label>5</label><figDesc>Results of Experiment C with T D 3 and T D 4 . Proport. refers to the number of true positive ciphertext pairs captured by the experiment.</figDesc><table><row><cell>5-i</cell><cell>Trunc. Diff.</cell><cell>Dataset size</cell><cell>Acc.</cell><cell>Proport.</cell></row><row><cell>3</cell><cell>TD3</cell><cell>87741</cell><cell>99.277%</cell><cell>87.11%</cell></row><row><cell>4</cell><cell>TD4</cell><cell>50063</cell><cell>99.996%</cell><cell>50.06%</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 7 :</head><label>7</label><figDesc>Accuracy of the average key rank distinguisher with a mask value of 0xff8f/ff8f.</figDesc><table><row><cell>N5</cell><cell>Accuracy</cell><cell>TPR</cell><cell>TNR</cell></row><row><cell>5</cell><cell>92.98%</cell><cell>90.76%</cell><cell>95.22%</cell></row><row><cell>6</cell><cell>78.79%</cell><cell>72.53%</cell><cell>85.07%</cell></row><row><cell>7</cell><cell>60.28%</cell><cell>55.31%</cell><cell>65.24%</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>Table 8 :</head><label>8</label><figDesc>Closeness of the outputs of N 5 and average key rank distinguisher.</figDesc><table><row><cell></cell><cell></cell><cell cols="2">Nr output</cell></row><row><cell></cell><cell></cell><cell>≥ 0.5</cell><cell>&lt; 0.5</cell></row><row><cell>AKR Dist</cell><cell>1</cell><cell>46.6%</cell><cell>1.48%</cell></row><row><cell></cell><cell>0</cell><cell>0.953%</cell><cell>51.0%</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5"><head>Table 11 :</head><label>11</label><figDesc>A comparison of Gohr's neural network predictions and our M-ODT pipeline predictions for around 150 masks generated each time, with input (∆L, ∆V, V 0 , V 1 ), LGBM as classifier and 1.1 × 10 7 samples generated in total.</figDesc><table><row><cell>Nr</cell><cell>Model</cell><cell>Accuracy</cell><cell>Matching</cell><cell>Matching &amp; equal</cell></row><row><cell></cell><cell></cell><cell></cell><cell></cell><cell>to label</cell></row><row><cell>5</cell><cell>N5 M-ODT (Ours)</cell><cell>92.9% 92.3%</cell><cell>97.5% ± 0.06</cell><cell>91.3% ± 0.08</cell></row><row><cell>6</cell><cell>N6 M-ODT (Ours)</cell><cell>78.8% 77.9%</cell><cell>93.1% ± 0.07</cell><cell>75.3% ± 0.11</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6"><head>Table 12 :</head><label>12</label><figDesc>Study of the batch size methods on the accuracies with (∆L, ∆V , V 0 , V 1 ) as input for 5 and 6 rounds.</figDesc><table><row><cell>Rounds</cell><cell></cell><cell>5</cell><cell></cell><cell></cell><cell>6</cell><cell></cell><cell></cell></row><row><cell>Batch input size</cell><cell>1</cell><cell>5</cell><cell>10</cell><cell>1</cell><cell>5</cell><cell>10</cell><cell>50</cell></row><row><cell>Averaging Method</cell><cell>92.9%</cell><cell>99.8%</cell><cell>100%</cell><cell>78.6%</cell><cell>95.41%</cell><cell>99.0%</cell><cell>100%</cell></row><row><cell>2D-CNN Method</cell><cell>-</cell><cell>99.4%</cell><cell>100%</cell><cell>-</cell><cell>93.27%</cell><cell>97.7%</cell><cell>100%</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_7"><head>Table 13 :</head><label>13</label><figDesc>Study of the averaging batch size method on the 7-round accuracies with (∆L, ∆V , V 0 , V 1 ) as input.</figDesc><table><row><cell>Batch input size</cell><cell>1</cell><cell>5</cell><cell>10</cell><cell>50</cell><cell>100</cell></row><row><cell>Averaging Method</cell><cell>61.2%</cell><cell>73.5%</cell><cell>80.8%</cell><cell>96.7%</cell><cell>99.7%</cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="3" xml:id="foot_0"><p>The modulo will be stated explicitly if it is not clear from the context</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="4" xml:id="foot_1"><p>Note that the new neural distinguishers are trained with 10 7 pairs, the same number as in<ref type="bibr" target="#b10">[11]</ref> </p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="5" xml:id="foot_2"><p>the differences were obtained experimentally.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="6" xml:id="foot_3"><p>https://github.com/pytorch/captum</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="7" xml:id="foot_4"><p>https://github.com/AnonymousSubmissionEuroCrypt2021/A-Deeper-Look-at-Machine-Learning-Based-Cryptanalysis</p></note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><head>Acknowledgements</head><p>The authors are grateful to the anonymous reviewers for their insightful comments that improved the quality of the paper. The authors are supported by the <rs type="funder">Temasek Laboratories NTU</rs> grant <rs type="grantNumber">DSOCL17101</rs>. We would like to thank <rs type="person">Aron Gohr</rs> for pointing out that the differential characteristics mentioned in the attacks of Dinur's <ref type="bibr" target="#b5">[6]</ref> have been extended by one free round, thus, our previous suggestion of extending Dinur's attack by one round is invalid.</p></div>
+			</div>
+			<listOrg type="funding">
+				<org type="funding" xml:id="_ZrTDpsN">
+					<idno type="grant-number">DSOCL17101</idno>
+				</org>
+			</listOrg>
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>92.4%. The slight deterioration in the results of our pipeline for SIMON can be explained by the lack of efficient masks as introduced in Section 5.3 for SPECK.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.6">Discussions</head><p>From the cryptanalysts' standpoint, one important aspect of using the neural distinguisher is to uncover the property P learned by the DNN. Unfortunately, while being powerful and easy to use, Gohr's neural network remains opaque.</p><p>Our main conjecture is that the 10-layer residual blocks, considered as the core of the model, are acting as a compressed DDT applied on the whole input space. We model our idea with a Masked Output Distribution Table (M-ODT). The M-ODT can be seen as a distribution table applied on masked outputs, in our case (∆L, ∆V, V 0 , V 1 ), instead of only the difference (C l ⊕ C l , C r ⊕ C r ). By doing so, features are no longer abstract as in the neural distinguisher. In our pipeline, each one of the features is a probability for the sample to be real knowing the mask and the input. In the end, with our M-ODT pipeline, we successfully obtained a model which has only -0.6% difference accuracy with the DNN and a matching of 97.3% on 5 rounds of SPECK-32/64. Additional analysis of our pipeline (e.g. masks independence, inputs influence, classifiers influence) are available into the <ref type="url" target="https://github.com/AnonymousSubmissionEuroCrypt2021/A-Deeper-Look-at-Machine-Learning-Based-Cryptanalysis">project code</ref>. To the best of our knowledge, this work is the first successful attempt to exhibit the underlying mechanism of the neural distinguisher. However, we note that a minor limitation of our method is that it still requires the DNN to extract the relevant masks during the preparation of the distinguisher. Since it is only during preparation, this does not remove anything with regards to the interpretability of the distinguisher. Future work will aim at computing these masks without DNN. All in all, our findings represent an opportunity to guide the development of a novel, easy-to-use and interpretable cryptanalysis method.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">Improved Training Models</head><p>While in the two previous sections we focused on understanding how the neural distinguisher works, here we will explain how one can outperform Gohr's results. The main idea is to create batches of ciphertext inputs instead of pairs. We refer to batch input of size B, a group of B ciphertexts that are constructed from the same key. Here, we can distinguish two ways to train and evaluate the neural distinguisher pipeline with batch input. The straightforward one is to evaluate the neural distinguisher score for each element of the batch and then to take the median of the results. The second is to consider the whole batch as a single input for a neural distinguisher. In order to do so, we used 2-dimensional CNN (2D-CNN) where the channel dimension is the features (∆L, ∆V, V 0 , V 1 ). We should point out that, for sake of comparability with Gohr's work, we maintained the product of the training set size by the batch size to be equal to 10 7 . Both batch size-based challenging methods yielded similar accuracy values (see Table <ref type="table">12</ref>). Notably, in both cases, we enjoyed 100% accuracy on 5 and 6 rounds with batch sizes 10 and 50 respectively.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>C Expression of the 50 Efficient Masks for the M-ODT Pipeline</head><p>Table <ref type="table">15</ref>: Expression (in hexadecimal notation) of the 50 efficient masks for the M-ODT pipeline for samples generated of type (∆L, ∆V, V 0 , V 1 ).</p><p>Name masks Mask 1 Mask 2 Mask 3 Mask 4 (3844-15384-7692-7692) 0F04 3C18 1E0C 1E0C (7939-31804-15360-15360) 1F03 7C3C 3C00 3C00 (3842-16020-516-7684) 0F02 3E94 0204 1E04 (1551-15420-12-12) 060F 3C3C 000C 000C (7693-30768-14336-14352) 1E0D 7830 3800 3810 (25569-12039-0-0) 63E1 2F07 0000 0000 (6409-26738-10240-10240) 1909 6872 2800 2800 (1543-7708-3072-3072) 0607 1E1C 0C00 0C00 (7693-7228-24-24) 1E0D 1C3C 0018 0018 (6150-30780-12312-12312) 1806 783C 3018 3018 (6159-14396-6168-2072) 180F 383C 1818 0818 (7692-31792-11264-12312) 1E0C 7C30 2C00 3018 (7683-21564-15360-15360) 1E03 543C 3C00 3C00 (6159-15420-8196-4124) 180F 3C3C 2004 101C (30768-24624-0-0) 7830 6030 0000 0000 (11280-8208-0-0) 2C10 2010 0000 0000 (33155-34691-12-12) 8183 8783 000C 000C (3852-14384-7184-7184) 0F0C 3830 1C10 1C10 (527-5692-2068-2068) 020F 163C 0814 0814 (5647-14396-4112-6168) 160F 383C 1010 1818 (772-256-41066-41066) 0304 0100 A06A A06A (5644-0-7186-7186) 160C 0000 1C12 1C12 (7-7740-1038-1038) 0007 1E3C 040E 040E (779-7958-2048-3588) 030B 1F16 0800 0E04 (49496-45811-3-0) C158 B2F3 0003 0000 (7680-30780-7168-7168) 1E00 783C 1C00 1C00 (7680-30780-6144-6144) 1E00 783C 1800 1800 (15-7740-1030-1030) 000F 1E3C 0406 0406 (7692-30768-14336-12304) 1E0C 7830 3800 3010 (7695-31804-0-28) 1E0F 7C3C 0000 001C (37304-21475-0-12) 91B8 53E3 0000 000C (2823-32566-0-4) 0B07 7F36 0000 0004 (1025-13923-4611-9795) 0401 3663 1203 2643 (3855-32316-0-0) 0F0F 7E3C 0000 0000 (7951-32308-0-0) 1F0F 7E34 0000 0000 (3840-13372-3076-3076) 0F00 343C 0C04 0C04 (3842-7196-9216-9216) 0F02 1C1C 2400 2400 (54568-192-4632-4632) D528 00C0 1218 1218 (7692-28728-6144-6144) 1E0C 7038 1800 1800 (37304-21475-2-140) 91B8 53E3 0002 008C (3840-14384-3076-3076) 0F00 3830 0C04 0C04 (28704-24608-0-0) 7020 6020 0000 0000 (2569-13360-273-273) 0A09 3430 0111 0111 (7693-30768-14336-13328) 1E0D 7830 3800 3410 (7174-14396-2560-5144) 1C06 383C 0A00 1418 (1-47891-4865-785) 0001 BB13 1301 0311 (5292-1-51-51) 14AC 0001 0033 0033 (2831-16182-0-2048) 0B0F 3F36 0000 0800 (7692-30768-12288-13328) 1E0C 7830 3000 3410 (7-31731-0-6674) 0007 7BF3 0000 1A12</p></div>			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Round-Reduced Simon and Speck</title>
+		<author>
+			<persName><forename type="first">Farzaneh</forename><surname>Abed</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eik</forename><surname>List</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Lucks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakob</forename><surname>Wenzel</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-46706-0_27</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="volume">8540</biblScope>
+			<biblScope unit="page" from="525" to="545" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Abed, F., List, E., Lucks, S., Wenzel, J.: Differential cryptanalysis of round-reduced simon and speck. In: Fast Software Encryption -FSE 2014. LNCS, vol. 8540, pp. 525-545. Springer (2014)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+		<ptr target="http://eprint.iacr.org/2013/404" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2013">2013. 2013</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beaulieu, R., Shors, D., Smith, J., Treatman-Clark, S., Weeks, B., Wingers, L.: The SIMON and SPECK families of lightweight block ciphers. IACR Cryptol. ePrint Arch. 2013, 404 (2013), http://eprint.iacr.org/2013/404</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Differential Analysis of Block Ciphers SIMON and SPECK</title>
+		<author>
+			<persName><forename type="first">Alex</forename><surname>Biryukov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Arnab</forename><surname>Roy</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vesselin</forename><surname>Velichkov</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-46706-0_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">C</forename><surname>Cid</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">C</forename><surname>Rechberger</surname></persName>
+		</editor>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="volume">8540</biblScope>
+			<biblScope unit="page" from="546" to="570" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biryukov, A., Roy, A., Velichkov, V.: Differential analysis of block ciphers SIMON and SPECK. In: Cid, C., Rechberger, C. (eds.) Fast Software Encryption -FSE 2014. LNCS, vol. 8540, pp. 546-570. Springer (2014)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Random Forests</title>
+		<author>
+			<persName><forename type="first">Leo</forename><surname>Breiman</surname></persName>
+		</author>
+		<idno type="DOI">10.1023/a:1010933404324</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Machine Learning</title>
+		<title level="j" type="abbrev">Machine Learning</title>
+		<idno type="ISSN">0885-6125</idno>
+		<idno type="ISSNe">1573-0565</idno>
+		<imprint>
+			<biblScope unit="volume">45</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="5" to="32" />
+			<date type="published" when="2001-10">2001</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Breiman, L.: Random forests. Machine learning 45(1), 5-32 (2001)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Polynomial calculation of the Shapley value based on sampling</title>
+		<author>
+			<persName><forename type="first">Javier</forename><surname>Castro</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Daniel</forename><surname>Gómez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Juan</forename><surname>Tejada</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.cor.2008.04.004</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Computers &amp; Operations Research</title>
+		<title level="j" type="abbrev">Computers &amp; Operations Research</title>
+		<idno type="ISSN">0305-0548</idno>
+		<imprint>
+			<biblScope unit="volume">36</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="1726" to="1730" />
+			<date type="published" when="2009-05">2009</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Castro, J., Gómez, D., Tejada, J.: Polynomial calculation of the shapley value based on sampling. Computers &amp; Operations Research 36(5), 1726-1730 (2009)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Improved Differential Cryptanalysis of Round-Reduced Speck</title>
+		<author>
+			<persName><forename type="first">Itai</forename><surname>Dinur</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-13051-4_9</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="147" to="164" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Dinur, I.: Improved differential cryptanalysis of round-reduced speck. In: Selected Areas in Cryptography -SAC 2014. pp. 147-164 (2014)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Attitude Tracking Control of Small-Scale Unmanned Helicopters Using Quaternion-Based Adaptive Dynamic Surface Control</title>
+		<author>
+			<persName><forename type="first">Xiaojun</forename><surname>Duan</surname></persName>
+			<idno type="ORCID">0000-0003-0727-5333</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Yue</surname></persName>
+			<idno type="ORCID">0000-0001-8285-4445</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Huiying</forename><surname>Liu</surname></persName>
+			<idno type="ORCID">0000-0002-6405-1187</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Huijuan</forename><surname>Guo</surname></persName>
+			<idno type="ORCID">0000-0002-3455-1682</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Fan</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0002-2478-4722</idno>
+		</author>
+		<idno type="DOI">10.1109/access.2020.3043363</idno>
+		<ptr target="https://doi.org/10.1109/ACCESS.2020.3043363" />
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Access</title>
+		<title level="j" type="abbrev">IEEE Access</title>
+		<idno type="ISSNe">2169-3536</idno>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="page" from="10153" to="10165" />
+			<date type="published" when="2021">2021</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Duan, X., Yue, C., Liu, H., Guo, H., Zhang, F.: Attitude tracking control of small-scale unmanned helicopters using quaternion-based adaptive dynamic surface control. IEEE Access 9, 10153-10165 (2021), https://doi.org/10.1109/ACCESS. 2020.3043363</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Greedy function approximation: A gradient boosting machine.</title>
+		<author>
+			<persName><forename type="first">Jerome</forename><forename type="middle">H</forename><surname>Friedman</surname></persName>
+		</author>
+		<idno type="DOI">10.1214/aos/1013203451</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Annals of Statistics</title>
+		<title level="j" type="abbrev">Ann. Statist.</title>
+		<idno type="ISSN">0090-5364</idno>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="1189" to="1232" />
+			<date type="published" when="2001-10-01">2001</date>
+			<publisher>Institute of Mathematical Statistics</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Friedman, J.H.: Greedy function approximation: a gradient boosting machine. An- nals of statistics pp. 1189-1232 (2001)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">MILP-Based Automatic Search Algorithms for Differential and Linear Trails for Speck</title>
+		<author>
+			<persName><forename type="first">Kai</forename><surname>Fu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yinghua</forename><surname>Guo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siwei</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lei</forename><surname>Hu</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-52993-5_14</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2016">2016. 2016</date>
+			<biblScope unit="page" from="268" to="288" />
+		</imprint>
+	</monogr>
+	<note>ePrint Arch</note>
+	<note type="raw_reference">Fu, K., Wang, M., Guo, Y., Sun, S., Hu, L.: Milp-based automatic search algorithms for diff erential and linear trails for speck. IACR Cryptol. ePrint Arch. 2016, 407 (2016)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Constraint Programming Models for Chosen Key Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Marine</forename><surname>Minier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Christine</forename><surname>Solnon</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-44953-1_37</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="584" to="601" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gerault, D., Minier, M., Solnon, C.: Constraint programming models for chosen key differential cryptanalysis. In: Principles and Practice of Constraint Programming. pp. 584-601. Springer (2016)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="volume">11693</biblScope>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr, A.: Improving attacks on round-reduced speck32/64 using deep learning. In: Advances in Cryptology -CRYPTO 2019. LNCS, vol. 11693, pp. 150-179. Springer (2019)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Lightgbm: A highly efficient gradient boosting decision tree</title>
+		<author>
+			<persName><forename type="first">G</forename><surname>Ke</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Q</forename><surname>Meng</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">T</forename><surname>Finley</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">T</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><surname>Ma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Q</forename><surname>Ye</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">T</forename><forename type="middle">Y</forename><surname>Liu</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Advances in neural information processing systems</title>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+			<biblScope unit="page" from="3146" to="3154" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ke, G., Meng, Q., Finley, T., Wang, T., Chen, W., Ma, W., Ye, Q., Liu, T.Y.: Lightgbm: A highly efficient gradient boosting decision tree. In: Advances in neural information processing systems. pp. 3146-3154 (2017)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Differential-Linear Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Susan</forename><forename type="middle">K</forename><surname>Langford</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Martin</forename><forename type="middle">E</forename><surname>Hellman</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-48658-5_3</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1994">1994</date>
+			<biblScope unit="volume">839</biblScope>
+			<biblScope unit="page" from="17" to="25" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Langford, S.K., Hellman, M.E.: Differential-linear cryptanalysis. In: Advances in Cryptology -CRYPTO &apos;94. LNCS, vol. 839, pp. 17-25. Springer (1994)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">From local explanations to global understanding with explainable AI for trees</title>
+		<author>
+			<persName><forename type="first">Scott</forename><forename type="middle">M</forename><surname>Lundberg</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gabriel</forename><surname>Erion</surname></persName>
+			<idno type="ORCID">0000-0001-8741-131X</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Hugh</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alex</forename><surname>Degrave</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jordan</forename><forename type="middle">M</forename><surname>Prutkin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bala</forename><surname>Nair</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ronit</forename><surname>Katz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jonathan</forename><surname>Himmelfarb</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nisha</forename><surname>Bansal</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Su-In</forename><surname>Lee</surname></persName>
+			<idno type="ORCID">0000-0001-5833-5215</idno>
+		</author>
+		<idno type="DOI">10.1038/s42256-019-0138-9</idno>
+		<idno type="arXiv">arXiv:1905.04610</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Nature Machine Intelligence</title>
+		<title level="j" type="abbrev">Nat Mach Intell</title>
+		<idno type="ISSNe">2522-5839</idno>
+		<imprint>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="56" to="67" />
+			<date type="published" when="2019">2019</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Lundberg, S.M., Erion, G., Chen, H., DeGrave, A., Prutkin, J.M., Nair, B., Katz, R., Himmelfarb, J., Bansal, N., Lee, S.I.: Explainable ai for trees: From local ex- planations to global understanding. arXiv preprint arXiv:1905.04610 (2019)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">A unified approach to interpreting model predictions</title>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">M</forename><surname>Lundberg</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">I</forename><surname>Lee</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Advances in neural information processing systems</title>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+			<biblScope unit="page" from="4765" to="4774" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lundberg, S.M., Lee, S.I.: A unified approach to interpreting model predictions. In: Advances in neural information processing systems. pp. 4765-4774 (2017)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Breaking Cryptographic Implementations Using Deep Learning Techniques</title>
+		<author>
+			<persName><forename type="first">Houssem</forename><surname>Maghrebi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thibault</forename><surname>Portigliatti</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Emmanuel</forename><surname>Prouff</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-49445-6_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2016">2016. 2016</date>
+			<biblScope unit="page" from="3" to="26" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Maghrebi, H., Portigliatti, T., Prouff, E.: Breaking cryptographic implementations using deep learning techniques. In: Security, Privacy, and Applied Cryptography Engineering -SPACE 2016. pp. 3-26 (2016)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">A proof that the ARX cipher salsa20 is secure against differential cryptanalysis</title>
+		<author>
+			<persName><forename type="first">N</forename><surname>Mouha</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><surname>Preneel</surname></persName>
+		</author>
+		<ptr target="http://eprint.iacr.org/2013/328" />
+	</analytic>
+	<monogr>
+		<title level="m">IACR Cryptol</title>
+		<imprint>
+			<date type="published" when="2013">2013. 2013</date>
+			<biblScope unit="page">328</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mouha, N., Preneel, B.: A proof that the ARX cipher salsa20 is secure against differential cryptanalysis. IACR Cryptol. ePrint Arch. 2013, 328 (2013), http: //eprint.iacr.org/2013/328</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Differential and Linear Cryptanalysis Using Mixed-Integer Linear Programming</title>
+		<author>
+			<persName><forename type="first">Nicky</forename><surname>Mouha</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qingju</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dawu</forename><surname>Gu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Preneel</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-34704-7_5</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2011">2011. 2011</date>
+			<biblScope unit="page" from="57" to="76" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mouha, N., Wang, Q., Gu, D., Preneel, B.: Differential and linear cryptanalysis using mixed-integer linear programming. In: Information Security and Cryptology -Inscrypt 2011. pp. 57-76 (2011)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Pytorch: An imperative style, highperformance deep learning library</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Paszke</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Gross</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">F</forename><surname>Massa</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Lerer</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Bradbury</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Chanan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">T</forename><surname>Killeen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Lin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">N</forename><surname>Gimelshein</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><surname>Antiga</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Advances in neural information processing systems</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="8026" to="8037" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., Killeen, T., Lin, Z., Gimelshein, N., Antiga, L., et al.: Pytorch: An imperative style, high- performance deep learning library. In: Advances in neural information processing systems. pp. 8026-8037 (2019)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Scikit-learn: Machine learning in python</title>
+		<author>
+			<persName><forename type="first">F</forename><surname>Pedregosa</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Varoquaux</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Gramfort</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Michel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><surname>Thirion</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">O</forename><surname>Grisel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Blondel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Prettenhofer</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><surname>Weiss</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Dubourg</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">the Journal of machine Learning research</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="page" from="2825" to="2830" />
+			<date type="published" when="2011">2011</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., et al.: Scikit-learn: Machine learning in python. the Journal of machine Learning research 12, 2825-2830 (2011)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Cryptography and machine learning</title>
+		<author>
+			<persName><forename type="first">Ronald</forename><forename type="middle">L</forename><surname>Rivest</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-57332-1_36</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1991">1991</date>
+			<biblScope unit="page" from="427" to="439" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Rivest, R.L.: Cryptography and machine learning. In: Advances in Cryptology - ASIACRYPT &apos;91. pp. 427-439 (1991)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<monogr>
+		<title level="m" type="main">Reverse-complement parameter sharing improves deep learning models for genomics</title>
+		<author>
+			<persName><forename type="first">Avanti</forename><surname>Shrikumar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peyton</forename><surname>Greenside</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anshul</forename><surname>Kundaje</surname></persName>
+		</author>
+		<idno type="DOI">10.1101/103663</idno>
+		<idno type="arXiv">arXiv:1704.02685</idno>
+		<imprint>
+			<date type="published" when="2017-01-27">2017</date>
+			<publisher>openRxiv</publisher>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Shrikumar, A., Greenside, P., Kundaje, A.: Learning important features through propagating activation differences. arXiv preprint arXiv:1704.02685 (2017)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b22">
+	<monogr>
+		<author>
+			<persName><forename type="first">K</forename><surname>Simonyan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Vedaldi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Zisserman</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1312.6034</idno>
+		<title level="m">Deep inside convolutional networks: Visualising image classification models and saliency maps</title>
+		<imprint>
+			<date type="published" when="2013">2013</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Simonyan, K., Vedaldi, A., Zisserman, A.: Deep inside convolutional net- works: Visualising image classification models and saliency maps. arXiv preprint arXiv:1312.6034 (2013)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Automatic Differential Analysis of ARX Block Ciphers with Application to SPECK and LEA</title>
+		<author>
+			<persName><forename type="first">Ling</forename><surname>Song</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhangjie</forename><surname>Huang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qianqian</forename><surname>Yang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-40367-0_24</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="379" to="394" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Song, L., Huang, Z., Yang, Q.: Automatic differential analysis of ARX block ci- phers with application to SPECK and LEA. In: Information Security and Privacy -ACISP 2016. pp. 379-394 (2016)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Analysis of AES, SKINNY, and Others with Constraint Programming</title>
+		<author>
+			<persName><forename type="first">Siwei</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pascal</forename><surname>Lafourcade</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qianqian</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yosuke</forename><surname>Todo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kexin</forename><surname>Qiao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lei</forename><surname>Hu</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tosc.v2017.i1.281-306</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Symmetric Cryptology</title>
+		<title level="j" type="abbrev">ToSC</title>
+		<idno type="ISSNe">2519-173X</idno>
+		<imprint>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="281" to="306" />
+			<date type="published" when="2017-03-08">2017. 2017</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Sun, S., Gérault, D., Lafourcade, P., Yang, Q., Todo, Y., Qiao, K., Hu, L.: Analysis of aes, skinny, and others with constraint programming. IACR Trans. Symmetric Cryptol. 2017(1), 281-306 (2017)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b25">
+	<monogr>
+		<title level="m" type="main">Axiomatic attribution for deep networks</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Sundararajan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Taly</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Q</forename><surname>Yan</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1703.01365</idno>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Sundararajan, M., Taly, A., Yan, Q.: Axiomatic attribution for deep networks. arXiv preprint arXiv:1703.01365 (2017)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Visualizing and Understanding Convolutional Networks</title>
+		<author>
+			<persName><forename type="first">Matthew</forename><forename type="middle">D</forename><surname>Zeiler</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Rob</forename><surname>Fergus</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-10590-1_53</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="818" to="833" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zeiler, M.D., Fergus, R.: Visualizing and understanding convolutional networks. In: European conference on computer vision. pp. 818-833. Springer (2014)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b27">
+	<monogr>
+		<title level="m" type="main">Dorefa-net: Training low bitwidth convolutional neural networks with low bitwidth gradients</title>
+		<author>
+			<persName><forename type="first">S</forename><surname>Zhou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Wu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Ni</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">X</forename><surname>Zhou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><surname>Wen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Zou</surname></persName>
+		</author>
+		<idno>CoRR abs/1606.06160</idno>
+		<ptr target="http://arxiv.org/abs/1606.06160" />
+		<imprint>
+			<date type="published" when="2016">2016</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhou, S., Wu, Y., Ni, Z., Zhou, X., Wen, H., Zou, Y.: Dorefa-net: Training low bitwidth convolutional neural networks with low bitwidth gradients. CoRR abs/1606.06160 (2016), http://arxiv.org/abs/1606.06160</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

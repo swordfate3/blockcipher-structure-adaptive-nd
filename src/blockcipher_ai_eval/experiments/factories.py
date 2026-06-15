@@ -42,6 +42,7 @@ from blockcipher_ai_eval.models.structure import (
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     PairwiseAdaptiveDBitNetDistinguisher,
     PresentInceptionMCNDDistinguisher,
+    PresentInceptionMCNDMatrixDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
@@ -259,6 +260,20 @@ def build_model(
             pooling=str(options.get("pooling", "attention_mean_max")),
             dropout=float(options.get("dropout", 0.0)),
             kernel_sizes=_int_tuple_option(options, "kernel_sizes", (1, 3, 5)),
+        )
+    if name == "present_inception_mcnd_matrix":
+        return PresentInceptionMCNDMatrixDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 128,
+            base_channels=hidden_bits,
+            branches=_int_option(options, "branches"),
+            blocks=_int_option(options, "blocks", 3) or 3,
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "batchnorm2d")),
+            pooling=str(options.get("pooling", "attention_mean_max")),
+            dropout=float(options.get("dropout", 0.0)),
+            kernel_sizes=tuple(_matrix_kernel_size_option(item) for item in options.get("kernel_sizes", [[1, 1], [1, 2], [2, 4]])),
+            cell_bits=_int_option(options, "cell_bits", 4) or 4,
         )
     if name == "spn_pairset_dbitnet_v2":
         return SpnCellPairSetDBitNetDistinguisher(
@@ -513,6 +528,14 @@ def _int_tuple_option(
     if not result:
         raise ValueError(f"model option {key} must not be empty")
     return result
+
+
+def _matrix_kernel_size_option(value: object) -> tuple[int, int]:
+    if isinstance(value, int):
+        return (1, value)
+    if isinstance(value, (list, tuple)) and len(value) == 2:
+        return (int(value[0]), int(value[1]))
+    raise ValueError("matrix kernel sizes must be ints or [height, width] pairs")
 
 
 def _int_option(options: dict[str, object], key: str, default: int | None = None) -> int | None:

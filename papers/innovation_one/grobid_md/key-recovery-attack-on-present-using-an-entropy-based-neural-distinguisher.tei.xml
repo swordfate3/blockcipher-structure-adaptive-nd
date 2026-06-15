@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Key recovery attack on PRESENT using an entropy-based neural distinguisher</title>
+				<funder>
+					<orgName type="full">Vice Presidency of Research &amp; Creation&apos;s Publication Fund</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>Springer Science and Business Media LLC</publisher>
+				<availability  status="unknown">
+					<licence/>
+				</availability>
+				<date type="published" when="2026-04-21">21 April 2026</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="consolidated" source="crossref">
+					<analytic>
+						<author>
+							<persName><forename type="first">Valérie</forename><surname>Gauthier-Umaña</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Systems and Computing Engineering Department , Universidad de los Andes , Bogotá , Colombia</note>
+								<orgName type="department">Systems and Computing Engineering Department</orgName>
+								<orgName type="institution">Universidad de los Andes</orgName>
+								<address>
+									<settlement>Bogotá</settlement>
+									<country key="CO">Colombia</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Isabella</forename><surname>Martínez</surname></persName>
+							<email>i.martinezm2@uniandes.edu.co</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Systems and Computing Engineering Department , Universidad de los Andes , Bogotá , Colombia</note>
+								<orgName type="department">Systems and Computing Engineering Department</orgName>
+								<orgName type="institution">Universidad de los Andes</orgName>
+								<address>
+									<settlement>Bogotá</settlement>
+									<country key="CO">Colombia</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Germán</forename><surname>Obando</surname></persName>
+							<email>gdobando@udenar.edu.co</email>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Departamento de Electrónica , Universidad de Nariño , Pasto , Colombia</note>
+								<orgName type="department">Departamento de Electrónica</orgName>
+								<orgName type="institution">Universidad de Nariño</orgName>
+								<address>
+									<settlement>Pasto</settlement>
+									<country key="CO">Colombia</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Juan</forename><forename type="middle">F</forename><surname>Pérez</surname></persName>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>3</label> Center for Optimization and Applied Probability , Department of Industrial Engineering , Universidad de los Andes , Bogotá , Colombia</note>
+								<orgName type="department" key="dep1">Center for Optimization and Applied Probability</orgName>
+								<orgName type="department" key="dep2">Department of Industrial Engineering</orgName>
+								<orgName type="institution">Universidad de los Andes</orgName>
+								<address>
+									<settlement>Bogotá</settlement>
+									<country key="CO">Colombia</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Key recovery attack on PRESENT using an entropy-based neural distinguisher</title>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">Neural Computing and Applications</title>
+						<title level="j" type="abbrev">Neural Comput &amp; Applic</title>
+						<idno type="ISSN">0941-0643</idno>
+						<idno type="eISSN">1433-3058</idno>
+						<imprint>
+							<publisher>Springer Science and Business Media LLC</publisher>
+							<biblScope unit="volume">38</biblScope>
+							<biblScope unit="issue">9</biblScope>
+							<date type="published" when="2026-04-21">21 April 2026</date>
+						</imprint>
+					</monogr>
+					<idno type="MD5">8933EE89E67BC3FB99220DE62570E1A0</idno>
+					<idno type="DOI">10.1007/s00521-026-11973-9</idno>
+					<note type="submission">Received: 17 August 2025 / Accepted: 3 February 2026 /</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-15T01:44+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Cryptography</term>
+					<term>Deep learning</term>
+					<term>Differential cryptanalysis</term>
+					<term>PRESENT</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>In 2019, Gohr introduced neural-distinguishers as a tool to improve differential cryptanalysis using deep learning. Building on this, we propose an Entropy-based Neural Distinguisher for present that requires significantly fewer input bits and network parameters. Our method identifies relevant bit subsets by analyzing the entropy of output differences between ciphertext pairs. We reduce the distinguisher size by: (i) simplifying the network architecture, and (ii) shrinking the input layer via entropy-based bit selection. Our distinguisher achieves accuracy within 1% (resp. 4%) of the state of the art for 7 (resp. 6) rounds of present, using only 28 out of 64 bits and under 10% of the original parameters. Leveraging this efficient setup, we introduce an iterative key recovery method capable of handling 64-bit round keys-unlike Gohr's 16-bit target. Our approach recovers full keys (64 bits) with 92.8% success (402 out of 433), with all partial recoveries retrieving at least 56 bits and 83.8% retrieving 60 bits or more.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>Symmetric cryptography plays a fundamental role in securing digital communications and data integrity across various domains. Its applications include secure communications, data storage, and authentication protocols. What sets symmetric cryptography apart from other types of cryptography is the use of the same key for both encryption and decryption <ref type="bibr" target="#b0">[1]</ref>. Some of the most popular symmetric-key algorithms are collectively known as block ciphers, since they operate on fixed-size blocks of data. These typically involve applying multiple rounds of a transformation function, which uses a round-specific key derived from the main key via a key schedule <ref type="bibr">[2]</ref>. A particularly popular type of block cipher relies on the substitution-permutation network (SPN), which alternates between substitution stages, using a nonlinear function known as S-Box, <ref type="foot" target="#foot_0">1</ref> and permutation stages to generate ciphertext blocks. In this manner, the cipher achieves confusion and diffusion as per Shannon's principles [3].</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.">Entropy-based bit selection:</head><p>We use Shannon entropy to systematically identify the most informative bit subsets before training. This principled feature selection yields distinguishers that use only 28 of 64 bits while maintaining accuracy within 1-4 percentage points of the state of the art. 2. Compact neural architecture: By reducing both input dimensionality and network depth, our distinguisher requires less than 10% of the parameters used in prior work <ref type="bibr">[8]</ref>, enabling efficient iterative key recovery. 3. First practical 64-bit neural key recovery: We introduce an iterative key recovery method that exploits score saturation-the phenomenon where reduced-input distinguishers assign identical scores to keys differing only in "invisible" bits-to progressively lock in key bits across multiple stages. Our approach achieves a 92.8% success rate (402 out of 433 keys), with all partial recoveries retrieving at least 56 bits and 83.8% retrieving 60 bits or more.</p><p>While the focus of this work is on present, we discuss the generalizability of this approach to other ciphers in Sect. 6. Paper Outline. In Sect. 2 we introduce the present cipher, differential cryptanalysis and how machine learning is employed by neural-differential distinguishers. Section 3 reviews related work and positions our contribution against prior approaches. In Sect. 4.1 we describe the design of an Entropy-based Neural Distinguisher, which relies on an entropy-based selection of a small subset of relevant bits. Next, in Sect. 4.2 we delve into the neural distinguisher design, which takes advantage of the small number of selected bits and simplifies Gohr's proposal by reducing the number of layers in the neural network and the number of nodes and/or filters. As illustrated by the results in Sect. 4.3, with this approach we devise distinguishers that achieve an accuracy within 1% (resp. 4%) for 7 (resp. 6) rounds of present, compared to <ref type="bibr">Gohr et al. [8]</ref>, but using less than half the number of bits (28 out of 64) and a neural network with less than 10% the number of parameters. In Sect. 5 we exploit the Entropy-based Neural Distinguisher to propose an iterative process to recover the secret round key on the 6-round present. Section 6 discusses the key findings and concludes the paper.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Background</head><p>This section summarizes the specification of the cipher present, a brief description of differential attacks, and how machine learning can be used for this type of attack. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">The Cipher PRESENT</head><p>present is a lightweight block cipher that belongs to the substitution-permutation network (SPN) family and comprises 31 rounds. It operates on a block size of 64 bits, and its key size can be either 80 or 128 bits, with the 80-bit version being generally recommended <ref type="bibr" target="#b8">[9]</ref>. A high-level algorithmic view of the cipher is presented in Fig. <ref type="figure" target="#fig_1">1a</ref>. For 31 rounds, the plaintext is iteratively transformed using the operations described by the round function and its corresponding round key, generated by a key schedule. The i-th round function, shown in Fig. <ref type="figure" target="#fig_1">1b</ref>, consists of an XOR operation between the input and the corresponding round key K i , followed by a non-linear substitution layer and a linear bitwise permutation. The substitution layer utilizes a 4-bit S-box, which is applied 16 times in parallel during each round.</p><p>Let us review in more detail each of the three steps that compose the round function depicted in Fig. <ref type="figure" target="#fig_1">1b</ref>. We define the cipher's state as the plaintext processed up to that point.</p><p>• AddRoundKey: Given a round key K i = κ i 63 . . . κ i 0 and the current state b 63 . . . b 0 , this step performs the bitwise operation</p><formula xml:id="formula_0">b j → b j ⊕ κ i j , for 0 ≤ j ≤ 63.</formula><p>Round keys are derived via the key schedule defined in <ref type="bibr" target="#b8">[9]</ref>.</p><p>• S-Box Layer: Each 4-bit word of the state is independently transformed using a fixed nonlinear substitution box (S-box). This S-box is applied to sixteen 4-bit chunks</p><formula xml:id="formula_1">w i = b 4i+3 ∥b 4i+2 ∥b 4i+1 ∥b 4i , for 0 ≤ i ≤ 15,</formula><p>and its specification is detailed in the original PRESENT paper <ref type="bibr" target="#b8">[9]</ref>.</p><p>• Permutation Layer: A fixed bit permutation P(i) is applied to the state, where each bit position i is moved to position P(i) as defined in <ref type="bibr" target="#b8">[9]</ref>.</p><p>A complete specification of the cipher, including the S-box and permutation layer, can be found in the original proposal by Bogdanov et al. <ref type="bibr" target="#b8">[9]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Differential cryptanalysis</head><p>Differential cryptanalysis was introduced in 1991 by Shamir and Biham <ref type="bibr" target="#b4">[5]</ref>, who used it to attack DES. This method exploits the correlation between the bitwise XOR of two plaintexts, which is called input difference, and the corresponding XORed ciphertexts, named output difference. The core of differential cryptanalysis is tracing high-probability differences through the network of round functions, revealing non-random behavior that can be used to recover the secret key. Numerous studies have been conducted to identify input differences that yield the most significant patterns in output differences <ref type="bibr" target="#b9">[10]</ref>. As expected, these critical inputs depend on the cipher. In 1 3 3 particular, the authors in <ref type="bibr" target="#b10">[11]</ref> show a comprehensive analysis for present, identifying the inputs for which this cipher is more vulnerable.</p><p>Another line of research focuses on differential distinguishers. Given an n k -bit key, an n p -bit plaintext, an n c -bit ciphertext, and a cipher modeled by F : {0, 1} n k ×{0, 1} np → {0, 1} nc , a distinguisher tries to decide whether a ciphertext pair originates from a fixed input difference ∆ in , i.e., the pair has the form ( F (k, p), F (k, p ⊕ ∆ in )</p><p>) , or if it is made of two random ciphertexts. If it can make that decision with confidence noticeably better than random guessing, the corresponding round key material is said to exhibit non-random behaviour and becomes a target for key recovery <ref type="bibr" target="#b11">[12]</ref>.</p><p>Importantly, a distinguisher for r rounds is not limited to attacking exactly r rounds. In a standard differentialcryptanalytic key-recovery attack, the distinguisher is embedded as follows:</p><p>1. Collect many ciphertext pairs produced by an (r + 1)-round cipher. 2. Guess the subkey bits of the last round and partially decrypt one round, mapping the pairs back to the r-round state space. 3. Feed the partially decrypted pairs into the r-round distinguisher. Only the correct key guess allows the distinguisher to correctly assert that the decrypted pair originates from the input difference ∆ in , while wrong guesses appear random. 4. Use the distinguisher's scores (or a majority-vote procedure) to keep the best-scoring key guesses and iterate until all subkey bits are recovered.</p><p>This approach, i.e., training a distinguisher on r rounds and using it within a key-recovery attack on r + 1 rounds, is standard practice in differential cryptanalysis <ref type="bibr">[6]</ref>. In this context, distinguishers serve as powerful tools to evaluate whether a key guess aligns the data with expected differential behavior. As we will explore in the following section, recent advances in machine learning have enabled the construction of more effective distinguishers using neural networks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Machine learning and neural-differential distinguishers</head><p>Within the domain of computer science, machine learning (ML) encompasses a diverse set of methodologies that enable computational systems to autonomously extract patterns from datasets. This pattern discovery ability forms the foundation for applications in various areas, including computer vision, natural language processing, and voice recognition. Notably, supervised learning, a subfield of ML, finds application in cryptography, facilitating the identification of encrypted data patterns and the detection of malicious activities. Neural networks, a specific type of ML model, are characterized by their intricate architecture, consisting of layers of nodes interconnected by weights and biases. The training process of these networks involves adjusting both connection weights and biases to minimize a predefined loss function, given by</p><formula xml:id="formula_2">L(θ) = 1 N samples Nsamples ∑ i=1 L(y i , f(x i ; θ)),</formula><p>where N samples denotes the number of samples, y i represents the observed output, f (x i ; θ) the predicted output, and L(y i , f(x i ; θ)) measures the difference between the observed and predicted outputs. The objective of training the neural network is to find the optimal parameters θ * that minimize the loss function, i.e.,</p><formula xml:id="formula_3">θ * = arg min θ {L(θ)}.</formula><p>(1)</p><p>In 2019, Gohr introduced the concept of neural-differential distinguishers based on deep neural networks, particularly utilizing residual convolutional blocks <ref type="bibr">[6]</ref>. This type of distinguisher receives as input a pair (c 1 , c 2 ) of encrypted texts, and must determine whether the pair (c 1 , c 2 ) originates from the difference ∆ in (i.e., c 1 = E(m 1 ),</p><formula xml:id="formula_4">c 2 = E(m 1 ⊕ ∆ in ))</formula><p>or from a random pair of texts. The network architecture proposed by Gohr consists of a 1 3</p><p>preprocessing layer and an initial convolutional layer, followed by ten residual blocks comprising convolutions and batch normalizations, and finally, the prediction head, which consists of densely connected layers that make the final classification decision. In 2022, <ref type="bibr">Gohr et al. [8]</ref> proposed neural distinguishers for several cryptosystems, including present. With an input difference of ∆ in =0x000000000000d00000, they obtained accuracies of 0.712 for 6 rounds of present and 0.563 for 7 rounds. Although some hyperparameters were tuned, the structure of the neural network remained the same as in <ref type="bibr">[6]</ref>.</p><p>In the next section, we propose an Entropy-based Neural Distinguisher that is able to achieve a performance very close to that of [8], but with a much smaller input and network. This smaller distinguisher will be the building block of the key recovery attack introduced in Sect. 5.2.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">State of the art</head><p>This section reviews neural-based approaches to differential cryptanalysis and positions our contribution against prior work.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Neural distinguishers for differential cryptanalysis</head><p>Following Gohr's seminal work [6], several neural-based attacks on lightweight ciphers have been proposed. Baksi et al. <ref type="bibr" target="#b12">[13]</ref> proposed distinguishers for non-Markov ciphers, such as Gimli, Knot and Chaskey. They compared different architectures, concluding that the multi-layer perceptron (MLP) outperforms Convolutional Neural Networks (CNN) and Long Short-Term Memory (LSTM) approaches. Chen et al. <ref type="bibr" target="#b13">[14]</ref> introduced distinguishers that simultaneously process multiple ciphertext pairs to enhance distinguishing accuracy on five ciphers: Speck32/64, Chaskey, present, DES and SHA3-256. In <ref type="bibr" target="#b14">[15]</ref>, the authors developed a polytope neural distinguisher that significantly improved the success rate for eight-round Simon32/64, and proposed an attack method combining the differential path probability with the polytope neural distinguisher. They also introduced a Bayesian Key Research with Error attack, further reducing the computational complexity of key recovery for eleven-round Simon32/64. In <ref type="bibr" target="#b15">[16]</ref>, Bacuieti et al. investigated whether there exists a smaller or better-performing neural network for executing a distinguishing attack. The network proposed displays an accuracy within 1% of the original network thanks to their successful pruning down to a single layer. To find out if preprocessing the input enhances performance, ciphertext pairings were used to train convolutional autoencoders. However, they discovered that the network was no longer able to extract relevant information from the input. Furthermore, they used Local Interpretable Model-Agnostic Explanations (LIME) to examine if all 64 input bits were necessary. They found that no region of the bit space significantly affects the ranking.</p><p>Recent works also explore lightweight cryptanalysis using resource-constrained models inspired by Tiny-ML, such as MIND-Crypt <ref type="bibr" target="#b16">[17]</ref>, which evaluates neural distinguishers against reduced variants of speck and simon using small, portable classifiers. These approaches demonstrate the growing feasibility of ML-based cryptanalysis even in constrained scenarios. A survey on differential cryptanalysis based on machine learning techniques can be found in <ref type="bibr" target="#b18">[18]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Positioning against prior work</head><p>Three works are particularly relevant to our contribution: Gohr et al. <ref type="bibr">[8]</ref>, Wu and Guo <ref type="bibr" target="#b19">[19]</ref>, and Bellini et al. <ref type="bibr" target="#b20">[20]</ref>. We describe their approaches and how our method differs from each.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Gohr et al.</head><p>[8]. In their comprehensive assessment of differential-neural distinguishers [8], Gohr et al. systematically evaluated neural distinguishers across six ciphers including present. Their key findings establish important baselines: (i) the accuracy of a differential-neural distinguisher correlates strongly with the mean absolute 1 3 5 distance between the ciphertext-difference distribution and the uniform distribution; (ii) for key-alternating ciphers like present, only differential features (i.e., output differences) can be exploited under the assumption of independent round keys; and (iii) contrary to claims in prior literature, using multiple ciphertext pairs simultaneously provides at most marginal improvements over combining single-pair scores. For present specifically, they achieved 7-round accuracy of 0.563 using a 10-block residual network with approximately 37,857 parameters, processing all 64 ciphertext bits. Crucially, while they optimized distinguisher accuracy, they did not pursue key recovery attacks on present, noting that such attacks remained limited to ciphers with small round keys (16 bits for SPECK32/64).</p><p>Wu and Guo <ref type="bibr" target="#b19">[19]</ref> proposed an improved integral-neural distinguisher for present. Their approach differs from Gohr's differential setting by exploiting integral (saturation) properties rather than differential characteristics. They introduced a novel data preprocessing format (invP n 0 , . . . , invP n 15 , invS n 0 , . . . , invS n 15 ) that exposes features from the previous round's ciphertext by applying inverse permutation and inverse S-box operations. Combined with a DenseNet architecture enhanced with MBConv (Mobile Inverted Bottleneck Convolution) modules-depthwise separable convolutions with inverted residual connections that reduce parameters while maintaining expressiveness-they achieved 8-round integral distinguisher accuracy of 57.32%, extending beyond Gohr's 7-round differential distinguisher for the first time. Although they demonstrate key recovery on SmallPresent-(8), a 32-bit variant, they do not address key recovery on full present with its 64-bit round keys, leaving the fundamental scalability challenge unresolved. <ref type="bibr" target="#b20">[20]</ref>. The most recent advancement comes from Bellini et al. <ref type="bibr" target="#b20">[20]</ref>, who introduced Generic Partial Decryption (GPD), a method that bridges generic neural approaches with cipherspecific feature engineering. GPD works by decrypting ciphertext pairs using a zero (or random) round key to obtain k-partial differentials, which then serve as input features for training neural distinguishers. This preserves the cipher's deterministic structural properties while remaining general enough to apply across different targets.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Bellini et al.-Generic Partial Decryption</head><p>GPD achieved notable results: for Simon and Simeck, GPD-based multi-pair neural distinguishers reached 12 rounds with 51.56% accuracy. More significantly, GPD enabled the first practical neural key recovery attack on 5-round Aradi, a cipher with a 128-bit round key. However, this attack critically relied on the discovery of Probabilistic Neutral Key Bits (PNKBs)-key bits whose incorrect guesses do not change the distinguisher's prediction. For Aradi, 88 out of 128 last-round key bits were PNKBs, reducing the effective attack space to just 40 non-neutral bits with theoretical complexity 2 40 . Furthermore, experimental validation assumed prior knowledge of 30 key bits to make the attack tractable in practice.</p><p>This represents a significant limitation: the GPD approach's practical key recovery success depends on the target cipher having an unusually large number of neutral key bits-a structural property that cannot be assumed for arbitrary ciphers. For present, GPD's key recovery methodology does not directly transfer without similar structural exploitation. Additionally, GPD's distinguishers remain computationally expensive (using architectures comparable to Gohr's), limiting their applicability for iterative key recovery on large key spaces without neutral bit exploitation.</p><p>In addition to the three previous approaches, it is also important to mention the work of Hou et al. <ref type="bibr" target="#b6">[7]</ref>, which performed a practical key recovery attack against large-size block ciphers, such as round-reduced versions of SIMON32/64 and SIMON48/96, but their round key size is 16 and 24, respectively.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Summary and comparison</head><p>Table <ref type="table">1</ref> summarizes the key differences between our approach and prior work. Our work improves upon prior approaches through three interrelated innovations:</p><p>1. Principled feature selection via entropy analysis. Unlike Gohr et al. <ref type="bibr">[8]</ref>, who use all 64 bits and rely on the neural network to implicitly learn relevant features, and unlike Wu and Guo, whose data format transformations expose derived features without reducing dimensionality, we perform explicit feature selection before training.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">3</head><p><ref type="url" target="https://doi.org/10.1007/s00521-026-11973-9">https://doi.org/10.1007/s00521-026-11973-9</ref> </p><p>By analyzing the Shannon entropy of ciphertext difference distributions, we identify the 28 most informative bits-those exhibiting maximum deviation from uniformity. This approach directly operationalizes Gohr et al.'s theoretical insight that distinguisher accuracy correlates with distributional distance, but applies it constructively for input selection rather than merely for analysis. Bacuieti et al. <ref type="bibr" target="#b15">[16]</ref> attempted post-hoc interpretability using LIME but found no significant bit regions; our entropy-based method succeeds because it analyzes the underlying differential distributions rather than learned network weights. Unlike GPD's partial decryption approach, which preserves input dimensionality while transforming features, our method achieves dimensionality reduction, directly enabling more efficient key recovery. 2. Computational efficiency enabling key recovery. The parameter reduction from entropy-based input selection is not merely an efficiency gain-it is essential for practical key recovery. Gohr's key recovery on SPECK32/64 requires evaluating the distinguisher for each of 2 16 candidate round keys, totaling approximately 2 16 × N forward passes, where N is the number of ciphertext pairs. For present's 64-bit round keys, a naïve extension would require 2 64 evaluations-computationally infeasible regardless of distinguisher efficiency. Our compact architecture (4505 parameters vs. 37,857), combined with an iterative recovery strategy that exploits score saturation, makes this computation tractable. 3. First neural key recovery on 64-bit round keys without neutral bit assumptions. While Gohr [6] demonstrated key recovery on 16-bit round keys and Hou et al. <ref type="bibr" target="#b6">[7]</ref> extended this to 24-bit keys on SIMON48/96, the only prior work achieving key recovery on larger keys is GPD's attack on 128-bit Aradi <ref type="bibr" target="#b20">[20]</ref>. However, that attack fundamentally depends on Aradi having 88 out of 128 Probabilistic Neutral Key Bits, reducing the effective search space to 2 40 , and required prior knowledge of 30 key bits for experimental validation. Our 92.8% success rate on present's 64-bit round keys represents a qualitatively different achievement: we attack the full 64-bit key space without relying on neutral bit exploitation, cipher-specific structural properties, or prior key knowledge. This demonstrates that neural cryptanalysis can scale to realistic key sizes through principled feature selection and architectural efficiency.</p><p>In the next section we introduce the Entropy-based Neural Distinguisher and assess its performance via experimental results.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Bit-reduced entropy based distinguisher</head><p>One of the key challenges in neural-differential distinguishers lies in their training, which is computationally very expensive. To tackle this challenge, we seek to reduce the size of the neural distinguisher in two fundamental ways: (i) by modifying its architecture, which includes its layers, number of nodes, and number of filters and/or filter size of the convolutional blocks; and (ii) by reducing the input size, which is done by reducing the number of bits of the ciphertext pair. While the former has been considered before, the latter is a contribution of this paper. Input reduction is particularly important for present, which has a 64-bit block size, resulting in a 128-bit input for the distinguisher when using ciphertext pairs. Identifying relevant bits through inspection is inherently challenging, as cryptographic algorithms are deliberately designed to obscure the relationships between input and output bits. For example, the authors in <ref type="bibr" target="#b15">[16]</ref> employed Local Interpretable Model-agnostic Explanations (LIME) to analyze the importance of input features for the speck distinguisher. However, this analysis did not reveal any bits as significantly more relevant than others, underscoring the limitations of traditional techniques Method Input Params Key recovery Assumptions Gohr et al. <ref type="bibr">[8]</ref> 64 bits 37,857 16-bit (SPECK) None Wu and Guo <ref type="bibr" target="#b19">[19]</ref> 64 (transf.) &gt;50k 32-bit (SmallPresent) None GPD <ref type="bibr" target="#b20">[20]</ref> 64 bits ∼40k 128-bit (Aradi) 88/128 PNKBs, 30 known bits This work 28 bits 4505 64-bit (PRESENT) None Table <ref type="table">1</ref> Comparison with prior neural distinguisher and key recovery approaches 1 3 7 in uncovering meaningful patterns within cryptographic data. Instead, to select the most relevant bits to train the distinguishers, we propose to use entropy as a measure of the distance between the bit distribution observed and the baseline uniform distribution. In this manner, we obtain a measure of the amount of information preserved in a bit subset. The next section describes in detail how this metric is used to select the most important bits to train the distinguisher. All the experiments described here utilize the same input difference as in <ref type="bibr">[8]</ref>. In Table <ref type="table" target="#tab_0">2</ref> we provide a comprehensive overview of the notation and symbols used in this section. Although there is no notational conflict across sections, we include this table to enhance readability and clarity.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Selecting the bits</head><p>Given a known input difference, the idea of the Entropy-based Neural Distinguisher is to identify the subsets of bits of the output difference that exhibit the most prominent patterns, i.e., those whose probability distribution has minimal uncertainty. Thus, one way to detect relevant bit subsets is by using a measure of the distance between the distribution of those bits and the uniform distribution, used as baseline. In our case, we employ Shannon entropy as the measuring criterion. Shannon entropy, denoted as H(X), quantifies the uncertainty associated with a discrete random variable X that takes values in the set X following a probability distribution q. It is expressed as [21, Ch. 2] H(X) = -</p><formula xml:id="formula_5">∑ x∈X q(x) log 2 q(x).<label>(2)</label></formula><p>A lower value of H(X) corresponds to a greater distance from the uniform distribution, and thus corresponds to a more noticeable pattern.</p><p>To illustrate the bit selection method, we start with a distinguisher that uses only three relevant bits. We will show that even just 3 bits out of 64 already provide significant information about the behavior of the cipher. In this case, we use 5-round present and input difference ∆ in = 0x0000000000d00000. Our goal is to detect the 3 most relevant bits of the output difference. Thus, we begin by calculating the entropy of each potential triplet of bits belonging to the output difference. Since this difference is a sequence of 64 bits, there exist</p><p>( 64 3 ) possible triplets.</p><p>According to Eq. ( <ref type="formula" target="#formula_5">2</ref>), computing the entropy requires knowledge of the probability distribution of the triplets. We estimate this distribution using histograms constructed from a sample of 50,000 pairs of encrypted messages. We use triplets (m t = 3) rather than pairs or quadruplets for a principled reason: pairs (m t = 2) provide insufficient discrimination-with only 4 possible values per pair, the entropy differences between bit combinations are too coarse to reliably identify informative positions. Quadruplets (m t = 4) would yield finer discrimination but require evaluating</p><p>( 64 4 ) ≈ 635,000 combinations, making the computation prohibitively expensive. Triplets Symbol Description H(X) Shannon entropy X Discrete random variable X Set of X values q Probability distribution ∆ in Input difference ∆out i Output difference for bit i tp True positive rate tn True negative rate nt and mt Number of elements in tuple r Number of cipher rounds n pairs Number of plaintext or ciphertext pairs t Minimum-entropy triplets of bits n Unique relevant input bits = 41,664 combinations) strike a practical balance. The sample size of n pairs = 50,000 ensures reliable histogram estimation: since each triplet has 2 3 = 8 possible values, this provides approximately 50,000/8 ≈ 6,250 expected samples per bin under the uniform distribution, sufficient for stable entropy estimates. Figure <ref type="figure" target="#fig_2">2</ref> shows the entropy of each possible bit triplet, where we observe that some of them (located below the dashed line) exhibit significantly lower entropy than the others. In fact, comparing the entropy of bit subsets offers a potential method that can be applied as a security check for symmetric ciphers to assess vulnerability to differential cryptanalysis. A significant entropy gap observed between bit subsets (like the one shown in Fig. <ref type="figure" target="#fig_2">2</ref>) might suggest a potential weakness in the cipher's obfuscation mechanism. This entropy disparity indicates that randomness is not uniformly distributed across the ciphertext bits. Consequently, as in the procedure proposed in this paper, an attacker could strategically target the lower entropy bit subsets, which exhibit higher predictability, thereby simplifying differential attacks and compromising the cipher's security.</p><p>As an example, in the case of 5-round present, the low-entropy triplets in Fig. <ref type="figure" target="#fig_2">2</ref> are the most attractive for use in our 3-bit distinguisher. Consider the minimum entropy triplet made of bits 2, 18, and 50 from the output difference, which we denote as ∆ out2 , ∆ out18 and ∆ out50 , respectively. The histogram associated with this triplet is shown in Fig. <ref type="figure">3</ref>. Observe that the combinations (0, 0, 0) and (0, 1, 1) are the most likely for this triplet. Hence, it is possible to build a distinguisher as follows: if (∆ out2 , ∆ out18 , ∆ out50 ) ∈ {(0, 0, 0), (0, 1, 1)}, then the output difference ∆ out comes from the input difference ∆ in = 0x0000000000d00000; otherwise, it does not.</p><p>The proportion of output differences that result from the specified ∆ in and are correctly identified by the distinguisher is called the true positive rate, t p . For the example 3-bit distinguisher, t p can be estimated from the data shown in Fig. <ref type="figure">3</ref> as</p><formula xml:id="formula_6">t p = q(0, 0, 0) + q(0, 1, 1) ≈ 0.3943.</formula><p>Besides, the proportion of output differences that the distinguisher correctly identifies as coming from random samples is called true negative rate, t n . In this example, t n can be approximated as the ratio between the triplet combinations that are different from (0, 0, 0) or (0, 1, 1) to the total number of possible combinations, i.e., t n = 6 8 . Therefore, for balanced samples (with an equal number of output differences from the specified input difference and random output differences), the accuracy of our 3-bit distinguisher is the average between t p and t n [22], which is approximately 0.5721. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">3</head><p>The accuracy of the example 3-bit distinguisher is low compared to the full-bit distinguishers for roundreduced present reported in [8]. To improve accuracy, we look to build distinguishers that use a larger number of bits. Nevertheless, we cannot use the same design method described earlier. There are two key issues. First, computing the entropy of all possible n t -tuples of bits is problematic when n t is large. For instance, if n t = 8, there are around 4.4 × 10 9 n t -tuples. Each sample requires computations such as calculating histograms and entropies, and as the number of possible combinations increases, the workload naturally grows. This results in high memory usage to store intermediate results and increased computational time to perform the necessary operations.</p><p>Second, defining the patterns that the distinguisher should detect cannot be done manually from histograms if n t is large. This is because the number of pairs of encrypted messages required to construct a histogram of n t -bit combinations grows double-exponentially with n t . In fact, following Sturges' rule <ref type="bibr" target="#b23">[23]</ref>, the histogram needs 2 2 n t -1 data points.</p><p>To address the first issue, rather than calculating the entropy for all possible n t -tuples and then selecting the one with the lowest entropy, we propose the following method to estimate the n t -tuple that exhibits the most prominent pattern:</p><p>1. Choose m t &lt; n t and calculate the entropy for all possible m t -tuples. 2. Form the n t -tuple from the bits that belong to at least one of the m t -tuples with the lowest entropy.</p><p>There is a trade-off in the selection of m t . The closer m t is to n t , the better the estimation of the n t most relevant bits because the entropy of the m t -tuples has the potential to capture more patterns when m t is larger. However, the larger the value of m t , the larger the computational burden to obtain the entropy of m t -tuples.</p><p>In the case of present, we perform this procedure using triplets of bits, i.e., m t = 3. This choice provides a balance between computational cost and with the goal to study larger subsets of bits. Quadruplets would provide further information and more detailed insights on the behavior of those subsets of bits, but the number of combinations makes this choice computationally very expensive. However, studying triplets provided good results for our experiments with present. Algorithm 1 illustrates the approach in more detail, using n pairs = 50, 000 and the same input difference ∆ in = 0x0000000000d00000 as in the 3-bit distinguisher example. 1 3 10 305 Page 10 of 23 Neural Computing and Applications (2026) 38:305 <ref type="url" target="https://doi.org/10.1007/s00521-026-11973-9">https://doi.org/10.1007/s00521-026-11973-9</ref> Algorithm 1 Selection of Relevant Bits</p><p>Once the relevant bits are selected, the second challenge is to construct the distinguisher. As stated before, a histogram-based construction is problematic. Therefore, we train a neural distinguisher using machine learning as described in the next section.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Neural distinguisher design</head><p>The bits selected with the method described in the previous section are used as input to a neural network that must classify an input pair as either resulting from a given difference or as random, as in <ref type="bibr">[6,</ref><ref type="bibr">8]</ref>. Figure <ref type="figure" target="#fig_4">4a</ref> displays the architecture of the neural distinguisher presented by Gohr for present, and Fig. <ref type="figure" target="#fig_4">4b</ref> specifies the details of each block <ref type="bibr">[8]</ref>. The network is made of a preprocessing layer, followed by a bit-sliced layer, ten residual block layers and a prediction head. With the hyper-parameter configuration proposed in <ref type="bibr">[8]</ref>, as listed in Table <ref type="table">3</ref>, the network comprises a total of 37,857 parameters.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Remark.</head><p>Bacuieti et al. <ref type="bibr" target="#b15">[16]</ref> investigated parameter reduction techniques for the distinguishers introduced by <ref type="bibr">Gohr [6]</ref> for Speck32/64, focusing on pruning the network's weights. They successfully pruned 90% of the weights in both depth-10 and depth-1 networks without causing a significant reduction in performance. This was </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">3</head><p>achieved using two distinct methods: one-shot pruning and iterative pruning, supplemented by a thorough analysis of activation maps. Rather than training the full network and later pruning it, our approach directly modifies the network's hyperparameters prior to training.</p><p>To reduce the number of parameters, we start with the same input, made of 64-bit pairs (c 1 , c 2 ), but reduce the network size to 1 residual block, 12 neurons in each dense layer, 28 filters in the convolutional blocks, and an L2 regularization parameter of 6.4 × 10 -7 , as detailed in Table <ref type="table">3</ref>. These modifications result in a total number of trained parameters of 4505, representing a reduction of nearly 90%. The reduction in depth from 10 residual blocks to 1 reflects our finding that for round-reduced ciphers, the differential patterns do not require very deep representations. Training for 50 epochs with this setup, we obtained an accuracy of 0.7073 (resp. 0.5617) for 6 (resp. 7) rounds of present. These results are comparable to Gohr's, who achieved an accuracy of 0.712 and 0.563 for 6 and 7 rounds, respectively. Despite using significantly fewer input bits and a much smaller neural network, our approach achieves similar performance, demonstrating the effectiveness of our entropy-based bit selection method.</p><p>We follow Gohr's training methodology [6] with the Adam optimizer and a cyclic learning rate (CLR) schedule of period 10 epochs, linearly annealing from lr high = 2×10 -3 to lr low = 10 -4 within each cycle. We use a batch size of 5000 with balanced classes, training on 10 7 samples with 10 6 held out for validation. The best checkpoint is saved based on validation loss. The loss function is mean squared error (MSE), consistent with [6]. Hyperparameter sensitivity analysis revealed that L2 regularization in the range (6.0-6.6)×10 -7 is the most critical factor; values outside this range cause significant accuracy degradation. Dense-layer width beyond 12-32 neurons provides no consistent improvement, and filter count variations (24-32) have minimal impact when L2 is properly tuned. All experiments used a fixed random seed for reproducibility; the code and trained models are available at the repository <ref type="bibr" target="#b24">[24]</ref>.</p><p>Next, we reduced the neural network input size by applying the entropy-based process proposed in Sect. 4.1 to select a subset of bits in each of the input ciphered messages c 1 and c 2 . The resulting message size is variable as it depends on the number of low-entropy triplets selected and their common bits. As a result, a modification to the pre-processing layer in the neural network is necessary to process data in this shortened format. The pre-processing layer proposed in <ref type="bibr">[6,</ref><ref type="bibr">8]</ref> organizes the data into a matrix of size (2 × num_blocks, word_size), which for present is a matrix of size (32, 4). By selecting fewer bits with the entropy-based process, we cannot guarantee the total number of bits to be divisible by 4, but, by construction, it is always divisible by 2. This is because we choose n bits for both c 1 and c 2 , totaling 2n bits for the input, as Fig. <ref type="figure" target="#fig_5">5</ref> demonstrates. Therefore, we organize the input into a matrix of size (total bits/2, 2). In the following sections, we will use the terminology n-bit distinguisher to refer to a neural distinguisher trained with n bits out of 64 for each ciphertext of the pair.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Results of the entropy-based neural distinguisher</head><p>As expected, training with fewer bits results in a reduction in the accuracy of the distinguishers. However, as depicted in Tables <ref type="table">4</ref> and <ref type="table" target="#tab_1">5</ref> for rounds 7 and 6, respectively, the accuracies are close to the full-size distinguisher, while dramatically reducing the training time. For 7 rounds, training with less than half the bits, specifically 28 out of 64 bits, reduces the accuracy by only one percentage point. With the same number of bits, for 6 rounds the</p><p>Hyperparameter Gohr PRESENT [8] Bit-reduced distinguisher Epochs 80 50 Depth 10 1 Neurons 64 12 Number of Filters 32 28 L2 (×10 -8 ) 62 64 Total # of Parameters 37,857 4505 Accuracy 0.563 0.5623 Table 3 Comparison of hyperparameters and accuracy for 7-round present 1 3 <ref type="url" target="https://doi.org/10.1007/s00521-026-11973-9">https://doi.org/10.1007/s00521-026-11973-9</ref> </p><p>reduction is slightly greater, as an accuracy of 0.6748 is obtained, representing a reduction of 3 percentage points compared to the full input, smaller network proposed in Sect. 4.2, and 4 percentage points compared to <ref type="bibr">Gohr et al. [8]</ref>. For the distinguishers built for 7 rounds of present, the number of neurons and filters were slightly modified, seeking to increase the network accuracy. Table <ref type="table">4</ref> displays the results obtained modifying these two hyperparameters. For 6 rounds, the results with different number of bits, 12 neurons and 28 filters are summarized in Table <ref type="table" target="#tab_1">5</ref>.</p><p>We observe that the behavior of the accuracy is neither linear nor monotonic with respect to the number of bits used for training, as also captured in Fig. <ref type="figure">6</ref>. It appears that certain bits contain more information than others, such that, occasionally, increasing the number of bits may confuse the distinguisher due to the inclusion of less significant information. We also trained smaller distinguishers for 5 rounds of present to conduct a test for key recovery employing the attack in Sect. 5. Using the same configuration as for round 6, we obtained an accuracy of 0.8436 and 0.8410 for distinguishers with 30 and 36 bits out of 64, respectively. By training with Gohr's configuration, an accuracy of 0.8793 is obtained in comparison.</p><p>In the next section, we exploit these reduced distinguishers (specifically the 30 and 36 bit versions) to attack 6 rounds of present and find all 64 bits for this round key. This is performed with an iterative approach in which each small distinguisher developed in this section allows us to find and fix certain sets of key bits, reducing the search space.  1 3 13</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Bits</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Accuracy</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">Key recovery</head><p>While neural distinguishers have been explored for present, key recovery remained elusive due to the 64-bit round key size. Gohr's attack on 16-bit speck round keys is not scalable. We instead design an iterative entropyguided method to recover present's larger key. For ease of reference, Table <ref type="table" target="#tab_2">6</ref> summarizes the notation employed in this section. Before introducing the key recovery attack on present, let us recall the attack schema proposed by Gohr for r rounds of speck [6]:</p><p>1. For n pairs chosen plaintext pairs P 1 , . . . , P npairs , such that each pair has a specified difference, request encryptions for r rounds, obtaining C 1 , . . . , C npairs . 2. For each possible value K r of the final key, decrypt the C i one round backwards to get C Kr i . 3. Use the neural-distinguisher N for r -1 rounds to get scores Z Kr i for each partially decrypted pair, such that</p><formula xml:id="formula_7">Z Kr i = N (C Kr i ).</formula><p>Notice that Z Kr i ∈ (0, 1).  into one score v Kr for each K r , using the following formula to estimate the odds of each possible key K r :</p><formula xml:id="formula_8">v Kr := npairs ∑ i=1 log 2 ( Z Kr i / ( 1 -Z Kr i ))</formula><p>.</p><p>(3) 5. Sort the candidate round keys in descending order according to their score v Kr . The real key should have the highest score.</p><p>To improve the efficiency of the attack, Gohr proposes using Bayesian optimization <ref type="bibr" target="#b25">[25]</ref> to construct a key search policy. However, this strategy requires to precompute 2 key size data, which in the case of present is impractical in terms of computational time and memory. In the absence of an optimization method to guide the key search, another approach is a random search in the present key space (2 64 ) with a full-bit distinguisher. This option however is also infeasible with the traditional methods studied by Gohr in his speck32/64 attack due to the very large search space.</p><p>To overcome this limitation, below we present a new strategy for the key-recovery attack, which uses the Entropy-based Neural Distinguishers with reduced bits introduced in the previous section. In Sect. 5.1, we introduce the reasoning behind the proposed iterative attack, emphasizing the effect of bit reduced distinguishers on the key score and how these distinguishers can be used for finding some key bits. Next, in Sect. 5.2 we propose a general algorithm for key-recovery using the Entropy-based Neural Distinguishers, and use it to perform a practical key-recovery attack on 6-round present in Sect. 5.3.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Effect of entropy-based neural distinguishers on the key recovery attack</head><p>When employing Entropy-based Neural Distinguishers for the key recovery attack discussed in the preceding section, a notable phenomenon arises: key candidates with identical bit values at specific positions yield the same score v Kr . We refer to this phenomenon as score saturation since it becomes impossible to surpass this cap. The reason is that when performing the decryption step by means of the round key candidates (step 2 of Gohr's Algorithm, described in the previous section), only specific bit positions of these keys can modify the relevant bits of the difference output, which are the input to the reduced distinguisher. In other words, some bits of the round key do not impact the distinguisher's result. Consequently, when using Entropy-based Neural Distinguishers, we are only able to identify certain bits of the round key.</p><p>Taking advantage of the previous observation, we propose the following method to recover a subset of bits of the round key:</p><p>1. Set a threshold for the key score v Kr . 2. Select the subset of keys that exceed the threshold. 3. Compare the bits of the candidate keys selected in the previous step, establishing a voting system such that if a significant percentage of these keys concurs on a bit at a specific position, that bit is set and accepted as correct.</p><p>The choice of the score threshold v Kr is critical for the success of the voting procedure. If the threshold is set too low, incorrect key candidates with spuriously high scores may be included, introducing noise into the voting system and potentially corrupting bit decisions. Conversely, if the threshold is set too high, too few candidates will pass the filter, yielding an insufficient sample size for reliable voting and increasing the risk that statistical fluctuations lead to incorrect bit assignments. Both the selection threshold and the voting percentage threshold must be tuned by the attacker, by observing the behavior of the key candidates and their scores. To select the thresholds it is advisable to identify suitable candidates based on the observed score distribution. Typically, a boxplot reveals clusters of keys with notably higher scores, and this information can be used to set the threshold. Figure <ref type="figure">7</ref> presents a boxplot illustrating the score distribution for a small set of candidate keys when using a 9-bit distinguisher. The optimal value, representing the score of the actual key, is also marked. The points on the 1 3 15 red line indicate 26 candidate keys with the highest score, which is indeed the same score obtained by the real key. Furthermore, all these top-scoring keys agree on 12 specific bits. Therefore, according to the proposed method, these 12 bits are accepted as correct. To recover the remaining 52 key bits (64 total minus 12 identified), we can randomly generate a new set of keys where the 12 previously identified bits are fixed, and iterate Gohr's scoring process and our voting system.</p><p>However, as we continue these iterations, the 9-bit distinguisher eventually fails to differentiate between the new sets of candidates, as they all attain the same maximum score. We refer to this situation as complete score saturation. The number of bits that can be determined depends on the distinguisher bit size. In our experiments, the 9-bit distinguisher enables the determination of approximately 12 bits before complete score saturation prevents further bit identification. Distinguishers with more bits can recover a larger number of key bits. For instance, a 19-bit distinguisher is capable of identifying 19 bits under identical conditions. However, finding key candidates with good scores for the voting system becomes more difficult, since the score range becomes larger and the search times longer.</p><p>In summary, distinguishers that use few bits can quickly identify a small number of key bits. On the other hand, distinguishers with more bits can identify a larger number of key bits, but they require more time to complete the task. It is worth mentioning that quickly setting some bits reduces the search space, making each random search for candidate keys increasingly faster, as opposed to attacking the entire 2 64 space with a single full bit distinguisher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Iterative recovery process</head><p>We now define a general process based on the previous insight that iteratively uses Entropy-based Neural Distinguishers to recover key bits. The proposed approach iteratively uses the process defined in Algorithm 2 and Algorithm 3. The objective is to first use n-bit distinguishers with a small n in Algorithm 2. If n is sufficiently small, the key scores will saturate quickly, but will allow us to fix some key bits, which we refer to as knownBits, reducing the key search space. Once the reduced distinguisher reaches complete score saturation, i.e., every key candidate reaches the same maximum score, the attacker can switch to an m-bit distinguisher, with m &gt; n, and repeat the process. This iterative approach reduces the search space in each step, until the last remaining bits can be found with a brute force attack using the full-bit distinguisher. This final step involves iterating through all Fig. <ref type="figure">7</ref> Candidate key scores for 6-round present using the 9-bit distinguisher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">3</head><p>possible remaining key candidates and computing their score. The real key will be the one with the highest score. The brute force step must be performed with the full-bit distinguisher since an Entropy-Based Neural Distinguishers with reduced bits will suffer from complete score saturation.</p><p>Notice that, in Algorithm 3, 32 random keys are generated in each iteration. This parameter is taken from Gohr's implementation [6], although it can be tuned depending on the computing capabilities available. The specific values of the parameters used in the algorithms must be chosen by the attacker according to the cipher and the number of rounds being attacked, as well as the behavior of the n-bit distinguisher. Tuning these hyperparameters requires experimentation to define thresholds that provide good results for the voting procedure.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 2 General Threshold-Based Key Recovery</head><p>Algorithm 3 Key Random Search The threshold value (u * ) in Algorithm 2 is initially set based on exploratory analysis of the score distribution produced by the Entropy-based Neural Distinguisher (N ), as described next.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Practical threshold selection.</head><p>The threshold u * and minimum key count n keys are chosen as follows:</p><p>1. Initial calibration: Run a preliminary search with a few thousand random keys to observe the score distribution (e.g., Fig. <ref type="figure">7</ref>). Set u * to separate the top-scoring cluster from the bulk. 2. Dynamic adjustment: If fewer than n keys candidates exceed u * after the maximum iterations, lower u * by a fixed decrement (e.g., 100) and retry until enough candidates are found. 3. Progressive tightening: As more bits are fixed, raise both u * and the voting agreement percentage (from 70% to 95%) to maintain reliability.</p><p>Table <ref type="table">8</ref> lists the specific values used in our experiments. These were determined empirically but follow a simple principle: early iterations use looser thresholds to quickly fix high-confidence bits, while later iterations use stricter thresholds to avoid committing errors.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">3</head><p><ref type="url" target="https://doi.org/10.1007/s00521-026-11973-9">https://doi.org/10.1007/s00521-026-11973-9</ref> </p><p>For these experiments, we used a custom server equipped with 2 Intel Xeon Silver 4310 CPUs (48 cores, 96 threads), 251 GiB RAM, and 4 NVIDIA A40 GPUs (46 GiB memory each), of which only one GPU was utilized, running on CUDA 12.6. To obtain all 64 bits of the round 6 key in present, we used the proposed iterative approach with 30-bit and 36-bit distinguishers, followed by a full-bit distinguisher, all these trained for 5-round present.</p><p>In the following description, we will employ a maximum of 12,000 iterations for Algorithm 3 and we use the following thresholds: u 1 = 2000, u 2 = 10, 000, u 3 = 12, 500, u 4 = 12, 800, and u 5 = 12, 500, which proved effective in our experiments. Table <ref type="table">8</ref> summarizes our chosen parameters, where the voting percentage refers to the fraction of keys above the threshold that must match on a bit for it to be accepted as true, and n keys represents the minimum number of keys required for voting.</p><p>The key recovery process begins with the 30-bit distinguisher. Through several experiments we found that the candidate keys agree correctly on the bits whose positions are multiples of 4. In this manner, with the voting  1 3 19 mechanism, 16 of 64 bits are set. Keeping these bits fixed and iterating again, we modify the stopping condition so that it finds at least 10 keys above the threshold u 2 . Once more, at this point we find that the bits on which the keys agree are the even bits, thus setting 32 bits. By repeating this process with slightly higher thresholds (u 3 and u 4 ), approximately 44 bits out of 64 can be found. At this point we observe that the score for the 30-bit distinguisher is saturated. By iterating once with the 36-bit distinguisher we obtain more than 50 bits (in our experiments usually around 52). At this step, the number of bits that remain to be found is sufficiently small to be handled with a brute force approach, iterating over every remaining key candidate left (around 2 12 keys), using the distinguisher trained with all the bits. The recovered key is the one with the highest score.</p><p>Most of the computational time used by the proposed method is consumed by the first and second iteration, when very few bits of the key have been set, and therefore, most of the bits must be generated randomly. On average, these two steps account for 83% of the total key recovery time. Using the Entropy-based Neural Distinguishers to iteratively fix bits and reduce the search space allows us to systematically recover the entire key. This approach contrasts with iterating over random candidate keys using the full-bit distinguisher, since the search space is very large (2 64 ) and the chances of finding a key with a high enough score are very low.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">Discussion and concluding remarks</head><p>This work addresses a fundamental scaling problem in neural cryptanalysis: extending key recovery from small round keys (16 bits in prior work) to the 64-bit round keys of present, a 2 48 -fold increase in search space. We make three main contributions:</p><p>1. Entropy-based bit selection: By measuring Shannon entropy across bit triplets of the output difference, we identify the most informative ciphertext positions. Distinguishers using only 28 of 64 bits achieve accuracy within 1-4 percentage points of state-of-the-art methods while reducing parameters by 88% (from 37,857 to 4505).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.">Iterative key recovery via score saturation:</head><p>We exploit the fact that reduced-input distinguishers assign identical scores to keys differing only in "invisible" bits. This enables progressive bit recovery through voting, turning an infeasible 2 64 search into a sequence of tractable subproblems. 3. Practical 64-bit key recovery: Our attack achieves 92.8% success (95% CI: [90.0%, 94.9%]) on 6-round present, using 2 12.55 chosen plaintexts and 2 28 partial decryptions, orders of magnitude below classical integral attacks.</p><p>Although our experiments focus on present, the entropy-based methodology is cipher-agnostic. The core idea, measuring Shannon entropy across bit subsets of the output difference to identify structured, non-random behavior, applies whenever a cipher exhibits differential bias that propagates unevenly across output positions. The method is most directly applicable to other substitution-permutation network (SPN) ciphers such as gift <ref type="bibr" target="#b27">[27]</ref>, skinny <ref type="bibr" target="#b28">[28]</ref>, or reduced-round AES, which share present's structural property that S-box outputs influence specific bit positions. For addition-rotation-XOR (ARX) ciphers like speck and simon, the algebraic structure differs, since modular addition creates carry-dependent bit interactions, but the entropy method remains applicable. Notably, Gohr's original work [6] on speck did not employ bit selection, suggesting potential for improvement. For 128-bit block ciphers, the entropy computation over all</p><formula xml:id="formula_9">( 128 3 )</formula><p>triplets remains tractable, and the score-saturation phenomenon should still enable progressive bit recovery despite the larger round-key space.</p><p>Several limitations warrant discussion. The entropy-based bit selection relies on histogram estimates from a finite sample (n pairs = 50,000), which may introduce slight misranking of bit importance due to sampling variance. All experiments use a single input difference (∆ in = 0x0000000000d00000); different input differences would yield different bit subsets and potentially different attack performance. Our experiments target 80-bit present with 64-bit round keys; the 128-bit key variant may require threshold recalibration. For rounds beyond 1 3 6, distinguisher accuracy drops significantly (to ∼0.56 for 7 rounds), making reliable voting difficult. Finally, failures concentrate on specific bit positions (bits 10, 26, 42) sharing intra-S-box position 2, suggesting targeted refinements such as position-specific voting thresholds could further improve success rates.</p><p>Future work. Several directions merit investigation: (i) extending the attack to 7-8 rounds through higheraccuracy distinguishers or modified voting strategies; (ii) automating threshold selection via meta-learning or reinforcement learning; (iii) combining neural distinguishers with classical algebraic or integral attacks for hybrid cryptanalysis; (iv) applying the entropy-based methodology to other lightweight ciphers (gift, skinny, ASCON); and (v) developing theoretical frameworks connecting entropy-based bit selection to classical differential trail analysis.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Neural</head><figDesc>Computing and Applications (2026) 38:305 https://doi.org/10.1007/s00521-026-11973-9</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Fig. 1</head><label>1</label><figDesc>Fig. 1 present cipher.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 2</head><label>2</label><figDesc>Fig. 2 Bit-triple entropy.</figDesc><graphic coords="9,213.02,496.58,331.22,195.86" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 3 3 10 305 9 Algorithm 1</head><label>3330591</label><figDesc>Fig.3Probability distribution of the triplet with minimum entropy (2, 18, 50).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>Fig. 4</head><label>4</label><figDesc>Fig. 4 Overview of Gohr et al.'s network.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head>Fig. 5</head><label>5</label><figDesc>Fig. 5 Selection of n input bits for each ciphertext.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6"><head>Fig. 6 9 4.</head><label>69</label><figDesc>Fig. 6 Accuracy of the bit-reduced distinguishers. The dashed lines indicate the accuracy achieved by the full network proposed by Gohr et al. [8], and the dotted lines indicate our reduced-size network using all 64 bits.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7"><head>Fig. 9</head><label>9</label><figDesc>Fig.<ref type="bibr" target="#b8">9</ref> Statistical analysis of incorrect key predictions.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 2</head><label>2</label><figDesc>Summary of Notation for Sect. 4</figDesc><table><row><cell>1 3</cell></row></table><note><p>Neural Computing and Applications (2026) 38:305 https://doi.org/10.1007/s00521-026-11973-9</p></note></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 5</head><label>5</label><figDesc>Test accuracy results for 6-round present</figDesc><table><row><cell>Bits</cell><cell>Accuracy</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 6</head><label>6</label><figDesc>Summary of notation for Sect. 5</figDesc><table><row><cell>Symbol</cell><cell>Description</cell></row><row><cell>r</cell><cell>Number of cipher rounds</cell></row><row><cell>n pairs</cell><cell>Number of plaintext (or ciphertext) pairs</cell></row><row><cell>P i</cell><cell>Plaintext pair</cell></row><row><cell>C i</cell><cell>Ciphertext pair</cell></row><row><cell>K i</cell><cell>Round i key</cell></row><row><cell>N n</cell><cell>Neural distinguisher Number of input bits</cell></row><row><cell>n-bit distinguisher</cell><cell>Distinguisher trained with n out of 64 bits</cell></row><row><cell>N</cell><cell>Maximum number of iterations</cell></row><row><cell>u, u  *</cell><cell>Score thresholds</cell></row><row><cell>n keys</cell><cell>Number of keys to exceed threshold</cell></row><row><cell>knownBits</cell><cell>Key bits found by the iterative process</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 7</head><label>7</label><figDesc>Computational complexity comparison</figDesc><table><row><cell></cell><cell>Metric</cell><cell>Our attack</cell><cell></cell><cell>Integral [26]</cell></row><row><cell></cell><cell>Chosen plaintexts</cell><cell>2 12.55</cell><cell></cell><cell>2 22.4</cell></row><row><cell></cell><cell>Partial decryptions</cell><cell>2 28</cell><cell></cell><cell>2 41.7</cell></row><row><cell></cell><cell>Offline training Online wall-clock</cell><cell>∼1 h ∼103 min</cell><cell></cell><cell>N/A N/A</cell></row><row><cell>Table 8 Key recovery</cell><cell>Iteration</cell><cell>n keys</cell><cell>u *</cell><cell>Voting (%)</cell></row><row><cell>parameters for the 30-bit and 36-bit distinguishers</cell><cell>30-bit distinguisher 1</cell><cell>5</cell><cell>2000</cell><cell>70</cell></row><row><cell></cell><cell>2</cell><cell>10</cell><cell>10,000</cell><cell>70</cell></row><row><cell></cell><cell>3</cell><cell>10</cell><cell>12,500</cell><cell>90</cell></row><row><cell></cell><cell>4</cell><cell>20</cell><cell>12,800</cell><cell>95</cell></row><row><cell></cell><cell>36-bit distinguisher</cell><cell></cell><cell></cell><cell></cell></row><row><cell></cell><cell>1</cell><cell>10</cell><cell>12,500</cell><cell>90</cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="1" xml:id="foot_0"><p>A substitution box is a non-linear function used to replace input bits with output values according to a fixed, predefined table, or a specified function.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" xml:id="foot_1"><p>Neural Computing and Applications (2026) 38:305 https://doi.org/10.1007/s00521-026-11973-9</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" xml:id="foot_2"><p>Neural Computing and Applications (2026) 38:305</p></note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><head>Acknowledgements</head><p>The authors would like to thank the <rs type="funder">Vice Presidency of Research &amp; Creation's Publication Fund</rs> <rs type="institution">at Universidad de los Andes</rs> for its financial support.</p></div>
+			</div>
+			
+			<div type="funding">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Funding</head><p>No funding was received for this work.</p></div>
+			</div>
+
+
+			<listOrg type="funding">
+			</listOrg>
+
+			<div type="availability">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Data availability</head><p>All data and materials supporting the findings of this study are openly available at Zenodo at the persistent identifier <ref type="url" target="https://doi.org/10.5281/zenodo.16826468">h t t p s : / / d o i . o r g / 1 0 . 5 2 8 1 / z e n o d o . 1 6 8 2 6 4 6 8</ref>. Access is provided via the DOI URL. The repository contains the d a t a s e t s and the scripts needed to reproduce the reported results (subject to the license terms indicated in the repository record).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Code availability</head><p>Code is available together with the data at the same Zenodo record cited above ( <ref type="url" target="https://doi.org/10.5281/zenodo.16826468">h t t p s : / / d o i . o r g / 1 0 . 5 2 8 1 /  z e n o d o . 1 6 8 2 6 4 6 8</ref>).</p></div>
+			</div>
+
+
+			<div type="conflict">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Conflict of interest</head><p>The authors declare no conflict of interest.</p></div>
+			</div>
+
+
+			<div type="contribution">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Author contributions</head><p>All authors contributed equally to the conception and design of the study, development of the entropy-based neural distinguisher, implementation of experiments, analysis and interpretation of results, and manuscript preparation. All authors read and approved the final manuscript.</p></div>
+			</div>
+
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p><ref type="url" target="https://doi.org/10.1007/s00521-026-11973-9">https://doi.org/10.1007/s00521-026-11973-9</ref> </p><p>In summary, the proposed strategy for the key recovery attack on the present cipher follows a systematic and iterative approach designed to maximize efficiency and minimize computational cost. The process begins by identifying relevant subsets of input bits using the proposed entropy-based method, which ensures that only the most informative bits are considered. Next, n-bit distinguishers are trained. Experiments are then conducted to determine the maximum number of bits that can be fixed by the reduced distinguisher before encountering score saturation, as well as to establish optimal thresholds for the candidate key voting mechanism. This process is iteratively refined by progressively transitioning to larger distinguishers, thereby fixing additional key bits with each iteration. Finally, the attack concludes with the application of a full-bit distinguisher once the key search space has been reduced sufficiently, ensuring the successful recovery of the round key.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Results on 6-round PRESENT</head><p>To demonstrate the performance of the proposed approach, we consider an attack on the 6-round present. We extended the key-recovery experiment to 433 random keys. The proposed attack recovered 402 of them, yielding a success rate of p = 92.8% with a 95% Wilson confidence interval of [90.0%, 94.9%]. Figure <ref type="figure" target="#fig_8">8</ref> shows the perblock success rate for consecutive batches of 50 keys. All estimates lie within one σ of the global rate and their Wilson intervals largely overlap, demonstrating that the attack does not degrade over time or with key diversity.</p><p>Only 31 keys (7.2%) were not fully recovered. For these, the candidate key differs from the ground truth by an average of 3.23 bits (95% bootstrap CI [2.68, 3.84]), see Fig. <ref type="figure">9a</ref>, i.e., &gt; 95% of the key space is still correct. No case exceeded 8 bit error, well below the 50% expected for a random guess, confirming that the distinguisher steers the search towards the right sub-space.</p><p>Bit-wise analysis (Fig. <ref type="figure">9b</ref> ) highlights three hot-spots at bits 10, 26 and 42, each failing in ≈22 % of the incorrect cases. These indices share the same intra-word position (bit 2 within a 4-bit S-Box output), suggesting that the neural distinguisher is biased against that particular bit position across several S-Boxes rather than against any specific S-Box instance.</p><p>Since we trained three distinguishers for our iterative attack proposal, we utilized 2 26 encryptions, each with a randomly generated key, for both training and validation. During the online attack phase, we initially performed approximately 6000 ≈ 2 12 encryptions and required an average of 2 28 partial decryptions to recover the round 6 key. For comparison, the authors of <ref type="bibr" target="#b26">[26]</ref> used 2 22.4 chosen plaintexts and 2 41.7 partial decryptions in their 6-round integral attack.</p><p>Table <ref type="table">7</ref> summarizes the computational complexity comparison. Our method reduces chosen plaintexts by a factor of 2 9.85 and partial decryptions by 2 13.7 compared to the classical integral attack, though we incur additional neural inference overhead. Training each distinguisher takes approximately 20 min on a single GPU; the three distinguishers require about 1 h total offline time. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Consent for publication Not applicable.</head><p>Open Access This article is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License, which permits any non-commercial use, sharing, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if you modified the licensed material. You do not have permission under this licence to share adapted material derived from this article or parts of it. The images or other third party material in this article are included in the article's Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit <ref type="url" target="http://creativecommons.org/licenses/by-nc-nd/4.0/">h t t p : / / c r e a t i v e c o m m o  n s . o r g / l i c e n s e s / b y -n c -n d / 4 . 0 /</ref>.</p><p>Publisher's Note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.</p><p>1 3</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8"><head>Fig. 8</head><label>8</label><figDesc>Per-block recovery rate with 95% Wilson CIs (block size = 50).</figDesc></figure>
+			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="extracted" xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Cryptography and Network Security: Principles and Practice</title>
+		<author>
+			<persName><forename type="first">W</forename><surname>Stallings</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+			<publisher>Pearson</publisher>
+			<pubPlace>Boston, MA</pubPlace>
+		</imprint>
+	</monogr>
+	<note>7th edn</note>
+	<note type="raw_reference">Stallings W (2016) Cryptography and Network Security: Principles and Practice, 7th edn. Pearson, Boston, MA</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b1">
+	<monogr>
+		<title level="m" type="main">Introduction to modern cryptography</title>
+		<author>
+			<persName><forename type="first">J</forename><surname>Katz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Lindell</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2020">2020</date>
+			<publisher>Chapman and Hall/CRC</publisher>
+			<pubPlace>Boca Raton, FL</pubPlace>
+		</imprint>
+	</monogr>
+	<note>3rd edn</note>
+	<note type="raw_reference">Katz J, Lindell Y (2020) Introduction to modern cryptography, 3rd edn. Chapman and Hall/CRC, Boca Raton, FL</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Handbook of Applied Cryptography</title>
+		<author>
+			<persName><forename type="first">Alfred</forename><forename type="middle">J</forename><surname>Menezes</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Paul</forename><forename type="middle">C</forename><surname>Van Oorschot</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Scott</forename><forename type="middle">A</forename><surname>Vanstone</surname></persName>
+		</author>
+		<idno type="DOI">10.1201/9780429466335</idno>
+		<imprint>
+			<date type="published" when="1996">1996</date>
+			<publisher>CRC Press</publisher>
+			<pubPlace>Boca Raton, FL</pubPlace>
+		</imprint>
+	</monogr>
+	<note>h t t p s : / / c a . u w a</note>
+	<note type="raw_reference">Menezes AJ, Vanstone SA, Van Oorschot PC (1996) Handbook of applied cryptography. CRC Press, Boca Raton, FL. h t t p s : / / c a . u w a</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Energy Consumption Analysis of ISO/IEC 29192-2 Standard Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Bora</forename><surname>Aslan</surname></persName>
+			<idno type="ORCID">0000-0002-8069-8204</idno>
+		</author>
+		<idno type="DOI">10.3390/app15073928</idno>
+		<idno>Standard ISO/IEC 29192-2:2019</idno>
+		<ptr target="//www.iso.o" />
+	</analytic>
+	<monogr>
+		<title level="j">Applied Sciences</title>
+		<title level="j" type="abbrev">Applied Sciences</title>
+		<idno type="ISSNe">2076-3417</idno>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page">3928</biblScope>
+			<date type="published" when="2019">2019</date>
+			<publisher>MDPI AG</publisher>
+			<pubPlace>Geneva, CH</pubPlace>
+		</imprint>
+		<respStmt>
+			<orgName>ISO Central Secretary</orgName>
+		</respStmt>
+	</monogr>
+	<note>International Organization for Standardization r / s</note>
+	<note type="raw_reference">ISO Central Secretary: ISO/IEC 29192-2:2019 Information security -Lightweight cryptography -Part 2: Block ciphers. (2019) Standard ISO/IEC 29192-2:2019, International Organization for Standardization, Geneva, CH. h t t p s : / / w w w . i s o . o r / s</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Differential cryptanalysis of DES-like cryptosystems</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bf00630563</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="3" to="72" />
+			<date type="published" when="1991-01">1991</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham E, Shamir A (1991) Differential cryptanalysis of des-like cryptosystems. J Cryptol 4:3-72 1 3</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Santa Barbara, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019-08">2019. 18-22 August 2019</date>
+			<biblScope unit="volume">39</biblScope>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr A (2019) Improving attacks on round-reduced speck32/64 using deep learning. In: Advances in Cryptology- CRYPTO 2019: 39th Annual International Cryptology Conference, Santa Barbara, CA, USA, 18-22 August 2019, Proceedings, Part II 39, Springer, pp 150-179</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Improve Neural Distinguisher for Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Chen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="1017">2021. 2021/1017</date>
+		</imprint>
+	</monogr>
+	<note>Preprint at h t t p s : / / e p r i n t . i a c r . o r g / 2 0 2 1 / 1 0 1</note>
+	<note type="raw_reference">Hou Z, Ren J, Chen S (2021) Improve Neural Distinguisher for Cryptanalysis. Cryptology ePrint Archive, 2021/1017. Preprint at h t t p s : / / e p r i n t . i a c r . o r g / 2 0 2 1 / 1 0 1</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">An Assessment of Differential-Neural Distinguishers</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Gohr</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Neumann</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2022">2022. 2022</date>
+		</imprint>
+	</monogr>
+	<note>Preprint at h t t p s : / / e p r i n t . i a c r . o r g / 2 0 2 2 / 1 5 2 1</note>
+	<note type="raw_reference">Gohr A, Leander G, Neumann P (2022) An Assessment of Differential-Neural Distinguishers. Cryptology ePrint Archive, 2022/1521. Preprint at h t t p s : / / e p r i n t . i a c r . o r g / 2 0 2 2 / 1 5 2 1</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">PRESENT: An Ultra-Lightweight Block Cipher</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Bogdanov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><forename type="middle">R</forename><surname>Knudsen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Paar</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Poschmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mjb</forename><forename type="middle">J B</forename><surname>Robshaw</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Seurin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><surname>Vikkelsoe</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-74735-2_31</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">P</forename><surname>Paillier</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">I</forename><surname>Verbauwhede</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Berlin, Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007">2007</date>
+			<biblScope unit="page" from="450" to="466" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bogdanov A, Knudsen LR, Leander G, Paar C, Poschmann A, Robshaw MJB, Seurin Y, Vikkelsoe C (2007) PRESENT: an ultra-lightweight block cipher. In: Paillier P, Verbauwhede I (eds) Cryptographic hardware and embedded systems - CHES 2007. Springer, Berlin, Heidelberg, pp 450-466</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Improved Differential Characteristic Searching Methods</title>
+		<author>
+			<persName><forename type="first">Jiageng</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Atsuko</forename><surname>Miyaji</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chunhua</forename><surname>Su</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jesen</forename><surname>Teh</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cscloud.2015.42</idno>
+		<ptr target="//doi.org/" />
+	</analytic>
+	<monogr>
+		<title level="m">2015 IEEE 2nd International Conference on Cyber Security and Cloud Computing</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2015-11">2015. 2015</date>
+			<biblScope unit="page" from="500" to="508" />
+		</imprint>
+	</monogr>
+	<note>1 0 . 1 1 0 9 / C S C l o u d . 2 0 1 5 . 4 2</note>
+	<note type="raw_reference">Chen J, Miyaji A, Su C, Teh JS (2015) Improved differential characteristic searching methods. In: 2015 IEEE 2nd international conference on cyber security and cloud computing. h t t p s : / / d o i . o r g / 1 0 . 1 1 0 9 / C S C l o u d . 2 0 1 5 . 4 2</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Reduced-Round PRESENT</title>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-68164-9_4</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">S</forename><surname>Vaudenay</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Berlin, Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2008">2008</date>
+			<biblScope unit="page" from="40" to="49" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang M (2008) Differential cryptanalysis of reduced-round PRESENT. In: Vaudenay S (ed) Progress in Cryptology - AFRICACRYPT 2008. Springer, Berlin, Heidelberg, pp 40-49</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">A TUTORIAL ON LINEAR AND DIFFERENTIAL CRYPTANALYSIS</title>
+		<author>
+			<persName><forename type="first">Howard</forename><forename type="middle">M</forename><surname>Heys</surname></persName>
+		</author>
+		<idno type="DOI">10.1080/0161-110291890885</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptologia</title>
+		<title level="j" type="abbrev">Cryptologia</title>
+		<idno type="ISSN">0161-1194</idno>
+		<idno type="ISSNe">1558-1586</idno>
+		<imprint>
+			<biblScope unit="volume">26</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="189" to="221" />
+			<date type="published" when="2002-07">2002</date>
+			<publisher>Informa UK Limited</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Heys HM (2002) A tutorial on linear and differential cryptanalysis. Cryptologia 26(3):189-221</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-02-01">2021</date>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note>h t t p s : / / d o i . o r g / 1 0 . 2 3 9 1 9 / D A T E 5 1 3 9 8 . 2 0 2 1 . 9 4 7 4 0 9 2</note>
+	<note type="raw_reference">Baksi A, Breier J, Chen Y, Dong X (2021) Machine learning assisted differential distinguishers for lightweight ciphers. In: 2021 design, automation &amp; test in Europe conference &amp; exhibition (DATE), pp 176-181. h t t p s : / / d o i . o r g / 1 0 . 2 3 9 1 9 / D A T E 5 1 3 9 8 . 2 0 2 1 . 9 4 7 4 0 9 2</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">A New Neural Distinguisher Considering Features Derived From Multiple Ciphertext Pairs</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sitong</forename><surname>Yuan</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac019</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1419" to="1433" />
+			<date type="published" when="2022-03-11">2022</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note>h t t p s : / / d o i . o r g / 1 0 . 1 0 9 3 / c o m j n l / b x a c 0 1 9</note>
+	<note type="raw_reference">Chen Y, Shen Y, Yu H, Yuan S (2022) A new neural distinguisher considering features derived from multiple ciphertext Pairs. Comput J 66(6):1419-1433. h t t p s : / / d o i . o r g / 1 0 . 1 0 9 3 / c o m j n l / b x a c 0 1 9</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Polytopic Attack on Round-Reduced Simon32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Heng-Chuan</forename><surname>Su</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xuan-Yong</forename><surname>Zhu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Duan</forename><surname>Ming</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-71852-7_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">Y</forename><surname>Wu</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">M</forename><surname>Yung</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="page" from="3" to="20" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Su H-C, Zhu X-Y, Ming D (2021) Polytopic attack on round-reduced simon32/64 using deep learning. In: Wu Y, Yung M (eds) Information security and cryptology. Springer, Cham, pp 3-20</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Deep Neural Networks Aiding Cryptanalysis: A Case Study of the Speck Distinguisher</title>
+		<author>
+			<persName><forename type="first">Norica</forename><surname>Băcuieți</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lejla</forename><surname>Batina</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stjepan</forename><surname>Picek</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-09234-3_40</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">G</forename><surname>Ateniese</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">D</forename><surname>Venturi</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="809" to="829" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Băcuieti N, Batina L, Picek S (2022) Deep neural networks aiding cryptanalysis: a case study of the speck distinguisher. In: Ateniese G, Venturi D (eds) Applied cryptography and network security. Springer, Cham, pp 809-829</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">A Machine Learning-Based Framework for Assessing Cryptographic Indistinguishability of Lightweight Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Jimmy</forename><surname>Dani</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kalyan</forename><surname>Nakka</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nitesh</forename><surname>Saxena</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/pst65910.2025.11268861</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2025 22nd Annual International Conference on Privacy, Security, and Trust (PST)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2024">2024</date>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="page" from="1" to="10" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Dani J, Nakka K, Saxena N (2024) A machine learning-based framework for assessing cryptographic indistinguishability of lightweight block ciphers. Preprint at a r X i v : 2 4 0 5 . 1 9 6 8 3</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b17">
+	<monogr>
+		<title level="m" type="main">h t t p s : / / a r x i v</title>
+		<imprint/>
+	</monogr>
+	<note>r g / a b s / 2 4 0 5 . 1 9 6 8 3</note>
+	<note type="raw_reference">h t t p s : / / a r x i v . o r g / a b s / 2 4 0 5 . 1 9 6 8 3</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Recent Advances in Machine Learning for Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Isabella</forename><surname>Martínez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Valentina</forename><surname>López</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Daniel</forename><surname>Rambaut</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Germán</forename><surname>Obando</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Valérie</forename><surname>Gauthier-Umaña</surname></persName>
+			<idno type="ORCID">0000-0003-0909-7091</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Juan</forename><forename type="middle">F</forename><surname>Pérez</surname></persName>
+			<idno type="ORCID">0000-0003-4732-1621</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-47372-2_5</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Communications in Computer and Information Science</title>
+		<editor>
+			<persName><forename type="first">M</forename><surname>Tabares</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">P</forename><surname>Vallejo</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">B</forename><surname>Suarez</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">M</forename><surname>Suarez</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">O</forename><surname>Ruiz</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">J</forename><surname>Aguilar</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2024">2024</date>
+			<biblScope unit="page" from="45" to="56" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Martínez I, López V, Rambaut D, Obando G, Gauthier-Umaña V, Pérez JF (2024) Recent advances in machine learning for differential cryptanalysis. In: Tabares M, Vallejo P, Suarez B, Suarez M, Ruiz O, Aguilar J (eds) Advances in computing. Springer, Cham, pp 45-56</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Improved integral neural distinguisher model for lightweight cipher PRESENT</title>
+		<author>
+			<persName><forename type="first">Wanqing</forename><surname>Wu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mingyu</forename><surname>Guo</surname></persName>
+			<idno type="ORCID">0009-0008-7394-0761</idno>
+		</author>
+		<idno type="DOI">10.1186/s42400-024-00258-0</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Cybersecurity</title>
+		<title level="j" type="abbrev">Cybersecurity</title>
+		<idno type="ISSNe">2523-3246</idno>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page">65</biblScope>
+			<date type="published" when="0258">2024. -0 2 4 -0 0 2 5 8 -0</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note>h t t p s : / / d o i . o r g / 1 0 . 1 1 8 6 / s 4 2 4 0 0</note>
+	<note type="raw_reference">Wu W, Guo M (2024) Improved integral neural distinguisher model for lightweight cipher PRESENT. Cybersecurity 7:65. h t t p s : / / d o i . o r g / 1 0 . 1 1 8 6 / s 4 2 4 0 0 -0 2 4 -0 0 2 5 8 -0</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Generic Partial Decryption as Feature Engineering for Neural Distinguishers</title>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+			<idno type="ORCID">0000-0002-2349-0247</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Rocco</forename><surname>Brunelli</surname></persName>
+			<idno type="ORCID">0009-0005-2481-410X</idno>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+			<idno type="ORCID">0000-0001-8583-0668</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Anna</forename><surname>Hambitzer</surname></persName>
+			<idno type="ORCID">0000-0002-5357-832X</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Marco</forename><surname>Pedicini</surname></persName>
+			<idno type="ORCID">0000-0002-9016-074X</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-032-06754-8_14</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="1443">2025. 2025/1443</date>
+			<biblScope unit="page" from="373" to="398" />
+		</imprint>
+	</monogr>
+	<note>Paper Preprint at h t t p s : / / e p r i n t . i a c r . o r g / 2 0 2 5 / 1 4 4 3</note>
+	<note type="raw_reference">Bellini E, Brunelli R, Gerault D, Hambitzer A, Pedicini M (2025) Generic Partial Decryption as Feature Engineering for Neural Distinguishers. Cryptology ePrint Archive, Paper 2025/1443. Preprint at h t t p s : / / e p r i n t . i a c r . o r g / 2 0 2 5 / 1 4 4 3</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b21">
+	<monogr>
+		<title level="m" type="main">Elements of information theory</title>
+		<author>
+			<persName><forename type="first">T</forename><forename type="middle">M</forename><surname>Cover</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">A</forename><surname>Thomas</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.aci.2018.08.003</idno>
+		<imprint>
+			<date type="published" when="2006">2006</date>
+			<publisher>Wiley-Interscience</publisher>
+			<pubPlace>Hoboken, NJ 22</pubPlace>
+		</imprint>
+	</monogr>
+	<note>2nd edn</note>
+	<note type="raw_reference">Cover TM, Thomas JA (2006) Elements of information theory, 2nd edn. Wiley-Interscience, Hoboken, NJ 22.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Classification assessment methods</title>
+		<author>
+			<persName><forename type="first">Alaa</forename><surname>Tharwat</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.aci.2018.08.003</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Applied Computing and Informatics</title>
+		<title level="j" type="abbrev">ACI</title>
+		<idno type="ISSN">2634-1964</idno>
+		<idno type="ISSNe">2210-8327</idno>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="168" to="192" />
+			<date type="published" when="2021">2021</date>
+			<publisher>Emerald</publisher>
+		</imprint>
+	</monogr>
+	<note>h t t p s : / / d o i . o r / 1 0 . 1 0 1 6 / j . a c i . 2 0 1 8 . 0 8 . 0 0 3</note>
+	<note type="raw_reference">Tharwat A (2021) Classification assessment methods. Appl Comp Inf 17(1):168-192. h t t p s : / / d o i . o r / 1 0 . 1 0 1 6 / j . a c i . 2 0 1 8 . 0 8 . 0 0 3</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">The Choice of a Class Interval</title>
+		<author>
+			<persName><forename type="first">Herbert</forename><forename type="middle">A</forename><surname>Sturges</surname></persName>
+		</author>
+		<idno type="DOI">10.1080/01621459.1926.10502161</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Statistical Association</title>
+		<title level="j" type="abbrev">Journal of the American Statistical Association</title>
+		<idno type="ISSN">0162-1459</idno>
+		<idno type="ISSNe">1537-274X</idno>
+		<imprint>
+			<biblScope unit="volume">21</biblScope>
+			<biblScope unit="issue">153</biblScope>
+			<biblScope unit="page" from="65" to="66" />
+			<date type="published" when="1926-03">1926</date>
+			<publisher>Informa UK Limited</publisher>
+		</imprint>
+	</monogr>
+	<note>/ d o i . o r g / 1 0 . 1 0 8 0 / 0 1 6 2 1 4 5 9 . 1 9 2 6 . 1 0 5 0 2 1 6 1</note>
+	<note type="raw_reference">Sturges HA (1926) The choice of a class interval. J Am Stat Assoc 21(153):65-66. h t t p s : / / d o i . o r g / 1 0 . 1 0 8 0 / 0 1 6 2 1 4 5 9 . 1 9 2 6 . 1 0 5 0 2 1 6 1</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b24">
+	<monogr>
+		<title level="m" type="main">Entropy-based Neural Distinguisher for PRESENT: Code and Data. Zenodo. Source code and datasets for reproducing the experiments</title>
+		<author>
+			<persName><forename type="first">I</forename><surname>Martínez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Gauthier-Umaña</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Obando</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">F</forename><surname>Pérez</surname></persName>
+		</author>
+		<idno type="DOI">10.5281/zenodo.16826468</idno>
+		<imprint>
+			<date type="published" when="2025">2025</date>
+		</imprint>
+	</monogr>
+	<note>h t t p s : / / d o i . o r g / 1 0 . 5 2 8 1 / z e n o d o . 1 6 8 2 6 4 6 8</note>
+	<note type="raw_reference">Martínez I, Gauthier-Umaña V, Obando G, Pérez JF (2025) Entropy-based Neural Distinguisher for PRESENT: Code and Data. Zenodo. Source code and datasets for reproducing the experiments. h t t p s : / / d o i . o r g / 1 0 . 5 2 8 1 / z e n o d o . 1 6 8 2 6 4 6 8</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Taking the Human Out of the Loop: A Review of Bayesian Optimization</title>
+		<author>
+			<persName><forename type="first">Bobak</forename><surname>Shahriari</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kevin</forename><surname>Swersky</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ziyu</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ryan</forename><forename type="middle">P</forename><surname>Adams</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nando</forename><surname>De Freitas</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/jproc.2015.2494218</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Proceedings of the IEEE</title>
+		<title level="j" type="abbrev">Proc. IEEE</title>
+		<idno type="ISSN">0018-9219</idno>
+		<idno type="ISSNe">1558-2256</idno>
+		<imprint>
+			<biblScope unit="volume">104</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="148" to="175" />
+			<date type="published" when="2016-01">2016</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Shahriari B, Swersky K, Wang Z, Adams RP, Freitas N (2016) Taking the human out of the loop: a review of bayesian optimization. Proc IEEE 104(1):148-175</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Bit-pattern based integral attack</title>
+		<author>
+			<persName><surname>Mr</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><surname>Raddum</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Henricksen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dawson</forename><forename type="middle">E</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Fast software encryption</title>
+		<editor>
+			<persName><forename type="first">K</forename><surname>Nyberg</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Berlin, Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2008">2008</date>
+			<biblScope unit="page" from="363" to="381" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Z&apos;aba MR, Raddum H, Henricksen M, Dawson E (2008) Bit-pattern based integral attack. In: Nyberg K (ed) Fast software encryption. Springer, Berlin, Heidelberg, pp 363-381</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">GIFT: A Small Present</title>
+		<author>
+			<persName><forename type="first">Subhadeep</forename><surname>Banik</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sumit</forename><forename type="middle">Kumar</forename><surname>Pandey</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Sasaki</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siang</forename><forename type="middle">Meng</forename><surname>Sim</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yosuke</forename><surname>Todo</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-66787-4_16</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2017">2017</date>
+			<biblScope unit="page" from="321" to="345" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Banik S, Pandey SK, Peyrin T, Sasaki Y, Sim SM, Todo Y (2017) GIFT: A small PRESENT: Towards reaching the limit of lightweight encryption. In: International conference on cryptographic hardware and embedded systems. Springer, pp 321-345</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">The SKINNY Family of Block Ciphers and Its Low-Latency Variant MANTIS</title>
+		<author>
+			<persName><forename type="first">Christof</forename><surname>Beierle</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jérémy</forename><surname>Jean</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Kölbl</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Amir</forename><surname>Moradi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Sasaki</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pascal</forename><surname>Sasdrich</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siang</forename><forename type="middle">Meng</forename><surname>Sim</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-53008-5_5</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="123" to="153" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beierle C, Jean J, Kölbl S, Leander G, Moradi A, Peyrin T, Sasaki Y, Sasdrich P, Sim SM (2016) The skinny family of block ciphers and its low-latency variant mantis. In: Annual international cryptology conference. Springer, pp 123-153</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

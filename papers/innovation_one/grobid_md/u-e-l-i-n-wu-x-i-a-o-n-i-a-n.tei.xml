@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="no">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">u e l i n , WU X i a o n i a n</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><roleName>武小年, 张润莲. 基于卷积残差网络的SM 4算法分析</roleName><forename type="first">J</forename><forename type="middle">]</forename><surname>余玥琳</surname></persName>
+						</author>
+						<author>
+							<persName><surname>桂林电子科技大学学报</surname></persName>
+						</author>
+						<author>
+							<persName><roleName>武小年, 张润莲 ( 桂林电子科技大学 广西密码学与信息安全重点实验室</roleName><surname>余玥琳</surname></persName>
+						</author>
+						<author>
+							<persName><roleName>各种深度学习技术开始被应用于密码分析中。为分析国密 SM</roleName><surname>由于密码分析与深度学习之间天然的相似性</surname></persName>
+						</author>
+						<author>
+							<persName><roleName>采用卷积残差网络构建模型, 搜索 SM</roleName><forename type="first">算</forename><surname>法的安全性</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">算法差分区分器</forename><forename type="middle">。</forename><surname>模型基于选择的明文差值和数据集进行训练</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">通过</forename><surname>数据处理</surname></persName>
+						</author>
+						<author>
+							<persName><roleName>构造了</roleName><forename type="first">、</forename><surname>参数和函数的优化</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">轮差分区分器</forename><forename type="middle">。</forename><surname>测试结果表明</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">模型可以对</forename><surname>Sm</surname></persName>
+						</author>
+						<author>
+							<persName><roleName>但随着轮数的增加, 模型已无法有效区分密文对和随机数据。结果表明</roleName><forename type="first">算法低轮数加密的密文对与</forename><surname>随机数据进行区分</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">算法</forename><forename type="middle">;</forename><surname>卷积神经网络</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">;</forename><surname>差分区分器</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">;</forename><surname>残差网络</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">R</forename><surname>Zhang</surname></persName>
+						</author>
+						<title level="a" type="main">u e l i n , WU X i a o n i a n</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">C53A2CF1813C118B96FA43A5B29080F3</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T16:20+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract xml:lang="zh-cn">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>9 7 2-) , 男, 副教授, 研究方向为信息安全和分布式计算。E -m a i l : x n w u</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="no">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>K e y w o r d s : SM 4 a l g o r i t h m ; c o n v o l u t i o n a l n e u r a l n e t w o r k s ; d i f f e r e n t i a l d i s t i n g u i s h e r ; r e s i d u a l n e t w o r k 随着互联网技术的发展, 各种网络安全问题频 发, 密码技术作为信息安全的核心技术, 一直是研究 重心。 SM 4 算法 <ref type="bibr">[ 1]</ref> 是国家密码管理局于 2 0 0 6 年公 开发布的一种用于中国无线标准的分组密码算法, 于 2 0 2 1 年 6 月正式被选为国际标准算法 <ref type="bibr">[ 2]</ref> , 其在商用 密码安全性保障方面发挥着巨大作用。 自 SM 4 算法发布以来, 针对算法安全性的分析 评估几乎采用了所有分组密码分析方法, 如差分分 析 <ref type="bibr">[ 3 -5]</ref> 、 不 可 能 差 分 分 析 <ref type="bibr">[ 6 -7]</ref> 、 线 性 分 析 <ref type="bibr">[ 8 -9]</ref>   <ref type="table">0 0 0 0 0 0 0 0</ref> , <ref type="table">0 x 0 0 0 0 0 0 0 0</ref> , <ref type="table">0 x 0 0 0 0 0 0 0 0</ref> , <ref type="table">0 x 0 0 0 0 0 0 0 1</ref>   </p><formula xml:id="formula_0">、 积 分 分 析 [ 1 0 -1 1] 、 代数攻击 [ 1 2] 、 矩形攻击 [ 1 3] 等。 2 0 1 6 年, 吕述 望等 [ 1 4] 对 SM 4 的原理和安全性分析进行了算法综 述; 此后, 针对 SM 4 算法的侧信道攻击及掩码防护方 法也相继被提出 [ 1 5] 。 另一方面, 深度学习的发展为密码分析提供了新 的思路。 2 0 1 9 年, G o h r [ 1 6] 通过构建带有残差块的卷 积神经网络搜索差分区分器, 针对 S p e c k 算法构建 5~8 轮差分区分器; 2 0 2 0 年, J a i n 等 [ 1 7] 利用深度学 习搜索的差分区分器对减轮的 P R E S ENT 算法进行 攻击分析。 2 0 2 1 年, B a k s i 等 [ 1 8] 基于机器学习找到 了 G i m l i 、 A s c o n 、 K n o t 等轻量级密码算法的差分区 分器; C h e n 等 [ 1 9] 构造多密文对的神经网络区分器; H o u 等 [ 2 0] 通过模拟文献[ 1 6 ] 的深度学习差分攻击方 法, 获得 S i m o n 算法 8~9 轮高准确率的神经网络区 分器,</formula><formula xml:id="formula_1">卷积层 c o n v 1 、 c o n v 2 的神经元个数均为 3 2 , 步 长为 1 , 采用 0 填充的方式。经过每个卷积层输出的 数据都需要进行批量归一化处理和线性整流的操作, 以使模型保持良好训练。随着深度的增加, 模型需要 采用正则化等手段来防止过拟合现象的出现。正则 第 1 期 余玥琳等: 基于卷积残差网络的 SM 4 算法分析 化技术通常包括 L 1 及 L 2 正则化, L 1 正则化常用于 稀疏模型, 使参数稀疏化; L 2 正则化又称 L 2 范数或 者岭回归, 其更稳定且可使稠密的参数效果接近于 0 , 更适合本模型。 L 2 正则化为 ω 2 2 =ω 2 1 +ω 2 2 + … +ω 2 n ,<label>( 2 )</label></formula><formula xml:id="formula_2">其中 ω 为权重, 表示特征的参数。 全连接层由 2 个隐藏层和 1 个输出单元组成, 通 过对提取到的样本特征进行分析判别, 输出最终结 果。 2 个隐藏层的神经元个数均为 6 4 , 借助批量标准 化层及 R e LU 激活函数来完成对数据的归一化和线 性整流。最后一层由 1 个使用 S i g m o i d 激活函数的 单体输出单元组成。 S i g m o d 函数光滑且连续, 在模 型中 与 均 方 误 差 函 数 ( m e a n s q u a r e e r r o r , 简 称 MS E ) 结合, 输出最后结果。其中 S i g m o d 函数为 f ( x ) = 1 1+e -x ; ( 3 ) MS E 函数为 fMSE =-∑ n i=1 ( y ^j l o g ( y ^i) + ( 1-y ^j) l o g ( 1-y ^i) ) ,<label>( 4 )</label></formula><formula xml:id="formula_3">其中: y ^j 为标签; y ^i 为预测值。 另外, 模型使用 A d a m 优化器进行优化, 基于训 练数据迭代地更新神经网络权重。与传统的梯度下 降算法不同, A d a m 算法可通过计算梯度的一阶矩估 计及二阶矩估计为不同的参数设置合适的学习率, 且 其实现简单, 计算效率高, 占用资源小。 1 . 3 模型训练和测试 模型的训练包括数据集的构造、 区分器的搜索 2 部分。数据集包括训练样本集和测试样本集, 每条样 本前半部分为固定明文差分加密的密文对或随机数 据; 后半部分用 0 或 1 作为标签, 其中 0 表示前半部 分为随机数据, 1 表示前半部分为固定明文差分加密 的密文对。 训练或验证数据总量约为 1 0 5 ~1 0 6 , 样本集的 生成过程实际上就是进行数据标签的过程, 用 m a k e _ t r a i n _ d a t a _ s m 4 ( n , n u m _ r o u n d ) 函数表示, 其中: n 为 输入样本集总数据量; n u m _ r o u n d 为算法减轮轮数; 输出返回的结果为密文对 X 及标签 Y 。具体过程 如下: 1 ) 随机生成 n 个字节, 并将其存放在标签 Y 中, Y [ i ] 表示第 i 个标签; 2 ) Y=Y&amp;1 ; 3 ) 随机产生 n 条 1 2 8 b y t e 的明文, 并将其存放 在明文矩阵 M0 中, M0 [ i ] 表示第 i 条明文; 4 ) 计算给定差值后的明文, 并将其存放在明文矩 阵 M1 中, M1 [ i ] 表示第 i 条明文; 5 ) 随机生成密钥 MK , 经密钥扩展后得到 r k ; 6 ) 进行数据标签, 置 i=0 ; 7 ) 若 Y [ i ] =0 , 则随机产生一条 1 2 8 b y t e 的明文 a , M1 [ i ] =a ; 8 ) 对 M0 [ i ] 加密, 加密后的数据存放在 C0 中, 即 C0 [ i ] =e n c r y p t ( M0 [ i ] , r k , n u m _ r o u n d ) ; 9 ) 对 M1 [ i ] 加密, 加密后的数据存放在 C1 中, 即 C1 [ i ] =e n c r y p t ( M1 [ i ] , r k , n u m _ r o u n d ) ; 1 0 ) 将 C0 [ i ] 与 C1 [ i ] 连 接 后 的 结 果 存 放 在 X [ i ] 中; 1 1 ) 令 i++ ; 1 2 ) 若 i&lt;n , 则转 7 ) , 否则转 1 3 ) ; 1 3 ) 返回密文对 X 与标签 Y , 即( X , Y ) 。 利用训练样本集训练神经网络以搜索区分器, 训 练过程如下: 1 ) 设置初始训练集 TD 为空, TD← ( •) ; 2 ) 将训练样本集( 包括密文对 X 和标签数据 Y ) 作为初始训练集 TD , TD← ( X , Y ) ; 3 ) 训练模型并保存, m o d e l ←t a i n N e t w o r k ( TD ) 。 其中: 输入为模型迭代次数 e p o c h ; SM 4 算法减 轮加密轮数为 n u m _ r o u n d ; 输出为训练成功的网络 模型, 并显示准确率。 模型的测试阶段使用已经训练完成的神经网络 模型, 针对测试样本集进行分类, 判断准确率。当模 型判断测试样本集中 X 的概率大于阈值时, X 即为 固定明文差分加密的密文对; 反之, X 为随机结果。 2 实验结果及分析 硬件环境: 计算机处理器为 I n t e l􀅺 X e o n􀅺 C P U E 7 -4 8 5 0 v 4@2 . 1 0 GH z , 内存 2 5 6 G i B , 显卡为 N v i d i a Q u a d r o M 6 0 0 0 0 2 4 G i B 。 软 件 环 境: 操 作 系 统 为 W i n d o w s S e r v e r 2 0 1 2 R 2 x 6 4 ,深 度 学 习 框 架 采 用 T e n s o r f l o w 1 . 1 4 . 0 和 K e r a s , 基于 P y t h o n 编程语言 完成实验。神经网络模型中优化器采用 A d a m , 损失 函数使用 MS E 函数, e p o c h 设置为 2 5 , A d a m 的学习 率设置为 0 . 0 0 0 1 , B a t c h 数量为 5 0 0 0 。 2 . 1 实验结果及分析 SM 4 算法采用上述方法构建 3~8 轮卷积残差 神经网络差分区分器。其中, 明文差分选定的差值 Δ x= ( 0 x</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>实习编辑: 高波</head></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><figDesc>a p p l i e d t o c r y p t a n a l y s i s . I n o r d e r t o a n a l y z e t h e s e c u r i t y o f s t a t e s e c r e t SM 4 a l g o r i t h m , t h e c o n v o l u t i o n r e s i d u a l n e t w o r k i s u s e d t o b u i l d a m o d e l a n d s e a r c h t h e d i f f e r e n c e d i v i d e r o f SM 4 a l g o r i t h m. T h e m o d e l i s t r a i n e d b a s e d o n t h e s e l e c t e d p l a i nt e x t d i f f e r e n c e a n d d a t a s e t . T h r o u g h d a t a p r o c e s s i n g , p a r a m e t e r a n d f u n c t i o n o p t i m i z a t i o n , a 3 -8 r o u n d d i f f e r e n c e d i v i d e r i s c o n s t r u c t e d. T h e m o d e l c a n d i s t i n g u i s h t h e c i p h e r t e x t p a i r s e n c r y p t e d b y SM 4 a l g o r i t h m w i t h l o w n u m b e r o f r o u n d s f r o m r a n d o m d a t a , b u t w i t h t h e i n c r e a s e o f t h e n u m b e r o f r o u n d s , t h e m o d e l c a n n o t e f f e c t i v e l y d i s t i n g u i s h t h e c i p h e r t e x t p a i r f r o m t h e r a n d o m d a t a. R e s u l t s s h o w t h a t SM 4 a l g o r i t h m h a s g o o d s e c u r i t y.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><figDesc>卷积神经网络( c o n v o l u t i o n a l n e u r a l n e t w o r k s , 1×2 5 6 的向量, 共 n 条数据构成一个多维矩阵。 卷积层 c o n v 0 神经元个数为 3 2 , 步长设定为 1 , 采用 0 填充的方式。为保证训练过程的稳定性, 提高 训练速度并协助模型表达复杂的特征, c o n v 0 输出的 数据需经批量归一化层和激励层进行处理, 另输入 D r o p 层, 以 0 . 5 的概率随机丢弃神经网络训练单元, 防止模型出现过拟合。其中, 激励层采用线性整流函 数( r e c t i f i e d l i n e a r u n i t , 简称 R e LU ) , 可使模型的收 敛速度保持在一个稳定的状态, R e LU 函数为 R e LU ( x ) = x , x &gt;0 ; 0 , x ≤0 。 ( 1 )</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><figDesc>) ; 训练集包含 1 0 6 条数据; 测试集包含 1 0 5 条数据。 SM 4 算法 5 轮区分器训练过程中的损失函数、 准确率的变化如图 2 所示。其中 l o s s 、 v a l _ l o s s 分别 为训练样本集、 测试样本集的损失变化, a c c 、 v a l _ a c c 分别为训练样本集、 测试样本集的准确率变化。 图 2 训练集与测试集的变化情况 图 2 ( a ) 为模型在搜索 SM 4 算法损失函数的变 化。初始时模型学习率设置较大, 在模型迭代次数 ( e p o c h ) 为 2 、 3 时, 损失值迅速下降; 随着 e p o c h 的增 长, 学习率不断降低, 在 e p o c h 为 1 5 后损失值已下降 到较低位置, 损失函数基本趋于稳定。 图 2 ( b ) 为模型在搜索 SM 4 算法样本集准确率 的变化。在 e p o c h 值为 3 时, 训练样本集与测试样本 集的准确率开始接近 1 , 说明模型能够正确地提取 5 轮固定明文差分加密的密文对及随机数据各自的特 征并进行区分; 随着 e p o c h 值的增加, 训练样本集与 测试样本集的准确率趋近 1 , 表明此时 SM 4 算法找 到了一个几乎完美的 5 轮差分区分器。 基于上述选择的差分值构造的 SM 4 算法 3~8 0 6 / e p o c h 由表 1 可知, 随着 SM 4 算法加密轮数的增加, 对 及 随 机 数。相 对 于 轻 量 级 密 码 算 法 P R E S ENT 和 G I ML I -HA SH , SM 4 算法在第 6 轮时</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><figDesc>n t e c h n o l o g y -s e c u r i t y t e c h n i q u e s -e n c r y p t i o n a l g or i t h m sp a r t 3 : b l o c k c i p h e r s -a m e n d m e n t 1 : SM 4 [ S ] . N e w Y o r k : I S O / I E C , 2 0 2 1. [ 3 ] ZHANG L e i , ZHANG We n t a o , WU We n l i n g. C r y p t an a l y s i s o f r e d u c e d -r o u n d SMS 4 b l o c k c i p h e r [ C ] / / I nf o r m a t i o n S e c u r i t y a n d P r i v a c y. B e r l i n : S p r i n g e r , 2 张美玲, 刘景美, 王新梅 . 2 2 轮 SMS 4 的差分分析[ J ] . LU J i q i a n g. A t t a c k i n g r e d u c e d -r o u n d v e r s i o n s o f t h e SMS 4 b l o c k c i p h e r i n t h e C h i n e s e WA P I s t a n d a r d [ C ] / / I n f o r m a t i o n a n d C o mm u n i c a t i o n s S e c u r i t y. B e rl i n : S p r i n g e r , 2 0 0 7 : 3 0 6 -3 1 8. [ 7 ] WANG G a o l i . I m p r o v e d i m p o s s i b l e d i f f e r e n t i a l c r y p t an a l y s i s o n SMS 4 [ C ] / / 2 0 1 0 I n t e r n a t i o n a l C o n f e r e n c e o n C o mm u n i c a t i o n s a n d I n t e l l i g e n c e I n f o r m a t i o n S e c u ri t y. P i s c a t a w a y , N J : I E E E P r e s s , 2 0 1 0 : 1 0 5 -1 0 8. [ 8 ] L I U Z h i q i a n g , GU D a w u , ZHANG J i n g. Mu l t i p l e l i n e a r c r y p t a n a l y s i s o f r e d u c e d -r o u n d SMS 4 b l o c k c i p h e r [ J ] . C h i n e s e J o u r n a l o f E l e c t r o n i c s , 2 0 1 0 , 1 9 ( 3 ) : 3 8 9 -3 9 3. [ 9 ] 马猛, 赵亚群, 刘庆聪, 等 . SM 4 算法的多维零相关线性 分析[ J ] . 密码学报, 2 0 1 5 , 2 ( 5 ) : 4 5 8 -4 6 6. [ 1 0 ] L I U F e n , J I We n , HU L e i , e t a l . A n a l y s i s o f t h e SM 4 b l o c k c i p h e r [ C ] / / I n f o r m a t i o n S e c u r i t y a n d P r i v a c y. B e r l i n : S p r i n g e r , 2 0 0 7 : 1 5 8 -1 7 0. [ 1 1 ] 钟名富, 胡予濮, 陈 杰 . 分 组 加 密 算 法 SMS 4 的 1 4 轮 S q u a r e 攻击 [ J ] . 西 安 电 子 科 技 大 学 学 报, 2 E R I CK S ON J , D I NG J T , CHR I S T EN S EN C. A l g e b r ai c c r y p t a n a l y s i s o f SMS 4 : G r ö b n e r b a s i s a t t a c k a n d S AT a t t a c k c o m p a r e d [ C ] / / I n f o r m a t i o n , S e c u r i t y a n d C r y p t o l o g y -I C I S C 2 0 0 9. B e r l i n : S p r i n g e r , 2 0 0 9 : 7 3 -8 6. [ 1 3 ] KONG X i a n g l o n g , WANG We i , XU Q i u l i a n g. I mp r o v e d r e c t a n g l e a t t a c k o n SMS 4 r e d u c e d t o 1 8 r o u n d s [ C ] / / 2 0 1 3 N i n t h I n t e r n a t i o n a l C o n f e r e n c e o n C o m p ut a t i o n a l I n t e l l i g e n c e a n d S e c u r i t y. P i s c a t a w a y , N J : I E E E P r e s s , 2 0 1 3 : 5 7 5 -5 7 8. [ 1 4 ] 吕述望, 苏波展, 王鹏, 等 . SM 4 分组密码算法综述[ J ] . GOHR A. I m p r o v i n g a t t a c k s o n r o u n d -r e d u c e d s p e c k 3 2 / 6 4 u s i n g d e e p l e a r n i n g [ C ] / / A d v a n c e s i n C r y p t o l o g y -C R Y P TO 2 0 1 9. B e r l i n : S p r i n g e r , 2 0 1 9 : 1 5 0 -1 7 9. [ 1 7 ] J A I N A , KOHL I V , M I SHRA G. D e e p l e a r n i n g b a s e d d i f f e r e n t i a l d i s t i n g u i s h e r f o r l i g h t w e i g h t c i p h e r P R E S -ENT [ E B / OL ] . ( 2 0 2 0 -0 7 -0 8 ) [ 2 0 2 1 -1 2 -2 0 ] . h t t p s : / / e p r i n t . i a c r . o r g / 2 0 2 0 / 8 4 6. p d f . [ 1 8 ] B AK S I A , B R E I E R J , CHEN Y , e t a l . M a c h i n e l e a r n i n g a s s i s t e d d i f f e r e n t i a l d i s t i n g u i s h e r s f o r l i g h t w e i g h t c ip h e r s [ C ] / / 2 0 2 1 D e s i g n , A u t o m a t i o n &amp; T e s t i n E u r o p e C o n f e r e n c e &amp; E x h i b i t i o n ( DAT E ) . N J : I E E E P r e s s CHEN Y i , SHEN Y a n t i a n , YU H o n g b o , e t a l . A n e w n e u r a l d i s t i n g u i s h e r c o n s i d e r i n g f e a t u r e s d e r i v e d f r o m m u l t i p l e c i p h e r t e x t p a i r s [ E B / OL ] . ( 2 HOU Z e z h o u , R EN J i o n g j i o n g , CHEN S h a o z h e n. C r y p t a n a l y s i s o f r o u n d -r e d u c e d S I MON 3 2 b a s e d o n d e e p l e a r n i n g [ E B / OL ] . ( 2 0 2 1 -0 3 -1 8 ) [ 2 0 2 1 -1 2 -2 0 ] . h tt p s : / / e p r i n t . i a c r . o r g / 2 0 2 1 / 3 6 2. p d f .</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><graphic coords="4,10.91,71.66,490.42,192.71" type="bitmap" /></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl/>
+			</div>
+		</back>
+	</text>
+</TEI>

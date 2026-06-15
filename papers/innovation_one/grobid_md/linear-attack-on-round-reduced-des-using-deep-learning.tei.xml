@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Linear Attack on Round-Reduced DES Using Deep Learning</title>
+				<funder ref="#_F4ZUegG">
+					<orgName type="full">National Key R&amp;D Program of China</orgName>
+				</funder>
+				<funder ref="#_qwex7GT #_KFY4HEA #_wzKQkEt">
+					<orgName type="full">National Nature Science Foundation of China</orgName>
+				</funder>
+				<funder ref="#_THPBEee">
+					<orgName type="full">unknown</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>Springer International Publishing</publisher>
+				<availability  status="unknown">
+					<licence/>
+				</availability>
+				<date type="published" when="2020">2020</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="consolidated" source="crossref">
+					<analytic>
+						<author>
+							<persName><forename type="first">Botao</forename><surname>Hou</surname></persName>
+							<email>houbotao@iie.ac.cn</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> State Key Laboratory of Information Security , Institute of Information Engineering , CAS , Beijing , China</note>
+								<orgName type="department">Institute of Information Engineering</orgName>
+								<orgName type="laboratory">State Key Laboratory of Information Security</orgName>
+								<orgName type="institution">CAS</orgName>
+								<address>
+									<settlement>Beijing</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> School of Cyber Security , University of Chinese Academy of Sciences , Beijing , China</note>
+								<orgName type="department">School of Cyber Security</orgName>
+								<orgName type="institution">University of Chinese Academy of Sciences</orgName>
+								<address>
+									<settlement>Beijing</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Yongqiang</forename><surname>Li</surname></persName>
+							<email>liyongqiang@iie.ac.cn</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> State Key Laboratory of Information Security , Institute of Information Engineering , CAS , Beijing , China</note>
+								<orgName type="department">Institute of Information Engineering</orgName>
+								<orgName type="laboratory">State Key Laboratory of Information Security</orgName>
+								<orgName type="institution">CAS</orgName>
+								<address>
+									<settlement>Beijing</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> School of Cyber Security , University of Chinese Academy of Sciences , Beijing , China</note>
+								<orgName type="department">School of Cyber Security</orgName>
+								<orgName type="institution">University of Chinese Academy of Sciences</orgName>
+								<address>
+									<settlement>Beijing</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Haoyue</forename><surname>Zhao</surname></persName>
+							<email>zhaohaoyue1@gmail.com</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> State Key Laboratory of Information Security , Institute of Information Engineering , CAS , Beijing , China</note>
+								<orgName type="department">Institute of Information Engineering</orgName>
+								<orgName type="laboratory">State Key Laboratory of Information Security</orgName>
+								<orgName type="institution">CAS</orgName>
+								<address>
+									<settlement>Beijing</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Bin</forename><surname>Wu</surname></persName>
+							<email>wubin@iie.ac.cn</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> State Key Laboratory of Information Security , Institute of Information Engineering , CAS , Beijing , China</note>
+								<orgName type="department">Institute of Information Engineering</orgName>
+								<orgName type="laboratory">State Key Laboratory of Information Security</orgName>
+								<orgName type="institution">CAS</orgName>
+								<address>
+									<settlement>Beijing</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> School of Cyber Security , University of Chinese Academy of Sciences , Beijing , China</note>
+								<orgName type="department">School of Cyber Security</orgName>
+								<orgName type="institution">University of Chinese Academy of Sciences</orgName>
+								<address>
+									<settlement>Beijing</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Linear Attack on Round-Reduced DES Using Deep Learning</title>
+					</analytic>
+					<monogr>
+						<title level="m">Lecture Notes in Computer Science</title>
+						<idno type="ISSN">0302-9743</idno>
+						<idno type="eISSN">1611-3349</idno>
+						<imprint>
+							<publisher>Springer International Publishing</publisher>
+							<biblScope unit="page" from="131" to="145"/>
+							<date type="published" when="2020" />
+						</imprint>
+					</monogr>
+					<idno type="MD5">8DA82793434A9723959D6C54D7205152</idno>
+					<idno type="DOI">10.1007/978-3-030-59013-0_7</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T15:50+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Linear attack</term>
+					<term>Deep learning</term>
+					<term>DES</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Linear attack is a powerful known-plaintext cryptanalysis method on block ciphers, which has been successfully applied in DES, KATAN, SPECK and other ciphers. In this paper, we use deep learning networks to achieve linear attack on DES with plain-cipher pairs. Comparing with traditional linear attack algorithm, our work requires less knowledge about complex cryptanalysis as neural network can work well by data-driven. Thus, this paper has three main contributions. First, a new linear attack architecture based on deep residual network was proposed to train discriminative neural networks with auto-generated plaincipher pair data. The results indicate that trained neural networks can effectively learn algorithmic representations of the XOR distributions of given linear expression on DES. Second, several novel neural networkbased algorithms were designed to efficiently enforce key recovery on round-reduced DES using trained networks with moderate full and partial bits of linear expression as inputs. Third, as far as we know, it is the first time that neural networks are used to achieve known-plaintext attack on complex block ciphers.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>Linear cryptanalysis is one of the most powerful analysis techniques used in modern block ciphers. It can achieve key recovery attacks utilizing non-zero correlation with bits of plain-cipher text and key, which is expressed in a linear approximate equation. The first linear cryptanalysis <ref type="bibr" target="#b1">[2]</ref> was presented to break Data Encryption Standard (DES) successfully in 1994. Since DES <ref type="bibr" target="#b0">[1]</ref> was published in 1977, its security has been focused by all over the world. In that paper, Matsui provided some linear equations on round-reduced DES and proposed a key recovery algorithm for known-plaintext attack in 8-round and even only-plaintext attack in 8 rounds. And Matsui <ref type="bibr" target="#b2">[3]</ref> proposed an improved version for linear cryptanalysis and its application to the full 16-round DES. Later, Hermelin et al. <ref type="bibr" target="#b3">[4]</ref> improved linear cryptanalysis into multiple approximations and achieved a faster attack. Obviously, all of those traditional linear cryptanalysis works need amounts of mathematical knowledge and manual theory deduction.</p><p>Recently, some works have been explored to combine deep learning and applicable statistical cryptanalytic techniques <ref type="bibr" target="#b9">[10,</ref><ref type="bibr" target="#b11">12]</ref>. At first, Abadi and Andersen <ref type="bibr" target="#b4">[5]</ref> trained two neural networks which allow them to communicate using given key without advanced cipher design, and another adversarial network was trained to prove that it cannot recover information without the key. However, their work did not explain what net construction is in cryptography. Soon, Coutinho et al. <ref type="bibr" target="#b10">[11]</ref> improved simple adversarial network above with chosen-plaintext attack and obtained a unbreakable One-Time Pad algorithm in unsupervised condition which explored the effect of adversarial network in security. And then, some works tried to achieve cracking directly by simulating ciphers <ref type="bibr" target="#b12">[13]</ref>. An unsupervised CycleGAN neural network <ref type="bibr" target="#b7">[8]</ref>, named CipherGAN, was used to crack Shift and Vigenere ciphers. Their work showed that neural network can learn detail relationship about encrypt and decrypt processes, but it was limited to fixed key. Comparing with traditional encrypt algorithms, modern block cryptographical algorithms are more complex so that previous methods can't work well, and some works began to apply some mature cryptanalysis methods to improve availability of attacking using machine learning <ref type="bibr" target="#b13">[14]</ref>. Recently, some works <ref type="bibr" target="#b8">[9]</ref> explored the possibility of applying machine learning on side channel attack of Advance Encryption Standard (AES), but generally side channel is considered not to be cryptanalysis in the sense we discussed. And Gohr <ref type="bibr" target="#b5">[6]</ref> tried to apply deep learning on Speck, a lightweight block encryption algorithm. They constructed a network to more accurately learn the distribution of output difference with a fixed input difference. However, they didn't give attacks on more complex ciphers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1">Our Contribution</head><p>First of all, we devise and train neural networks and expect that we can achieve efficient key recovery on DES using trained network models. Those network models should obtain the ability of distinguishing different distributions by observing given linear expression on round-reduced DES. Considering two different key recovery methods, one bit key recovery and multiple bits key recovery, we train corresponding network models in different ways.</p><p>For one bit key recovery on round-reduced DES, we propose a new neural network attack framework that can successfully distinguish two different binomial distributions. Those distributions perform two different situations of n-round linear approximation expression. Using the trained network models, we established corresponding one bit key recovery algorithm and achieved successful key recovering on 3, 4 and 5 rounds DES. In order to know the availability of our models, we calculate the expected efficiency for round-reduced DES that use Bayesian model. Experimental results indicate that the performance of our models is very closed to theoretical value.</p><p>In multiple bits key recovery, another neural network model is proposed to train as a discriminator for distributions produced by real and random effective key bits. And this model is used in proposed multiple bits key recovery algorithm. We tested the performance of this algorithm on 4 rounds DES and obtained effective key rank.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.2">Paper Organization</head><p>The rest of the paper is organized as follows. In Sect. 2, we present a brief description of the cryptographic modules employed in our linear cryptanalysis. In Sect. 3, we introduce our detail scheme of neural networks. The result of neural discriminators and corresponding key recovery attacks are in Sect. 4. Section 5 is the conclusion about our scheme in short.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Preliminaries</head><p>Before introducing our architecture, we briefly review some cryptographic building modules deployed in linear cryptanalysis method on DES and two classical key recovery attack algorithms.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">DES</head><p>DES is a iterative cryptographic algorithm with Feistel structure, which has a profound impact on the design of later ciphers. DES uses 56 bits key to protect message with block divided into 64 bits. Omitting the initial permutation IP and the final permutation IP -1 in full DES, we call input and output of round iterations as plain text block P and cipher text block C. Each block will be divided into two 32 bits blocks (L, R), which will be encrypted by total 16 rounds. More details can be seen in <ref type="bibr" target="#b0">[1]</ref>.</p><p>For rth round, the output L r and R r are computed as follows.</p><formula xml:id="formula_0">L r = R r-1 R r = L r-1 ⊕ F (R r-1 , K r )<label>(1)</label></formula><p>Where F(.) is the non-linear function called F function, it contains four operations which include extension operation E of R r , bitwise XOR operation between subkey and extended R r , S-box operation S and final permutation operation. F function is briefly expressed as:</p><formula xml:id="formula_1">F (R r-1 , K r ) = S(E(R r-1 ) ⊕ K r ) (<label>2</label></formula><formula xml:id="formula_2">)</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Linear Attack</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Linear Approximate Equation.</head><p>Linear attack has been widely used to break block cipher algorithms. Indeed, given plain text P , master key K and corresponding cipher text C, linear approximate equation L try to describe the linear relationship of bits in serval fixed locations like:</p><formula xml:id="formula_3">α • P ⊕ β • C = γ • K (<label>3</label></formula><p>) Algorithm 1. ONE BIT KEY RECOVERY ALGORITHM Input: Ln, n-round linear approximate equation P rL n , the probability of Ln P air, plain-cipher text pairs generated by key K Output: output result 1: Npc ← the number of P air 2: NL ← 0 3: for pair in P air do 4: L l ← compare the left side of Ln 5: if L l == 0 then 6: NL+ = 1 7: if NL &gt; Npc/2 then 8: if P rL &gt; 1/2 then 9: return L r = 0 10: else 11: return L r = 1 12: else 13: if P rL &gt; 1/2 then 14: return L r = 1 15: else 16: return L r = 0</p><p>Where α, β and γ are the bit location masks and α • P is the bitwise addition for bits in locations marked by α in P . There we name the value of left side in L as L l and the right side as L r . Generally, equation L holds with the probability P r L of 1/2. But if there is an obvious deviation with 1/2 and P r L , we call this expression L as a well linear approximate equation. The bigger this deviation is, the quicker this expression could be distinguished from other expressions. Moreover, key recovery mentioned in follows is relative with P r L closely.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Key Recovery Attack.</head><p>There are two different linear attack algorithms divided by number of key bits can be recovered. First one is one bit key recovery attack, relying on a well linear expression. Multiple bits key recovery is another, it generally depend on the linear equation which expended by (n-1)-round expression. Both of those attacks can work well in DES, and many effective linear expressions can be found <ref type="bibr" target="#b1">[2]</ref>.</p><p>One Bit Key Recovery. Given linear approximate equation L like Function 3, we can judge whether L r is 0 or 1 with probability P r L . If we have N pc plaincipher text pairs generated by fixed key, we count the number N L of those pairs that satisfy L l = 0. If N L has obvious difference with N pc /2, we can judge this one bit key L r depending on the symbol of difference with high success rate. The detailed recovery process is showed in Algorithm 1.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 2. MULTIPLE BITS CANDIDATE KEY RANK ALGORITHM</head><p>Input: Ln, n-round linear approximate equation P air, Plain-cipher text pairs generated by key K Output: output Rank key 1: Nt ← the number of effective text bits in left Ln 2: Tt ← {0} 2 N t 3: for pair in P air do 4:</p><p>e ← bits extracted from pair following Ln 5:</p><p>Tt[e]+ = 1 6: N k ← the number of effective key bits in left Ln 7:</p><formula xml:id="formula_4">T k ← {0} 2 N k 8: for k in len(T k ) do 9:</formula><p>for t in len(Tt) do 10:</p><p>L l ← compare the left side of Ln 11:</p><p>if L l == 0 then 12:</p><p>T k [k]+ = t 13: Npc ← the number of P air 14: for k in len(T k ) do 15:</p><p>T k [k] = T k [k] -Npc 16: Rank key ← sort T k by descending value order 17: return Rank key Multiple Bits Key Recovery. Generally, if we attack n rounds DES, we have to obtain a (n-1)-round linear approximate equation L n-i with P r L . Considering the effect of F function in first round and nth round, n-round expression L n is described as:</p><formula xml:id="formula_5">α • P ⊕ β • C ⊕ μ • F 1 (P, K 1 ) ⊕ ν • F n (C, K n ) = γ • K (<label>4</label></formula><formula xml:id="formula_6">)</formula><p>Since L n is expanded from L n-i , P r Ln should be almost same with P r Ln-i , which makes us knowing the distribution of L l n . Obviously, this value is totally determined by some bits of plain-cipher text and key, and we call those bits as effective text bits and effective key bits respectively. Based on known P r L , we can recover those effective key bits as follows.</p><p>First, we list all possible effective key bits as key candidates. Considering that the probability P r Ln would almost equal to P r Ln-i when K 1 and K n are correctly guessed, this leads us to use maximum likelihood method in regard to those key candidates.</p><p>There we get N pc plain-cipher text pairs generated with fixed key K. For each key candidate, compute L l n and add counter with 1 when it equals to 0. Sort all key candidates by the difference between counter and N pc /2 as key rank. Generally, correct key bits will be in higher rank. The candidate key rank processing is showed in Algorithm 2.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">Network Architectures</head><p>Our goal is to develop a learnable, end-to-end model for linear attack, and it should obtain statistical cryptanalytic characteristics. Thus, we proposed a new neural network architecture as a deep learning discriminator to distinguish different distributions. The diagram for our network is shown in Fig. <ref type="figure" target="#fig_0">1</ref>. Those networks comprise three main components: input layer, iteration layer and predict layer. The iteration layer is built by classical residual neural network <ref type="bibr" target="#b6">[7]</ref>. This network has been successfully applied in many domains. It consists of some residual blocks which add input layer to output layer and produce new output, the output will been sent to next block. The most important advantage of residual networks is that it can effectively avoid gradient dispersion when the number of layer increases.</p><p>The input layer receives training data with fixed length and applies reshape layer into the data. We expect that our network should simulate XOR operation better and form some intermediate representation. For this reason, we transpose and apply convolution into input data so that we can expend the effect of each bit. After batch normalization layer, data will be sent into iteration layer. Each iteration layer has same structure with a convolution and normalization following. What' more, a skip connection is applied to add input layer and output layer and this operation may allow next layer can mix bits in block more like bitwise addition. Iteration layer will repeat 5 or 10 rounds in our experiments, and then the predict layer will be following. The predict layer provides a fully connect operation in order to combines all bits and a single linear layer to produce one bit predicted result.</p><p>In our key recovery experiments, this neural network will be fed with bit sequences and is expected to distinguish those input into two different distributions. For each sequence, it consists of 6 units and each unit will be padded with return right of Ln = 0 0 to fixed length, which is determined by max length of each mark in L n . Generally, this length is not longer than 8 and we will pad the sequence to 6 × 8 = 48. Input layer changes the size of this sequence into 8 × 48, and it will be trained in this size till predict layer. Pooling operation condenses it into 48 × 1 and output it with 1 bit by dense layer.</p><p>In each epoch, we will check networks by validation data, and we save and update the best model according to its accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Attack Architecture</head><p>In this section, we will introduce two new linear attack architectures: one bit key recovery and multiple bits key recovery. We apply them in round-reduced DES, and both of them can distinguish different distributions well using deep learning net and realize expected key recovery.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">One Bit Key Recovery</head><p>Given n-round linear approximation expression L n as Function 3, and we know that it will hold with certain probability P r Ln in previous. There, we don't need to know exact value about P r Ln and more details, and we can also obtain one bit key information γ • K. For this, we propose one bit key recovery algorithm showed in Algorithm 3 to recover mentioned bit using deep learning networks.</p><p>Train and Recover. Supposed that P r Ln is the probability linear expression L n holds, if we ask that L r n is fixed to 0, the distribution of L r n will be almost binomial distribution which means 0 will appear with the probability equaling to P r Ln . While the binomial distribution will be inverse if L r n is fixed to 1. Thus, we mark those different distributions with corresponding labels and expect trained networks can effectively distinguish them by inputting some bit sequences.</p><p>In order to obtain those network models, we generate training and validation by several phases as follows:</p><p>1. Generate plain texts P and master keys K ordering uniformly distribution. 2. Encrypt P with K by n-round DES cipher and obtain cipher texts C. 3. Extract P -C pairs into bits sequence EX pc and K into EX k depending on linear equation L n . 4. Pad EX pc with 0 into X following the order of (α • P ||β • C). 5. Set label Y relying on XOR value distribution of each EX k .</p><p>After generating enough data, neural network discriminator Net Ln will be trained to predict right label Y . Obviously, if Net Ln is train well, its correct output will help us directly to recover corresponding one bit key information. Thus, we apply trained network into Algorithm 3 to recover this key bit.</p><p>Recovery phase need N pc plain-cipher pairs generated by fixed key K. Repetitively run Phase 3-4 above and we can obtain extracted text sequences of those pairs. Those text sequences are feed into Net Ln and output their prediction. Considering with the accuracy of Net Ln , the success rate of Algorithm 3 rely on N pc and performance of algorithm will be shown in following experiments.</p><p>Goal Model. After training mentioned above, we indeed obtain a deep learning discriminator. This discriminator would first learn the simulation of XOR operation, and then obtain the ability that distinguish the difference with different binomial distribution performance.</p><p>Our deep learning model didn't know any information about those distributions and even didn't know XOR operation before training, all they obtaining is input seems like random bit sequences. Obviously, if we can obtain those distribution information about linear expression L, we can estimate the best result of those networks using Bayesian rule.</p><p>As P r L is the possibility of linear approximation expression L holding and discriminator B L with Bayesian model obtains distribution features of L l fully, if L l of a bit sequence is 1, the accuracy of B L correctly judging that this sequence belongs into L r = 1 is shown following Function 5.</p><formula xml:id="formula_7">P (γ • K = 1|1) = P (1|γ • K = 1)P (γ • K = 1) P (1|γ • K = 1)P (γ • K = 1) + P (1|γ • K = 0)P (γ • K = 0) (<label>5</label></formula><p>) Supposing that K is generated following uniform distribution, accuracy of B L will be equal to P r L .</p><p>This Bayesian model will be our goal model of deep learning network. We replace network discriminator Net L with this Bayesian discriminator B L in Algorithm 3 and can get one bit key recovery. After reducing, we find that the relationship between success rate of one bit key recovery and number of plain-cipher pairs required is same with Lemma 2 in <ref type="bibr" target="#b1">[2]</ref>. Thus, we can measure key recovery effect which uses deep learning networks with this lemma.</p><p>Experiment. All of our experiments are run in a uniform environment, models are trained on a workstation with NVIDIA GeForce GTX 1080Ti and Intel(R) E5-2609 1.7 GHz CPU. P H [7, 18, 24, 29]⊕P L [15] ⊕ C H [7, 18, 24, 29] ⊕ C L <ref type="bibr" target="#b14">[15]</ref> = K 1 [22] ⊕ K 3 [22] (6) P H [7, 18, 24, 29]⊕P L [15] ⊕ C H [15] ⊕ C L [7, 18, 24, 27, 28, 29, 30, 31] = K 1 [22] ⊕ K 3 [22] ⊕ K 4 [42, 43, 45, 46] (7) P H [15] ⊕ P L [7, 18, 24, 27, 28, 29, 30, 31] ⊕ C H [15] ⊕ C L [7, 18, 24, 27, 28, 29, 30, 31] = K 1 [42, 43, 45, 46] ⊕ K 2 [22] ⊕ K 4 [22] ⊕ K 5 [42, 43, 45, 46] (</p><p>First, we tested the performance of one bit key recovery algorithm on L 3 which can be seen in Function 6. Model was trained for 200 epochs using the Adam optimizer <ref type="bibr" target="#b14">[15]</ref> with a batch size of 1000 against MSE loss with L2-regularization. And there were 10 5 train data and 10 4 validation data used. Figure <ref type="figure" target="#fig_2">2a</ref> shows the learn history of Net L3 . The accuracy on validation data is 67.23% which is very closed to theoretical goal model which is 70%, same with P r L3 .</p><p>To be clear, our neural network knows nothing about XOR operation and detailed data distribution, but it can still perform well almost like goal model which knows all about knowledge. All of those show that the presented approach equips excellent learning capability of describing XOR distributions. What's more, we found that the increase of train data can significant improve the accuracy, and the network with 10 5 data is improved with 0.43% than 10 4 data.</p><p>Apply those models to recover key information and we found that the success rate of neural network models is only lower than theoretical Bayesian model slightly. The number of plain-cipher text pairs required in key recovery in different success rate based on those discriminators are shown in Fig. <ref type="figure" target="#fig_2">2b</ref>. For each result, we run key recovery process for 2000 times to obtain moderate observations. We can see that our neural network can complete key recovery given small plain-cipher text set, and Net L3 trained by 10 5 training data even performs better than theoretical success rate. Thus, those network model showed their capacity to distinguish different distributions. (a) (b) Excepted 3-round one bit key recovery, we also ran 4 and 5-round key recovery based on linear expression in Function 7 and Function 8. Comparing with L 3 , the binomial distribution probability like P r L5 even decreases from 70% into 51.9% <ref type="bibr" target="#b1">[2]</ref>. Obviously, the difficulty of distinguishing those two different distributions increases a lot. Table <ref type="table" target="#tab_0">1</ref> shows the accuracy and key recovery of best models. There, B n is the discriminator of goal model using Bayes mentioned above. And we can find that almost all of them can recover required one bit key with limited plain-cipher text pairs number. For neural discriminators Net L5 , though it does not achieve success rate more than 95% with less than 20000 pairs plain-cipher text, it still performs its ability recovering key bit with success rate of even 90%.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 4 . MULTIPLE BITS DEEP LEARNING NETWORK CANDI-DATE KEY RANK ALGORITHM</head><p>Input: L n , n-round linear approximate equation Net L n , neural net discriminator trained by L n P air, Plain-cipher text pairs generated by key K Output: output Rank key 1: N k ← the number of effective subkey bits in left L n 2: T k ← {0} 2 N k 3: for key in len(T k ) do 4:</p><p>Ex ← bit sequences extracted from (P air, key) following L n 5:</p><formula xml:id="formula_9">G k ← Net L n (Ex) 6: T k [key] = sum(G key )/len(G key ) 7: Rank k ← sort T k by descending value order 8: return Rank k</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Multiple Bits Key Recovery</head><p>Like Function 4, we can apply (n-1)-round linear approximation expression L n-1 to consecutive F-functions from the first round to the (n-1)th round or from the second round to the nth round of n rounds DES, and obtain n-round linear equation L n with some bits in F-functions. Because K n is added in expression, we can try all possible effective bits in K n and test whether the value of left L n satisfies the similar distribution like L n-i , so that recover those effective bits. Thus, we propose new multiple bits key candidate recovery algorithm showed in Algorithm 4 to recover multiple bits using deep learning networks.</p><p>Train and Recover. Similar with one bit key recovery algorithm, we also utilize the ability of deep learning networks that can distinguish different distributions. Of course, we have to consider the interference produced by right side of Function 4. In order to simplify our models, we suppose that the value of γ • K is 0 which may be happened with the probability of 1/2. Then for once right guess of key, the distribution of L l n will still be almost binomial distribution which 0 will appear in the probability equal to P r L n , and we call it real distribution. While the distribution for one wrong guess of key will be uniform, and we name it random distribution. Those difference is what our networks should distinguish. If given bit sequences generated by correct fixed key, neural network discriminator Net L n should output label of real distribution as 1 with a big probability, otherwise, it should be random distribution as 0.</p><p>Also, we give the generation phases of training and validation data.</p><p>1. Generate plain texts P and label Y ordering uniformly distribution, and Num P is the number of those P . 2. Generate master key K ordering uniformly distribution, and filtrate out Num P K that satisfy γ • K = 0.</p><p>3. Encrypted P with K by n-round DES cipher and obtain cipher text C. 4. Extract P -C pairs into bits sequence EX pc and K into EX k with linear equation L n . 5. For each label Y , do.</p><p>-if Y = 1, Pad EX pc with 0 into X following the order of (α</p><formula xml:id="formula_10">• P ||β • C||μ • F 1 ||ν • F n ). -if Y = 0, Pad EX pc</formula><p>with 0 into X following the order of (α • P ||β • C||Rand||Rand), which Rand is generated ordering uniformly distribution.</p><p>As we know, F 1 (P L , K 1 ) and F n (C L , K n ) are determined by effective text bits and effective key bits. Because the number of effective key bits are few enough, we can research those bit keys exhaustively and call those keys as key candidate. For each possible key candidate, we test this key candidate with some plaincipher text pairs and input corresponding bit sequences extracted following L n into network model Net L n . We count those output as the score which support that this key candidate is the right bits of master key required. Sort those key candidates with corresponding score in descending order and we call those as key rank. A well discriminator should have the ability ranking real right subkey higher.</p><p>Once we get a key rank, we can run an exhaustive key search for remaining several bits key. In each trying, we will choose a candidate bit key from key rank by order. Obviously, the higher the rank of right subkey is, the quicker whole key recovery will complete.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Goal Model.</head><p>Also, our neural network discriminator Net L need distinguish two binomial distributions. However, different with distributions in one bit key recovery, these binomial distributions should be with p real = P r L and p ran = 1 2 . Use Function 5 and we can obtain the theory accuracy of B L with Bayesian model.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Experiment.</head><p>We run our network models on the number of 10 5 training data and 10 4 validation data. And we tested the performance of multiple bits key recovery on L 4 showed in Function 9 extended from L 3 . Thus P r L 4 will almost equal to P r L3 if effective key bits in K 4 is right. P H <ref type="bibr" target="#b14">[15]</ref> ⊕ P L [7, 18, 24, 29] ⊕ C H [7, 18, 24, 29] ⊕ C L <ref type="bibr" target="#b14">[15]</ref> </p><formula xml:id="formula_11">⊕ F 1 (P L , K 1 )[15] = K 2 [22] ⊕ K 4 [22] (9)</formula><p>We trained this neural network about 4-round with 200 epochs and each epoch is run in size of 5000. As no unit in L 4 is more than 4 bits, we set padding as 5. And we contain 6 × 5 bits sequence, where the sixth unit is F 4 and it don't appear in Function 9, we will pad it into {0} 5 . Real and random data determined by random label Y were sent to 5-depth residual network. And those two different distributions were separated with accuracy of 56.77%, while the accuracy of theoretical Bayesian model should be 58.3%.</p><p>Analysis the effective text and key bits in Function 9, we can easily ensure that the effective key bits effecting left side of L 4 are {K 1  We set a random master key K which holds γ •K = 1 asked by trained neural network Net L 4 above, and we obtained plain-cipher pairs P air with number of N pc encrypted by K. Then we extract each pair following L 4 and obtain bit sequence (α • P ||β • C). Up to now, we have no information about F 1 in L 4 . For each key candidate K can , we compute μ • F 1 (P L , K can ) and insert μ • F 1 into sequence. Record the prediction Net L 4 and get score of K can .</p><p>Count all score of key candidate K can , the rank of those key candidates with score is key rank. Research the rank of correct effective key bits, and we can test the performance of Net L 4 is showed in Table <ref type="table" target="#tab_1">2</ref>. As key ranks using Net L 4 are no lower than 2 5 = 32 in those small number of plain-cipher pairs, all of those indicate that our neural network models can distinguish different distribution in multiple bits key recovery and are pretty effective for key ranking.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">Conclusion</head><p>In this paper, we used deep learning network achieving linear attack in roundreduced DES. We proposed the network structure to distinguish different performance of linear expressions. Our experiments indicated that those deep learning networks have the capacity of learning complex static characteristics like XOR and distinguishing different distributions. In order to make networks perform better, we also designed two linear attack algorithms which apply network in one bit and multiple bits key recovery. These end-to-end architectures need almost few knowledge about distribution of linear expressions and performs well in our experiments. And the representations of our results are also useful for cryptanalysis on other more complex block ciphers.</p><p>For further work, we will continue to test the performance using deep learning networks to research linear approximations with limited advanced knowledge.</p><p>What's more, we found a problem effecting performance of net when we trained our network. Limited by number N t of plain-cipher text bits, there are only 2 Nt text sequences in train text. However, training data is usually larger than this value and make some same input may have different label, and this may make network puzzled. The same situation also happened in <ref type="bibr" target="#b7">[8]</ref>, and we will explore those further more.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 1 .</head><label>1</label><figDesc>Fig. 1. Model overview. An universal neural network architecture used in our experiments</figDesc><graphic coords="6,42.81,141.95,338.14,146.92" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Algorithm 3 .</head><label>3</label><figDesc>ONE BIT DEEP LEARNING NETWORK KEY RECOVERY ALGORITHM Input: Ln, n-round linear approximate equation NetL n , neural net discriminator trained by Ln P air, Plain-cipher text pairs generated by fixed key K Output: output 1: Npc ← the number of P air 2: G ← NetL n (P air) 3: if sum(G) &gt; Npc/2 then 4: return right of Ln = 1 5: else 6:</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 2 .</head><label>2</label><figDesc>Fig. 2. (a) shows accuracy and loss of Net3 in total train process data size of 10 5 respectively. Both valuation data and training data perform synchronously and indicate that network work well without over fitting. (b) shows key recovery performance of Bayesian model and our models. All of them will almost recover key information with success rate more than 99% when increase the number of plain-cipher pairs into 64. With same pair number, the success rate of neural network models only lower than theory Bayesian model slightly. And increasing the number of train data, neural networks will work better.</figDesc><graphic coords="10,42.81,53.84,338.23,289.12" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><figDesc>[42], K 1 [43], K 1 [44], K 1 [45], K 1 [46], K 1 [47]}, all of them are related to S-box S 1 . Those 6 bits subkey are what we aim to recover. We list all possibility of 6 bits may take and get key candidate table with size of 2 6 = 64.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1 .</head><label>1</label><figDesc>results of different models on corresponding linear expression Ln. Meanwhile, we show the average number of plain-cipher text pairs that can achieve key recovery success rate, each of them are test in 2000 times</figDesc><table><row><cell cols="4">Index Network Train data Epoch</cell><cell cols="6">Depth Accuracy Number of P -C pairs for success rate</cell></row><row><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell><cell>85%</cell><cell>90%</cell><cell cols="2">95% 99%</cell></row><row><cell>1</cell><cell>B 3</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>0.7</cell><cell>6</cell><cell cols="2">10 17</cell><cell>32</cell></row><row><cell>2 3</cell><cell>Net L 3 Net L 3</cell><cell>10 4 10 5</cell><cell cols="2">10 3 5 × 10 3 5 5</cell><cell>0.668 0.6723</cell><cell>14 10</cell><cell cols="2">18 32 18 25</cell><cell>64 32</cell></row><row><cell>4</cell><cell>B 4</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>0.561</cell><cell>67</cell><cell cols="2">112 190</cell><cell>358</cell></row><row><cell>5</cell><cell>Net L 4</cell><cell>10 6</cell><cell cols="2">5 × 10 4 5</cell><cell>0.5375</cell><cell>115</cell><cell cols="2">200 332</cell><cell>633</cell></row><row><cell>6</cell><cell>B 5</cell><cell>-</cell><cell>-</cell><cell>-</cell><cell>0.519</cell><cell cols="4">2770 4617 7849 14774</cell></row><row><cell>7</cell><cell>Net L 5</cell><cell>10 6</cell><cell cols="2">5 × 10 4 10</cell><cell>0.5128</cell><cell cols="3">5130 8631 -</cell><cell>-</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 2 .</head><label>2</label><figDesc>Multiple bits key recovery on 4-round DES. We list the average key rank on different number of plain-cipher pairs. They are measured through 200 rounds in replicated test.Network Train data depth Accuracy Average key rank in number of P-C pairs 32 64 128 256</figDesc><table><row><cell>Net L 4</cell><cell>10 5</cell><cell>5</cell><cell>0.5677</cell><cell>13 9</cell><cell>3</cell><cell>2</cell></row></table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><head>Acknowledgments.</head><p>The authors appreciate the anonymous reviewers valuable comments, which improved the paper greatly. This work was supported by <rs type="funder">National Nature Science Foundation of China</rs> under Grants No. <rs type="grantNumber">61941116</rs>, No. <rs type="grantNumber">61772517</rs> and No. <rs type="grantNumber">U1936119</rs>, and <rs type="funder">National Key R&amp;D Program of China</rs> under Grant No. <rs type="grantNumber">2019QY</rs>(Y)<rs type="grantNumber">0602</rs>.</p></div>
+			</div>
+			<listOrg type="funding">
+				<org type="funding" xml:id="_qwex7GT">
+					<idno type="grant-number">61941116</idno>
+				</org>
+				<org type="funding" xml:id="_KFY4HEA">
+					<idno type="grant-number">61772517</idno>
+				</org>
+				<org type="funding" xml:id="_wzKQkEt">
+					<idno type="grant-number">U1936119</idno>
+				</org>
+				<org type="funding" xml:id="_F4ZUegG">
+					<idno type="grant-number">2019QY</idno>
+				</org>
+				<org type="funding" xml:id="_THPBEee">
+					<idno type="grant-number">0602</idno>
+				</org>
+			</listOrg>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Federal Information Processing Standards Publication: dictionary for information processing</title>
+		<idno type="DOI">10.6028/nbs.fips.11-1-sep30/1977</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Federal Information Processing Standards</title>
+		<imprint>
+			<biblScope unit="volume">46</biblScope>
+			<date type="published" when="1977">1977</date>
+			<publisher>National Bureau of Standards</publisher>
+		</imprint>
+		<respStmt>
+			<orgName>National Burean of Standards ; U.S. Department of Commercc</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">National Burean of Standards: Data Encryption Standard. U.S. Department of Commercc, Federal Information Processing Standards 46 (1977)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Linear cryptanalysis method for DES cipher</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Matsui</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-48285-733</idno>
+		<ptr target="https://doi.org/10.1007/3-540-48285-733" />
+	</analytic>
+	<monogr>
+		<title level="m">EUROCRYPT 1993</title>
+		<editor>
+			<persName><forename type="first">T</forename><surname>Helleseth</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="1994">1994</date>
+			<biblScope unit="volume">765</biblScope>
+			<biblScope unit="page" from="386" to="397" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Matsui, M.: Linear cryptanalysis method for DES cipher. In: Helleseth, T. (ed.) EUROCRYPT 1993. LNCS, vol. 765, pp. 386-397. Springer, Heidelberg (1994). https://doi.org/10.1007/3-540-48285-7 33</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">The first experimental cryptanalysis of the data encryption standard</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Matsui</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-48658-51</idno>
+		<ptr target="https://doi.org/10.1007/3-540-48658-51" />
+	</analytic>
+	<monogr>
+		<title level="m">CRYPTO 1994</title>
+		<editor>
+			<persName><forename type="first">Y</forename><forename type="middle">G</forename><surname>Desmedt</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="1994">1994</date>
+			<biblScope unit="volume">839</biblScope>
+			<biblScope unit="page" from="1" to="11" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Matsui, M.: The first experimental cryptanalysis of the data encryption stan- dard. In: Desmedt, Y.G. (ed.) CRYPTO 1994. LNCS, vol. 839, pp. 1-11. Springer, Heidelberg (1994). https://doi.org/10.1007/3-540-48658-5 1</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Linear cryptanalysis using multiple linear approximations</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Hermelin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><surname>Nyberg</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2011">2011</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hermelin, M., Nyberg, K.: Linear cryptanalysis using multiple linear approxima- tions. IACR Cryptology ePrint Archive (2011)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Learning to protect communications with adversarial neural cryptography</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Abadi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">G</forename><surname>Andersen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">arXiv Cryptography and Security</title>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Abadi, M., Andersen,D.G.: Learning to protect communications with adversarial neural cryptography. arXiv Cryptography and Security (2017)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Improving attacks on round-reduced Speck32/64 using deep learning</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-76</idno>
+		<ptr target="https://doi.org/10.1007/978-3-030-26951-76" />
+	</analytic>
+	<monogr>
+		<title level="m">CRYPTO 2019. LNCS</title>
+		<editor>
+			<persName><forename type="first">A</forename><surname>Boldyreva</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">D</forename><surname>Micciancio</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Cham</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="volume">11693</biblScope>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr, A.: Improving attacks on round-reduced Speck32/64 using deep learning. In: Boldyreva, A., Micciancio, D. (eds.) CRYPTO 2019. LNCS, vol. 11693, pp. 150-179. Springer, Cham (2019). https://doi.org/10.1007/978-3-030-26951-7 6</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Deep Residual Learning for Image Recognition</title>
+		<author>
+			<persName><forename type="first">Kaiming</forename><surname>He</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiangyu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaoqing</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2016.90</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2016-06">2016</date>
+			<biblScope unit="page" from="770" to="778" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">He, K., et al.: Deep residual learning for image recognition. In: Computer Vision and Pattern Recognition, pp. 770-778 (2016)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b7">
+	<monogr>
+		<title level="m" type="main">Unsupervised cipher cracking using discrete GANs</title>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">N</forename><surname>Gomez</surname></persName>
+		</author>
+		<idno>arXiv: Learning</idno>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gomez, A.N., et al.: Unsupervised cipher cracking using discrete GANs. arXiv: Learning (2018)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Breaking Masked Implementations of the Clyde-Cipher by Means of Side-Channel Analysis</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Friederike</forename><surname>Laus</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Werner</forename><surname>Schindler</surname></persName>
+		</author>
+		<idno type="DOI">10.46586/tches.v2022.i4.397-437</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Transactions on Cryptographic Hardware and Embedded Systems</title>
+		<title level="j" type="abbrev">TCHES</title>
+		<idno type="ISSNe">2569-2925</idno>
+		<imprint>
+			<biblScope unit="page" from="397" to="437" />
+			<date type="published" when="2019">2019</date>
+			<publisher>Universitatsbibliothek der Ruhr-Universitat Bochum</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr, A., Jacob, S., Schindler, W.: CHES 2018 side channel contest CTF -solution of the AES challenges. IACR Cryptology ePrint Archive (2019)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Information Encryption Based on the Synthesis of a Neural Network and AES Algorithm</title>
+		<author>
+			<persName><forename type="first">Vasyl</forename><surname>Lytvyn</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ivan</forename><surname>Peleshchak</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Roman</forename><surname>Peleshchak</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Victoria</forename><surname>Vysotska</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/aiact.2019.8847896</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2019 3rd International Conference on Advanced Information and Communications Technologies (AICT)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2019-07">2019</date>
+			<biblScope unit="page" from="447" to="450" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lytvyn, V., Peleshchak, I., Peleshchak, R., Vysotska, V.: Information encryption based on the synthesis of a neural network and AES algorithm. In: 3rd International Conference on Advanced Information and Communications Technologies, pp. 447- 450 (2019)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Learning Perfectly Secure Cryptography to Protect Communications with Adversarial Neural Cryptography</title>
+		<author>
+			<persName><forename type="first">Murilo</forename><surname>Coutinho</surname></persName>
+			<idno type="ORCID">0000-0001-7545-5040</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Robson</forename><surname>De Oliveira Albuquerque</surname></persName>
+			<idno type="ORCID">0000-0002-6717-3374</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Fábio</forename><surname>Borges</surname></persName>
+			<idno type="ORCID">0000-0001-5159-9517</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Luis</forename><surname>García Villalba</surname></persName>
+			<idno type="ORCID">0000-0001-7573-6272</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Tai-Hoon</forename><surname>Kim</surname></persName>
+			<idno type="ORCID">0000-0003-0117-8102</idno>
+		</author>
+		<idno type="DOI">10.3390/s18051306</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Sensors</title>
+		<title level="j" type="abbrev">Sensors</title>
+		<idno type="ISSNe">1424-8220</idno>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page">1306</biblScope>
+			<date type="published" when="2018-04-24">2018</date>
+			<publisher>MDPI AG</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Coutinho, M., et al.: Learning perfectly secure cryptography to protect communi- cations with adversarial neural cryptography. Sensors 18(5), 1306 (2018)</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Depreciating Motivation and Empirical Security Analysis of Chaos-Based Image and Video Encryption</title>
+		<author>
+			<persName><forename type="first">Mario</forename><surname>Preishuber</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Hutter</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Katzenbeisser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andreas</forename><surname>Uhl</surname></persName>
+			<idno type="ORCID">0000-0002-5921-8755</idno>
+		</author>
+		<idno type="DOI">10.1109/tifs.2018.2812080</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Information Forensics and Security</title>
+		<title level="j" type="abbrev">IEEE Trans.Inform.Forensic Secur.</title>
+		<idno type="ISSN">1556-6013</idno>
+		<idno type="ISSNe">1556-6021</idno>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="2137" to="2150" />
+			<date type="published" when="2018-09">2018</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Preishuber, M., et al.: Depreciating motivation and empirical security analysis of chaos-based image and video encryption. IEEE Trans. Inf. Forensics Secur. 13(9), 2137-2150 (2018)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Learning the enigma with recurrent neural networks</title>
+		<author>
+			<persName><forename type="first">S</forename><surname>Greydanus</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">arXiv Neural and Evolutionary Computing</title>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Greydanus, S.: Learning the enigma with recurrent neural networks. arXiv Neural and Evolutionary Computing (2017)</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Big bias hunting in amazonia: large-scale computation and exploitation of rc4 biases (invited paper)</title>
+		<author>
+			<persName><forename type="first">K</forename><forename type="middle">G</forename><surname>Paterson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><surname>Poettering</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">C N</forename><surname>Schuldt</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-45611-821</idno>
+		<ptr target="https://doi.org/10.1007/978-3-662-45611-821" />
+	</analytic>
+	<monogr>
+		<title level="m">ASIACRYPT 2014</title>
+		<editor>
+			<persName><forename type="first">P</forename><surname>Sarkar</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">T</forename><surname>Iwata</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="volume">8873</biblScope>
+			<biblScope unit="page" from="398" to="419" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Paterson, K.G., Poettering, B., Schuldt, J.C.N.: Big bias hunting in amazonia: large-scale computation and exploitation of rc4 biases (invited paper). In: Sarkar, P., Iwata, T. (eds.) ASIACRYPT 2014. LNCS, vol. 8873, pp. 398-419. Springer, Heidelberg (2014). https://doi.org/10.1007/978-3-662-45611-8 21</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Adam: a method for stochastic optimization</title>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">P</forename><surname>Kingma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ba</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on Learning Representations</title>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Kingma, D.P., Ba, J.: Adam: a method for stochastic optimization. In: Interna- tional Conference on Learning Representations (2015)</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

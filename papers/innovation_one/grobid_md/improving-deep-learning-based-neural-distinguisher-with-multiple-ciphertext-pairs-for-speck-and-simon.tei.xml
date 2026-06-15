@@ -1,0 +1,1361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Improving deep learning-based neural distinguisher with multiple ciphertext pairs for speck and Simon</title>
+				<funder ref="#_8fDDH5j">
+					<orgName type="full">Special Funds for Basic scientific Research</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>Springer Science and Business Media LLC</publisher>
+				<availability  status="unknown">
+					<licence/>
+				</availability>
+				<date type="published" when="2025-04-21">2025-04-21</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="consolidated" source="crossref">
+					<analytic>
+						<author>
+							<persName><forename type="first">Yufei</forename><surname>Hou</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Jie</forename><surname>Liu</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> School of Software , Northwestern Polytechnical University , Xi&apos;an 710000 , China.</note>
+								<orgName type="department">School of Software</orgName>
+								<orgName type="institution">Northwestern Polytechnical University</orgName>
+								<address>
+									<postCode>710000</postCode>
+									<settlement>Xi&apos;an</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Shouxu</forename><surname>Han</surname></persName>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Information Security Research Center , CEPREI , Guangzhou 511370 , China.</note>
+								<orgName type="department">Information Security Research Center</orgName>
+								<orgName type="institution">CEPREI</orgName>
+								<address>
+									<postCode>511370</postCode>
+									<settlement>Guangzhou</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Zhongjun</forename><surname>Ma</surname></persName>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>3</label> Department of cybersecurity , Shandong Future Network Research Institute , JiNan , China.</note>
+								<orgName type="department">Department of cybersecurity</orgName>
+								<orgName type="institution">Shandong Future Network Research Institute</orgName>
+								<address>
+									<settlement>JiNan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Xi</forename><surname>Ye</surname></persName>
+							<affiliation key="aff3">
+								<note type="raw_affiliation"><label>4</label> Institute of Cyberspace Security , Wuhan University , Wuhan 430072 , China.</note>
+								<orgName type="department">Institute of Cyberspace Security</orgName>
+								<orgName type="institution">Wuhan University</orgName>
+								<address>
+									<postCode>430072</postCode>
+									<settlement>Wuhan</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Xuan</forename><surname>Nie</surname></persName>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> School of Software , Northwestern Polytechnical University , Xi&apos;an 710000 , China.</note>
+								<orgName type="department">School of Software</orgName>
+								<orgName type="institution">Northwestern Polytechnical University</orgName>
+								<address>
+									<postCode>710000</postCode>
+									<settlement>Xi&apos;an</settlement>
+									<country key="CN">China</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Improving deep learning-based neural distinguisher with multiple ciphertext pairs for speck and Simon</title>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">Scientific Reports</title>
+						<title level="j" type="abbrev">Sci Rep</title>
+						<idno type="eISSN">2045-2322</idno>
+						<imprint>
+							<publisher>Springer Science and Business Media LLC</publisher>
+							<biblScope unit="volume">15</biblScope>
+							<biblScope unit="issue">1</biblScope>
+							<date type="published" when="2025-04-21" />
+						</imprint>
+					</monogr>
+					<idno type="MD5">A8E4C66FF7EEE20772D5E5AF18CA697C</idno>
+					<idno type="DOI">10.1038/s41598-025-98251-1</idno>
+					<note type="submission">Received: 5 February 2025; Accepted: 10 April 2025</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-15T01:37+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>The neural network-based differential distinguisher has attracted significant interest from researchers due to its high efficiency in cryptanalysis since its introduction by Gohr in 2019. However, the accuracy of existing neural distinguishers remains limited for high-round-reduced cryptosystems. In this work, we explore the design principles of neural networks and propose a novel neural distinguisher based on a multi-scale convolutional block and dense residual connections. Two different ablation schemes are designed to verify the efficiency of the proposed neural distinguisher. Additionally, the concept of a linear attack is introduced to optimize the input dataset for the neural distinguisher. By combining ciphertext pairs, the differences between ciphertext pairs, the keys, and the differences between the keys, a novel dataset model is designed. The results show that the accuracy of the proposed neural distinguisher, utilizing the novel neural network and dataset, is 0.15-0.45% higher than Gohr's distinguisher for Speck 32/64 when using a single ciphertext pair as input. When using multiple ciphertext pairs as input, it is 1.24-3.5% higher than the best distinguishers for Speck 32/64 and 0.32-1.83% higher than the best distinguishers for Simon 32/64. Finally, a key recovery attack based on the proposed neural distinguisher using a single ciphertext pair is implemented, achieving a success rate of 61.8%, which is 9.7% higher than the distinguisher proposed by Gohr. Therefore, the proposed neural distinguisher demonstrates significant advantages in both accuracy and key recovery rate.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Motivation</head><p>Neural distinguisher-based key recovery attacks have been widely studied for various block ciphers and have achieved higher key recovery rates. However, there is still much work to be done, such as optimizing the input data model, improving the neural network, enhancing interpretability, and advancing the key recovery attack. In this work, we explore the construction of input data, the optimization of the neural network, and their performance in key recovery attacks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Our contributions</head><p>This paper focuses on the accuracy of the neural distinguisher, which influences the success rate of key recovery attacks while addressing security aspects. The main contributions of this work are as follows:</p><p>(i) We design three novel neural networks based on ResNeXt and DenseNet, in which both the residual block and the convolutional layers are improved. Then derive rules of thumb for optimizing the neural network modules: increase the number of convolution layers in the residual block from 2 to 5. Start with a convolution kernel size of 1 and increase it by 2 for each successive convolution layer. Increase the convolution kernel size between different residual blocks by 2 with each step. (ii) We combine the ciphertext pairs and their differences, the keys and the difference of the keys to the dataset.</p><p>This approach highlights that the number of ciphertext pairs, the number of decrypted rounds, and the order in which these data are combined significantly affect accuracy. Finally, construct the dataset with highest accuracy by using the ciphertext pairs of different rounds, the differences of the ciphertext pairs of different rounds, and the differences of the keys used to decrypt the ciphertexts of different rounds. (iii) A key recovery attack based on the proposed neural distinguisher is designed and implemented for the Speck 32/64 and Simon 32/64. This attack shows a 9.7% improvement in key recovery rate compared to the state-of-the-art methods for Speck 32/64.</p><p>The organization is as follows: The paper is organized as follows. Section 2 provides an introduction to deep learning-based differential cryptanalysis and introduces the Speck cipher. The proposed neural networks and the rules for optimizing them are described in Sect. 3. In Sect. 4, we design two efficient data models and explore the construction of the input dataset using different cipher materials and orders. In Sect. 5, the accuracy of the proposed neural distinguisher for Speck 32/64 and Simon 32/64 is tested. Additionally, we verify the key recovery rate of the proposed neural distinguisher using single ciphertext pairs as input. Finally, the work is concluded in Sect. 6.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Preliminaries</head><p>Let (x, x * ) denotes a plaintext pair with difference ∆ x. The corresponding ciphertext pair is (c, c * ), and the i -th round's ciphertext pair is (xi, x * i ). The notations used in this work are defined as follows:</p><p>Definition 1 (Difference). For any plaintext x, x * ∈ {0,1} n , the difference between x and x * is defined as</p><formula xml:id="formula_0">∆ x = x ⊕ x * .</formula><p>Definition 2 (Difference of the ciphertext pair). For any plaintext x, x * ∈ {0,1} n with a difference ∆ x = x ⊕ x * , their i-th round's ciphertext are xi and x * i , respectively. Then ∆ xi = xi ⊕ x * i is the difference of the ciphertext pair.</p><p>Definition 3 (Neutral bit). Let {e0, e1, . . . , ei , . . . , en-1} ∈ F n 2 be the standard basis, where i ≥ 0 is the index. Suppose that any plaintexts x, x * ∈ {0,1} n have an input difference ∆ x, and their i-th round's ciphertext difference is ∆ xi. If the difference of i-th round's ciphertext of x + ei and x * + ei also equals ∆ xi, then the i-th bit is the neutral bit of the difference (∆ x → ∆ xi).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The speck 32/64 cipher</head><p>The Speck cryptosystem is a lightweight block cipher with an ARX (Addition, Rotation, and XOR) construction. It is proposed by Beaulier et al. <ref type="bibr" target="#b10">11</ref> for the NSA, aimed at achieving high efficiency for IoT devices. Different rotation constants and the number of rounds are designed for various block and key sizes. A general description of Speck is Speck B/A, where B denotes the block size and A denotes the key size. This work focuses on Speck 32/64 with 22 rounds. The round function is shown in Fig. <ref type="figure" target="#fig_1">1</ref>.</p><p>As shown in Fig. <ref type="figure" target="#fig_1">1</ref>, the plaintext is split into two subblocks <ref type="bibr">(Li, Ri)</ref> with each length of 16 bits, where i denotes the i-th round. ki is the 16 bits key for the i-th round, generated by the round key schedule algorithm using mast key K. The round function follows a classical Feistel structure, combining XOR, addition modulo, and bitwise operations, which are denoted by ⊕, ⊞ and ⊙, respectively. The bitwise left and bitwise right rotations are denoted by &lt;&lt;&lt; and &gt;&gt;&gt;, respectively. In the round function of Speck 32/64, α = 7 and β = 3.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The Simon 32/64 cipher</head><p>Simon 11 is a lightweight block cipher proposed by the NSA to meet the need for secure, flexible, and analyzable encryption. Its block sizes are 32, 48, 64, 96, and 128 bits, which can be expressed in units of word lengths as 16, 24, 32, 48, and 64, respectively. The round function of Simon is shown in Fig. <ref type="figure" target="#fig_0">2</ref>.  </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Scientific Reports | 2025 15:13696</head><p>As shown in Fig. <ref type="figure" target="#fig_0">2</ref>, the key-dependent Simon (2</p><formula xml:id="formula_1">• n)/(l • n)</formula><p>round function is the map R sk i : GF (2) n × GF (2) n → GF (2) n × GF (2) n , defined by formula (1), where n is the block size in word length unit, and l is the number of the key word length.</p><formula xml:id="formula_2">R sk i (xi, yi) = (yi ⊕ f (xi) ⊕ ski, xi) (<label>1</label></formula><formula xml:id="formula_3">)</formula><p>Where</p><formula xml:id="formula_4">f (xi) = ( S 1 xi ⊙ S 8 xi ) ⊕ S 2 xi, ⊙</formula><p>is the bitwise AND operation, and ski ∈ GF (2) n is the round key.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Structure of the Gohr' neural network</head><p>The structure of the neural network used for differential analysis was first proposed by Gohr in <ref type="bibr" target="#b9">10</ref> . Its network is shown in Fig. <ref type="figure" target="#fig_2">3</ref>: In 10 , the ciphertext pair (x, x * ) is generated by encrypting two plaintext pair with a specified difference ∆ x , for example ∆ x = (0 × 0040/0000). The ciphertext pair (x, x * ) encrypted by Speck 32/64 is first split into two words. Then, it goes through the initial convolutional (IC) model, where a convolution with a filter size of 1 and 32 filters is applied. Batch normalization and a Rectified Linear Unit (ReLU) activation layer follow the convolutional layer. Next, 10 Convolutional Block (CB) models are applied, each consisting of two iterations of convolutional layers with a filter size of 3 and 32 filters, followed by batch normalization and ReLU activation. The input of each CB model is added to its output. Finally, the output of the last CB model is processed by the prediction head (PH) model, which consists of two iterations of a densely connected layer (using 64 neurons), batch normalization, and ReLU activation. The output of the PH model is processed by a densely connected layer in the output model, which uses a sigmoid activation function and a single neuron.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The differential analysis</head><p>Differential analysis is a commonly used method for data analysis, which extracts significant features and correlations between two or more data sets. It is a form of chosen plaintext attack. This method distinguishes ciphertext pairs of a given difference from random ciphertext pairs based on the probability propagation property of the plaintext pair with the given difference during encryption. Given an encryption function E :</p><formula xml:id="formula_5">F np 2 × F n k 2 → F nc</formula><p>2 , where np denotes the number of the plaintext bits, n k denotes the number of the key bits, and nc denotes the number of the ciphertext bits. Let the input of plaintext pair be (x, x * ), the difference of x and x * is denoted by</p><formula xml:id="formula_6">∆ x = x ⊕ x * . The ciphertext-pair of i-th round is (xi, x * i ),</formula><p>and its difference is denoted by</p><formula xml:id="formula_7">∆ xi = xi ⊕ x * i .</formula><p>After n rounds of encryption, we obtain a differential sequence Ω = (∆ x, ∆ x1, • • • , ∆ xn), which is called the differential path of the n-rounds of encryption. This path represents the differential propagation characteristics of the encryption. Let ND be the number of the plaintext pair. The probability that all these plaintext pair have a differential path Ω is given by formula (2):</p><formula xml:id="formula_8">RP (∆ x, ∆ xn) = ND 2 m (<label>2</label></formula><formula xml:id="formula_9">)</formula><p>where m is the length of the plaintext. The Differential Distribution Table (DDT) is widely used to analyze cryptosystems, listing the probability of each differential path. In 10 , Gohr constructed a neural distinguisher (ND) for Speck 32/64 reduced to 8 rounds and recovered the key for Speck 32/64 reduced to 11 rounds. First, Gohr extended the 7-round distinguisher to a 9-round distinguisher by prepending a two-round differential transition ∆ x = δ → ∆ x2 = (0x0040,0000), passing as desired with a probability of about 1/64. For example, ∆ x = δ = (0x0211,0x0a04). Then, the 9-round distinguisher was extended by another round with no additional cost, requiring encryptions of ciphertext pairs (x0, x * 0 ) that encrypt to the desired input difference δ after one round of Speck encryption. This creates a 10-round distinguisher, which can be easily achieved since no key addition happens in Speck before the first nonlinear operation. Finally, the ciphertext pair (x11, x * 11 ) is decrypted by a random key, and recovery the key by the 10-round distinguisher and Bayesian optimization. Scientific Reports | 2025 15:13696</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Design of the neural network</head><p>Inspired by the pyramid convolutional structure and the residual network, we introduce multi-scale convolution and multi-character studies into the convolutional layer to propose a novel distinguisher (ND). Furthermore, different convolutional block models are designed to enhance the accuracy of the proposed ND. Additionally, three different convolutional block models are designed to use as the ablation schemes and validate the efficiencies of the proposed ND.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The distinguisher using pyramid convolutional structure</head><p>Since the pyramid convolutional structure can capture both global and local features, it is employed to optimize the convolutional module of Gohr's neural network and construct eleven different distinguishers. We test the accuracy of these distinguishers using different number of convolutional blocks NCB, convolutional layers NCL, first convolutional kernel size of each CB model NCK, and the increasement of convolutional kernel size Nstep in each CB block. The results of these distinguishers against 5 round-reduced Speck 32/64 cipher are shown and compared with that of Gohr's distinguisher in Table <ref type="table" target="#tab_0">1</ref>: As shown in Table <ref type="table" target="#tab_0">1</ref>, the distinguisher with the highest accuracy is ND_G8, which has five CB models, each with five convolutional layers. The convolutional kernel sizes for the first CB model are 1, 3, 5, 7, and 9 for each convolutional layer, with the corresponding convolutional kernel size of each subsequent CB model increasing by a step of 2. The accuracy of all the improved distinguishers is higher than that of Gohr's, which implies that the pyramid convolutional structure can improve the accuracy of the ND.</p><p>From above, we derive the structure optimization criteria of neural discriminator network based on ResNet as follows:</p><p>Proposition 1 The accuracy of the neural distinguisher can be enhanced by increasing the number of convolutional layers in the residual block from 2 to 5.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Proposition 2</head><p>The accuracy of the neural distinguisher can be enhanced by increasing the convolutional kernel size in the residual block from 1, with a step of 2.</p><p>Proposition 3 The accuracy of the neural distinguisher can be enhanced by increasing the initial convolutional kernel size in different residual blocks with a step of 2.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>New distinguisher base on multiple scale convolution and denser residual connection</head><p>Based on the above propositions, we introduce the denser residual connection in <ref type="bibr" target="#b36">37</ref> and construct a novel CB model. Then, present a new neural distinguisher ND1 with five proposed CB models, while the other models remain the same as Gohr's. The network structure is shown in Fig. <ref type="figure" target="#fig_4">4</ref>.</p><p>In Fig. <ref type="figure" target="#fig_4">4</ref>, ks denotes the initial convolutional kernel size, and i denotes the i-th convolutional block. The operation ⊕ denotes addition. In the new convolutional block, a denser residual connection is added from the input to all the convolutional layers. The n-th convolutional layer is defined by formula (3).</p><formula xml:id="formula_10">F n (x) = F ( ∑ n-1 i=1 F i (x) + x ) (<label>3</label></formula><formula xml:id="formula_11">)</formula><p>where x is the input of the n-th layer, F i (x) is the output of the i-th layer. The final output of the convolutional block model is F N CL (x). Additionally, a skip connection is added from the output of each convolutional layer to the input of all subsequent convolutional layers, while the convolutional kernel size of the residual block increases by 2. These skip connections allow the use of features from lower layers, and the addition operation preserves the shape of the feature matrix, preventing the data dimension from exploding.</p><p>The ciphertext pairs are first reshaped into a two-dimensional array with 16 columns. Then, they are processed by a convolution operation with a kernel size of 1, followed by Batch Normalization and the ReLU function. In the convolutional block model, the data is processed through five convolutional blocks, each containing different convolutional layers. In each convolutional block, there are five convolutional layers with an increasing convolutional kernel size, incrementing by 2, enabling feature extraction at different scales. The output of the convolutional block model is processed by two dense blocks, each containing a dense layer of size 64, a Batch Normalization operation, and a ReLU function. Finally, the features are mapped into the target space by a dense layer of size 1 and passed through the Sigmoid function. By using the multi-scale convolution operation in the convolutional block model, more features of the ciphertext pairs can be captured, allowing the new neural distinguisher to achieve higher accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Design of the ablation schemes</head><p>In the proposed distinguisher ND1, the input of each convolutional layer is the output of its previous convolutional layer, except for the first convolutional layer. To verify whether this design may lead to the loss of some features from the original input, we consider using convolutional layers with different kernel sizes simultaneously to process the original input. We replace the CB model of ND1 with five parallel CB blocks, each containing different convolutional layers, to obtain a new neural distinguisher ND2. The structure of the CB model of ND2 is shown in Fig. <ref type="figure" target="#fig_3">5</ref>.</p><p>Here, the parameters ks represents the initial convolutional kernel size. As shown in Fig. <ref type="figure" target="#fig_3">5</ref>, there are five convolutional blocks, each consisting of two identical convolutional layers. The convolutional operation of each identical layer can be defined as a function <ref type="bibr">F (x)</ref>. The convolutional kernel size of the convolutional layers increases with a step of 2. Multiple groups of convolutional layers with different kernel sizes can study features in parallel, thereby enhancing the model's expressive power. This approach also reduces the number of parameters and computational cost.</p><p>Additionally, the initial convolutional model of ND1 uses a single convolutional layer with a kernel size of 1 to capture the features of the ciphertext pairs. To verify whether multiple convolutional layers with different kernel sizes can capture more nonlinear features that are widely present in ciphertext pairs, we replace the initial convolutional model of ND1 with a new initial convolutional model containing multiple convolutional layers with different kernel sizes. The resulting neural distinguisher is denoted as ND3. The structure of the new initial convolutional model is shown in Fig. <ref type="figure" target="#fig_5">6</ref>.  </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Scientific Reports | 2025 15:13696</head><p>In Fig. <ref type="figure" target="#fig_5">6</ref>, the input is processed simultaneously by three convolutional layers at the first depth, each with a kernel size of 1 and denoted as F 1,1 (x), F 1,2 (x) and F 1,3 (x), respectively. Then, the outputs of F 1,1 (x) and F 1,3 (x) are concatenated and used as the input for the first convolutional layer at the second depth, defined as F 2,1 (x) = F (F 1,1 (x) , F 1,3 (x)). The second convolutional layer at the second depth is defined as F 2,2 (x) = F (F 1,2 (x) , F 1,3 (x)). Following the same method, the convolutional layer at the third depth is defined as F 3,1 (x) = F (F 2,1 (x) , F 2,2 (x)). Finally, the three outputs are added together to generate the output of the initial convolutional model.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Best parameters and network structure for the proposed neural distinguisher</head><p>To verify the effectiveness of the proposed neural distinguisher, the accuracy of the neural distinguishers ND1 , ND2, and ND3 is tested. The simulation environment is set up as follows:</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Hyperparameters</head><p>We set the number of epochs to 200 and the batch size to 5000. The default parameters of the Adam algorithm in Keras <ref type="bibr" target="#b37">38</ref> are used to optimize the mean squared error (MSE) loss, with a small penalty based on L2 weights regularization, and a regularization parameter c = 10 -5 . The learning rate for epoch i is defined as formula (4).</p><formula xml:id="formula_12">li = α + (n -i) mod (n + 1) n • (β -α )<label>(4)</label></formula><p>where α = 10 -4 , β = 2 • 10 -3 , and n = 9.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Data generation</head><p>The random number generator in Linux, using a fixed random seed, is used to generate the keys, training dataset, and test dataset. The size of the training set is 10 7 , while the size of the test set is 10 6 . Half of the dataset is generated by encrypting the plaintext pairs with an input difference ∆ x = (0x0040,0x0000), which is labeled by 1. The other half of the dataset is generated by encrypting random plaintext pairs, which are labeled as 0.</p><p>Considering the improvements to Gohr's NDs in Table <ref type="table" target="#tab_0">1</ref>, which achieve higher accuracy when NCK = (3,5, 7,9) and NCK = (1,3, 5,7, 9), we test the accuracy of ND1 and ND2 against 5 round-reduced Speck 32/64 for different NCK in Table <ref type="table">2</ref>:</p><p>From Table <ref type="table">3</ref>, we can see that the accuracy of the proposed distinguishers ND1 is approximately equal to the ablation scheme ND2. Therefore, applying parallel convolutional layers with different kernel sizes to the original input has a limited effect on the neural distinguisher. Furthermore, ND2 requires more training time and computational resources, as it requires copying multiple inputs to the CB model and uses more convolutional layers. Therefore, ND1 is more suitable for large input datasets. Although the accuracy of another ablation scheme ND3 is higher than that of the other distinguishers for both 5-round and 6-round reduced Speck 32/64, it is lower than the distinguishers in <ref type="bibr" target="#b9">10,</ref><ref type="bibr" target="#b29">30</ref> for the 7-round reduced Speck. Moreover, its accuracy is significantly lower than that of ND1, suggests that multi-scale convolution in the initial convolutional model fails to capture additional nonlinear features effectively. The accuracy of ND1 is higher than that of the traditional distinguisher and the ND models in <ref type="bibr" target="#b9">10,</ref><ref type="bibr" target="#b28">29</ref> , and <ref type="bibr" target="#b29">30</ref> . The advantage ranges from 0.2 to 0.5%, which is significant according to Gohr's evaluation criteria for neural distinguishers.</p><p>Additionally, the training time, inference speed, memory usage, and number of parameters of the different neural distinguishers are tested on an Intel(R) Xeon(R) Silver 4216 CPU @ 2.10 GHz platform with an RTX 3090 GPU. The results are shown in Table <ref type="table" target="#tab_2">4</ref>. Scientific Reports | 2025 15:13696</p><p>Table <ref type="table" target="#tab_2">4</ref> shows that, the proposed ND1 requires less time than ND2. Although the efficiency of ND1 is lower than ND3, its accuracy is higher. Since accuracy is more critical for key recovery than slightly increased resource consumption, the proposed ND1 represents the best compromise between accuracy and efficiency.</p><p>To verify the validity of the above optimization criteria (Propositions 1-3) for ND1, we conduct an ablation experiment with different combinations of the criteria. The details are shown in Table <ref type="table" target="#tab_1">5</ref>.</p><p>Table <ref type="table" target="#tab_1">5</ref> demonstrates that the combination of different improved components in ND1 contributes to a 0.46% improvement in accuracy.</p><p>Thus, we can conclude that the three propositions in Sect. 3.1 are applicable to the proposed neural distinguisher ND1, ND2 and ND3. The denser residual connection and the multi-scale convolutional layers in the convolutional block module can significantly improve the accuracy of the neural distinguisher. Among them, ND1 achieves the best balance between efficiency and accuracy compared to ND2 and ND3.   Table 3. Comparison of accuracy of different neural distinguishers. *D denotes the traditional distinguisher. *Ghor denotes the neural distinguisher that uses knowledge distillation for the 7 round-reduced Speck 32/64. Table 2. The accuracy of the NDs using improved CB model with different NCK From Table 2, we can see that the accuracy of ND1 and ND2 obtains the maximum advantage of 0.34-0.43% compared to Gohr's when NCK = (1,3, 5,7, <ref type="bibr" target="#b8">9)</ref>. Therefore, we adopt NCK = <ref type="bibr" target="#b0">(1,</ref><ref type="bibr" target="#b2">3,</ref><ref type="bibr" target="#b4">5,</ref><ref type="bibr" target="#b6">7,</ref><ref type="bibr" target="#b8">9)</ref> for the proposed ND1 in the following work. Furthermore, we validate the efficiency of ND1 and the ablation schemes, and compare them with other distinguishers in Table <ref type="table">3</ref>:</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Mathematical analysis of feature extraction improvement</head><p>The convolutional kernel size in <ref type="bibr" target="#b9">10</ref> remains constant at 3, which results in a limited and small receptive field. In this work, the convolutional kernel size within the residual block and between residual blocks increases by a step of 2, leading to a richer convolutional receptive field and an extended feature range. The computation of the receptive field is defined by formula (5):</p><formula xml:id="formula_13">RF i+1 = RF i + (ks -1) × Si (<label>5</label></formula><formula xml:id="formula_14">)</formula><p>where RF i+1 denotes the receptive field of the (i + 1)-th layer, ks represents the convolutional kernel size, and Si denotes the product of the all the steps from the first layer to the i-th layer. Since the convolutional step of both ND1 and the neural distinguisher in 10 is 1, the receptive field can be denoted by RF i+1 = RF i + (ks -1) . Therefore, the receptive field of ND1 becomes larger than that of the neural distinguisher in <ref type="bibr" target="#b9">10</ref> from the third convolutional layer. Furthermore, the receptive field of ND1 increases at each convolutional layer and convolutional block, allowing it to capture multi-scale features. Additionally, based on the definition of the neural network in formula (3), we analyze the process of each convolutional layer in the proposed ND1 and Gohr's neural distinguisher in <ref type="bibr" target="#b9">10</ref> . Let x l denotes the input of the neural distinguisher, l denotes the l-th convolutional block. The output of each convolutional layer is presented in Table <ref type="table">6</ref>: Here, Conv 1D (a, b, c) denote a 1D convolution operation using convolutional layer weight a, convolutional kernel size b, and input c. W l i denotes the weight of the i-th convolutional layer in the l-th convolutional block. Table <ref type="table">6</ref> shows that the final output of ND1 integrates all the features captured by different convolutional layers, whereas the final output of the neural distinguisher in 10 only contains the features captured by the current convolutional layer. Therefore, the modifications introduced in this work significantly enhance the performance of the distinguisher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Constructing of dataset using multiple ciphertext pairs</head><p>Besides the improvement of the neural network structure, the construction of the dataset is another important way to improve the accuracy of the neural distinguisher. In this section, we propose two methods to construct the dataset using different rounds of ciphertext pairs, decryption keys, and ciphertext pair differences. Then obtain two optimal combinations of these elements and test their accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Two novel models of dataset construction</head><p>Since the input data can provide different features for the ND, we construct two new datasets by combining ciphertext pairs, decryption keys, and ciphertext pair differences from different decryption rounds. These datasets are denoted as follows: multi-round multi-splicing ciphertext-pair and keys (MRMSCPK), and multiround multi-splicing ciphertext-pairs and differences (MRMSCPD).</p><p>In MRMSCPK, the ciphertext pair (xi, x * i ) is decrypted by a random key to obtain the ciphertext pair (xi-1, x * i-1 ) and (xi-j, x * i-j ) is obtained by decrypting j times with j different keys. The dataset is denoted by {(xi,</p><formula xml:id="formula_15">x * i ) 1 , • • • (xi, x * i ) N d , (xi-1, x * i-1 ) 1 , • • • , (xi-1, x * i-1</formula><p>) N d , key}, where (xi, x * i ) l denotes the l-th ciphertext pair of i-round's encryption, key = {key 1 , • • • , key j }, and N d is the number of the ciphertext pairs. The structure is shown in Fig. <ref type="figure" target="#fig_10">7</ref>.</p><p>Here, ND is the number of ciphertext pairs. xi-j denotes the ciphertext obtained by decrypting a i-round's ciphertext j times. The size of the dataset is (2m</p><formula xml:id="formula_16">• ND • j + j).</formula><p>In MRMSCPD, the dataset consists of the ciphertext pairs and the difference of the ciphertext pairs, which is denoted as</p><formula xml:id="formula_17">{(xi, x * i ) 1 , (∆ xi) 1 , • • • , (xi, x * i ) N d , (∆ xi) N d , • • • , ( xi-j, x * i-j ) 1 , (∆ xi-j) 1 , • • • , ( xi-j, x * i-j ) N d , (∆ xi-j) N d }</formula><p>. Here, (xi, x * i ) l denotes the l-th ciphertext pair of i-round's encryption, and (∆ xi) l denotes the difference of the l-th ciphertext pair. The detail is shown in Fig. <ref type="figure" target="#fig_9">8</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Index of the convolutional layer</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Output of the convolutional layer</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ND1</head><p>ND in [10]</p><formula xml:id="formula_18">1 Conv1 = Conv 1D ( W l 1 , 2L -1, x l ) R1 = x l + Conv1 Conv1 = Conv 1D ( W l 1 , 3, x l ) 2 Conv2 = Conv 1D<label>(</label></formula><formula xml:id="formula_19">W l 2 , 2L + 1, R1 ) R2 = x l + Conv1 + Conv2 Conv2 = Conv 1D<label>(</label></formula><formula xml:id="formula_20">W l 2 , 3, Conv1 ) 3 Conv3 = Conv 1D<label>(</label></formula><formula xml:id="formula_21">W l 3 , 2L + 3, R2 ) R3 = x l + Conv1 + Conv2 + Conv3 × 4 Conv4 = Conv 1D<label>(</label></formula><formula xml:id="formula_22">W l 4 , 2L + 4, R3 ) R4 = x l + Conv1 + Conv2 + Conv3 + Conv4 × 5 Conv5 = Conv 1D<label>(</label></formula><formula xml:id="formula_23">W l 5 , 2L + 7, R4 ) × Final output y l+1 = x l + Conv5 y l+1 = x l + Conv2</formula><p>Table <ref type="table">6</ref>. The output of each convolutional layer for different neural distinguishers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Scientific Reports | 2025 15:13696</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Construction of dataset with different decryption rounds</head><p>Although the decrypted ciphertext pairs are useful for capturing features, the error propagation introduced by decryption with random keys may mislead the neural distinguisher. Therefore, we explore efficient decryption rounds to construct the datasets for MRMSCPK and MRMSCPD, where the decryption rounds j are varied from 1 to 2. When j = 1, the datasets are denoted by DRMSCPK and DRMSCPD, respectively. We use the ciphertext pairs and their differences from the i-th and (i -1)-th rounds, along with the keys used to decrypt the ciphertext of the i-th round, to construct double-round multiple splicing ciphertext pairs with differences and keys (denoted as DRMSCPDK). The structure of the DRMSCPDK is shown in Fig. <ref type="figure" target="#fig_8">9</ref>.</p><formula xml:id="formula_24">For j = 2, the ciphertext pair (xi, x * i ) is decrypted to (xi-1, x * i-1</formula><p>) and (xi-2, x * i-2 ) using the same random key. All these ciphertext pairs and their differences are used to construct triple-round multiple splicing ciphertext pairs and differences (denoted as TRMSCPD), as shown in Fig. <ref type="figure" target="#fig_13">10</ref>.</p><p>Furthermore, we use two different keys to decrypt (xi, x * i ) and add the differences of the keys at the end of the data in Fig. <ref type="figure" target="#fig_13">10</ref> which is denoted as TRMSCPDKD (triple-round multiple splicing ciphertext pairs, differences, and key differences).</p><p>Since the dataset is reshaped to a 4 × B 2 matrix for each ciphertext pair and input into the initial convolutional layer, the order of the ciphertext pairs and their differences may affect the accuracy. Therefore, we change the order of DRMSCPDK to</p><formula xml:id="formula_25">{ (xi, x * i ) 1 , • • • (xi, x * i ) N d , • • • (xi-1, x * i-1 ) 1 , • • • , (xi-1, x * i-1 ) N d , (∆ xi) 1 , • • • , (∆ xi) N d , (∆ xi-1) 1 , • • • , (∆ xi-1) N d , key }</formula><p>. This dataset is denoted as DRMSCPDK* and shown in Fig. <ref type="figure" target="#fig_12">11</ref>.   </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Scientific Reports | 2025 15:13696</head><p>Then, we change the order of TRMSCPDKD to</p><formula xml:id="formula_26">     (xi, x * i ) 1 , • • • (xi, x * i ) N d , • • • , (xi-1, x * i-1 ) 1 , • • • (xi-1, x * i-1 ) N d , • • • , (xi-2, x * i-2 ) N d , (∆xi) 1 , • • • , (∆xi) N d , (∆xi-1) 1 , • • • , (∆xi-1) N d , (∆xi-2) 1 , • • • , (∆xi-2) N d , key1 ⊕ key2     </formula><p>. This is denoted as TRMSCPDKD* and shown in Fig. <ref type="figure" target="#fig_11">12</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Test of accuracy and key recovery</head><p>To validate the efficiency of the different datasets, we train the neural distinguisher ND1 using the proposed datasets and compare the accuracy of the different neural distinguishers. Additionally, we test key recovery using the proposed ND1 for Speck 32/64 and Simon 32/64. The details are as follows.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Testing the proposed distinguisher with a new dataset format for speck 32/64</head><p>Since the neural distinguisher ND1 achieves the best accuracy and training speed for a single ciphertext pair, we fine-tune the structure and reduce the number of convolutional layers in each convolutional block to 4 for handling multiple ciphertext pairs. The size of the training dataset and prediction dataset is 10 6 and 10 5 , respectively. The epoch is set to 100, and the batch size is set to 1000. The learning rate of epoch i is defined as li = α + (n-i) mod (n+1) n • (βα ), where, α = 10 -4 , β = 2 • 10 -3 , and n = 9. The number of ciphertext pairs is set to ND = 32, as used in <ref type="bibr" target="#b32">33</ref> . The accuracy of the proposed ND1 for Speck 32/64 is test and compared in Table <ref type="table" target="#tab_4">7</ref>.</p><p>From Table <ref type="table" target="#tab_4">7</ref>, we can see that the accuracy of all the proposed datasets using ND1 is higher that of the neural distinguisher in <ref type="bibr" target="#b32">33</ref> , where the accuracy in <ref type="bibr" target="#b32">33</ref> is the highest so far. The datasets DRMSCPDK* and TRMSCPDKD* achieve the highest accuracy for 8-round-reduced Speck 32/64 and 7-round-reduced Speck 32/64, respectively.   </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Scientific Reports | 2025 15:13696</head><p>Both datasets show an advantage of 2.1-2.16% for 7-round-reduced Speck 32/64, and 0.48-0.69% for 8-roundreduced Speck 32/64. The improvement in accuracy is significant.</p><p>We analyzed the reason that these particular data organizations capture more distinguishing features from the perspective of theoretical cryptography. As shown in Fig. <ref type="figure" target="#fig_0">2</ref>, the (i + 1)-th ciphertext can be obtained by formula (6).</p><formula xml:id="formula_27">{ C i+1 L = (( C i L &gt;&gt;&gt; 7) ⊞ C i R ) ⊕ k i C i+1 R = (( C i R &lt;&lt;&lt; 2 )) ⊕ C i+1 L (<label>6</label></formula><formula xml:id="formula_28">)</formula><p>That is, the (i + 1)-th ciphertext contains information about the bit shift and XOR operations between the i-th ciphertext and the i-th key. The difference of the ciphertext pair can be defined by formula (7):</p><formula xml:id="formula_29">{ C i+1 L0 ⊕ C i+1 L1 = (( (C i L0 &gt;&gt;&gt; 7) ⊞ C i R0 ) ⊕ k i ) ⊕ (( (C i L1 &gt;&gt;&gt; 7) ⊞ C i R1 ) ⊕ k i ) C i+1 R0 ⊕ C i+1 R1 = (( C i R0 &lt;&lt;&lt; 2) ⊕ C i+1 L ) ⊕ (( C i R1 &lt;&lt;&lt; 2) ⊕ C i+1 L (<label>7</label></formula><formula xml:id="formula_30">)</formula><p>We have</p><formula xml:id="formula_31">C i+1 L0 ⊕ C i+1 L1 = (( C i L0 &gt;&gt;&gt; 7) ⊞ C i R0 ) ⊕ (( C i L1 &gt;&gt;&gt; 7) ⊞ C i R1 )</formula><p>and</p><formula xml:id="formula_32">C i+1 R0 ⊕ C i+1 R1 = ( C i R0 &lt;&lt;&lt; 2 ) ⊕ ( C i R1 &lt;&lt;&lt; 2 ) = ( C i R0 ⊕ C i R1 ) &lt;&lt;&lt; 2.</formula><p>In the left-hand side of the difference equation, the i-th key is eliminated. While the right-hand side contains only the bit shift operation of</p><formula xml:id="formula_33">( C i R0 ⊕ C i R1 )</formula><p>. Therefore, the difference of the ciphertext pair removes the confusion introduced by the XOR operation and the i-th key, making the ciphertext features more distinguishable. In this section, keys are added to the dataset DRMSCPDK*, and key differences are included in the dataset TRMSCPDAK*. This enables the neural distinguisher to study them independently, allowing it to extract more features. These theoretical analyses also demonstrate that the proposed datasets help capture more distinguishing features.</p><p>Additionally, we test the accuracy of the proposed neural distinguisher using ND1 with different number of ciphertext pairs ncp, which help us explore the optimal number of ciphertext pairs. The results are shown in Table <ref type="table" target="#tab_3">8</ref>.</p><p>In Table <ref type="table" target="#tab_3">8</ref>, the symbol "×" denotes that the accuracy of the neural distinguisher is smaller than 50.5%, which indicates that it cannot make an efficient distinction. The accuracy of the proposed scheme is higher than that</p><p>Round ND Number of ciphertext pairs ncp 2 4 8 16 32 64 128 256 7 ND of [33] 63.33% 68.51% 75.82% 84.48% 94.11% 95.51% 98.12% 98.62% CSYY [29] 64.99% 69.17% 72.93% 71.34% 69.52% 58.46% 59.91% × DRMSCPDK*/ ND1 (Ours) 64.62% 70.00% 79.26% 88.92% 96.21% 99.01% 99.39% 99.86% TRMSCPDKD*/ ND1 (Ours) 64.24% 70.78% 79.29% 88.84% 96.27% 99.03% 99.67% 99.86% 8 ND of [33] 52.96% 54.45% 56.91% 56.91% 65.02% 55.32% 52.79% 57.34% CSYY [29] × × × × × × × × DRMSCPDK*/ ND1 (Ours) × 54.53% 57.45% 61.11% 65.71% 69.52% 74.30% 71.58% TRMSCPDKD*/ ND1 (Ours) 51.93% 53.78% 57.03% 57.03% 65.5% 69.41% 73.13% 72.40% 9 ND of [33] × × × × × 50.46% 50.54% 50.65% CSYY [29] × × × × × × × × DRMSCPDK*/ ND1 (Ours) × × × × × 50.52% 51.01% 50.91% TRMSCPDKD*/ ND1 (Ours) × × × × × 50.64% 50.79% 50.67%  of 29] and [33 for all round-reduced Speck32/64 variants. The accuracy of the proposed neural distinguisher using the DRMSCPDK* dataset and the ND1 network is 3.5% higher than that of <ref type="bibr" target="#b28">29</ref> when ncp = 64. Its accuracy reaches 99.86% when ncp = 256, which is 1.24% higher than <ref type="bibr" target="#b28">29</ref> . For the 9-round-reduced Speck32/64, the accuracy of the proposed neural distinguisher is 51.01% when ncp = 128, which is 0.47% higher than <ref type="bibr" target="#b28">29</ref> and can make an efficient distinguish. Additionally, the accuracy of the neural distinguisher increases as ncp increases, reaching its highest accuracy when ncp = 128. This trend is particularly evident for 8-and 9-round-reduced Speck 32/64.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Testing the proposed distinguisher with a new dataset format for Simon 32/64</head><p>To validate the generalization of the proposed neural distinguisher and dataset, we test the accuracy of the proposed ND1 with the dataset TRMSCPDKD* for different round-reduced Simon 32/64 ciphers. The number of the ciphertext pairs is set to 32 to compare with other literatures. The results are shown in Table <ref type="table" target="#tab_5">9</ref>.</p><p>In Table <ref type="table" target="#tab_5">9</ref>, the neural distinguishers proposed in <ref type="bibr" target="#b32">33</ref> and our paper can distinguish ciphertext pairs with fixed input differences from those with random input differences with a probability higher than 60%. The accuracy of the proposed ND1 with the TRMSCPDKD* dataset is 0.32%, 1.83%, and 0.44% higher than that of the neural distinguisher in <ref type="bibr" target="#b32">33</ref> for 9, 10, and 11 round-reduced Simon 32/64 ciphers, respectively.</p><p>Therefore, the proposed neural distinguisher demonstrates a significant advantage over other neural distinguishers. Additionally, it achieves high accuracy for both the Speck 32/64 and Simon 32/64 ciphers when using the TRMSCPDKD* dataset. We also evaluate the accuracy of the proposed neural distinguisher on a 4-round reduced GIFT-64 cipher, achieving 97% accuracy. This suggests that the proposed neural distinguisher exhibits strong generalization capabilities for lightweight ciphers, which is consistent with the findings of other studies, such as 29] and [31 .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Key recovery attack based on the neural distinguisher</head><p>The key recovery attack on 11-round Speck32/64 is proposed in 11 , which combines the 2-round classical differential (0x0211,0x0a04) → (0x0040,0x0000) with the 7-round and 6-round neural distinguishers. Since there is no key addition operation before the first nonlinear operation in Speck 32/64, this method can be extended to 10 rounds for the 7-round distinguisher. All the 10-round ciphertext pairs (x10, x * 10 ) i are obtained by decrypting (x11, x * 11 ) i with all possible keys k10,j, where j ∈ {1,2, • • • , 2 16 -1}. All (x10, x * 10 ) i are input into the 7-round distinguisher to obtain a score S k 10,j for each possible key, as defined as formula (8):</p><formula xml:id="formula_34">S k 10,j = ∑ N i=1 log 2 ( Z k 10,j i 1 -Z k 10,j i ) (<label>8</label></formula><formula xml:id="formula_35">)</formula><p>where N is the number of the ciphertext pairs, Z k 10,j i is the score of k10,j used to decrypt the ciphertext pair (x11, x * 11 ) i . When S k 10,j exceeds the threshold Ci, k10,j is returned as a candidate key. The same operation is applied to obtain k9,j. Since this method is probabilistic, it may not return the correct keys when only one round of trial decryption is performed. Bayesian optimization is used to reduce the number of trial decryptions and improve the probability of finding the correct keys. Additionally, the upper confidence bound (UCB) is employed to prioritize the ciphertext structures with the highest scores during the last-key search process, thus reducing the time spent searching for less promising ciphertext structures. It can be calculated by formula (9):</p><formula xml:id="formula_36">S i cp = w i max + α • √ log 2 (j) /nsi (<label>9</label></formula><formula xml:id="formula_37">)</formula><p>Here, w i max is the highest distinguisher score obtained so far for the i-th ciphertext structure, nsi is the number of previous iterations in which the i-th ciphertext structure has been selected, j is the number of the current iteration, and α = √ N , where N is the total number of ciphertext structure available.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Key recovery test for speck 32/64</head><p>In this work, the key recovery attack is implemented through the following four steps:</p><p>Step 1: Generate the incorrect key response profile for our neural distinguisher ND1 by encrypting 3000 plaintext pairs (x0, x * 0 ) for each key difference δ ∈ {1,2, • • • , 2 16 -1} over 11 rounds to obtain the ciphertext pairs (x11, x * 11 ).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Step 2: Decrypt the ciphertext pairs using E -1 k+δ (x 11</head><p>) and E -1 k+δ (x * 11 ), then distinguish them using the proposed ND1 to compute the empirical mean µ δ and standard deviation σ δ of these trials. Here, k is the final subkey of each encryption operation.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ND Accuracy Round 9 Round 10 Round 11</head><p>ND of [20]  82.27% 61.09% × MRMSP [33]  96.30% 78.72% 56.16% MRMSD [33]  99.08% 83.02% 60.81% TRMSCPDKD*/ ND1 (Ours) 99.4% 84.85% 61.25% Step 3: Randomly select 100 plaintext pairs with an input difference of (0x11, 0xa04) and decrypt them using all-zero key. Then, extend each of these by modifying the neutral bits {20,21,22,14,15,23} to create 64 plaintext pairs, and calculate the 11-round ciphertext pairs (x11, x  1 and 6-round distinguisher ND 6 1 , respectively. We set N ucb = 500 , N kc = 5, N = 100, m = 64, and n k <ref type="bibr">= 32.</ref> The key recovery attack test is implemented 1000 times and divided in to 10 groups. The results are shown in Table <ref type="table" target="#tab_6">10</ref>.</p><p>From Table <ref type="table" target="#tab_6">10</ref>, we can see that the total number of successful key recoveries in our attack reaches 618, resulting in a success rate of 61.8%. This is 9.7% higher than the success rate reported in <ref type="bibr" target="#b9">10</ref> . The success rate can be further improved by increasing the number of neutral bits. In this experiment, the neutral bits were chosen solely to enable a fair comparison with <ref type="bibr" target="#b9">10</ref> . The computational complexity of the key recovery attack consists of two rounds of key recovery operations. The (i -1)-th round of key recovery is performed only when the score of the guessed key in the i-th round of key recovery exceeds the predefined threshold. Consequently, it is difficult to precisely estimate the computational complexity of the (i -1)-th round of key recovery. The computational  . Suppose the predicted score is improved to 0.513, then we obtain w k ′ = 4.8024. For the 7 round-reduced Speck 32/64, if w i,ka is improved from 0.788 to 0.7904, the total score w k increases from 121.2244 to 122.5564. The larger the w k , the higher the success rate of the key recovery attack. Therefore, improving the accuracy of the neural distinguisher can significantly enhance the success rate of the key recovery attack.</p><p>Additionally, we used the method described in <ref type="bibr" target="#b10">11</ref> to train an 8-round distinguisher for Speck32/64. During the training process, we first utilized 10 7 ciphertext pairs (x5, x * 5 ) of 5-round Speck32/64 with an input difference of (0x8000,0x840a) to retrain the 7-round distinguisher ND <ref type="bibr" target="#b6">7</ref> 1 for 10 epochs with a batch size of 500 and a learning rate of 10 -4 . Here, (0x8000,0x840a) is the most likely difference to appear three rounds after the input difference (0x4000,0x0000). Subsequently, we train the distinguisher ND <ref type="bibr" target="#b7">8</ref> 1 using 2 × 10 7 ciphertext pairs (x8, x * 8 ) of 8-round Speck32/64 with an input difference of (0x4000,0x0000) for 10 epochs with a batch size of 10,000 and a learning rate of 10 -4 . Finally, we retrain the distinguisher ND <ref type="bibr" target="#b7">8</ref> 1 using another 2 × 10 7 ciphertext pairs (x8, x * 8 ), this time with a reduced learning rate of 10 -5 . The accuracy of the new distinguisher ND <ref type="bibr" target="#b7">8</ref> 1 is test, yielding a result of 51.38%. Base on the distinguishers ND <ref type="bibr" target="#b7">8</ref> 1 and ND 7 1 , we implement the same key recovery attack for 13-round Speck32/64 with neutral bits {20,13,22, {12,19} , {14,21} , {6,29} , 30, {0,8, 31} , {5,28} , {15,24} , {6,11,12,18} , {4,27,29}, } and number of ciphertext structures of N = 2 <ref type="bibr" target="#b10">11</ref> . Each ciphertext structure consists of 2 <ref type="bibr" target="#b11">12</ref> ciphertext pairs. The key recovery attack is only tested 20 times and the result is shown in Table <ref type="table" target="#tab_0">11</ref>.</p><p>From Table <ref type="table" target="#tab_0">11</ref>, we can see that the success rate of the key recovery attack against the 13-round reduced Speck32/64 using the proposed neural distinguisher is 65%. In contrast, this attack cannot be implemented by the methods described in <ref type="bibr" target="#b9">10,</ref><ref type="bibr" target="#b19">20,</ref><ref type="bibr" target="#b32">33</ref> . Therefore, the proposed neural distinguisher demonstrates significant advantages in key recovery attacks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Conclusion</head><p>To improve the accuracy of the neural distinguisher based on deep learning, we explore neural distinguishers using different convolutional block models. A neural distinguisher based on dense residual connections and multiple convolutional layers is proposed. The convolutional block module with parallel convolutional layers and an initial convolutional module using multi-scale convolutional kernel sizes are designed to validate the efficiency of the proposed neural distinguisher. The experiments show that adding incremental convolutional layers and adjusting the convolutional kernel sizes within and between the residual blocks (with a step of 2) can significantly improve accuracy. However, the initial convolutional module using multi-scale convolutional kernel sizes does not improve accuracy. Additionally, we constructed two new datasets, which suggest that the combination of ciphertext pairs, decryption keys, and the differences between ciphertext pairs from different decryption rounds can significantly improve the accuracy of the neural distinguisher. The key recovery attack results show that the proposed neural distinguisher has a significant advantage.</p><p>Although the proposed neural distinguisher using 256 ciphertext pairs achieves higher accuracy, it cannot yet be used to recover the key directly. The reason is that, to ensure the generated correct ciphertext structure follows the same distribution for the two rounds of differential paths (0x211,0xa04) → (0x40,0), log 2 256 = 8 neutral bits are required to extend a ciphertext pair structure. However, there are only 12 neutral and probabilistic neutral bits available, which can generate only 16 ciphertext pair structures, significantly reducing the success rate of the key recovery attack. This issue will be the focus of future work. Finding more neutral and probabilistic neutral bits may help mitigate this problem.</p><p>Sequence number of key recoveries 1 2 3 4 5 6 7 8 9 10 Result Y Y N Y N Y N N Y Y Number of used iterations 7956 7778 8192 1203 8192 8192 8192 8192 2490 1755 Sequence number of key recoveries 11 12 13 14 15 16 17 18 19 20 Result Y N Y Y Y Y N N Y Y Number of used iterations 1722 8192 4165 648 6177 8192 8192 8192 1689 692</p><p>Table 11. The key recovery attack against 13-round Speck32/64. Scientific Reports | 2025 15:13696</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 2 .</head><label>2</label><figDesc>Fig. 2. The round function of Simon cipher.</figDesc><graphic coords="3,155.91,249.91,145.44,108.96" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Fig. 1 .</head><label>1</label><figDesc>Fig. 1. The round function and key schedule algorithm of Speck 32/64.</figDesc><graphic coords="3,155.91,50.50,111.60,147.84" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 3 .</head><label>3</label><figDesc>Fig.3. The structure of Gohr's neural network.</figDesc><graphic coords="4,155.91,568.91,245.76,142.56" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head>Fig. 5 .</head><label>5</label><figDesc>Fig. 5. The structure of the convolutional block model with parallel convolutional blocks.</figDesc><graphic coords="6,155.91,256.39,186.72,138.72" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>Fig. 4 .</head><label>4</label><figDesc>Fig. 4. The network structure of the proposed neural distinguisher.</figDesc><graphic coords="6,146.41,50.50,407.76,154.32" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head>Fig. 6 .</head><label>6</label><figDesc>Fig.6. The structure of the initial convolutional model with multi-scale layers.</figDesc><graphic coords="7,155.91,518.99,142.08,192.48" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6"><head>The number of the convolutional layers of the residual block equals to 5 The</head><label>5</label></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7"><head>Round ND Accuracy 5 ND1</head><label>5</label><figDesc>with N CK = (3,5, 7,9)93.29%ND2 with N CK = (3,5, 7,9) 93.38% ND1 with N CK = (1,3, 5,7, 9) 93.35% ND2 with N CK = (1,3, 5,7, 9)</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8"><head>Fig. 9 .</head><label>9</label><figDesc>Fig. 9. The data set structure of DRMSCPDK.</figDesc><graphic coords="10,155.91,333.63,221.28,96.24" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9"><head>Fig. 8 .</head><label>8</label><figDesc>Fig. 8. The data set structure of MRMSCPD.</figDesc><graphic coords="10,155.91,183.91,208.80,98.16" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10"><head>Fig. 7 .</head><label>7</label><figDesc>Fig. 7. The data set structure of MRMSCPK.</figDesc><graphic coords="10,155.91,50.50,238.08,81.84" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11"><head>Fig. 12 .</head><label>12</label><figDesc>Fig. 12. The data set structure of TRMSCPDAK*.</figDesc><graphic coords="11,155.91,354.03,277.44,96.48" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12"><head>Fig. 11 .</head><label>11</label><figDesc>Fig. 11. The data set structure of DRMSCPDK*.</figDesc><graphic coords="11,155.91,187.27,282.00,115.20" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13"><head>Fig. 10 .</head><label>10</label><figDesc>Fig. 10. The data set structure of TRMSCPD.</figDesc><graphic coords="11,155.91,50.50,266.64,85.20" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_14"><head>* 11 )Algorithm 1 .</head><label>111</label><figDesc>i of each. Step 4: Use UCB method and the optimized Bayesian approach to recover the key of Speck 32/64. The details of the key recovery process for the 11-round case are shown in Algorithm 1: Key recovery process. In Algorithm 1, the variable N ucb denotes the iteration number of the UCB, N kc denotes the iteration number of the Bayesian-based key search, n k denotes the number of candidate keys, and c1 denotes the threshold of the key's score. The function E -1 ka (Xi) denotes the decryption of the ciphertext pair Ci by key ka , and ND (P i,ka ) denotes distinguishing the plaintext pair P i,ka using the neural distinguisher. In this work, we use the 7-round distinguisher ND</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_15"><head>7</head><label>7</label></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_16"><head>Group 1 2 3 4 5 6 7 8 9 10</head><label>10</label><figDesc>Number of successes 68 63 64 63 64 64 55 59 59 59</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1 .</head><label>1</label><figDesc>The</figDesc><table><row><cell>ND</cell><cell cols="3">NCB NCL NCK</cell><cell cols="2">Nstep Accuracy</cell></row><row><cell>ND_G1</cell><cell>5</cell><cell>2</cell><cell>1,1</cell><cell>2</cell><cell>93.21%</cell></row><row><cell>ND_G2</cell><cell>5</cell><cell>2</cell><cell>1,3</cell><cell>2</cell><cell>93.12%</cell></row><row><cell>ND_G3</cell><cell>5</cell><cell>2</cell><cell>3,3,</cell><cell>2</cell><cell>93.19%</cell></row><row><cell>ND_G4</cell><cell>5</cell><cell>3</cell><cell>1,3,5</cell><cell>0</cell><cell>93.01%</cell></row><row><cell>ND_G5</cell><cell>5</cell><cell>4</cell><cell>1,3,5,7</cell><cell>0</cell><cell>93.03%</cell></row><row><cell>ND_G6</cell><cell>5</cell><cell>4</cell><cell>3,5,7,9</cell><cell>0</cell><cell>93.16%</cell></row><row><cell>ND_G7</cell><cell>5</cell><cell>4</cell><cell>3,5,7,9</cell><cell>2</cell><cell>93.24%</cell></row><row><cell>ND_G8</cell><cell>5</cell><cell>5</cell><cell cols="2">1,3,5,7,9 2</cell><cell>93.25%</cell></row><row><cell>ND_G9</cell><cell>5</cell><cell>5</cell><cell cols="2">3,5,7,9,11 2</cell><cell>93.08%</cell></row><row><cell cols="2">ND_G10 8</cell><cell>4</cell><cell>3,5,7,9</cell><cell>2</cell><cell>93.18%</cell></row><row><cell cols="2">ND_G11 10</cell><cell>4</cell><cell>3,5,7,9</cell><cell>2</cell><cell>93.16%</cell></row><row><cell>Gohr</cell><cell>10</cell><cell>2</cell><cell>3,3</cell><cell>0</cell><cell>92.95%</cell></row></table><note><p>accuracy of different improvements of Gohr's neural network.</p><p>Scientific Reports | 2025 15:13696</p></note></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 5 .</head><label>5</label><figDesc>The accuracy of the ND1 with different ablation experiments</figDesc><table><row><cell cols="2">Goh19 [10] (baseline) 88</cell><cell>25</cell><cell>6,181,116</cell><cell>100,897</cell></row><row><cell>ND1</cell><cell>117</cell><cell>30</cell><cell>6,223,800</cell><cell>270,337</cell></row><row><cell>ND2</cell><cell>205</cell><cell>36</cell><cell>6,534,868</cell><cell>503,137</cell></row><row><cell>ND3</cell><cell>112</cell><cell>27</cell><cell>6,086,744</cell><cell>114,817</cell></row></table><note><p>ND</p><p>Training time of single epoch (s) Inference speed (ms) Memory usage (KB) Number of parameters</p></note></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 4 .</head><label>4</label><figDesc>Comparison of the efficiency of the proposed neural distinguishers.</figDesc><table><row><cell></cell><cell>Accuracy</cell><cell></cell><cell></cell></row><row><cell>ND</cell><cell cols="3">Round 5 Round 6 Round 7</cell></row><row><cell>D  *  5 [10]</cell><cell>91.1%</cell><cell>75.8%</cell><cell>59.1%</cell></row><row><cell>CSYY [29]</cell><cell>92.6%</cell><cell>78.4%</cell><cell>60.7%</cell></row><row><cell cols="2">Goh19* [10] 92.9%</cell><cell>78.8%</cell><cell>61.6%</cell></row><row><cell cols="2">Goh22 [30] 92.9%</cell><cell>78.8%</cell><cell>61.7%</cell></row><row><cell>ND1</cell><cell>93.35%</cell><cell>79.06%</cell><cell>61.85%</cell></row><row><cell>ND2</cell><cell>93.36%</cell><cell>79.1%</cell><cell>61.87%</cell></row><row><cell>ND3</cell><cell>93.1%</cell><cell>79%</cell><cell>61.3%</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 8 .</head><label>8</label><figDesc>The accuracy of different neural distinguishers using different numbers of ciphertext pairs for speck 32/64.</figDesc><table><row><cell></cell><cell>Accuracy</cell><cell></cell></row><row><cell>ND</cell><cell cols="2">Round 7 Round 8</cell></row><row><cell>MRMSP [33]</cell><cell>89.16%</cell><cell>57.74%</cell></row><row><cell>MRMSD [33]</cell><cell>94.11%</cell><cell>65.02%</cell></row><row><cell>DRMSCPDK</cell><cell>96.24%</cell><cell>65.35%</cell></row><row><cell>TRMSCPD (Proposed)</cell><cell>96.21%</cell><cell>65.09%</cell></row><row><cell cols="2">TRMSCPDKD (Proposed) 96.23%</cell><cell>65.27%</cell></row><row><cell>DRMSCPDK* (Proposed)</cell><cell>96.21%</cell><cell>65.71%</cell></row><row><cell cols="2">TRMSCPDKD* (Proposed) 96.27%</cell><cell>65.5%</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>Table 7 .</head><label>7</label><figDesc>Comparison of the accuracy of different neural distinguisher for speck 32/64.</figDesc><table><row><cell>Scientific Reports |</cell><cell>2025 15:13696</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5"><head>Table 9 .</head><label>9</label><figDesc>Comparison of the accuracy of different neural distinguisher for Simon 32/64.</figDesc><table><row><cell>Scientific Reports |</cell><cell>2025 15:13696</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6"><head>Table 10 .</head><label>10</label><figDesc>The key recovery attack against 11-round Speck32/64. complexity of the i-th round of key recovery is approximately O (N ucb * N kc * n k * O( ND ( ) )). Thus, the primary difference between the proposed method and Gohr's method lies in the inference complexity of the neural distinguisher. The execution time of a single attack was tested, showing that the proposed scheme requires 1500 s, whereas the method in 10 takes 500 s. Although the proposed key recovery attack requires more time, it remains acceptable and offers a significant advantage in terms of success rate.Furthermore, we analyze the impact of ND1's accuracy on the success rate of the key recovery attack. As shown in Algorithm 1, scoring the decrypted ciphertextE -1 ka (Xi)is the core operation in key recovery. The score for each possible key is defined in formula(8), where each key's score is obtained using ND1. For example, in the 11 round-reduced Speck 32/64, if ND1 outputs a predicted score 0.512 for all 64 ciphertext pairs with a fixed input difference, its final score is w i,ka = log 2</figDesc><table><row><cell>Scientific Reports |</cell><cell>2025 15:13696</cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="2" xml:id="foot_0"><p>| https://doi.org/10.1038/s41598-025-98251-1</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" xml:id="foot_1"><p>| https://doi.org/10.1038/s41598-025-98251-1</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="5" xml:id="foot_2"><p>| https://doi.org/10.1038/s41598-025-98251-1</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="6" xml:id="foot_3"><p>| https://doi.org/10.1038/s41598-025-98251-1</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" xml:id="foot_4"><p>√ √ √ √ 93.36%</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" xml:id="foot_5"><p>Scientific Reports | 2025 15:13696</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="10" xml:id="foot_6"><p>| https://doi.org/10.1038/s41598-025-98251-1</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="11" xml:id="foot_7"><p>| https://doi.org/10.1038/s41598-025-98251-1</p></note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><head>Acknowledgements</head><p>This work was supported by the following projects and foundations: <rs type="programName">2024 Shaanxi Province key research and development plan</rs> project (No. <rs type="grantNumber">2024GX-ZDCYL-01-13</rs>), the <rs type="funder">Special Funds for Basic scientific Research</rs> of the</p></div>
+			</div>
+			<listOrg type="funding">
+				<org type="funding" xml:id="_8fDDH5j">
+					<idno type="grant-number">2024GX-ZDCYL-01-13</idno>
+					<orgName type="program" subtype="full">2024 Shaanxi Province key research and development plan</orgName>
+				</org>
+			</listOrg>
+
+			<div type="availability">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Data availability</head><p>Data will be made available on request from the corresponding author.</p></div>
+			</div>
+
+
+			<div type="conflict">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Declarations</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Competing interests</head><p>The authors declare no competing interests.</p></div>
+			</div>
+
+
+			<div type="contribution">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Author contributions</head><p>Yufei Hou: Writing -review &amp; editing, Validation, Methodology, Investigation, Data curation. Jie Liu: Writingreview &amp; editing, Writing -original Draft, Supervision, Conceptualization, Methodology, Funding acquisition. Shouxu Han: Investigation, Software. Zhongjun Ma: Resources, Validation. Xi Ye: Validation, Software. Xuan Nie: Visualization, Writing -review &amp; editing, Funding acquisition.</p></div>
+			</div>
+
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Central universities (No. D5000210638).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Additional information</head><p>Correspondence and requests for materials should be addressed to J.L.</p><p>Reprints and permissions information is available at <ref type="url" target="www.nature.com/reprints">www.nature.com/reprints</ref>.</p><p>Publisher's note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.</p></div>			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Dynamic network security leveraging efficient CoviNet with granger causality-inspired graph neural networks for data compression in cloud IoT Devices</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">Baritha</forename><surname>Begum</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">N</forename><forename type="middle">R</forename><surname>Nagarajan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Rajalakshmi</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.knosys.2024.112859</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Knowledge-Based Systems</title>
+		<title level="j" type="abbrev">Knowledge-Based Systems</title>
+		<idno type="ISSN">0950-7051</idno>
+		<imprint>
+			<biblScope unit="volume">309</biblScope>
+			<biblScope unit="page">112859</biblScope>
+			<date type="published" when="2025-01">2025</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Begum, M. B. et al. Dynamic network security leveraging efficient covinet with Granger causality-inspired graph neural networks for data compression in cloud IoT devices. Knowl. Based Syst. 309, 112859 (2025).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">An Enhanced Heterogeneous Local Directed Acyclic Graph Blockchain With Recalling Enhanced Recurrent Neural Networks for Routing in Secure MANET‐IOT Environments in 6G</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle"> Baritha</forename><surname>Begum</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><surname>Suganthi</surname></persName>
+			<idno type="ORCID">0009-0006-5170-4843</idno>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Sivagamasundhari</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle"> A</forename><surname>Arunmozhi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle"> J Muhamed</forename><surname>Suhail</surname></persName>
+		</author>
+		<idno type="DOI">10.1002/dac.6110</idno>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Communication Systems</title>
+		<title level="j" type="abbrev">Int J Communication</title>
+		<idno type="ISSN">1074-5351</idno>
+		<idno type="ISSNe">1099-1131</idno>
+		<imprint>
+			<biblScope unit="volume">38</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page">6110</biblScope>
+			<date type="published" when="2025-01-23">2025</date>
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Begum, M. B. et al. An enhanced heterogeneous local directed acyclic graph blockchain with recalling enhanced recurrent neural networks for routing in secure MANET-IOT environments in 6G. Int. J. Commun Syst. 38(4), e6110 (2025).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Integration of BWT scrambling and data compression in an innovative system enhances protection and versatile management of sensor feeds (SEC)</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">Baritha</forename><surname>Begum</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Karthikeyan</forename><surname>Kaliyaperumal</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.heliyon.2024.e39254</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Heliyon</title>
+		<title level="j" type="abbrev">Heliyon</title>
+		<idno type="ISSN">2405-8440</idno>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="issue">20</biblScope>
+			<biblScope unit="page">e39254</biblScope>
+			<date type="published" when="2024-10">2024</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Begum, M. B. &amp; Kaliyaperumal, K. Integration of BWT scrambling and data compression in an innovative system enhances protection and versatile management of sensor feeds (SEC). Heliyon 10(20) (2024).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Review of Marochov et al.: Image Classification of Marine-Terminating Outlet Glaciers using Deep Learning Methods</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">B</forename><surname>Begum</surname></persName>
+		</author>
+		<idno type="DOI">10.5194/tc-2020-310-rc3</idno>
+		<imprint>
+			<date type="published" when="2020-12-22" />
+			<publisher>Copernicus GmbH</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Begum, M. B. et al. Cereal Crop Variety Classification using Deep Learning.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Enhancing Agricultural Productivity with Data-Driven Crop Recommendations</title>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">Baritha</forename><surname>Begum</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Sivakannu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Eindhumathy</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">Sangeetha</forename><surname>Priya</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Mahendran</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">Ranjith</forename><surname>Kumar</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/icaiss58487.2023.10250657</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2023 Second International Conference on Augmented Intelligence and Sustainable Systems (ICAISS)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2023-08-23">2023. 2023</date>
+			<biblScope unit="page" from="1055" to="1063" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Begum, M. B. et al. Enhancing agricultural productivity with data-driven crop recommendations. 2023 Second International Conference on Augmented Intelligence and Sustainable Systems (ICAISS) 1055-1063 (IEEE, 2023).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">FN-HNN Coupled With Tunable Multistable Memristors and Encryption by Arnold Mapping and Diagonal Diffusion Algorithm</title>
+		<author>
+			<persName><forename type="first">Yanfeng</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-8623-1111</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Pengke</forename><surname>Su</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zicheng</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0009-0003-3553-6470</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Junwei</forename><surname>Sun</surname></persName>
+			<idno type="ORCID">0000-0001-8518-5064</idno>
+		</author>
+		<idno type="DOI">10.1109/tcsi.2024.3516722</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Circuits and Systems I: Regular Papers</title>
+		<title level="j" type="abbrev">IEEE Trans. Circuits Syst. I</title>
+		<idno type="ISSN">1549-8328</idno>
+		<idno type="ISSNe">1558-0806</idno>
+		<imprint>
+			<biblScope unit="volume">72</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="4830" to="4842" />
+			<date type="published" when="2024">2024</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang, Y. et al. FN-HNN coupled with tunable multistable memristors and encryption by arnold mapping and diagonal diffusion algorithm. IEEE Trans. Circuits Syst. I (2024).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Operant Conditioning Neuromorphic Circuit With Addictiveness and Time Memory for Automatic Learning</title>
+		<author>
+			<persName><forename type="first">Gang</forename><surname>Dou</surname></persName>
+			<idno type="ORCID">0000-0002-2631-1734</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Wenhai</forename><surname>Guo</surname></persName>
+			<idno type="ORCID">0009-0003-5223-0334</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Lingtong</forename><surname>Kong</surname></persName>
+			<idno type="ORCID">0009-0003-7021-5314</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Junwei</forename><surname>Sun</surname></persName>
+			<idno type="ORCID">0000-0001-8518-5064</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Mei</forename><surname>Guo</surname></persName>
+			<idno type="ORCID">0000-0003-3002-9368</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Shiping</forename><surname>Wen</surname></persName>
+			<idno type="ORCID">0000-0002-5048-0319</idno>
+		</author>
+		<idno type="DOI">10.1109/tbcas.2024.3388673</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Biomedical Circuits and Systems</title>
+		<title level="j" type="abbrev">IEEE Trans. Biomed. Circuits Syst.</title>
+		<idno type="ISSN">1932-4545</idno>
+		<idno type="ISSNe">1940-9990</idno>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="1166" to="1177" />
+			<date type="published" when="2024-10">2024</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Dou, G. et al. Operant conditioning neuromorphic circuit with addictiveness and time memory for automatic learning. IEEE Trans. Biomed. Circuits Syst. (2024).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Memristor-Based Parallel Computing Circuit Optimization for LSTM Network Fault Diagnosis</title>
+		<author>
+			<persName><forename type="first">Junwei</forename><surname>Sun</surname></persName>
+			<idno type="ORCID">0000-0001-8518-5064</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yuhan</forename><surname>Cao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Yue</surname></persName>
+			<idno type="ORCID">0009-0000-3064-3371</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Shiping</forename><surname>Wen</surname></persName>
+			<idno type="ORCID">0000-0002-5048-0319</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yanfeng</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-8623-1111</idno>
+		</author>
+		<idno type="DOI">10.1109/tcsi.2024.3516325</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Circuits and Systems I: Regular Papers</title>
+		<title level="j" type="abbrev">IEEE Trans. Circuits Syst. I</title>
+		<idno type="ISSN">1549-8328</idno>
+		<idno type="ISSNe">1558-0806</idno>
+		<imprint>
+			<biblScope unit="volume">72</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="907" to="917" />
+			<date type="published" when="2024">2024</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Sun, J. et al. Memristor-based parallel computing circuit optimization for LSTM network fault diagnosis. IEEE Trans. Circuits Syst. I (2024).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Capacitor Parameter Estimation Based on Wavelet Transform and Convolution Neural Network</title>
+		<author>
+			<persName><forename type="first">Hongjian</forename><surname>Xia</surname></persName>
+			<idno type="ORCID">0000-0002-9595-8478</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0003-0248-7644</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Minyou</forename><surname>Chen</surname></persName>
+			<idno type="ORCID">0000-0001-7186-5704</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Dan</forename><surname>Luo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wei</forename><surname>Lai</surname></persName>
+			<idno type="ORCID">0000-0001-8418-3964</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Huai</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-5404-3140</idno>
+		</author>
+		<idno type="DOI">10.1109/tpel.2024.3409534</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Power Electronics</title>
+		<title level="j" type="abbrev">IEEE Trans. Power Electron.</title>
+		<idno type="ISSN">0885-8993</idno>
+		<idno type="ISSNe">1941-0107</idno>
+		<imprint>
+			<biblScope unit="volume">39</biblScope>
+			<biblScope unit="issue">11</biblScope>
+			<biblScope unit="page" from="14888" to="14897" />
+			<date type="published" when="2024-11">2024</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Xia, H. et al. Capacitor parameter Estimation based on wavelet transform and Convolution neural network. IEEE Trans. Power Electron. (2024).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Santa Barbara, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">August 18-22, 2019. 2019</date>
+			<biblScope unit="volume">39</biblScope>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr, A. Improving attacks on round-reduced speck32/64 using deep learning. Advances in Cryptology-CRYPTO. 39th Annual International Cryptology Conference, Santa Barbara, CA, USA, August 18-22, 2019, Proceedings, Part II 39 150-179 (Springer International Publishing, 2019).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015-06-07">2015</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beaulieu, R. et al. The SIMON and SPECK lightweight block ciphers. Proceedings of the 52nd Annual Design Automation Conference 1-6 (2015).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">A Deeper Look at Machine Learning-Based Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Adrien</forename><surname>Benamira</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><surname>Gerault</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Quan</forename><forename type="middle">Quan</forename><surname>Tan</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-77870-5_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Zagreb, Croatia</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">October 17-21, 2021. 2021</date>
+			<biblScope unit="volume">40</biblScope>
+			<biblScope unit="page" from="805" to="835" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Benamira, A. et al. A deeper look at machine learning-based cryptanalysis. Advances in Cryptology-EUROCRYPT. 40th Annual International Conference on the Theory and Applications of Cryptographic Techniques, Zagreb, Croatia, October 17-21, 2021, Proceedings, Part I 40 805-835 (Springer International Publishing, 2021).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Performance Comparison Between Deep Learning-Based and Conventional Cryptographic Distinguishers</title>
+		<author>
+			<persName><forename type="first">Emanuele</forename><surname>Bellini</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matteo</forename><surname>Rossi</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-80129-8_48</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Networks and Systems</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2021">2021</date>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="681" to="701" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bellini, E., Rossi, M. &amp; Conference Computing Performance comparison between deep learning-based and conventional cryptographic distinguishers. Intelligent Computing: Proceedings of the Volume 3 681-701 (Springer International Publishing, 2021).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Deep Learning Assisted Differential Cryptanalysis for the Lightweight Cipher SIMON</title>
+		<author>
+			<persName><forename type="first">W</forename><surname>Tian</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><surname>Hu</surname></persName>
+		</author>
+		<idno type="DOI">10.3837/tiis.2021.02.012</idno>
+	</analytic>
+	<monogr>
+		<title level="j">KSII Transactions on Internet and Information Systems</title>
+		<title level="j" type="abbrev">KSII TIIS</title>
+		<idno type="ISSNe">1976-7277</idno>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="600" to="616" />
+			<date type="published" when="2021-02-28">2021</date>
+			<publisher>Korean Society for Internet Information (KSII)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Tian, W. &amp; Hu, B. Deep learning assisted differential cryptanalysis for the lightweight cipher Simon. KSII Trans. Internet Inform. Syst. (TIIS). 15(2), 600-616 (2021).</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Improve Neural Distinguisher for Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Chen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou, Z., Ren, J. &amp; Chen, S. Improve Neural Distinguisher for Cryptanalysis (Cryptology ePrint Archive, 2021).</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Cryptanalysis of Round-Reduced SIMON32 Based on Deep Learning</title>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><surname>Chen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou, Z., Ren, J. &amp; Chen, S. Cryptanalysis of Round-Reduced SIMON32 Based on Deep Learning (Cryptology ePrint Archive, 2021).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Polytopic Attack on Round-Reduced Simon32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Heng-Chuan</forename><surname>Su</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xuan-Yong</forename><surname>Zhu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Duan</forename><surname>Ming</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-71852-7_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Guangzhou, China</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">December 11-14, 2020. 2021</date>
+			<biblScope unit="page" from="3" to="20" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers 3-20</note>
+	<note type="raw_reference">Su, H. C., Zhu, X. Y. &amp; Ming, D. Polytopic attack on round-reduced simon32/64 using deep learning. Information Security and Cryptology: 16th International Conference, Inscrypt 2020, Guangzhou, China, December 11-14, 2020, Revised Selected Papers 3-20 (Springer International Publishing, 2021).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Improved Machine Learning Assisted (Related-key) Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Gao</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gaoli</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>He</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/trustcom53373.2021.00039</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 IEEE 20th International Conference on Trust, Security and Privacy in Computing and Communications (TrustCom)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-10">2021. 2021</date>
+			<biblScope unit="page" from="164" to="171" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang, G., Wang, G. &amp; He, Y. Improved machine learning assisted (related-key) differential distinguishers for lightweight ciphers. 2021 IEEE 20th International Conference on Trust, Security and Privacy in Computing and Communications (TrustCom) 164-171 (IEEE, 2021).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of TweGIFT-128 Based on Neural Network</title>
+		<author>
+			<persName><forename type="first">Runlian</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mi</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jiaxu</forename><surname>Yan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yixing</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaonian</forename><surname>Wu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lingchen</forename><surname>Li</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/dsc53577.2021.00084</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 IEEE Sixth International Conference on Data Science in Cyberspace (DSC)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-10">2021. 2021</date>
+			<biblScope unit="page" from="529" to="534" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhang, R. et al. Differential Cryptanalysis of TweGIFT-128 Based on Neural Network. 2021 IEEE Sixth International Conference on Data Science in Cyberspace (DSC) 529-534 (IEEE, 2021).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Improving the Deep-Learning-Based Differential Distinguisher and Applications to Simeck</title>
+		<author>
+			<persName><forename type="first">Lijun</forename><surname>Lyu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yingjie</forename><surname>Zhang</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cscwd54268.2022.9776036</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2022 IEEE 25th International Conference on Computer Supported Cooperative Work in Design (CSCWD)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2022-05-04">2022. 2022</date>
+			<biblScope unit="page" from="465" to="470" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lyu, L., Tu, Y. &amp; Zhang, Y. Improving the deep-learning-based differential distinguisher and applications to Simeck. 2022 IEEE 25th International Conference on Computer Supported Cooperative Work in Design (CSCWD) 465-470 (IEEE, 2022).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Deep Learning-Based Differential Distinguisher for Lightweight Cipher GIFT-COFB</title>
+		<author>
+			<persName><forename type="first">Reshma</forename><surname>Rajan</surname></persName>
+			<idno type="ORCID">0000-0002-0689-0337</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Rupam</forename><forename type="middle">Kumar</forename><surname>Roy</surname></persName>
+			<idno type="ORCID">0000-0002-2093-3014</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Diptakshi</forename><surname>Sen</surname></persName>
+			<idno type="ORCID">0000-0002-0185-2788</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Girish</forename><surname>Mishra</surname></persName>
+			<idno type="ORCID">0000-0002-7489-2721</idno>
+		</author>
+		<idno type="DOI">10.1007/978-981-16-9650-3_31</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Algorithms for Intelligent Systems</title>
+		<meeting><address><addrLine>Singapore</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Singapore</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="397" to="406" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Rajan, R. et al. Deep learning-based differential distinguisher for lightweight cipher GIFT-COFB. Machine Intelligence and Smart Systems: Proceedings of MISS 2021 397-406 (Springer Nature Singapore, 2022).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Deep Learning-Based Differential Distinguisher for Lightweight Ciphers GIFT-64 and PRIDE</title>
+		<author>
+			<persName><forename type="first">Girish</forename><surname>Mishra</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">K</forename><surname>Pal</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">V S S N V G</forename><surname>Krishna Murthy</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ishan</forename><surname>Prakash</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anshul</forename><surname>Kumar</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-981-16-9650-3_19</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Algorithms for Intelligent Systems</title>
+		<meeting><address><addrLine>Singapore</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Singapore</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="245" to="257" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mishra, G. et al. Deep learning-based differential distinguisher for lightweight ciphers GIFT-64 and PRIDE. Machine Intelligence and Smart Systems: Proceedings of MISS 2021 245-257 (Springer Nature Singapore, 2022).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Machine Learning-Assisted Differential Distinguishers for Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-981-16-6522-6_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Computer Architecture and Design Methodologies</title>
+		<imprint>
+			<publisher>Springer Singapore</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="141" to="162" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi, A. &amp; Baksi, A. Machine learning-assisted differential distinguishers for lightweight ciphers. Classical Phys. Secur. Symmetric Key Cryptographic Algorithms 141-162 (2022).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Enhancing Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+			<idno type="ORCID">0000-0003-2839-6687</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Guo</surname></persName>
+			<idno type="ORCID">0000-0001-8847-6748</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Meicheng</forename><surname>Liu</surname></persName>
+			<idno type="ORCID">0000-0002-5259-1848</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Ma</surname></persName>
+			<idno type="ORCID">0000-0002-6192-7526</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Tu</surname></persName>
+			<idno type="ORCID">0000-0002-2051-8806</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-031-22963-3_11</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Switzerland</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Switzerland</publisher>
+			<date type="published" when="2022">2022</date>
+			<biblScope unit="page" from="318" to="347" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bao, Z. et al. Enhancing differential-neural cryptanalysis. International Conference on the Theory and Application of Cryptology and Information Security 318-347 (Springer Nature Switzerland, 2022).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Improving the Accuracy of Differential-Neural Distinguisher for DES, Chaskey, and PRESENT</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yindong</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1587/transinf.2022edl8094</idno>
+		<idno type="arXiv">arXiv:2204.06341</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEICE Transactions on Information and Systems</title>
+		<title level="j" type="abbrev">IEICE Trans. Inf. &amp; Syst.</title>
+		<idno type="ISSN">0916-8532</idno>
+		<idno type="ISSNe">1745-1361</idno>
+		<imprint>
+			<biblScope unit="volume">E106.D</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="1240" to="1243" />
+			<date type="published" when="2022">2022</date>
+			<publisher>Institute of Electronics, Information and Communications Engineers (IEICE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Zhang, L. &amp; Wang, Z. Improving differential-neural distinguisher model for DES, Chaskey, and PRESENT. arXiv preprint arXiv:2204.06341 (2022).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">A New Neural Distinguisher Considering Features Derived From Multiple Ciphertext Pairs</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sitong</forename><surname>Yuan</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac019</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1419" to="1433" />
+			<date type="published" when="2021">2021</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen, Y. &amp; Yu, H. A new neural distinguisher model considering derived features from multiple ciphertext pairs. IACR Cryptol. 310 (2021).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Neural-Aided Statistical Attack for Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac099</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="2480" to="2498" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen, Y., Shen, Y. &amp; Yu, H. Neural-Aided statistical attack for cryptanalysis. Comput. J. 66(10), 2480-2498 (2023).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Improving Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0001-6106-3767</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Zilong</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-1525-3356</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Baocang</forename><surname>Wang</surname></persName>
+			<idno type="ORCID">0000-0002-2554-4464</idno>
+		</author>
+		<idno type="DOI">10.62056/ay11wa3y6</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IACR Communications in Cryptology</title>
+		<title level="j" type="abbrev">IACR CiC</title>
+		<idno type="ISSNe">3006-5496</idno>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+			<publisher>International Association for Cryptologic Research</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Zhang, L. &amp; Wang, Z. Improving Differential-Neural Cryptanalysis (Cryptology ePrint Archive, 2022).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">A New Neural Distinguisher Considering Features Derived From Multiple Ciphertext Pairs</title>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yantian</forename><surname>Shen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Hongbo</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sitong</forename><surname>Yuan</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac019</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1419" to="1433" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen, Y. et al. A new neural distinguisher considering features derived from multiple ciphertext pairs. Comput. J. 66(6), 1419-1433 (2023).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Figure 5: The framework of basic and enhanced related-key differential neural distinguishers.</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Gohr</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Leander</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><surname>Neumann</surname></persName>
+		</author>
+		<idno type="DOI">10.7717/peerj-cs.2566/fig-5</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+			<publisher>PeerJ</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr, A., Leander, G. &amp; Neumann, P. An Assessment of differential-neural Distinguishers (Cryptology ePrint Archive, 2022).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Practical Attacks of Round-Reduced SIMON Based on Deep Learning</title>
+		<author>
+			<persName><forename type="first">Zezhou</forename><surname>Hou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac102</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">66</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="2517" to="2534" />
+			<date type="published" when="2023">2023</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Hou, Z., Ren, J. &amp; Chen, S. Practical attacks of round-reduced Simon based on deep learning. Comput. J. 66(10), 2517-2534 (2023).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">More Insight on Deep Learning-Aided Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Zhenzhen</forename><surname>Bao</surname></persName>
+			<idno type="ORCID">0000-0003-2839-6687</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+			<idno type="ORCID">0000-0002-7299-0934</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Yiran</forename><surname>Yao</surname></persName>
+			<idno type="ORCID">0009-0009-0347-8230</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Liu</forename><surname>Zhang</surname></persName>
+			<idno type="ORCID">0000-0001-6106-3767</idno>
+		</author>
+		<idno type="DOI">10.1007/978-981-99-8727-6_15</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Singapore</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Nature Singapore</publisher>
+			<date type="published" when="2023">2023</date>
+			<biblScope unit="page" from="436" to="467" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bao, Z. et al. More insight on deep learning-aided cryptanalysis. International Conference on the Theory and Application of Cryptology and Information Security 436-467 (Springer Nature Singapore, 2023).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Improved neural distinguishers with multi-round and multi-splicing construction</title>
+		<author>
+			<persName><forename type="first">Jiashuo</forename><surname>Liu</surname></persName>
+			<idno type="ORCID">0000-0002-9415-5972</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Jiongjiong</forename><surname>Ren</surname></persName>
+			<idno type="ORCID">0000-0003-2223-4329</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Shaozhen</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Manman</forename><surname>Li</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.jisa.2023.103461</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Information Security and Applications</title>
+		<title level="j" type="abbrev">Journal of Information Security and Applications</title>
+		<idno type="ISSN">2214-2126</idno>
+		<imprint>
+			<biblScope unit="volume">74</biblScope>
+			<biblScope unit="page">103461</biblScope>
+			<date type="published" when="2023-05">2023</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Liu, J. S. et al. Improved neural distinguishers with multi-round and multi-splicing construction. J. Inform. Secur. Appl. 74, 103461 (2023).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Improved (Related-Key) Differential-Based Neural Distinguishers for SIMON and SIMECK Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Jinyu</forename><surname>Lu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Guoqiang</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bing</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chao</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Li</forename><surname>Liu</surname></persName>
+		</author>
+		<idno type="DOI">10.1093/comjnl/bxac195</idno>
+	</analytic>
+	<monogr>
+		<title level="j">The Computer Journal</title>
+		<idno type="ISSN">0010-4620</idno>
+		<idno type="ISSNe">1460-2067</idno>
+		<imprint>
+			<biblScope unit="volume">67</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="537" to="547" />
+			<date type="published" when="2024">2024</date>
+			<publisher>Oxford University Press (OUP)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lu, J. et al. Improved (related-key) differential-based neural distinguishers for SIMON and SIMECK block ciphers. Comput. J. 67(2), 537-547 (2024).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">A Novel Approach to Construct a Good Dataset for Differential-Neural Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Byoungjin</forename><surname>Seok</surname></persName>
+			<idno type="ORCID">0000-0002-8130-5011</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Changhoon</forename><surname>Lee</surname></persName>
+			<idno type="ORCID">0000-0003-4292-5792</idno>
+		</author>
+		<idno type="DOI">10.1109/tdsc.2024.3387662</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Dependable and Secure Computing</title>
+		<title level="j" type="abbrev">IEEE Trans. Dependable and Secure Comput.</title>
+		<idno type="ISSN">1545-5971</idno>
+		<idno type="ISSNe">2160-9209</idno>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="246" to="262" />
+			<date type="published" when="2024">2024</date>
+			<publisher>Institute of Electrical and Electronics Engineers (IEEE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Seok, B., Chang, D. &amp; Lee, C. A Novel Approach To Construct a Good Dataset for differential-neural Cryptanalysis(IEEE Transactions on Dependable and Secure Computing, 2024).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Investigating and Enhancing the Neural Distinguisher for Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Gao</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gaoli</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siwei</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1587/transinf.2024edp7011</idno>
+	</analytic>
+	<monogr>
+		<title level="j">IEICE Transactions on Information and Systems</title>
+		<title level="j" type="abbrev">IEICE Trans. Inf. &amp; Syst.</title>
+		<idno type="ISSN">0916-8532</idno>
+		<idno type="ISSNe">1745-1361</idno>
+		<imprint>
+			<biblScope unit="volume">E107.D</biblScope>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="1016" to="1028" />
+			<date type="published" when="2024-08-01">2024</date>
+			<publisher>Institute of Electronics, Information and Communications Engineers (IEICE)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wang, G., Wang, G. &amp; Sun, S. Investigating and enhancing the neural distinguisher for differential cryptanalysis. IEICE. Trans. Inf. Syst. 107(8), 1016-1028 (2024).</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Densely Connected Convolutional Networks</title>
+		<author>
+			<persName><forename type="first">Gao</forename><surname>Huang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhuang</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Laurens</forename><surname>Van Der Maaten</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kilian</forename><forename type="middle">Q</forename><surname>Weinberger</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2017.243</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2017-07">2017</date>
+			<biblScope unit="page" from="2261" to="2269" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Huang, G. et al. Densely connected convolutional networks. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition 4700-4708 (2017).</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b37">
+	<monogr>
+		<title/>
+		<author>
+			<persName><forename type="first">F</forename><surname>Chollet</surname></persName>
+		</author>
+		<ptr target="https://keras.io" />
+		<imprint>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chollet, F. et al. https://keras.io (2015).</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

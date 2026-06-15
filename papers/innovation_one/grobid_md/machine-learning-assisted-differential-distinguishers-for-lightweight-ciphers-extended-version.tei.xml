@@ -1,0 +1,1235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers (Extended Version)</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+							<email>anubhab001@e.ntu.edu.sg</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation"><label>1</label> Nanyang Technological University , Singapore</note>
+								<orgName type="institution">Nanyang Technological University</orgName>
+								<address>
+									<country key="SG">Singapore</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+							<email>jbreier@jbreier.com</email>
+							<affiliation key="aff1">
+								<note type="raw_affiliation"><label>2</label> Silicon Austria Labs , Graz , Austria</note>
+								<orgName type="institution">Silicon Austria Labs</orgName>
+								<address>
+									<settlement>Graz</settlement>
+									<country key="AT">Austria</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+							<email>chenyi19@mails.tsinghua.edu.cn</email>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>3</label> Tsinghua University , Beijing , PR China</note>
+								<orgName type="institution">Tsinghua University</orgName>
+								<address>
+									<settlement>Beijing</settlement>
+									<country key="CN">PR China</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+							<email>xiaoyangdong@tsinghua.edu.cn</email>
+							<affiliation key="aff2">
+								<note type="raw_affiliation"><label>3</label> Tsinghua University , Beijing , PR China</note>
+								<orgName type="institution">Tsinghua University</orgName>
+								<address>
+									<settlement>Beijing</settlement>
+									<country key="CN">PR China</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers (Extended Version)</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">B82AE5DFD8AA08656B81AFFB7DEF0736</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T15:48+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>gimli</term>
+					<term>ascon</term>
+					<term>knot</term>
+					<term>chaskey</term>
+					<term>distinguisher</term>
+					<term>machine learning</term>
+					<term>differential</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>At CRYPTO 2019, Gohr first introduces the deep learning based cryptanalysis on round-reduced SPECK. Using a deep residual network, Gohr trains several neural network based distinguishers on 8-round SPECK-32/64. The analysis follows an 'all-in-one' differential cryptanalysis approach, which considers all the output differences effect under the same input difference. Usually, the all-in-one differential cryptanalysis is more effective compared to that using only one single differential trail. However, when the cipher is non-Markov or its block size is large, it is usually very hard to fully compute. Inspired by Gohr's work, we try to simulate the all-in-one differentials for non-Markov ciphers through machine learning. Our idea here is to reduce a distinguishing problem to a classification problem, so that it can be efficiently managed by machine learning. As a proof of concept, we show several distinguishers for four high profile ciphers, each of which works with trivial complexity. In particular, we show differential distinguishers for 8-round Gimli-Hash, Gimli-Cipher and Gimli-Permutation; 3-round Ascon-Permutation; 10-round Knot-256 permutation and 12-round Knot-512 permutation; and 4-round Chaskey-Permutation. Finally, we explore more on choosing an efficient machine learning model and observe that only a three layer neural network can be used. Our analysis shows the attacker is able to reduce the complexity of finding distinguishers by using machine learning techniques.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head><p>Machine Learning (ML) tools have made a great progress in the last decades. At present, these techniques are widely used in various fields, such as computer vision <ref type="bibr" target="#b34">[35]</ref>, machine translation <ref type="bibr" target="#b3">[4,</ref><ref type="bibr" target="#b35">36]</ref>, autonomous driving <ref type="bibr" target="#b16">[17]</ref>, to name a few. In the aspect of cryptography however, usage of ML is mainly confined in the context of side channel analysis, such as <ref type="bibr" target="#b15">[16,</ref><ref type="bibr" target="#b30">31]</ref>, to the best of our knowledge.</p><p>Therefore, the applicability of ML techniques in classical cryptanalysis is not much explored. It seems the community is rather skeptical regarding this approach. For example, the authors of <ref type="bibr" target="#b0">[1]</ref> comment, "Neural networks are generally not meant to be great at cryptography. Famously, the simplest neural networks cannot even compute XOR, which is basic to many cryptographic algorithms".</p><p>Although ML techniques have been used against legacy ciphers, like the Enigma (the German cipher used during second world war) <ref type="bibr" target="#b23">[24]</ref>, it was not until the work by Gohr <ref type="bibr" target="#b22">[23]</ref> at CRYPTO'19 that this line of research finally got its exposure. The idea here is applied to key recovery attacks on round-reduced SPECK using ML.</p><p>This work focuses on extending the commonly used model of differential distinguisher by using ML techniques. In the case of differential distinguisher, the attacker Eve XORs a chosen input difference δ to the input of the state of the (reduced round) cipher and watches for a particular output difference ∆, with randomly chosen inputs. If the (δ, ∆) pair occurs with a probability significantly higher for the (reduced round) cipher than what it should be for a random case, the (reduced round) cipher can be distinguished from the random case. This probability distribution of δ → ∆ is modeled by differential branch number <ref type="bibr" target="#b17">[18]</ref> or by automated tools like Mixed Integer Linear Programming (MILP) <ref type="bibr" target="#b33">[34]</ref>. We extend the modeling for differential distinguisher by incorporating machine learning algorithms.</p><p>We argue that the usual modeling with branch number or MILP underestimates attacker's power. Having collected the output differences for the chosen input differences, the attacker can use any technique to distinguish the cipher from the random case. In such a situation, machine learning based techniques can reduce the search complexity estimated by existing methods. In fact, we observe that ML can reduce the search complexity to the cube root of the previously estimated bound.</p><p>The machine learning models we propose, can work with any number (say, t) of suitably chosen input differences. Our first model comes into play when t ≥ 2 (see Section 3.1). In order to work with only one input difference, we propose our second model (see Section 3.2).</p><p>Detailed discussion of machine learning is out of scope of this work, interested readers may refer to standard textbooks such as <ref type="bibr" target="#b24">[25]</ref> for the same. We use TensorFlow<ref type="foot" target="#foot_0">foot_0</ref> back-end with Keras<ref type="foot" target="#foot_1">foot_1</ref> API. The optimizer function is based on Adam algorithm <ref type="bibr" target="#b25">[26]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Our Contributions</head><p>In this work, we construct machine learning models to simulate the all-in-one differentials from <ref type="bibr" target="#b1">[2]</ref>. We consider the classical distinguisher game: Given ORACLE $ ← {CIPHER, RANDOM}, the attacker is to identify whether ORACLE = CIPHER with probability significantly &gt; 1  2 and with sufficiently small number of queries.</p><p>The core of our analysis lies in the actual problem of distinguishing the CIPHER from RANDOM into a classification problem. For this purpose, we propose two models (details are given in Section 3). We choose the most common ML tool, Multi-Layer Perceptron (MLP) as a starting point (we have also tested with other ML tools, as described in Section 5).</p><p>As for transforming the differential distinguisher to a classification problem, we propose two models here. We apply the first model (described in Section 3.1) to round-reduced GIMLI <ref type="bibr" target="#b11">[12]</ref>, ASCON <ref type="bibr" target="#b18">[19]</ref> and KNOT <ref type="bibr" target="#b36">[37]</ref>. All of the ciphers are the 2 nd round candidates in the ongoing NIST Lightweight Cryptography (LWC) competition <ref type="foot" target="#foot_2">3</ref> . Further, we also show the effectiveness of the second model (described in Section 3.2) over the lightweight MAC CHASKEY <ref type="bibr" target="#b32">[33]</ref>. Brief description of the ciphers is given in Appendix A.</p><p>Results are described in Section 4 and Section 5, which can be summarized as follows: • For GIMLI, we obtain 8-round practical distinguishers on GIMLI-HASH and GIMLI-CIPHER in nonce respecting case in Section 4.1. The distinguishing complexity is 2 17.6 offline data to train the model and 2 14.3 online data to distinguish the cipher. Note that the authors of GIMLI <ref type="bibr" target="#b11">[12]</ref> proved that the optimal 8-round differential trail is with probability of 2 -52 . If we use this trail to distinguish 8-round GIMLI, we need at least 2 52 online data. Thus, we are able to perform a differential distinguisher in around cube root complexity.</p><p>• For the ciphers, ASCON <ref type="bibr" target="#b18">[19]</ref> and KNOT <ref type="bibr" target="#b36">[37]</ref>, we show practical distinguishers for reduced round versions of the underlying permutations in Section 4.2. For the 320-bit ASCON-PERMUTATION, we show two separate distinguishers that work until 3-rounds with 2 19 training data. For the 256-bit permutation of KNOT (KNOT-256), we show distinguishers for up to 10 rounds; and for the 512-bit permutation (KNOT-512), we show the same for up to 12-rounds. All results on KNOT are obtained with 2 19 training data.</p><p>• For CHASKEY <ref type="bibr" target="#b31">[32,</ref><ref type="bibr" target="#b32">33]</ref>, we present our results in Section 4.3. With trivial training/testing complexity (2 23 for training and 2 14.3 for testing), we show the existence of a 4-round distinguisher. This contradicts the authors' claim that no 4-round differential distinguisher of complexity 2 37 searches exists.</p><p>In Section 5, we discuss effects of choosing different neural network architectures with respect to 8-round GIMLI-PERMUTATION as the target cipher. We show that even a shallow three layer neural network works well for our purpose. We also report few differential distinguishers for 8-round GIMLI-PERMUTATION in the process.</p><p>With regard to our analysis, we emphasize on the following points:</p><p>• Generality and practicality. It is to be mentioned that our ML assisted model is generic in nature and can be adopted to any symmetric key setting. All the results presented are practical and can be carried out in around an hour on a modern computer.</p><p>• Compatibility with differential distinguisher. We would like to point out that we use the same attack model as that of the pre-existing differential distinguisher. The only distinction is made during the analysis, as ours is done by machine learning (instead of the branch number or automated tools like MILP). We do not fix any output difference a priori, instead all the differentials are fed to the ML.</p><p>• Effect of truncation. The results (Section 4.1) for GIMLI-HASH and GIMLI-CIPHER are with truncated versions of the state, whereas the results for GIMLI-PERMUTATION (Section 5) are with the full state. Moreover, we argue that the truncation of the state does not fall outside the perceived model. Having collected the differentials, the attacker can employ any method (including truncating a part) based on the attacker's preference for analysis. This is also noted (with an example) in <ref type="bibr" target="#b4">[5]</ref>.</p><p>• Extensibility. The results presented in our work do not constitute the theoretical upper bound for the ML assisted distinguishers. By using a more sophisticated ML model and/or more training/testing data, it is likely that one can cover more rounds<ref type="foot" target="#foot_3">foot_3</ref> .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Background</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Markov Ciphers</head><p>Lai, Massey and Murphy <ref type="bibr" target="#b27">[28]</ref> introduce the concept of Markov ciphers at Eurocrypt'91 which we describe here.</p><p>Definition 1 (Markov Chain <ref type="bibr" target="#b27">[28]</ref>). Given a sequence of discrete random variables v</p><formula xml:id="formula_0">0 , v 1 , . . . , v r is a Markov chain, if for 0 ≤ i &lt; r, Pr(v i+1 = β i+1 |v i = β i , v i-1 = β i-1 , . . . , v 0 = β 0 ) = Pr(v i+1 = β i+1 |v i = β i ).<label>(1)</label></formula><p>If Pr(v i+1 = β|v i = α) is independent of i for all α and β, the Markov chain is called homogeneous. Given an r-round iterated cipher, the input of ith round is denoted as Y i (0 ≤ i ≤ r). Given a group operation ⊗, we define the corresponding input differences as ∆Y 0 , ∆Y 1 , . . . , ∆Y r , where ∆Y = Y ⊗ Y . Then, Lai et al. introduce the following definition of Markov cipher as given in Definition 2.</p><p>Definition 2 (Markov Cipher <ref type="bibr" target="#b27">[28]</ref>). An iterated cipher with round function Y = f (X, K) is a Markov cipher if there is a group operation ⊗ for defining differences such that, for all choices of α (α = 0) and β (β = 0), Pr(∆Y = β|∆X = α, X = γ) is independent of γ when the subkey K is uniformly random, or equivalently, if Pr(∆Y = β|∆X = α, X = γ) = Pr(∆Y (1) = β 1 |∆X = α) for all choices of γ when the sub-key K is uniformly random.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Theorem 1.</head><p>If an r-round iterated cipher is a Markov cipher and the r round keys are independent and uniformly random, then the sequence of differences ∆X = (∆Y 0 ,∆Y 1 , . . . , ∆Y r ), is a homogeneous Markov chain. Moreover, this Markov chain is stationary if ∆X is uniformly distributed over the non-neutral elements of the group.</p><p>Theorem 1 is adopted from <ref type="bibr" target="#b27">[28]</ref>. According to Theorem 1, one can compute the probability of an r-round differential characteristic as,</p><formula xml:id="formula_1">Pr(∆Y 1 = β 1 , ∆Y 2 = β 2 , . . . , ∆Y r = β r |∆X = β 0 ) = r i=1</formula><p>Pr(∆Y 1 = β i |∆X = β i-1 ).</p><p>(2) However, the above theory can not be applied to non-Markov ciphers, such as GIMLI <ref type="bibr" target="#b11">[12]</ref> or ASCON <ref type="bibr" target="#b18">[19]</ref>. One of the most important feature of those primitives is that there are no sub-keys in each iterated round. In this situation, the iterated cipher usually can not be regarded as a Markov cipher or a homogeneous a Markov chain. This is because, the differences in the former rounds usually have</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>GIFT-64 SBox</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>GIFT-64 SBox</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>GIFT-64 SBox</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>GIFT-64</head><p>SBox</p><formula xml:id="formula_2">∆Y 1 ∆W 1 ∆Y 2 ∆W 2</formula><p>Fig. <ref type="figure">1</ref>: One-round GIFT-128 (unkeyed) permutation significant effect on the the differences of the latter rounds, where Equation (1) does not hold any more. Hence, we can not use the Equation (2) to compute the probability of a characteristic any more. As shown in Figure <ref type="figure">1</ref>, we introduce a toy cipher to explain the dependence of the differences between a 2-round cipher without sub-keys. We use the 4-bit SBox of GIFT-64 <ref type="bibr" target="#b6">[7]</ref> as an example. The Difference Distribution Table (DDT) SBox (1A4C6F392DB7508E) is omitted here for the interest of brevity and can be found in [7, Table <ref type="table" target="#tab_7">18</ref> <ref type="bibr" target="#b0">[1]</ref> are the input difference of the upper and lower SBox in Figure <ref type="figure">1</ref>, respectively. We try to compute the probability of a differential characteristic, where ∆Y 1 = (2, 3), ∆W 1 = (5, 8), ∆Y 2 = (6, 2), and ∆W 2 = (2, 5). From the DDT of the GIFT SBox, it is easy to know the probability of ∆Y 1 → ∆W 1 is 2 -5 . The valid tuples of (Y</p><formula xml:id="formula_3">]. Suppose ∆Y 1 [0] = Y 1 [0] ⊕ Y 1 [0] and ∆Y 1 [1] = Y 1 [1] ⊕ Y 1</formula><formula xml:id="formula_4">1 [0], W 1 [0], Y 1 [0], W 1 [0]</formula><p>) are (0, 1, 2, 4), (2, 4, 0, 1), (4, 6, 6, 3) and (6, 3, 4, 6). The valid tuples of (Y 1 <ref type="bibr" target="#b0">[1]</ref>, W 1 <ref type="bibr" target="#b0">[1]</ref>, Y 1 <ref type="bibr" target="#b0">[1]</ref>, W 1 <ref type="bibr" target="#b0">[1]</ref>) is (d, 0, e, 8) and (e, 8, d, 0). Only input pairs with (Y 1 [0], Y 1 <ref type="bibr" target="#b0">[1]</ref>) = (0, d), (0, e), (2, d) and (2, e) are valid for the differential characteristic. Hence the probability of the characteristic is 2 -6 , instead of 2 -9 computed by Equation (2).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Gohr's Work on SPECK (CRYPTO'19)</head><p>Using a deep residual neural networks, Gohr in <ref type="bibr" target="#b22">[23]</ref> achieves better results than the best classical cryptanalysis on 11-round SPECK <ref type="bibr" target="#b7">[8]</ref>. In this work, first several machine learned distinguishers for round-reduced SPECK based on an all-in-one differential cryptanalysis <ref type="bibr" target="#b1">[2]</ref> are trained, where the attacker considers potentially all the output differences of a cipher for a given input difference and to combine the information derived from them. Under the Markov assumption, Gohr first computes the entire DDT of round-reduced SPECK with a fixed input difference, which can be achieved due to the small block size of SPECK-32/64. Hence, the all-in-one differentials for the 5-/6-/7-/8-round SPECK-32/64 following the Markov assumption are reported. After this, the same distinguishing task via the neural networks is performed.</p><p>Concretely, the following steps are used to train the model: 1. Collecting training data by generating uniformly distributed keys and plaintext pairs given a fixed input difference as well as the binary labels Y i . 2. If the binary label Y i = 1, then the plaintext pairs are encrypted by k-round SPECK to produce the ciphertext pairs. If other wise, the random ciphertext pairs are generated. 3. Pre-process ciphertext pairs to fit the format required by the neural network and start to train them.</p><p>Finally, the author gains several machine-learned distinguishers on round-reduced SPECK which are a little more efficient the the distinguishers derived by computing the entire difference distribution table. After that, Gohr uses the neural network based distinguishers to launch several key-recovery attacks on round-reduced SPECK.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Motivation of Our Work.</head><p>Inspired from Gohr's work <ref type="bibr" target="#b22">[23]</ref>, the following questions come to our mind, and subsequently we employ neural networks:</p><p>• As the all-in-one approach considers all the output differences with one input difference -it is more efficient to distinguish the ciphers than that using only one input difference and one output difference. However, computing the all-in-one distinguisher is infeasible when the state of the cipher is large, e.g. 128-bit state. However, as shown by Gohr's attack, the neural networks can match the all-in-one distinguisher well. Hence, we can take advantage of the neural networks to simulate the all-in-one distinguishers for larger state ciphers.</p><p>• As shown in Gohr's attack, under Markov assumption, one can compute the all-in-one distinguishers somehow. However, there are many ciphers which can not be assumed as Markov, such as some permutation-based ciphers or stream ciphers, where there are no sub-key in the iterated rounds (the justification is given in Section 2.1). In these situations, it is hard to compute the all-in-one distinguishers.</p><p>3 Machine Learning Based Distinguishers</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Model 1: Multiple Input Differences</head><p>Under this model, the attacker chooses t (≥ 2) input differences δ 0 , δ 1 , . . . , δ t-1 . In the training (offline) phase, the attacker tries to learn whether there is any pattern in the CIPHER outputs that the machine learning tool is capable of finding. To test that, Eve creates t differentials with those input differences and feeds all the data to the machine learning. If the accuracy (a) of ML training is higher than what it should be for random data (i.e., 1 t ), the attacker is able extract pattern from the CIPHER outputs and proceeds to the online phase. Otherwise (if the training accuracy is 1 t ), she aborts. During the testing (online) phase, the attacker would check if the sequence of classes predicted by the already-trained machine learning model matches the expected sequence (in which she has queried the ORACLE) with the same probability as training. Since she queries in a specific sequence to the ORACLE, the classes predicted by the machine learning would follow the specific sequence with the same probability as training if ORACLE = CIPHER; or would be arbitrary if ORACLE = RANDOM. Since the ORACLE can only choose between CIPHER and RANDOM, the machine learning produced sequence (of predicted classes) would either match the attacker's pre-perceived sequence with the same probability as she has observed during training (&gt; 1 t ); or that sequence would be arbitrary and hence would match the attacker's pre-perceived sequence with probability 1  t . Therefore, if the accuracy of predicting the classes (a ) is same as a, we infer the chosen ORACLE = CIPHER. On the other hand, if a = 1 t , we conclude ORACLE = RANDOM.</p><p>Algorithm 1: Model 1 (multiple input differences) for differential distinguisher with machine learning</p><p>1: procedure Offline phase (Training) 2: T D ← (•) Training data 3: Choose random P 4: C ← CIPHER(P ) 5: for i = 0; i ≤ t -1; i ← i + 1 do 6: Pi ← P ⊕ δi 7: Ci ← CIPHER(Pi) 8: Append T D with (i, Ci ⊕ C) Ci ⊕ C is from class i 9: Repeat from Step 3 if required 10: Train ML model with T D 11: ML training reports accuracy a 12: if a &gt; 1 t then 13: Proceed to Online phase 14: else a = 1 t 15: Abort 1: procedure Online phase (Testing) 2: T D ← (•) Testing data 3: Choose random P 4: C ← ORACLE(P ) 5:</p><formula xml:id="formula_5">for i = 0; i ≤ t -1; i ← i + 1 do 6: Pi ← P ⊕ δi 7: Ci ← ORACLE(Pi) 8:</formula><p>Append T D with Ci ⊕ C 9:</p><p>Test ML model with T D to get C C is sequence of classes by ML 10: a = probability that C matches (0, 1, . . . , t -1) 11:</p><p>if a = a &gt; 1 t then 12: ORACLE = CIPHER 13: else a = 1 t 14: ORACLE = RANDOM 15:</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Repeat from Step 3 if required</head><p>A top-level description of the model is given in Algorithm 1. Although we describe the algorithm in terms of the entire state of the permutation for the sake of simplicity. In actual experimentation, we often consider part of the state (such as the rate part) part to make the permutation compatible with the primitives that use it.</p><p>Discussion on ORACLE = RANDOM Given the RANDOM case, the machine learning tool will assign classes arbitrarily. Therefore, the accuracy for training will be (close to) 1 t . For example, if t = 2, then the expected training accuracy is 0.5; if t = 32, the expected training accuracy is 0.03125. This is confirmed through our experiments. In fact, for all the results reported (in Section 4), we note that the accuracy for training drops to this bound for higher rounds of the ciphers.</p><p>Training and Testing the Model Our distinguisher works on the (unkeyed) permutation with a suitably chosen number of rounds. For the sake of simplicity, we denote the (unkeyed) permutation with input P as CIPHER(P ). The basic work-flow is given next.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Training (Offline).</head><p>1. Select t (≥ 2) non-zero input differences δ 0 , δ 1 , . . . , δ t-1 . 2. For each input difference δ i , generate (an arbitrary number of) input pairs (P, P i = P ⊕ δ i ). Run the (unkeyed) permutation the input pairs to get the output pairs: C ← CIPHER(P ), C i ← CIPHER(P i ) for all i. Then XOR the outputs within a pair to generate the output difference (C i ⊕ C). The output difference together with its label i (i.e., this sample belongs from class i) form a training sample. 3. Check if the training accuracy is &gt; 1 t . Otherwise (i.e., if accuracy = 1 t ), the procedure is aborted.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Testing (Online).</head><p>1. Generate the input pairs in the same way as training. In other words, randomly generate an input P . With the same input differences chosen during training δ 0 , δ 1 , . . . , δ t-1 ; generate new inputs P i = P ⊕ δ i for all i = 0(1)t -1. 2. Collect the outputs C and C i 's by querying ORACLE with input P and P i 's in order, for all i = 0(1)t -1. 3. Generate the testing data as C ⊕ C i for all i and in order. 4. Get the predicted classes from the trained model with the testing data. 5. Find the accuracy of class prediction. In other words, tally the classes returned by the trained ML with the sequence: (0, 1, . . . , t -1, 0, 1, . . . , t -1, . . . , 0, 1, . . . , t -1), and find the probability that both match. 6. (a) If ORACLE = CIPHER, the ML would predict the class for C ⊕ C i as i wtih the same probability as training.</p><p>Therefore in this case, the accuracy for class prediction (in Step 5) would be same (or, close to) the accuracy observed during training, i.e., &gt; 1 t . (b) If ORACLE = RANDOM, the ML would arbitrarily predict the classes. Therefore the accuracy for predicting classes by the trained ML (in Step 5) would be equal to (or, close to) 1 t . Algorithm 2: Model 2 (one input difference) for differential distinguisher with machine learning 1: procedure Offline phase (Training) 2: T D ← (•) Training data 3: Choose random P0, P1 ( = P0 ⊕ δ) 4: P2 = P1 ⊕ δ 5: Ci ← CIPHER(Pi), for i = 0, 1, 2 6: Append T D with: (0, C0 C1), C0 C1 is from class 0 (1, C0 C2) C0 C2 is from class 1 7: Repeat from Step 3 if required 8: Train ML model with T D 9: ML training reports accuracy a 10: if a &gt; 1 2 then 11: Proceed to Online phase 12: else a = 1 2 13: Abort 1: procedure Online phase (Testing) 2: T D ← (•) Testing data 3:</p><p>Choose random P0, P1 ( = P0 ⊕ δ) 4:</p><p>P2 = P1 ⊕ δ 5:</p><p>Ci ← ORACLE(Pi), for i = 0, 1, 2 6:</p><p>Append T D with C0 C1 and C0 C1 in order 7:</p><p>Test ML model with T D to get C C is sequence of classes by ML 8: a = probability that C matches (0, 1) 9:</p><p>if a = a &gt;</p><p>1 2 then 10: ORACLE = CIPHER 11: else a = 1 2 12: ORACLE = RANDOM 13: Repeat from Step 3 if required</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Model 2: One Input Difference</head><p>While the first model (described earlier in Section 3.1) can work with an arbitrary number of input differences, t ≥ 2, here we propose a different model that can work with only one input difference. A top-level view can be found in Algorithm 2. As it can be seen, this model actually converts one input difference to a problem of classification with two classes. The case for ORACLE = RANDOM would result in training accuracy of 1 2 .</p><p>Training and Testing the Model With the backdrop already presented in the previous model, here we present the basic work-flow.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Training (Offline).</head><p>1. Select the non-zero input difference, δ.</p><p>2. Generate (an arbitrary number of) pairs of inputs, P 0 , P 1 ( = P 0 ⊕ δ); and compute P 2 = P 1 ⊕ δ.</p><p>3. Run the (unkeyed) permutation the inputs to get the corresponding outputs: C i ← CIPHER(P i ), for i = 0, 1, 2. 4. Label C 0 C 1 as class 0 and C 0 C 2 as class 1. Run the machine learning model with the data. 5. Check if the training accuracy is &gt; 1  2 . If the accuracy equals (or, close to) 1 2 , the procedure is aborted.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Testing (Online).</head><p>1. Generate the input triplets P 0 , P 1 and P 2 in the same way as training. 2. Collect the outputs C 0 , C 1 and C 2 by querying ORACLE with input P 0 , P 1 and P 2 in order. 3. Feed the trained machine learning data C 0 C 1 and C 0 C 2 in order. 4. Get the predicted classes from the trained model with the testing data. 5. Find the accuracy of class prediction. More precisely, tally the classes returned by the trained ML with the sequence: (0, 1, 0, 1, . . . , 0, 1), and find the probability that both match. 6. (a) If ORACLE = CIPHER, the ML would predict the class for C 0 C 1 and C 0 C 2 as 0 and 1, respectively, wtih the same probability as training.</p><p>Therefore, the accuracy for class prediction (in Step 5) would be same (or, close to) the accuracy observed during training, i.e., &gt; 1 2 . (b) If ORACLE = RANDOM, the ML would arbitrarily predict the classes. So the accuracy for predicting classes by the trained ML (in Step 5) would be equal to (or, close to) 1 2 .</p><p>As we can see for both the models, it is important to feed the machine learning (during the online phase) the queries returned by the ORACLE in a specific order. The ordering of the classes predicted by the trained machine learning is what determines the inference regarding the ORACLE. Also, this inference, in turn, is determined by the accuracy observed during the training phase.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Comparison with Existing Models</head><p>All-in-one Differential Cryptanalysis All-in-one differential cryptanalysis <ref type="bibr" target="#b1">[2]</ref> does not use the cases where the output difference is not same as the pre-determined output difference. Such cases are simply discarded. We make use of all the cases, and are able to obtain distinguishers with reduced search complexity in the process.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Gohr's Model</head><p>Our analysis focuses on different direction from that of Gohr's <ref type="bibr" target="#b22">[23]</ref>. Gohr tries to prove the ability of ML-based distinguishers, so he selects SPECK <ref type="bibr" target="#b7">[8]</ref> with small state size. This way he is able computed the full DDT of round-reduced SPECK to compare with his neural distinguishers. We focus on other directions. More precisely, we consider ciphers with bigger state and non-Markov ciphers. Both of them are hard to compute the all-in-one distinguishers and we successfully to simulate them via machine learning. It can be stated that our algorithm is simpler to understand and implement.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Results on Round-Reduced Ciphers</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">GIMLI (Model 1)</head><p>Using a SAT/SMT-based approach, the authors of GIMLI present the optimal differential trails up to 8 rounds <ref type="bibr" target="#b11">[12]</ref>, which are given in Table <ref type="table" target="#tab_0">1</ref>. If we use the optimal 8-round differential trail to distinguish GIMLI-PERMUTATION, we need more than 2 52 input pairs. Now, based on the ML assisted model presented in Section 3.1 (the first model), we present differential distinguishers till 8 rounds of GIMLI-HASH and GIMLI-CIPHER, each with training data of 2 17.6 samples (and testing data of size 2 14.3 samples). In both the cases, we choose only two input differences, so t = 2. A summary of results can be found in Table <ref type="table" target="#tab_1">2</ref>. We use the same MLP network for distinguishing 8-round GIMLI-HASH and GIMLI-CIPHER. The network has 5 middle layers with numbers of neurons as (296, 258, 207, 112, 160). The activation function is ReLU, and the number of epochs is set to 20. We observe that our ML model is able to train the data collected with accuracy &gt; 0.5 till 8-rounds (the accuracy drops to 0.5 from 9 rounds onward) for both GIMLI-HASH and GIMLI-CIPHER.</p><p>GIMLI-HASH For GIMLI-HASH, we focus on the processes of absorbing the last block of message M and squeezing the first 128-bit hash value h. Suppose the full message M is just 127 bytes (denote the i th byte as M [i]), then after padded with a zero byte, the 128-bit block is absorbed into the sponge function. We generate the training data by flipping the least significant bit of byte M [4] and M <ref type="bibr" target="#b11">[12]</ref>. In other words, we process the message pairs with difference 1 in the 4 th byte (as δ 0 ) and 12 th byte (as δ 1 ). Then we compute the first 128-bit hash values pairs accordingly and collect the difference of hash values as training samples.</p><p>GIMLI-CIPHER For GIMLI-CIPHER in Figure <ref type="figure" target="#fig_1">3</ref>, we assume there is only one associated data block, so at least 2 GIMLI permutations (48 rounds) are involved until the first output of the ciphertext block. Of 48 rounds, here we take the reduced version, namely up to 8 rounds to show our distinsguisher. For the data collection, we generate uniformly distributed 256-bit keys and 128-bit nonce pairs with difference 1 in the 4 th byte (as δ 0 ) or 12 th byte (as δ 1 ) of the nonces (similar to GIMLI-HASH). We set the associated data and the first message block m 0 to be zero. Then compute the ciphertext c 0 and the differences of it. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">ASCON and KNOT (Model 1)</head><p>To show genericness of our methodology, here we present differential distinguishers on ASCON<ref type="foot" target="#foot_4">foot_4</ref>  <ref type="bibr" target="#b18">[19]</ref> and KNOT <ref type="bibr" target="#b36">[37]</ref>, using the first model (Section 3.1) for this purpose.</p><p>ASCON-PERMUTATION works with 320-bit state; and we only take 256 and 512-bit versions of KNOT-PERMUTATION. Our results show existence of differential distinguishers for up to 3 rounds of ASCON-PERMUTATION; up to 10 rounds of KNOT-256, and up to 12 rounds KNOT-512 with trivial complexity. Table <ref type="table" target="#tab_2">3</ref> shows results for ASCON with 1-3 reduced rounds. Here, we XOR a mask value to the 64-bit register x 0 to get δ 0 , and XOR the same mask value to the register x 1 to get δ 1 . The results with the mask value 1000 are presented in Table <ref type="table" target="#tab_2">3</ref>(a), and the same for the mask value 10001 are presented in <ref type="bibr">Table 3(b)</ref>. For both the variants of KNOT, the mask value 1 is XORed to the 0 th and 1 st bytes of the state to generate the input differences, respectively. Similarly, Table <ref type="table" target="#tab_3">4</ref> shows the results for KNOT-PERMUTATION. In particular, Table <ref type="table" target="#tab_3">4</ref>(a) shows the results for KNOT-256 with 6-10 reduced rounds, and Table <ref type="bibr">4(b)</ref> shows that of KNOT-512 with 8-12 reduced rounds.</p><p>The size of neurons for the middle layers of the MLP used for ASCON and KNOT-256 is (128, 1024, 1024, 1024), and for KNOT-512 it is (256, 1024, 1024, 1024). Activation function in the hidden layers is taken as ReLU. Training is run for 20 epochs with 2 19 training data (validation is done with testing data of equal size) samples in all the cases. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">CHASKEY (Model 2)</head><p>Using the Lipmaa-Moriai formula, the authors of CHASKEY present some differential trails up to 8 rounds <ref type="bibr" target="#b32">[33]</ref>, which are given in Table <ref type="table" target="#tab_4">5</ref>. Using the notion of pre-existing all-in-one differential, if we use the 4-round differential trail to distinguish CHASKEY, we need at least 2 37 input pairs. Here, we apply the second model of machine learning based differential distinguisher (described in Section 3.2) on 4-round CHASKEY-PERMUTATION. The ML model from Gohr's <ref type="bibr" target="#b22">[23]</ref> is used here, except the number of epochs is set to 10.</p><p>First, we extend the 4-round differential given by the designers <ref type="bibr" target="#b32">[33]</ref> to get a new 5-round trail presented in Table <ref type="table" target="#tab_5">6</ref>, which shows the complexity for distinguishing 4-round CHASKEY-PERMUTATION would be at minimum 2 37 input pairs. Next for our analysis, first two inputs P 0 , P 1 are randomly generated. Thereafter, we obtain two pairs of samples: P 0 P 1 , and P 0 P 1 ⊕ (00008400 00000400 00000000 00000000). Then we follow the methodology as described in Section 3.2. With training data size of 2 23 , (validation is done with 2 14.3 data) we observe the accuracy of ML is 0.616 for 4-round CHASKEY-PERMUTATION. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">Choice of Machine Learning Model</head><p>For finding a distinguisher, we opt for machine learning techniques that can reveal the hidden structures in the data without explicit feature selection. Our problem is treated as a classification problem where one tries to check whether a particular differential is inserted at the input to the (round-reduced) cipher or not. Results in this section are obtained by taking the 8-round distinguisher of GIMLI-PERMUTATION as the benchmark. For training, we use 2 18 data samples. Number of epochs is set to 20 as for higher numbers the models tend to overfit. When using machine learning algorithms, one has to make a choice on hyperparameters that would perform the best on the given problem. These parameters are normally chosen in an empirical way, by testing various network architectures and following best practices. There are automated techniques to tune the hyperparameters <ref type="bibr" target="#b8">[9,</ref><ref type="bibr" target="#b9">10]</ref>; however, these require significant resources which can be hard to emulate. Here, we report the outcome from the manual architecture search next. Results in this section are obtained by using Intel Xeon Silver 4215 processor with 256 GB of RAM.</p><p>We have tried several different neural network types, including the basic MLP, Convolutional Neural Network (CNN), and Long Short-Term Memory Network (LSTM). We have varied the width (number of neurons per layer) and the depth (number of layers) of these to find out the best accuracy and speed of learning. We have also tried several different types of activation functions.</p><p>Here, we choose our first model (Section 3.1), with two differences, δ 0 = 1 and δ 1 = 2 (i.e., the least significant and the second least significant bits are flipped, respectively). The input layer size of the model is 128 (first 128-bits are squeezed), and the output layer size, t = 2. Our findings, which contain several distinguishers for 8-round GIMLI-PERMUTATION (highlighted), are stated in Table <ref type="table" target="#tab_7">8</ref>. Architecture denotes number of neurons per layer starting from the input layer. Activation function denotes the function that was used in the hidden layers, as the output layer always used softmax. A summary can be given as follows:</p><p>• CNNs are not suitable for the purpose of finding a distinguisher. We have tried several architectures, and the accuracy was always 0.5. This is expected result, as CNNs are aimed at recognizing patterns in input data, which helps in image recognition or natural language processing, but does not work for cipher input where the bits are not related in any way. In fact, we observe distinguisher for 8-round GIMLI-PERMUTATION only except these models. • LSTMs perform better than CNNs, but worse than fine-tuned MLP. The main drawback of LSTMs was the training speed -as they have recurrent layers, these have high memory requirements and more computations are required.</p><p>• MLPs provide the best accuracy, and can be tuned to train in very fast time. Our best result is achieved by MLP with 3 hidden layers and 1024 neurons per hidden layer (MLP VII in Table <ref type="table" target="#tab_7">8</ref>), respectively. One can notice that in some cases we used Leaky ReLU as activation function <ref type="bibr" target="#b29">[30]</ref>, which allows a small, positive gradient when the unit is not active (e.g. input is negative), and therefore is considered more "balanced." This is an advantage for smaller networks compared to normal ReLU, but for the network with 1.2M parameters, its performance is slightly worse.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">Conclusion and Outlook</head><p>In this work, we propose two novel methods on finding distinguishers on symmetric key primitives by using machine learning. Our methods work with any number (non-zero) input differences. At the core, we use multiple differentials and convert the problem of distinguishing CIPHER from RANDOM into a classification problem, which is then tackled by a machine learning technique. Overall, we generalize the classical (all-in-one) differential distinguisher <ref type="bibr" target="#b1">[2,</ref><ref type="bibr" target="#b14">15]</ref>. Unlike the usual differential distinguisher that relies on a rigorous observation and specifics of the target cipher, both of our approaches are much simpler and only rely on analyzing a set of input difference-output difference by machine learning. Thus, we propose the first proof of concept on how machine learning can be used as a generic tool in symmetric key cryptanalysis.</p><p>Our methods are also efficient as they can be carried out in around an hour by a modern computer. On the non-Markov ciphers GIMLI <ref type="bibr" target="#b11">[12]</ref>, ASCON <ref type="bibr" target="#b18">[19]</ref>, KNOT <ref type="bibr" target="#b36">[37]</ref> and CHASKEY <ref type="bibr" target="#b31">[32,</ref><ref type="bibr" target="#b32">33]</ref>; we show drastic reduction of search complexity reported by the designers for the round-reduced versions (typically of the order of a cube root).</p><p>A summary of advantages and limitations of our work can be given as: + The attack model is simple. In terms of neural network, our method works with as simple as a three layer neural network. + For round-reduced ciphers, we show that the complexity of differential cryptanalysis can be reduced to around a cube root of the claimed complexity. For example, the designers of GIMLI <ref type="bibr" target="#b11">[12]</ref> claim the complexity of mounting a differential distinguisher by existing modeling methods would be at least 2 52 data. However we are able to find the same with the complexity of around 2 17.6 data (details can be found in Section 4.1 and Section 5). + Our work is generic, and can be applied to any symmetric key primitive where differential cryptanalysis can be applied. Here we target non-Markov ciphers as these are typically more complicated to analyze. -So far, we are not able to extend our model to cover further rounds.</p><p>-For the time being, our model does not have a key recovery functionality.</p><p>That being said, we would like to emphasize that our work does not indicate the theoretical limit of the application of machine learning in symmetric key cryptography. Future works in this direction will likely cover more rounds with advanced ML modelling and/or more training/testing data. As noted in <ref type="bibr" target="#b4">[5]</ref>, new functionalities like key recovery, higher order differential can be achieved by switching to a Support Vector Machine (SVM) <ref type="foot" target="#foot_5">6</ref> .</p><p>As this is the first research work of its kind, there are scopes to improve the coverage of our experiments in the future. For example, training with more data can be performed to see if a distinguisher for 9-round GIMLI-PERMUTATION is achieved. We only take two input differences with our experiments with the first model (Section 3.1), so one may also be interested in experimenting with more differences. Apart from that, one may look for optimal choices for the input differences so that the size of the training/testing data can be reduced.</p><p>We are optimistic that the same methodologies can be applied to Markov ciphers like GIFT <ref type="bibr" target="#b6">[7]</ref> as well, which we leave as a future work. Since we use a classification problem, other machine learning techniques that specialize on classification can also be used instead of neural networks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A Basic Description of the Ciphers</head><p>A.1 GIMLI GIMLI <ref type="bibr" target="#b10">[11]</ref> is a cross-platform permutation proposed by Bernstein, Kölbl, Lucks, Massolino, Mendel, Nawaz, Schneider, Schwabe, Standaert, Todo and Viguier at CHES'17. Based on GIMLI permutation, the authors of <ref type="bibr" target="#b11">[12]</ref> introduce the lightweight hashing and authenticated encryption algorithms, i.e., GIMLI-HASH and GIMLI-CIPHER, which are included in the second round of NIST Lightweight Cryptography (LWC) competition. GIMLI is also used in the open source cryptographic library LibHydrogen <ref type="foot" target="#foot_6">7</ref> .</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>GIMLI-PERMUTATION</head><p>works on a 384-bit state which can be represented as a 3 × 4 matrix of 32-bit words, namely:</p><formula xml:id="formula_6">s =   s 0,0 s 0,1 s 0,2 s 0,3 s 1,0 s 1,1 s 1,2 s 1,3 s 2,0 s 2,1 s 2,2 s 2,3  </formula><p>where the j th column of s is s * ,j = s 0,j , s 1,j , s 2,j , the i th row of s is s i, * = s i,0 , s i,1 , s i,2 , s i,3 . The details of GIMLI-PERMUTATION is given in Algorithm 3, which is adopted from <ref type="bibr" target="#b10">[11]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 3: GIMLI-PERMUTATION</head><p>Input: s = (si,j) Output: GIMLI-PERMUTATION(s) 1: for r from 24 down to 1 inclusive do 2: for j from 0 to 3 inclusive do 3:</p><p>x ← s0,j ≪ 24 SP-box 4:</p><p>y ← s1,j ≪ 9 5: z ← s2,j 6: s2,j ← x ⊕ (z 1) ⊕ ((y ∧ z) 2) 7:</p><p>s1,j ← y ⊕ x ⊕ ((x ∨ z) 1) 8:</p><p>s0,j ← z ⊕ y ⊕ ((x ∧ y) 3) 9:</p><p>if r mod 4 = 0 then Linear layer 10:</p><p>s0,0, s0,1, s0,2, s0,3 ← s0,1, s0,0, s0,3, s0,2 Small-Swap 11:</p><p>else if r mod 4 = 2 then 12:</p><p>s0,0, s0,1, s0,2, s0,3 ← s0,2, s0,3, s0,0, s0,1 Big-Swap 13:</p><p>if r mod 4 = 0 then 14: GIMLI-HASH Taking advantage of GIMLI-PERMUTATION and the sponge construction [13], GIMLI-HASH is defined as shown in Figure 2. The message M is padded and divided into 128-bit blocks, i.e., m 0 , . . . , m t . They are XORed into the state in the absorb phase the state and output 256-bit digest in the squeeze phase. Here we omit some padding rules since they do not affect our attacks. Our neural distinguisher happens in the processing of the last message block m t . GIMLI-CIPHER Taking advantage of GIMLI-PERMUTATION and the Monkey-Duplex construction [14], GIMLI-CIPHER is defined as shown in Figure 3. Here σ 0 , . . . , σ t are the associated data and padded to 128-bit blocks. Here m 0 , . . . , m t and c 0 , . . . , c t are the plaintext and ciphertext blocks, respectively. Note that at least one block of associated data is processed. So at least two GIMLI-PERMUTATION's (48 rounds) are used until the first ciphertext block c 0 generated. In this paper, we target on the case where only one block of associated data is processed. f Nonce Key σ 0 • • • pad (σ t ) m 0 c 0 pad (m t ) Tag c t • • • • • • f f f f Fig. 3: Construction of GIMLI-CIPHER A.2 ASCON</p><formula xml:id="formula_7">s0,0 = s0,0 ⊕ 9e377900 ⊕ r Add constant return si,j m 0 • • • m t h h • • • pad (M ) 0 f f f</formula><p>ASCON is one of the winners of CAESAR<ref type="foot" target="#foot_7">foot_7</ref> (first choice for lightweight application), and one of the 32 contestants in the second round of the ongoing NIST LWC competition <ref type="bibr" target="#b18">[19]</ref>. The mode of operation is MonkeyDuplex <ref type="bibr" target="#b13">[14]</ref>. It operates on a 320-bit state which are divided into five 64-bit words x 0 , . . . , x 4 , i.e., S = x 0 x 1 x 2 x 3 x 4 . Since for the machine learning assisted distinguisher we only consider the 320-bit ASCON-PERMUTATION, we give a concise description of it. For more information regarding the cipher, one may refer to <ref type="bibr" target="#b18">[19]</ref>. ASCON-PERMUTATION iteratively applies a three-step round transformation for 12-rounds, which are (in order) denoted by p C (addition of constants), p S (substitution layer), p L (linear diffusion layer).</p><p>The constant addition, p C , adds an 8-bit round constant to the least significant 8-bits of x 2 at round i. The round constants are as follows: f0, e1, d2, c3, b4, a5, 96, 87, 78, 69, 5a, 4b.</p><p>The substitution layer, p S , updates the 320-bit state by applying a 5-bit SBox on it (the SBox is applied 64-times in parallel). The SBox in the look-up format is given as: 4, B, 1F, 14, 1A, 15, 9, 2, 1B, 5, 8, 12, 1D, 3, 6, 1C, 1E, 13, 7, E, 0, D, 11, 18, 10, C, 1, 19, 16, A, F, 17.</p><p>The linear diffusion layer, p L , is used to diffuse within each 64-bit register. It applies a linear function to each of the register, x i ← Σ i (x i ) for i = 0, . . . , 4. The linear functions, Σ i 's are given as given next. Here x ≫ i indicates right-rotation (circular shift) by i bits of 64-bit word x. As for the number of rounds, the designers recommend to use 28-rounds for b = 256 and 52-rounds for b = 512 <ref type="bibr" target="#b36">[37,</ref><ref type="bibr">Table 2]</ref>. m 1 m 2 m ℓ K 1 K 1 K π π . . . π π right t τ (a) Case: |m ℓ | = n m 1 m 2 m ℓ ||10 K 2 K 2 K π π . . . π π right t τ (b) Case: 0 ≤ |m ℓ | &lt; n Fig. 5: CHASKEY mode of operation</p><formula xml:id="formula_8">Σ 1 (x 1 ) = x 0 ⊕ (x 0 ≫ 19) ⊕ (x 0 ≫ 28) Σ 1 (x 1 ) = x 1 ⊕ (x 1 ≫ 61) ⊕ (x 1 ≫ 39) Σ 2 (x 2 ) = x 2 ⊕ (x 2 ≫ 1) ⊕ (x 2 ≫ 6) Σ 3 (x 3 ) = x</formula><formula xml:id="formula_9">A.4 CHASKEY v 1 v 0 v 2 v 3 • • ≪ 5 ≪ 8 • • ≪ 16 • • ≪ 7 ≪<label>13</label></formula><formula xml:id="formula_10">• • ≪<label>16</label></formula><formula xml:id="formula_11">v 1 v 0 v 2 v 3</formula><p>CHASKEY <ref type="bibr" target="#b31">[32,</ref><ref type="bibr" target="#b32">33]</ref> is a permutation based MAC which is designed for optimized performance for 32-bit microcontrollers. This permutation (π) is based on Modular Addition-Rotation-XOR (ARX) design methodology similar to SIPHASH <ref type="bibr" target="#b2">[3]</ref>. It takes a 128-bit key K and processes a message m in 128-bit blocks using the 128-bit permutation π.</p><p>The permutation π (we denote it by CHASKEY-PERMUTATION) which processes 128 bits is as given in Figure <ref type="figure">4</ref>; here,</p><formula xml:id="formula_12">v 0 v 1 v 2 v 3 ← π(v 0 v 1 v 2 v 3</formula><p>). This round functions is iterated for r = 12 rounds <ref type="bibr" target="#b31">[32]</ref>. The key operations are addition over modulo 2 32 ( ), XOR (⊕) and left rotation (≪). Here is the only non-linear operation. The permutation π is repeatedly applied in a mode of operation to implement the MAC (see Figure <ref type="figure">5</ref>) and the whole process can be viewed as an Even-Mansour block cipher <ref type="bibr" target="#b20">[21,</ref><ref type="bibr" target="#b21">22]</ref> with a 2n-bit key and n-bit block size.</p><p>For the key schedule, CHASKEY takes a 128-bit key K; from which two 128-bit subkeys K 1 and K 2 are derived, each using a 128-bit shift and a 128-bit conditional XOR.</p><p>So far the most significant cryptanalysis that has been carried out on CHASKEY can be found in <ref type="bibr" target="#b28">[29]</ref>. This attack was in fact on the older version <ref type="bibr" target="#b32">[33]</ref>, where the number or rounds of the permutation π is set to r = 8. The author used differential-linear cryptanalysis and succeed to attack for r = 7. After this attack, CHASKEY is revised with r = 12 <ref type="bibr" target="#b31">[32]</ref>.</p><p>To the best of our knowledge, the most advanced cryptanalysis of CHASKEY-PERMUTATION is reported in <ref type="bibr" target="#b19">[20]</ref>, where the authors show a 4-round integral distinguisher. The authors also acknowledge that no such 5-round distinguisher exists. A recent work analyses CHASKEY in terms of weak key setting <ref type="bibr" target="#b26">[27]</ref>.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 2 :Fig. 3 :</head><label>23</label><figDesc>Fig. 2: Construction of GIMLI-HASH</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>3 ⊕</head><label>3</label><figDesc>(x 3 ≫ 10) ⊕ (x 3 ≫ 17) Σ 4 (x 4 ) = x 4 ⊕ (x 4 ≫ 7) ⊕ (x 4 ≫ 41) A.3 KNOT KNOT [37] is one of the 32 candidates currently competing in the second round of the NIST LWC project. Similar to ASCON, we only consider permutation of KNOT, therefore we only describe KNOT-PERMUTATION here. KNOT-PERMUTATION is parameterized by the width b, where b ∈ {256, 384, 512}, although we only use b = 256 and 512 for our experiment. KNOT-PERMUTATION has therefore a state size of b-bits, which is organized in a two dimensional matrix, as detailed in [37, Chapter 2.1]. At each round, an SPN round transformation (denoted by, p b ) is iteratively applied. Each p b consists of the following 3 steps (in order): AddRoundConstant b , SubColumn b , ShiftRow b . The AddRoundConstant b adds round constants (which are generated by a LFSR) to the state, more description can be found at [37, Chapter 2.2]. Next, the SubColumn b step updates the state by applying a 4-bit SBox in column-major fashion. The SBox chosen by the designers is: 40A7BE1D9F6852C3. Finally, the ShiftRow b step left-rotates the state in a row-major fashion. The 0 th is rotated c i bits, i = 0, 1, 2, 3; where c 0 = 0, c 1 = 1, c 3 = 25 for both b = 256, 512 and c 2 = 8 for b = 256, c 2 = 16 for b = 512.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 4 :Fig. 5 :</head><label>45</label><figDesc>Fig. 4: One round of CHASKEY-PERMUTATION (π)</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1 :</head><label>1</label><figDesc>Optimal differential trails for the round-reduced GIMLI-PERMUTATION</figDesc><table><row><cell>Rounds 1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>5</cell><cell>6</cell><cell>7</cell><cell>8</cell></row><row><cell>Weight 0</cell><cell>0</cell><cell>2</cell><cell>6</cell><cell>12</cell><cell>22</cell><cell>36</cell><cell>52</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 2 :</head><label>2</label><figDesc>Accuracy of ML training on round-reduced GIMLI-HASH and GIMLI-CIPHER</figDesc><table><row><cell>Rounds</cell><cell cols="2">Accuracy GIMLI-HASH GIMLI-CIPHER</cell></row><row><cell>6</cell><cell>0.9689</cell><cell>0.9528</cell></row><row><cell>7</cell><cell>0.7229</cell><cell>0.6340</cell></row><row><cell>8</cell><cell>0.5219</cell><cell>0.5099</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2"><head>Table 3 :</head><label>3</label><figDesc>Accuracy of ML training for reduced round ASCON-PERMUTATION(a) Mask: 1000</figDesc><table><row><cell></cell><cell></cell><cell cols="2">(b) Mask: 10001</cell></row><row><cell cols="2">Rounds Accuracy</cell><cell cols="2">Rounds Accuracy</cell></row><row><cell>1</cell><cell>0.7499</cell><cell>1</cell><cell>0.8749</cell></row><row><cell>2</cell><cell>0.9847</cell><cell>2</cell><cell>0.9990</cell></row><row><cell>3</cell><cell>0.9861</cell><cell>3</cell><cell>0.8314</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3"><head>Table 4 :</head><label>4</label><figDesc>Accuracy of ML training for reduced round KNOT-256 and KNOT-512 (a) KNOT-256</figDesc><table><row><cell></cell><cell></cell><cell cols="2">(b) KNOT-512</cell></row><row><cell cols="2">Rounds Accuracy</cell><cell cols="2">Rounds Accuracy</cell></row><row><cell>6</cell><cell>0.9508</cell><cell>8</cell><cell>0.9999</cell></row><row><cell>7</cell><cell>0.8984</cell><cell>9</cell><cell>0.9989</cell></row><row><cell>8</cell><cell>0.8293</cell><cell>10</cell><cell>0.9824</cell></row><row><cell>9</cell><cell>0.7096</cell><cell>11</cell><cell>0.8472</cell></row><row><cell>10</cell><cell>0.5912</cell><cell>12</cell><cell>0.6032</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4"><head>Table 5 :</head><label>5</label><figDesc>Differential trails for the round-reduced CHASKEY-PERMUTATION</figDesc><table><row><cell>Rounds 1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>5</cell><cell>6</cell><cell>7</cell><cell>8</cell></row><row><cell>Weight 0</cell><cell>4</cell><cell>16</cell><cell>37</cell><cell>73</cell><cell cols="3">133 208 293</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5"><head>Table 6 :</head><label>6</label><figDesc>Differential trail for 5-round CHASKEY-PERMUTATION</figDesc><table><row><cell>Round(s)</cell><cell>v0</cell><cell>v1</cell><cell>v2</cell><cell>v3</cell><cell>Weight</cell></row><row><cell>0</cell><cell cols="4">c0240100 44202100 0c200008 0c200000</cell><cell>-</cell></row><row><cell>1</cell><cell cols="4">00008400 00000400 00000000 00000000</cell><cell>15</cell></row><row><cell>2</cell><cell cols="4">80000000 00000000 00000000 80000000</cell><cell>2</cell></row><row><cell>3</cell><cell cols="4">80008080 00000040 00000000 80109080</cell><cell>2</cell></row><row><cell>4</cell><cell cols="4">10409000 00542800 08400010 12408210</cell><cell>18</cell></row><row><cell>5</cell><cell cols="4">42828202 48540a0d 0a000090 10c0cb52</cell><cell>35</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6"><head>Table 7 :</head><label>7</label><figDesc>Accuracy of ML training on reduced round CHASKEY-PERMUTATION</figDesc><table><row><cell cols="3">Rounds Differential Probability Training Accuracy</cell></row><row><cell>0 → 4</cell><cell>2 -37</cell><cell>0.61618899</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_7"><head>Table 8 :</head><label>8</label><figDesc>Results for architecture search with 8-round GIMLI-PERMUTATION</figDesc><table><row><cell>Network</cell><cell>Architecture</cell><cell>Activation Function</cell><cell>Number of Parameters</cell><cell>Training Time (s)</cell><cell>Accuracy</cell></row><row><cell>MLP I</cell><cell>128, 296, 258, 207, 112, 160, 2</cell><cell>ReLU</cell><cell cols="3">226,633 1267.39 0.5588</cell></row><row><cell cols="2">MLP II 128, 1024, 2</cell><cell>ReLU</cell><cell cols="3">150,658 1081.67 0.5569</cell></row><row><cell cols="2">MLP III 128, 1024, 1024, 2</cell><cell>ReLU</cell><cell cols="3">1,200,256 1162.21 0.5652</cell></row><row><cell cols="2">MLP IV 128, 256, 128, 64, 2</cell><cell>LeakyReLU</cell><cell>90,818</cell><cell>510.9</cell><cell>0.5478</cell></row><row><cell cols="2">MLP V 128, 1024, 2</cell><cell>LeakyReLU</cell><cell>150,658</cell><cell>934.89</cell><cell>0.5516</cell></row><row><cell cols="2">MLP VI 128, 1024, 1024, 2</cell><cell cols="3">LeakyReLU 1,200,256 1778.5</cell><cell>0.5509</cell></row><row><cell cols="2">MLP VII 128, 1024, 1024, 1024, 2</cell><cell>ReLU</cell><cell cols="2">2,249,858 2410.1</cell><cell>0.5689</cell></row><row><cell>CNN I</cell><cell>128, 128, 128, 100, 2</cell><cell>ReLU</cell><cell>128,046</cell><cell>2951.7</cell><cell>0.5000</cell></row><row><cell cols="2">CNN II 128, 1024, 128, 128, 100, 2</cell><cell>ReLU</cell><cell cols="3">604,206 11503.0 0.5000</cell></row><row><cell cols="2">LSTM I 128, 256, 128, 2</cell><cell cols="4">tanh/sigmoid 444,162 50460.7 0.5316</cell></row><row><cell cols="2">LSTM II 128, 200, 100, 128, 2</cell><cell cols="4">tanh/sigmoid 313,170 39825.9 0.5325</cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="1" xml:id="foot_0"><p>https://www.tensorflow.org/</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="2" xml:id="foot_1"><p>https://keras.io/</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="3" xml:id="foot_2"><p>https://csrc.nist.gov/projects/lightweight-cryptography</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="4" xml:id="foot_3"><p>New functionalities like higher order differential or key recovery can be incorporated too.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="5" xml:id="foot_4"><p>We denote the latest version, ASCONv1.2, as ASCON for simplicity.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="6" xml:id="foot_5"><p>It is possible to get the same functionalities with an artificial neural network, but it is computationally expensive compared to a support vector machine.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="7" xml:id="foot_6"><p>https://github.com/jedisct1/libhydrogen</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="8" xml:id="foot_7"><p>https://competitions.cr.yp.to/</p></note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="extracted" xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Learning to protect communications with adversarial neural cryptography</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Abadi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">G</forename><surname>Andersen</surname></persName>
+		</author>
+		<idno>CoRR abs/1610.06918</idno>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page">1</biblScope>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Abadi, M., Andersen, D.G.: Learning to protect communications with adversarial neural cryptography. CoRR abs/1610.06918 (2016) 1</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">An All-In-One Approach to Differential Cryptanalysis for Small Block Ciphers</title>
+		<author>
+			<persName><forename type="first">Martin</forename><forename type="middle">R</forename><surname>Albrecht</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Leander</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-35999-6_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Windsor, ON, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2012">August 15-16, 2012. 2012</date>
+			<biblScope unit="page" from="1" to="15" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers 1-15 2, 4, 7</note>
+	<note type="raw_reference">Albrecht, M.R., Leander, G.: An all-in-one approach to differential cryptanalysis for small block ciphers. In: Selected Areas in Cryptography, 19th International Conference, SAC 2012, Windsor, ON, Canada, August 15-16, 2012, Revised Selected Papers. (2012) 1-15 2, 4, 7, 11</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">SipHash: A Fast Short-Input PRF</title>
+		<author>
+			<persName><forename type="first">Jean-Philippe</forename><surname>Aumasson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Daniel</forename><forename type="middle">J</forename><surname>Bernstein</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-34931-7_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Kolkata, India</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2012">December 9-12, 2012. 2012</date>
+			<biblScope unit="page" from="489" to="508" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Aumasson, J., Bernstein, D.J.: Siphash: A fast short-input PRF. In: Progress in Cryptology -INDOCRYPT 2012, 13th International Conference on Cryptology in India, Kolkata, India, December 9-12, 2012. Proceedings. (2012) 489-508 15</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Neural machine translation by jointly learning to align and translate</title>
+		<author>
+			<persName><forename type="first">D</forename><surname>Bahdanau</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><surname>Cho</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Bengio</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1409.0473</idno>
+		<imprint>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page">1</biblScope>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Bahdanau, D., Cho, K., Bengio, Y.: Neural machine translation by jointly learning to align and translate. arXiv preprint arXiv:1409.0473 (2014) 1</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2021-02-01">2021</date>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi, A., Breier, J., Dasu, V.A., Dong, X., Yi, C.: Following-up on machine learning assisted differential distinguishers. SILC Workshop -Security and Implementation of Lightweight Cryptography (2021) 3, 12</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Machine Learning Assisted Differential Distinguishers For Lightweight Ciphers</title>
+		<author>
+			<persName><forename type="first">Anubhab</forename><surname>Baksi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakub</forename><surname>Breier</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiaoyang</forename><surname>Dong</surname></persName>
+		</author>
+		<idno type="DOI">10.23919/date51398.2021.9474092</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2020">2020. 2020</date>
+			<biblScope unit="page" from="176" to="181" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Baksi, A., Breier, J., Dong, X., Yi, C.: Machine learning assisted differential distinguishers for lightweight ciphers. IACR Cryptol. ePrint Arch. 2020 (2020) 571</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">GIFT: A Small Present</title>
+		<author>
+			<persName><forename type="first">Subhadeep</forename><surname>Banik</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sumit</forename><forename type="middle">Kumar</forename><surname>Pandey</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Peyrin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Sasaki</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Siang</forename><forename type="middle">Meng</forename><surname>Sim</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yosuke</forename><surname>Todo</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-66787-4_16</idno>
+		<idno>Report 2017/622</idno>
+		<ptr target="https://eprint.iacr.org/2017/622.4,12" />
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2017">2017</date>
+			<biblScope unit="page" from="321" to="345" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Banik, S., Pandey, S.K., Peyrin, T., Sasaki, Y., Sim, S.M., Todo, Y.: Gift: A small present. Cryptology ePrint Archive, Report 2017/622 (2017) https://eprint.iacr.org/2017/622. 4, 12</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+		<idno>Report 2013/404</idno>
+		<ptr target="https://eprint.iacr.org/2013/404.4,7" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2013">2013</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Beaulieu, R., Shors, D., Smith, J., Treatman-Clark, S., Weeks, B., Wingers, L.: The simon and speck families of lightweight block ciphers. Cryptology ePrint Archive, Report 2013/404 (2013) https://eprint.iacr.org/2013/404. 4, 7</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Gradient-Based Optimization of Hyperparameters</title>
+		<author>
+			<persName><forename type="first">Yoshua</forename><surname>Bengio</surname></persName>
+		</author>
+		<idno type="DOI">10.1162/089976600300015187</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Neural Computation</title>
+		<title level="j" type="abbrev">Neural Computation</title>
+		<idno type="ISSN">0899-7667</idno>
+		<idno type="ISSNe">1530-888X</idno>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="1889" to="1900" />
+			<date type="published" when="2000-08-01">2000</date>
+			<publisher>MIT Press</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bengio, Y.: Gradient-based optimization of hyperparameters. Neural computation 12(8) (2000) 1889-1900 10</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Random search for hyper-parameter optimization</title>
+		<author>
+			<persName><forename type="first">J</forename><surname>Bergstra</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Bengio</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Machine Learning Research</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="page" from="281" to="305" />
+			<date type="published" when="2012-02">Feb. 2012</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bergstra, J., Bengio, Y.: Random search for hyper-parameter optimization. Journal of Machine Learning Research 13(Feb) (2012) 281-305 10</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Gimli : A Cross-Platform Permutation</title>
+		<author>
+			<persName><forename type="first">Daniel</forename><forename type="middle">J</forename><surname>Bernstein</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Kölbl</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Lucks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pedro</forename><forename type="middle">Maat Costa</forename><surname>Massolino</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Florian</forename><surname>Mendel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kashif</forename><surname>Nawaz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tobias</forename><surname>Schneider</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peter</forename><surname>Schwabe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">François-Xavier</forename><surname>Standaert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yosuke</forename><surname>Todo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Benoît</forename><surname>Viguier</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-66787-4_15</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Taipei, Taiwan</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2017">September 25-28, 2017. 2017</date>
+			<biblScope unit="page" from="299" to="320" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bernstein, D.J., Kölbl, S., Lucks, S., Massolino, P.M.C., Mendel, F., Nawaz, K., Schneider, T., Schwabe, P., Standaert, F., Todo, Y., Viguier, B.: Gimli : A cross-platform permutation. In: Cryptographic Hardware and Embedded Systems -CHES 2017 -19th International Conference, Taipei, Taiwan, September 25-28, 2017, Proceedings. (2017) 299-320 12</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Gimli : A Cross-Platform Permutation</title>
+		<author>
+			<persName><forename type="first">Daniel</forename><forename type="middle">J</forename><surname>Bernstein</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Kölbl</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Lucks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Pedro</forename><forename type="middle">Maat Costa</forename><surname>Massolino</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Florian</forename><surname>Mendel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kashif</forename><surname>Nawaz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tobias</forename><surname>Schneider</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peter</forename><surname>Schwabe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">François-Xavier</forename><surname>Standaert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yosuke</forename><surname>Todo</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Benoît</forename><surname>Viguier</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-66787-4_15</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="page" from="299" to="320" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bernstein, D.J., Kölbl, S., Lucks, S., Massolino, P.M.C., Mendel, F., Nawaz, K., Schneider, T., Schwabe, P., Standaert, F., Todo, Y., Viguier, B.: Gimli (2019) 2, 3, 8, 11, 12</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Sponge-Based Pseudo-Random Number Generators</title>
+		<author>
+			<persName><forename type="first">Guido</forename><surname>Bertoni</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Joan</forename><surname>Daemen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Michaël</forename><surname>Peeters</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gilles</forename><surname>Van Assche</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-15031-9_3</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007-05">May 2007. 2007</date>
+			<biblScope unit="page" from="33" to="47" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Bertoni, G., Daemen, J., Peeters, M., Assche, G.V.: Sponge functions. In: Ecrypt Hash Workshop (May 2007). (2007) 13</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Duplexing the Sponge: Single-Pass Authenticated Encryption and Other Applications</title>
+		<author>
+			<persName><forename type="first">Guido</forename><surname>Bertoni</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Joan</forename><surname>Daemen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Michaël</forename><surname>Peeters</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gilles</forename><surname>Van Assche</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-28496-0_19</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Toronto, ON, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2011">August 11-12, 2011. 2011</date>
+			<biblScope unit="page" from="320" to="337" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Bertoni, G., Daemen, J., Peeters, M., Assche, G.V.: Duplexing the sponge: Single-pass authenticated encryption and other applications. In: Selected Areas in Cryptography -18th International Workshop, SAC 2011, Toronto, ON, Canada, August 11-12, 2011, Revised Selected Papers. (2011) 320-337 13</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Differential fault analysis of secret key cryptosystems</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/bfb0052259</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Santa Barbara, California, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1990">August 11-15, 1990. 1990</date>
+			<biblScope unit="page" from="513" to="525" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Biham, E., Shamir, A.: Differential cryptanalysis of des-like cryptosystems. In: Advances in Cryptology -CRYPTO &apos;90, 10th Annual International Cryptology Conference, Santa Barbara, California, USA, August 11-15, 1990, Proceedings. (1990) 2-21 11</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Convolutional Neural Networks with Data Augmentation Against Jitter-Based Countermeasures</title>
+		<author>
+			<persName><forename type="first">Eleonora</forename><surname>Cagli</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Cécile</forename><surname>Dumas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Emmanuel</forename><surname>Prouff</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-66787-4_3</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Taipei, Taiwan</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2017">September 25-28, 2017. 2017</date>
+			<biblScope unit="page" from="45" to="68" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Cagli, E., Dumas, C., Prouff, E.: Convolutional neural networks with data augmentation against jitter-based countermeasures -profiling attacks without pre-processing. In: Cryptographic Hardware and Embedded Systems - CHES 2017 -19th International Conference, Taipei, Taiwan, September 25-28, 2017, Proceedings. (2017) 45-68 1</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">DeepDriving: Learning Affordance for Direct Perception in Autonomous Driving</title>
+		<author>
+			<persName><forename type="first">Chenyi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ari</forename><surname>Seff</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alain</forename><surname>Kornhauser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jianxiong</forename><surname>Xiao</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/iccv.2015.312</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2015 IEEE International Conference on Computer Vision (ICCV)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2015-12">2015</date>
+			<biblScope unit="page" from="2722" to="2730" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chen, C., Seff, A., Kornhauser, A., Xiao, J.: Deepdriving: Learning affordance for direct perception in autonomous driving. In: Proceedings of the IEEE International Conference on Computer Vision. (2015) 2722-2730 1</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Specification of Rijndael</title>
+		<author>
+			<persName><forename type="first">Joan</forename><surname>Daemen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vincent</forename><surname>Rijmen</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-60769-5_3</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Information Security and Cryptography</title>
+		<meeting><address><addrLine>Berlin Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2002">2002</date>
+			<biblScope unit="page" from="31" to="51" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Daemen, J., Rijmen, V.: The Design of Rijndael: AES -The Advanced Encryption Standard. Springer-Verlag Berlin Heidelberg (2002) 1</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Ascon v1.2: Lightweight Authenticated Encryption and Hashing</title>
+		<author>
+			<persName><forename type="first">Christoph</forename><surname>Dobraunig</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Maria</forename><surname>Eichlseder</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Florian</forename><surname>Mendel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Martin</forename><surname>Schläffer</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/s00145-021-09398-9</idno>
+		<ptr target="https://csrc.nist.gov/CSRC/media/Projects/lightweight-cryptography/documents/round-2/spec-doc-rnd2/ascon-spec-round2.pdf.2" />
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J Cryptol</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">34</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<date type="published" when="2019">2019</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note>Ascon v1.2 , 3, 8, 11, 13</note>
+	<note type="raw_reference">Dobraunig, C., Eichlseder, M., Mendel, F., Schläffer, M.: Ascon v1.2. Submission to NIST (2019) https: //csrc.nist.gov/CSRC/media/Projects/lightweight-cryptography/documents/round-2/spec-doc-rnd2/ ascon-spec-round2.pdf. 2, 3, 8, 11, 13</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Finding Integral Distinguishers with Ease</title>
+		<author>
+			<persName><forename type="first">Zahra</forename><surname>Eskandari</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andreas</forename><forename type="middle">Brasen</forename><surname>Kidmose</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Kölbl</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tyge</forename><surname>Tiessen</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-10970-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<title level="s">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">C</forename><surname>Cid</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">M</forename><forename type="middle">J J</forename><surname>Jr</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Calgary, AB, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2018">August 15-17, 2018. 2018</date>
+			<biblScope unit="volume">11349</biblScope>
+			<biblScope unit="page" from="115" to="138" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Eskandari, Z., Kidmose, A.B., Kölbl, S., Tiessen, T.: Finding integral distinguishers with ease. In Cid, C., Jr., M.J.J., eds.: Selected Areas in Cryptography -SAC 2018 -25th International Conference, Calgary, AB, Canada, August 15-17, 2018, Revised Selected Papers. Volume 11349 of Lecture Notes in Computer Science., Springer (2018) 115-138 15</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">A construction of a cipher from a single pseudorandom permutation</title>
+		<author>
+			<persName><forename type="first">Shimon</forename><surname>Even</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yishay</forename><surname>Mansour</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-57332-1_17</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Fujiyoshida, Japan</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1991">November 11-14, 1991. 1991</date>
+			<biblScope unit="page" from="210" to="224" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Even, S., Mansour, Y.: A construction of a cipher from a single pseudorandom permutation. In: Advances in Cryptology -ASIACRYPT &apos;91, International Conference on the Theory and Applications of Cryptology, Fujiyoshida, Japan, November 11-14, 1991, Proceedings. (1991) 210-224 15</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">A construction of a cipher from a single pseudorandom permutation</title>
+		<author>
+			<persName><forename type="first">Shimon</forename><surname>Even</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yishay</forename><surname>Mansour</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/s001459900025</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Cryptology</title>
+		<title level="j" type="abbrev">J. Cryptology</title>
+		<idno type="ISSN">0933-2790</idno>
+		<idno type="ISSNe">1432-1378</idno>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="151" to="161" />
+			<date type="published" when="1997-06">1997</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Even, S., Mansour, Y.: A construction of a cipher from a single pseudorandom permutation. J. Cryptology 10(3) (1997) 151-162 15</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+		<author>
+			<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">A</forename><surname>Boldyreva</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">D</forename><surname>Micciancio</surname></persName>
+		</editor>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page" from="150" to="179" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gohr, A.: Improving attacks on round-reduced speck32/64 using deep learning. In Boldyreva, A., Micciancio, D., eds.: Advances in Cryptology -CRYPTO 2019, Cham, Springer International Publishing (2019) 150-179 1, 4, 7, 9</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b23">
+	<monogr>
+		<title level="m" type="main">Learning the enigma with recurrent neural networks</title>
+		<author>
+			<persName><forename type="first">S</forename><surname>Greydanus</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1708.07576</idno>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+			<biblScope unit="page">1</biblScope>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Greydanus, S.: Learning the enigma with recurrent neural networks. arXiv preprint arXiv:1708.07576 (2017) 1</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b24">
+	<monogr>
+		<author>
+			<persName><forename type="first">S</forename><surname>Haykin</surname></persName>
+		</author>
+		<title level="m">Neural Networks and Learning Machines</title>
+		<imprint>
+			<publisher>Pearson</publisher>
+			<date type="published" when="2008">2008</date>
+			<biblScope unit="page">2</biblScope>
+		</imprint>
+	</monogr>
+	<note>third edition</note>
+	<note type="raw_reference">Haykin, S.: Neural Networks and Learning Machines (third edition). Pearson (2008) 2</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Preprint repository arXiv achieves milestone million uploads</title>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">P</forename><surname>Kingma</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Ba</surname></persName>
+		</author>
+		<idno type="DOI">10.1063/pt.5.028530</idno>
+		<idno type="arXiv">arXiv:1412.6980</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Physics Today</title>
+		<title level="j" type="abbrev">Phys. Today</title>
+		<idno type="ISSNe">1945-0699</idno>
+		<imprint>
+			<biblScope unit="volume">2014</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page">2</biblScope>
+			<date type="published" when="2014-12-30">2014</date>
+			<publisher>AIP Publishing</publisher>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Kingma, D.P., Ba, J.: Adam: A method for stochastic optimization. arXiv preprint arXiv:1412.6980 (2014) 2</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Rotational Cryptanalysis on MAC Algorithm Chaskey</title>
+		<author>
+			<persName><forename type="first">Liliya</forename><surname>Kraleva</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Tomer</forename><surname>Ashur</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vincent</forename><surname>Rijmen</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-57808-4_8</idno>
+		<idno>Report 2020/538</idno>
+		<ptr target="https://eprint.iacr.org/2020/538.15" />
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2020">2020</date>
+			<biblScope unit="page" from="153" to="168" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Kraleva, L., Ashur, T., Rijmen, V.: Rotational cryptanalysis on mac algorithm chaskey. Cryptology ePrint Archive, Report 2020/538 (2020) https://eprint.iacr.org/2020/538. 15</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Markov Ciphers and Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Xuejia</forename><surname>Lai</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">James</forename><forename type="middle">L</forename><surname>Massey</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sean</forename><surname>Murphy</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-46416-6_2</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<editor>
+			<persName><forename type="first">D</forename><forename type="middle">W</forename><surname>Davies</surname></persName>
+		</editor>
+		<meeting><address><addrLine>Berlin, Heidelberg; Berlin Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1991">1991</date>
+			<biblScope unit="page" from="17" to="38" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lai, X., Massey, J.L., Murphy, S.: Markov ciphers and differential cryptanalysis. In Davies, D.W., ed.: Advances in Cryptology -EUROCRYPT &apos;91, Berlin, Heidelberg, Springer Berlin Heidelberg (1991) 17-38 3</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Improved Differential-Linear Cryptanalysis of 7-Round Chaskey with Partitioning</title>
+		<author>
+			<persName><forename type="first">Gaëtan</forename><surname>Leurent</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-49890-3_14</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Vienna, Austria</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2016">May 8-12, 2016. 2016</date>
+			<biblScope unit="page" from="344" to="371" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Leurent, G.: Improved differential-linear cryptanalysis of 7-round chaskey with partitioning. In: Advances in Cryptology -EUROCRYPT 2016 -35th Annual International Conference on the Theory and Applications of Cryptographic Techniques, Vienna, Austria, May 8-12, 2016, Proceedings, Part I. (2016) 344-371 15</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Building DNN acoustic models for large vocabulary speech recognition</title>
+		<author>
+			<persName><forename type="first">Andrew</forename><forename type="middle">L</forename><surname>Maas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Peng</forename><surname>Qi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ziang</forename><surname>Xie</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Awni</forename><forename type="middle">Y</forename><surname>Hannun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Christopher</forename><forename type="middle">T</forename><surname>Lengerich</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Daniel</forename><surname>Jurafsky</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Andrew</forename><forename type="middle">Y</forename><surname>Ng</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.csl.2016.06.007</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Speech &amp; Language</title>
+		<title level="j" type="abbrev">Computer Speech &amp; Language</title>
+		<idno type="ISSN">0885-2308</idno>
+		<imprint>
+			<biblScope unit="volume">41</biblScope>
+			<biblScope unit="page" from="195" to="213" />
+			<date type="published" when="2013">2013</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Maas, A.L., Hannun, A.Y., Ng, A.Y.: Rectifier nonlinearities improve neural network acoustic models. In: Proc. icml. Volume 30. (2013) 3 11</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Breaking Cryptographic Implementations Using Deep Learning Techniques</title>
+		<author>
+			<persName><forename type="first">Houssem</forename><surname>Maghrebi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thibault</forename><surname>Portigliatti</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Emmanuel</forename><surname>Prouff</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-49445-6_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Hyderabad, India</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2016">December 14-18, 2016. 2016</date>
+			<biblScope unit="page" from="3" to="26" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Maghrebi, H., Portigliatti, T., Prouff, E.: Breaking cryptographic implementations using deep learning techniques. In: Security, Privacy, and Applied Cryptography Engineering -6th International Conference, SPACE 2016, Hyderabad, India, December 14-18, 2016, Proceedings. (2016) 3-26 1</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Chaskey: An Efficient MAC Algorithm for 32-bit Microcontrollers</title>
+		<author>
+			<persName><forename type="first">Nicky</forename><surname>Mouha</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Mennink</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anthony</forename><surname>Van Herrewege</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dai</forename><surname>Watanabe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Preneel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ingrid</forename><surname>Verbauwhede</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-13051-4_19</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2015">2015. 2015</date>
+			<biblScope unit="volume">1182</biblScope>
+			<biblScope unit="page" from="306" to="323" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mouha, N.: Chaskey: a MAC algorithm for microcontrollers -status update and proposal of chaskey-12 -. IACR Cryptology ePrint Archive 2015 (2015) 1182 2, 11, 15</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Chaskey: An Efficient MAC Algorithm for 32-bit Microcontrollers</title>
+		<author>
+			<persName><forename type="first">Nicky</forename><surname>Mouha</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Mennink</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anthony</forename><surname>Van Herrewege</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dai</forename><surname>Watanabe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Preneel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ingrid</forename><surname>Verbauwhede</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-13051-4_19</idno>
+		<idno>306-323 2</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Montreal, QC, Canada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2014">August 14-15, 2014. 2014</date>
+			<biblScope unit="page" from="306" to="323" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Mouha, N., Mennink, B., Herrewege, A.V., Watanabe, D., Preneel, B., Verbauwhede, I.: Chaskey: An efficient MAC algorithm for 32-bit microcontrollers. In: Selected Areas in Cryptography -SAC 2014 -21st International Conference, Montreal, QC, Canada, August 14-15, 2014, Revised Selected Papers. (2014) 306-323 2, 9, 11, 15</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Differential and Linear Cryptanalysis Using Mixed-Integer Linear Programming</title>
+		<author>
+			<persName><forename type="first">Nicky</forename><surname>Mouha</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qingju</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dawu</forename><surname>Gu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bart</forename><surname>Preneel</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-34704-7_5</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<meeting><address><addrLine>Beijing, China</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2011-12-03">November 30 -December 3, 2011. 2011</date>
+			<biblScope unit="page" from="57" to="76" />
+		</imprint>
+	</monogr>
+	<note>Revised Selected Papers</note>
+	<note type="raw_reference">Mouha, N., Wang, Q., Gu, D., Preneel, B.: Differential and linear cryptanalysis using mixed-integer linear programming. In: Information Security and Cryptology -7th International Conference, Inscrypt 2011, Beijing, China, November 30 -December 3, 2011. Revised Selected Papers. (2011) 57-76 1</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Image Processing, Analysis and Machine Vision</title>
+		<author>
+			<persName><forename type="first">Milan</forename><surname>Sonka</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vaclav</forename><surname>Hlavac</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Roger</forename><surname>Boyle</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-1-4899-3216-7</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Cengage Learning</title>
+		<imprint>
+			<biblScope unit="page">1</biblScope>
+			<date type="published" when="2014">2014</date>
+			<publisher>Springer US</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Sonka, M., Hlavac, V., Boyle, R.: Image processing, analysis, and machine vision. Cengage Learning (2014) 1</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b35">
+	<monogr>
+		<title level="m" type="main">Google&apos;s neural machine translation system: Bridging the gap between human and machine translation</title>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Wu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Schuster</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Q</forename><forename type="middle">V</forename><surname>Le</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Norouzi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><surname>Macherey</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Krikun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Cao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Q</forename><surname>Gao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><surname>Macherey</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1609.08144</idno>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page">1</biblScope>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Wu, Y., Schuster, M., Chen, Z., Le, Q.V., Norouzi, M., Macherey, W., Krikun, M., Cao, Y., Gao, Q., Macherey, K., et al.: Google&apos;s neural machine translation system: Bridging the gap between human and machine translation. arXiv preprint arXiv:1609.08144 (2016) 1</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b36">
+	<monogr>
+		<author>
+			<persName><forename type="first">W</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">T</forename><surname>Ding</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Bao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Z</forename><surname>Xiang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">F</forename><surname>Ji</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">X</forename><surname>Zhao</surname></persName>
+		</author>
+		<ptr target="https://csrc.nist.gov/CSRC/media/Projects/lightweight-cryptography/documents/round-2/spec-doc-rnd2/knot-spec-round.pdf" />
+		<title level="m">Knot: Algorithm specifications and supporting document</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="page">14</biblScope>
+		</imprint>
+	</monogr>
+	<note>Submission to NIST</note>
+	<note type="raw_reference">Zhang, W., Ding, T., Yang, B., Bao, Z., Xiang, Z., Ji, F., Zhao, X.: Knot: Algorithm specifications and supporting doc- ument. Submission to NIST (2019) https://csrc.nist.gov/CSRC/media/Projects/lightweight-cryptography/ documents/round-2/spec-doc-rnd2/knot-spec-round.pdf. 2, 8, 11, 14</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

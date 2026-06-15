@@ -70,6 +70,7 @@ class TrainingConfig:
     restore_best_checkpoint: bool = False
     early_stopping_patience: int = 0
     early_stopping_min_delta: float = 0.0
+    loss: str = "bce"
 
 
 @dataclass(frozen=True)
@@ -135,7 +136,7 @@ def train_binary_classifier(
     model = model.to(selected_device)
     optimizer = _make_optimizer(model, config)
     scheduler = _make_scheduler(optimizer, config, len(train_dataset.labels))
-    loss_fn = nn.BCEWithLogitsLoss()
+    loss_fn = _make_loss(config.loss)
     train_loader = _make_loader(
         train_dataset,
         batch_size=config.batch_size,
@@ -177,7 +178,7 @@ def train_binary_classifier(
             labels = labels.to(selected_device)
             optimizer.zero_grad(set_to_none=True)
             logits = model(features).squeeze(1)
-            loss = loss_fn(logits, labels)
+            loss = _compute_loss(loss_fn, logits, labels, config.loss)
             loss.backward()
             optimizer.step()
             if scheduler is not None:
@@ -304,6 +305,7 @@ def train_binary_classifier(
         "restore_best_checkpoint": config.restore_best_checkpoint,
         "early_stopping_patience": config.early_stopping_patience,
         "early_stopping_min_delta": config.early_stopping_min_delta,
+        "loss": config.loss,
         "best_epoch": best_epoch,
         "best_checkpoint_metric": best_metric_value,
         "selected_checkpoint": selected_checkpoint,
@@ -322,6 +324,21 @@ def train_binary_classifier(
         calibrated_accuracy=final_metrics["calibrated_accuracy"],
     )
     return TrainingResult(history=history, final_metrics=final_metrics, metadata=metadata)
+
+
+
+def _make_loss(loss: str) -> nn.Module:
+    if loss == "bce":
+        return nn.BCEWithLogitsLoss()
+    if loss == "mse":
+        return nn.MSELoss()
+    raise ValueError(f"unsupported loss: {loss}")
+
+
+def _compute_loss(loss_fn: nn.Module, logits: torch.Tensor, labels: torch.Tensor, loss: str) -> torch.Tensor:
+    if loss == "mse":
+        return loss_fn(torch.sigmoid(logits), labels)
+    return loss_fn(logits, labels)
 
 
 def _make_optimizer(

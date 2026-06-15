@@ -23,6 +23,8 @@ def encode_ciphertext_pair(
 ) -> list[int]:
     if feature_encoding == "ciphertext_pair_bits":
         return pair_to_bits(left, right, width)
+    if feature_encoding == "present_mcnd_cell_matrix_bits":
+        return present_mcnd_cell_matrix_bits(left, right, width)
     if feature_encoding == "ciphertext_xor_bits":
         return xor_bits(left, right, width)
     if feature_encoding in {"ciphertext_xor_spn_aligned_bits", "ciphertext_xor_spn_paligned_bits"}:
@@ -61,6 +63,14 @@ def pair_to_bits(left: int, right: int, width: int) -> list[int]:
     return int_to_bits(left, width) + int_to_bits(right, width)
 
 
+def present_mcnd_cell_matrix_bits(left: int, right: int, width: int) -> list[int]:
+    if width % 4 != 0:
+        raise ValueError("present_mcnd_cell_matrix_bits requires a 4-bit cell block size")
+    pair_bits = pair_to_bits(left, right, width)
+    cells = [pair_bits[index : index + 4] for index in range(0, len(pair_bits), 4)]
+    return [cell[bit_index] for bit_index in range(4) for cell in cells]
+
+
 def xor_bits(left: int, right: int, width: int) -> list[int]:
     return int_to_bits(left ^ right, width)
 
@@ -73,7 +83,7 @@ def pair_xor_bits(left: int, right: int, width: int) -> tuple[list[int], list[in
 
 
 def pair_bits_for_encoding(block_bits: int, feature_encoding: str) -> int:
-    if feature_encoding == "ciphertext_pair_bits":
+    if feature_encoding in {"ciphertext_pair_bits", "present_mcnd_cell_matrix_bits"}:
         return block_bits * 2
     if feature_encoding == "ciphertext_xor_bits":
         return block_bits

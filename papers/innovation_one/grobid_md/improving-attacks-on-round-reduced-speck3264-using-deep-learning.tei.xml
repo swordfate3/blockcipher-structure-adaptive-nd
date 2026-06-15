@@ -1,0 +1,1290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>Springer International Publishing</publisher>
+				<availability  status="unknown">
+					<licence/>
+				</availability>
+				<date type="published" when="2019">2019</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="consolidated" source="crossref">
+					<analytic>
+						<author role="corresp">
+							<persName><forename type="first">Aron</forename><surname>Gohr</surname></persName>
+							<email>aron.gohr@bsi.bund.de</email>
+							<affiliation key="aff0">
+								<note type="raw_affiliation">Bundesamt für Sicherheit in der Informationstechnik (BSI) , Germany ,</note>
+								<orgName type="department">Bundesamt für Sicherheit in der Informationstechnik (BSI)</orgName>
+								<address>
+									<country key="DE">Germany</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Improving Attacks on Round-Reduced Speck32/64 Using Deep Learning</title>
+					</analytic>
+					<monogr>
+						<title level="m">Lecture Notes in Computer Science</title>
+						<idno type="ISSN">0302-9743</idno>
+						<idno type="eISSN">1611-3349</idno>
+						<imprint>
+							<publisher>Springer International Publishing</publisher>
+							<biblScope unit="page" from="150" to="179"/>
+							<date type="published" when="2019" />
+						</imprint>
+					</monogr>
+					<idno type="MD5">67F3F2E242E6BCA9D016393D4E9FDAB4</idno>
+					<idno type="DOI">10.1007/978-3-030-26951-7_6</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.0" ident="GROBID" when="2026-06-14T15:46+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.0</label>
+					<label type="parameters">startPage=-1, endPage=-1, consolidateCitations=1, consolidateHeader=1, consolidateFunders=0, includeRawAffiliations=true, includeRawCitations=true, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=[], flavor=null</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Deep Learning</term>
+					<term>Differential Cryptanalysis</term>
+					<term>Speck</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>This paper has four main contributions. 1 First, we calculate the predicted difference distribution of Speck32/64 with one specific input difference under the Markov assumption completely for up to eight rounds and verify that this yields a globally fairly good model of the difference distribution of Speck32/64. Secondly, we show that contrary to conventional wisdom, machine learning can produce very powerful cryptographic distinguishers: for instance, in a simple low-data, chosen plaintext attack on nine rounds of Speck, we present distinguishers based on deep residual neural networks that achieve a mean key rank roughly five times lower than an analogous classical distinguisher using the full difference distribution table. Thirdly, we develop a highly selective key search policy based on a variant of Bayesian optimization which, together with our neural distinguishers, can be used to reduce the remaining security of 11-round Speck32/64 to roughly 38 bits. This is a significant improvement over previous literature. Lastly, we show that our neural distinguishers successfully use features of the ciphertext pair distribution that are invisible to all purely differential distinguishers even given unlimited data. While our attack is based on a known input difference taken from the literature, we also show that neural networks can be used to rapidly (within a matter of minutes on our machine) find good input differences without using prior human cryptanalysis.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">Introduction</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1">Motivation and Goals of This Paper</head><p>Deep Learning has led to great improvements recently on a number of difficult tasks ranging from machine translation <ref type="bibr" target="#b6">[7,</ref><ref type="bibr" target="#b39">40]</ref> and autonomous driving <ref type="bibr" target="#b12">[13]</ref> to 1 Supplementary code and data for this paper is available at <ref type="url" target="https://github.com/agohr/deep_speck">https://github.com/  agohr/deep_speck</ref> c IACR 2019. This article is the final version submitted by the author to the IACR and to Springer-Verlag on June 2, 2019. The version published by Springer-Verlag is available at <ref type="url" target="https://doi.org/10.1007/978-3-030-26951-7_6">https://doi.org/10.1007/978-3-030-26951-7_6</ref>.</p><p>playing various abstract board games at superhuman level <ref type="bibr" target="#b15">[16,</ref><ref type="bibr" target="#b36">37,</ref><ref type="bibr" target="#b37">38]</ref>. In cryptography, practical work using machine learning techniques has mostly focused on side-channel analysis <ref type="bibr" target="#b30">[31,</ref><ref type="bibr" target="#b33">34,</ref><ref type="bibr" target="#b34">35]</ref>. On a theoretical level, it has long been recognized that cryptography and machine learning are naturally linked fields, see e.g. the survey of the subject given in <ref type="bibr" target="#b35">[36]</ref>. Many cryptographic tasks can be naturally framed as learning tasks and consequently cryptographic hardness assumptions may for instance yield examples for distributions that are by design difficult to learn. However, not much work as been done on machine-learning based cryptanalysis. This paper is the first to show that neural networks can be used to produce attacks quite competitive to the published state of the art against a round-reduced version of a modern block cipher.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.2">Contributions and Structure of This Paper</head><p>Main Results This paper tries to teach neural networks to exploit differential properties of round-reduced Speck. To this end, we train neural networks to distinguish the output of Speck with a given input difference from random data.</p><p>To test the strength of these machine-learned distinguishers, we first calculate the expected efficiency of some multiple-differential distinguishers for round-reduced Speck32/64 that use the full Markov model of Speck32/64, i.e. all differential characteristics following a given input difference. This is the strongest form of differential distinguishing attack known that does not involve key search and to the best of our knowledge, the efficiency of distinguishing attacks of this kind has not been studied before for any Speck variant. A fairly high detection efficiency is achieved for up to about eight rounds past our chosen input difference. Our neural distinguishers achieve better overall classification accuracy than these very strong baselines (see Table <ref type="table">2</ref> for details). As an additional performance metric, we construct a simple partial key recovery attack on nine rounds of Speck using only 128 chosen plaintexts where the two types of distinguisher can be directly compared. In this test, we try to recover one subkey. The mean rank of this subkey is roughly five times lower with the neural distinguishers than with the difference distribution table. We explore this further by designing a cryptographic task in which the adversary has to distinguish two ciphertext pair distributions that have exactly the same ciphertext difference distribution. We find that our neural distinguishers perform fairly well in this game without any retraining, reinforcing the observation that the neural distinguishers use features not represented in the difference distribution table.</p><p>In order to allow for a direct comparison to existing literature, we also construct a partial key recovery attack against 11 (out of 22) rounds of Speck32/64 based on a lightweight version of our neural distinguishers. The attack is expected to recover the last two subkeys after 2 14.5 chosen-plaintext queries at a computational complexity equivalent to about 2 38 Speck encryptions; expected average wall time to recovery of the last two subkeys on a desktop computer under single-threaded CPU-only execution is about 15 minutes in our proof of concept implementation. The closest comparison to this in the literature might be the attack on Speck32/64 reduced to 11 rounds presented in <ref type="bibr" target="#b18">[19]</ref>, which needs an expected 2 14 chosen plaintexts to recover a Speck key with a computational effort of about 2 46 reduced Speck evaluations. For a summary, see Table <ref type="table" target="#tab_0">1</ref>.</p><p>All experiments reported in this paper have been performed with a full implementation of Speck32/64, i.e. including the real key schedule. However, there is no evidence that the neural distinguishers use any properties of the key schedule. In particular, our 11-round key recovery attack has been tested also against reduced Speck32/64 with the free key schedule (independent and uniformly distributed subkeys), with no difference in performance compared to the real key schedule.</p><p>While other authors have tried to use neural networks for cryptanalytic tasks (see e.g. <ref type="bibr" target="#b5">[6,</ref><ref type="bibr" target="#b14">15,</ref><ref type="bibr" target="#b16">17,</ref><ref type="bibr" target="#b17">18,</ref><ref type="bibr" target="#b25">26,</ref><ref type="bibr" target="#b27">28]</ref> and the references cited therein), this paper is to the best of our knowledge the first work that compares cryptanalysis performed by a deep neural network to solving the same problems with strong, well-understood conventional cryptanalytic tools. It is also to the best of our knowledge the first paper to combine neural networks with strong conventional cryptanalysis techniques and the first paper to demonstrate a neural network based attack on a symmetric cryptographic primitive that improves upon the published state of the art.</p><p>The comparison with traditional techniques serves in this paper both a benchmarking purpose and heuristically also as an additional safeguard against possible flaws in experimental setup. In the examples here considered, the performance of our deep neural networks is competitive with results obtained classically. Structure of the Paper In section 2, we give a short overview of the Speck family of block ciphers and fix some notations.</p><p>In section 3, we systematically develop new high-gain random-or-real differential distinguishers for round-reduced Speck based on an approach similar to that used on KATAN32 in <ref type="bibr" target="#b2">[3]</ref>. For five to eight rounds of Speck32/64, we calculate for the first time the full distribution of differences within the Markov model for Speck induced by the input difference 0x0040/0000 up to double precision rounding error. See Table <ref type="table">2</ref> for details.</p><p>Section 4 contains our main results on using neural networks for cryptanalysis: we develop strong neural distinguishers against Speck reduced to up to eight rounds and show key recovery attacks competitive with classical methods for 9 and 11 rounds. We further show that using few shot learning techniques, fairly strong distinguishers against up to six rounds of Speck can be trained from very small data sets (see Figure <ref type="figure">2</ref>) and with very little computation. We use this further to automatically find good input differences for Speck32/64 without using prior human cryptanalysis.</p><p>In section 5, we further investigate the capabilities of our networks by introducing a differential cryptanalytic task which we call the real differences experiment where the distinguishers of section 3 are made useless. In this model, the adversary has to distinguish a real ciphertext C = (C 0 , C 1 ) obtained by encrypting two blocks of data P 0 , P 1 with a known plaintext difference ∆ from ciphertext that has additionally been bitwise-added with a random masking value K out ∈ {0, 1} b , where b is the block size of the primitive considered.</p><p>We show that our best neural models for the main distinguishing task discussed in section 4 have discovered ways to win in this experiment significantly more often than random guessing without any retraining, although for the fiveround case retraining is found to be quite helpful in extending this advantage. We also discuss a concrete example of a ciphertext pair that is misclassified by traditional differential distinguishers.</p><p>In section 6 we discuss our results and possible extensions of this work.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.3">Related Work</head><p>Related Cryptographic Work Speck has since its publication <ref type="bibr" target="#b8">[9]</ref> received a fair amount of analysis, see e.g. <ref type="bibr" target="#b7">[8]</ref> for a review. We focus only on those works that are most relevant to the present paper. The differential cryptanalysis of Speck was first studied by Abed, List, Lucks and Wenzel in <ref type="bibr" target="#b1">[2]</ref>. They constructed efficient differential characteristics for roundreduced versions of all members of the Speck family of ciphers and showed how to use these for key recovery. For Speck32/64, the round 3 difference of their 9round characteristic is used in the present work as the input difference required by our differential distinguishers.</p><p>In <ref type="bibr" target="#b18">[19]</ref>, Dinur improved the analysis given in <ref type="bibr" target="#b1">[2]</ref> by using a two-round guess and determine attack to speed up key recovery and extend the number of rounds that can be attacked. The two-round guess and determine stage of this attack takes as input a bitwise input difference and the cipher output two rounds later and returns all possible solutions for the subkeys used in these final rounds. In section 3, we use this two-round attack to construct a practical distinguisher for Speck reduced to five rounds that exploits the nonuniformity of the ciphertext pair distribution perfectly in the setting where only the input difference but not the input values to the cipher are known.</p><p>Biryukov and Velichkov proposed in <ref type="bibr" target="#b10">[11]</ref> a framework for the automatic search for optimal single differential characteristics of Speck and further improved on the differential characteristics found in <ref type="bibr" target="#b1">[2]</ref>. They also showed that Speck is not a Markov cipher. This latter finding is reinforced by our finding that neural distinguishers on Speck can for a nontrivial number of rounds outperform in terms of prediction accuracy all purely differential distinguishers.</p><p>Differential attacks are most useful in the chosen plaintext setting, as the adversary needs to see the output of the primitive under study given plaintext inputs with a particular chosen difference. The most powerful attacks against round-reduced Speck that have been put forward in the known plaintext setting come from linear cryptanalysis <ref type="bibr" target="#b4">[5,</ref><ref type="bibr" target="#b29">30]</ref>.</p><p>Multiple differential cryptanalysis as an extension of truncated differential cryptanalysis was first studied by Blondeau and Gerard in <ref type="bibr" target="#b11">[12]</ref>. A multipledifferential attack framework for block ciphers with small block size which (under the assumption that the relevant differential transition probabilities can be calculated correctly) exploits the difference between the wrong-key and rightkey difference distributions perfectly was developed by Albrecht and Leander <ref type="bibr" target="#b2">[3]</ref> and used to provide new cryptanalytic results on the KATAN32 block cipher, significantly extending the number of rounds that can be shown to be attackable.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Prior Work on Machine Learning and Data Driven Techniques in Cryptanalysis</head><p>A number of works have explored the use of machine learning and broadly applicable statistical techniques for cryptanalytic purposes previously. We give a brief review here.</p><p>For the purpose of this review, precomputation attacks are generally viewed as not being machine learning. Likewise, side channel attacks and other ways of exploiting the implementation of a mechanism are considered not to be cryptanalysis in the sense here discussed.</p><p>Laskari, Meletiou, Stamatiou and Vrahatis <ref type="bibr" target="#b27">[28]</ref> reported some success (in terms of search tree size, not necessarily in terms of execution time) compared to the baseline given by unoptimized brute force search in applying evolutionary computing methods to the problem of recovering additional subkey bits in fourand six round reduced DES subsequent to a classical differential attack.</p><p>Klimov, Mityagin and Shamir used genetic algorithms and neural networks to break a proposed public-key scheme itself based on neural networks <ref type="bibr" target="#b24">[25]</ref>. The same protocol was broken in the same paper also using two other methods.</p><p>A few authors have looked at the possibility of using machine learning directly to distinguish between or to otherwise attack unreduced modern ciphers. From a cryptographic point of view, this is clearly expected to be impossible, at least unless mode-of-operation or other implementation issues make it feasible. This is e.g. also the conclusion reached by Chou, Lin and Chen <ref type="bibr" target="#b14">[15]</ref>, who perform some experiments along these lines and give a review of the literature. Gomez, Huang, Zhang, Li, Osama and Kaiser <ref type="bibr" target="#b19">[20]</ref> used unsupervised learning using neural networks to achieve code book recovery for short-period Vigenere ciphers in a setting in which neither parallel text nor information on the enciphering mechanism was available to the network during training. Their motivation was primarily to work towards unsupervised learning techniques for machine translation.</p><p>Abadi and Andersen <ref type="bibr" target="#b0">[1]</ref> trained two neural networks to protect their communications from a third network that was trying to read their traffic. They showed that the two networks were in this setting able to use a pre-shared secret to shut out the adversary. However, neither analysis of humanly designed primitives nor human cryptanalysis of the communication method developed by the networks was performed.</p><p>Rivest in <ref type="bibr" target="#b35">[36]</ref> reviewed various connections between machine learning and cryptography. He also suggested some possible directions of research in cryptanalytic applications of machine learning.</p><p>Greydanus reported that recurrent neural networks can in a black box setting learn to simulate a restricted version of Enigma <ref type="bibr" target="#b20">[21]</ref>.</p><p>Purely data driven attacks have been used with good success e.g. against RC4 by Paterson, Poettering and Schuldt <ref type="bibr" target="#b31">[32]</ref>. They basically learn from a very large amount of RC4 keystream examples a Bayesian model of single-byte and two-byte biases of RC4. This model is then used to derive some plaintext data given on the order of millions of encryptions of the same plaintext.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">The Speck Family of Block Ciphers</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Notations and Conventions</head><p>Bitwise addition will in the sequel be denoted by ⊕, modular addition modulo 2 n by , and bitwise rotation of a fixed-size word by for rotation to the left and for rotation to the right. Here, k will be the word size of the primitive in question, which in the case of Speck32/64 is <ref type="bibr">16.</ref> In this paper, differential cryptanalysis will always mean cryptanalysis with regards to bitwise differences in the adversary-controlled input to the cipher under study. Let hence F : {0, 1} n → {0, 1} m be a map. Then, a differential transition for F is a pair (∆ in , ∆ out ) ∈ {0, 1} n × {0, 1} m . The probability P (∆ in → ∆ out ) of the differential transition F : ∆ in → ∆ out is defined as</p><formula xml:id="formula_0">P (∆ in → ∆ out ) := Card({x ∈ {0, 1} n : F (x) ⊕ F (x ⊕ ∆ in ) = ∆ out }) 2 n . (<label>1</label></formula><formula xml:id="formula_1">)</formula><p>In the description of differential attacks, it is sometimes necessary to specify specific ciphertext or plaintext differences or ciphertext/plaintext states. A single Speck block (or the difference between two blocks, depending on context) will in this paper be described by a pair of hexadecimal numbers. For instance, for Speck32/64, a state difference in which only the most significant bit is set will be written as 0x8000/8000.</p><p>For a primitive iteratively constructed by repeated application of a simpler building block (i.e. a round function), a differential characteristic or differential trail will be a sequence of differential transitions, given by a sequence of differences ∆ 0 , ∆ 1 , . . . , ∆ n . When the same concepts are applied to key-dependent function families (e.g. block ciphers), any key dependence of the differential probability will usually be suppressed, although such key-dependencies can make a difference for security evaluation and although they are known to exist in ARX primitives (see e.g. <ref type="bibr" target="#b3">[4]</ref>).</p><p>As introduced by Lai, Massey and Murphy <ref type="bibr" target="#b26">[27]</ref>, a Markov cipher is an iterated block cipher in which the probability of the individual differential transitions is independent of the concrete plaintext values if the subkeys applied to each round are chosen in a uniformly random manner. It is common to suppress the effect of initial or final keyless permutations on the assessment of the Markov property, because the details of message modifying the data that goes into these initial or final permutations are outside the scope of differential cryptanalysis. In the case of Speck, the first round up to and excluding the first subkey addition is for instance a fixed initial permutation on the plaintext.</p><p>A differential attack is any cryptographic attack that uses nonrandom properties of the output of a cryptographic primitive when it is being given input data with a known difference distribution. The most general form of differential attack that has been formally discussed in the literature are multiple differential attacks <ref type="bibr" target="#b11">[12]</ref>, where information from an arbitrary set of differential transitions is exploited in order to maximise the gain of the resulting attack.</p><p>In this paper, we will see both attacks that only use the information contained in observed ciphertext differences and the full information contained in output ciphertext pairs. We will in the sequel call the former purely differential attacks and the latter general differential attacks.</p><p>A distinguisher is a classifier C that accepts as input d data sampled independently from a finite event space Ω according to one of n probability distributions D i , i = 1, . . . , n, and outputs a guess of i for the submitted input item d. Here, i is chosen at each trial with a probability p i from the set {1, 2, . . . , n}. The selection method for i together with the distributions D i is known in advance and is in this paper called an experiment.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">A Short Description of Speck</head><p>Speck is an iterated block cipher designed by Beaulieu, Treatman-Clark, Shors, Weeks, Smith and Wingers <ref type="bibr" target="#b8">[9]</ref> for the NSA with the aim of building a cipher efficient in software implementations in IoT devices <ref type="bibr" target="#b7">[8]</ref>. It is an ARX construction, meaning that it is a composition of the basic functions of modular addition (mod 2 k ), bitwise rotation, and bitwise addition applied to k-bit words. In <ref type="bibr" target="#b8">[9]</ref>, various versions of Speck were proposed, which differ from each other by the values of some rotation constants, the number of rounds suggested, as well as by the block and key sizes used. Generally, Speckn/m will denote Speck with n bit block size and m bits key size.</p><p>The round function F : F k 2 × F 2k 2 → F 2k 2 of Speck is very simple. It takes as input a k-bit subkey K and a cipher state consisting of two k-bit words (L i , R i ) and produces from this the next round state (L i+1 , R i+1 ) as follows:</p><formula xml:id="formula_2">L i+1 := ((L i α) R i ) ⊕ K, R i+1 := (R i β) ⊕ L i+1 ,<label>(2)</label></formula><p>where α, β are constants specific to each member of the Speck cipher family (α = 7, β = 2 for Speck32/64 and α = 8, β = 3 for the other variants).</p><p>The round function is applied a fixed number of times (for 22 rounds in the case of Speck32/64) to produce from the plaintext input the ciphertext output. The subkeys for each round are generated from a master key by a non-linear key schedule that uses as its main building block also this round function. Some details of the key schedule differ between different versions of Speck due to the different number of words in the master key. The key schedule will not be analyzed in this paper and we therefore refer to <ref type="bibr" target="#b8">[9]</ref> for reference.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">Multiple Differential Attacks on Speck32/64</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Pure Differential Distinguishers</head><p>Setting Multiple differential attacks <ref type="bibr" target="#b11">[12]</ref> build cryptographic distinguishers by using a set S of differential transitions for some cryptographic function F to characterise its behaviour. The basic idea is that each transition ∆ i → δ j in S has associated with it a probability p ij of being observed given the experimental setting the cipher is being studied in and another probability pij in some situation that is being distinguished against. Given some observed data O from the experiment, Bayesian inference can then be used to determine e.g. if the observed data comes from the real or the random experiment.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Calculating Differential Transition Probabilities</head><p>We use algorithm 2 in <ref type="bibr" target="#b28">[29]</ref> to compute the differential behaviour of the nonlinear component of Speck32/64, which is simply modular addition modulo 2 16 . This gives us an efficient way to access arbitrary entries of the single-round differential transition matrix A ∈ R 2 32 ×2 32 of Speck. Given an input difference distribution v i ∈ R 2 32 for round i of Speck, we calculate the distribution at the input of round i + 1 by setting v i+1 := Av i .</p><p>Starting from the input difference ∆ = 0x0040/0000, i.e. the round 3 difference of the differential characteristic given in Table <ref type="table">7</ref> of <ref type="bibr" target="#b1">[2]</ref>, we have calculated the full predicted induced output distribution of Speck32/64 for up to 8 rounds in this way. The required sparse matrix-vector multiplications and the on-the-fly calculation of the relevant matrix entries took around 300 core-days of computing time in our implementation and produced about 34 gigabytes of distribution data for each round, which was saved to disk for further study. The input difference ∆ is used in most distinguishers developed in the remainder of this paper. It transitions deterministically to the low-weight difference 0x8000/8000 and has been chosen for being a very good starting point for truncated differential cryptanalysis in a low-data setting.</p><p>Cryptographic Tasks In this section, we set out to distinguish reduced-round Speck output with the input difference ∆ from random data. Our distinguishers will use the full predicted output difference distribution for the number of rounds considered. We will denote by Di the resulting distinguisher for i rounds. Hence, D5 will e.g. be the resulting five-round distinguisher and the corresponding distinguishing problem will be referred to as the D5 task.</p><p>Classification To distinguish between examples of real ciphertext pairs and examples generated at random, we assume that random ciphertext pair differences are distributed according to the uniform distribution on nonzero ciphertext blocks. We classify an observed output difference δ as real if the predicted probability of observing it in the real distribution is &gt; 1/(2 32 -1) and as random otherwise. This exploits the non-uniformity of the output difference distribution perfectly if our prediction of this distribution does not contain errors. The reported true positive rates and accuracies for the distinguishers defined by the predicted output distribution were calculated under the assumption that the true output distribution is the predicted one.</p><p>Sources of Error This kind of calculation works only if the cipher under study does not deviate too strongly from the Markov property. Also, in our calculation we used double-precision arithmetic, which introduces rounding errors. We have therefore tested the validity of this model in three ways:</p><p>1. We checked empirically that the highest-probability transition found by our model for eight rounds (0x0040/0000 → 0x0280/0080) is empirically observed with the expected probability of 2 -26.015 . This was found to be the case. 2. We checked empirically that the predicted true positive rates of our differential distinguishers match observed values on a size 10 6 test set from the real distribution. This was also the case within experimental error margins.</p><p>The corresponding experiment for true negative rates was not performed, as the random distribution is a priori known exactly, so given the distinguisher, there is no error in predicting its accuracy on random samples. 3. We approximated the true difference distribution of Speck32/64 also empirically using 100 billion samples in each case. The resulting distinguishers were clearly inferior to our theoretical model.</p><p>These experiments indicate that our model captures the difference distribution of round-reduced Speck32/64 for the considered input difference quite well.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Distinguisher Accuracy and Key Rank</head><p>Accuracy as well as true positive and true negative rate results are summarised in the next section, specifically in Table <ref type="table">2</ref>. Computing the full difference distribution table of Speck32/64 yields fairly strong distinguishers for at least up to eight rounds (better results than presented here may be possible with other input differences). Statistics on key ranking in the context of a simple key recovery attack can be found in Table <ref type="table">3</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Differential Distinguishers Using the Full Distribution of Ciphertext Pairs</head><p>Setting and Motivation The distinguishers so far considered in this paper observe a ciphertext pair that has been generated from a known input difference (but unknown input plaintext pairs) and try to guess based on the ciphertext difference whether the observed pair has been generated by reduced Speck encryption or randomly chosen. It is clear that one could improve on this by considering not only the difference data for an observed ciphertext pair, but the entire data observed. However, this is more difficult, because calculating the full distribution of ciphertext pairs for the real distribution is not feasible. The goal of this section is to determine, for differential distinguishers on five-round Speck with the input difference used in the previously studied distinguishers, how much of an advantage the adversary might gain in still exploiting this additional information.</p><p>A Perfect Differential Distinguisher for Speck32/64 Reduced to Five Rounds We have developed a perfect distinguisher for the D5 task. Given an observed ciphertext pair C := (C 0 , C 1 ) and an input difference ∆, the likelihood P (C|real) that we would observe (C 0 , C 1 ) under the real distribution for a block cipher E of block size b and key size k given uniformly random key and plaintext data is given by 2 -(b+k) N , where N is the number of key and plaintext pairs (K, P ) such that E K (P ) = C 0 and E K (P ⊕ ∆) = C 1 . But N is just the number N keys (C) of keys that decrypt C into a plaintext pair with difference ∆. On the other hand, P (C|random) = 1/(2 2b -2 b ), so applying Bayes' theorem again, for perfect classification we need to determine whether</p><formula xml:id="formula_3">N keys (C) &gt; 2 b+k /(2 2b -2 b ) ≈ 2 b+k-2b</formula><p>or not. For Speck32/64, we hence check whether N keys &gt; 2 32 .</p><p>For the D5 task, it is possible to do this in practice by enumerating the possible round-3 differential states and then launching the two-round attack from <ref type="bibr" target="#b18">[19]</ref> for each of these intermediate differences, enumerating the subkeys sk 5 and sk 4 used in rounds 4 and 5. After obtaining candidate round 3 output, we note that the round 1 output difference is known (the input difference transitions deterministically to 0x8000/8000) and use the two round attack again to recover the first two subkeys. We stop after 2 32 + 1 solutions have been found or the key space has been exhausted, whichever comes first. We tested this distinguisher on a test set of 10000 examples. 9456 of these were correctly classified, for an overall accuracy of about 95 percent. Replacing key search on the first two rounds with a (much faster) estimate of the number of solutions based on the 3-round difference distribution table did not lead to a statistically significant loss in performance.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">Neural Distinguishers for Reduced Speck32/64</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Overview</head><p>In this section, we will use neural networks to develop distinguishing attacks that try to solve the same problems as those presented previously. We only report results on our best neural models. The computational effort used in searching for a good architecture was not excessive; all machine learning experiments here reported were performed on a single workstation. Some other choices of architecture yield results that are also comparable or superior to the distinguishers presented in the previous section. One example of a simpler network architecture with still reasonable performance is shown in the github repository.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Network Structure</head><p>Input Representation A pair (C 0 , C 1 ) of ciphertexts for Speck32/64 can be written as a sequence of four sixteen-bit words (w 0 , w 1 , w 2 , w 3 ), mirroring the wordoriented structure of the cipher. In our networks, the w i are directly interpreted as the row-vectors of a 4 × 16-matrix and the input layer consists of 64 units likewise arranged in a 4 × 16 array.</p><p>Overall Network Structure Our best network is a residual tower of two-layer convolutional neural networks preceded by a single bit-sliced convolution and followed by a densely connected prediction head. Deep residual networks were first introduced in <ref type="bibr" target="#b21">[22]</ref> for image recognition and have been successful since in a number of other applications, for instance strategic board games <ref type="bibr" target="#b37">[38,</ref><ref type="bibr" target="#b38">39]</ref>. The results reported for five and six rounds use a depth-10 residual tower; for seven and eight round Speck, our final models use just a single residual block.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Initial Convolution</head><p>The input layer is connected in channels-first mode to one layer of bit-sliced, e.g. width 1, convolutions with 32 output channels. Batch normalization is applied to the output of these convolutions. Finally, rectifier nonlinearities are applied to the outputs of batch normalization and the resulting 32x16 matrix is passed to the main residual tower.</p><p>Convolutional Blocks Each convolutional block consists of two layers of 32 filters. Each layer applies first the convolutions, then a batch normalization, and finally a rectifier layer. At the end of the convolutional block, a skip connection then adds the output of the final rectifier layer of the block to the input of the convolutional block and passes the result to the next block.</p><p>Prediction Head The prediction head consists of two hidden layers and one output unit. The first and second layer are densely connected layers with 64 units. The first of these layers is followed by a batch normalization layer and a rectifier layer; the second hidden layer does not use batch normalization but is simply a densely connected layer of 64 relu units. The final layer consists of a single output unit using a sigmoid activation.</p><p>Rationale The use of the initial width-1 convolutional layer is intended to make the learning of simple bit-sliced functions such as bitwise addition easier. The number of filters in the initial convolution is meant to expand the data to the format required by the residual tower. The choice of the input channels is motivated by a desire to make the word-oriented structure of the cipher known to the network. The use of a densely connected prediction head reflects the fact that for a nontrivial number of rounds, we do not expect the input data to show strong spatial symmetries, so any attempt to extract local features from the data using a spatially symmetric pooling layer of some sort is probably futile. The size of the layers was determined by experiment, although we tried only a few settings. The depth of the residual tower was chosen so as to allow for integration of input data over the whole input string within the convolutional layers. However, even a design with just one residual block achieves reasonably good (clearly superior to a purely differential distinguisher) results.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Training Real vs Random Classifiers</head><p>Data Generation Training and validation data was generated by using the Linux random number generator (/dev/urandom) to obtain uniformly distributed keys K i and plaintext pairs P i with the input difference ∆ = 0x0040/0000 as well as a vector of binary-valued real/random labels Y i . To produce training or validation data for k-round Speck, the plaintext pair P i was then encrypted for k rounds if Y i was set, while otherwise the second plaintext of the pair was replaced with a freshly generated random plaintext.</p><p>In this way, data sets consisting of 10 7 samples were generated for training. Preprocessing was performed to transform the data so obtained into the format required by the network. Data generation is very cheap. On a standard PC, it takes a few seconds to generate a data set of size 10 7 in our implementation.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Basic Training Pipeline</head><p>Training was run for 200 epochs on the dataset of size 10 7 . The datasets were processed in batches of size 5000. The last 10 6 samples were withheld for validation. Optimization was performed against mean square error loss plus a small penalty based on L2 weights regularization (with regularization parameter c = 10 -5 ) using the Adam algorithm <ref type="bibr" target="#b23">[24]</ref> with default parameters in Keras <ref type="bibr" target="#b13">[14]</ref>. A cyclic learning rate schedule was used, setting the learning rate l i for epoch i to l i := α+ (n-i) mod (n+1) n •(β -α), with α = 10 -4 ,β = 2•10 -3 and n = 9. The networks obtained at the end of each epoch were stored and the best network by validation loss was evaluated against a test set of size 10 6 not used in training or validation.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Improving the Distinguishers by Key Search</head><p>We tested whether the distinguishers obtained can be improved by key search. To this end, a size one million test set for Speck reduced to seven rounds was generated as previously described. Each ciphertext pair c in the test set was then evaluated by performing brute force key search on the last round, grading the resulting partial decryptions using a six-round neural distinguisher, and combining the results into a score for the ciphertext pair c by transforming the scores into real-vs-random likelihood ratios and averaging. Algorithm 1 gives details on the method used.</p><p>Using key search as a teacher for a fast neural distinguisher The size one million sample set so obtained was further used as a training target for a single-block distinguisher against seven rounds of Speck. Training was performed from a randomly initialized network state for 300 epochs at batch size 5000 with a single learning rate drop from 0.001 to 0.0001 at epoch 200. Data on the resulting distinguisher can be found in Table <ref type="table">2</ref> and Table <ref type="table">3</ref>.</p><p>Algorithm 1 KeyAveraging: Deriving a differential distinguisher against a block cipher E r+1 reduced to r + 1 rounds for input difference ∆ from a corresponding distinguisher D against E r . A sample is predicted to come from the real distribution if and only if the output value of the algorithm is ≥ 0.5.</p><p>Require: Observed output ciphertext pair C0, C1 ∈ {0,</p><formula xml:id="formula_4">1} b 1: Di ← [DecryptOneRound(Ci, k) for k ∈ Subkeys] 2: v k ← D(D0[k], D1[k]) for all k ∈ Subkeys 3: v k ← v k /(1 -v k ) for all k ∈ Subkeys 4: v ← Average([v k , k ∈ Subkeys]) 5: v ← v/(1 + v) 6: return v</formula><p>Training an 8-Round Distinguisher For 8 rounds, the training scheme described above fails, i.e. the model does not learn to approximate any useful function.</p><p>We still succeeded in training an 8-round distinguisher slightly superior to the difference distribution table by using several stages of pre-training. First, we retrained our best seven-round distinguisher to recognize 5-round Speck32/64 with the input difference 0x8000/840a (the most likely difference to appear three rounds after the input difference 0x0040/0000). This was done on 10 7 examples for ten epochs with a batch size of 5000 and a learning rate of 10 -4 . Then, we trained the distinguisher so obtained to recognize 8-round Speck with the input difference 0x0040/0000 by processing 10 9 freshly generated examples once with batch size 10000, keeping the learning rate constant. Finally, learning rate was dropped twice to 10 -5 and finally to 10 -6 after processing another 10 9 fresh examples each, again with a batch size of 10000.</p><p>Training Cost A single epoch of training according to the basic training schedule for one of our ten-block networks takes about 150 seconds on a single GTX 1080 Ti graphics card at batch size 5000. A full training cycle can therefore be run in less than a day, and results superior to the difference distribution table can be obtained in less than fifteen minutes after starting the training cycle for our neural distinguishers against 5 to 7 rounds.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Results</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Test Set Accuracy</head><p>We summarize data on our best models in Table <ref type="table">2</ref>. N5 and N6 are networks with ten residual blocks trained using the basic training method. N7 was trained to predict output of the KeyAveraging algorithm used with a six-round single-block neural distinguisher derived by knowledge distillation from N6 (see the paragraph on inference speed below for further details). N8 was derived from N7 using the staged training method described in section 4.3. The neural distinguishers achieve higher accuracies than the purely differential baselines discussed in the previous section on all tasks. The accuracy of the key search based distinguishers was not matched, as expected. Validation losses were only slightly lower than training losses at the end of training, suggesting that only mild overfitting took place. An example learning history for a five-round network is shown in Figure <ref type="figure" target="#fig_0">1</ref>. Algorithm 1 was tried on the seven round problem and did slightly improve prediction accuracy: ground truth was matched in 62.7 percent of the test sample.</p><p>If encryption is performed with fixed keys, a mild key dependency of distinguisher performance is observed, in line with previous work on Speck <ref type="bibr" target="#b3">[4]</ref>. For instance, with 100 random keys, we found that true positive rates for the 7-round distinguisher empirically varied between 57.1 and 49.7 percent. See the github repository for code and data on this. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Key Ranking</head><p>We can extend all of the distinguishers here discussed by one round at no additional cost by using the fact that the first subkey addition happens after the first application of nonlinearity in Speck. An adversary in the chosenplaintext setting can easily inject plaintext differences of their choosing into the output of the first round of Speck. A simple attack on 9-round Speck can then be performed as follows:</p><p>1. Request encryptions for n chosen plaintext pairs P 1 , . . . , P n such that the output difference of the first round will be ∆ = 0x0040/0000. Obtain the corresponding ciphertext pairs C 1 , . . . , C n . 2. For each value of the final subkey k, decrypt the C i under k to get C k i . Let δ k i be the difference of the ciphertext pair C k i . 3. Use a 7-round differential distinguisher to get scores Z k i for each partially decrypted ciphertext pair. 4. For each k, combine the scores Z k i into one score v k . 5. Sort the keys in descending order according to their score v k .</p><p>Table <ref type="table">2</ref>. Accuracy of various distinguishers against Speck32/64 using two blocks of ciphertext with chosen plaintext difference 0x0040/0000 for N r rounds. D5-D8 are classical differential distinguishers that use the entire difference distribution table of Speck32/64 (calculated under the Markov assumption). N5-N8 are neural distinguishers solving the same distinguishing task. The accuracies of the D5-D8 distinguishers are theoretical predictions based on the assumption that they correctly predict the difference distribution, but have been empirically confirmed within 2σ error margins on size 10 6 test sets. The figures for the neural distinguishers were obtained by testing on size 10 6 test sets containing approximately 500000 positive and negative examples each. N5 and N6 are networks with ten residual blocks, while N7 and N8 are smaller networks with only one block.</p><p>Nr Distinguisher Accuracy True Positive Rate True Negative Rate 5 D5 0.911 0.877 0.947 5 N5 0.929 ± 5.13 • 10 -4 0.904 ± 8.33 • 10 -4 0.954 ± 5.91 • 10 -4 6 D6 0.758 0.680 0.837 6 N6 0.788 ± 8.17 • 10 -4 0.724 ± 1.26 • 10 -<ref type="foot" target="#foot_1">foot_1</ref> 0.853 ± 1.00 • 10 -3 7 D7 0.591 0.543 0.640 7 N7 0.616 ± 9.7 • 10 -4 0.533 ± 1.41 • 10 -3 0.699 ± 1.30 • 10 -3 8 D8 0.512 0.496 0.527 8 N8 0.514 ± 1.00 • 10 -3 0.519 ± 1.41 • 10 -3 0.508 ± 1.42 • 10 -3</p><p>We have implemented this attack both with the 7-round distinguisher derived from the difference distribution of 7-round Speck with the given input difference and with our 7-round neural distinguisher. In the case of the neural distinguisher, we used the formula</p><formula xml:id="formula_5">v k := n i=1 log 2 (Z k i /(1 -Z k i )) (<label>3</label></formula><formula xml:id="formula_6">)</formula><p>to combine the scores of individual decrypted ciphertext pairs into a score for the key; in the case of the difference distribution table, we set</p><formula xml:id="formula_7">v k := n i=1 log 2 (P (δ k i )),<label>(4)</label></formula><p>where P (δ k i ) is the probability according to the difference distribution table of observing the output difference δ k i in the output of Speck32/64 reduced to seven rounds given the input difference ∆. This is comparable, since in both cases we can up to a constant multiplicative factor heuristically treat the summed terms as logarithms of real-vs-random likelihood ratios <ref type="foot" target="#foot_0">2</ref> .</p><p>We chose n = 64 for this experiment. In this setting, we found that the neural distinguishers achieved much better key ranking (Table <ref type="table">3</ref>).</p><p>It is worth noting the following:</p><p>Table 3. Statistics on a key recovery attack on 9-round Speck32/64. The same attack using 128 chosen plaintexts is executed using both a distinguisher based on the difference distribution table and a neural distinguisher against Speck32/64 reduced to 7 rounds. All values reported are based on 1000 trials of the respective attacks. Reported error bars around the mean are for a 2σ confidence interval, where σ is calculated based on the observed standard deviation of the key rank. The rank of a key is defined as the number of subkeys ranked higher, i.e. rank zero corresponds to successful key recovery.</p><p>When several keys were ranked equally, the right key was assumed to be in a random position among the equally ranked keys. Key rank data on all runs as well as data on runs with 64 and 256 chosen plaintexts is available from the github repository.</p><p>Distinguisher Mean of key rank Median key rank Success rate D7 263.9 ± 77.7 9.0 0.13 N7 52.1 ± 34.7 1.0 0.358</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Proposition 1.</head><p>Assume that E is any Speck variant with a free key schedule and that A is an attack that tries to recover the Speck key used using purely differential methods, i.e. assume that it gets as input plaintext differences P 0 ⊕ P 1 , P 0 ⊕ P 2 , . . . , P 0 ⊕ P n as well as ciphertexts C 0 , C 1 , . . . , C n . Then full key recovery can never be successful with a success rate beyond 50 percent.</p><p>Proof. To see this, consider any pair of ciphertexts C 0 , C 1 and a Speck subkey k.</p><p>Suppose that E -1 k (C 0 )⊕E -1 k (C 1 ) = δ, where E k denotes single-round encryption under the subkey k. Flip the most significant bit of k and call the resulting new subkey k . Then it is straightforward to verify that E -1 k (C 0 ) ⊕ E -1 k (C 1 ) = δ as well. The proposition follows by applying this reasoning to the first round of E.</p><p>Hence, purely differential distinguishers for Speck always produce pairs (or larger groups) of equally ranked subkeys until the key schedule can be used to rule out candidate keys.</p><p>However, already with 256 chosen plaintexts our 9-round attack does in fact yield a success rate of about 70 percent if a neural distinguisher is used. This is only possible because our neural distinguishers are not purely differential distinguishers. See Section 5 for further evidence of this.</p><p>Inference Speed The deep residual architecture described yields networks that are still reasonably efficient to evaluate. On a single machine using a GTX 1080 Ti graphics card we were able to process roughly 200000 ciphertext pairs per second with our deeper networks (10 residual blocks). For single-block networks, we reach about one million ciphertext pairs per second on the same hardware. For seven and eight rounds of Speck, the best networks here presented are singleblock networks; for five and six rounds, one can produce networks that are almost as good as the ten-block architecture by using a simple form of knowledge distillation <ref type="bibr" target="#b22">[23]</ref>. For instance, a single-block network with 92.7 percent accuracy on the D5 task can be obtained by training against the output of our ten-block network for 30 epochs on a size 10 7 training dataset with a single learning rate drop from 0.001 to 0.0001 at epoch 20.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Disagreement with Difference Distribution</head><p>Table For five-round Speck, we generated a size one million test set and calculated for each example both the relevant entry of the difference distribution table for Speck32/64 using the Markov model of Speck, and the output of a five-round one-block neural predictor. Exactly half of the test sample was generated using the real distribution, with the other half being drawn at random. We used this data set to study disagreements between the neural predictor and the difference distribution table.</p><p>Disagreement between both predictors was observed in 48826 samples, of which the majority was from the random distribution (about 57 percent). Our neural network chose the classification corresponding to ground truth in 67 percent of these cases of disagreement.</p><p>However, exploitation of information that can be obtained reliably from the difference distribution table was not perfect. For instance, 1549 of our samples were found to correspond to impossible differential transitions. Two of these were misclassified by the neural network as coming from the real distribution, although in both cases the confidence level returned by the neural network output was low (56 percent and 53 percent respectively).</p><p>On the other hand, the neural network also successfully identified output pairs that could not have appeared in the real distribution. For instance, the lowest neural network score on the set of disagreements was obtained for the output pair (c 0 , c 1 ) := (0xc65d2696, 0xa6a37b2a). This corresponds to an output difference of 0x60fe/5dbc, and the transition 0x0040/0000 → 0x60fe/5dbc for five rounds has a transition probability of about 2 -26 according to the Markov model. Accordingly, the predictor based on the difference distribution table assigns a 98 percent probability to this output pair being from the real distribution, whereas our neural distinguisher returns an almost zero score. Performing optimized key search, we found that there is in fact no key that links this output pair to a possible intermediate difference in round 3. Indeed, the sample had come from the random distribution in our test set.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Few-Shot Learning of Cryptographic Distributions</head><p>Few-shot learning is the ability of people (and sometimes machines) to learn to recognize objects of a certain category or to solve certain problems after having been shown only a few or even just one example. We tested if our neural networks can successfully perform fewshot learning of a cryptographic distribution given knowledge of another related distribution by performing the following experiment: a fresh neural network with one residual block was first trained to recognize Speck reduced to three rounds with a fixed but randomly chosen input difference. Training consisted of a single epoch of 2000 descent steps with batch size 5000, which on our hardware corresponds to about a minute of training time. We then accessed the output of the second-to-last layer of this network, treating it as a representation of the input data. We generated small samples (only real examples, specifically between 1 and 50 of them) of the output distribution for six rounds of Speck with the chosen input difference of our main distinguishers. Each example set so created was complemented by the same number of samples drawn from the random distribution. The resulting example set S was sent through the neural network to obtain the corresponding set S ⊂ R 64 of internal representation vectors. Ridge regression (with regularization parameter α = 1) was used to create from this small training set a linear predictor L : R 64 → R for the six-round distribution minimizing the squared error between labels and predictions on S . We classified an example x ∈ S as real if L(x) &gt; 0.5 and as random otherwise. This predictor was then tested on a size 50000 test set to determine its accuracy. This worked well even with a single-figure number of examples. Figure <ref type="figure">2</ref> gives detailed results, Algorithm 2 summarizes the algorithm used.</p><p>Algorithm 2 TrainByTransfer: Training a distinguisher for a block cipher with block size b reduced to r rounds E r with input difference δ by transfer learning given an auxiliary neural distinguisher N for input difference ∆ and E s .</p><p>Require: N, r, δ, n 1: X0 ← n samples drawn from the real output distribution of E r with input difference δ. 2: Y0 ← (1, 1, ..., 1) ∈ R n 3: X1 ← n samples drawn uniformly at random from {0, 1} 2b . 4: Y1 ← 0 ∈ R n . 5: N ← N [-2], where N [-2] denotes the output of the second-to-last layer of N . 6: Z, Y ← N (X0||X1), Y0||Y1 7:</p><formula xml:id="formula_8">L ← RidgeRegression(Z, Y ) 8: return L • N</formula><p>Training a new distinguisher using Algorithm 2 is very efficient. For instance, retraining on a thousand example training set takes about a millisecond on our platform.</p><p>Deriving Good Input Differences Without Human Knowledge This few-shot learning capability allows us to very quickly derive a rough lower bound for the effectiveness of truncated differential distinguishers for Speck for a given input difference and a given number of rounds. Concretely, given a pre-trained network for three-round Speck and a random input difference δ, we can quickly train a distinguisher for another random input difference δ and evaluate its accuracy on a small test set. Starting with a random δ , we then use Algorithm 3 to optimize δ for test set accuracy of the resulting distinguishers. Using α = 0.01, t = 2000, and test and training datasets of size 1000 for each new input difference to be tested, we need less than two minutes of computing time for the training of the initial three-round distinguisher and about 15 seconds for each full run of Algorithm 3 on our platform. The initial difference of our main neural distinguishers is usually found within a few random restarts of the greedy optimizer and extending the number of rounds to be attacked, one can then easily show using transfer learning that at least six rounds of Speck can be distinguished with fairly high gain.</p><p>It seems likely that other generic optimization algorithms, e.g. suitable variants of Monte Carlo Tree Search, might work even better.  <ref type="figure">2</ref>. Few-shot learning on the D5 and D6 tasks using a pre-trained classifier to preprocess the input data. Algorithm 2 was used with a fixed auxiliary network trained to distinguish Speck32/64 reduced to three rounds with a random fixed input difference. The number of training examples supplied was varied from 1 to 50. The accuracy figures shown are an average over 100 runs for each training set size, where for each training run a fresh training set of the indicated size was generated on the fly. Accuracy was measured against a fixed test set of size 50000. Measured accuracy is above guessing at 2σ significance level even for a single training example.</p><p>Algorithm 3 GreedyOptimizerWithExplorationBias: Given a function F : {0, 1} b → R, try to find x ∈ {0, 1} b which maximises F .</p><p>Require: F , number t of iterations, exploration factor α, input bit size b 1: x ← Rand(0, 2 b -1) 2: v best ← F (x) 3: x best ← x 4: v ← v best 5: H ← hashtable with default value 0 6: for i ∈ {1, . . . , t} do 7:</p><formula xml:id="formula_9">H[x] ← H[x] + 1 8: r ← Rand(0, b -1) 9: xnew ← x ⊕ (1 r) 10: vnew = F (xnew) 11: if vnew -α log 2 (H[xnew]) &gt; v -α log 2 (H[x]) then 12: v, x ← vnew, xnew 13:</formula><p>end if 14:</p><p>if vnew &gt; v best then 15:</p><p>v best , x best ← v, x 16:</p><p>end if 17: end for 18: return x best</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Key Recovery Attack</head><p>To showcase the utility of our neural distinguishers as research tools, we have constructed a partial-key recovery attack based on the N7 and N6 distinguisher that is competitive to the best attacks previously known from the literature on Speck32/64 reduced to 11 rounds, i.e. in particular to the 11-round attack of <ref type="bibr" target="#b18">[19]</ref>. The attack proposed by Dinur has a computational complexity approximately equivalent to 2 46 Speck evaluations. The attack is expected to succeed after querying 2 13 chosen-plaintext pairs and obtaining the corresponding ciphertexts. Attacks on 12 to 14 rounds were also proposed in <ref type="bibr" target="#b18">[19]</ref>, naturally with substantially larger computational and data complexities.</p><p>Our eleven-round attack, in contrast, is expected to succeed with a computational complexity of roughly 2 38 Speck evaluations if it is executed on a CPU. Its data complexity is slightly higher than that of the attack in <ref type="bibr" target="#b18">[19]</ref>; however, computational complexity is reduced by a factor of more than 200.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Basic Attack Idea</head><p>Overview The idea of our attack is to extend our neural 7-round distinguisher to a 9-round distinguisher by prepending a two-round differential transition δ → 0x0040/0000 that is passed as desired with a probability of about 1/64. The 9-round distinguisher is then extended by another round at no additional cost by asking for encryptions of ciphertext pairs P 0 , P 1 that encrypt to the desired input difference δ after one round of Speck encryption; this is easy, since no key addition happens in Speck before the first nonlinear operation.</p><p>The signal from this distinguisher will be rather weak. We therefore boost it by using k (probabilistic) neutral bits <ref type="bibr" target="#b9">[10]</ref> to create from each plaintext pair a plaintext structure consisting of 2 k plaintext pairs that are expected to pass the initial two-round differential together. For each plaintext structure, we decrypt the resulting ciphertexts under all final subkeys and rank each partially decrypted ciphertext structure using our neural distinguisher. If the resulting score is beyond a threshold c 1 , we attempt to decrypt another round and grade the resulting partially-decrypted ciphertexts using a six-round neural distinguisher. A key guess is returned if the resulting score for the partially decrypted ciphertext structure then exceeds another threshold c 2 .</p><p>Ranking a Partial Decryption To combine scores returned for individual ciphertext pairs in a ciphertext structure into a score for the structure, we use Equation (3) as in the previously described 9-round attack.</p><p>Attack Parameters This basic idea can be turned into a practical key recovery attack on 11-round Speck. The initial difference (0x211/0xa04) and the neutral bits set consisting of bits 14,15,20,21,22,23 of the cipher state work well, even though bits 14,15 and 23 are not totally neutral. Using c 1 = 15, c 2 = 100 one obtains an attack that succeeds on average within about 20 minutes of computing time on a machine equipped with a GTX 1080 Ti graphics card, or in about 12 hours on a single core of a modern CPU. In one hundred trials, a key guess was output after processing on average 2 13.2 ciphertext pairs. Recovery of both true last subkeys was successful in 81 cases; the final subkey was correctly guessed in 99 cases. In the one remaining case, the second-to-last subkey was correct and the guess for the last subkey was incorrect in one bit.</p><p>Improved Attack This basic attack can be accelerated in various ways. Here, we focus on the following ideas:</p><p>1. The wrong key randomization hypothesis does not hold when only one round of trial decryption is performed, especially in a lightweight cipher. We use this to introduce an efficient key search policy using a generic optimization algorithm. 2. It is inefficient to spend the same amount of computation on every ciphertext structure. We use a generic method (an automatic exploitation versus exploration tradeoff based on upper confidence bounds) to focus our key search on the most promising ciphertext structures.</p><p>With these improvements, we can build an attack that recovers the final two subkeys of Speck32/64 reduced to 11 rounds with a success probability of about 50 percent from ciphertext corresponding to 12800 chosen plaintexts in about 8 minutes running in single-threaded mode on a single CPU core. <ref type="foot" target="#foot_2">3</ref>Bayesian Optimization Bayesian optimization <ref type="bibr" target="#b32">[33]</ref> is a method that is commonly used for the optimization of black box functions f that are expensive to evaluate. Examples are found in many domains; the tuning of hyperparameters of machine learning models is one common example. It uses prior knowledge about the function to be optimized to construct a probabilistic model of the function that is easy to optimize. Knowledge about the model parameters is adjusted to accomodate input from function evaluations f (x 0 ), f (x 1 ), . . . , f (x n ). An acquisition function is then used to decide which points of the function to query next in order to improve in the most effective way possible knowledge about the maximum.</p><p>In this work, we use Bayesian optimization to build an effective key search policy for reduced-round Speck. This key search policy drastically reduces the number of trial decryptions used by our basic attack, at the cost of a somewhat expensive optimization step. The basic idea of our key search policy is that the expected response of our distinguisher upon wrong-key decryption will depend on the bitwise difference between the trial key and the real key. This wrongkey response profile can be captured in a precomputation. Given some trial decryptions, the optimization step then tries to come up with a new set of key hypotheses to try. These new key hypotheses are chosen such that they maximize the probability of the observed distinguisher responses.</p><p>Model Assumptions Let C 0 , C 1 be a ciphertext pair and let k be the real subkey used in the final round of encryption. Let δ ∈ F 16  2 and let k = k ⊕ δ be a wrong key. Denote the response of our distinguisher D to decryption by the key k by R D,δ (C 0 , C 1 ) := D(E -1 k (C 0 ), E -1 k (C 1 )). We can then view R D,δ as a random variable depending on δ induced by the ciphertext pair distribution and compute its mean µ δ and standard deviation σ δ . If we average the distinguisher response over all elements of a ciphertext structure of size n as used in our attack, the average can be expected to approximately follow a normal distribution <ref type="foot" target="#foot_4">4</ref> with mean µ δ and standard deviation σ δ / √ n.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Wrong Key Randomization</head><p>We calculated the wrong key response profile for our six-and seven round distinguishers for Speck32/64. To calculate the r + 1round wrong key response profile, we generated 3000 random keys and message input pairs P 0 , P 1 for each δ and encrypted for r +1 rounds to obtain ciphertexts C 0 , C 1 . Denoting the final subkey of each encryption operation by k, we then performed single-round decryption to get E -1 k⊕δ (C 0 ), E -1 k⊕δ (C 1 ) and had the resulting partially decrypted ciphertext pair rated by an r-round neural distinguisher. µ δ and σ δ were then calculated as empirical mean and standard deviation over these 3000 trials. The wrong key response profile for seven rounds is shown in Figure <ref type="figure">3</ref>. A lot of non-random structure is evident. The shape of the curves for σ δ and for six rounds is similar.</p><p>0 20000 40000 60000 Difference to real key 0.46 0.48 0.50 0.52 Mean response 0 100 200 300 400 500 Difference to real key 0.46 0.48 0.50 0.52</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Mean response</head><p>Fig. <ref type="figure">3</ref>. Wrong key response profile (only µ δ shown) for 8-round Speck32/64 and our 7-round neural distinguisher. For each difference δ between trial key and right key, 3000 ciphertext pairs with the input difference 0x0040/0000 were encrypted for 8 rounds of Speck using randomly generated keys and then decrypted for one round using a final subkey at difference δ to the right key. Differences are shown on the x-axis, while mean response over the 3000 pairs tried is shown in the y-axis.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Using the Wrong-Key Response Profile for Key Search</head><p>Given our model assumptions and observations of the distinguisher response r 0 , r 1 , . . . , r n-1 for keys k 0 , k 1 , . . . , k n-1 , we can view the r i as values obtained from an n-dimensional normal distribution. The parameters of this normal distribution depend on the bitwise differences of the k i to the real last subkey k, specifically on µ k⊕ki and σ k⊕ki . It is easy to see that the probability density at the observed values is maximised by minimizing the weighted euclidean distance n-1 i=0 (m i -µ k⊕ki ) 2 /σ 2 k⊕ki . Our algorithm first generates a set of random key candidates, then scores those keys by decrypting the ciphertext structure currently under study, then calculates the average distinguisher response on the tried keys, and finds a new set of key candidates that bring the precomputed wrong key response profile in line with the observed values as well as possible. This is iterated for a few cycles. Algorithm 4 sums up the algorithm.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 4</head><p>BayesianKeySearch: efficiently find a list of plausible key candidates given a ciphertext structure satisfying the initial differential of our attack.</p><p>Require: Ciphertext structure C = C0, . . . Cm-1, neural distinguisher N , number of candidates to be generated n, number of iterations l. 1: S := {k0, k1, . . . , kn-1} ← choose at random without replacement from the set of all subkey candidates. 2: L ← {} 3: for j ∈ {0, 1, . . . , l -1}: do 4: P i,k ← Decrypt(Ci, k) for all i ∈ {0, 1, . . . , m -1}, k ∈ S. 5:</p><p>v i,k ← N (P i,k ) for all i,k 6:</p><formula xml:id="formula_10">w i,k ← log 2 (v i,k /(1 -v i,k</formula><p>)) for all i ∈ {0, . . . , m -1}, k ∈ S 7:</p><p>w k ← n i=1 v i,k for allk ∈ S 8:</p><p>L ← L||[(k, w k ) for k ∈ S] 9: m k ← n-1 i=0 v i,k /n for k ∈ {k0, . . . , kn-1} 10:</p><formula xml:id="formula_11">λ k ← n-1 i=0 (m k i -µ k i ⊕k ) 2 /σ 2 k i ⊕k</formula><p>for k ∈ {0, 1, . . . , 2 16 -1}: 11:</p><p>S ← argsort k (λ)[0 : n -1] 12: end for 13: return L All keys tried and their scores w k on the current ciphertext structure are stored. Keys that obtain a score above a cutoff threshold c 1 are expanded by repeating the process for one further round, i.e. Algorithm 4 is used with a sixround neural distinguisher and its associated wrong key response profile. If one of the resulting key candidates scores above another threshold c 2 , we determine that the search will be terminated, but the processing of the current search node is finished before the best pair of subkeys found for the last two rounds is returned.</p><p>Before we return a key, we perform a small verification search with hamming radius two around the two subkey candidates that are currently best. This removes remaining bit errors in the key guess. If the verification search yields an improvement, it is repeated with the new best key guess.</p><p>Given t ciphertext structures, our algorithm is first tried on each structure. If no solution is found, since Algorithm 4 is probabilistic, we continue for a preset number of iterations it before returning the highest-scoring pair of subkeys for the last two rounds. During these additional iterations, we have to actively decide which ciphertext structures we will spend our computational budget on. We treat this as a multi-armed bandit problem and solve it using a standard exploration-exploitation technique, namely Upper Confidence Bounds (UCB). The order of the ciphertext structures to be tested in this phase depends on the highest distinguisher score obtained in the last-key search for the structures so far and on the number of visits they have received in our search. Specifically, denote by w i max the highest distinguisher score obtained so far for the ith ciphertext structure, by n i the number of previous iterations in which the ith ciphertext structure has been selected, and by j the number of the current iteration. We calculate a priority score</p><formula xml:id="formula_12">s i := w i max + α • log 2 (j)/n i<label>(5)</label></formula><p>and pick the ciphertext structure with the highest priority score for further processing. The visit count and the best result for this ciphertext structure are updated after the iteration has finished. We set α to √ n c , where n c is the number of ciphertext structures available.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Results</head><p>In the trials subsequently described, we use 100 ciphertext structures of 64 chosen plaintext pair encryptions each, the cutoff parameters c 1 = 5, c 2 = 10, the UCB exploration term α = 10, an iteration count for the Bayesian key search policy of l = 5 and candidate number n = 32, and an iteration budget for the main loop it = 500. Given a hundred ciphertext structures, our implementation outputs a key guess in approximately eight minutes on average (measured average in 100 trials: 500.68 seconds) when running on a single thread of our machine with no graphics card usage. This key guess is not always correct, but if it is not, this is easily apparent from the scores returned. When a fast graphics card is used, performance of our proof of concept implementation is not limited by the speed of neural network evaluation, but by the key search policy. The key search policy tries with the settings mentioned only 160 keys when processing a ciphertext structure. We count a key guess as successful if the last round key was guessed correctly and if the second round key is at hamming distance at most two of the real key. Under these conditions, the attack was successful in 521 out of 1000 trials; recovery of the first round key was successful in 521 cases and in all of these cases, the second round key guess was wrong for at most two bits within the most significant nibble. For comparison, the attack presented in <ref type="bibr" target="#b18">[19]</ref> is expected to succeed with the same data complexity in about 55 percent of all trials. In the simple model where in case of failure we request ciphertext values for another 100 plaintext structures, we expect that this attack will on average use 2 14.5  chosen plaintexts until success, slightly more than <ref type="bibr" target="#b18">[19]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Computational Complexity</head><p>We estimate that a highly optimized, fully SIMDparallelized implementation of Speck32/64 could perform brute force key search on our system at a speed of about 2 28 keys per second per core. Adjusting for the empirically measured success rate of our attack we expect to need about 1000 seconds on average to execute the key recovery algorithm on a single core of our system. This yields an estimated computational attack complexity of 2 38 Speck encryptions until a solution is found. The additional effort needed for full-key recovery is negligible, since at that point a good ciphertext structure has been found and the same attack can be launched on that single ciphertext structure with distinguishers for less rounds of Speck.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">The Real Differences Experiment</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Summary</head><p>In this section, we design a cryptographic experiment in which the adversary has to do differential cryptanalysis in a setting where the random and the real difference distribution are the same. We show that our neural distinguishers are successful in this experiment and compare their efficiency to solving the same problem by key search in the case of five-round Speck.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Experiment</head><p>Motivation We have seen in the previous section that our best neural distinguishers are better at recognizing Speck32/64 reduced up to eight rounds than a distinguisher based on the full difference distribution table. We have also seen that the Markov model at least predicts its own distinguishing success rate fairly well and have seen some evidence that the neural distinguishers exploit features outside the difference distribution table, e.g. from the fact that our neural distinguishers break Proposition 1. This section looks at that topic in isolation.</p><p>To this end, we introduce a differential cryptographic distinguishing task in which perfect knowledge of the differential distribution of a primitive under study does not in itself allow the adversary to do better than random guessing.</p><p>Experimental Setup First, 10 6 samples were drawn from the real distribution for the D5, D6, D7 and D8 tasks. Then, half of these samples were randomized in the following way: for an output ciphertext pair C = (C 0 , C 1 ) ∈ F 2b  2 to be randomized, a blinding value K ∈ F b 2 was generated uniformly at random by reading from /dev/urandom. This value was bitwise-added to both ciphertexts to produce the randomized ciphertext C = (C 0 ⊕ K, C 1 ⊕ K).</p><p>The resulting 10 6 samples of randomized or non-randomized ciphertext pairs were preprocessed as previously described and the results were passed to the appropriate pretrained neural network for classification as random or real. No further training took place.</p><p>Rationale The distribution of difference values is clearly the same in both the random and the real sample in this experiment. On the other hand, in the random sample any information about the ciphertext other than the difference between the two ciphertext blocks given is perfectly hidden, as the blinding makes the results of the random sampling uniformly distributed on the hyperplane given by each possible difference.</p><p>Adapting Key Search For reference, the key search based distinguisher on five rounds from section 3 was modified to work in the real differences setting. In this setting, an exact solution by counting the keys leading to a decryption with the desired input difference seems infeasible, as both random and real examples are expected to regularly have a very high number of solutions. We therefore calculate two approximations to N keys .</p><p>First, we calculate A rand := 2 64 • DP (∆C), where DP (∆C) is the differential probability of observing the output difference of the ciphertext pair C as given by the Markov model of Speck.</p><p>Second, denoting by D mid the set of possible round 3 differences, by P (δ) the probability of observing the round 3 difference δ, and by N δ (C) the number of solutions for the final two subkeys that decrypt our observed ciphertext pair C to the round 3 difference δ, we compute A real := 2 32 • δ∈D mid P (δ) • N δ (C).</p><p>C is then predicted as real if A real &gt; A rand and as random otherwise.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Results</head><p>Our best networks were found to solve the real differences task measurably better than random guessing without ever having explicitly been trained for it. Training on the real differences task was tried in the five-round case and expanded this advantage considerably. Predictably, however, key search yielded clearly superior distinguishing power. See Table <ref type="table" target="#tab_1">4</ref> for details. These tests show that ciphertext pairs are not evenly distributed within their respective difference equivalence classes. Indeed, using neural distinguishers as a search tool it is easy to find examples of ciphertext pairs with relatively highlikelihood differences which have very little chance of appearing in the ciphertext pair distribution of reduced Speck. One such example has already been discussed in section 4.4. For another, consider the output pair (0x58e0bc4, 0x85a4ff6c). It has the ciphertext difference 0x802a/f4a8, which is a high probability output difference for five round Speck given our input difference (p ≈ 2 -15.3 according to the full Markov model, which matches empirical trials well here). However, the pair decrypts to our input difference with a much lower likelihood, around 2 -35.3 according to our calculations.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Constraining the Additional Signal</head><p>If we constrain the blinding values used in the real differences experiment to be of the form aa, where a is any 16-bit word, our distinguishers fail. This is consistent with the observation that the distinguishers do not exploit the key schedule, as addition of a blinding value of this form is equivalent to changing the final subkey used in encryption. It also suggests that the networks exploit a strictly more fine-grained partition of the output pairs into equivalence classes than the difference equivalence classes. We find that intraclass variance of distinguisher output is very low for these equivalence classes and that also the input representations generated by the penultimate network layer show tight clustering.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">Conclusions</head><p>We have tested in this paper whether neural networks can be used to develop statistical tests that efficiently exploit differential properties of a symmetric primitive that has been weakened sufficiently by round reduction to allow for attacks to be carried out in a low data setting. In the setting considered, this works reasonably well: our distinguishers offer classification accuracy superior to the difference distribution table for the primitive in question and use less memory, even if inference speed is of course low compared to the simple memory lookup needed with a precomputed difference distribution table. We consider it interesting that this much knowledge about the differential distribution of round-reduced Speck can be extracted from a few million examples by black-box methods.</p><p>The time needed to train a network from the ground up to an accuracy level beyond the difference distribution table is on the order of minutes in our trials when a single fast graphics card is available. Our networks start training with no cryptographic knowledge beyond the word-structure of the cipher, making our approach fairly generic. The transfer learning capabilities shown in this paper demonstrate that finding good input differences from scratch is likewise possible using our networks with minimal input of prior cryptographic knowledge. Our distinguishers have various novel properties, most notably the ability to differentiate between ciphertext pairs within the same difference class.</p><p>In the context of this study, it certainly helped that Speck32/64 is a small blocksize, lightweight primitive. However, this is true both for the optimisation of conventional attacks and for the application of machine learning.</p><p>Given that the present work is an initial case study, we would not be surprised if our results could be improved. Various directions for further research suggest themselves. For instance, it would be interesting if a reasonably generic way were found to give the model to be trained more prior knowledge about the cipher or to enable the researcher to more easily extract knowledge from a trained model.</p><p>Small improvements to network performance are also completely expected to be possible within the architecture and setting given by this paper.</p><p>It would be interesting to see the effect of giving the network cryptographic knowledge in the form of precomputed features. We did some tests along these lines, for instance by giving the prediction head a classification derived from the difference distribution table as an additional input, but this was only marginally helpful.</p><p>The use of Bayesian optimization and related methods for key search could be of more general interest whenever an attack exploits a statistical distinguisher with high evaluation cost. This could be a neural network, but for instance ordinary statistical distinguishers that need to be evaluated on very large sets of ciphertexts to be effective may also be examples.</p><p>We do not think that machine learning methods will supplant traditional cryptanalysis. However, we do think that our results show that neural networks can learn to do cryptanalysis at a level that is interesting for a cryptographer and that ML methods can be a useful addition to the cryptographic evaluators' tool box. We expect that similar to other general-purpose tools used in cryptography such as SAT solvers or Groebner basis methods, machine learning will not solve cryptography but usefully complement and support conventional dedicated methods of doing research on the security of symmetric constructions.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 1 .</head><label>1</label><figDesc>Fig. 1. Training a neural network to distinguish 5-round Speck32/64 output for the input difference ∆ = 0x0040/0 from random data. (left) Training and validation loss by epoch. (right) Validation accuracy. (both) Only data for epochs with lowest learning rate is shown. Intermediate epochs contained excursions to low performance. Full learning history for this run is available from supplementary data.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><figDesc>Fig.2. Few-shot learning on the D5 and D6 tasks using a pre-trained classifier to preprocess the input data. Algorithm 2 was used with a fixed auxiliary network trained to distinguish Speck32/64 reduced to three rounds with a random fixed input difference. The number of training examples supplied was varied from 1 to 50. The accuracy figures shown are an average over 100 runs for each training set size, where for each training run a fresh training set of the indicated size was generated on the fly. Accuracy was measured against a fixed test set of size 50000. Measured accuracy is above guessing at 2σ significance level even for a single training example.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1 .</head><label>1</label><figDesc>Summary of key recovery attacks on 11 round Speck32/64. Computational complexity is given in terms of Speck evaluations on a modern CPU, i.e. assuming full utilisation of SIMD parallelism for fast key search.</figDesc><table><row><cell>Type</cell><cell cols="2">Complexity Data</cell><cell>Source</cell></row><row><cell>Single-trail differential</cell><cell>2 46</cell><cell>2 14 CP</cell><cell>[19]</cell></row><row><cell>Neural multiple differential</cell><cell>2 38</cell><cell>2 14.5 CP</cell><cell>This paper, section 4</cell></row></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1"><head>Table 4 .</head><label>4</label><figDesc>Performance of neural distinguishers in the real differences experiment. For comparison, the performance of a key search based distinguisher and a version of the N5 network retrained to this task are also given. Test set size is 10 6 for the neural distinguishers and 10 4 for Search.</figDesc><table><row><cell cols="2">Nr Distinguisher</cell><cell>Accuracy</cell></row><row><cell>5</cell><cell>N5</cell><cell>0.707 ± 9.10 • 10 -4</cell></row><row><cell>6</cell><cell>N6</cell><cell>0.606 ± 9.77 • 10 -4</cell></row><row><cell>7</cell><cell>N7</cell><cell>0.551 ± 9.95 • 10 -4</cell></row><row><cell>8</cell><cell>N8</cell><cell>0.507 ± 1.00 • 10 -3</cell></row><row><cell>5</cell><cell>Search</cell><cell>0.810 ± 7.84 • 10 -3</cell></row><row><cell cols="3">5 N5 retrained 0.762 ± 8.51 • 10 -4</cell></row></table></figure>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="2" xml:id="foot_0"><p>As an implementation remark, note that with the neural networks used in this paper, the individual terms in the sum of Equation</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="3" xml:id="foot_1"><p>are up to a scale factor just the neural network outputs before application of the final sigmoid activation.</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="3" xml:id="foot_2"><p>Running the same code with different parameters, other attacks can be obtained. The code repository, for instance, contains parameters for a 12-round attack that is practical on a single PC (with the parameters used, average runtime is under an hour on a GeForce GTX 1080 Ti GPU and success rate is ≈</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="40" xml:id="foot_3"><p>percent).</p></note>
+			<note xmlns="http://www.tei-c.org/ns/1.0" place="foot" n="4" xml:id="foot_4"><p>Note that for our neural networks, this argument can be slightly strengthened if the final sigmoid activation is removed, since then distinguisher output on an individual ciphertext pair is just a linear combination of 64 somewhat independent intermediate network units.</p></note>
+		</body>
+		<back>
+
+			
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Acknowledgments</head><p>The author wishes to thank the anonymous reviewers for their questions and comments, as they helped him to improve the present paper.</p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct status="extracted" xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Learning to protect communications with adversarial neural cryptography</title>
+		<author>
+			<persName><forename type="first">Martin</forename><surname>Abadi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><forename type="middle">G</forename><surname>Andersen</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1610.06918</idno>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Martin Abadi and David G Andersen. Learning to protect communications with adversarial neural cryptography. arXiv preprint arXiv:1610.06918, 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Differential Cryptanalysis of Round-Reduced Simon and Speck</title>
+		<author>
+			<persName><forename type="first">Farzaneh</forename><surname>Abed</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Eik</forename><surname>List</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Lucks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jakob</forename><surname>Wenzel</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-46706-0_27</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="525" to="545" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Farzaneh Abed, Eik List, Stefan Lucks, and Jakob Wenzel. Differential crypt- analysis of round-reduced Simon and Speck. In International Workshop on Fast Software Encryption, pages 525-545. Springer, 2014.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">An all-in-one approach to differential cryptanalysis for small block ciphers</title>
+		<author>
+			<persName><forename type="first">R</forename><surname>Martin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gregor</forename><surname>Albrecht</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Leander</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on Selected Areas in Cryptography</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2012">2012</date>
+			<biblScope unit="page" from="1" to="15" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Martin R Albrecht and Gregor Leander. An all-in-one approach to differential cryptanalysis for small block ciphers. In International Conference on Selected Areas in Cryptography, pages 1-15. Springer, 2012.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Mind the Gap - A Closer Look at the Security of Block Ciphers against Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Ralph</forename><surname>Ankele</surname></persName>
+			<idno type="ORCID">0000-0001-8751-9099</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Kölbl</surname></persName>
+			<idno type="ORCID">0000-0002-4281-6935</idno>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-10970-7_8</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2018">2018</date>
+			<biblScope unit="page" from="163" to="190" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ralph Ankele and Stefan Kölbl. Mind the Gap -A Closer Look at the Security of Block Ciphers against Differential Cryptanalysis. In Proceedings SAC 2018, 2018.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Linear cryptanalysis of reduced-round SPECK</title>
+		<author>
+			<persName><forename type="first">Tomer</forename><surname>Ashur</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Daniël</forename><surname>Bodden</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 37th Symposium on Information Theory in the Benelux. Werkgemeenschap voor Informatie-en Communicatietheorie</title>
+		<meeting>the 37th Symposium on Information Theory in the Benelux. Werkgemeenschap voor Informatie-en Communicatietheorie</meeting>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Tomer Ashur and Daniël Bodden. Linear cryptanalysis of reduced-round SPECK. In Proceedings of the 37th Symposium on Information Theory in the Benelux. Werkgemeenschap voor Informatie-en Communicatietheorie, 2016.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Computational intelligence in cryptology</title>
+		<author>
+			<persName><forename type="first">Wasan</forename><surname>Shaker</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Awad</forename></persName>
+		</author>
+		<author>
+			<persName><forename type="first">El-Sayed</forename><surname>El-Alfy</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Improving Information Security Practices through Computational Intelligence</title>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+			<biblScope unit="page" from="28" to="45" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Wasan Shaker Awad and El-Sayed El-Alfy. Computational intelligence in cryptol- ogy. Improving Information Security Practices through Computational Intelligence, pages 28-45, 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Preprint repository arXiv achieves milestone million uploads</title>
+		<author>
+			<persName><forename type="first">Dzmitry</forename><surname>Bahdanau</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kyunghyun</forename><surname>Cho</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yoshua</forename><surname>Bengio</surname></persName>
+		</author>
+		<idno type="DOI">10.1063/pt.5.028530</idno>
+		<idno type="arXiv">arXiv:1409.0473</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Physics Today</title>
+		<title level="j" type="abbrev">Phys. Today</title>
+		<idno type="ISSNe">1945-0699</idno>
+		<imprint>
+			<biblScope unit="volume">2014</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<date type="published" when="2014-12-30">2014</date>
+			<publisher>AIP Publishing</publisher>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio. Neural machine trans- lation by jointly learning to align and translate. arXiv preprint arXiv:1409.0473, 2014.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015-06-07">2015. 2015</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ray Beaulieu, Douglas Shors, Jason Smith, Stefan Treatman-Clark, Bryan Weeks, and Louis Wingers. SIMON and SPECK: Block Ciphers for the Internet of Things. IACR Cryptology ePrint Archive, 2015:585, 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">The SIMON and SPECK lightweight block ciphers</title>
+		<author>
+			<persName><forename type="first">Ray</forename><surname>Beaulieu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Douglas</forename><surname>Shors</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jason</forename><surname>Smith</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Stefan</forename><surname>Treatman-Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><surname>Weeks</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Louis</forename><surname>Wingers</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2744769.2747946</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 52nd Annual Design Automation Conference</title>
+		<meeting>the 52nd Annual Design Automation Conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015-06-07">2015. 2015</date>
+			<biblScope unit="page" from="1" to="6" />
+		</imprint>
+	</monogr>
+	<note>52nd ACM/EDAC/IEEE</note>
+	<note type="raw_reference">Ray Beaulieu, Stefan Treatman-Clark, Douglas Shors, Bryan Weeks, Jason Smith, and Louis Wingers. The SIMON and SPECK lightweight block ciphers. In Design Automation Conference (DAC), 2015 52nd ACM/EDAC/IEEE, pages 1-6. IEEE, 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Near-Collisions of SHA-0</title>
+		<author>
+			<persName><forename type="first">Eli</forename><surname>Biham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Rafi</forename><surname>Chen</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-28628-8_18</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2004">2004</date>
+			<biblScope unit="page" from="290" to="305" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Eli Biham and Rafi Chen. Near-collisions of SHA-0. In Annual International Cryptology Conference, pages 290-305. Springer, 2004.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Automatic Search for the Best Trails in ARX: Application to Block Cipher Speck</title>
+		<author>
+			<persName><forename type="first">Alex</forename><surname>Biryukov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Vesselin</forename><surname>Velichkov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yann</forename><surname>Le Corre</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-662-52993-5_15</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="289" to="310" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Alex Biryukov, Vesselin Velichkov, and Yann Le Corre. Automatic search for the best trails in ARX: Application to block cipher Speck. In International Conference on Fast Software Encryption, pages 289-310. Springer, 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Multiple Differential Cryptanalysis: Theory and Practice</title>
+		<author>
+			<persName><forename type="first">Céline</forename><surname>Blondeau</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Benoît</forename><surname>Gérard</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-642-21702-9_3</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2011">2011</date>
+			<biblScope unit="page" from="35" to="54" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Céline Blondeau and Benoît Gérard. Multiple differential cryptanalysis: theory and practice. In International Workshop on Fast Software Encryption, pages 35- 54. Springer, 2011.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">DeepDriving: Learning Affordance for Direct Perception in Autonomous Driving</title>
+		<author>
+			<persName><forename type="first">Chenyi</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ari</forename><surname>Seff</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Alain</forename><surname>Kornhauser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jianxiong</forename><surname>Xiao</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/iccv.2015.312</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2015 IEEE International Conference on Computer Vision (ICCV)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2015-12">2015</date>
+			<biblScope unit="page" from="2722" to="2730" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Chenyi Chen, Ari Seff, Alain Kornhauser, and Jianxiong Xiao. Deepdriving: Learn- ing affordance for direct perception in autonomous driving. In Computer Vision (ICCV), 2015 IEEE International Conference on, pages 2722-2730. IEEE, 2015.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b13">
+	<monogr>
+		<title/>
+		<author>
+			<persName><forename type="first">François</forename><surname>Chollet</surname></persName>
+		</author>
+		<ptr target="https://keras.io" />
+		<imprint>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">François Chollet et al. Keras. https://keras.io, 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">On the effectiveness of using state-of-the-art machine learning techniques to launch cryptographic distinguishing attacks</title>
+		<author>
+			<persName><forename type="first">Jung-Wei</forename><surname>Chou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shou-De</forename><surname>Lin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chen-Mou</forename><surname>Cheng</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/2381896.2381912</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 5th ACM workshop on Security and artificial intelligence</title>
+		<meeting>the 5th ACM workshop on Security and artificial intelligence</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2012-10-19">2012</date>
+			<biblScope unit="page" from="105" to="110" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jung-Wei Chou, Shou-De Lin, and Chen-Mou Cheng. On the effectiveness of using state-of-the-art machine learning techniques to launch cryptographic distinguish- ing attacks. In Proceedings of the 5th ACM workshop on Security and artificial intelligence, pages 105-110. ACM, 2012.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Training deep convolutional neural networks to play go</title>
+		<author>
+			<persName><forename type="first">Christopher</forename><surname>Clark</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Amos</forename><surname>Storkey</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on Machine Learning</title>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+			<biblScope unit="page" from="1766" to="1774" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Christopher Clark and Amos Storkey. Training deep convolutional neural networks to play go. In International Conference on Machine Learning, pages 1766-1774, 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Improved cryptanalysis combining differential and artificial neural network schemes</title>
+		<author>
+			<persName><forename type="first">Moises</forename><surname>Danziger</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Marco</forename><forename type="middle">Aurelio</forename><surname>Amaral Henriques</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/its.2014.6948008</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2014 International Telecommunications Symposium (ITS)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2014-08">2014</date>
+			<biblScope unit="page" from="1" to="5" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Moisés Danziger and Marco Aurélio Amaral Henriques. Improved cryptanalysis combining differential and artificial neural network schemes. In Telecommunica- tions Symposium (ITS), 2014 International, pages 1-5. IEEE, 2014.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Identifying Encryption Algorithms in ECB and CBC Modes Using Computational Intelligence</title>
+		<author>
+			<persName><forename type="first">Flavio</forename><surname>De</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mello</forename></persName>
+		</author>
+		<author>
+			<persName><forename type="first">José</forename><surname>Xexéo</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Universal Computer Science</title>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="25" to="42" />
+			<date type="published" when="2018">2018</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Flavio de Mello and José Xexéo. Identifying Encryption Algorithms in ECB and CBC Modes Using Computational Intelligence. Journal of Universal Computer Science, 24(1):25-42, 2018.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Improved differential cryptanalysis of round-reduced Speck</title>
+		<author>
+			<persName><forename type="first">Itai</forename><surname>Dinur</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Workshop on Selected Areas in Cryptography</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="147" to="164" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Itai Dinur. Improved differential cryptanalysis of round-reduced Speck. In Inter- national Workshop on Selected Areas in Cryptography, pages 147-164. Springer, 2014.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Unsupervised cipher cracking using discrete GANs</title>
+		<author>
+			<persName><forename type="first">Aidan</forename><forename type="middle">N</forename><surname>Gomez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sicong</forename><surname>Huang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ivan</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Bryan</forename><forename type="middle">M</forename><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Muhammad</forename><surname>Osama</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lukasz</forename><surname>Kaiser</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on Learning Representations</title>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Aidan N. Gomez, Sicong Huang, Ivan Zhang, Bryan M. Li, Muhammad Osama, and Lukasz Kaiser. Unsupervised cipher cracking using discrete GANs. In International Conference on Learning Representations, 2018.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b20">
+	<monogr>
+		<title level="m" type="main">Learning the enigma with recurrent neural networks</title>
+		<author>
+			<persName><forename type="first">Sam</forename><surname>Greydanus</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1708.07576</idno>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Sam Greydanus. Learning the enigma with recurrent neural networks. arXiv preprint arXiv:1708.07576, 2017.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Deep Residual Learning for Image Recognition</title>
+		<author>
+			<persName><forename type="first">Kaiming</forename><surname>He</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Xiangyu</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shaoqing</forename><surname>Ren</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jian</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="DOI">10.1109/cvpr.2016.90</idno>
+	</analytic>
+	<monogr>
+		<title level="m">2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2016-06">2016</date>
+			<biblScope unit="page" from="770" to="778" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. In Proceedings of the IEEE conference on computer vision and pattern recognition, pages 770-778, 2016.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b22">
+	<monogr>
+		<title level="m" type="main">Distilling the knowledge in a neural network</title>
+		<author>
+			<persName><forename type="first">Geoffry</forename><surname>Hinton</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Orio</forename><surname>Vinyals</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jeffrey</forename><surname>Dean</surname></persName>
+		</author>
+		<idno>arXiv 1503.02531</idno>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Geoffry Hinton, Orio Vinyals, and Jeffrey Dean. Distilling the knowledge in a neural network. arXiv preprint: arXiv 1503.02531, 2015.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Preprint repository arXiv achieves milestone million uploads</title>
+		<author>
+			<persName><forename type="first">P</forename><surname>Diederik</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jimmy</forename><surname>Kingma</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Ba</surname></persName>
+		</author>
+		<idno type="DOI">10.1063/pt.5.028530</idno>
+		<idno type="arXiv">arXiv:1412.6980</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Physics Today</title>
+		<title level="j" type="abbrev">Phys. Today</title>
+		<idno type="ISSNe">1945-0699</idno>
+		<imprint>
+			<biblScope unit="volume">2014</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<date type="published" when="2014-12-30">2014</date>
+			<publisher>AIP Publishing</publisher>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Diederik P Kingma and Jimmy Ba. Adam: A method for stochastic optimization. arXiv preprint arXiv:1412.6980, 2014.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Analysis of Neural Cryptography</title>
+		<author>
+			<persName><forename type="first">Alexander</forename><surname>Klimov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Anton</forename><surname>Mityagin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adi</forename><surname>Shamir</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-36178-2_18</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2002">2002</date>
+			<biblScope unit="page" from="288" to="298" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Alexander Klimov, Anton Mityagin, and Adi Shamir. Analysis of neural cryptog- raphy. In International Conference on the Theory and Application of Cryptology and Information Security, pages 288-298. Springer, 2002.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b25">
+	<monogr>
+		<title level="m" type="main">Extracting Information from Encrypted Data using Deep Neural Networks</title>
+		<author>
+			<persName><forename type="first">Linus</forename><surname>Lagerhjelm</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+		</imprint>
+		<respStmt>
+			<orgName>Umeå University</orgName>
+		</respStmt>
+	</monogr>
+	<note type="report_type">Master&apos;s thesis</note>
+	<note type="raw_reference">Linus Lagerhjelm. Extracting Information from Encrypted Data using Deep Neural Networks. Master&apos;s thesis, Umeå University, 2018.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Markov Ciphers and Differential Cryptanalysis</title>
+		<author>
+			<persName><forename type="first">Xuejia</forename><surname>Lai</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">James</forename><forename type="middle">L</forename><surname>Massey</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sean</forename><surname>Murphy</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-46416-6_2</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="1991">1991</date>
+			<biblScope unit="page" from="17" to="38" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Xuejia Lai, James L Massey, and Sean Murphy. Markov ciphers and differential cryptanalysis. In Workshop on the Theory and Application of of Cryptographic Techniques, pages 17-38. Springer, 1991.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Cryptography and Cryptanalysis Through Computational Intelligence</title>
+		<author>
+			<persName><forename type="first">Elena</forename><forename type="middle">C</forename><surname>Laskari</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Gerasimos</forename><forename type="middle">C</forename><surname>Meletiou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yannis</forename><forename type="middle">C</forename><surname>Stamatiou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Michael</forename><forename type="middle">N</forename><surname>Vrahatis</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-540-71078-3_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Studies in Computational Intelligence</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2007">2007</date>
+			<biblScope unit="page" from="1" to="49" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Elena Laskari, Gerasimos Meletiou, Yannis Stamatiou, and Michael Vrahatis. Cryptography and cryptanalysis through computational intelligence. In Compu- tational Intelligence in Information Assurance and Security, pages 1-49. Springer, 2007.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Efficient Algorithms for Computing Differential Properties of Addition</title>
+		<author>
+			<persName><forename type="first">Helger</forename><surname>Lipmaa</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shiho</forename><surname>Moriai</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/3-540-45473-x_28</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer Berlin Heidelberg</publisher>
+			<date type="published" when="2001">2001</date>
+			<biblScope unit="page" from="336" to="350" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Helger Lipmaa and Shiho Moriai. Efficient algorithms for computing differential properties of addition. In International Workshop on Fast Software Encryption, pages 336-350. Springer, 2001.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Linear cryptanalysis of reduced-round SPECK</title>
+		<author>
+			<persName><forename type="first">Yu</forename><surname>Liu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kai</forename><surname>Fu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wei</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ling</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Meiqin</forename><surname>Wang</surname></persName>
+		</author>
+		<idno type="DOI">10.1016/j.ipl.2015.11.005</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Information Processing Letters</title>
+		<title level="j" type="abbrev">Information Processing Letters</title>
+		<idno type="ISSN">0020-0190</idno>
+		<imprint>
+			<biblScope unit="volume">116</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="259" to="266" />
+			<date type="published" when="2016-03">2016</date>
+			<publisher>Elsevier BV</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Yu Liu, Kai Fu, Wei Wang, Ling Sun, and Meiqin Wang. Linear cryptanalysis of reduced-round SPECK. Information Processing Letters, 116(3):259-266, 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Breaking Cryptographic Implementations Using Deep Learning Techniques</title>
+		<author>
+			<persName><forename type="first">Houssem</forename><surname>Maghrebi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thibault</forename><surname>Portigliatti</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Emmanuel</forename><surname>Prouff</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-319-49445-6_1</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2016">2016</date>
+			<biblScope unit="page" from="3" to="26" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Houssem Maghrebi, Thibault Portigliatti, and Emmanuel Prouff. Breaking cryp- tographic implementations using deep learning techniques. In International Con- ference on Security, Privacy, and Applied Cryptography Engineering, pages 3-26. Springer, 2016.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Big bias hunting in amazonia: Large-scale computation and exploitation of RC4 biases</title>
+		<author>
+			<persName><forename type="first">Bertram</forename><surname>Kenneth G Paterson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jacob Cn</forename><surname>Poettering</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Schuldt</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on the Theory and Application of Cryptology and Information Security</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2014">2014</date>
+			<biblScope unit="page" from="398" to="419" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Kenneth G Paterson, Bertram Poettering, and Jacob CN Schuldt. Big bias hunting in amazonia: Large-scale computation and exploitation of RC4 biases. In Interna- tional Conference on the Theory and Application of Cryptology and Information Security, pages 398-419. Springer, 2014.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b32">
+	<analytic>
+		<title level="a" type="main">iBOA</title>
+		<author>
+			<persName><forename type="first">Martin</forename><surname>Pelikan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Kumara</forename><surname>Sastry</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">David</forename><forename type="middle">E</forename><surname>Goldberg</surname></persName>
+		</author>
+		<idno type="DOI">10.1145/1389095.1389177</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 10th annual conference on Genetic and evolutionary computation</title>
+		<meeting>the 10th annual conference on Genetic and evolutionary computation</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2008-07-12" />
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="page" from="455" to="462" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Martin Pelikan, David E Goldberg, and Erick Cantú-Paz. BOA: The Bayesian optimization algorithm. In Proceedings of the 1st Annual Conference on Genetic and Evolutionary Computation-Volume 1, pages 525-532.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Template attack vs bayes classifier</title>
+		<author>
+			<persName><forename type="first">Stjepan</forename><surname>Picek</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Annelie</forename><surname>Heuser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sylvain</forename><surname>Guilley</surname></persName>
+		</author>
+		<idno>Report 2017/531</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Cryptology ePrint Archive</title>
+		<imprint>
+			<date type="published" when="2016">2017. 2016</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">Technical report</note>
+	<note type="raw_reference">Stjepan Picek, Annelie Heuser, and Sylvain Guilley. Template attack vs bayes classifier. Technical report, Cryptology ePrint Archive, Report 2017/531, 2017, 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">On the Performance of Convolutional Neural Networks for Side-Channel Analysis</title>
+		<author>
+			<persName><forename type="first">Stjepan</forename><surname>Picek</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ioannis</forename><forename type="middle">Petros</forename><surname>Samiotis</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Jaehun</forename><surname>Kim</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Annelie</forename><surname>Heuser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Shivam</forename><surname>Bhasin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Axel</forename><surname>Legay</surname></persName>
+		</author>
+		<idno type="DOI">10.1007/978-3-030-05072-6_10</idno>
+	</analytic>
+	<monogr>
+		<title level="m">Lecture Notes in Computer Science</title>
+		<imprint>
+			<publisher>Springer International Publishing</publisher>
+			<date type="published" when="2018">2018</date>
+			<biblScope unit="page" from="157" to="176" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Stjepan Picek, Ioannis Petros Samiotis, Jaehun Kim, Annelie Heuser, Shivam Bhasin, and Axel Legay. On the performance of convolutional neural networks for side-channel analysis. In International Conference on Security, Privacy, and Applied Cryptography Engineering, pages 157-176. Springer, 2018.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Cryptography and machine learning</title>
+		<author>
+			<persName><forename type="first">L</forename><surname>Ronald</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Rivest</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on the Theory and Application of Cryptology</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="1991">1991</date>
+			<biblScope unit="page" from="427" to="439" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ronald L Rivest. Cryptography and machine learning. In International Conference on the Theory and Application of Cryptology, pages 427-439. Springer, 1991.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Mastering the game of Go with deep neural networks and tree search</title>
+		<author>
+			<persName><forename type="first">David</forename><surname>Silver</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Aja</forename><surname>Huang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Chris</forename><forename type="middle">J</forename><surname>Maddison</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Arthur</forename><surname>Guez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Laurent</forename><surname>Sifre</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">George</forename><surname>Van Den Driessche</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Julian</forename><surname>Schrittwieser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ioannis</forename><surname>Antonoglou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Veda</forename><surname>Panneershelvam</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Marc</forename><surname>Lanctot</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Sander</forename><surname>Dieleman</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dominik</forename><surname>Grewe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">John</forename><surname>Nham</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Nal</forename><surname>Kalchbrenner</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ilya</forename><surname>Sutskever</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Timothy</forename><surname>Lillicrap</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Madeleine</forename><surname>Leach</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Koray</forename><surname>Kavukcuoglu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thore</forename><surname>Graepel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Demis</forename><surname>Hassabis</surname></persName>
+		</author>
+		<idno type="DOI">10.1038/nature16961</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<title level="j" type="abbrev">Nature</title>
+		<idno type="ISSN">0028-0836</idno>
+		<idno type="ISSNe">1476-4687</idno>
+		<imprint>
+			<biblScope unit="volume">529</biblScope>
+			<biblScope unit="issue">7587</biblScope>
+			<biblScope unit="page" from="484" to="489" />
+			<date type="published" when="2016-01-27">2016</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">David Silver, Aja Huang, Chris J Maddison, Arthur Guez, Laurent Sifre, George Van Den Driessche, Julian Schrittwieser, Ioannis Antonoglou, Veda Panneershel- vam, Marc Lanctot, et al. Mastering the game of go with deep neural networks and tree search. Nature, 529(7587):484-489, 2016.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b37">
+	<analytic>
+		<title level="a" type="main">A general reinforcement learning algorithm that masters chess, shogi, and Go through self-play</title>
+		<author>
+			<persName><forename type="first">David</forename><surname>Silver</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Hubert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Julian</forename><surname>Schrittwieser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ioannis</forename><surname>Antonoglou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matthew</forename><surname>Lai</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Arthur</forename><surname>Guez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Marc</forename><surname>Lanctot</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Laurent</forename><surname>Sifre</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Dharshan</forename><surname>Kumaran</surname></persName>
+			<idno type="ORCID">0000-0001-5995-5264</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Thore</forename><surname>Graepel</surname></persName>
+			<idno type="ORCID">0000-0003-3957-0310</idno>
+		</author>
+		<author>
+			<persName><forename type="first">Timothy</forename><surname>Lillicrap</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Karen</forename><surname>Simonyan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Demis</forename><surname>Hassabis</surname></persName>
+		</author>
+		<idno type="DOI">10.1126/science.aar6404</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<title level="j" type="abbrev">Science</title>
+		<idno type="ISSN">0036-8075</idno>
+		<idno type="ISSNe">1095-9203</idno>
+		<imprint>
+			<biblScope unit="volume">362</biblScope>
+			<biblScope unit="issue">6419</biblScope>
+			<biblScope unit="page" from="1140" to="1144" />
+			<date type="published" when="2018-12-07">2018</date>
+			<publisher>American Association for the Advancement of Science (AAAS)</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">David Silver, Thomas Hubert, Julian Schrittwieser, Ioannis Antonoglou, Matthew Lai, Arthur Guez, Marc Lanctot, Laurent Sifre, Dharshan Kumaran, Thore Grae- pel, et al. A general reinforcement learning algorithm that masters chess, shogi, and go through self-play. Science, 362(6419):1140-1144, 2018.</note>
+</biblStruct>
+
+<biblStruct status="consolidated" source="crossref" xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Mastering the game of Go without human knowledge</title>
+		<author>
+			<persName><forename type="first">David</forename><surname>Silver</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Julian</forename><surname>Schrittwieser</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Karen</forename><surname>Simonyan</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Ioannis</forename><surname>Antonoglou</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Aja</forename><surname>Huang</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Arthur</forename><surname>Guez</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thomas</forename><surname>Hubert</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Lucas</forename><surname>Baker</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Matthew</forename><surname>Lai</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Adrian</forename><surname>Bolton</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yutian</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Timothy</forename><surname>Lillicrap</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Fan</forename><surname>Hui</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Laurent</forename><surname>Sifre</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">George</forename><surname>Van Den Driessche</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Thore</forename><surname>Graepel</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Demis</forename><surname>Hassabis</surname></persName>
+		</author>
+		<idno type="DOI">10.1038/nature24270</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<title level="j" type="abbrev">Nature</title>
+		<idno type="ISSN">0028-0836</idno>
+		<idno type="ISSNe">1476-4687</idno>
+		<imprint>
+			<biblScope unit="volume">550</biblScope>
+			<biblScope unit="issue">7676</biblScope>
+			<biblScope unit="page" from="354" to="359" />
+			<date type="published" when="2017-10">2017</date>
+			<publisher>Springer Science and Business Media LLC</publisher>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">David Silver, Julian Schrittwieser, Karen Simonyan, Ioannis Antonoglou, Aja Huang, Arthur Guez, Thomas Hubert, Lucas Baker, Matthew Lai, Adrian Bolton, et al. Mastering the game of go without human knowledge. Nature, 550(7676):354, 2017.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b39">
+	<monogr>
+		<title level="m" type="main">Google&apos;s neural machine translation system: Bridging the gap between human and machine translation</title>
+		<author>
+			<persName><forename type="first">Yonghui</forename><surname>Wu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mike</forename><surname>Schuster</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Zhifeng</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><surname>Quoc</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Mohammad</forename><surname>Le</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Wolfgang</forename><surname>Norouzi</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Maxim</forename><surname>Macherey</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Yuan</forename><surname>Krikun</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Qin</forename><surname>Cao</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">Klaus</forename><surname>Gao</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Macherey</surname></persName>
+		</author>
+		<idno type="arXiv">arXiv:1609.08144</idno>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+		</imprint>
+	</monogr>
+	<note type="report_type">arXiv preprint</note>
+	<note type="raw_reference">Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc V Le, Mohammad Norouzi, Wolfgang Macherey, Maxim Krikun, Yuan Cao, Qin Gao, Klaus Macherey, et al. Google&apos;s neural machine translation system: Bridging the gap between human and machine translation. arXiv preprint arXiv:1609.08144, 2016.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>
