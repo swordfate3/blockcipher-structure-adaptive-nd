@@ -23,6 +23,7 @@ from blockcipher_ai_eval.models.structure import (
     PresentInceptionMCNDDistinguisher,
     PresentInceptionMCNDGlobalMatrixDistinguisher,
     PresentInceptionMCNDPairStackMatrixDistinguisher,
+    PresentPLayerMixerPairSetDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
@@ -53,6 +54,7 @@ MODEL_REGISTRY: dict[str, type[nn.Module]] = {
     "spn_cell_pairset_dbitnet": SpnCellPairSetDBitNetDistinguisher,
     "spn_nibble_conv_pairset": SpnNibbleConvPairSetDistinguisher,
     "spn_token_mixer_pairset": SpnTokenMixerPairSetDistinguisher,
+    "present_p_layer_mixer_pairset": PresentPLayerMixerPairSetDistinguisher,
     "structure_aware_moe": StructureAwareMoEDistinguisher,
 }
 

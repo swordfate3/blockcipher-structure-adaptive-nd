@@ -318,3 +318,23 @@ def test_present_cell_matrix_extended_encodings_are_registered():
     assert is_supported_feature_encoding("present_pair_xor_paligned_cell_matrix_bits")
     assert is_supported_feature_encoding("present_pair_xor_paligned_sinv_cell_matrix_bits")
     assert is_supported_feature_encoding("present_xor_paligned_cell_matrix_bits")
+
+
+def test_ciphertext_xor_spn_paligned_bits_appends_public_inverse_p_difference():
+    cipher = Present80(rounds=1, key=0)
+    left = 0x8000000000000001
+    right = 0x0000000000000000
+
+    encoded = encode_ciphertext_pair(
+        left,
+        right,
+        width=64,
+        feature_encoding="ciphertext_xor_spn_paligned_bits",
+        cipher=cipher,
+    )
+
+    difference = left ^ right
+    aligned_difference = Present80.inverse_permutation_layer(difference)
+    assert encoded[:64] == int_to_bits(difference, 64)
+    assert encoded[64:] == int_to_bits(aligned_difference, 64)
+    assert pair_bits_for_encoding(64, "ciphertext_xor_spn_paligned_bits") == 128

@@ -20,6 +20,8 @@ from blockcipher_ai_eval.models.structure.spn import (
     SpnNibbleConvPairSetDistinguisher as ModularSpnNibbleConvPairSetDistinguisher,
 )
 from blockcipher_ai_eval.models.structure.spn import (
+    PresentPLayerMixerBlock,
+    PresentPLayerMixerPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher,
     SpnTokenMixerPairSetDistinguisher as ModularSpnTokenMixerPairSetDistinguisher,
 )
@@ -503,6 +505,66 @@ def test_build_model_passes_spn_nibble_conv_evidence_pooling_options():
     assert model.pooling == "logsumexp"
     assert model.top_k == 3
     assert model.lse_temperature == 0.8
+
+
+def test_present_p_layer_mixer_block_uses_msb_ordered_present_adjacency():
+    block = PresentPLayerMixerBlock(words_per_pair=2, token_dim=8)
+
+    # Token 0 is the MSB nibble, i.e. PRESENT nibble 15. Bit 63 maps to itself.
+    assert 0 in block.p_sources[0].tolist()
+    # Token 15 is the LSB nibble, i.e. PRESENT nibble 0.
+    assert block.p_sources.shape[0] == 16
+    assert block.p_targets.shape[0] == 16
+
+
+def test_present_p_layer_mixer_pairset_forward_and_position_mapping():
+    model = PresentPLayerMixerPairSetDistinguisher(
+        input_bits=512,
+        pair_bits=128,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=2,
+        pooling="topk_logsumexp",
+        top_k=2,
+        lse_temperature=0.7,
+    )
+    batch = torch.randn((2, 512), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "SPN"
+    assert model.words_per_pair == 2
+    assert model.nibbles_per_pair == 32
+    assert model.present_bit_to_input_position(63) == 0
+    assert model.present_bit_to_input_position(0) == 63
+    assert model.last_attention_weights is not None
+    assert model.last_attention_weights.shape == (2, 4)
+    assert torch.count_nonzero(model.last_attention_weights, dim=1).tolist() == [2, 2]
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_present_p_layer_mixer_pairset_key():
+    model = build_model(
+        "present_p_layer_mixer_pairset",
+        input_bits=512,
+        hidden_bits=8,
+        pair_bits=128,
+        structure="SPN",
+        model_options={
+            "token_dim": 24,
+            "mixer_depth": 2,
+            "pooling": "topk_mean",
+            "top_k": 3,
+            "lse_temperature": 0.5,
+        },
+    )
+
+    assert isinstance(model, PresentPLayerMixerPairSetDistinguisher)
+    assert model.token_dim == 24
+    assert model.mixer_depth == 2
+    assert model.pooling == "topk_mean"
+    assert model.top_k == 3
+    assert model.lse_temperature == 0.5
 
 
 def test_adaptive_dbitnet_rejects_too_small_or_odd_inputs():
