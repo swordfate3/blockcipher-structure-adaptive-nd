@@ -10,6 +10,7 @@ from blockcipher_ai_eval.models.structure.adaptive_dbitnet import (
     structure_conditioned_dilations,
 )
 from blockcipher_ai_eval.models.structure.arx import (
+    ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     ArxTrailMixerPairSetDistinguisher,
@@ -523,6 +524,53 @@ def test_build_model_supports_arx_round_function_hybrid_pairset_key_and_options(
     assert model.pooling == "topk_mean"
     assert model.top_k == 2
     assert model.lse_temperature == 0.5
+
+
+def test_arx_pairset_stats_hybrid_fuses_word_mixing_and_cross_pair_statistics():
+    model = ArxPairSetStatsHybridDistinguisher(
+        input_bits=448,
+        pair_bits=224,
+        base_channels=8,
+        token_dim=16,
+        mixer_depth=1,
+        stats_hidden_bits=32,
+    )
+    batch = torch.randn((2, 448), dtype=torch.float32)
+
+    logits = model(batch)
+
+    assert model.structure == "ARX"
+    assert model.feature_words_per_pair == 7
+    assert model.stats_feature_bits == 7 * 2 * 5 + 7 * 7
+    assert model.fused_embedding_bits == model.word_pair_embedding_bits * 3 + 32
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_arx_pairset_stats_hybrid_key_and_options():
+    model = build_model(
+        "arx_pairset_stats_hybrid",
+        input_bits=448,
+        hidden_bits=8,
+        pair_bits=224,
+        structure="ARX",
+        model_options={
+            "token_dim": 24,
+            "mixer_depth": 1,
+            "stats_hidden_bits": 48,
+            "activation": "silu",
+            "norm": "rmsnorm",
+            "dropout": 0.05,
+        },
+    )
+
+    assert isinstance(model, ArxPairSetStatsHybridDistinguisher)
+    assert model.pair_bits == 224
+    assert model.token_dim == 24
+    assert model.word_branch.mixer_depth == 1
+    assert model.stats_hidden_bits == 48
+    assert model.activation == "silu"
+    assert model.norm == "rmsnorm"
+    assert model.dropout == 0.05
 
 
 def test_present_trail_mixer_pairset_preserves_word_roles_and_evidence_pooling():

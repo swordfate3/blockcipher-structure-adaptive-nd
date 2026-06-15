@@ -39,6 +39,7 @@ from blockcipher_ai_eval.models.baseline import (
 )
 from blockcipher_ai_eval.models.structure import (
     AdaptiveDBitNetDistinguisher,
+    ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
     ArxStructureAdaptivePairSetDBitNetDistinguisher,
     ArxTrailMixerPairSetDistinguisher,
@@ -258,6 +259,19 @@ def build_model(
             dropout=float(options.get("dropout", 0.0)),
             top_k=_int_option(options, "top_k", 4) or 4,
             lse_temperature=float(options.get("lse_temperature", 1.0)),
+        )
+    if name == "arx_pairset_stats_hybrid":
+        return ArxPairSetStatsHybridDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 224,
+            base_channels=hidden_bits,
+            token_dim=_int_option(options, "token_dim"),
+            mixer_depth=_int_option(options, "mixer_depth", 3),
+            token_mlp_ratio=_int_option(options, "token_mlp_ratio", 2),
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            dropout=float(options.get("dropout", 0.0)),
+            stats_hidden_bits=_int_option(options, "stats_hidden_bits"),
         )
     if name == "arx_trail_mixer_pairset":
         return ArxTrailMixerPairSetDistinguisher(
