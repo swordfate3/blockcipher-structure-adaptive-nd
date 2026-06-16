@@ -595,7 +595,7 @@ def _training_config(
             if task.get("early_stopping_min_delta") is not None
             else args.early_stopping_min_delta
         ),
-        loss=str(task.get("loss", args.loss)),
+        loss=str(task.get("loss") or args.loss),
         seed=seed,
         device=args.device,
     )
