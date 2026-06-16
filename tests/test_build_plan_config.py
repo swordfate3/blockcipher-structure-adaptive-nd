@@ -733,6 +733,11 @@ def test_speck32_arx_partial_inverse_r7_confirm_10seed_plan_is_explicit_multi_ke
     assert {row["key_rotation_interval"] for row in rows} == {"1024"}
     assert {row["sample_structure"] for row in rows} == {"independent_pairs"}
     assert {row["loss"] for row in rows} == {"mse"}
+    assert {row["learning_rate"] for row in rows} == {"0.0001"}
+    assert {row["optimizer"] for row in rows} == {"adamw"}
+    assert {row["weight_decay"] for row in rows} == {"0.0001"}
+    assert {row["lr_scheduler"] for row in rows} == {"cyclic"}
+    assert {row["max_learning_rate"] for row in rows} == {"0.002"}
     assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
     assert {row["difference_profile"] for row in rows} == {"speck32_gohr2019"}
 
