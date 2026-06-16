@@ -39,6 +39,7 @@ from blockcipher_ai_eval.models.baseline import (
 )
 from blockcipher_ai_eval.models.structure import (
     AdaptiveDBitNetDistinguisher,
+    ArxCarryPositionStatsPairSetDistinguisher,
     ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
     ArxRoundStatsHybridPairSetDistinguisher,
@@ -326,6 +327,16 @@ def build_model(
         )
     if name == "arx_round_stats_pairset":
         return ArxRoundStatsPairSetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 736,
+            base_channels=hidden_bits,
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            dropout=float(options.get("dropout", 0.0)),
+            stats_hidden_bits=_int_option(options, "stats_hidden_bits"),
+        )
+    if name == "arx_carry_position_stats_pairset":
+        return ArxCarryPositionStatsPairSetDistinguisher(
             input_bits=input_bits,
             pair_bits=pair_bits or 736,
             base_channels=hidden_bits,

@@ -10,6 +10,7 @@ from blockcipher_ai_eval.models.structure.adaptive_dbitnet import (
     structure_conditioned_dilations,
 )
 from blockcipher_ai_eval.models.structure.arx import (
+    ArxCarryPositionStatsPairSetDistinguisher,
     ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
     ArxRoundStatsHybridPairSetDistinguisher,
@@ -674,6 +675,57 @@ def test_build_model_supports_arx_round_stats_pairset_key_and_options():
     assert model.pair_bits == 736
     assert model.stats_hidden_bits == 48
     assert model.stats_feature_bits == 23 * 2 * 5 + 23 * 8 + 9 * 5 + 6
+
+
+def test_arx_carry_position_stats_pairset_preserves_bit_position_evidence():
+    model = ArxCarryPositionStatsPairSetDistinguisher(
+        input_bits=2944,
+        pair_bits=736,
+        base_channels=8,
+        stats_hidden_bits=32,
+        activation="silu",
+        norm="rmsnorm",
+        dropout=0.05,
+    )
+    batch = torch.zeros((2, 2944), dtype=torch.float32)
+    shaped = batch.reshape(2, 4, 23, 2, 16)
+    shaped[:, :, 17, :, 0:3] = 1.0
+    shaped[:, :, 19, :, 7:10] = 1.0
+    shaped[:, :, 22, :, 15] = 1.0
+
+    stats = model._position_statistics(batch)
+    logits = model(batch)
+
+    assert model.structure == "ARX"
+    assert model.feature_words_per_pair == 23
+    assert model.carry_role_indices == (17, 18, 19, 20, 21, 22)
+    assert model.stats_feature_bits == model.position_stats_feature_bits(23, 6, 3)
+    assert stats.shape == (2, model.stats_feature_bits)
+    assert torch.isfinite(stats).all()
+    assert logits.shape == (2, 1)
+
+
+def test_build_model_supports_arx_carry_position_stats_pairset_key_and_options():
+    model = build_model(
+        "arx_carry_position_stats_pairset",
+        input_bits=2944,
+        hidden_bits=8,
+        pair_bits=736,
+        structure="ARX",
+        model_options={
+            "stats_hidden_bits": 48,
+            "activation": "silu",
+            "norm": "rmsnorm",
+            "dropout": 0.05,
+        },
+    )
+
+    assert isinstance(model, ArxCarryPositionStatsPairSetDistinguisher)
+    assert model.pair_bits == 736
+    assert model.stats_hidden_bits == 48
+    assert model.activation == "silu"
+    assert model.norm == "rmsnorm"
+    assert model.dropout == 0.05
 
 
 def test_present_trail_mixer_pairset_preserves_word_roles_and_evidence_pooling():

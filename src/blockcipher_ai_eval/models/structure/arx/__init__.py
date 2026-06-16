@@ -18,8 +18,12 @@ from blockcipher_ai_eval.models.structure.arx.round_stats_hybrid import (
     ArxRoundStatsHybridPairSetDistinguisher,
     ArxRoundStatsPairSetDistinguisher,
 )
+from blockcipher_ai_eval.models.structure.arx.carry_position_stats import (
+    ArxCarryPositionStatsPairSetDistinguisher,
+)
 
 __all__ = [
+    "ArxCarryPositionStatsPairSetDistinguisher",
     "ArxPairSetStatsHybridDistinguisher",
     "ArxRoundFunctionHybridPairSetDistinguisher",
     "ArxRoundStatsHybridPairSetDistinguisher",
