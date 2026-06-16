@@ -754,6 +754,9 @@ def _build_tasks(args: argparse.Namespace) -> list[dict[str, Any]]:
             pairs_per_sample=args.pairs_per_sample,
             difference_profile=args.difference_profile,
             difference_member=args.difference_member,
+            key_rotation_interval=args.key_rotation_interval,
+            sample_structure=args.sample_structure,
+            integral_active_nibble=args.integral_active_nibble,
         )
 
     tasks: list[dict[str, Any]] = []
@@ -798,6 +801,9 @@ def _tasks_from_plan(
     pairs_per_sample: int,
     difference_profile: str | None,
     difference_member: int,
+    key_rotation_interval: int = 0,
+    sample_structure: str = "independent_pairs",
+    integral_active_nibble: int = 0,
 ) -> list[dict[str, Any]]:
     with path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
@@ -808,6 +814,9 @@ def _tasks_from_plan(
             pairs_per_sample,
             difference_profile,
             difference_member,
+            key_rotation_interval,
+            sample_structure,
+            integral_active_nibble,
         )
         for row in rows
     ]
@@ -819,6 +828,9 @@ def _plan_task(
     pairs_per_sample: int,
     difference_profile: str | None,
     difference_member: int,
+    key_rotation_interval: int = 0,
+    sample_structure: str = "independent_pairs",
+    integral_active_nibble: int = 0,
 ) -> dict[str, Any]:
     cipher_key = _cipher_key(row["cipher"])
     task = {
@@ -837,11 +849,11 @@ def _plan_task(
             "negative_mode": row.get("negative_mode") or "random_ciphertext",
             "key_rotation_interval": _optional_int(row.get("key_rotation_interval"))
             if row.get("key_rotation_interval") not in {None, ""}
-            else 0,
-            "sample_structure": row.get("sample_structure") or "independent_pairs",
+            else key_rotation_interval,
+            "sample_structure": row.get("sample_structure") or sample_structure,
             "integral_active_nibble": _optional_int(row.get("integral_active_nibble"))
             if row.get("integral_active_nibble") not in {None, ""}
-            else 0,
+            else integral_active_nibble,
             "loss": row.get("loss") or "bce",
             "learning_rate": _optional_float(row.get("learning_rate")),
             "optimizer": row.get("optimizer") or None,

@@ -1339,6 +1339,32 @@ def test_plan_rows_can_override_training_protocol_fields(tmp_path):
     assert task["early_stopping_patience"] == 0
 
 
+def test_plan_rows_inherit_cli_protocol_defaults_when_fields_are_missing(tmp_path):
+    module = _load_matrix_runner()
+    plan = tmp_path / "legacy_plan.csv"
+    plan.write_text(
+        "cipher,model_key,network,architecture_rank,score,evidence,literature,rounds,seed,samples_per_class,pairs_per_sample,feature_encoding,negative_mode\n"
+        "SPECK32/64,structure_adaptive_pairset_dbitnet,StructureAdaptive-PairSet-DBitNet,0,100,legacy,Innovation1,7,0,32,4,ciphertext_pair_xor_arx_partial_inverse_bits,encrypted_random_plaintexts\n",
+        encoding="utf-8",
+    )
+
+    tasks = module._tasks_from_plan(
+        plan,
+        feature_encoding="ciphertext_pair_bits",
+        pairs_per_sample=1,
+        difference_profile="speck32_gohr2019",
+        difference_member=0,
+        key_rotation_interval=1024,
+        sample_structure="independent_pairs",
+        integral_active_nibble=3,
+    )
+
+    task = tasks[0]
+    assert task["key_rotation_interval"] == 1024
+    assert task["sample_structure"] == "independent_pairs"
+    assert task["integral_active_nibble"] == 3
+
+
 def test_plan_rows_can_request_curriculum_pretraining(tmp_path):
     module = _load_matrix_runner()
     plan = tmp_path / "curriculum_plan.csv"
