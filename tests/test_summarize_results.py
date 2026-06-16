@@ -220,3 +220,85 @@ def test_summarize_innovation_one_results_keeps_key_rotation_protocols_separate(
     summary_rows = list(csv.DictReader(output_path.open()))
     assert len(summary_rows) == 2
     assert {row["key_rotation_interval"] for row in summary_rows} == {"0", "1024"}
+
+
+def test_summarize_strict_round_boundary_marks_confirmed_r7_and_r8_probe(tmp_path: Path):
+    input_path = tmp_path / "strict.jsonl"
+    output_path = tmp_path / "strict_summary.csv"
+    base_row = {
+        "cipher": "PRESENT-80",
+        "structure": "SPN",
+        "model": "present_inception_mcnd_matrix",
+        "feature_encoding": "present_pair_xor_paligned_sinv_cell_matrix_bits",
+        "sample_structure": "zhang_wang_case2_mcnd",
+        "key_rotation_interval": 1024,
+        "metrics": {"accuracy": 0.63, "calibrated_accuracy": 0.64, "auc": 0.68, "loss": 0.63},
+    }
+    rows = [
+        {**base_row, "rounds": 7, "seed": 0, "metrics": {**base_row["metrics"], "auc": 0.68}},
+        {**base_row, "rounds": 7, "seed": 1, "metrics": {**base_row["metrics"], "auc": 0.66}},
+        {**base_row, "rounds": 8, "seed": 0, "metrics": {**base_row["metrics"], "auc": 0.54}},
+    ]
+    input_path.write_text("\n".join(json.dumps(row) for row in rows), encoding="utf-8")
+
+    subprocess.run(
+        [
+            sys.executable,
+            "experiments/innovation1/summarize_strict_round_boundary.py",
+            "--input",
+            str(input_path),
+            "--output",
+            str(output_path),
+            "--expected-r7",
+            "2",
+            "--expected-r8",
+            "1",
+        ],
+        check=True,
+    )
+
+    summary = {row["rounds"]: row for row in csv.DictReader(output_path.open())}
+    assert summary["7"]["complete"] == "true"
+    assert summary["7"]["runs"] == "2"
+    assert summary["7"]["verdict"] == "r7_strict_candidate"
+    assert summary["7"]["auc_min"] == "0.6600000000"
+    assert summary["8"]["complete"] == "true"
+    assert summary["8"]["verdict"] == "r8_no_boundary_signal"
+
+
+def test_summarize_strict_round_boundary_marks_incomplete(tmp_path: Path):
+    input_path = tmp_path / "strict.jsonl"
+    output_path = tmp_path / "strict_summary.csv"
+    input_path.write_text(
+        json.dumps(
+            {
+                "rounds": 7,
+                "seed": 0,
+                "model": "present_inception_mcnd_matrix",
+                "feature_encoding": "present_pair_xor_paligned_sinv_cell_matrix_bits",
+                "sample_structure": "zhang_wang_case2_mcnd",
+                "key_rotation_interval": 1024,
+                "metrics": {"accuracy": 0.63, "calibrated_accuracy": 0.64, "auc": 0.68, "loss": 0.63},
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    subprocess.run(
+        [
+            sys.executable,
+            "experiments/innovation1/summarize_strict_round_boundary.py",
+            "--input",
+            str(input_path),
+            "--output",
+            str(output_path),
+            "--expected-r7",
+            "2",
+        ],
+        check=True,
+    )
+
+    rows = list(csv.DictReader(output_path.open()))
+    assert rows[0]["complete"] == "false"
+    assert rows[0]["verdict"] == "incomplete"
