@@ -1,0 +1,7 @@
+[1/6] PRESENT-80 r=6 model=present_inception_mcnd_matrix seed=0 pairs=16
+[2/6] PRESENT-80 r=6 model=present_inception_mcnd_matrix seed=1 pairs=16
+[3/6] PRESENT-80 r=6 model=present_inception_mcnd_matrix seed=2 pairs=16
+[4/6] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=0 pairs=16
+[5/6] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=1 pairs=16
+[6/6] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=2 pairs=16
+wrote 6 rows to results\innovation1-spn-present-sinv-curriculum-r7-gpu0-20260616.jsonl
