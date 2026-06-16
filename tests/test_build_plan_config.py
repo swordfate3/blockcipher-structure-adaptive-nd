@@ -637,6 +637,45 @@ def test_present_global_stats_only_beamstats8deep4_r7_plan_shape():
     assert {row["pretrain_epochs"] for row in rows} == {"6"}
 
 
+def test_present_spnaligned_r7_confirm_5seed_plans_shape():
+    repo_root = Path(__file__).resolve().parents[1]
+    plan_dir = repo_root / "experiments" / "innovation1" / "plans"
+    expectations = {
+        "innovation1_spn_present_protocol_spnaligned_r7_confirm_5seed.csv": {
+            "key_rotation_interval": "1",
+            "sample_structure": "zhang_wang_case2_independent_mcnd",
+            "samples_per_class": "32768",
+            "checkpoint_metric": "val_loss",
+        },
+        "innovation1_spn_present_strict_spnaligned_r7_confirm_5seed.csv": {
+            "key_rotation_interval": "1024",
+            "sample_structure": "zhang_wang_case2_mcnd",
+            "samples_per_class": "65536",
+            "checkpoint_metric": "val_auc",
+        },
+    }
+
+    for filename, expected in expectations.items():
+        with (plan_dir / filename).open(encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+
+        assert len(rows) == 10
+        assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+        assert {row["structure"] for row in rows} == {"SPN"}
+        assert {row["rounds"] for row in rows} == {"7"}
+        assert {row["seed"] for row in rows} == {"0", "1", "2", "3", "4"}
+        assert {row["pairs_per_sample"] for row in rows} == {"16"}
+        assert {row["feature_encoding"] for row in rows} == {
+            "present_mcnd_cell_matrix_bits",
+            "present_pair_xor_paligned_cell_matrix_bits",
+        }
+        assert {row["model_key"] for row in rows} == {"present_inception_mcnd_global_matrix"}
+        assert {row["negative_mode"] for row in rows} == {"encrypted_random_plaintexts"}
+        assert {row["difference_profile"] for row in rows} == {"present_zhang_wang2022_mcnd"}
+        for field, value in expected.items():
+            assert {row[field] for row in rows} == {value}
+
+
 def test_speck32_arx_partial_inverse_r7_clean_ablation_10seed_plan_shape():
     repo_root = Path(__file__).resolve().parents[1]
     plan_path = (
