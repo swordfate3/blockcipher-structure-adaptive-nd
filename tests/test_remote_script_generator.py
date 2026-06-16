@@ -286,3 +286,23 @@ def test_generate_remote_run_script_can_disable_gpu_guard(tmp_path: Path):
     assert "set GPU_BUSY_COUNT=0" not in run_text
     assert "RUN_GATE_BLOCKED_GPU_BUSY" in run_text
     assert "gpu_guard=disabled" in run_text
+
+
+def test_spn_sinv_curriculum_direct_strict_r7r8_watcher_is_configured():
+    repo_root = Path(__file__).resolve().parents[1]
+    remote_dir = repo_root / "scripts" / "generated" / "remote"
+    watcher = remote_dir / "watch_after_spn_sinv_to_sinv_strict_r7r8_20260616.ps1"
+    schedule = remote_dir / "schedule_watch_after_spn_sinv_to_sinv_strict_r7r8_20260616.cmd"
+
+    watcher_text = watcher.read_text(encoding="utf-8")
+    schedule_text = schedule.read_text(encoding="utf-8")
+
+    assert '$UpstreamRun = "innovation1-spn-present-sinv-curriculum-r7-gpu0-20260616"' in watcher_text
+    assert '$NextRun = "innovation1-spn-present-sinv-strict-r7r8-confirm-gpu0-20260616"' in watcher_text
+    assert (
+        '$NextScheduleScript = Join-Path $ProjectPath '
+        '"scripts\\generated\\remote\\schedule_innovation1_spn_present_sinv_strict_r7r8_confirm_gpu0_20260616.cmd"'
+    ) in watcher_text
+    assert '$GpuIndex = 0' in watcher_text
+    assert '$LogPath = Join-Path $LogDir "watch_after_${UpstreamRun}_to_${NextRun}.log"' in watcher_text
+    assert "watch_after_spn_sinv_to_sinv_strict_r7r8_20260616.ps1" in schedule_text
