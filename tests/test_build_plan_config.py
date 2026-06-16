@@ -676,6 +676,45 @@ def test_present_spnaligned_r7_confirm_5seed_plans_shape():
             assert {row[field] for row in rows} == {value}
 
 
+def test_present_sinv_strict_r7r8_confirm_plan_shape():
+    repo_root = Path(__file__).resolve().parents[1]
+    plan_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "plans"
+        / "innovation1_spn_present_sinv_strict_r7r8_confirm.csv"
+    )
+
+    with plan_path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    r7_rows = [row for row in rows if row["rounds"] == "7"]
+    r8_rows = [row for row in rows if row["rounds"] == "8"]
+
+    assert len(rows) == 14
+    assert len(r7_rows) == 10
+    assert len(r8_rows) == 4
+    assert {row["cipher"] for row in rows} == {"PRESENT-80"}
+    assert {row["structure"] for row in rows} == {"SPN"}
+    assert {row["model_key"] for row in rows} == {"present_inception_mcnd_matrix"}
+    assert {row["family"] for row in rows} == {"present_sinv_strict_r7r8_confirm"}
+    assert {row["seed"] for row in r7_rows} == {str(seed) for seed in range(10)}
+    assert {row["seed"] for row in r8_rows} == {str(seed) for seed in range(4)}
+    assert {row["samples_per_class"] for row in r7_rows} == {"65536"}
+    assert {row["samples_per_class"] for row in r8_rows} == {"131072"}
+    assert {row["pairs_per_sample"] for row in rows} == {"16"}
+    assert {row["feature_encoding"] for row in rows} == {
+        "present_pair_xor_paligned_sinv_cell_matrix_bits"
+    }
+    assert {row["key_rotation_interval"] for row in rows} == {"1024"}
+    assert {row["sample_structure"] for row in rows} == {"zhang_wang_case2_mcnd"}
+    assert {row["difference_profile"] for row in rows} == {"present_zhang_wang2022_mcnd"}
+    assert {row["checkpoint_metric"] for row in rows} == {"val_auc"}
+    assert {row["pretrain_rounds"] for row in rows} == {"6"}
+    assert {row["pretrain_epochs"] for row in rows} == {"6"}
+
+
 def test_speck32_arx_partial_inverse_r7_clean_ablation_10seed_plan_shape():
     repo_root = Path(__file__).resolve().parents[1]
     plan_path = (
