@@ -5,6 +5,7 @@ from blockcipher_ai_eval.models.structure.adaptive_dbitnet import (
 )
 from blockcipher_ai_eval.models.structure.arx import (
     ArxCarryPositionStatsPairSetDistinguisher,
+    ArxCarryRunMixerPairSetDistinguisher,
     ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
     ArxRoundStatsHybridPairSetDistinguisher,
@@ -25,6 +26,7 @@ from blockcipher_ai_eval.models.structure.spn import (
     PresentPairSetHistogramHybridDistinguisher,
     PresentPairSetStatsHybridDistinguisher,
     PresentPLayerMixerPairSetDistinguisher,
+    PresentTrailPositionStatsPairSetDistinguisher,
     PresentTrailMixerPairSetDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
@@ -42,9 +44,11 @@ __all__ = [
     "PresentPairSetHistogramHybridDistinguisher",
     "PresentPairSetStatsHybridDistinguisher",
     "PresentPLayerMixerPairSetDistinguisher",
+    "PresentTrailPositionStatsPairSetDistinguisher",
     "PresentTrailMixerPairSetDistinguisher",
     "AdaptiveDBitNetDistinguisher",
     "ArxCarryPositionStatsPairSetDistinguisher",
+    "ArxCarryRunMixerPairSetDistinguisher",
     "ArxPairSetStatsHybridDistinguisher",
     "ArxRoundFunctionHybridPairSetDistinguisher",
     "ArxRoundStatsHybridPairSetDistinguisher",

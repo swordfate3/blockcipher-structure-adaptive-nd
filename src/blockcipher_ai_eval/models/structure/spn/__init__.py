@@ -14,6 +14,9 @@ from blockcipher_ai_eval.models.structure.spn.present_pairset_global_stats_hybri
     PresentPairSetGlobalStatsDistinguisher,
     PresentPairSetGlobalStatsHybridDistinguisher,
 )
+from blockcipher_ai_eval.models.structure.spn.present_trail_position_stats import (
+    PresentTrailPositionStatsPairSetDistinguisher,
+)
 from blockcipher_ai_eval.models.structure.spn.present_p_layer_mixer import (
     PresentPLayerMixerBlock,
     PresentPLayerMixerPairSetDistinguisher,
@@ -39,6 +42,7 @@ __all__ = [
     "PresentMatrixTrailHybridPairSetDistinguisher",
     "PresentPairSetHistogramHybridDistinguisher",
     "PresentPairSetStatsHybridDistinguisher",
+    "PresentTrailPositionStatsPairSetDistinguisher",
     "PresentInceptionMCNDBlock",
     "PresentInceptionMCNDDistinguisher",
     "PresentInceptionMCNDGlobalMatrixDistinguisher",

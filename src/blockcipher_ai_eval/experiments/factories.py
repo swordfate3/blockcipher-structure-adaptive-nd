@@ -40,6 +40,7 @@ from blockcipher_ai_eval.models.baseline import (
 from blockcipher_ai_eval.models.structure import (
     AdaptiveDBitNetDistinguisher,
     ArxCarryPositionStatsPairSetDistinguisher,
+    ArxCarryRunMixerPairSetDistinguisher,
     ArxPairSetStatsHybridDistinguisher,
     ArxRoundFunctionHybridPairSetDistinguisher,
     ArxRoundStatsHybridPairSetDistinguisher,
@@ -58,6 +59,7 @@ from blockcipher_ai_eval.models.structure import (
     PresentPairSetHistogramHybridDistinguisher,
     PresentPairSetStatsHybridDistinguisher,
     PresentPLayerMixerPairSetDistinguisher,
+    PresentTrailPositionStatsPairSetDistinguisher,
     PresentTrailMixerPairSetDistinguisher,
     SpnCellPairSetDBitNetDistinguisher,
     SpnNibbleConvPairSetDistinguisher,
@@ -345,6 +347,22 @@ def build_model(
             dropout=float(options.get("dropout", 0.0)),
             stats_hidden_bits=_int_option(options, "stats_hidden_bits"),
         )
+    if name == "arx_carry_run_mixer_pairset":
+        return ArxCarryRunMixerPairSetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 736,
+            base_channels=hidden_bits,
+            token_dim=_int_option(options, "token_dim"),
+            mixer_depth=_int_option(options, "mixer_depth", 3) or 3,
+            token_mlp_ratio=_int_option(options, "token_mlp_ratio", 2) or 2,
+            kernel_size=_int_option(options, "kernel_size", 3) or 3,
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            pooling=str(options.get("pooling", "topk_logsumexp")),
+            dropout=float(options.get("dropout", 0.0)),
+            top_k=_int_option(options, "top_k", 4) or 4,
+            lse_temperature=float(options.get("lse_temperature", 1.0)),
+        )
     pairset_pooling_keys = {
         "structure_adaptive_pairset_dbitnet": "attention_mean_max",
         "structure_adaptive_pairset_dbitnet_attention": "attention",
@@ -531,6 +549,18 @@ def build_model(
             norm=str(options.get("norm", "layernorm")),
             dropout=float(options.get("dropout", 0.0)),
             global_hidden_bits=_int_option(options, "global_hidden_bits"),
+        )
+    if name == "present_trail_position_stats_pairset":
+        return PresentTrailPositionStatsPairSetDistinguisher(
+            input_bits=input_bits,
+            pair_bits=pair_bits or 2496,
+            base_channels=hidden_bits,
+            trail_depth=_int_option(options, "trail_depth", 4) or 4,
+            trail_words_per_depth=_int_option(options, "trail_words_per_depth", 9) or 9,
+            activation=str(options.get("activation", "gelu")),
+            norm=str(options.get("norm", "layernorm")),
+            dropout=float(options.get("dropout", 0.0)),
+            stats_hidden_bits=_int_option(options, "stats_hidden_bits"),
         )
     if name == "present_p_layer_mixer_pairset":
         return PresentPLayerMixerPairSetDistinguisher(
