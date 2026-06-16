@@ -13,11 +13,11 @@ set RESULT_REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.
 set BRANCH=refactor/model-project-structure
 set GITHUB_SSH_KEY=C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519
 set GIT_SSH_COMMAND=ssh -i %GITHUB_SSH_KEY% -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new
-set RUN_ID=innovation1-arx-speck32-partial-inverse-r7-confirm-10seed-gpu1-20260616
-set EXPECTED_ROWS=10
+set RUN_ID=innovation1-arx-speck32-partial-inverse-keyrotation-r7-screen-gpu1-20260616
+set EXPECTED_ROWS=9
 set RUN_ROOT=%ROOT%\%PROJECT_ID%-runs
 set RUN_DIR=%RUN_ROOT%\%RUN_ID%
-set ARCHIVE_WORK=%ROOT%\archive_work\arx_speck32_partial_inverse_r7_confirm_10seed_gpu1_20260616
+set ARCHIVE_WORK=%ROOT%\archive_work\arx_speck32_partial_inverse_keyrotation_r7_screen_gpu1_20260616
 set PY=F:\Anaconda\envs\DWT\torch310\python.exe
 set PYTHONPATH=%RUN_DIR%\src;%PYTHONPATH%
 
@@ -68,7 +68,7 @@ echo gpu_busy_count=%GPU_BUSY_COUNT% >> logs\%RUN_ID%_gpu_guard.txt
 if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
 
 
-%PY% experiments\run_innovation_one_matrix.py --plan experiments\innovation1\plans\innovation1_arx_speck32_partial_inverse_r7_confirm_10seed.csv --epochs 16 --batch-size 1024 --hidden-bits 64 --learning-rate 0.0001 --optimizer adamw --weight-decay 0.0001 --key-rotation-interval 1024 --sample-structure independent_pairs --integral-active-nibble 0 --device cuda:1 --dataset-cache-root dataset_cache --dataset-cache-chunk-size 8192 --checkpoint-metric val_auc --restore-best-checkpoint --early-stopping-patience 4 --early-stopping-min-delta 0 --progress-output logs\%RUN_ID%_progress.jsonl --output results\%RUN_ID%.jsonl > logs\%RUN_ID%_stdout.txt 2> logs\%RUN_ID%_stderr.txt
+%PY% experiments\run_innovation_one_matrix.py --plan experiments\innovation1\plans\innovation1_arx_speck32_partial_inverse_keyrotation_r7_screen.csv --epochs 12 --batch-size 512 --hidden-bits 64 --learning-rate 0.0001 --optimizer adamw --weight-decay 0.0001 --key-rotation-interval 1024 --sample-structure independent_pairs --integral-active-nibble 0 --device cuda:1 --dataset-cache-root dataset_cache --dataset-cache-chunk-size 4096 --checkpoint-metric val_auc --restore-best-checkpoint --early-stopping-patience 4 --early-stopping-min-delta 0 --progress-output logs\%RUN_ID%_progress.jsonl --output results\%RUN_ID%.jsonl > logs\%RUN_ID%_stdout.txt 2> logs\%RUN_ID%_stderr.txt
 set RUNNER_EXIT_CODE=%ERRORLEVEL%
 echo runner_exit_code=%RUNNER_EXIT_CODE% > logs\%RUN_ID%_runner_exit.txt
 if not exist results\%RUN_ID%.jsonl goto run_failed
@@ -102,7 +102,7 @@ if exist results_archive\%RUN_ID% rmdir /s /q results_archive\%RUN_ID%
 mkdir results_archive\%RUN_ID%
 copy "%RUN_DIR%\results\%RUN_ID%.jsonl" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\results\%RUN_ID%_summary.csv" "results_archive\%RUN_ID%\"
-copy "%RUN_DIR%\experiments\innovation1\plans\innovation1_arx_speck32_partial_inverse_r7_confirm_10seed.csv" "results_archive\%RUN_ID%\"
+copy "%RUN_DIR%\experiments\innovation1\plans\innovation1_arx_speck32_partial_inverse_keyrotation_r7_screen.csv" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_git_revision.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_git_status_before_run.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_gpu_info.txt" "results_archive\%RUN_ID%\"
@@ -123,12 +123,12 @@ echo project_dir=%PROJECT_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
 echo run_dir=%RUN_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
 echo archive_work=%ARCHIVE_WORK%>> results_archive\%RUN_ID%\run_manifest.txt
 echo branch=%BRANCH%>> results_archive\%RUN_ID%\run_manifest.txt
-echo plan=experiments\innovation1\plans\innovation1_arx_speck32_partial_inverse_r7_confirm_10seed.csv>> results_archive\%RUN_ID%\run_manifest.txt
+echo plan=experiments\innovation1\plans\innovation1_arx_speck32_partial_inverse_keyrotation_r7_screen.csv>> results_archive\%RUN_ID%\run_manifest.txt
 echo device=cuda:1>> results_archive\%RUN_ID%\run_manifest.txt
 echo gpu_guard=enabled:cuda:1>> results_archive\%RUN_ID%\run_manifest.txt
 echo expected_rows=%EXPECTED_ROWS%>> results_archive\%RUN_ID%\run_manifest.txt
-echo epochs=16>> results_archive\%RUN_ID%\run_manifest.txt
-echo batch_size=1024>> results_archive\%RUN_ID%\run_manifest.txt
+echo epochs=12>> results_archive\%RUN_ID%\run_manifest.txt
+echo batch_size=512>> results_archive\%RUN_ID%\run_manifest.txt
 echo hidden_bits=64>> results_archive\%RUN_ID%\run_manifest.txt
 echo optimizer=adamw>> results_archive\%RUN_ID%\run_manifest.txt
 echo weight_decay=0.0001>> results_archive\%RUN_ID%\run_manifest.txt
@@ -142,8 +142,8 @@ echo early_stopping_min_delta=0>> results_archive\%RUN_ID%\run_manifest.txt
 echo pretrain_rounds=none>> results_archive\%RUN_ID%\run_manifest.txt
 echo pretrain_epochs=0>> results_archive\%RUN_ID%\run_manifest.txt
 echo dataset_cache_root=dataset_cache>> results_archive\%RUN_ID%\run_manifest.txt
-echo dataset_cache_chunk_size=8192>> results_archive\%RUN_ID%\run_manifest.txt
-echo validation=speck32_arx_partial_inverse_r7_confirm_10seed>> results_archive\%RUN_ID%\run_manifest.txt
+echo dataset_cache_chunk_size=4096>> results_archive\%RUN_ID%\run_manifest.txt
+echo validation=arx_speck32_partial_inverse_keyrotation_r7_screen_gpu1>> results_archive\%RUN_ID%\run_manifest.txt
 
 git add results_archive\%RUN_ID%
 git commit -m "results: %RUN_ID% remote run"
