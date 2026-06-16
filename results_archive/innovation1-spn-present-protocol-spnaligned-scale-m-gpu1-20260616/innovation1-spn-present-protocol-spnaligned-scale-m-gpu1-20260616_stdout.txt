@@ -1,0 +1,13 @@
+[1/12] PRESENT-80 r=6 model=present_inception_mcnd_global_matrix seed=0 pairs=16
+[2/12] PRESENT-80 r=6 model=present_inception_mcnd_global_matrix seed=1 pairs=16
+[3/12] PRESENT-80 r=7 model=present_inception_mcnd_global_matrix seed=0 pairs=16
+[4/12] PRESENT-80 r=7 model=present_inception_mcnd_global_matrix seed=1 pairs=16
+[5/12] PRESENT-80 r=6 model=present_inception_mcnd_global_matrix seed=0 pairs=16
+[6/12] PRESENT-80 r=6 model=present_inception_mcnd_global_matrix seed=1 pairs=16
+[7/12] PRESENT-80 r=7 model=present_inception_mcnd_global_matrix seed=0 pairs=16
+[8/12] PRESENT-80 r=7 model=present_inception_mcnd_global_matrix seed=1 pairs=16
+[9/12] PRESENT-80 r=6 model=present_inception_mcnd_matrix seed=0 pairs=16
+[10/12] PRESENT-80 r=6 model=present_inception_mcnd_matrix seed=1 pairs=16
+[11/12] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=0 pairs=16
+[12/12] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=1 pairs=16
+wrote 12 rows to results\innovation1-spn-present-protocol-spnaligned-scale-m-gpu1-20260616.jsonl
