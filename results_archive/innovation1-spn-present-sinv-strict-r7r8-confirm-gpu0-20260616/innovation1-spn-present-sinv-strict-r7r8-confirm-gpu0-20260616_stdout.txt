@@ -1,0 +1,15 @@
+[1/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=0 pairs=16
+[2/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=1 pairs=16
+[3/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=2 pairs=16
+[4/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=3 pairs=16
+[5/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=4 pairs=16
+[6/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=5 pairs=16
+[7/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=6 pairs=16
+[8/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=7 pairs=16
+[9/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=8 pairs=16
+[10/14] PRESENT-80 r=7 model=present_inception_mcnd_matrix seed=9 pairs=16
+[11/14] PRESENT-80 r=8 model=present_inception_mcnd_matrix seed=0 pairs=16
+[12/14] PRESENT-80 r=8 model=present_inception_mcnd_matrix seed=1 pairs=16
+[13/14] PRESENT-80 r=8 model=present_inception_mcnd_matrix seed=2 pairs=16
+[14/14] PRESENT-80 r=8 model=present_inception_mcnd_matrix seed=3 pairs=16
+wrote 14 rows to results\innovation1-spn-present-sinv-strict-r7r8-confirm-gpu0-20260616.jsonl
