@@ -1,0 +1,6 @@
+[1/5] PRESENT-80 r=6 model=present_transition_spectrum_pairset seed=0 pairs=16
+[2/5] PRESENT-80 r=7 model=present_transition_spectrum_pairset seed=0 pairs=16
+[3/5] PRESENT-80 r=7 model=present_transition_spectrum_pairset seed=1 pairs=16
+[4/5] PRESENT-80 r=8 model=present_transition_spectrum_pairset seed=0 pairs=16
+[5/5] PRESENT-80 r=8 model=present_transition_spectrum_pairset seed=1 pairs=16
+wrote 5 rows to results\innovation1-spn-present-transition-spectrum-fast-gate-r7r8-gpu1-20260618.jsonl
