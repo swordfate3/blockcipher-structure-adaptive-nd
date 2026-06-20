@@ -1,0 +1,10 @@
+## refactor/model-project-structure...origin/refactor/model-project-structure
+ M experiments/innovation1/plans/innovation1_spn_present_trail_position_stats_r7r8_screen.csv
+ M experiments/run_innovation_one_matrix.py
+ M src/blockcipher_ai_eval/experiments/factories.py
+ M src/blockcipher_ai_eval/models/registry.py
+ M src/blockcipher_ai_eval/models/structure/spn/__init__.py
+ M src/blockcipher_ai_eval/models/structure/spn/present_pairset_global_stats_hybrid.py
+ M src/blockcipher_ai_eval/models/structure/spn/present_trail_position_stats.py
+?? experiments/innovation1/validate_result_plan_alignment.py
+?? logs/

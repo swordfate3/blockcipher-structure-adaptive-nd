@@ -1,0 +1,96 @@
+{
+  "duplicate_plan_keys": [],
+  "duplicate_result_keys": [],
+  "errors": [],
+  "expected_rows": 8,
+  "field_mismatches": [],
+  "missing_result_keys": [],
+  "plan_keys": [
+    [
+      6,
+      0,
+      "present_pairset_global_stats"
+    ],
+    [
+      6,
+      0,
+      "present_trail_position_stats_pairset"
+    ],
+    [
+      7,
+      0,
+      "present_pairset_global_stats"
+    ],
+    [
+      7,
+      1,
+      "present_pairset_global_stats"
+    ],
+    [
+      7,
+      0,
+      "present_trail_position_stats_pairset"
+    ],
+    [
+      7,
+      1,
+      "present_trail_position_stats_pairset"
+    ],
+    [
+      8,
+      0,
+      "present_pairset_global_stats"
+    ],
+    [
+      8,
+      0,
+      "present_trail_position_stats_pairset"
+    ]
+  ],
+  "plan_rows": 8,
+  "result_keys": [
+    [
+      6,
+      0,
+      "present_pairset_global_stats"
+    ],
+    [
+      6,
+      0,
+      "present_trail_position_stats_pairset"
+    ],
+    [
+      7,
+      0,
+      "present_pairset_global_stats"
+    ],
+    [
+      7,
+      1,
+      "present_pairset_global_stats"
+    ],
+    [
+      7,
+      0,
+      "present_trail_position_stats_pairset"
+    ],
+    [
+      7,
+      1,
+      "present_trail_position_stats_pairset"
+    ],
+    [
+      8,
+      0,
+      "present_pairset_global_stats"
+    ],
+    [
+      8,
+      0,
+      "present_trail_position_stats_pairset"
+    ]
+  ],
+  "result_rows": 8,
+  "status": "pass",
+  "unexpected_result_keys": []
+}
