@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_GITHUB_SSH_KEY = r"%ROOT%\.ssh\github_blockcipher_20260612_result_pusher_ed25519"
+DEFAULT_GITHUB_SSH_KEY = "C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519"
 REQUIRED_REMOTE_ROOT = r"G:\lxy"
 
 

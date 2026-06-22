@@ -11,7 +11,7 @@ set CLONE_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set RESULT_REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set BRANCH=refactor/model-project-structure
-set GITHUB_SSH_KEY=%ROOT%\.ssh\github_blockcipher_20260612_result_pusher_ed25519
+set GITHUB_SSH_KEY=C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519
 set GIT_SSH_COMMAND=ssh -i %GITHUB_SSH_KEY% -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new
 set RUN_ID=innovation1-spn-present-active-pattern-r7-screen-gpu1-20260622
 set EXPECTED_ROWS=2

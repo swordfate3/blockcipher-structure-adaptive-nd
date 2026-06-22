@@ -74,8 +74,7 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "set EXPECTED_ROWS=4" in run_text
     assert "set RESULT_REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git" in run_text
     assert "set PYTHONPATH=%RUN_DIR%\\src;%PYTHONPATH%" in run_text
-    assert "set GITHUB_SSH_KEY=%ROOT%\\.ssh\\github_blockcipher_20260612_result_pusher_ed25519" in run_text
-    assert "C:/Users" not in run_text
+    assert "set GITHUB_SSH_KEY=C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519" in run_text
     assert "set GIT_SSH_COMMAND=ssh -i %GITHUB_SSH_KEY% -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new" in run_text
     assert "--plan experiments\\innovation1\\plans\\demo.csv" in run_text
     assert "--device cuda:0" in run_text
