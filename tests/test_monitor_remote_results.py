@@ -89,6 +89,31 @@ def test_once_waits_when_any_result_branch_is_missing(tmp_path):
     assert not (local / "outputs" / "remote_results" / "run-gpu0").exists()
 
 
+def test_once_accepts_fallback_options_while_waiting_for_result_branch(tmp_path):
+    repo_root = Path(__file__).resolve().parents[1]
+    module = load_module(repo_root)
+    origin = make_origin_with_result_branches(tmp_path, [])
+    local = make_local_repo(tmp_path, origin)
+
+    code = module.main(
+        [
+            "--repo-root",
+            str(local),
+            "--remote",
+            "origin",
+            "--fallback-remote-run-root",
+            "lxy-a6000:G:/lxy/blockcipher-structure-adaptive-nd-runs",
+            "--fallback-output-dir",
+            str(local / "outputs" / "remote_results_incomplete"),
+            "--run-id",
+            "run-gpu0=2",
+            "--once",
+        ]
+    )
+
+    assert code == 2
+
+
 def test_once_fetches_verified_result_branches_to_outputs(tmp_path):
     repo_root = Path(__file__).resolve().parents[1]
     module = load_module(repo_root)

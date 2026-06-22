@@ -134,6 +134,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="Explicit Git remote URL/path for checks and fetches. Use this to bypass the local origin URL.",
     )
     parser.add_argument("--output-dir", type=Path, default=None)
+    parser.add_argument(
+        "--fallback-remote-run-root",
+        default=None,
+        help=(
+            "Optional remote run root used by generated monitors for raw fallback retrieval. "
+            "This branch monitor accepts it for compatibility and waits for verified result branches."
+        ),
+    )
+    parser.add_argument(
+        "--fallback-output-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Optional output directory reserved for raw fallback retrieval. "
+            "Verified result-branch retrieval still uses --output-dir."
+        ),
+    )
     parser.add_argument("--interval-minutes", type=float, default=30.0)
     parser.add_argument("--once", action="store_true")
     parser.add_argument(
