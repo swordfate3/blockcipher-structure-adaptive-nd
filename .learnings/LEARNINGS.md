@@ -148,3 +148,44 @@ Promote this to `AGENTS.md` under workspace hygiene and remote workflow. Before 
 - Promoted: AGENTS.md
 
 ---
+
+## [LRN-20260622-002] best_practice
+
+**Logged**: 2026-06-22T13:05:00+08:00
+**Priority**: high
+**Status**: pending
+**Area**: research
+
+### Summary
+Treat SPN/PRESENT active-nibble accuracy as an auxiliary trail-activity signal, not as real-vs-random accuracy; promote it into an explicit active-pattern distinguisher route.
+
+### Details
+The user identified that the high `val_active_nibble_bit_accuracy` from the multitask active-nibble run should not be left as a side metric. It measures per-position correctness for 16 active/inactive nibble labels per sample, where "active" means a 4-bit differential/trail cell is non-zero. It is not ciphertext-value nonzero-ness, not whole-sample trail accuracy, and not real-vs-random classification accuracy.
+
+Correct interpretation:
+
+- `active nibble` means a nibble of a differential or candidate trail state is non-zero.
+- The metric is averaged over all sample-position binary labels, e.g. validation rows times 16 positions.
+- It can be inflated by inactive-class imbalance; always compare against all-inactive baseline and report active precision, recall, F1, and per-position rates.
+- The research opportunity is to convert this auxiliary structure recognition into explicit real-vs-random evidence: active count, position frequency, candidate-trail disagreement, confidence, margin, pair-set consistency, and trail-family match scores.
+- Strict evidence still requires `encrypted_random_plaintexts` negatives and separate reporting of single-sample raw accuracy, AUC, and multi-query aggregation.
+
+### Suggested Action
+Implement the active-pattern route as a staged Innovation 1 SPN plan:
+
+1. Add deterministic active-pattern/statistics extraction from existing PRESENT beamstats/candidate-trail feature encodings.
+2. Add diagnostics for active-label imbalance and real-vs-random distribution separation.
+3. Train active-only and active-plus-candidate-statistics baselines before any large neural model.
+4. If small/medium evidence is positive, run the route at 262144/class and then >=1000000/class multi-seed before making formal claims.
+
+### Metadata
+- Source: user_feedback
+- Related Files: outputs/remote_results_incomplete/innovation1-spn-present-multitask-active-nibble-fast-gate-r7-gpu1-20260618/, src/blockcipher_ai_eval/features/pair_features.py, docs/superpowers/plans/
+- Tags: innovation1, spn, present, active-nibble, trail-activity, distinguisher, evidence-gates
+- See Also: LRN-20260621-001, LRN-20260621-002
+- Pattern-Key: innovation1.spn_present.active_pattern_distinguisher
+- Recurrence-Count: 1
+- First-Seen: 2026-06-22
+- Last-Seen: 2026-06-22
+
+---
