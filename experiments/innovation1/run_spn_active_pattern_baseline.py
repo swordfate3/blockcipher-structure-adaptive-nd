@@ -29,14 +29,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--sample-structure", default="zhang_wang_case2_mcnd")
     parser.add_argument("--epochs", type=int, default=20)
     parser.add_argument("--learning-rate", type=float, default=1e-2)
+    parser.add_argument("--device", default="cpu")
     return parser.parse_args()
 
 
-def train_linear(features: np.ndarray, labels: np.ndarray, *, epochs: int, learning_rate: float) -> torch.nn.Module:
+def train_linear(
+    features: np.ndarray,
+    labels: np.ndarray,
+    *,
+    epochs: int,
+    learning_rate: float,
+    device: torch.device,
+) -> torch.nn.Module:
     torch.manual_seed(0)
-    x = torch.from_numpy(features.astype(np.float32))
-    y = torch.from_numpy(labels.astype(np.float32)).reshape(-1, 1)
-    model = torch.nn.Linear(features.shape[1], 1)
+    x = torch.from_numpy(features.astype(np.float32)).to(device)
+    y = torch.from_numpy(labels.astype(np.float32)).reshape(-1, 1).to(device)
+    model = torch.nn.Linear(features.shape[1], 1).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     loss_fn = torch.nn.BCEWithLogitsLoss()
     for _epoch in range(epochs):
@@ -102,6 +110,7 @@ def make_dataset(
 
 def main() -> None:
     args = parse_args()
+    device = torch.device(args.device)
     train_dataset, cipher = make_dataset(
         rounds=args.rounds,
         seed=args.seed,
@@ -135,9 +144,16 @@ def main() -> None:
         train_dataset.labels,
         epochs=args.epochs,
         learning_rate=args.learning_rate,
+        device=device,
     )
     with torch.no_grad():
-        logits = model(torch.from_numpy(validation_features.astype(np.float32))).numpy().reshape(-1)
+        logits = (
+            model(torch.from_numpy(validation_features.astype(np.float32)).to(device))
+            .detach()
+            .cpu()
+            .numpy()
+            .reshape(-1)
+        )
     probabilities = 1.0 / (1.0 + np.exp(-logits))
     result = {
         "route": "spn_active_pattern_baseline",
@@ -148,6 +164,7 @@ def main() -> None:
         "feature_encoding": args.feature_encoding,
         "negative_mode": args.negative_mode,
         "sample_structure": args.sample_structure,
+        "device": args.device,
         "feature_dim": int(train_features.shape[1]),
         "val_accuracy": binary_accuracy(validation_dataset.labels, probabilities),
         "val_auc": binary_auc(validation_dataset.labels, probabilities),

@@ -11,3 +11,4 @@ def test_spn_active_pattern_baseline_help_runs(capsys):
     captured = capsys.readouterr()
     assert "--samples-per-class" in captured.out
     assert "--feature-encoding" in captured.out
+    assert "--device" in captured.out
