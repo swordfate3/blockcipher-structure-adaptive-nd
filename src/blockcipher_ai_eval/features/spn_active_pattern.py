@@ -44,3 +44,42 @@ def active_pattern_summary_from_words(words: NDArray[np.uint64]) -> ActivePatter
         "density_std": density.std(axis=1, dtype=np.float32),
         "density_span": (density.max(axis=1) - density.min(axis=1)).astype(np.float32),
     }
+
+
+def uint64_words_from_bit_rows(bit_rows: NDArray[np.uint8], *, words_per_row: int) -> NDArray[np.uint64]:
+    rows = np.asarray(bit_rows, dtype=np.uint8)
+    if rows.ndim != 2:
+        raise ValueError("bit_rows must have shape (rows, bits)")
+    expected_bits = words_per_row * 64
+    if rows.shape[1] != expected_bits:
+        raise ValueError(f"expected {expected_bits} bits, got {rows.shape[1]}")
+    reshaped = rows.reshape(rows.shape[0], words_per_row, 64)
+    powers = (1 << np.arange(63, -1, -1, dtype=np.uint64)).reshape(1, 1, 64)
+    return (reshaped.astype(np.uint64) * powers).sum(axis=2, dtype=np.uint64)
+
+
+def extract_active_pattern_features(bit_rows: NDArray[np.uint8], *, words_per_row: int) -> NDArray[np.float32]:
+    words = uint64_words_from_bit_rows(bit_rows, words_per_row=words_per_row)
+    summary = active_pattern_summary_from_words(words)
+    active_count = summary["active_count"].astype(np.float32)
+    count_mean = active_count.mean(axis=1, keepdims=True) / 16.0
+    count_std = active_count.std(axis=1, keepdims=True) / 16.0
+    count_min = active_count.min(axis=1, keepdims=True) / 16.0
+    count_max = active_count.max(axis=1, keepdims=True) / 16.0
+    density_stats = np.stack(
+        [
+            summary["density_mean"],
+            summary["density_std"],
+            summary["density_span"],
+            summary["position_frequency"].std(axis=1, dtype=np.float32),
+        ],
+        axis=1,
+    )
+    return np.concatenate(
+        [
+            summary["position_frequency"].astype(np.float32),
+            np.concatenate([count_mean, count_std, count_min, count_max], axis=1).astype(np.float32),
+            density_stats.astype(np.float32),
+        ],
+        axis=1,
+    )

@@ -3,6 +3,8 @@ import numpy as np
 from blockcipher_ai_eval.features.spn_active_pattern import (
     active_mask16_from_word,
     active_pattern_summary_from_words,
+    extract_active_pattern_features,
+    uint64_words_from_bit_rows,
 )
 
 
@@ -32,3 +34,31 @@ def test_active_pattern_summary_from_words_counts_positions_and_density():
     assert summary["position_frequency"].shape == (2, 16)
     assert summary["position_frequency"][0, :3].tolist() == [0.5, 0.5, 0.0]
     assert summary["density_mean"].tolist() == [0.0625, 0.03125]
+
+
+def test_uint64_words_from_bit_rows_round_trips_big_endian_words():
+    rows = np.array(
+        [
+            [int(bit) for bit in f"{0x8000000000000001:064b}{0x00000000000000F0:064b}"],
+        ],
+        dtype=np.uint8,
+    )
+
+    words = uint64_words_from_bit_rows(rows, words_per_row=2)
+
+    assert words.shape == (1, 2)
+    assert words[0, 0] == 0x8000000000000001
+    assert words[0, 1] == 0x00000000000000F0
+
+
+def test_extract_active_pattern_features_has_stable_shape():
+    rows = np.zeros((3, 4 * 64), dtype=np.uint8)
+    rows[0, 63] = 1
+    rows[0, 127] = 1
+    rows[1, 60:64] = 1
+
+    features = extract_active_pattern_features(rows, words_per_row=4)
+
+    assert features.shape == (3, 16 + 4 + 4)
+    assert features.dtype == np.float32
+    assert features[0, 0] > 0.0
