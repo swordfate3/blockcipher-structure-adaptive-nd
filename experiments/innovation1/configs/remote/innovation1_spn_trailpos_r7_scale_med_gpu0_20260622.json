@@ -1,0 +1,50 @@
+{
+  "run_id": "i1-spn-trailpos-r7-scale-med-gpu0-20260622",
+  "task_name": "i1_spn_trailpos_r7_scale_med_gpu0_20260622",
+  "plan": "experiments\\innovation1\\plans\\innovation1_spn_present_trail_position_stats_r7_scale_med.csv",
+  "expected_rows": 2,
+  "device": "cuda:0",
+  "epochs": 16,
+  "batch_size": 128,
+  "hidden_bits": 32,
+  "learning_rate": 0.0001,
+  "optimizer": "adam",
+  "weight_decay": 0.00001,
+  "loss": "mse",
+  "lr_scheduler": "cyclic",
+  "max_learning_rate": 0.002,
+  "key_rotation_interval": 1024,
+  "sample_structure": "zhang_wang_case2_mcnd",
+  "checkpoint_metric": "val_auc",
+  "restore_best_checkpoint": true,
+  "early_stopping_patience": 0,
+  "early_stopping_min_delta": 0.0,
+  "archive_work_id": "spn_trailpos_r7_scale_med_gpu0_20260622",
+  "validation_label": "spn_present_trail_position_stats_r7_scale_med_gpu0",
+  "monitor_script_name": "monitor_i1_spn_trailpos_r7_scale_med_gpu0_results.sh",
+  "dataset_cache": true,
+  "dataset_cache_root": "dataset_cache",
+  "dataset_cache_chunk_size": 8192,
+  "gpu_guard": true,
+  "launcher_tail_source": "project",
+  "run_overlay_files": [
+    "experiments\\run_innovation_one_matrix.py",
+    "experiments\\innovation1\\validate_result_plan_alignment.py",
+    "src\\blockcipher_ai_eval\\experiments\\factories.py",
+    "src\\blockcipher_ai_eval\\models\\registry.py"
+  ],
+  "run_overlay_dirs": [
+    "src\\blockcipher_ai_eval\\models\\structure"
+  ],
+  "plan_scoped_fields": [
+    "pretrain_rounds",
+    "pretrain_epochs"
+  ],
+  "branch": "refactor/model-project-structure",
+  "project_id": "blockcipher-structure-adaptive-nd",
+  "clone_url": "git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git",
+  "repo_url": "git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git",
+  "result_repo_url": "git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git",
+  "claim_scope": "MEDIUM scale only: test whether the earlier r7 trail-position route that reached about 0.678 calibrated accuracy at 65536/class improves at 262144/class; not formal or breakthrough evidence",
+  "launch_policy": "scale the exact trail-position structure-feature route, with global-stats control, before any 1M/class formal expansion"
+}

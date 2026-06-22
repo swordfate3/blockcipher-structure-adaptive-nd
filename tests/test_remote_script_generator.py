@@ -74,7 +74,8 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "set EXPECTED_ROWS=4" in run_text
     assert "set RESULT_REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git" in run_text
     assert "set PYTHONPATH=%RUN_DIR%\\src;%PYTHONPATH%" in run_text
-    assert "set GITHUB_SSH_KEY=C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519" in run_text
+    assert "set GITHUB_SSH_KEY=%ROOT%\\.ssh\\github_blockcipher_20260612_result_pusher_ed25519" in run_text
+    assert "C:/Users" not in run_text
     assert "set GIT_SSH_COMMAND=ssh -i %GITHUB_SSH_KEY% -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new" in run_text
     assert "--plan experiments\\innovation1\\plans\\demo.csv" in run_text
     assert "--device cuda:0" in run_text
@@ -89,7 +90,8 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "--early-stopping-min-delta 0.001" in run_text
     assert "--pretrain-rounds 6" in run_text
     assert "--pretrain-epochs 2" in run_text
-    assert "--progress-output logs\\%RUN_ID%_progress.jsonl" in run_text
+    assert "--progress-output %RUN_DIR%\\logs\\%RUN_ID%_progress.jsonl" in run_text
+    assert "--output %RUN_DIR%\\results\\%RUN_ID%.jsonl" in run_text
     assert "--dataset-cache-root dataset_cache" in run_text
     assert "--dataset-cache-chunk-size 4096" in run_text
     run_command = next(
@@ -155,6 +157,8 @@ def test_generate_remote_scripts_writes_run_launch_schedule_and_monitor(tmp_path
     assert "innovation1-demo-gpu0-20260608=4" in monitor_text
     assert "scripts/monitor_remote_results.py" in monitor_text
     assert '--remote "${RESULT_REMOTE:-origin-ssh}"' in monitor_text
+    assert '--fallback-remote-run-root "${FALLBACK_REMOTE_RUN_ROOT:-lxy-a6000:G:/lxy/blockcipher-structure-adaptive-nd-runs}"' in monitor_text
+    assert '--fallback-output-dir "${FALLBACK_OUTPUT_DIR:-outputs/remote_results_incomplete}"' in monitor_text
 
 
 def test_generate_remote_run_script_escapes_windows_paths(tmp_path: Path):
@@ -286,6 +290,150 @@ def test_generate_remote_run_script_can_disable_gpu_guard(tmp_path: Path):
     assert "set GPU_BUSY_COUNT=0" not in run_text
     assert "RUN_GATE_BLOCKED_GPU_BUSY" in run_text
     assert "gpu_guard=disabled" in run_text
+
+
+def test_zhang_wang_keras_official_anchor_remote_config_generates_aligned_scripts(tmp_path: Path):
+    repo_root = Path(__file__).resolve().parents[1]
+    spec_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "configs"
+        / "remote"
+        / "innovation1_spn_present_zhang_wang2022_keras_official_anchor_smoke_gpu1_20260621.json"
+    )
+    output_dir = tmp_path / "remote"
+    monitor_dir = tmp_path / "monitors"
+
+    generated = generate_remote_scripts(spec_path, output_dir=output_dir, monitor_dir=monitor_dir)
+    run_text = generated.run_script.read_text(encoding="utf-8")
+    launcher_text = generated.launch_script.read_text(encoding="utf-8")
+    schedule_text = generated.schedule_script.read_text(encoding="utf-8")
+    monitor_text = generated.monitor_script.read_text(encoding="utf-8")
+
+    assert (
+        "--plan experiments\\innovation1\\plans\\"
+        "innovation1_spn_present_zhang_wang2022_keras_official_anchor_smoke.csv"
+    ) in run_text
+    assert "--sample-structure zhang_wang_case2_official_mcnd" in run_text
+    assert "--key-rotation-interval 0" in run_text
+    assert "--hidden-bits 32" in run_text
+    assert "--loss mse" in run_text
+    assert "--lr-scheduler none" in run_text
+    assert "--checkpoint-metric val_loss" in run_text
+    assert 'xcopy "%PROJECT_DIR%\\experiments" "experiments\\" /E /I /Y' in run_text
+    assert 'xcopy "%PROJECT_DIR%\\src\\blockcipher_ai_eval" "src\\blockcipher_ai_eval\\" /E /I /Y' in run_text
+    assert "set ROOT=G:\\lxy" in run_text
+    assert "C:\\Users" not in run_text
+    assert "cmd.exe /k" not in launcher_text
+    assert "cmd.exe /c powershell" in launcher_text
+    assert "cmd.exe /c" in schedule_text
+    assert "G:\\lxy\\blockcipher-structure-adaptive-nd\\scripts\\generated\\remote" in schedule_text
+    assert (
+        "innovation1-spn-present-zhang-wang2022-keras-official-anchor-smoke-gpu1-20260621=2"
+        in monitor_text
+    )
+
+
+def test_zhang_wang_keras_official_anchor_scale_ladder_remote_config_generates_safe_scripts(
+    tmp_path: Path,
+):
+    repo_root = Path(__file__).resolve().parents[1]
+    spec_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "configs"
+        / "remote"
+        / "innovation1_spn_zwkeras_anchor_r7_scale_med_gpu1_20260621.json"
+    )
+    output_dir = tmp_path / "remote"
+    monitor_dir = tmp_path / "monitors"
+
+    generated = generate_remote_scripts(spec_path, output_dir=output_dir, monitor_dir=monitor_dir)
+    run_text = generated.run_script.read_text(encoding="utf-8")
+    launcher_text = generated.launch_script.read_text(encoding="utf-8")
+    schedule_text = generated.schedule_script.read_text(encoding="utf-8")
+    monitor_text = generated.monitor_script.read_text(encoding="utf-8")
+
+    assert (
+        "--plan experiments\\innovation1\\plans\\"
+        "innovation1_spn_present_zhang_wang2022_keras_official_anchor_scale_ladder_r7.csv"
+    ) in run_text
+    assert "--sample-structure zhang_wang_case2_official_mcnd" in run_text
+    assert "--key-rotation-interval 0" in run_text
+    assert "--hidden-bits 32" in run_text
+    assert "--epochs 50" in run_text
+    assert "--loss mse" in run_text
+    assert "--checkpoint-metric val_loss" in run_text
+    assert "--early-stopping-patience 8" in run_text
+    assert "--progress-output %RUN_DIR%\\logs\\%RUN_ID%_progress.jsonl" in run_text
+    assert "--output %RUN_DIR%\\results\\%RUN_ID%.jsonl" in run_text
+    assert 'xcopy "%PROJECT_DIR%\\experiments" "experiments\\" /E /I /Y' in run_text
+    assert 'xcopy "%PROJECT_DIR%\\src\\blockcipher_ai_eval" "src\\blockcipher_ai_eval\\" /E /I /Y' in run_text
+    assert "set ROOT=G:\\lxy" in run_text
+    assert "C:\\Users" not in run_text
+    assert "cmd.exe /k" not in launcher_text
+    assert "cmd.exe /c powershell" in launcher_text
+    assert "cmd.exe /c" in schedule_text
+    assert "G:\\lxy\\blockcipher-structure-adaptive-nd\\scripts\\generated\\remote" in schedule_text
+    assert (
+        "i1-spn-zwkeras-anchor-r7-scale-med-gpu1-20260621=2"
+        in monitor_text
+    )
+    assert "--fallback-remote-run-root" in monitor_text
+
+
+def test_present_trail_position_scale_med_remote_config_generates_safe_scripts(tmp_path: Path):
+    repo_root = Path(__file__).resolve().parents[1]
+    spec_path = (
+        repo_root
+        / "experiments"
+        / "innovation1"
+        / "configs"
+        / "remote"
+        / "innovation1_spn_trailpos_r7_scale_med_gpu0_20260622.json"
+    )
+    output_dir = tmp_path / "remote"
+    monitor_dir = tmp_path / "monitors"
+
+    generated = generate_remote_scripts(spec_path, output_dir=output_dir, monitor_dir=monitor_dir)
+    run_text = generated.run_script.read_text(encoding="utf-8")
+    launcher_text = generated.launch_script.read_text(encoding="utf-8")
+    schedule_text = generated.schedule_script.read_text(encoding="utf-8")
+    monitor_text = generated.monitor_script.read_text(encoding="utf-8")
+
+    assert (
+        "--plan experiments\\innovation1\\plans\\"
+        "innovation1_spn_present_trail_position_stats_r7_scale_med.csv"
+    ) in run_text
+    assert "--sample-structure zhang_wang_case2_mcnd" in run_text
+    assert "--key-rotation-interval 1024" in run_text
+    assert "--loss mse" in run_text
+    assert "--lr-scheduler cyclic" in run_text
+    assert "--max-learning-rate 0.002" in run_text
+    assert "--checkpoint-metric val_auc" in run_text
+    assert "--pretrain-rounds" not in run_text
+    assert "--pretrain-epochs" not in run_text
+    assert "pretrain_rounds=from_plan" in run_text
+    assert "pretrain_epochs=from_plan" in run_text
+    assert "--dataset-cache-chunk-size 8192" in run_text
+    assert (
+        'xcopy "%PROJECT_DIR%\\src\\blockcipher_ai_eval\\models\\structure" '
+        '"src\\blockcipher_ai_eval\\models\\structure\\" /E /I /Y'
+    ) in run_text
+    assert "set ROOT=G:\\lxy" in run_text
+    assert "C:\\Users" not in run_text
+    assert "cmd.exe /k" not in launcher_text
+    assert "cmd.exe /c powershell" in launcher_text
+    assert "cmd.exe /c" in schedule_text
+    assert "cmd.exe /k" not in schedule_text
+    assert "G:\\lxy\\blockcipher-structure-adaptive-nd\\scripts\\generated\\remote" in schedule_text
+    assert (
+        "i1-spn-trailpos-r7-scale-med-gpu0-20260622=2"
+        in monitor_text
+    )
+    assert "--fallback-remote-run-root" in monitor_text
 
 
 def test_spn_sinv_curriculum_direct_strict_r7r8_watcher_is_configured():

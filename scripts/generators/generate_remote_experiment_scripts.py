@@ -8,6 +8,10 @@ from pathlib import Path
 from typing import Any
 
 
+DEFAULT_GITHUB_SSH_KEY = r"%ROOT%\.ssh\github_blockcipher_20260612_result_pusher_ed25519"
+REQUIRED_REMOTE_ROOT = r"G:\lxy"
+
+
 @dataclass(frozen=True)
 class GeneratedRemoteScripts:
     run_script: Path
@@ -20,6 +24,16 @@ def _required(spec: dict[str, Any], key: str) -> Any:
     if key not in spec or spec[key] in {None, ""}:
         raise ValueError(f"missing required remote run spec field: {key}")
     return spec[key]
+
+
+def _validate_remote_root(spec: dict[str, Any]) -> None:
+    raw_root = str(spec.get("root", REQUIRED_REMOTE_ROOT))
+    normalized = raw_root.replace("/", "\\").rstrip("\\").lower()
+    if normalized != REQUIRED_REMOTE_ROOT.lower():
+        raise ValueError(
+            f"remote run root must be {REQUIRED_REMOTE_ROOT}; got {raw_root!r}. "
+            "Remote experiments must not leave files outside G:\\lxy."
+        )
 
 
 def _cmd_name(prefix: str, run_id: str) -> str:
@@ -40,7 +54,51 @@ def _format_float(value: Any) -> str:
     return text
 
 
+def _ensure_parent_dir_cmd(path: str) -> str:
+    normalized = path.replace("/", "\\")
+    parts = normalized.rsplit("\\", 1)
+    if len(parts) == 1 or not parts[0]:
+        return ""
+    return f"if not exist {parts[0]} mkdir {parts[0]}\n"
+
+
+def _render_run_overlay_cmds(files: list[Any], dirs: list[Any]) -> str:
+    commands: list[str] = []
+    for raw_path in files:
+        path = str(raw_path).replace("/", "\\")
+        if not path:
+            continue
+        ensure_parent = _ensure_parent_dir_cmd(path).rstrip()
+        if ensure_parent:
+            commands.append(ensure_parent)
+        commands.append(f'if exist "%PROJECT_DIR%\\{path}" copy "%PROJECT_DIR%\\{path}" "{path}"')
+    for raw_path in dirs:
+        path = str(raw_path).replace("/", "\\").rstrip("\\")
+        if not path:
+            continue
+        ensure_parent = _ensure_parent_dir_cmd(path).rstrip()
+        if ensure_parent:
+            commands.append(ensure_parent)
+        commands.append(f'if exist "%PROJECT_DIR%\\{path}" xcopy "%PROJECT_DIR%\\{path}" "{path}\\" /E /I /Y')
+    return "\n".join(commands)
+
+
+def _archive_integrity_guard_cmd() -> str:
+    required_files = (
+        r"results_archive\%RUN_ID%\%RUN_ID%.jsonl",
+        r"results_archive\%RUN_ID%\%RUN_ID%_summary.csv",
+        r"results_archive\%RUN_ID%\%RUN_ID%_result_gate.txt",
+        r"results_archive\%RUN_ID%\run_manifest.txt",
+    )
+    checks = "\n".join(f'if not exist "{path}" goto archive_incomplete' for path in required_files)
+    return (
+        f"{checks}\n"
+        r"echo archive_integrity=pass > results_archive\%RUN_ID%\archive_integrity.txt"
+    )
+
+
 def render_run_script(spec: dict[str, Any]) -> str:
+    _validate_remote_root(spec)
     run_id = str(_required(spec, "run_id"))
     plan = str(_required(spec, "plan"))
     expected_rows = int(_required(spec, "expected_rows"))
@@ -63,6 +121,9 @@ if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
     learning_rate = _format_float(spec.get("learning_rate", 0.001))
     optimizer = str(spec.get("optimizer", "adamw"))
     weight_decay = _format_float(spec.get("weight_decay", 0.0001))
+    loss = str(spec.get("loss", "bce"))
+    lr_scheduler = str(spec.get("lr_scheduler", "none"))
+    max_learning_rate = spec.get("max_learning_rate")
     key_rotation_interval = int(spec.get("key_rotation_interval", 0))
     sample_structure = str(spec.get("sample_structure", "independent_pairs"))
     integral_active_nibble = int(spec.get("integral_active_nibble", 0))
@@ -96,17 +157,31 @@ if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
     github_ssh_key = str(
         spec.get(
             "github_ssh_key",
-            "C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519",
+            DEFAULT_GITHUB_SSH_KEY,
         )
     )
     git_user_name = str(spec.get("git_user_name", "fate"))
     git_user_email = str(spec.get("git_user_email", "2968195987@qq.com"))
     archive_work_id = str(spec.get("archive_work_id", run_id.replace("-", "_")))
     validation_label = str(spec.get("validation_label", "remote_experiment"))
+    claim_scope = str(spec.get("claim_scope", ""))
+    launch_policy = str(spec.get("launch_policy", ""))
     runner = str(spec.get("runner", r"experiments\run_innovation_one_matrix.py"))
     summarizer = str(spec.get("summarizer", r"experiments\summarize_innovation_one_results.py"))
+    plan_alignment_validator = str(
+        spec.get(
+            "plan_alignment_validator",
+            r"experiments\innovation1\validate_result_plan_alignment.py",
+        )
+    )
     dataset_cache_root = str(spec.get("dataset_cache_root", r"dataset_cache"))
     dataset_cache_chunk_size = int(spec.get("dataset_cache_chunk_size", 8192))
+    run_overlay_cmds = _render_run_overlay_cmds(
+        list(spec.get("run_overlay_files", [])),
+        list(spec.get("run_overlay_dirs", [])),
+    )
+    if run_overlay_cmds:
+        run_overlay_cmds += "\n"
     dataset_cache_args: list[str] = []
     dataset_cache_manifest = ""
     if bool(spec.get("dataset_cache", False)):
@@ -119,6 +194,15 @@ if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
         dataset_cache_manifest = (
             f"echo dataset_cache_root={dataset_cache_root}>> results_archive\\%RUN_ID%\\run_manifest.txt\n"
             f"echo dataset_cache_chunk_size={dataset_cache_chunk_size}>> results_archive\\%RUN_ID%\\run_manifest.txt"
+        )
+    claim_boundary_manifest = ""
+    if claim_scope:
+        claim_boundary_manifest += (
+            f"echo claim_scope={claim_scope}>> results_archive\\%RUN_ID%\\run_manifest.txt\n"
+        )
+    if launch_policy:
+        claim_boundary_manifest += (
+            f"echo launch_policy={launch_policy}>> results_archive\\%RUN_ID%\\run_manifest.txt"
         )
     checkpoint_args = [
         "--checkpoint-metric",
@@ -138,6 +222,9 @@ if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
             "--early-stopping-min-delta",
             str(early_stopping_min_delta),
         ]
+    scheduler_args = ["--loss", loss, "--lr-scheduler", lr_scheduler]
+    if max_learning_rate is not None:
+        scheduler_args.extend(["--max-learning-rate", _format_float(max_learning_rate)])
     runner_args = [
         runner,
         "--plan",
@@ -154,6 +241,7 @@ if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
         optimizer,
         "--weight-decay",
         str(weight_decay),
+        *scheduler_args,
         "--key-rotation-interval",
         str(key_rotation_interval),
         "--sample-structure",
@@ -166,9 +254,9 @@ if not "%GPU_BUSY_COUNT%"=="0" goto gpu_busy
         *checkpoint_args,
         *pretrain_args,
         "--progress-output",
-        r"logs\%RUN_ID%_progress.jsonl",
+        r"%RUN_DIR%\logs\%RUN_ID%_progress.jsonl",
         "--output",
-        r"results\%RUN_ID%.jsonl",
+        r"%RUN_DIR%\results\%RUN_ID%.jsonl",
     ]
     runner_command = f"%PY% {' '.join(runner_args)} > logs\\%RUN_ID%_stdout.txt 2> logs\\%RUN_ID%_stderr.txt"
     summary_command = (
@@ -225,6 +313,8 @@ git config --global --add safe.directory %RUN_DIR%
 git config core.longpaths true
 git checkout %BRANCH%
 git remote set-url origin %REPO_URL%
+{run_overlay_cmds}{_ensure_parent_dir_cmd(plan)}if exist "%PROJECT_DIR%\{plan}" copy "%PROJECT_DIR%\{plan}" "{plan}"
+{_ensure_parent_dir_cmd(plan_alignment_validator)}if exist "%PROJECT_DIR%\{plan_alignment_validator}" copy "%PROJECT_DIR%\{plan_alignment_validator}" "{plan_alignment_validator}"
 
 if not exist logs mkdir logs
 if not exist results mkdir results
@@ -247,11 +337,14 @@ echo runner_exit_code=%RUNNER_EXIT_CODE% > logs\%RUN_ID%_runner_exit.txt
 if not exist results\%RUN_ID%.jsonl goto run_failed
 
 set RESULT_LINES=0
-for /f "tokens=3" %%L in ('find /c /v "" results\%RUN_ID%.jsonl') do set RESULT_LINES=%%L
+for /f %%L in ('%PY% -c "from pathlib import Path; p=Path(r'results\%RUN_ID%.jsonl'); print(sum(1 for _ in p.open('rb')))"') do set RESULT_LINES=%%L
 echo result_lines=%RESULT_LINES% > logs\%RUN_ID%_result_gate.txt
 echo expected_rows=%EXPECTED_ROWS% >> logs\%RUN_ID%_result_gate.txt
 echo runner_exit_code=%RUNNER_EXIT_CODE% >> logs\%RUN_ID%_result_gate.txt
 if not "%RESULT_LINES%"=="%EXPECTED_ROWS%" goto incomplete_results
+
+%PY% {plan_alignment_validator} --plan {plan} --results results\%RUN_ID%.jsonl --expected-rows %EXPECTED_ROWS% --output logs\%RUN_ID%_plan_alignment.json > logs\%RUN_ID%_plan_alignment_stdout.txt 2> logs\%RUN_ID%_plan_alignment_stderr.txt
+if errorlevel 1 goto plan_alignment_failed
 
 if exist {summarizer} (
   {summary_command}
@@ -287,6 +380,9 @@ copy "%RUN_DIR%\logs\%RUN_ID%_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_stderr.txt" "results_archive\%RUN_ID%\"
 if exist "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" copy "%RUN_DIR%\logs\%RUN_ID%_progress.jsonl" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_result_gate.txt" "results_archive\%RUN_ID%\"
+copy "%RUN_DIR%\logs\%RUN_ID%_plan_alignment.json" "results_archive\%RUN_ID%\"
+copy "%RUN_DIR%\logs\%RUN_ID%_plan_alignment_stdout.txt" "results_archive\%RUN_ID%\"
+copy "%RUN_DIR%\logs\%RUN_ID%_plan_alignment_stderr.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_summary_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_summary_stderr.txt" "results_archive\%RUN_ID%\"
 
@@ -305,6 +401,8 @@ echo batch_size={batch_size}>> results_archive\%RUN_ID%\run_manifest.txt
 echo hidden_bits={hidden_bits}>> results_archive\%RUN_ID%\run_manifest.txt
 echo optimizer={optimizer}>> results_archive\%RUN_ID%\run_manifest.txt
 echo weight_decay={weight_decay}>> results_archive\%RUN_ID%\run_manifest.txt
+echo loss={loss}>> results_archive\%RUN_ID%\run_manifest.txt
+echo lr_scheduler={lr_scheduler}>> results_archive\%RUN_ID%\run_manifest.txt
 echo key_rotation_interval={key_rotation_interval}>> results_archive\%RUN_ID%\run_manifest.txt
 echo sample_structure={sample_structure}>> results_archive\%RUN_ID%\run_manifest.txt
 echo integral_active_nibble={integral_active_nibble_manifest}>> results_archive\%RUN_ID%\run_manifest.txt
@@ -315,8 +413,10 @@ echo early_stopping_min_delta={early_stopping_min_delta}>> results_archive\%RUN_
 echo pretrain_rounds={pretrain_rounds_manifest}>> results_archive\%RUN_ID%\run_manifest.txt
 echo pretrain_epochs={pretrain_epochs_manifest}>> results_archive\%RUN_ID%\run_manifest.txt
 {dataset_cache_manifest}
+{claim_boundary_manifest}
 echo validation={validation_label}>> results_archive\%RUN_ID%\run_manifest.txt
 
+{_archive_integrity_guard_cmd()}
 git add results_archive\%RUN_ID%
 git commit -m "results: %RUN_ID% remote run"
 git push origin results/%RUN_ID%
@@ -352,6 +452,17 @@ echo RUN_GATE_BLOCKED_SUMMARY_FAILED
 type logs\%RUN_ID%_summary_stderr.txt
 exit /b 2
 
+:plan_alignment_failed
+echo RUN_GATE_BLOCKED_PLAN_ALIGNMENT_FAILED
+type logs\%RUN_ID%_plan_alignment_stderr.txt
+type logs\%RUN_ID%_plan_alignment_stdout.txt
+exit /b 6
+
+:archive_incomplete
+echo RUN_GATE_BLOCKED_ARCHIVE_INCOMPLETE
+dir results_archive\%RUN_ID%
+exit /b 11
+
 :push_failed
 echo RUN_GATE_BLOCKED_PUSH_FAILED
 exit /b 3
@@ -359,6 +470,7 @@ exit /b 3
 
 
 def render_launch_script(run_script_name: str, run_id: str, spec: dict[str, Any]) -> str:
+    _validate_remote_root(spec)
     root = str(spec.get("root", r"G:\lxy"))
     project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
     python_exe = str(spec.get("python", r"F:\Anaconda\envs\DWT\torch310\python.exe"))
@@ -366,11 +478,17 @@ def render_launch_script(run_script_name: str, run_id: str, spec: dict[str, Any]
     run_root = rf"{root}\{project_id}-runs"
     run_dir = rf"{run_root}\{run_id}"
     progress_path = rf"{run_dir}\logs\{run_id}_progress.jsonl"
-    tail_script = rf"{run_dir}\scripts\tail_progress.py"
+    tail_source = str(spec.get("launcher_tail_source", "run"))
+    if tail_source == "project":
+        tail_script = rf"{project_dir}\scripts\tail_progress.py"
+    elif tail_source == "run":
+        tail_script = rf"{run_dir}\scripts\tail_progress.py"
+    else:
+        raise ValueError("launcher_tail_source must be 'run' or 'project'")
     run_script_path = rf"{project_dir}\scripts\generated\remote\{run_script_name}"
     progress_command = (
         "while ($true) { "
-        f"if (Test-Path '{tail_script}') {{ & '{python_exe}' '{tail_script}' '{progress_path}' --interval 5; break }}; "
+        f"if (Test-Path '{tail_script}') {{ & '{python_exe}' '{tail_script}' '{progress_path}' --interval 5 --exit-on-complete; break }}; "
         "cls; "
         f"Write-Host 'waiting for progress viewer {tail_script}'; "
         "Start-Sleep -Seconds 2 "
@@ -395,6 +513,7 @@ def render_launch_script(run_script_name: str, run_id: str, spec: dict[str, Any]
 
 
 def render_schedule_script(task_name: str, launch_script_name: str, spec: dict[str, Any]) -> str:
+    _validate_remote_root(spec)
     root = str(spec.get("root", r"G:\lxy"))
     project_id = str(spec.get("project_id", "blockcipher-structure-adaptive-nd"))
     launch_script_path = rf"{root}\{project_id}\scripts\generated\remote\{launch_script_name}"
@@ -415,6 +534,8 @@ def render_monitor_script(run_id: str, expected_rows: int) -> str:
         "cd \"$(dirname \"$0\")/../../..\"\n"
         "uv run python scripts/monitor_remote_results.py \\\n"
         "  --remote \"${RESULT_REMOTE:-origin-ssh}\" \\\n"
+        "  --fallback-remote-run-root \"${FALLBACK_REMOTE_RUN_ROOT:-lxy-a6000:G:/lxy/blockcipher-structure-adaptive-nd-runs}\" \\\n"
+        "  --fallback-output-dir \"${FALLBACK_OUTPUT_DIR:-outputs/remote_results_incomplete}\" \\\n"
         f"  --run-id {run_id}={expected_rows}\n"
     )
 
@@ -426,6 +547,7 @@ def generate_remote_scripts(
     monitor_dir: Path = Path("scripts/generated/monitors"),
 ) -> GeneratedRemoteScripts:
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    _validate_remote_root(spec)
     run_id = str(_required(spec, "run_id"))
     task_name = str(spec.get("task_name", run_id.replace("-", "_")))
     expected_rows = int(_required(spec, "expected_rows"))
