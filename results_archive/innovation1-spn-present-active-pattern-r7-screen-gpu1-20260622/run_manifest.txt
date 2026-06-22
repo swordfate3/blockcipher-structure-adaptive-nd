@@ -1,0 +1,14 @@
+run_id=innovation1-spn-present-active-pattern-r7-screen-gpu1-20260622
+project_id=blockcipher-structure-adaptive-nd
+run_dir=G:\lxy\blockcipher-structure-adaptive-nd-runs\innovation1-spn-present-active-pattern-r7-screen-gpu1-20260622
+archive_work=G:\lxy\archive_work\spn_present_active_pattern_r7_screen_gpu1_20260622
+branch=refactor/model-project-structure
+plan=experiments\innovation1\plans\innovation1_spn_present_active_pattern_r7_screen.csv
+device=cuda:1
+samples_per_class=65536
+pairs_per_sample=16
+feature_encoding=present_delta_paligned_sinv_sboxddt_beamstats4deep3_cell_matrix_bits
+negative_mode=encrypted_random_plaintexts
+sample_structure=zhang_wang_case2_mcnd
+launch_mode=github_direct_clean_run_clone
+claim_scope=SCREEN only: active-pattern baseline route for PRESENT r7 at 65536/class on GPU1; not formal or breakthrough evidence

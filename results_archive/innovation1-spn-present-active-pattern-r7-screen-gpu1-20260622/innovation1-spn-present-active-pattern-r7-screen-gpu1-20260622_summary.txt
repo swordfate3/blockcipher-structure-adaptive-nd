@@ -1,0 +1,4 @@
+rows=2
+mean_accuracy=0.500000
+mean_auc=0.491578
+feature_dim=24
