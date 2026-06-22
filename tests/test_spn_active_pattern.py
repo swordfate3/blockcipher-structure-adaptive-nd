@@ -1,6 +1,7 @@
 import numpy as np
 
 from blockcipher_ai_eval.features.spn_active_pattern import (
+    active_label_diagnostics,
     active_mask16_from_word,
     active_pattern_summary_from_words,
     extract_active_pattern_features,
@@ -62,3 +63,20 @@ def test_extract_active_pattern_features_has_stable_shape():
     assert features.shape == (3, 16 + 4 + 4)
     assert features.dtype == np.float32
     assert features[0, 0] > 0.0
+
+
+def test_active_label_diagnostics_reports_all_inactive_baseline():
+    labels = np.array(
+        [
+            [0, 0, 0, 1],
+            [0, 0, 0, 0],
+            [1, 0, 0, 0],
+        ],
+        dtype=np.uint8,
+    )
+
+    metrics = active_label_diagnostics(labels)
+
+    assert metrics["active_positive_rate"] == 2 / 12
+    assert metrics["all_inactive_accuracy"] == 10 / 12
+    assert metrics["positions"] == 4

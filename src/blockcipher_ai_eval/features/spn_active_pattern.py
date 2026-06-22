@@ -83,3 +83,20 @@ def extract_active_pattern_features(bit_rows: NDArray[np.uint8], *, words_per_ro
         ],
         axis=1,
     )
+
+
+def active_label_diagnostics(labels: NDArray[np.uint8]) -> dict[str, float | int]:
+    label_array = np.asarray(labels, dtype=np.uint8)
+    if label_array.ndim != 2:
+        raise ValueError("labels must have shape (rows, positions)")
+    total = int(label_array.size)
+    positives = int(label_array.sum())
+    negatives = total - positives
+    return {
+        "rows": int(label_array.shape[0]),
+        "positions": int(label_array.shape[1]),
+        "active_positive_rate": positives / total if total else 0.0,
+        "inactive_negative_rate": negatives / total if total else 0.0,
+        "all_inactive_accuracy": negatives / total if total else 0.0,
+        "mean_active_per_row": float(label_array.sum(axis=1).mean()) if label_array.shape[0] else 0.0,
+    }
