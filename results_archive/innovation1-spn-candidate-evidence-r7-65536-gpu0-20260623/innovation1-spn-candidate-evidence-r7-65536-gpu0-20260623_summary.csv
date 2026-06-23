@@ -1,0 +1,2 @@
+rows,accuracy_mean,auc_mean,accuracy_values,auc_values,feature_dim,samples_per_class,pairs_per_sample,model
+2,0.6213378906,0.6740772752,"[0.6181640625, 0.62451171875]","[0.6720810644328594, 0.6760734859853983]",186,65536,16,mlp
