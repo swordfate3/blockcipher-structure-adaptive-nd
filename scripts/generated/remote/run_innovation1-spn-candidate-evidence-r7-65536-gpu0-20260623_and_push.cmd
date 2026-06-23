@@ -6,7 +6,6 @@ set http_proxy=
 set https_proxy=
 set ROOT=G:\lxy
 set PROJECT_ID=blockcipher-structure-adaptive-nd
-set PROJECT_DIR=%ROOT%\%PROJECT_ID%
 set REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set RESULT_REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set BRANCH=refactor/model-project-structure
@@ -24,26 +23,15 @@ if not exist %ROOT% mkdir %ROOT%
 if not exist %RUN_ROOT% mkdir %RUN_ROOT%
 if not exist %ROOT%\archive_work mkdir %ROOT%\archive_work
 git config --global core.longpaths true
-cd /d %ROOT%
-if not exist %PROJECT_DIR% (
-  git -c core.longpaths=true -c http.proxy= -c https.proxy= clone %REPO_URL% %PROJECT_ID%
-)
-
-cd /d %PROJECT_DIR%
-git config --global --add safe.directory %PROJECT_DIR%
-git config --global --add safe.directory %PROJECT_DIR%\.git
-git fetch origin %BRANCH%
-git checkout %BRANCH%
-git merge --ff-only FETCH_HEAD
-
 cd /d %RUN_ROOT%
 if exist %RUN_ID% rmdir /s /q %RUN_ID%
-git -c core.longpaths=true clone --local %PROJECT_DIR% %RUN_ID%
+git -c core.longpaths=true -c http.proxy= -c https.proxy= clone %REPO_URL% %RUN_ID%
 
 cd /d %RUN_DIR%
 git config --global --add safe.directory %RUN_DIR%
 git config core.longpaths true
 git checkout %BRANCH%
+git pull --ff-only origin %BRANCH%
 git remote set-url origin %REPO_URL%
 
 if not exist logs mkdir logs
@@ -110,7 +98,6 @@ copy "%RUN_DIR%\logs\%RUN_ID%_summary_stderr.txt" "results_archive\%RUN_ID%\"
 
 echo run_id=%RUN_ID%> results_archive\%RUN_ID%\run_manifest.txt
 echo project_id=%PROJECT_ID%>> results_archive\%RUN_ID%\run_manifest.txt
-echo project_dir=%PROJECT_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
 echo run_dir=%RUN_DIR%>> results_archive\%RUN_ID%\run_manifest.txt
 echo archive_work=%ARCHIVE_WORK%>> results_archive\%RUN_ID%\run_manifest.txt
 echo branch=%BRANCH%>> results_archive\%RUN_ID%\run_manifest.txt
