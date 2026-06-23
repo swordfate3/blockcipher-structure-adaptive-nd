@@ -40,8 +40,11 @@ git remote set-url origin %REPO_URL%
 
 if not exist logs mkdir logs
 if not exist results mkdir results
+if not exist feature_cache mkdir feature_cache
 if exist logs\%RUN_ID%_stdout.txt del logs\%RUN_ID%_stdout.txt
 if exist logs\%RUN_ID%_stderr.txt del logs\%RUN_ID%_stderr.txt
+if exist logs\%RUN_ID%_seed0_progress.jsonl del logs\%RUN_ID%_seed0_progress.jsonl
+if exist logs\%RUN_ID%_seed1_progress.jsonl del logs\%RUN_ID%_seed1_progress.jsonl
 if exist results\%RUN_ID%.jsonl del results\%RUN_ID%.jsonl
 if exist results\%RUN_ID%_seed0.jsonl del results\%RUN_ID%_seed0.jsonl
 if exist results\%RUN_ID%_seed1.jsonl del results\%RUN_ID%_seed1.jsonl
@@ -52,9 +55,9 @@ git status --short --branch > logs\%RUN_ID%_git_status_before_run.txt
 nvidia-smi > logs\%RUN_ID%_gpu_info.txt
 %PY% -c "import sys, torch; print('python', sys.executable); print('torch', torch.__version__); print('cuda_version', torch.version.cuda); print('cuda_available', torch.cuda.is_available()); print('device_count', torch.cuda.device_count()); print('device0', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'NA')" > logs\%RUN_ID%_torch_info.txt 2> logs\%RUN_ID%_torch_info_stderr.txt
 
-%PY% experiments\innovation1\run_spn_candidate_evidence_baseline.py --output results\%RUN_ID%_seed0.jsonl --rounds 7 --seed 0 --samples-per-class 65536 --pairs-per-sample 16 --model mlp --epochs 30 --learning-rate 0.001 --device cuda:0 > logs\%RUN_ID%_seed0_stdout.txt 2> logs\%RUN_ID%_seed0_stderr.txt
+%PY% experiments\innovation1\run_spn_candidate_evidence_baseline.py --output results\%RUN_ID%_seed0.jsonl --rounds 7 --seed 0 --samples-per-class 65536 --pairs-per-sample 16 --model mlp --epochs 30 --learning-rate 0.001 --device cuda:0 --feature-cache-root feature_cache --feature-cache-chunk-size 1024 --progress-output logs\%RUN_ID%_seed0_progress.jsonl > logs\%RUN_ID%_seed0_stdout.txt 2> logs\%RUN_ID%_seed0_stderr.txt
 if errorlevel 1 goto seed0_failed
-%PY% experiments\innovation1\run_spn_candidate_evidence_baseline.py --output results\%RUN_ID%_seed1.jsonl --rounds 7 --seed 1 --samples-per-class 65536 --pairs-per-sample 16 --model mlp --epochs 30 --learning-rate 0.001 --device cuda:0 > logs\%RUN_ID%_seed1_stdout.txt 2> logs\%RUN_ID%_seed1_stderr.txt
+%PY% experiments\innovation1\run_spn_candidate_evidence_baseline.py --output results\%RUN_ID%_seed1.jsonl --rounds 7 --seed 1 --samples-per-class 65536 --pairs-per-sample 16 --model mlp --epochs 30 --learning-rate 0.001 --device cuda:0 --feature-cache-root feature_cache --feature-cache-chunk-size 1024 --progress-output logs\%RUN_ID%_seed1_progress.jsonl > logs\%RUN_ID%_seed1_stdout.txt 2> logs\%RUN_ID%_seed1_stderr.txt
 if errorlevel 1 goto seed1_failed
 
 type results\%RUN_ID%_seed0.jsonl > results\%RUN_ID%.jsonl
@@ -94,8 +97,10 @@ copy "%RUN_DIR%\logs\%RUN_ID%_torch_info_stderr.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_runner_exit.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_seed0_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_seed0_stderr.txt" "results_archive\%RUN_ID%\"
+copy "%RUN_DIR%\logs\%RUN_ID%_seed0_progress.jsonl" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_seed1_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_seed1_stderr.txt" "results_archive\%RUN_ID%\"
+copy "%RUN_DIR%\logs\%RUN_ID%_seed1_progress.jsonl" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_result_gate.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_summary_stdout.txt" "results_archive\%RUN_ID%\"
 copy "%RUN_DIR%\logs\%RUN_ID%_summary_stderr.txt" "results_archive\%RUN_ID%\"
@@ -114,6 +119,11 @@ echo pairs_per_sample=16>> results_archive\%RUN_ID%\run_manifest.txt
 echo model=mlp>> results_archive\%RUN_ID%\run_manifest.txt
 echo epochs=30>> results_archive\%RUN_ID%\run_manifest.txt
 echo learning_rate=0.001>> results_archive\%RUN_ID%\run_manifest.txt
+echo feature_cache_enabled=true>> results_archive\%RUN_ID%\run_manifest.txt
+echo feature_cache_root=feature_cache>> results_archive\%RUN_ID%\run_manifest.txt
+echo feature_cache_chunk_size=1024>> results_archive\%RUN_ID%\run_manifest.txt
+echo progress_output_seed0=logs\%RUN_ID%_seed0_progress.jsonl>> results_archive\%RUN_ID%\run_manifest.txt
+echo progress_output_seed1=logs\%RUN_ID%_seed1_progress.jsonl>> results_archive\%RUN_ID%\run_manifest.txt
 echo negative_mode=encrypted_random_plaintexts>> results_archive\%RUN_ID%\run_manifest.txt
 echo sample_structure=zhang_wang_case2_mcnd>> results_archive\%RUN_ID%\run_manifest.txt
 echo difference_profile=present_zhang_wang2022_mcnd>> results_archive\%RUN_ID%\run_manifest.txt
@@ -125,6 +135,8 @@ echo launch_policy=scale candidate-disagreement/margin/confidence evidence only 
 if not exist "results_archive\%RUN_ID%\%RUN_ID%.jsonl" goto archive_incomplete
 if not exist "results_archive\%RUN_ID%\%RUN_ID%_summary.csv" goto archive_incomplete
 if not exist "results_archive\%RUN_ID%\%RUN_ID%_result_gate.txt" goto archive_incomplete
+if not exist "results_archive\%RUN_ID%\%RUN_ID%_seed0_progress.jsonl" goto archive_incomplete
+if not exist "results_archive\%RUN_ID%\%RUN_ID%_seed1_progress.jsonl" goto archive_incomplete
 if not exist "results_archive\%RUN_ID%\run_manifest.txt" goto archive_incomplete
 echo archive_integrity=pass > results_archive\%RUN_ID%\archive_integrity.txt
 git add results_archive\%RUN_ID%
