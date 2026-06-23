@@ -184,8 +184,65 @@ Implement the active-pattern route as a staged Innovation 1 SPN plan:
 - Tags: innovation1, spn, present, active-nibble, trail-activity, distinguisher, evidence-gates
 - See Also: LRN-20260621-001, LRN-20260621-002
 - Pattern-Key: innovation1.spn_present.active_pattern_distinguisher
-- Recurrence-Count: 1
+- Recurrence-Count: 2
 - First-Seen: 2026-06-22
-- Last-Seen: 2026-06-22
+- Last-Seen: 2026-06-23
+
+---
+
+## [LRN-20260623-001] research
+
+**Logged**: 2026-06-23T10:23:47+08:00
+**Priority**: high
+**Status**: pending
+**Area**: research
+
+### Summary
+SPN/PRESENT active-only 24-dim active-pattern screen failed as a real-vs-random distinguisher despite the earlier high auxiliary active-nibble signal.
+
+### Details
+The active-pattern route completed and was retrieved from a verified result branch:
+
+- Run ID: `innovation1-spn-present-active-pattern-r7-screen-gpu1-20260622`
+- Result branch: `results/innovation1-spn-present-active-pattern-r7-screen-gpu1-20260622`
+- Result commit: `6c3243137b821d5fc39d266d8aa5f39622ad4fdd`
+- Local archive: `outputs/remote_results/innovation1-spn-present-active-pattern-r7-screen-gpu1-20260622/`
+- Gate: `result_lines=2`, `expected_rows=2`, `runner_exit_code=0`, `archive_integrity=pass`
+- Config: `rounds=7`, `samples_per_class=65536`, `pairs_per_sample=16`, `negative_mode=encrypted_random_plaintexts`, `sample_structure=zhang_wang_case2_mcnd`
+- Mean result: `accuracy=0.500000`, `AUC=0.491578`, `feature_dim=24`
+- Seed 0: `val_accuracy=0.5`, `val_auc=0.4894024282693863`
+- Seed 1: `val_accuracy=0.5`, `val_auc=0.4937528520822525`
+
+Failure interpretation:
+
+- The auxiliary target and the distinguisher target are different. Active-nibble prediction asks whether each 4-bit trail/difference cell is non-zero; real-vs-random classification asks whether a pair set came from the target differential encryption process or encrypted-random-plaintext negatives.
+- The 24-dim active summary is too coarse. It keeps only active position frequencies and aggregate density statistics, but discards value-level S-box/DDT evidence, candidate trail scores, top-k margins, confidence, per-pair ordering, and cross-pair consistency.
+- Under this representation, real and random samples can share almost the same active-density and position-frequency distribution, i.e. `P(active-summary | real) ~= P(active-summary | random)`. The retrieved AUC below `0.5` is direct evidence that the current active-only summary gives little or no separation.
+- Earlier high `active_nibble_bit_accuracy` may be partly inflated by inactive-class imbalance. Per-position bit accuracy can be high when many positions are inactive, so active precision, recall, F1, balanced accuracy, and all-inactive baselines are required before treating it as strong structural evidence.
+- Therefore, active-pattern should be used as auxiliary supervision or one component of richer candidate-trail evidence, not as a standalone final feature family.
+
+This was only a screen/medium diagnostic at `65536/class`, not formal `>=1000000/class` evidence. However, because the active-only baseline is already at chance with strict `encrypted_random_plaintexts` negatives, do not scale this exact 24-dim linear route as the main next experiment.
+
+### Suggested Action
+Retire the active-only 24-dim linear baseline as a main scaling route. Keep active-nibble information, but combine it with features that measure whether candidate trails actually support the observed sample:
+
+- Top-1/top-2 trail score and top-k margin
+- Candidate score entropy and confidence
+- Candidate disagreement across pairs
+- Active-pattern-to-top-trail match
+- Pair-set trail-family consistency
+- Transition-spectrum features and multi-query score aggregation
+
+For future reports, state plainly: high active-nibble auxiliary accuracy proves the model can learn trail-activity propagation patterns; it does not prove real-vs-random distinguishability.
+
+### Metadata
+- Source: conversation
+- Related Files: src/blockcipher_ai_eval/features/spn_active_pattern.py, experiments/innovation1/run_spn_active_pattern_baseline.py, outputs/remote_results/innovation1-spn-present-active-pattern-r7-screen-gpu1-20260622/
+- Tags: innovation1, spn, present, active-pattern, active-nibble, real-vs-random, failure-analysis, evidence-gates
+- See Also: LRN-20260622-002
+- Pattern-Key: innovation1.spn_present.active_pattern_distinguisher
+- Recurrence-Count: 1
+- First-Seen: 2026-06-23
+- Last-Seen: 2026-06-23
 
 ---
