@@ -9,8 +9,8 @@ set PROJECT_ID=blockcipher-structure-adaptive-nd
 set REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set RESULT_REPO_URL=git@github.com:swordfate3/blockcipher-structure-adaptive-nd.git
 set BRANCH=refactor/model-project-structure
-set GITHUB_SSH_KEY=%ROOT%\.ssh\github_blockcipher_20260612_result_pusher_ed25519
-set GIT_SSH_COMMAND=ssh -i %GITHUB_SSH_KEY% -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new
+set "GITHUB_SSH_KEY=C:/Users/1304Lijinlin/.ssh/github_blockcipher_20260612_result_pusher_ed25519"
+set "GIT_SSH_COMMAND=ssh -i %GITHUB_SSH_KEY% -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
 set RUN_ID=innovation1-spn-candidate-evidence-r7-65536-gpu0-20260623
 set EXPECTED_ROWS=2
 set RUN_ROOT=%ROOT%\%PROJECT_ID%-runs
@@ -26,12 +26,16 @@ git config --global core.longpaths true
 cd /d %RUN_ROOT%
 if exist %RUN_ID% rmdir /s /q %RUN_ID%
 git -c core.longpaths=true -c http.proxy= -c https.proxy= clone %REPO_URL% %RUN_ID%
+if errorlevel 1 goto git_sync_failed
 
 cd /d %RUN_DIR%
+if errorlevel 1 goto git_sync_failed
 git config --global --add safe.directory %RUN_DIR%
 git config core.longpaths true
 git checkout %BRANCH%
+if errorlevel 1 goto git_sync_failed
 git pull --ff-only origin %BRANCH%
+if errorlevel 1 goto git_sync_failed
 git remote set-url origin %REPO_URL%
 
 if not exist logs mkdir logs
@@ -138,6 +142,13 @@ exit /b 0
 echo RUN_GATE_BLOCKED_SEED0_FAILED
 type logs\%RUN_ID%_seed0_stderr.txt
 exit /b 1
+
+:git_sync_failed
+echo RUN_GATE_BLOCKED_GIT_SYNC_FAILED
+echo run_root=%RUN_ROOT%
+echo run_dir=%RUN_DIR%
+echo branch=%BRANCH%
+exit /b 10
 
 :seed1_failed
 echo RUN_GATE_BLOCKED_SEED1_FAILED
