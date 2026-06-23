@@ -20,6 +20,7 @@
 - Generated Windows schedule/launch commands must use `cmd.exe /c`, not `cmd.exe /k`, so completed training does not leave stuck command windows.
 - Remote experiment roots should use `G:\lxy\blockcipher-structure-adaptive-nd` for the project and `G:\lxy\blockcipher-structure-adaptive-nd-runs` for run outputs.
 - Referencing fixed external executables or pre-existing credentials is allowed only as a reference; project files and generated artifacts still must not be written outside `G:\lxy`.
+- Remote training that generates datasets or derived features must not use pure in-memory one-shot generation at screen/scale sizes. Before launching a remote run at `65536/class` or above, verify disk-backed cache/progress/reuse exists for the exact data path: `features.npy`/`labels.npy` or equivalent chunk files, metadata, progress JSONL/logging, and parameter-matched reuse/resume behavior. New runners and new feature routes are not exempt; if they bypass `run_innovation_one_matrix.py`, they must implement an equivalent route-specific cache first.
 
 ## Remote Monitoring And Retrieval
 
@@ -42,6 +43,7 @@
 - Use `uv run pytest ...`, not bare `pytest`, for project test commands.
 - Keep the project root clean of `tmp_*`; use `/tmp` for transient local markers and remove or ignore them when no longer needed.
 - Before remote launches, audit generated scripts for `cmd.exe /c`, absence of `cmd.exe /k`, and no generated project paths outside `G:\lxy`.
+- Before remote launches, audit generated-data paths: any dataset/feature generation for medium or larger remote jobs must write cache/progress under `G:\lxy` and must not wait until after full generation/training to emit the first durable artifact.
 - When searching for Windows paths such as `G:\lxy` with `rg`, use fixed-string mode (`rg -F`) or proper escaping to avoid regex backslash parse errors.
 - After completing code, config, generated-script, memory-rule, or test edits, run the relevant verification, make a scoped git commit, and push it. Do not leave agent-authored completed work as an uncommitted pile.
 - Do not include unrelated user or historical dirty files in that commit. If the worktree already has unrelated changes, commit only the task-scoped files and report the remaining dirty state separately.

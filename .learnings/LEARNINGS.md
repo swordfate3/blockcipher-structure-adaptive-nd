@@ -246,3 +246,50 @@ For future reports, state plainly: high active-nibble auxiliary accuracy proves 
 - Last-Seen: 2026-06-23
 
 ---
+
+## [LRN-20260623-002] correction
+
+**Logged**: 2026-06-23T21:56:37+08:00
+**Priority**: critical
+**Status**: promoted
+**Area**: infra
+
+### Summary
+Remote training that generates datasets or derived features must use disk-backed cache/progress/reuse before launch; do not run large remote jobs with pure in-memory one-shot generation.
+
+### Details
+The user corrected a recurring workflow mistake: prior project work had already established that dataset generation should write reusable artifacts such as `features.npy`, `labels.npy`, metadata, CSV/JSONL summaries, and progress logs. The candidate-evidence route violated this principle by launching `65536/class` remotely through a new prototype runner that built `features: list[np.ndarray]` in memory and only wrote a final result after all feature generation, training, and evaluation finished.
+
+Correct rule:
+
+- Any remote training or medium/large screen that generates datasets, feature matrices, candidate-evidence features, trail statistics, or other derived training inputs must have disk-backed cache before launch.
+- The cache must be under `G:\lxy` on the remote and normally inside the run directory or approved run cache root.
+- Required artifacts include cache metadata, feature/label arrays or equivalent chunked files, progress JSONL/logging, and reuse/resume behavior when parameters match.
+- New runners and new feature routes are not exempt. If they bypass `run_innovation_one_matrix.py`, they must implement an equivalent route-specific cache before remote scale-up.
+- Smoke-only local experiments may use in-memory generation, but remote launches at `65536/class` or above must not.
+- Do not call a remote experiment ready to launch until this cache/progress gate has been checked explicitly.
+
+The immediate failure mode was the candidate-evidence baseline: positive local fast screens led to a remote `65536/class` run, but its feature generation was pure Python/in-memory and produced no progress or reusable cache, making the remote appear stalled and wasting time.
+
+### Suggested Action
+Promote this rule to `AGENTS.md` under Remote Windows GPU Rules / Verification. Add cache/progress support to `experiments/innovation1/run_spn_candidate_evidence_baseline.py` before relaunching scaled candidate-evidence experiments:
+
+- `--feature-cache-root`
+- `--feature-cache-chunk-size`
+- `--progress-output`
+- disk-backed `features.npy` / `labels.npy` / `metadata.json`
+- cache identity including rounds, seeds, samples_per_class, pairs_per_sample, negative mode, sample structure, difference profile, key rotation, beam width, depth, source, and feature dimension
+- chunk progress events and cache reuse
+
+### Metadata
+- Source: user_feedback
+- Related Files: AGENTS.md, experiments/innovation1/run_spn_candidate_evidence_baseline.py, experiments/run_innovation_one_matrix.py, src/blockcipher_ai_eval/data/cache/disk.py
+- Tags: remote-training, dataset-cache, feature-cache, progress-logging, innovation1, spn, present, candidate-evidence
+- See Also: LRN-20260621-003
+- Pattern-Key: remote_training.must_use_disk_cache_for_generated_data
+- Recurrence-Count: 1
+- First-Seen: 2026-06-23
+- Last-Seen: 2026-06-23
+- Promoted: AGENTS.md
+
+---
